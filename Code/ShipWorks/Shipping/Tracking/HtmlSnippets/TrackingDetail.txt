@@ -1,0 +1,6 @@
+﻿<tr {SwDetailRowClass}>
+   <td valign='top' NOWRAP>{SwDate}</td>
+   <td valign='top' NOWRAP>{SwTime}</td>
+   <td valign='top' >{SwLocation}</td>
+   <td valign='top' >{SwActivity}</td>
+</tr>

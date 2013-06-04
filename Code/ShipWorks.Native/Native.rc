@@ -1,0 +1,97 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 2110
+//
+
+BUTTON_HOVER.GIF				2110                    "button_hover.gif"
+BUTTON_HOVER_BIG.GIF			2110                    "button_hover_big.gif"
+BUTTON_PUSHED.GIF				2110                    "button_pushed.gif"
+BUTTON_PUSHED_BIG.GIF			2110                    "button_pushed_big.gif"
+NAVIGATE_FIRST.PNG				2110                    "navigate_first.png"
+NAVIGATE_FIRST_DISABLED.PNG     2110                    "navigate_first_disabled.png"
+NAVIGATE_LAST.PNG				2110                    "navigate_last.png"
+NAVIGATE_LAST_DISABLED.PNG      2110                    "navigate_last_disabled.png"
+NAVIGATE_LEFT.PNG               2110                    "navigate_left.png"
+NAVIGATE_LEFT_DISABLED.PNG      2110                    "navigate_left_disabled.png"
+NAVIGATE_RIGHT.PNG				2110                    "navigate_right.png"
+NAVIGATE_RIGHT_DISABLED.PNG     2110                    "navigate_right_disabled.png"
+PRINT_NOW.PNG					2110				    "print_now.png"
+PRINT_SETTINGS.PNG				2110				    "print_settings.png"
+TOOLBAR_BACKGROUND.GIF          2110                    "toolbar_background.gif"
+ZOOM_IN.PNG						2110                    "zoom_in.png"
+ZOOM_IN_DISABLED.PNG            2110                    "zoom_in_disabled.png"
+ZOOM_OUT.PNG					2110                    "zoom_out.png"
+ZOOM_OUT_DISABLED.PNG           2110                    "zoom_out_disabled.png"
+INFORMATION2.PNG				2110					"information2.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// HTML
+//
+
+PRINTTEMPLATE.HTM       HTML                    "PrintTemplate.htm"
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

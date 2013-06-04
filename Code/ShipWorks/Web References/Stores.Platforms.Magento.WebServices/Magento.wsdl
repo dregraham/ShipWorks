@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:typens="urn:Magento" xmlns="http://schemas.xmlsoap.org/wsdl/" name="Magento" targetNamespace="urn:Magento" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+      <xsd:complexType name="FixedArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="xsd:anyType[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="call">
+    <wsdl:part name="sessionId" type="xsd:string" />
+    <wsdl:part name="resourcePath" type="xsd:string" />
+    <wsdl:part name="args" type="xsd:anyType" />
+  </wsdl:message>
+  <wsdl:message name="callResponse">
+    <wsdl:part name="callReturn" type="xsd:anyType" />
+  </wsdl:message>
+  <wsdl:message name="multiCall">
+    <wsdl:part name="sessionId" type="xsd:string" />
+    <wsdl:part name="calls" type="typens:FixedArray" />
+    <wsdl:part name="options" type="xsd:anyType" />
+  </wsdl:message>
+  <wsdl:message name="multiCallResponse">
+    <wsdl:part name="multiCallReturn" type="typens:FixedArray" />
+  </wsdl:message>
+  <wsdl:message name="endSession">
+    <wsdl:part name="sessionId" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="endSessionResponse">
+    <wsdl:part name="endSessionReturn" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="login">
+    <wsdl:part name="username" type="xsd:string" />
+    <wsdl:part name="apiKey" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="loginResponse">
+    <wsdl:part name="loginReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="resources">
+    <wsdl:part name="sessionId" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="resourcesResponse">
+    <wsdl:part name="resourcesReturn" type="typens:FixedArray" />
+  </wsdl:message>
+  <wsdl:message name="globalFaults">
+    <wsdl:part name="sessionId" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="globalFaultsResponse">
+    <wsdl:part name="globalFaultsReturn" type="typens:FixedArray" />
+  </wsdl:message>
+  <wsdl:message name="resourceFaults">
+    <wsdl:part name="resourceName" type="xsd:string" />
+    <wsdl:part name="sessionId" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="resourceFaultsResponse">
+    <wsdl:part name="resourceFaultsReturn" type="typens:FixedArray" />
+  </wsdl:message>
+  <wsdl:message name="startSession" />
+  <wsdl:message name="startSessionResponse">
+    <wsdl:part name="startSessionReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:portType name="Mage_Api_Model_Server_HandlerPortType">
+    <wsdl:operation name="call">
+      <documentation>Call api functionality</documentation>
+      <wsdl:input message="typens:call" />
+      <wsdl:output message="typens:callResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="multiCall">
+      <documentation>Multiple calls of resource functionality</documentation>
+      <wsdl:input message="typens:multiCall" />
+      <wsdl:output message="typens:multiCallResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="endSession">
+      <documentation>End web service session</documentation>
+      <wsdl:input message="typens:endSession" />
+      <wsdl:output message="typens:endSessionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <documentation>Login user and retrive session id</documentation>
+      <wsdl:input message="typens:login" />
+      <wsdl:output message="typens:loginResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="startSession">
+      <documentation>Start web service session</documentation>
+      <wsdl:input message="typens:startSession" />
+      <wsdl:output message="typens:startSessionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="resources">
+      <documentation>List of available resources</documentation>
+      <wsdl:input message="typens:resources" />
+      <wsdl:output message="typens:resourcesResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="globalFaults">
+      <documentation>List of resource faults</documentation>
+      <wsdl:input message="typens:globalFaults" />
+      <wsdl:output message="typens:globalFaultsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="resourceFaults">
+      <documentation>List of global faults</documentation>
+      <wsdl:input message="typens:resourceFaults" />
+      <wsdl:output message="typens:resourceFaultsResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Mage_Api_Model_Server_HandlerBinding" type="typens:Mage_Api_Model_Server_HandlerPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="call">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="multiCall">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="endSession">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="startSession">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="resources">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="globalFaults">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="resourceFaults">
+      <soap:operation soapAction="urn:Mage_Api_Model_Server_HandlerAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:Magento" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MagentoService">
+    <wsdl:port name="Mage_Api_Model_Server_HandlerPort" binding="typens:Mage_Api_Model_Server_HandlerBinding">
+      <soap:address location="http://magento151.interapptive.local/index.php/api/soap/index/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

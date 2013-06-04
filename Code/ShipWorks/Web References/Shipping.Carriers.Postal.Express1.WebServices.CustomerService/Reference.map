@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd3" filename="CustomerService.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://www.express1dev.com/Services/CustomerService.svc?wsdl" filename="CustomerService.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd0" filename="CustomerService0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd1" filename="CustomerService1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd2" filename="CustomerService2.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>

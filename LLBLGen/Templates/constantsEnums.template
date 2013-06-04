@@ -1,0 +1,97 @@
+﻿///////////////////////////////////////////////////////////////
+// This is generated code. 
+//////////////////////////////////////////////////////////////
+// Code is generated using LLBLGen Pro version: <[LLBLGenVersion]>
+// Code is generated on: <[Time]>
+// Code is generated using templates: <[TemplateName]>
+// Templates vendor: Solutions Design.
+// Templates version: <[TemplateVersion]>
+//////////////////////////////////////////////////////////////
+using System;
+using System.Reflection;
+
+namespace <[RootNamespace]>
+{
+<[Foreach Entity CrLf]>
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: <[CurrentEntityName]>.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum <[CurrentEntityName]>FieldIndex:int
+	{
+<[Foreach EntityField IncludeInherited CommaCrLf]>		///<summary><[EntityFieldName]>. <[If EntityFieldIsOverriden]><[If Not EntityFieldContainedInCurrentEntity]>Inherited from <[EntityFieldEntityName]><[EndIf]><[EndIf]></summary>
+		<[EntityFieldName]><[If EntityFieldIsOverriden]><[If Not EntityFieldContainedInCurrentEntity]>_<[EntityFieldEntityName]><[EndIf]><[EndIf]><[NextForeach]><[If HasFields]>,<[Else]><[If IsSubType]>,<[EndIf]><[EndIf]>
+		/// <summary></summary>
+		AmountOfFields
+	}
+<[NextForeach]>
+<[Foreach TypedView CrLf]>
+	/// <summary>
+	/// Index enum to fast-access Typed View EntityFields in the IEntityFields collection for the typed view : <[CurrentTypedViewName]>.
+	/// </summary>
+	[Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum <[CurrentTypedViewName]>FieldIndex:int
+	{
+<[Foreach TypedViewField CommaCrLf]>		///<summary><[TypedViewFieldName]></summary>
+		<[TypedViewFieldName]><[NextForeach]><[If HasFields]>,<[EndIf]>
+		/// <summary></summary>
+		AmountOfFields
+	}
+<[NextForeach]>
+<[ Foreach TypedList CrLf ]> 
+	/// <summary>
+	/// Index enum to fast-access TypedList Fields in the Columns collection of the Typed List: <[ CurrentTypedListName ]>
+	/// </summary>
+	[Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum <[CurrentTypedListName]>TypedListFieldIndex:int
+	{
+<[Foreach TypedListField CommaCrLf]>		///<summary><[TypedListFieldName]></summary>
+		<[TypedListFieldName]><[NextForeach]><[If HasFields]>,<[EndIf]>
+		/// <summary></summary>
+		AmountOfFields
+	}
+<[ NextForeach ]>
+
+<[If HasEntity]>
+	/// <summary>
+	/// Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.
+	/// </summary>
+	[Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum EntityType:int
+	{
+<[Foreach Entity CommaCrLf]>		///<summary><[CurrentEntityName]></summary>
+		<[CurrentEntityName]>Entity<[NextForeach]>
+	}
+<[EndIf]>
+
+<[If HasTypedView]>
+	/// <summary>
+	/// Enum definition for all the typed view types defined in this namespace. Used by the entityfields factory.
+	/// </summary>
+	[Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum TypedViewType:int
+	{
+<[Foreach TypedView CommaCrLf]>		///<summary><[CurrentTypedViewName]></summary>
+		<[CurrentTypedViewName]>TypedView<[NextForeach]>
+	}
+<[EndIf]>
+
+	#region Custom ConstantsEnums Code
+	<[ UserCodeRegion "CustomUserConstants" ]>
+	// __LLBLGENPRO_USER_CODE_REGION_START CustomUserConstants
+	// __LLBLGENPRO_USER_CODE_REGION_END
+	<[ EndUserCodeRegion ]>
+	#endregion
+
+	#region Included code
+<# Custom_ConstantsEnumsTemplate #>
+	#endregion
+}
+
+<[If Not HasEntity]>
+// empty namespace declarations
+namespace <[RootNamespace]>.EntityClasses
+{
+}
+
+<[EndIf]>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:tns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" name="RegistrationNAccountMgr" targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema>
+      <xsd:import schemaLocation="UPSSecurity.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" />
+      <xsd:import schemaLocation="Error1.1.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" />
+      <xsd:import schemaLocation="RegisterNAccountMgrSchema.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="RegisterRequestMessage">
+    <wsdl:part name="Body" element="reg:RegisterRequest" />
+    <wsdl:part name="UPSSecurity" element="upss:UPSSecurity" />
+  </wsdl:message>
+  <wsdl:message name="RegisterResponseMessage">
+    <wsdl:part name="Body" element="reg:RegisterResponse" />
+  </wsdl:message>
+  <wsdl:message name="RegisterErrorMessage">
+    <wsdl:part name="RegisterError" element="error:Errors" />
+  </wsdl:message>
+  <wsdl:message name="ManageAccountRequestMessage">
+    <wsdl:part name="Body" element="reg:ManageAccountRequest" />
+    <wsdl:part name="UPSSecurity" element="upss:UPSSecurity" />
+  </wsdl:message>
+  <wsdl:message name="ManageAccountResponseMessage">
+    <wsdl:part name="Body" element="reg:ManageAccountResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageAccountErrorMessage">
+    <wsdl:part name="ManageAccountError" element="error:Errors" />
+  </wsdl:message>
+  <wsdl:portType name="RegisterMgrAcctPortType">
+    <wsdl:operation name="ProcessRegister">
+      <wsdl:input name="RegisterRequest" message="reg:RegisterRequestMessage" />
+      <wsdl:output name="RegisterResponse" message="reg:RegisterResponseMessage" />
+      <wsdl:fault name="RegisterError" message="reg:RegisterErrorMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessManageAccount">
+      <wsdl:input name="ManageAccountRequest" message="reg:ManageAccountRequestMessage" />
+      <wsdl:output name="ManageAccountResponse" message="reg:ManageAccountResponseMessage" />
+      <wsdl:fault name="ManageAccountError" message="reg:ManageAccountErrorMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegisterBinding" type="reg:RegisterMgrAcctPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ProcessRegister">
+      <soap:operation soapAction=" http://www.ups.com/XMLSchema/XOLTWS/RegistrationBinding/v1.0" style="document" />
+      <wsdl:input name="RegisterRequest">
+        <soap:body use="literal" parts="Body" />
+        <soap:header message="reg:RegisterRequestMessage" part="UPSSecurity" use="literal">
+          <soap:headerfault message="reg:RegisterErrorMessage" part="RegisterError" use="literal" />
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output name="RegisterResponse">
+        <soap:body use="literal" parts="Body" />
+      </wsdl:output>
+      <wsdl:fault name="RegisterError">
+        <soap:fault use="literal" name="RegisterError" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessManageAccount">
+      <soap:operation soapAction="http://onlinetools.ups.com/webservices/RegistrationBinding/v1.0" style="document" />
+      <wsdl:input name="ManageAccountRequest">
+        <soap:body use="literal" parts="Body" />
+        <soap:header message="reg:ManageAccountRequestMessage" part="UPSSecurity" use="literal">
+          <soap:headerfault message="reg:ManageAccountErrorMessage" part="ManageAccountError" use="literal" />
+        </soap:header>
+      </wsdl:input>
+      <wsdl:output name="ManageAccountResponse">
+        <soap:body use="literal" parts="Body" />
+      </wsdl:output>
+      <wsdl:fault name="ManageAccountError">
+        <soap:fault use="literal" name="ManageAccountError" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegisterMgrAcctService">
+    <wsdl:port name="RegisterMgrAcctPort" binding="reg:RegisterBinding">
+      <soap:address location="https://wwwcie.ups.com/webservices/Registration" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

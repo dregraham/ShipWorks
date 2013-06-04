@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConditionTree>
+
+  <!--
+  Menu when Customer is the entity
+  -->
+  <ConditionTypes entity="Customer">
+
+    <Category name="Customer">
+      <Group name="Customer">
+        <Condition identifier="Customer.CompanyName" displayAs="Company" />
+        <Condition identifier="Customer.EmailAddress" displayAs="Email" />
+        <Separator />
+        <Condition identifier="Customer.OrderCount" />
+        <Condition identifier="Customer.AmountSpent" />
+        <Separator />
+        <Condition identifier="Customer.Emailed" displayAs="Emailed With" />
+        <Condition identifier="Customer.Printed" displayAs="Printed With" />
+        <Condition identifier="Customer.NoteCount" displayAs="Note Count" />
+      </Group>
+      <Group name="Name">
+        <Condition identifier="Customer.Name.First" displayAs="First" />
+        <Condition identifier="Customer.Name.Middle" displayAs="Middle" />
+        <Condition identifier="Customer.Name.Last" displayAs="Last" />
+      </Group>
+      <Group name="Address">
+        <Condition identifier="Customer.Address.Street1" displayAs="Street1" />
+        <Condition identifier="Customer.Address.Street2" displayAs="Street2" />
+        <Condition identifier="Customer.Address.Street3" displayAs="Street3" />
+        <Condition identifier="Customer.Address.City" displayAs="City" />
+        <Condition identifier="Customer.Address.StateProvince" displayAs="State\Province" />
+        <Condition identifier="Customer.Address.PostalCode" displayAs="Postal Code" />
+        <Condition identifier="Customer.Address.Country" displayAs="Country" />
+      </Group>
+    </Category>
+
+    <Category name="Contents">
+
+      <Group name="For every">
+        <Condition identifier="Customer.ForEveryOrder" displayAs="Order..."/>
+        <Condition identifier="Customer.ForEveryEmail" displayAs="Email..." />
+        <Condition identifier="Customer.ForEveryPrint" displayAs="Print..." />
+        <Condition identifier="Customer.ForEveryNote" displayAs="Note..."/>
+      </Group>
+
+      <Group name="For any">
+        <Condition identifier="Customer.ForAnyOrder" displayAs="Order..."/>
+        <Condition identifier="Customer.ForAnyEmail" displayAs="Email..." />
+        <Condition identifier="Customer.ForAnyPrint" displayAs="Print..." />
+        <Condition identifier="Customer.ForAnyNote" displayAs="Note..." />
+      </Group>
+
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when Order is the entity
+  -->
+  <ConditionTypes entity="Order">
+
+    <Category name="Order">
+      <Group name="Order">
+        <Condition identifier="Order.Number" displayAs="Number" />
+        <Condition identifier="Order.Date" displayAs="Date" />
+        <Condition identifier="Order.Total" displayAs="Total" />
+        <Condition identifier="Order.RequestedShipping" />
+        <Condition identifier="Order.TotalWeight" />
+        <Condition identifier="Order.OnlineLastModified" />
+        <Separator />
+        <Condition identifier="Order.LocalStatus" />
+        <Condition identifier="Order.OnlineStatus" />
+        <Separator />
+        <Condition identifier="Order.Emailed" displayAs="Emailed With" />
+        <Condition identifier="Order.Printed" displayAs="Printed With" />
+        <Separator/>
+        <Group name="Entry Method">
+          <Condition identifier="Order.Downloaded" displayAs="Downloaded" />
+          <Condition identifier="Order.Manual" displayAs="Manually Entered" />
+        </Group>
+        <Separator />
+        <Condition identifier="Amazon.OrderID" />
+        <Condition identifier="Amazon.FulfillmentChannel" displayAs="Amazon Fulfilled By" />
+        <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
+        <Condition identifier="ChannelAdvisorOrder.ShippingStatus" />
+        <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />
+        <Condition identifier="ChannelAdvisorOrder.CheckoutStatus" />
+        <Condition identifier="ChannelAdvisorOrder.FlagType" />
+        <Condition identifier="CommerceInterfaceOrder.CommerceInterfaceOrderNumber" />
+        <Condition identifier="EbayOrder.EbayBuyerID" />
+        <Condition identifier="EbayOrder.SelectedShippingMethod" />
+        <Condition identifier="EbayOrder.GspEligible" />
+        <Condition identifier="EtsyOrder.WasPaid" />
+        <Condition identifier="EtsyOrder.WasShipped" />
+        <Condition identifier="MarketplaceAdvisorOrder.InvoiceNumber" />
+        <Condition identifier="MarketplaceAdvisorOrder.SellerOrderNumber" />
+        <Condition identifier="NeweggOrder.InvoiceNumber" />
+        <Condition identifier="OrderMotionOrder.Promotion" />
+        <Condition identifier="PayPalOrder.PaymentStatus" />
+        <Condition identifier="ProStoresOrder.Confirmation" />
+        <Condition identifier="ProStoresOrder.Authorization" />
+        <Condition identifier="SearsOrder.CustomerPickup" />
+        <Condition identifier="SearsOrder.PoNumber" />
+        <Condition identifier="ShopifyOrder.OnlineFulfillmentStatusCode" />
+        <Condition identifier="ShopifyOrder.OnlinePaymentStatusCode" />
+      </Group>
+      <Group name="Person">
+        <Group name="Name">
+          <Condition identifier="Order.Name.First" displayAs="First" />
+          <Condition identifier="Order.Name.Middle" displayAs="Middle" />
+          <Condition identifier="Order.Name.Last" displayAs="Last" />
+        </Group>
+        <Group name="Address">
+          <Condition identifier="Order.Address.Street1" displayAs="Street1" />
+          <Condition identifier="Order.Address.Street2" displayAs="Street2" />
+          <Condition identifier="Order.Address.Street3" displayAs="Street3" />
+          <Condition identifier="Order.Address.City" displayAs="City" />
+          <Condition identifier="Order.Address.StateProvince" displayAs="State\Province" />
+          <Condition identifier="Order.Address.PostalCode" displayAs="Postal Code" />
+          <Condition identifier="Order.Address.Country" displayAs="Country" />
+        </Group>
+        <Condition identifier="Order.CompanyName" displayAs="Company" />
+        <Condition identifier="Order.EmailAddress" displayAs="Email" />
+      </Group>
+      <Group name="Store">
+        <Condition identifier="Order.Store" displayAs="Store instance" />
+        <Condition identifier="Order.StoreType" displayAs="Store type" />
+      </Group>
+      <Group name="Counts">
+        <Condition identifier="Order.LineItems" displayAs="Line Items" />
+        <Condition identifier="Order.TotalItems" displayAs="Total Items" />
+        <Condition identifier="Order.NoteCount" displayAs="Notes" />
+        <Condition identifier="Order.ShipmentCount" displayAs="Shipments" />
+      </Group>
+    </Category>
+
+    <Category name="Customer">
+      <Condition identifier="Order.Customer"/>
+    </Category>
+
+    <Category name="Contents">
+
+      <Group name="For every">
+        <Condition identifier="Order.ForEveryItem" displayAs="Item..." />
+        <Condition identifier="Order.ForEveryCharge" displayAs="Charge..." />
+        <Condition identifier="Order.ForEveryShipment" displayAs="Shipment..." />
+        <Condition identifier="Order.ForEveryPaymentDetail" displayAs="Payment..." />
+        <Condition identifier="Order.ForEveryEmail" displayAs="Email..." />
+        <Condition identifier="Order.ForEveryPrint" displayAs="Print..." />
+        <Condition identifier="Order.ForEveryNote" displayAs="Note..." />
+      </Group>
+
+      <Group name="For any">
+        <Condition identifier="Order.ForAnyItem" displayAs="Item..." />
+        <Condition identifier="Order.ForAnyCharge" displayAs="Charge..." />
+        <Condition identifier="Order.ForAnyShipment" displayAs="Shipment..." />
+        <Condition identifier="Order.ForAnyPaymentDetail" displayAs="Payment..." />
+        <Condition identifier="Order.ForAnyEmail" displayAs="Email..." />
+        <Condition identifier="Order.ForAnyPrint" displayAs="Print..." />
+        <Condition identifier="Order.ForAnyNote" displayAs="Note..." />
+      </Group>
+
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when OrderItem is the entity
+  -->
+  <ConditionTypes entity="OrderItem">
+
+    <Category name="Order Item">
+      <Condition identifier="OrderItem.SKU" displayAs="SKU" />
+      <Condition identifier="OrderItem.Name" displayAs="Name" />
+      <Condition identifier="OrderItem.Code" displayAs="Code" />
+      <Condition identifier="OrderItem.Description" displayAs="Description" />
+      <Condition identifier="OrderItem.ISBN" displayAs="ISBN" />
+      <Condition identifier="OrderItem.Location" displayAs="Location" />
+      <Condition identifier="OrderItem.Quantity" displayAs="Quantity" />
+      <Condition identifier="OrderItem.UnitCost" displayAs="Unit Cost" />
+      <Condition identifier="OrderItem.UnitPrice" displayAs="Unit Price" />
+      <Condition identifier="OrderItem.UnitWeight" displayAs="Unit Weight" />
+      <Condition identifier="OrderItem.UPC" displayAs="UPC" />
+      <Condition identifier="OrderItem.LocalStatus" displayAs="Local Status" />
+      <Separator/>
+      <Condition identifier="BigCommerceOrderItem.IsDigitalItem" />
+      <Condition identifier="BigCommerceOrderItem.EventDate" />
+      <Condition identifier="BigCommerceOrderItem.EventName" />
+      <Condition identifier="BuyDotComOrderItem.ListingID" />
+      <Condition identifier="ChannelAdvisorOrderItem.SiteName" />
+      <Condition identifier="ChannelAdvisorOrderItem.BuyerID" />
+      <Condition identifier="ChannelAdvisorOrderItem.SalesSourceID" />
+      <Condition identifier="ChannelAdvisorOrderItem.DistributionCenter" />
+      <Condition identifier="ChannelAdvisorOrderItem.IsFBA" />
+      <Condition identifier="EbayOrderItem.SellingManagerRecord" />
+      <Condition identifier="EbayOrderItem.Feedback" />
+      <Condition identifier="EbayOrderItem.PaymentMethod" />
+      <Condition identifier="EbayOrderItem.CheckoutStatus" />
+      <Condition identifier="EbayOrderItem.PayPalAddressStatus" />
+    </Category>
+
+    <Category name="Order">
+      <Condition identifier="OrderItem.Order" />
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when OrderCharge is the entity
+  -->
+  <ConditionTypes entity="OrderCharge">
+
+    <Category name="Order Charge">
+      <Condition identifier="OrderCharge.Type" displayAs="Type" />
+      <Condition identifier="OrderCharge.Description" displayAs="Description" />
+      <Condition identifier="OrderCharge.Amount" displayAs="Amount" />
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when PaymentDetail is the entity
+  -->
+  <ConditionTypes entity="PaymentDetail">
+
+    <Category name="Payment Detail">
+      <Condition identifier="PaymentDetail.Label" />
+      <Condition identifier="PaymentDetail.Value" />
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when Shipment is the entity
+  -->
+  <ConditionTypes entity="Shipment">
+
+    <Category name="Shipment">
+      <Condition identifier="Shipment.ShipmentType" />
+      <Group name="Ship To">
+        <Group name="Name">
+          <Condition identifier="Shipment.ShipTo.FirstName" displayAs="First Name"/>
+          <Condition identifier="Shipment.ShipTo.MiddleName" displayAs="Middle Name"/>
+          <Condition identifier="Shipment.ShipTo.LastName" displayAs="Last Name"/>
+        </Group>
+        <Group name="Address">
+          <Condition identifier="Shipment.ShipTo.Street1" displayAs="Street1"/>
+          <Condition identifier="Shipment.ShipTo.Street2" displayAs="Street2"/>
+          <Condition identifier="Shipment.ShipTo.Street3" displayAs="Street3"/>
+          <Condition identifier="Shipment.ShipTo.City" displayAs="City"/>
+          <Condition identifier="Shipment.ShipTo.StateProvince" displayAs="State\Province"/>
+          <Condition identifier="Shipment.ShipTo.PostalCode" displayAs="Postal Code"/>
+          <Condition identifier="Shipment.ShipTo.Country" displayAs="Country"/>
+        </Group>
+        <Condition identifier="Shipment.ShipTo.Company" displayAs="Company"/>
+        <Condition identifier="Shipment.ShipTo.EmailAddress"  displayAs="Email Address"/>
+      </Group>
+      <Condition identifier="Shipment.ShipDate" />
+      <Condition identifier="Shipment.Weight" displayAs="Weight" />
+      <Condition identifier="Shipment.Insurance" />
+      <Separator/>
+      <Condition identifier="Shipment.Status" />
+      <Condition identifier="Shipment.ProcessedDate" />
+      <Condition identifier="Shipment.VoidedDate" />
+      <Condition identifier="Shipment.ReturnStatus" />
+      <Separator/>
+      <Condition identifier="Shipment.Cost" displayAs="Cost" />
+      <Condition identifier="Shipment.Tracking" displayAs="Tracking Number" />
+      <Condition identifier="Shipment.LabelFormat" />
+      <Separator/>
+      <Group name="Postal">
+        <Condition identifier="Shipment.Postal.ServiceType" displayAs="Service" />
+        <Condition identifier="Shipment.Postal.ConfirmationType" displayAs="Confirmation" />
+        <Condition identifier="Shipment.Postal.PackagingType" displayAs="Packaging" />
+      </Group>
+      <Group name="FedEx">
+        <Condition identifier="Shipment.FedEx.ServiceType" displayAs="Service" />
+        <Condition identifier="Shipment.FedEx.PackagingType" displayAs="Packaging" />
+      </Group>
+      <Group name="UPS">
+        <Condition identifier="Shipment.UPS.ServiceType" displayAs="Service" />
+        <Condition identifier="Shipment.UPS.ReturnServiceType" displayAs="Return Service"/>
+      </Group>
+    </Category>
+
+    <Category name="Order">
+      <Condition identifier="Shipment.Order" />
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when Note is the entity
+  -->
+  <ConditionTypes entity="Note">
+
+    <Category name="Note">
+      <Condition identifier="Note.Text" displayAs="Note Text" />
+      <Condition identifier="Note.Source" displayAs="Note Source" />
+      <Condition identifier="Note.Visibility" displayAs="Note Visibility" />
+      <Condition identifier="Note.Edited" displayAs="Last Edited" />
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when Email is the entity
+  -->
+  <ConditionTypes entity="Email">
+
+    <Category name="Email">
+      <Condition identifier="Email.Status" displayAs="Status" />
+      <Condition identifier="Email.SendDate" displayAs="Sent On" />
+      <Condition identifier="Email.Template" displayAs="Using Template" />
+    </Category>
+
+  </ConditionTypes>
+
+  <!--
+  Menu when Printed is the entity
+  -->
+  <ConditionTypes entity="Printed">
+
+    <Category name="Printed">
+      <Condition identifier="Print.PrintDate" displayAs="Printed On" />
+      <Condition identifier="Print.Template" displayAs="Using Template" />
+    </Category>
+
+  </ConditionTypes>
+
+</ConditionTree>
+

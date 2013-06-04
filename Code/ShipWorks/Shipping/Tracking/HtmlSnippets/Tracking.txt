@@ -1,0 +1,23 @@
+﻿<table class=main cellSpacing=0 cellPadding=0>
+	<tr class=heading>
+		<td valign='top'><b>Tracking Summary</b></td>
+	</tr>
+	<tr class=grayrow >
+		<td valign='top'>{SwTrackingSummary}</td>
+	</tr>
+</table>
+
+<br /><br />
+
+<table class=activity>
+   <tr class=heading>
+    <td>Date</td>
+    <td>Time</td>
+    <td>Location</td>
+    <td>Activity</td>
+   </tr>
+
+   {SwDetailRows}
+   
+</table>
+

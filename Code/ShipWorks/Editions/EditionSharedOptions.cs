@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ShipWorks.Editions
+{
+    /// <summary>
+    /// Encapsulates
+    /// </summary>
+    public class EditionSharedOptions
+    {
+        /// <summary>
+        /// Indicates if DHL is enabled and allowed for the edition
+        /// </summary>
+        public bool EndiciaDhlEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates if insurance is enabled and allowed for the edition
+        /// </summary>
+        public bool EndiciaInsuranceEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates whether UPS SurePost is enabled and allowed for the edition
+        /// </summary>
+        /// <value><c>true</c> if UPS SurePost is enabled; otherwise, <c>false</c>.</value>
+        public bool UpsSurePostEnabled { get; set; }
+    }
+}

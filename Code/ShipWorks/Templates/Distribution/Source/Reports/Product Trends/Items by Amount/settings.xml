@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TemplateSettings>
+  <General>
+    <Type>Report</Type>
+    <Context>Automatic</Context>
+    <OutputFormat>Html</OutputFormat>
+  </General>
+  <Saving>
+    <Filename>ItemsByAmount</Filename>
+  </Saving>
+</TemplateSettings>

@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ShipWorks.Shipping.Carriers.UPS.Enums
+{
+    [Flags]
+    public enum UpsEmailNotificationType
+    {
+        None = 0x0000,
+
+        Ship = 0x0001,
+
+        Exception = 0x0002,
+
+        Deliver = 0x0004
+    }
+}

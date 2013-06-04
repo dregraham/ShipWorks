@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ExpressOne.Services" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ExpressOne.Services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ExpressOne.Common" />
+  <xs:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="CustomerCredentials">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PassPhrase" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerCredentials" nillable="true" type="tns:CustomerCredentials" />
+  <xs:complexType name="CustomerRegistrationData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BankAccount" nillable="true" type="tns:BankAccountInfo" />
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContactName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CreditCard" nillable="true" type="tns:CreditCardInfo" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExternalAccountID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InsuranceTermsAccepted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MailingAddress" nillable="true" type="tns:AddressInfo" />
+      <xs:element minOccurs="0" name="PaymentType" type="tns:PaymentType" />
+      <xs:element minOccurs="0" name="Phone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SecurityInfo" nillable="true" type="tns:SecurityInfo" />
+      <xs:element minOccurs="0" name="TermsAccepted" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerRegistrationData" nillable="true" type="tns:CustomerRegistrationData" />
+  <xs:complexType name="BankAccountInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ExpressOne.Common" minOccurs="0" name="AccountType" type="q1:BankAccountTypeEnum" />
+      <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingAddress" nillable="true" type="tns:AddressInfo" />
+      <xs:element minOccurs="0" name="RoutingNumber" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BankAccountInfo" nillable="true" type="tns:BankAccountInfo" />
+  <xs:complexType name="AddressInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostalCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="State" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AddressInfo" nillable="true" type="tns:AddressInfo" />
+  <xs:complexType name="CreditCardInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BillingAddress" nillable="true" type="tns:AddressInfo" />
+      <xs:element minOccurs="0" name="CardNumber" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ExpressOne.Common" minOccurs="0" name="CardType" type="q2:CreditCardTypeEnum" />
+      <xs:element minOccurs="0" name="ExpirationMonth" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExpirationYear" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NameOnCard" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SecurityCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CreditCardInfo" nillable="true" type="tns:CreditCardInfo" />
+  <xs:simpleType name="PaymentType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CreditCard">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ACH">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Wire">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ProPay">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PaymentType" nillable="true" type="tns:PaymentType" />
+  <xs:complexType name="SecurityInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AcceptLanguage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ForwardedIPAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RemoteIPAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SessionID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserAgent" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SecurityInfo" nillable="true" type="tns:SecurityInfo" />
+  <xs:complexType name="CustomerProfile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContactName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExternalCustomerID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InsuranceTermsAccepted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MailingAddress" nillable="true" type="tns:AddressInfo" />
+      <xs:element minOccurs="0" name="PaymentType" type="tns:PaymentType" />
+      <xs:element minOccurs="0" name="Phone" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerProfile" nillable="true" type="tns:CustomerProfile" />
+  <xs:complexType name="AuthenticationInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ApiKey" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PassPhrase" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AuthenticationInfo" nillable="true" type="tns:AuthenticationInfo" />
+  <xs:simpleType name="CustomerTransactionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CreateLabel">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VoidLabel">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Deposit">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Refund">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PurchaseInsurance">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VoidInsurance">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TransferIn">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TransferOut">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Adjustment">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">9</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CustomerTransactionType" nillable="true" type="tns:CustomerTransactionType" />
+  <xs:complexType name="CustomerTransactionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HasMoreRecords" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Transactions" nillable="true" type="tns:ArrayOfCustomerTransaction" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerTransactionResponse" nillable="true" type="tns:CustomerTransactionResponse" />
+  <xs:complexType name="ArrayOfCustomerTransaction">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomerTransaction" nillable="true" type="tns:CustomerTransaction" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCustomerTransaction" nillable="true" type="tns:ArrayOfCustomerTransaction" />
+  <xs:complexType name="CustomerTransaction">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ExternalTransactionID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PartnerCustomerID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PartnerTransactionID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TrackingNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TransactionID" type="xs:long" />
+      <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TransactionType" type="tns:CustomerTransactionType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerTransaction" nillable="true" type="tns:CustomerTransaction" />
+</xs:schema>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://manager.orderdynamics.com/webservices" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="https://manager.orderdynamics.com/webservices" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://manager.orderdynamics.com/webservices">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="GetShipmentQueue">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="storeGuid" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetShipmentQueueResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetShipmentQueueResult" type="tns:ArrayOfShipmentQueueItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfShipmentQueueItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ShipmentQueueItem" nillable="true" type="tns:ShipmentQueueItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ShipmentQueueItem">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipperCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RateCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Weight" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Value" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="tns:ShipmentQueueStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ShipmentQueueStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotProcessed" />
+          <s:enumeration value="Shipped" />
+          <s:enumeration value="Error" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="UpdateQueueItemStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="storeGuid" type="s1:guid" />
+            <s:element minOccurs="1" maxOccurs="1" name="queueItemId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="status" type="tns:ShipmentQueueStatus" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateQueueItemStatusResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdateQueueItemsStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="storeGuid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="queueItems" type="tns:ArrayOfInt" />
+            <s:element minOccurs="1" maxOccurs="1" name="status" type="tns:ShipmentQueueStatus" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateQueueItemsStatusResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdateTrackingNumber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="storeGuid" type="s1:guid" />
+            <s:element minOccurs="1" maxOccurs="1" name="orderId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="trackingNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateTrackingNumberResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdateTrackingNumbers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="storeGuid" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="orders" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="trackingNumbers" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateTrackingNumbersResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="guid">
+        <s:restriction base="s:string">
+          <s:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetShipmentQueueSoapIn">
+    <wsdl:part name="parameters" element="tns:GetShipmentQueue" />
+  </wsdl:message>
+  <wsdl:message name="GetShipmentQueueSoapOut">
+    <wsdl:part name="parameters" element="tns:GetShipmentQueueResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateQueueItemStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateQueueItemStatus" />
+  </wsdl:message>
+  <wsdl:message name="UpdateQueueItemStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateQueueItemStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateQueueItemsStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateQueueItemsStatus" />
+  </wsdl:message>
+  <wsdl:message name="UpdateQueueItemsStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateQueueItemsStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateTrackingNumberSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateTrackingNumber" />
+  </wsdl:message>
+  <wsdl:message name="UpdateTrackingNumberSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateTrackingNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateTrackingNumbersSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateTrackingNumbers" />
+  </wsdl:message>
+  <wsdl:message name="UpdateTrackingNumbersSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateTrackingNumbersResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ShipmentQueueServiceSoap">
+    <wsdl:operation name="GetShipmentQueue">
+      <wsdl:input message="tns:GetShipmentQueueSoapIn" />
+      <wsdl:output message="tns:GetShipmentQueueSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateQueueItemStatus">
+      <wsdl:input message="tns:UpdateQueueItemStatusSoapIn" />
+      <wsdl:output message="tns:UpdateQueueItemStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateQueueItemsStatus">
+      <wsdl:input message="tns:UpdateQueueItemsStatusSoapIn" />
+      <wsdl:output message="tns:UpdateQueueItemsStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTrackingNumber">
+      <wsdl:input message="tns:UpdateTrackingNumberSoapIn" />
+      <wsdl:output message="tns:UpdateTrackingNumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTrackingNumbers">
+      <wsdl:input message="tns:UpdateTrackingNumbersSoapIn" />
+      <wsdl:output message="tns:UpdateTrackingNumbersSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ShipmentQueueServiceSoap" type="tns:ShipmentQueueServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetShipmentQueue">
+      <soap:operation soapAction="https://manager.orderdynamics.com/webservices/GetShipmentQueue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateQueueItemStatus">
+      <soap:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateQueueItemStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateQueueItemsStatus">
+      <soap:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateQueueItemsStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTrackingNumber">
+      <soap:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateTrackingNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTrackingNumbers">
+      <soap:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateTrackingNumbers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ShipmentQueueServiceSoap12" type="tns:ShipmentQueueServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetShipmentQueue">
+      <soap12:operation soapAction="https://manager.orderdynamics.com/webservices/GetShipmentQueue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateQueueItemStatus">
+      <soap12:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateQueueItemStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateQueueItemsStatus">
+      <soap12:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateQueueItemsStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTrackingNumber">
+      <soap12:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateTrackingNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTrackingNumbers">
+      <soap12:operation soapAction="https://manager.orderdynamics.com/webservices/UpdateTrackingNumbers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ShipmentQueueService">
+    <wsdl:port name="ShipmentQueueServiceSoap" binding="tns:ShipmentQueueServiceSoap">
+      <soap:address location="https://manager.orderdynamics.com/webservices/ShipmentQueueService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ShipmentQueueServiceSoap12" binding="tns:ShipmentQueueServiceSoap12">
+      <soap12:address location="https://manager.orderdynamics.com/webservices/ShipmentQueueService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

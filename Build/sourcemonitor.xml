@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sourcemonitor_commands>
+	
+	<!-- ===================================================================
+    The write_log element value is used for execution of commands in this
+    file, not the log errors flag set in SourceMonitor's options dialog.
+    If this element is missing, command progress and errors will be written
+    to the SourceMonitor log file.
+    =================================================================== -->
+	<write_log>true</write_log>
+
+	<!-- ===============================================================
+     This command is typical for a project that does not yet exist.
+     The file name becomes the project name of the new project.
+   ================================================================ -->
+	<command>
+
+		<project_file>{LogDirectory}sourcemonitor.smp</project_file>
+
+		<!-- ===============================================================
+        For a new project, you must specify the language and the location
+        of the source code.
+       ================================================================ -->
+
+		<project_language>C#</project_language>
+		<source_directory>{SrcDirectory}</source_directory>
+		<checkpoint_name>{BuildLabel}</checkpoint_name>
+
+		<!-- ===============================================================
+        For either a new or existing project, you can override the default
+        or current file extensions (set in the Options dialog) for source
+        files to be included in a new checkpoint. All files with the
+        extensions you specify here will be included in the new checkpoint.
+       ================================================================ -->
+
+		<file_extensions>*.cs</file_extensions>
+		<include_subdirectories>true</include_subdirectories>
+		<ignore_headers_footers>false</ignore_headers_footers>
+
+		<!-- ===============================================================
+        Export of metrics data is supported for a single checkpoint per
+        command (the one identified in the <checkpoint_name> tag or one that
+        is automatically created as explained below). Exported metrics data
+        is specified by the export type: "1" for the project summary as XML,
+        "2" for checkpoint details as XML, or "3" project details as CSV.
+        You specify the type with a number 1, 2 or 3 in the element's
+        contents. All other text is ignored. The following examples are
+        all valid specification of export type 2:
+          <export_type>2 (project details as XML)</export_type>
+          <export_type>Project details as XML: 2</export_type>
+          <export_type>2</export_type>
+       ================================================================ -->
+
+		<export>
+			<export_file>{LogDirectory}sourcemonitor.summary.xml</export_file>
+			<export_type>1 (summary)</export_type>
+		</export>
+		
+	</command>
+
+	<!-- ===============================================================
+    This command is typical for the case where a project exists and you
+    want to create a new checkpoint and export its metrics.
+   ================================================================ -->
+	
+	<command>
+
+		<project_file>{LogDirectory}sourcemonitor.smp</project_file>
+		<checkpoint_name>{BuildLabel}</checkpoint_name>
+		
+		<!-- ===============================================================
+        If you do not specify a checkpoint name, a name will be created for
+        you in the form "CheckpointN" where N is the next higher number not
+        already present in an auto-generated checkpoint name in this
+        project.
+       ================================================================ -->
+
+		<export>
+			<export_file>{LogDirectory}sourcemonitor.detail.xml</export_file>
+			<export_type>2 (details)</export_type>
+		</export>
+
+		<!-- ===============================================================
+         If you wish, you can delete the checkpoint you just created.
+		<delete_checkpoint />
+       ================================================================ -->
+
+	</command>
+
+</sourcemonitor_commands>

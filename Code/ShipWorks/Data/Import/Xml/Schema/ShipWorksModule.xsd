@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ShipWorksModule"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  
+  <!-- Core ShipWorks types -->
+  <xs:include schemaLocation="ShipWorksCore.xsd"/>
+
+  <!-- Module definition -->
+  <xs:element type="ShipWorks" name="ShipWorks"/>
+
+  <xs:complexType name="ShipWorks">
+    <xs:annotation>
+      <xs:documentation>Root of all integration responses.</xs:documentation>
+    </xs:annotation>
+
+    <xs:sequence>
+      <xs:element name="Parameters" minOccurs="0" >
+        <xs:annotation>
+          <xs:documentation>Container for echoing received parameters back to ShipWorks.  Useful for support staff.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="Module" type="Module">
+          <xs:annotation>
+            <xs:documentation>Response element for GetModule call.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Store" type="Store">
+          <xs:annotation>
+            <xs:documentation>Response element for GetStore call.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="StatusCodes">
+          <xs:annotation>
+            <xs:documentation>Response element for GetStatusCodes call.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="StatusCode" minOccurs="0" maxOccurs="unbounded" type="StatusCode"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="OrderCount" type="xs:int">
+          <xs:annotation>
+            <xs:documentation>Response element for GetCount call.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Orders">
+          <xs:annotation>
+            <xs:documentation>Response element for GetOrders call.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Order" minOccurs="0" maxOccurs="unbounded" type="Order" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="UpdateSuccess">
+          <xs:annotation>
+            <xs:documentation>Response element for a successful UpdateStatus or UpdateShipment call.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Error">
+          <xs:annotation>
+            <xs:documentation>Response element for any fatal errors that occured in the processing of any requests.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Code" type="xs:string" >
+                <xs:annotation>
+                  <xs:documentation>The error code will appear in logs and has no meaning to ShipWorks.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="Description" type="xs:string" >
+                <xs:annotation>
+                  <xs:documentation>Error message that will be presented to the user when encountered by ShipWorks.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Debug" type="Debug" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Container for passing any debugging or support information back to ShipWorks.  Nothing contained here will be used by ShipWorks.  Responses will be logged by ShipWorks, so this should not contain sensitive information.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+
+    <xs:attribute name="moduleVersion" type="Version" use="required">
+      <xs:annotation>
+        <xs:documentation>The version of this integration module.  Must be at least 3.0.0 for ShipWorks 3, or an error will be raised.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+
+    <xs:attribute name="schemaVersion" type="Version" use="required">
+      <xs:annotation>
+        <xs:documentation>ShipWorks Schema version to validate the response to.   Currently 1.0.0.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="Store">
+    <xs:annotation>
+      <xs:documentation>Demographic information about the user's online store.  This information is made available to the ShipWorks user during shipping and invoicing.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The name of the oniline store.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CompanyOrOwner" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The individual or company owner's name.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Email" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Typically the support/customer service email address for the store.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Street1" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Physical street address.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Street2" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Physical street address.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Street3" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Physical street address.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="City" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>City where the store is located.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="State" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>State where the store is located.  State code or full name.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="PostalCode" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Postal code where the store is located.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Country" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Country where the store is located. Country code or full name.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Phone" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Typically the store's customer service phone number.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Website" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The online store's customer-facing URL.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Module">
+    <xs:annotation>
+      <xs:documentation>Descriptive information about the module and its developer, including the module's capabilities.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Platform" type="RequiredString">
+        <xs:annotation>
+          <xs:documentation>The ecommerce system this module allows ShipWorks to integrate with.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Developer" type="RequiredString">
+        <xs:annotation>
+          <xs:documentation>The company or individual name of the integration developer.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Capabilities">
+        <xs:annotation>
+          <xs:documentation>Declares the functionality available in the integration.  Options specified here setup expectations in ShipWorks such as the availability of certain data elements, or features as a whole.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="DownloadStrategy">
+              <xs:annotation>
+                <xs:documentation>
+                  Dictates how ShipWorks will retrieve orders from your system.
+
+                  ByModifiedTime: ShipWorks will request orders placed or modified since the most recent LastModified order it has downloaded in the past.
+
+                  ByOrderNumber: ShipWorks will request orders having order numbers larger than the highest order number it has downloaded in the past.
+
+                  Consult the Store Integration Guide for more information on the implications of this setting.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="ByModifiedTime">
+                    <xs:annotation>
+                      <xs:documentation>ShipWorks will request orders placed or modified since the most recent LastModified order it has downloaded in the past.</xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="ByOrderNumber">
+                    <xs:annotation>
+                      <xs:documentation>ShipWorks will request orders having order numbers larger than the highest order number it has downloaded in the past.</xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="OnlineCustomerID">
+              <xs:annotation>
+                <xs:documentation>If your system assigns unique identifier to customers, ShipWorks can use this identifier to match up orders to customers in the ShipWorks database.  Customer linking is done by email address otherwise.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:attribute name="supported" type="xs:boolean" use="required">
+                  <xs:annotation>
+                    <xs:documentation>Specifies whether or not CustomerID will be provided in GetOrder respones.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="dataType" type="VariantDataType" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Tells ShipWorks what type of data to expect in the CustomerID element of the GetOrder respones.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="OnlineStatus">
+              <xs:annotation>
+                <xs:documentation>ShipWorks can do more than just display order statuses.  Depending on the configuration specified here, ShipWorks can allow users to change order status with or without comments.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:attribute name="supported" type="xs:boolean" use="required">
+                  <xs:annotation>
+                    <xs:documentation>Specifies whether or not order statuses should be downloaded and displayed.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="supportsComments" type="xs:boolean" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Specifies if ShipWorks users can provide comments when doing order status updates.  Ignored if downloadOnly is true.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="downloadOnly" type="xs:boolean" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Specifies if order statuses are read-only, not allowing the user to make changes to the online status.  If this is true, no UpdateStatus calls will ever be made by ShipWorks.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="dataType" type="VariantDataType" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Tells ShipWorks what type of data to expect in the StatusCode element of the GetOrder response.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="OnlineShipmentUpdate">
+              <xs:annotation>
+                <xs:documentation>ShipWorks can send shipment tracking information to the integration, either automatically when orders are shipped or manually by the user.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:attribute name="supported" type="xs:boolean" use="required">
+                  <xs:annotation>
+                    <xs:documentation>Dictates whether or not shipment details should be sent to the integration.  If this is true, no UpdateShipment calls will ever be made by ShipWorks.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Communications" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This is used to configure any communications-level settings ShipWorks needs in order to fully communicate with the module.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Http" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="expect100Continue" type="xs:boolean" use="optional" default="true">
+                  <xs:annotation>
+                    <xs:documentation>By default ShipWorks will send the expect:100Continue HTTP Header on its POST requests.  If this causes issues for your system, set this to false and it will no longer be sent.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="ResponseEncoding" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  The character encoding used in responses from the integration.
+
+                  By default ShipWorks expects UTF-8, but can support Latin-1 (ISO-8859-1) by configuring this.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="UTF-8">
+                    <xs:annotation>
+                      <xs:documentation>ShipWorks default</xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="Latin-1">
+                    <xs:annotation>
+                      <xs:documentation>Also known as ISO-8859-1</xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="StatusCode">
+    <xs:annotation>
+      <xs:documentation>Container element for a single status code.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Code" type="RequiredString">
+        <xs:annotation>
+          <xs:documentation>The internal representation of your system's status code.  For example 1001, SHIP, CANCEL2</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Name" type="RequiredString">
+        <xs:annotation>
+          <xs:documentation>The display name for the status code.  This value is presented as the status code in ShipWorks and should be identical to how it is displayed in your system to avoid confusion.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

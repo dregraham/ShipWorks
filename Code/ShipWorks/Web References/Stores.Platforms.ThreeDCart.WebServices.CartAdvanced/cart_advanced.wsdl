@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://3dcart.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://3dcart.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://3dcart.com/">
+      <s:element name="runQuery">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sqlStatement" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="runQueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="runQueryResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="runQuerySoapIn">
+    <wsdl:part name="parameters" element="tns:runQuery" />
+  </wsdl:message>
+  <wsdl:message name="runQuerySoapOut">
+    <wsdl:part name="parameters" element="tns:runQueryResponse" />
+  </wsdl:message>
+  <wsdl:portType name="cartAPIAdvancedSoap">
+    <wsdl:operation name="runQuery">
+      <wsdl:input message="tns:runQuerySoapIn" />
+      <wsdl:output message="tns:runQuerySoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="cartAPIAdvancedSoap" type="tns:cartAPIAdvancedSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="runQuery">
+      <soap:operation soapAction="http://3dcart.com/runQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="cartAPIAdvancedSoap12" type="tns:cartAPIAdvancedSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="runQuery">
+      <soap12:operation soapAction="http://3dcart.com/runQuery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="cartAPIAdvanced">
+    <wsdl:port name="cartAPIAdvancedSoap" binding="tns:cartAPIAdvancedSoap">
+      <soap:address location="http://api.3dcart.com/cart_advanced.asmx" />
+    </wsdl:port>
+    <wsdl:port name="cartAPIAdvancedSoap12" binding="tns:cartAPIAdvancedSoap12">
+      <soap12:address location="http://api.3dcart.com/cart_advanced.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

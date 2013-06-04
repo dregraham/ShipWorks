@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="OpenAccount" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:oa="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns:tns="http://www.ups.com/WSDL/XOLTWS/OpenAccount/v1.0" targetNamespace="http://www.ups.com/WSDL/XOLTWS/OpenAccount/v1.0">
+	<wsdl:types>
+		<xsd:schema>
+			<!-- This schema defines the UPS Security header used for authorization purposes -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" schemaLocation="UPSSecurity.xsd"/>
+			<!--  This schema defines the error detail data types returned within SOAPFaults to provide more specific information pertaining to the problem. -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" schemaLocation="Error1.1.xsd"/>
+			<!-- ###############This schema defines the OpenAccount  service data types  ################ -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" schemaLocation="OpenAccountWS.xsd"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="OpenAccountRequestMessage">
+		<wsdl:part name="Body" element="oa:OpenAccountRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="OpenAccountResponseMessage">
+		<wsdl:part name="Body" element="oa:OpenAccountResponse"/>
+	</wsdl:message>
+	<wsdl:message name="OpenAccountErrorMessage">
+		<wsdl:part name="OpenAccountError" element="error:Errors"/>
+	</wsdl:message>
+	<wsdl:portType name="OpenAccountPortType">
+		<wsdl:operation name="ProcessOpenAccount">
+			<wsdl:input name="OpenAccountRequest" message="tns:OpenAccountRequestMessage"/>
+			<wsdl:output name="OpenAccountResponse" message="tns:OpenAccountResponseMessage"/>
+			<wsdl:fault name="OpenAccountError" message="tns:OpenAccountErrorMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="OpenAccountBinding" type="tns:OpenAccountPortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ProcessOpenAccount">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/OpenAccountBinding/v1.0" style="document"/>
+			<wsdl:input name="OpenAccountRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:OpenAccountRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:OpenAccountErrorMessage" part="OpenAccountError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="OpenAccountResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="OpenAccountError">
+				<soap:fault name="OpenAccountError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="OpenAccountService">
+		<wsdl:port name="OpenAccountPort" binding="tns:OpenAccountBinding">
+			<!-- Production URL -->
+			<!--<soap:address location="https://onlinetools.ups.com/webservices/OpenAccount"/>-->
+			<!-- CIE -->
+			<soap:address location="https://wwwcie.ups.com/webservices/OpenAccount"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

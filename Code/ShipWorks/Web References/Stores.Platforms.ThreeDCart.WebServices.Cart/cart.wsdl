@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://3dcart.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://3dcart.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://3dcart.com/">
+      <s:element name="getProduct">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="batchSize" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startNum" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getProductResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getProductResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getCustomer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="batchSize" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startNum" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="customersFilter" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getCustomerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getCustomerResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="editCustomer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerData" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="action" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="editCustomerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="editCustomerResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getProductCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getProductCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getProductCountResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getCustomerCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getCustomerCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getCustomerCountResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getOrderStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="invoiceNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getOrderStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getOrderStatusResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getProductInventory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getProductInventoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getProductInventoryResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateProductInventory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="quantity" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="replaceStock" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateProductInventoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="updateProductInventoryResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateOrderStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="invoiceNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newStatus" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateOrderStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="updateOrderStatusResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateOrderShipment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="invoiceNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="shipmentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tracking" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="shipmentDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateOrderShipmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="updateOrderShipmentResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="batchSize" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startNum" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startFrom" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="invoiceNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dateFrom" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dateTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getOrderResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getOrderCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="startFrom" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="invoiceNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dateFrom" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dateTo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getOrderCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getOrderCountResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getCustomerLoginToken">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="storeUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerEmail" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="timeToLive" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="callBackURL" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getCustomerLoginTokenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getCustomerLoginTokenResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getProductSoapIn">
+    <wsdl:part name="parameters" element="tns:getProduct" />
+  </wsdl:message>
+  <wsdl:message name="getProductSoapOut">
+    <wsdl:part name="parameters" element="tns:getProductResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerSoapIn">
+    <wsdl:part name="parameters" element="tns:getCustomer" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerSoapOut">
+    <wsdl:part name="parameters" element="tns:getCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="editCustomerSoapIn">
+    <wsdl:part name="parameters" element="tns:editCustomer" />
+  </wsdl:message>
+  <wsdl:message name="editCustomerSoapOut">
+    <wsdl:part name="parameters" element="tns:editCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProductCountSoapIn">
+    <wsdl:part name="parameters" element="tns:getProductCount" />
+  </wsdl:message>
+  <wsdl:message name="getProductCountSoapOut">
+    <wsdl:part name="parameters" element="tns:getProductCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerCountSoapIn">
+    <wsdl:part name="parameters" element="tns:getCustomerCount" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerCountSoapOut">
+    <wsdl:part name="parameters" element="tns:getCustomerCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getOrderStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:getOrderStatus" />
+  </wsdl:message>
+  <wsdl:message name="getOrderStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:getOrderStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProductInventorySoapIn">
+    <wsdl:part name="parameters" element="tns:getProductInventory" />
+  </wsdl:message>
+  <wsdl:message name="getProductInventorySoapOut">
+    <wsdl:part name="parameters" element="tns:getProductInventoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="updateProductInventorySoapIn">
+    <wsdl:part name="parameters" element="tns:updateProductInventory" />
+  </wsdl:message>
+  <wsdl:message name="updateProductInventorySoapOut">
+    <wsdl:part name="parameters" element="tns:updateProductInventoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="updateOrderStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:updateOrderStatus" />
+  </wsdl:message>
+  <wsdl:message name="updateOrderStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:updateOrderStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="updateOrderShipmentSoapIn">
+    <wsdl:part name="parameters" element="tns:updateOrderShipment" />
+  </wsdl:message>
+  <wsdl:message name="updateOrderShipmentSoapOut">
+    <wsdl:part name="parameters" element="tns:updateOrderShipmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="getOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:getOrder" />
+  </wsdl:message>
+  <wsdl:message name="getOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:getOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="getOrderCountSoapIn">
+    <wsdl:part name="parameters" element="tns:getOrderCount" />
+  </wsdl:message>
+  <wsdl:message name="getOrderCountSoapOut">
+    <wsdl:part name="parameters" element="tns:getOrderCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerLoginTokenSoapIn">
+    <wsdl:part name="parameters" element="tns:getCustomerLoginToken" />
+  </wsdl:message>
+  <wsdl:message name="getCustomerLoginTokenSoapOut">
+    <wsdl:part name="parameters" element="tns:getCustomerLoginTokenResponse" />
+  </wsdl:message>
+  <wsdl:portType name="cartAPISoap">
+    <wsdl:operation name="getProduct">
+      <wsdl:input message="tns:getProductSoapIn" />
+      <wsdl:output message="tns:getProductSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getCustomer">
+      <wsdl:input message="tns:getCustomerSoapIn" />
+      <wsdl:output message="tns:getCustomerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="editCustomer">
+      <wsdl:input message="tns:editCustomerSoapIn" />
+      <wsdl:output message="tns:editCustomerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getProductCount">
+      <wsdl:input message="tns:getProductCountSoapIn" />
+      <wsdl:output message="tns:getProductCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerCount">
+      <wsdl:input message="tns:getCustomerCountSoapIn" />
+      <wsdl:output message="tns:getCustomerCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getOrderStatus">
+      <wsdl:input message="tns:getOrderStatusSoapIn" />
+      <wsdl:output message="tns:getOrderStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getProductInventory">
+      <wsdl:input message="tns:getProductInventorySoapIn" />
+      <wsdl:output message="tns:getProductInventorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="updateProductInventory">
+      <wsdl:input message="tns:updateProductInventorySoapIn" />
+      <wsdl:output message="tns:updateProductInventorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderStatus">
+      <wsdl:input message="tns:updateOrderStatusSoapIn" />
+      <wsdl:output message="tns:updateOrderStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderShipment">
+      <wsdl:input message="tns:updateOrderShipmentSoapIn" />
+      <wsdl:output message="tns:updateOrderShipmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getOrder">
+      <wsdl:input message="tns:getOrderSoapIn" />
+      <wsdl:output message="tns:getOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getOrderCount">
+      <wsdl:input message="tns:getOrderCountSoapIn" />
+      <wsdl:output message="tns:getOrderCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerLoginToken">
+      <wsdl:input message="tns:getCustomerLoginTokenSoapIn" />
+      <wsdl:output message="tns:getCustomerLoginTokenSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="cartAPISoap" type="tns:cartAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getProduct">
+      <soap:operation soapAction="http://3dcart.com/getProduct" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomer">
+      <soap:operation soapAction="http://3dcart.com/getCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="editCustomer">
+      <soap:operation soapAction="http://3dcart.com/editCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductCount">
+      <soap:operation soapAction="http://3dcart.com/getProductCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerCount">
+      <soap:operation soapAction="http://3dcart.com/getCustomerCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOrderStatus">
+      <soap:operation soapAction="http://3dcart.com/getOrderStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductInventory">
+      <soap:operation soapAction="http://3dcart.com/getProductInventory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateProductInventory">
+      <soap:operation soapAction="http://3dcart.com/updateProductInventory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderStatus">
+      <soap:operation soapAction="http://3dcart.com/updateOrderStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderShipment">
+      <soap:operation soapAction="http://3dcart.com/updateOrderShipment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOrder">
+      <soap:operation soapAction="http://3dcart.com/getOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOrderCount">
+      <soap:operation soapAction="http://3dcart.com/getOrderCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerLoginToken">
+      <soap:operation soapAction="http://3dcart.com/getCustomerLoginToken" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="cartAPISoap12" type="tns:cartAPISoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getProduct">
+      <soap12:operation soapAction="http://3dcart.com/getProduct" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomer">
+      <soap12:operation soapAction="http://3dcart.com/getCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="editCustomer">
+      <soap12:operation soapAction="http://3dcart.com/editCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductCount">
+      <soap12:operation soapAction="http://3dcart.com/getProductCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerCount">
+      <soap12:operation soapAction="http://3dcart.com/getCustomerCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOrderStatus">
+      <soap12:operation soapAction="http://3dcart.com/getOrderStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductInventory">
+      <soap12:operation soapAction="http://3dcart.com/getProductInventory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateProductInventory">
+      <soap12:operation soapAction="http://3dcart.com/updateProductInventory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderStatus">
+      <soap12:operation soapAction="http://3dcart.com/updateOrderStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrderShipment">
+      <soap12:operation soapAction="http://3dcart.com/updateOrderShipment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOrder">
+      <soap12:operation soapAction="http://3dcart.com/getOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOrderCount">
+      <soap12:operation soapAction="http://3dcart.com/getOrderCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerLoginToken">
+      <soap12:operation soapAction="http://3dcart.com/getCustomerLoginToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="cartAPI">
+    <wsdl:port name="cartAPISoap" binding="tns:cartAPISoap">
+      <soap:address location="http://api.3dcart.com/cart.asmx" />
+    </wsdl:port>
+    <wsdl:port name="cartAPISoap12" binding="tns:cartAPISoap12">
+      <soap12:address location="http://api.3dcart.com/cart.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

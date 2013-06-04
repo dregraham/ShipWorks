@@ -1,0 +1,1573 @@
+<?xml version="1.0" standalone="yes"?>
+<LabelLabelSheet>
+	<Brand>
+		<Name>Avery</Name>
+	</Brand>
+	<Brand>
+		<Name>Dymo</Name>
+	</Brand>
+	<Brand>
+		<Name>FedEx</Name>
+	</Brand>
+	<Brand>
+		<Name>UPS</Name>
+	</Brand>
+	<Brand>
+		<Name>USPS</Name>
+	</Brand>
+	<Brand>
+		<Name>Other</Name>
+	</Brand>
+	<LabelSheet>
+		<LabelSheetID>-1</LabelSheetID>
+		<Name>Paper - Portrait</Name>
+		<BrandName>Other</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>10.5</LabelHeight>
+		<LabelWidth>8</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-2</LabelSheetID>
+		<Name>Paper - Landscape</Name>
+		<BrandName>Other</BrandName>
+		<PaperSizeDescription>Letter (11 x 8 ½  in)</PaperSizeDescription>
+		<PaperSizeHeight>8.5</PaperSizeHeight>
+		<PaperSizeWidth>11</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>8</LabelHeight>
+		<LabelWidth>10.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-3</LabelSheetID>
+		<Name>Full Sheet - Portrait</Name>
+		<BrandName>FedEx</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>10.5</LabelHeight>
+		<LabelWidth>8</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-4</LabelSheetID>
+		<Name>Full Sheet - Landscape</Name>
+		<BrandName>FedEx</BrandName>
+		<PaperSizeDescription>Letter (11 x 8 ½ in)</PaperSizeDescription>
+		<PaperSizeHeight>8.5</PaperSizeHeight>
+		<PaperSizeWidth>11</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>8</LabelHeight>
+		<LabelWidth>10.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-5</LabelSheetID>
+		<Name>Peel and Stick - 2 Up</Name>
+		<BrandName>FedEx</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.45</MarginTop>
+		<MarginLeft>0.5</MarginLeft>
+		<LabelHeight>4.7</LabelHeight>
+		<LabelWidth>7.05</LabelWidth>
+		<VerticalSpacing>0.5</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>2</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-6</LabelSheetID>
+		<Name>Full Sheet - 1 Up</Name>
+		<BrandName>UPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>10.5</LabelHeight>
+		<LabelWidth>8</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-7</LabelSheetID>
+		<Name>Peel and Stick - 2 Up</Name>
+		<BrandName>UPS</BrandName>
+		<PaperSizeDescription>Letter (11 x 8 ½  in)</PaperSizeDescription>
+		<PaperSizeHeight>8.5</PaperSizeHeight>
+		<PaperSizeWidth>11</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.45</MarginLeft>
+		<LabelHeight>7.05</LabelHeight>
+		<LabelWidth>4.7</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.5</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-8</LabelSheetID>
+		<Name>Peel and Stick - 4 Up</Name>
+		<BrandName>UPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.45</MarginTop>
+		<MarginLeft>0.5</MarginLeft>
+		<LabelHeight>4.7</LabelHeight>
+		<LabelWidth>3.13</LabelWidth>
+		<VerticalSpacing>0.5</VerticalSpacing>
+		<HorizontalSpacing>1.25</HorizontalSpacing>
+		<Rows>2</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-9</LabelSheetID>
+		<Name>5159 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.25</MarginTop>
+		<MarginLeft>0.13</MarginLeft>
+		<LabelHeight>1.5</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.13</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-10</LabelSheetID>
+		<Name>5160 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-11</LabelSheetID>
+		<Name>5161 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-12</LabelSheetID>
+		<Name>5162 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-13</LabelSheetID>
+		<Name>5163 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-14</LabelSheetID>
+		<Name>5164 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>3.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>3</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-15</LabelSheetID>
+		<Name>5165 - Full Sheet</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.0</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>11</LabelHeight>
+		<LabelWidth>8.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-16</LabelSheetID>
+		<Name>5167 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.28</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.31</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-17</LabelSheetID>
+		<Name>5168 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.5</MarginLeft>
+		<LabelHeight>5</LabelHeight>
+		<LabelWidth>3.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.5</HorizontalSpacing>
+		<Rows>2</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-18</LabelSheetID>
+		<Name>5260 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-19</LabelSheetID>
+		<Name>5261 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-20</LabelSheetID>
+		<Name>5262 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-21</LabelSheetID>
+		<Name>5263 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-22</LabelSheetID>
+		<Name>5264 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>3.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>3</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-23</LabelSheetID>
+		<Name>5267 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.28</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.31</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-24</LabelSheetID>
+		<Name>5660 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.83</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-25</LabelSheetID>
+		<Name>5661 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>4.25</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-26</LabelSheetID>
+		<Name>5662 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4.25</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-27</LabelSheetID>
+		<Name>5663 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4.25</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-28</LabelSheetID>
+		<Name>5664 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>3.33</LabelHeight>
+		<LabelWidth>4.25</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>3</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-29</LabelSheetID>
+		<Name>5667 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.3</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.30</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-30</LabelSheetID>
+		<Name>5920 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-31</LabelSheetID>
+		<Name>5922 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-32</LabelSheetID>
+		<Name>5923 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-33</LabelSheetID>
+		<Name>5927 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.28</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.31</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-34</LabelSheetID>
+		<Name>5930 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.83</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-35</LabelSheetID>
+		<Name>5960 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-36</LabelSheetID>
+		<Name>5961 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-37</LabelSheetID>
+		<Name>5962 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-38</LabelSheetID>
+		<Name>5963 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-39</LabelSheetID>
+		<Name>5970 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-40</LabelSheetID>
+		<Name>5971 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-41</LabelSheetID>
+		<Name>5972 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-42</LabelSheetID>
+		<Name>5979 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-43</LabelSheetID>
+		<Name>5980 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-44</LabelSheetID>
+		<Name>8160 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-45</LabelSheetID>
+		<Name>8161 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-46</LabelSheetID>
+		<Name>8162 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-47</LabelSheetID>
+		<Name>8163 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-48</LabelSheetID>
+		<Name>8164 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>3.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>3</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-49</LabelSheetID>
+		<Name>8165 - Full Sheet</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.0</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>11</LabelHeight>
+		<LabelWidth>8.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-50</LabelSheetID>
+		<Name>8167 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.28</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.31</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-51</LabelSheetID>
+		<Name>8250 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-52</LabelSheetID>
+		<Name>8253 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-53</LabelSheetID>
+		<Name>8257 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.63</MarginTop>
+		<MarginLeft>0.38</MarginLeft>
+		<LabelHeight>.75</LabelHeight>
+		<LabelWidth>2.25</LabelWidth>
+		<VerticalSpacing>.25</VerticalSpacing>
+		<HorizontalSpacing>0.5</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-54</LabelSheetID>
+		<Name>8460 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-55</LabelSheetID>
+		<Name>8462 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-56</LabelSheetID>
+		<Name>8463 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-57</LabelSheetID>
+		<Name>8660 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-58</LabelSheetID>
+		<Name>8662 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-59</LabelSheetID>
+		<Name>8663 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-60</LabelSheetID>
+		<Name>8667 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.28</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.31</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-61</LabelSheetID>
+		<Name>8920 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-62</LabelSheetID>
+		<Name>8922 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-63</LabelSheetID>
+		<Name>8923 - Shipping</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-64</LabelSheetID>
+		<Name>8927 - Return Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.28</MarginLeft>
+		<LabelHeight>.5</LabelHeight>
+		<LabelWidth>1.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.31</HorizontalSpacing>
+		<Rows>20</Rows>
+		<Columns>4</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-65</LabelSheetID>
+		<Name>8930 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.19</MarginLeft>
+		<LabelHeight>1</LabelHeight>
+		<LabelWidth>2.63</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.14</HorizontalSpacing>
+		<Rows>10</Rows>
+		<Columns>3</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-66</LabelSheetID>
+		<Name>8932 - Address</Name>
+		<BrandName>Avery</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.83</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>1.33</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>7</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-67</LabelSheetID>
+		<Name>Avery 5168 - 4 Up</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.5</MarginLeft>
+		<LabelHeight>5</LabelHeight>
+		<LabelWidth>3.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.5</HorizontalSpacing>
+		<Rows>2</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-68</LabelSheetID>
+		<Name>Avery 5163 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-69</LabelSheetID>
+		<Name>Avery 5263 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-70</LabelSheetID>
+		<Name>Avery 5663 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.0</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4.25</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.0</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-71</LabelSheetID>
+		<Name>Avery 5923 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-72</LabelSheetID>
+		<Name>Avery 5963 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-73</LabelSheetID>
+		<Name>Avery 8163 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-74</LabelSheetID>
+		<Name>Avery 8253 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-75</LabelSheetID>
+		<Name>Avery 8463 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-76</LabelSheetID>
+		<Name>Avery 8663 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-77</LabelSheetID>
+		<Name>Avery 8923 - Barcode</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.16</MarginLeft>
+		<LabelHeight>2</LabelHeight>
+		<LabelWidth>4</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.19</HorizontalSpacing>
+		<Rows>5</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-78</LabelSheetID>
+		<Name>Full Sheet - 1 Up</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>10.5</LabelHeight>
+		<LabelWidth>8</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-79</LabelSheetID>
+		<Name>Plain Paper - 2 Up</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (11 x 8 ½  in)</PaperSizeDescription>
+		<PaperSizeHeight>8.5</PaperSizeHeight>
+		<PaperSizeWidth>11</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.25</MarginLeft>
+		<LabelHeight>6.5</LabelHeight>
+		<LabelWidth>4.75</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0.5</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-80</LabelSheetID>
+		<Name>Plain Paper - 4 Up</Name>
+		<BrandName>USPS</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>0.5</MarginTop>
+		<MarginLeft>0.5</MarginLeft>
+		<LabelHeight>5</LabelHeight>
+		<LabelWidth>3.35</LabelWidth>
+		<VerticalSpacing>0.1</VerticalSpacing>
+		<HorizontalSpacing>0.5</HorizontalSpacing>
+		<Rows>2</Rows>
+		<Columns>2</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-81</LabelSheetID>
+		<Name>30251 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-82</LabelSheetID>
+		<Name>30252 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-83</LabelSheetID>
+		<Name>30254 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-84</LabelSheetID>
+		<Name>30255 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-85</LabelSheetID>
+		<Name>30256 - Shipping</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>2.31</PaperSizeHeight>
+		<PaperSizeWidth>4</PaperSizeWidth>
+		<MarginTop>.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>2.06</LabelHeight>
+		<LabelWidth>3.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-86</LabelSheetID>
+		<Name>30269 - Shipping</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>2.31</PaperSizeHeight>
+		<PaperSizeWidth>4</PaperSizeWidth>
+		<MarginTop>.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>2.06</LabelHeight>
+		<LabelWidth>3.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-87</LabelSheetID>
+		<Name>30320 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-88</LabelSheetID>
+		<Name>30321 - Large Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.41</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>1.16</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-89</LabelSheetID>
+		<Name>30323 - Shipping</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>2.13</PaperSizeHeight>
+		<PaperSizeWidth>3.97</PaperSizeWidth>
+		<MarginTop>.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>1.88</LabelHeight>
+		<LabelWidth>3.47</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-90</LabelSheetID>
+		<Name>30330 - Return Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>.75</PaperSizeHeight>
+		<PaperSizeWidth>2.0</PaperSizeWidth>
+		<MarginTop>.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.50</LabelHeight>
+		<LabelWidth>1.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-91</LabelSheetID>
+		<Name>30341 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-92</LabelSheetID>
+		<Name>30342 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-93</LabelSheetID>
+		<Name>30343 - Address</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>1.09</PaperSizeHeight>
+		<PaperSizeWidth>3.5</PaperSizeWidth>
+		<MarginTop>0.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>.84</LabelHeight>
+		<LabelWidth>3.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-94</LabelSheetID>
+		<Name>30344 - Shipping</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>2.31</PaperSizeHeight>
+		<PaperSizeWidth>4</PaperSizeWidth>
+		<MarginTop>.13</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>2.06</LabelHeight>
+		<LabelWidth>3.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-95</LabelSheetID>
+		<Name>30383 - Shipping (3-Part)</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>2.25</PaperSizeHeight>
+		<PaperSizeWidth>7.0</PaperSizeWidth>
+		<MarginTop>0</MarginTop>
+		<MarginLeft>0</MarginLeft>
+		<LabelHeight>2.25</LabelHeight>
+		<LabelWidth>7.0</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-96</LabelSheetID>
+		<Name>30384 - Shipping (2-Part)</Name>
+		<BrandName>Dymo</BrandName>
+		<PaperSizeDescription>Custom</PaperSizeDescription>
+		<PaperSizeHeight>2.31</PaperSizeHeight>
+		<PaperSizeWidth>7.5</PaperSizeWidth>
+		<MarginTop>0</MarginTop>
+		<MarginLeft>0</MarginLeft>
+		<LabelHeight>2.31</LabelHeight>
+		<LabelWidth>7.5</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>1</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+	<LabelSheet>
+		<LabelSheetID>-97</LabelSheetID>
+		<Name>Universal - 2 Up</Name>
+		<BrandName>Other</BrandName>
+		<PaperSizeDescription>Letter (8 ½ x 11 in)</PaperSizeDescription>
+		<PaperSizeHeight>11</PaperSizeHeight>
+		<PaperSizeWidth>8.5</PaperSizeWidth>
+		<MarginTop>.25</MarginTop>
+		<MarginLeft>.25</MarginLeft>
+		<LabelHeight>5.25</LabelHeight>
+		<LabelWidth>8</LabelWidth>
+		<VerticalSpacing>0</VerticalSpacing>
+		<HorizontalSpacing>0</HorizontalSpacing>
+		<Rows>2</Rows>
+		<Columns>1</Columns>
+	</LabelSheet>
+</LabelLabelSheet>

@@ -1,0 +1,90 @@
+<!-- Last Update: 01/26/2010 -->
+<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:ups="http://www.ups.com/XMLSchema" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" schemaLocation="common.xsd"/>
+	<!-- 1 For new Customer only: registration -->
+	<xsd:element name="RegisterRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="common:Request"/>
+				<xsd:element name="Username" type="xsd:string"/>
+				<xsd:element name="Password" type="xsd:string"/>
+				<xsd:element name="CompanyName" type="xsd:string"/>
+				<xsd:element name="CustomerName" type="xsd:string"/>
+				<xsd:element name="Title" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Address" type="AddressType"/>
+				<xsd:element name="PhoneNumber" type="xsd:string"/>
+				<xsd:element name="PhoneExtension" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="EmailAddress" type="xsd:string"/>
+				<xsd:element name="NotificationCode" type="xsd:string"/>
+				<xsd:element name="ShipperAccount" type="ShipperAccountType" minOccurs="0"/>
+				<xsd:element name="DeviceIdentity" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="SuggestUsernameIndicator" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- 2 For existing Customer only: add  and/or authenticate  account-->
+	<xsd:element name="ManageAccountRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="common:Request"/>
+				<xsd:element name="Username" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="Password" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ShipperAccount" type="ShipperAccountType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="RegisterResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="common:Response"/>
+				<xsd:element name="SuggestedUsername" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="ShipperAccountStatus" type="RegCodeDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="Disclaimer" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ManageAccountResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="common:Response"/>
+				<xsd:element name="ShipperAccountStatus" type="RegCodeDescriptionType" maxOccurs="unbounded"/>
+				<xsd:element name="Disclaimer" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="RegCodeDescriptionType">
+		<xsd:sequence>
+			<xsd:element name="Code" type="xsd:string"/>
+			<xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Start elements-->
+	<xsd:complexType name="AddressType">
+		<xsd:sequence>
+			<xsd:element name="AddressLine" type="xsd:string" maxOccurs="unbounded"/>
+			<xsd:element name="City" type="xsd:string"/>
+			<xsd:element name="StateProvinceCode" type="xsd:string"/>
+			<xsd:element name="PostalCode" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CountryCode" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Request Sub element-->
+	<xsd:complexType name="ShipperAccountType">
+		<xsd:sequence>
+			<xsd:element name="AccountName" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="AccountNumber" type="xsd:string"/>
+			<xsd:element name="PostalCode" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="CountryCode" type="xsd:string"/>
+			<xsd:element name="InvoiceInfo" type="InvoiceInfoType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InvoiceInfoType">
+		<xsd:sequence>
+			<xsd:element name="InvoiceNumber" type="xsd:string"/>
+			<xsd:element name="InvoiceDate" type="xsd:string"/>
+			<xsd:element name="CurrencyCode" type="xsd:string"/>
+			<xsd:element name="InvoiceAmount" type="xsd:string"/>
+			<xsd:element name="ControlID" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

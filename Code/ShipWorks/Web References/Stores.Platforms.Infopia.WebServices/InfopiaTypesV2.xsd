@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:ns1="http://com.infopia.webservices/types/2" xmlns="http://com.infopia.webservices/types/2" elementFormDefault="qualified" targetNamespace="http://com.infopia.webservices/types/2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="User">
+    <xsd:all>
+      <xsd:element minOccurs="1" maxOccurs="1" name="userToken" type="xsd:string" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="Status">
+    <xsd:all>
+      <xsd:element minOccurs="1" maxOccurs="1" name="statusCode" type="xsd:int" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="statusMsg" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="infopiaIdentifierValue" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="customerIdentifierValue" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="headerTypeId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="infopiaIdentifierHeaderId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="customerIdentifierHeaderId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="callId" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="Statuses">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="status" type="ns1:Status" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Headers">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="header" type="ns1:Header" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Header">
+    <xsd:all>
+      <xsd:element minOccurs="1" maxOccurs="1" name="headerId" type="xsd:string" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="headerInfo" type="xsd:string" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="isSearchable" type="xsd:boolean" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="isRequiredWhenAdding" type="xsd:boolean" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="maxInfo" type="xsd:string" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="isAlwaysIncluded" type="xsd:boolean" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="headerTypeId" type="xsd:string" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="isUpdateable" type="xsd:boolean" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="MasterHeaderTypes">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="masterHeaderType" type="ns1:MasterHeaderType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MasterHeaderType">
+    <xsd:all>
+      <xsd:element minOccurs="1" maxOccurs="1" name="masterHeaderTypeId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="headerTypes" type="ns1:HeaderIds" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="HeaderIds">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="headerTypeId" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Cells">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="cell" type="ns1:Cell" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="QueryType">
+    <xsd:choice>
+      <xsd:element name="queryId" type="xsd:int" />
+      <xsd:element name="pageNumber" type="xsd:int" />
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="Search">
+    <xsd:all>
+      <xsd:element minOccurs="1" maxOccurs="1" name="cellsToPopulate" type="ns1:Cells" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="searchByCells" type="ns1:Cells" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="numberMasterObjectsPerPage" type="xsd:int" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="pageInfo" type="ns1:QueryType" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="andOrType" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="orderByCell" type="ns1:Cell" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="Cell">
+    <xsd:all>
+      <xsd:element minOccurs="1" maxOccurs="1" name="headerId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="value" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="operator" type="xsd:string" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="Lines">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="line" type="ns1:Line" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Line">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="1" name="cells" type="ns1:Cells" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BaseStatusResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="status" type="ns1:Status" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="LinesResponse">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="ns1:BaseStatusResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="lines" type="ns1:Lines" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="searchRequest" type="ns1:Search" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="estimatedNumberMasterObjectsFound" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="estimatedNumberPagesFound" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="currentPageNumber" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="numberCells" type="xsd:int" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="queryId" type="xsd:int" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="HeadersResponse">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="ns1:BaseStatusResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="headers" type="ns1:Headers" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="MasterHeaderTypesResponse">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="ns1:BaseStatusResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="masterHeaderTypes" type="ns1:MasterHeaderTypes" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="StatusesResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="statuses" type="ns1:Statuses" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="LinesResponseWrapper">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="1" name="response" type="ns1:LinesResponse" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="HeadersResponseWrapper">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="1" name="response" type="ns1:HeadersResponse" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MasterHeaderTypesResponseWrapper">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="1" name="response" type="ns1:MasterHeaderTypesResponse" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="StatusesResponseWrapper">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="1" name="response" type="ns1:StatusesResponse" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="BaseRequest">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="user" type="ns1:User" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="GetAvailableExportHeadersRequest">
+    <xsd:complexType>
+      <xsd:complexContent mixed="false">
+        <xsd:extension base="ns1:BaseRequest">
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="masterHeaderTypeId" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetAvailableImportHeadersRequest">
+    <xsd:complexType>
+      <xsd:complexContent mixed="false">
+        <xsd:extension base="ns1:BaseRequest">
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="masterHeaderTypeId" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetAvailableExportMasterHeaderTypesRequest">
+    <xsd:complexType>
+      <xsd:complexContent mixed="false">
+        <xsd:extension base="ns1:BaseRequest" />
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetAvailableImportMasterHeaderTypesRequest">
+    <xsd:complexType>
+      <xsd:complexContent mixed="false">
+        <xsd:extension base="ns1:BaseRequest" />
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetLinesRequest">
+    <xsd:complexType>
+      <xsd:complexContent mixed="false">
+        <xsd:extension base="ns1:BaseRequest">
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="search" type="ns1:Search" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="masterHeaderTypeId" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AddOrUpdateLinesRequest">
+    <xsd:complexType>
+      <xsd:complexContent mixed="false">
+        <xsd:extension base="ns1:BaseRequest">
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="lines" type="ns1:Lines" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="masterHeaderTypeId" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

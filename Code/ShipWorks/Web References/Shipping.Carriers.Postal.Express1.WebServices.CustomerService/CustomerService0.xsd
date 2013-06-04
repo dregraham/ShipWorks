@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://www.express1.com/2010/06" elementFormDefault="qualified" targetNamespace="http://www.express1.com/2010/06" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ExpressOne.Services" />
+  <xs:element name="GetCustomerCredentials">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="apiKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="customerInfo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerCredentialsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="GetCustomerCredentialsResult" nillable="true" type="q1:CustomerCredentials" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterCustomer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="apiKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="customerInfo" nillable="true" type="xs:string" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="customerData" nillable="true" type="q2:CustomerRegistrationData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterCustomerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="RegisterCustomerResult" nillable="true" type="q3:CustomerCredentials" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="apiKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="customerInfo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="GetCustomerProfileResult" nillable="true" type="q4:CustomerProfile" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerTransactions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="authInfo" nillable="true" type="q5:AuthenticationInfo" />
+        <xs:element minOccurs="0" name="startTime" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="endTime" nillable="true" type="xs:string" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="transactionType" nillable="true" type="q6:CustomerTransactionType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerTransactionsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ExpressOne.Services" minOccurs="0" name="GetCustomerTransactionsResult" nillable="true" type="q7:CustomerTransactionResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

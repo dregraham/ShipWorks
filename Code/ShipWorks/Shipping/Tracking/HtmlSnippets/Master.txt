@@ -1,0 +1,124 @@
+﻿<html>
+<head>
+
+<script type="text/javascript" language="JavaScript" >
+
+
+function ExpandCollapse(element)
+{ 
+    if (element.tagName == "DIV")
+    {
+	   element.style.display = (element.style.display == "none" ) ? "" : "none";
+	   event.srcElement.innerHTML = (element.style.display == "none" ) ? "Show&nbsp;Details" : "Hide&nbsp;Details";
+	}
+	else
+	{
+	   for (i = 0; i < element.length; i++)
+	   {
+	      element.item(i).style.display = (element.item(i).style.display == "none" ) ? "" : "none";
+	      event.srcElement.innerHTML = (element[i].style.display == "none" ) ? "Show&nbsp;Details" : "Hide&nbsp;Details";
+	   }
+	}
+}
+
+</script>
+<style>
+
+body
+{
+    font-size: 8pt;
+    font-family: Verdana;
+}
+
+table
+{
+    font-size: 8pt;
+    font-family: Verdana;
+    border-collapse: collapse;
+}
+
+table.main, table.activity
+{
+    width: 100%;
+}
+
+table.main tr.heading, a
+{
+    color: white;
+    background-color: #2266AA;
+}
+
+table.activity tr.heading
+{
+	color:#222222;
+	background-color: #DEDEDE;
+	font-weight:bold;
+}
+
+table.activity, table.main
+{
+    border-color: #2266AA;
+    border-style: solid;
+    border-width: 2px;
+}
+
+table.main td, table.activity tr.heading td
+{
+    border-color: #BBBBBB;
+    border-style: solid;
+    border-width: 1px;
+}
+
+table.activity
+{
+    border-color: #AAAAAA;
+    border-style: solid;
+    border-width: 2px;
+    margin-top:-2px;
+}
+
+table.activity tr.heading td
+{
+    border-bottom-color: #AAAAAA;
+    border-bottom-width: 2px;
+}
+
+table.activity td
+{
+	padding:1px;
+	border-color: #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    padding-left:4px;
+    padding-right:6px;
+}
+
+table tr.grayrow
+{
+   background-color: #FAFAFA;
+}
+
+table.main
+{
+	padding:4px;
+}
+
+table.activity tr.heading td
+{
+    padding:2px;
+}
+
+table.inner td
+{
+    border: none;
+    padding:0px;
+}
+
+</style>
+</head>
+<body>
+
+{BODY}
+
+</body>
+</html>

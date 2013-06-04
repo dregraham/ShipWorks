@@ -1,0 +1,115 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="Wiseowl.Build.Tasks.Obfuscate" AssemblyFile="$(MSBuildExtensionsPath)\Wise Owl, Inc\Demeanor for .NET, Enterprise Edition\v5.0\WiseOwl.Build.Tasks.dll"/>
+
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="Interapptive.MSBuild.Tasks.Targets"/>
+
+  <PropertyGroup>
+    <SnExe>C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\sn.exe</SnExe>
+    <SignToolExe>C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe</SignToolExe>
+    <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "Interapptive ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.verisign.com/scripts/timestamp.dll"</SignCommand>
+    <InnoSetupExe>C:\Program Files (x86)\Inno Setup 5\ISCC.EXE</InnoSetupExe>
+    <SourceMonitorExe>C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe</SourceMonitorExe>
+    <VaultExe>C:\Program Files (x86)\SourceGear\Vault Client\vault.exe</VaultExe>
+    <MsTestExe>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\MSTest.exe</MsTestExe>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>0</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+  </PropertyGroup>
+
+  <!-- Initialization specific to all projects -->
+  <Target Name="CommonInitialization">
+
+    <MakeDir Directories="$(LogDirectory);$(LibraryDirectory);" />
+
+    <!-- For Automated, We need to break up the version from the label -->
+    <SplitVersion Version="$(CCNetLabel)" Condition=" $(BuildType) == 'Automated' ">
+      <Output TaskParameter="Major" PropertyName="VersionMajor" />
+      <Output TaskParameter="Minor" PropertyName="VersionMinor" />
+      <Output TaskParameter="Build" PropertyName="VersionBuild" />
+      <Output TaskParameter="Revision" PropertyName="VersionRevision" />
+    </SplitVersion>
+    
+  </Target>
+
+  <!-- Update the AssemblyInfo.cs files-->
+  <Target Name="UpdateAssemblyInfo" Condition=" '$(BuildType)' == 'Automated' ">
+
+    <!-- First we need to find all of the AssemblyInfo.cs files -->
+    <CreateItem Include="..\Code\**\AssemblyInfo.cs" >
+      <Output TaskParameter="Include" ItemName="AssemblyInfoFiles"/>
+    </CreateItem>
+
+    <FileUpdate Files="@(AssemblyInfoFiles)"
+			Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
+			ReplacementText="$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)" />
+
+    <Time Format="u" Kind="Utc" >
+      <Output TaskParameter="FormattedTime" PropertyName="BuildDate" />
+    </Time>
+
+    <FileUpdate Files="@(AssemblyInfoFiles)"
+			Regex="AssemblyDate\(.*?\)"
+			ReplacementText="AssemblyDate(%22$(BuildDate)%22)" />
+
+  </Target>
+
+  <!-- Run SourceMonitor analysis -->
+  <ItemGroup>
+    <SourceMonitorReplacement Include="{LogDirectory}">
+      <Value>$(LogDirectory)\</Value>
+    </SourceMonitorReplacement>
+    <SourceMonitorReplacement Include="{SrcDirectory}">
+      <Value>..\Code\</Value>
+    </SourceMonitorReplacement>
+    <SourceMonitorReplacement Include="{BuildLabel}">
+      <Value Condition=" $(CCNetLabel) != '' ">$(CCNetLabel)</Value>
+      <Value Condition=" $(CCNetLabel) == '' ">Local</Value>
+    </SourceMonitorReplacement>
+  </ItemGroup>
+  <Target Name="SourceMonitor"  Condition=" '$(BuildType)' == 'Automated' " >
+
+    <CreateItem Include="$(LogDirectory)\sourcemonitor.input.xml">
+      <Output TaskParameter="Include" ItemName="SourceMonitorXml" />
+    </CreateItem>
+
+    <!-- We are going to make changes to the file, so make a copy of it-->
+    <Copy SourceFiles="sourcemonitor.xml" DestinationFiles="@(SourceMonitorXml)" />
+
+    <!-- Update the properties in the source mon file -->
+    <FileUpdate Files="@(SourceMonitorXml)"
+			Regex="%(SourceMonitorReplacement.Identity)"
+			ReplacementText="%(SourceMonitorReplacement.Value)" />
+
+    <Exec Command='"$(SourceMonitorExe)" /C "@(SourceMonitorXml)" ' />
+
+  </Target>
+  
+  <!-- Update the label state files for CC.NET so we can sync the build numbers -->
+  <Target Name="UpdateRevisionNumber" >
+
+    <CreateItem Include="$(ProjectRevisionFile)" >
+      <Output TaskParameter="Include" ItemName="RevisionFile" />
+    </CreateItem>
+
+    <Error Text="Revision File not found (@(RevisionFile))." Condition=" !Exists(@(RevisionFile)) " />
+
+    <Add Numbers="$(VersionRevision);1">
+      <Output TaskParameter="Result" PropertyName="NewRevision" />
+    </Add>
+
+    <WriteLinesToFile
+        File="%(RevisionFile.FullPath)"
+        Lines="$(NewRevision)"
+        Overwrite="true"
+        />
+    
+  </Target>
+
+  
+</Project>

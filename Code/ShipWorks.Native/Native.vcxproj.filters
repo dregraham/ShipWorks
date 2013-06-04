@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{d0014235-40a9-404e-951a-cabde87a894f}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{aa4b5a5e-df04-477d-85a3-9af6f1b9595b}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{3c6e0b69-efb7-4e03-aece-3fb142e587f7}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ListSQLSvr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Printer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="odbcss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sql.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="button_hover.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="button_hover_big.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="button_pushed.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="button_pushed_big.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="information2.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_first.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_first_disabled.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_last.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_last_disabled.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_left.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_left_disabled.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_right.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="navigate_right_disabled.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="print_now.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="print_settings.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="PrintTemplate.htm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="toolbar_background.gif">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="zoom_in.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="zoom_in_disabled.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="zoom_out.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="zoom_out_disabled.png">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Native.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{14A91D06-21A1-4496-8F41-25E53BDD88ED}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks.Tests</RootNamespace>
+    <AssemblyName>ShipWorks.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>ShipWorks.Tests</SccProjectName>
+    <SccLocalPath>2~4dc65538-e67f-4277-9622-0ab008abf2fc</SccLocalPath>
+    <SccAuxPath>http://vault.interapptive.com/VaultService</SccAuxPath>
+    <SccProvider>SourceGear Vault Visual Studio 2005 Client:{1EA47954-8515-402d-82D9-B5C332120A8D}</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\..\Components\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\AssemblyDateTests.cs" />
+    <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
+    <Compile Include="Core\GuidTests.cs" />
+    <Compile Include="Core\GeneralTests.cs" />
+    <Compile Include="Core\PersonNameTests.cs" />
+    <Compile Include="Core\RegistryTests.cs" />
+    <Compile Include="Core\SecureTextTests.cs" />
+    <Compile Include="Core\XPathUtilityTests.cs" />
+    <Compile Include="DatabaseManager.cs" />
+    <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentTypeTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelSkuQuantityParserTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelTokenSuggestionFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Authentication\iParcelIPAddressElementTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\iParcelValidationElementTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\iParcelVersionElementTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Ship\iParcelPackageInfoElementTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Ship\iParcelRateRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Ship\iParcelShipRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Ship\iParcelShipValidationElementTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Track\iParcelTrackRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\Net\Track\iParcelTrackingNumberElementTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\CarrierRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\FedExGroundCloseRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\FedExSmartPostCloseRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\Manipulators\FedExCloseClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\Manipulators\FedExCloseDateManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\Manipulators\FedExCloseVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\Manipulators\FedExCloseWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Request\Manipulators\FedExPickupCarrierManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Response\FedExGroundCloseResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Response\FedExSmartPostCloseResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Response\Manipulators\FedExGroundCloseReportManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Close\Response\Manipulators\FedExSmartPostCloseEntityManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Environment\FedExSettingsTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\FedExResponseFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\FedExRequestFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\FedExShippingClerkTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\IntegrationTest\GlobalShipAddressIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Request\FedExGlobalShipAddressRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Response\FedExGlobalShipAddressResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\PackageMovement\Request\FedExPackageMovementRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressConstraintManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\PackageMovement\Request\Manipulators\FedExPackageMovementClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\PackageMovement\Request\Manipulators\FedExPackageMovementVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\PackageMovement\Request\Manipulators\FedExPackageMovementWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\PackageMovement\Response\FedExPackageMovementResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\FedExRateRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRatePackageDetailsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRatePackageSpecialServicesManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRatePackagingTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRatePickupManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateRateTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateSmartPostManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateWebAuthenticationManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateRecipientManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateReturnTransitManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateShipmentSpecialServiceTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateShipperManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateTotalInsuredValueManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Request\Manipulators\FedExRateTotalWeightManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Rate\Response\FedExRateResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\FedExRegisterCspUserRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\FedExSubscriptionRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Response\FedExRegisterCspUserResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Response\FedExSubscriptionResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\Manipulators\FedExCspContactManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\Manipulators\FedExRegistrationClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\Manipulators\FedExRegistrationVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\Manipulators\FedExRegistrationWebAuthenticationDetailManipatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\Manipulators\FedExSubscriberManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\BuildFedExProcessShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\BuildFedExShipmentEntity.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\FedExShipRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExCertificationManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExCodOptionsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExDangerousGoodsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExDryIceManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExEmailNotificationsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExFreightManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExHoldAtLocationManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExHomeDeliveryManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\International\FedExInternationalControlledExportManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExLabelSpecificationManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExMasterTrackingManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExPackageDetailsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExPackageSpecialServicesManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExPackagingTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExPickupManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExPriorityAlertManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExRecipientManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExRateTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExReferenceManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExReturnsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExServiceTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExShipmentSpecialServiceTypeManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExShippingChargesManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExShippingClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExShippingVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExSmartPostManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExTotalInsuredValueManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExTotalWeightManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\FedExRequestManipulatorUtilitiesTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExShippingWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\International\FedExAdmissibilityManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\International\FedExBrokerManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\International\FedExCommercialInvoiceManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\International\FedExCustomsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\International\FedExTrafficInArmsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Response\FedExShipResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Request\Manipulators\FedExShipperManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Response\Manipulators\FedExShipmentCodManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Response\Manipulators\FedExShipmentCostManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Shipping\Response\Manipulators\FedExTrackingManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Request\FedExVersionCaptureRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Registration\Response\FedExVersionCaptureResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\FedExTrackingUtilities.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Request\FedExTrackingRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Request\Manipulators\FedExTrackingClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Request\Manipulators\FedExTrackingPackageIdentifierManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Request\Manipulators\FedExTrackingVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Request\Manipulators\FedExTrackingWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Response\FedExTrackingResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Tracking\Response\Manipulators\FedExTrackingResponseManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Void\Request\FedExVoidRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Void\Request\Manipulators\FedExVoidClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Void\Request\Manipulators\FedExVoidParametersManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Void\Request\Manipulators\FedExVoidVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\v2013\Void\Response\FedExVoidResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Authentication\OnTracAuthenticationRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Rates\OnTracRateRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Shipment\OnTracShipmentRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\Tracking\OnTracTrackingRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormCarrierAccountTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormCarrierAccountTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationValidatorTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccountTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationAddressManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationShipperInfoManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationInvoiceInfoManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\Manipulators\UpsSaveCredentialsManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\UpsInvoiceRegistrationResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCoreTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManagerTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\ServiceManager\UpsServiceManagerFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Environment\UpsOpenAccountSettingsTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\UpsOpenAccountRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsResponseFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsClerkTest.cs" />
+    <Compile Include="Shipping\CustomsManagerTest.cs" />
+    <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
+    <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
+    <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
+    <Compile Include="SqlServer\FilterTests.cs" />
+    <Compile Include="Stores\Amazon\EnsClientTest.cs" />
+    <Compile Include="Stores\Amazon\MwsClientTests.cs" />
+    <Compile Include="Stores\eBay\Authorization\EbayTokenFactoryTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\EbayTokenRepositoryTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Readers\SecureXmlFileTokenReaderTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Readers\XmlFileTokenReaderTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Readers\XmlTokenReaderTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\TokenTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Writers\SecureXmlFileTokenWriterTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Writers\SecureXmlTokenWriterTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Writers\XmlFileTokenWriterTest.cs" />
+    <Compile Include="Stores\eBay\Authorization\Writers\XmlTokenWriterTest.cs" />
+    <Compile Include="Stores\eBay\EbayDownloadSummaryTest.cs" />
+    <Compile Include="Stores\eBay\EbayWebClientTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Authorization\EbayUserInfoRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Download\EbayCombinedPaymentRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Download\EbayFeedbackRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Download\EbayItemRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Download\EbaySellingRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Download\EbayTransactionRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\EbayRequestFactoryTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayCombineOrdersRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayCompleteSaleRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayItemTransactionRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayLeaveFeedbackRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Fulfillment\EbaySendMessageToPartnerRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayUserNotesRequestTest.cs" />
+    <Compile Include="Stores\eBay\Requests\System\EbayTimeRequestTest.cs" />
+    <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
+    <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
+    <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
+    <Compile Include="Stores\GenericStore\IdentifierTests.cs" />
+    <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
+    <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
+    <Compile Include="Stores\Newegg\CheckCredentialsRequestTest.cs" />
+    <Compile Include="Stores\Newegg\CheckCredentialsResponseSerializerTest.cs" />
+    <Compile Include="Stores\Newegg\DownloadOrdersRequestTest.cs" />
+    <Compile Include="Stores\Newegg\DownloadResponseSerializerTest.cs" />
+    <Compile Include="Stores\Newegg\ErrorResponseSerializerTest.cs" />
+    <Compile Include="Stores\Newegg\LiveRequestFactoryTest.cs" />
+    <Compile Include="Stores\Newegg\Mocked\Failure\MockCredentialCheckRequest.cs" />
+    <Compile Include="Stores\Newegg\Mocked\Failure\MockRequestFactory.cs" />
+    <Compile Include="Stores\Newegg\Mocked\MockedNeweggRequest.cs" />
+    <Compile Include="Stores\Newegg\Mocked\NonLoggingNeweggRequest.cs" />
+    <Compile Include="Stores\Newegg\Mocked\Success\MockCredentialCheckRequest.cs" />
+    <Compile Include="Stores\Newegg\Mocked\Success\MockReportStatusRequest.cs" />
+    <Compile Include="Stores\Newegg\Mocked\Success\MockRequestFactory.cs" />
+    <Compile Include="Stores\Newegg\Mocked\Success\MockShippingRequest.cs" />
+    <Compile Include="Stores\Newegg\NeweggAccountSettingsValidatorTest.cs" />
+    <Compile Include="Stores\Newegg\NeweggWebClientTest.cs" />
+    <Compile Include="Stores\Newegg\PageCalculatorTest.cs" />
+    <Compile Include="Stores\Newegg\RemoveItemRequestTest.cs" />
+    <Compile Include="Stores\Newegg\ShippingRequestTest.cs" />
+    <Compile Include="Stores\Newegg\ShippingResponseSerializerTest.cs" />
+    <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
+    <Compile Include="Stores\Shopify\IdentifierTests.cs" />
+    <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
+    <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\ClickCartProOrder.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\Error.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetCount.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetOrdersWithData.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetOrdersWithoutData.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetStatusCodes.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetStore.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GenericError.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetCount.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetOrdersWithData.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetOrdersWithoutData.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetStatusCodes.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetStore.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetCount_fail.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetCount_pass.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetOrdersNone_pass.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetOrders_fail.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetStatusCodes_fail.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetStatusCodes_pass.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetStore_pass.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\ModuleVersion2_fail.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\ModuleVersion_fail.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\UpdateStatusFail_fail.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\UpdateStatusFail_pass.xml" />
+    <EmbeddedResource Include="Stores\GenericStore\SampleXML\UpdateStatusSuccess_pass.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Amazon\TestCerts\cert-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
+    <EmbeddedResource Include="Stores\Amazon\TestCerts\pk-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
+      <Project>{D5EB1EB5-DD70-4461-9377-B462031837DC}</Project>
+      <Name>ShipWorks.Data.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
+      <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{CFF69808-F073-42B7-96A2-2616987F6737}</Project>
+      <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.csproj">
+      <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
+      <Name>ShipWorks</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\DownloadedOrders.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\ShippingResult.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\FortyTwoOrderDownload.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\MockedTwoHundredOrderDownload.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\ZeroOrderDownload.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Stores\eBay\Artifacts\SecureTokenFileWithoutUserId.tkn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Stores\eBay\Artifacts\SecureTokenFileWithUserId.tkn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Stores\eBay\Artifacts\TokenFileWithoutUserId.tkn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Stores\eBay\Artifacts\TokenFileWithUserId.tkn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\eBay\Artifacts\TokenFileWithoutUserId.xml" />
+    <EmbeddedResource Include="Stores\eBay\Artifacts\TokenFileWithUserId.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stores\BuyDotcom\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithInvalidHyphen.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithUnicodeCharacter.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

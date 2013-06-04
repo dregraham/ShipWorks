@@ -1,0 +1,1723 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.marketworks.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.marketworks.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.marketworks.com">
+      <s:element name="CreatePWSProfile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:InternalCredentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:CreatePWSProfileRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="InternalCredentials">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Credentials">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="SellerUid" type="s:unsignedInt" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Credentials">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="APIUserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="APIPassword" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerUserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerPassword" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CreatePWSProfileRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ProfileName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="FolderType" type="tns:ApiFolderTypeEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="NextPublishDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="PublishIntervalMinutes" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdminEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdminPassword" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="URL" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SmallImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="MediumImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="LargeImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image4Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image5Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image6Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image7Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image8Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image9Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image10Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="VariantImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsNewImageMapping" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="InclusiveTaxRate" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="XMLPackage" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TaxCountry" type="tns:ApiTaxCountryEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ApiFolderTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="AllFolderTypes" />
+          <s:enumeration value="Inventory" />
+          <s:enumeration value="StoreFront" />
+          <s:enumeration value="PricingGroup" />
+          <s:enumeration value="Customer" />
+          <s:enumeration value="Image" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ApiTaxCountryEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotDefined" />
+          <s:enumeration value="UnitedStates" />
+          <s:enumeration value="EuropeanUnion" />
+          <s:enumeration value="Australia" />
+          <s:enumeration value="Canada" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="CreatePWSProfileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreatePWSProfileResult" type="tns:APIResultOfPWSProfileInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="APIResultOfPWSProfileInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="tns:ResultStatus" />
+          <s:element minOccurs="1" maxOccurs="1" name="MessageCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultData" type="tns:PWSProfileInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ResultStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Success" />
+          <s:enumeration value="Failure" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="PWSProfileInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ProfileUid" type="s:unsignedLong" />
+          <s:element minOccurs="1" maxOccurs="1" name="SellerUid" type="s:unsignedInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProfileName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="FolderType" type="tns:ApiFolderTypeEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="NextPublishDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="PublishIntervalMinutes" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdminEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdminPassword" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="URL" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SmallImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="MediumImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="LargeImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image4Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image5Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image6Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image7Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image8Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image9Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="Image10Number" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="VariantImageNumber" type="s:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsNewImageMapping" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="InclusiveTaxRate" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="XMLPackage" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TaxCountry" type="tns:ApiTaxCountryEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetVersionNumber">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetVersionNumberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVersionNumberResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSeller">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSellerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSellerResult" type="tns:OMSeller" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMSeller">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MWSeller" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="MWSeller">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SellerUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasCreditCardMerchantAgreement" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetPaymentEnum">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPaymentEnumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPaymentEnumResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetShippingCarriers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetShippingCarriersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetShippingCarriersResult" type="tns:MwCodeList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MwCodeList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MwCode" type="tns:ArrayOfMwCode" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMwCode">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MwCode" nillable="true" type="tns:MwCode" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MwCode">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="MWUid" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetShippingMethods">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="mwCarrierUid" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetShippingMethodsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetShippingMethodsResult" type="tns:MwCodeList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCountries">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCountriesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCountriesResult" type="tns:MwCodeList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStates">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="mwCountryUid" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatesResult" type="tns:MwCodeList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomFlags">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomFlagsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomFlagsResult" type="tns:OMFlags" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMFlags">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName5" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName6" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName7" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName8" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName9" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FlagName10" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetWorkflowSteps">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetWorkflowStepsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetWorkflowStepsResult" type="tns:OMWorkflowSteps" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMWorkflowSteps">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowSteps" type="tns:ArrayOfOMWorkflowStep" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfOMWorkflowStep">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OMWorkflowStep" nillable="true" type="tns:OMWorkflowStep" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMWorkflowStep">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CustomStepNumber" type="s:short" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="StepUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="StatusType" type="tns:StatusTypeEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="StatusTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="OrderStatus" />
+          <s:enumeration value="ParcelStatus" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetStoreFronts">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStoreFrontsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStoreFrontsResult" type="tns:MwCodeList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderQuery" type="tns:OMOrderQuery" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMOrderQuery">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DetailLevel" type="tns:OrderQueryDetailEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="Key" type="tns:OrderKeyTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderNumberRange" type="tns:OMRange" />
+          <s:element minOccurs="1" maxOccurs="1" name="SortField" type="tns:OrderSortEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="SortDirection" type="tns:SortDirectionEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderStatus" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelStatus" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="RecordsPerPage" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Flags" type="tns:OMOrderFlags" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastModifiedDateRange" type="tns:OMRange" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreateDateRange" type="tns:OMRange" />
+          <s:element minOccurs="1" maxOccurs="1" name="RetrievePendingOnly" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderUidList" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CheckoutChannel" type="tns:OrderSourceEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OrderQueryDetailEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="OrderLevel" />
+          <s:enumeration value="ParcelLevel" />
+          <s:enumeration value="ParcelLineItemLevel" />
+          <s:enumeration value="OrderLineItemLevel" />
+          <s:enumeration value="AllDetailsLevel" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="OrderKeyTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="SystemOrderNumber" />
+          <s:enumeration value="InvoiceNumber" />
+          <s:enumeration value="SellerOrderNumber" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMRange">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MWRange" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="MWRange">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="RangeStart" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RangeEnd" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OrderSortEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="AdjustmentTotal" />
+          <s:enumeration value="BillToCompanyName" />
+          <s:enumeration value="BillToCountry" />
+          <s:enumeration value="BillToEmailAddress" />
+          <s:enumeration value="BillToLastName" />
+          <s:enumeration value="Channel" />
+          <s:enumeration value="CustomerUid" />
+          <s:enumeration value="InvoiceNumber" />
+          <s:enumeration value="ItemInventoryNumber" />
+          <s:enumeration value="ItemTitle" />
+          <s:enumeration value="ItemUid" />
+          <s:enumeration value="OrderDate" />
+          <s:enumeration value="OrderSubTotal" />
+          <s:enumeration value="OrderTotal" />
+          <s:enumeration value="OrderUid" />
+          <s:enumeration value="ParcelQty" />
+          <s:enumeration value="ParcelUid" />
+          <s:enumeration value="PaymentMethod" />
+          <s:enumeration value="SellerOrderNumber" />
+          <s:enumeration value="ShippingCarrier" />
+          <s:enumeration value="ShippingCarrierMethod" />
+          <s:enumeration value="ShipProfileCarrierMethod" />
+          <s:enumeration value="ShipToCountry" />
+          <s:enumeration value="ShipToLastName" />
+          <s:enumeration value="ShipToPostalCode" />
+          <s:enumeration value="ShipToState" />
+          <s:enumeration value="TrackingNumber" />
+          <s:enumeration value="WorkflowStep" />
+          <s:enumeration value="WorkflowStepDate" />
+          <s:enumeration value="WorkflowStepName" />
+          <s:enumeration value="ItemUPC" />
+          <s:enumeration value="ItemISBN" />
+          <s:enumeration value="ItemSKU" />
+          <s:enumeration value="ItemQty" />
+          <s:enumeration value="ShipToLine1" />
+          <s:enumeration value="ShipToCity" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="SortDirectionEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Ascending" />
+          <s:enumeration value="Descending" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMOrderFlags">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FlagStatuses" type="tns:OMCustomFlags" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderCancelled" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentCleared" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentDeclined" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentMethodChanged" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderPartiallyShipped" type="tns:FlagState" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMCustomFlags">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Flag1Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag2Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag3Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag4Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag5Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag6Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag7Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag8Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag9Status" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="Flag10Status" type="tns:FlagState" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="FlagState">
+        <s:restriction base="s:string">
+          <s:enumeration value="Off" />
+          <s:enumeration value="On" />
+          <s:enumeration value="Ignore" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="OrderSourceEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Ignore" />
+          <s:enumeration value="Marketworks" />
+          <s:enumeration value="eBayExpress" />
+          <s:enumeration value="Google" />
+          <s:enumeration value="Amazon" />
+          <s:enumeration value="AspDotNetStorefront" />
+          <s:enumeration value="eBay" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOrderResult" type="tns:OMOrder" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMOrder">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OrderUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserUid" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderDate" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SellerOrderNumber" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="CheckoutUid" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="InvoiceNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrivateOrderNotes" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InvoiceNote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SpecialBuyerInstructions" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsProcessed" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CheckoutChannel" type="tns:OrderSourceEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="Financials" type="tns:OMOrderFinancials" />
+          <s:element minOccurs="0" maxOccurs="1" name="Flags" type="tns:OMOrderFlags" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowSteps" type="tns:OMOrderWorkflowSteps" />
+          <s:element minOccurs="0" maxOccurs="1" name="BuyerInfo" type="tns:OMAddress" />
+          <s:element minOccurs="0" maxOccurs="1" name="Payment" type="tns:OMOrderPayment" />
+          <s:element minOccurs="0" maxOccurs="1" name="LineItems" type="tns:OMLineItems" />
+          <s:element minOccurs="0" maxOccurs="1" name="Parcels" type="tns:OMOrderParcels" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMOrderFinancials">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OrderTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="SubTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="TaxTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShippingTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="PostageTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="HandlingTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="InsuranceTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentSurcharge" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentSurchargeTax" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="LineTaxTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShippingTaxTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="InsuranceTaxTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShippingTaxRate" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="AdditionalShippingTaxRate" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderAdjustments" type="tns:OMAdjustments" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMAdjustments">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Adjustments" type="tns:ArrayOfOMAdjustment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfOMAdjustment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OMAdjustment" nillable="true" type="tns:OMAdjustment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMAdjustment">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="TaxAmount" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="Reason" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AdjustmentType" type="tns:AdjustmentTypeEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="AdjustmentUID" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="AdjustmentTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Order" />
+          <s:enumeration value="Shipping" />
+          <s:enumeration value="LineItem" />
+          <s:enumeration value="Insurance" />
+          <s:enumeration value="PaymentSurcharge" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMOrderWorkflowSteps">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CreateDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentReceivedDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippedDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomWorkflowSteps" type="tns:OMCustomWorkflowSteps" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMCustomWorkflowSteps">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowStep1Date" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowStep2Date" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowStep3Date" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowStep4Date" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowStep5Date" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMAddress">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MWAddress">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="BuyerNumber" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustRecordNotes" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="MWAddress">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="County" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FaxNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsResidential" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMOrderPayment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Method" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MethodCode" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="MethodType" type="tns:OrderPaymentTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreditCard" type="tns:OMPaymentCC" />
+          <s:element minOccurs="0" maxOccurs="1" name="Other" type="tns:OMPaymentGeneric" />
+          <s:element minOccurs="0" maxOccurs="1" name="Debit" type="tns:OMPaymentDebit" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bank" type="tns:OMPaymentBank" />
+          <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrder" type="tns:OMPaymentPO" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OrderPaymentTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="CertifiedCheck" />
+          <s:enumeration value="MoneyOrder" />
+          <s:enumeration value="Visa_MasterCard" />
+          <s:enumeration value="AmericanExpress" />
+          <s:enumeration value="Discover" />
+          <s:enumeration value="CreditCardOther" />
+          <s:enumeration value="Paypal" />
+          <s:enumeration value="OtherOnline" />
+          <s:enumeration value="Other" />
+          <s:enumeration value="PersonalCheck" />
+          <s:enumeration value="Cash" />
+          <s:enumeration value="PurchaseOrder" />
+          <s:enumeration value="COD" />
+          <s:enumeration value="HomeDepotConsumerCard" />
+          <s:enumeration value="Switch" />
+          <s:enumeration value="SOLO" />
+          <s:enumeration value="Paymate" />
+          <s:enumeration value="WireTransfer" />
+          <s:enumeration value="RadioShackCreditCard" />
+          <s:enumeration value="ECheck" />
+          <s:enumeration value="BankTransfer" />
+          <s:enumeration value="OnlineDirectDebit" />
+          <s:enumeration value="Google" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMPaymentCC">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AcctNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AcctName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CVV" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="EndMonth" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="EndYear" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GatewayTransId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMPaymentGeneric">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentServiceFee" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMPaymentDebit">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CheckDigits" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BranchCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCountry" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AcctNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMPaymentBank">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AccountHolder" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountTypeName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GatewayResponse" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IBAN_Number" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoutingNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SWIFTCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMPaymentPO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PONumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMLineItems">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LineItem" type="tns:ArrayOfOMLineItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfOMLineItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OMLineItem" nillable="true" type="tns:OMLineItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMLineItem">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="MWInvUID" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserUID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="InventoryNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LineItemQuantity" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InventoryLocation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImageUrl" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellingChannel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BuyerChannelId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemChannelId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Flags" type="tns:OMCustomFlags" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemFinancials" type="tns:OMItemFinancials" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMItemFinancials">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PriceNoTax" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Tax" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="TaxRate" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="FederalTax" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="LocalTax" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="FederalTaxRate" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="LocalTaxRate" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="TaxCodeApplied" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AdjLineItemAmountWithTax" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="LineItemAdjustment" type="tns:OMAdjustment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMOrderParcels">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="OrderParcels" type="tns:ArrayOfOMOrderParcel" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfOMOrderParcel">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OMOrderParcel" nillable="true" type="tns:OMOrderParcel" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMOrderParcel">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsOversized" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsInsured" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsResidential" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastModified" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelWeight" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="WeightUnit" type="tns:WeightUnitEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelWidth" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelDepth" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelHeight" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="DimensionsUnit" type="tns:DimensionUnitEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="ActualShippingCost" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="MerchandiseTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShipProfileUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShipCarrierUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShipMethodUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShipCarrierCode" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShipMethodCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipProfileName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipCarrierName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipMethodName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Flags" type="tns:OMCustomFlags" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkflowSteps" type="tns:OMParcelWorkflowSteps" />
+          <s:element minOccurs="0" maxOccurs="1" name="Destination" type="tns:OMAddress" />
+          <s:element minOccurs="0" maxOccurs="1" name="LineItems" type="tns:OMLineItems" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="WeightUnitEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotDefined" />
+          <s:enumeration value="Grams" />
+          <s:enumeration value="Kilograms" />
+          <s:enumeration value="Pounds" />
+          <s:enumeration value="Ounces" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DimensionUnitEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotDefined" />
+          <s:enumeration value="Inches" />
+          <s:enumeration value="Feet" />
+          <s:enumeration value="Centimeters" />
+          <s:enumeration value="Meters" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMParcelWorkflowSteps">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ShippedDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomWorkflowSteps" type="tns:OMCustomWorkflowSteps" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetOrders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderQuery" type="tns:OMOrderQuery" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOrdersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOrdersResult" type="tns:OMOrders" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMOrders">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Orders" type="tns:ArrayOfOMOrder" />
+          <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="RecordsPerPage" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="TotalPages" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="TotalRecords" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfOMOrder">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OMOrder" nillable="true" type="tns:OMOrder" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="MarkOrdersAsProcessed">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderUidArray" type="tns:ArrayOfLong" />
+            <s:element minOccurs="1" maxOccurs="1" name="flagValue" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfLong">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="long" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="MarkOrdersAsProcessedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="MarkOrdersAsProcessedResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="createOrderInfo" type="tns:OMCreateOrderInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMCreateOrderInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ExternalOrderUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="StorefrontUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsNotificationsDisabled" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="BuyerNote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InvoiceNote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrivateNote" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderOrigin" type="tns:OrderOriginEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentClearedDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPaymentCleared" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentReceivedDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPaymentReceived" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentDeclinedDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPaymentDeclined" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShippedDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsShipped" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Payment" type="tns:OMUpdateOrderPayment" />
+          <s:element minOccurs="0" maxOccurs="1" name="Shipping" type="tns:OMUpdateOrderShipping" />
+          <s:element minOccurs="0" maxOccurs="1" name="LineItems" type="tns:ArrayOfOMCreateLineItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderAdjustment" type="tns:OMUpdateAdjustmentInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingAdjustment" type="tns:OMUpdateAdjustmentInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="InsuranceAdjustment" type="tns:OMUpdateAdjustmentInfo" />
+          <s:element minOccurs="1" maxOccurs="1" name="TaxTotal" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingAddress" type="tns:OMUpdateAddress" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress" type="tns:OMUpdateAddress" />
+          <s:element minOccurs="1" maxOccurs="1" name="OriginProfileId" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderSourceCustomerId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomFlags" type="tns:OMUpdateCustomFlags" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OrderOriginEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="AspDotNetStorefront" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMUpdateOrderPayment">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentMethod" type="tns:OrderPaymentTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreditCard" type="tns:OMPaymentCC" />
+          <s:element minOccurs="0" maxOccurs="1" name="Generic" type="tns:OMPaymentGeneric" />
+          <s:element minOccurs="0" maxOccurs="1" name="Debit" type="tns:OMPaymentDebit" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bank" type="tns:OMPaymentBank" />
+          <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrder" type="tns:OMPaymentPO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMUpdateOrderShipping">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="MethodUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="TotalPrice" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfOMCreateLineItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="OMCreateLineItem" nillable="true" type="tns:OMCreateLineItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMCreateLineItem">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="LineType" type="tns:OrderLineTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="StorefrontLine" type="tns:OMCreateLineStorefront" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuctionLine" type="tns:OMCreateLineAuction" />
+          <s:element minOccurs="0" maxOccurs="1" name="Adjustment" type="tns:OMUpdateAdjustmentInfo" />
+          <s:element minOccurs="1" maxOccurs="1" name="SourceProductID" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OrderLineTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Storefront" />
+          <s:enumeration value="Auction" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OMCreateLineStorefront">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="MWInventoryUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UnitPrice" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMCreateLineAuction">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="MWSalesUid" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMUpdateAdjustmentInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsPrivate" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="UnitPrice" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="Notes" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPercent" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="PromoCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PercentValue" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMUpdateAddress">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="StateCode" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="County" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CountryCode" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FaxNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OMUpdateCustomFlags">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag1Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag2Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag3Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag4Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag5Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag6Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag7Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag8Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag9Set" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFlag10Set" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CreateOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateOrderResult" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateOrderPaymentStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="updateStatusInfo" type="tns:OMUpdateOrderPaymentStatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMUpdateOrderPaymentStatusInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OrderUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentReceivedFlag" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentClearedFlag" type="tns:FlagState" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateOrderPaymentStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateOrderPaymentStatusResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateOrders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="updateOrderInfo" type="tns:OMUpdateOrderInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMUpdateOrderInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OrderUid" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomFlags" type="tns:OMCustomFlags" />
+          <s:element minOccurs="1" maxOccurs="1" name="Notification" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderCancelledFlag" type="tns:FlagState" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentClearedFlag" type="tns:FlagState" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrivateNote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InvoiceNote" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PromoteOrder" type="tns:OrderPromoteEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsAPIProcessed" type="tns:FlagState" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="OrderPromoteEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Ignore" />
+          <s:enumeration value="LastParcelOrOrderStatus" />
+          <s:enumeration value="PromoteOneStep" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="UpdateOrdersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateOrdersResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="updateOrderInfo" type="tns:OMUpdateOrderInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateOrderResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateParcels">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="updateParcelInfo" type="tns:OMUpdateParcelInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="OMUpdateParcelInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsValidateShippingMethodCode" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Flags" type="tns:OMCustomFlags" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderUid" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="ParcelUid" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PromoteParcel" type="tns:OrderPromoteEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShippingMethodCode" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShippingCost" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsInsured" type="tns:FlagState" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateParcelsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateParcelsResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateParcel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="0" maxOccurs="1" name="updateParcelInfo" type="tns:OMUpdateParcelInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateParcelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateParcelResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CreatePWSProfileSoapIn">
+    <wsdl:part name="parameters" element="tns:CreatePWSProfile" />
+  </wsdl:message>
+  <wsdl:message name="CreatePWSProfileSoapOut">
+    <wsdl:part name="parameters" element="tns:CreatePWSProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionNumberSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVersionNumber" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionNumberSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVersionNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSellerSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSeller" />
+  </wsdl:message>
+  <wsdl:message name="GetSellerSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSellerResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPaymentEnumSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPaymentEnum" />
+  </wsdl:message>
+  <wsdl:message name="GetPaymentEnumSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPaymentEnumResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetShippingCarriersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetShippingCarriers" />
+  </wsdl:message>
+  <wsdl:message name="GetShippingCarriersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetShippingCarriersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetShippingMethodsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetShippingMethods" />
+  </wsdl:message>
+  <wsdl:message name="GetShippingMethodsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetShippingMethodsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCountriesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCountries" />
+  </wsdl:message>
+  <wsdl:message name="GetCountriesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCountriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStates" />
+  </wsdl:message>
+  <wsdl:message name="GetStatesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFlagsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomFlags" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFlagsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomFlagsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetWorkflowStepsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetWorkflowSteps" />
+  </wsdl:message>
+  <wsdl:message name="GetWorkflowStepsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetWorkflowStepsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStoreFrontsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStoreFronts" />
+  </wsdl:message>
+  <wsdl:message name="GetStoreFrontsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStoreFrontsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOrder" />
+  </wsdl:message>
+  <wsdl:message name="GetOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOrdersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOrders" />
+  </wsdl:message>
+  <wsdl:message name="GetOrdersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="MarkOrdersAsProcessedSoapIn">
+    <wsdl:part name="parameters" element="tns:MarkOrdersAsProcessed" />
+  </wsdl:message>
+  <wsdl:message name="MarkOrdersAsProcessedSoapOut">
+    <wsdl:part name="parameters" element="tns:MarkOrdersAsProcessedResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateOrder" />
+  </wsdl:message>
+  <wsdl:message name="CreateOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOrderPaymentStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateOrderPaymentStatus" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOrderPaymentStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateOrderPaymentStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOrdersSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateOrders" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOrdersSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateOrder" />
+  </wsdl:message>
+  <wsdl:message name="UpdateOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateParcelsSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateParcels" />
+  </wsdl:message>
+  <wsdl:message name="UpdateParcelsSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateParcelsResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateParcelSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateParcel" />
+  </wsdl:message>
+  <wsdl:message name="UpdateParcelSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateParcelResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionNumberHttpGetIn" />
+  <wsdl:message name="GetVersionNumberHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionNumberHttpPostIn" />
+  <wsdl:message name="GetVersionNumberHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="OMServiceSoap">
+    <wsdl:operation name="CreatePWSProfile">
+      <wsdl:input message="tns:CreatePWSProfileSoapIn" />
+      <wsdl:output message="tns:CreatePWSProfileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionNumber">
+      <wsdl:input message="tns:GetVersionNumberSoapIn" />
+      <wsdl:output message="tns:GetVersionNumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSeller">
+      <wsdl:input message="tns:GetSellerSoapIn" />
+      <wsdl:output message="tns:GetSellerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPaymentEnum">
+      <wsdl:input message="tns:GetPaymentEnumSoapIn" />
+      <wsdl:output message="tns:GetPaymentEnumSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetShippingCarriers">
+      <wsdl:input message="tns:GetShippingCarriersSoapIn" />
+      <wsdl:output message="tns:GetShippingCarriersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetShippingMethods">
+      <wsdl:input message="tns:GetShippingMethodsSoapIn" />
+      <wsdl:output message="tns:GetShippingMethodsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCountries">
+      <wsdl:input message="tns:GetCountriesSoapIn" />
+      <wsdl:output message="tns:GetCountriesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStates">
+      <wsdl:input message="tns:GetStatesSoapIn" />
+      <wsdl:output message="tns:GetStatesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFlags">
+      <wsdl:input message="tns:GetCustomFlagsSoapIn" />
+      <wsdl:output message="tns:GetCustomFlagsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetWorkflowSteps">
+      <wsdl:input message="tns:GetWorkflowStepsSoapIn" />
+      <wsdl:output message="tns:GetWorkflowStepsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStoreFronts">
+      <wsdl:input message="tns:GetStoreFrontsSoapIn" />
+      <wsdl:output message="tns:GetStoreFrontsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOrder">
+      <wsdl:input message="tns:GetOrderSoapIn" />
+      <wsdl:output message="tns:GetOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOrders">
+      <wsdl:input message="tns:GetOrdersSoapIn" />
+      <wsdl:output message="tns:GetOrdersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MarkOrdersAsProcessed">
+      <wsdl:input message="tns:MarkOrdersAsProcessedSoapIn" />
+      <wsdl:output message="tns:MarkOrdersAsProcessedSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrder">
+      <wsdl:input message="tns:CreateOrderSoapIn" />
+      <wsdl:output message="tns:CreateOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrderPaymentStatus">
+      <wsdl:input message="tns:UpdateOrderPaymentStatusSoapIn" />
+      <wsdl:output message="tns:UpdateOrderPaymentStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrders">
+      <wsdl:input message="tns:UpdateOrdersSoapIn" />
+      <wsdl:output message="tns:UpdateOrdersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrder">
+      <wsdl:input message="tns:UpdateOrderSoapIn" />
+      <wsdl:output message="tns:UpdateOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateParcels">
+      <wsdl:input message="tns:UpdateParcelsSoapIn" />
+      <wsdl:output message="tns:UpdateParcelsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateParcel">
+      <wsdl:input message="tns:UpdateParcelSoapIn" />
+      <wsdl:output message="tns:UpdateParcelSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="OMServiceHttpGet">
+    <wsdl:operation name="GetVersionNumber">
+      <wsdl:input message="tns:GetVersionNumberHttpGetIn" />
+      <wsdl:output message="tns:GetVersionNumberHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="OMServiceHttpPost">
+    <wsdl:operation name="GetVersionNumber">
+      <wsdl:input message="tns:GetVersionNumberHttpPostIn" />
+      <wsdl:output message="tns:GetVersionNumberHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OMServiceSoap" type="tns:OMServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreatePWSProfile">
+      <soap:operation soapAction="http://www.marketworks.com/CreatePWSProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionNumber">
+      <soap:operation soapAction="http://www.marketworks.com/GetVersionNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSeller">
+      <soap:operation soapAction="http://www.marketworks.com/GetSeller" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPaymentEnum">
+      <soap:operation soapAction="http://www.marketworks.com/GetPaymentEnum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShippingCarriers">
+      <soap:operation soapAction="http://www.marketworks.com/GetShippingCarriers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShippingMethods">
+      <soap:operation soapAction="http://www.marketworks.com/GetShippingMethods" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCountries">
+      <soap:operation soapAction="http://www.marketworks.com/GetCountries" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStates">
+      <soap:operation soapAction="http://www.marketworks.com/GetStates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFlags">
+      <soap:operation soapAction="http://www.marketworks.com/GetCustomFlags" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetWorkflowSteps">
+      <soap:operation soapAction="http://www.marketworks.com/GetWorkflowSteps" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStoreFronts">
+      <soap:operation soapAction="http://www.marketworks.com/GetStoreFronts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrder">
+      <soap:operation soapAction="http://www.marketworks.com/GetOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrders">
+      <soap:operation soapAction="http://www.marketworks.com/GetOrders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarkOrdersAsProcessed">
+      <soap:operation soapAction="http://www.marketworks.com/MarkOrdersAsProcessed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrder">
+      <soap:operation soapAction="http://www.marketworks.com/CreateOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrderPaymentStatus">
+      <soap:operation soapAction="http://www.marketworks.com/UpdateOrderPaymentStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrders">
+      <soap:operation soapAction="http://www.marketworks.com/UpdateOrders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrder">
+      <soap:operation soapAction="http://www.marketworks.com/UpdateOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateParcels">
+      <soap:operation soapAction="http://www.marketworks.com/UpdateParcels" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateParcel">
+      <soap:operation soapAction="http://www.marketworks.com/UpdateParcel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OMServiceSoap12" type="tns:OMServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreatePWSProfile">
+      <soap12:operation soapAction="http://www.marketworks.com/CreatePWSProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionNumber">
+      <soap12:operation soapAction="http://www.marketworks.com/GetVersionNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSeller">
+      <soap12:operation soapAction="http://www.marketworks.com/GetSeller" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPaymentEnum">
+      <soap12:operation soapAction="http://www.marketworks.com/GetPaymentEnum" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShippingCarriers">
+      <soap12:operation soapAction="http://www.marketworks.com/GetShippingCarriers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShippingMethods">
+      <soap12:operation soapAction="http://www.marketworks.com/GetShippingMethods" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCountries">
+      <soap12:operation soapAction="http://www.marketworks.com/GetCountries" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStates">
+      <soap12:operation soapAction="http://www.marketworks.com/GetStates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFlags">
+      <soap12:operation soapAction="http://www.marketworks.com/GetCustomFlags" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetWorkflowSteps">
+      <soap12:operation soapAction="http://www.marketworks.com/GetWorkflowSteps" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStoreFronts">
+      <soap12:operation soapAction="http://www.marketworks.com/GetStoreFronts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrder">
+      <soap12:operation soapAction="http://www.marketworks.com/GetOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrders">
+      <soap12:operation soapAction="http://www.marketworks.com/GetOrders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MarkOrdersAsProcessed">
+      <soap12:operation soapAction="http://www.marketworks.com/MarkOrdersAsProcessed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrder">
+      <soap12:operation soapAction="http://www.marketworks.com/CreateOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrderPaymentStatus">
+      <soap12:operation soapAction="http://www.marketworks.com/UpdateOrderPaymentStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrders">
+      <soap12:operation soapAction="http://www.marketworks.com/UpdateOrders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateOrder">
+      <soap12:operation soapAction="http://www.marketworks.com/UpdateOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateParcels">
+      <soap12:operation soapAction="http://www.marketworks.com/UpdateParcels" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateParcel">
+      <soap12:operation soapAction="http://www.marketworks.com/UpdateParcel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OMServiceHttpGet" type="tns:OMServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetVersionNumber">
+      <http:operation location="/GetVersionNumber" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OMServiceHttpPost" type="tns:OMServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetVersionNumber">
+      <http:operation location="/GetVersionNumber" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OMService">
+    <wsdl:port name="OMServiceSoap" binding="tns:OMServiceSoap">
+      <soap:address location="https://sandbox.marketworks.com/nextgen/mwapi/current/omservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OMServiceSoap12" binding="tns:OMServiceSoap12">
+      <soap12:address location="https://sandbox.marketworks.com/nextgen/mwapi/current/omservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OMServiceHttpGet" binding="tns:OMServiceHttpGet">
+      <http:address location="https://sandbox.marketworks.com/nextgen/mwapi/current/omservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OMServiceHttpPost" binding="tns:OMServiceHttpPost">
+      <http:address location="https://sandbox.marketworks.com/nextgen/mwapi/current/omservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

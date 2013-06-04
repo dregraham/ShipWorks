@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><HTML><HEAD><TITLE>SQL Snapper V7.5.0.28 Help</TITLE></HEAD><BODY><H1 CLASS="RedGateCmdLine">SQL Snapper V7.5.0.28</H1>
+<P CLASS="RedGateCmdLine"><EM CLASS="RedGateCmdLine">Copyright Copyright &copy; Red Gate Software Ltd 2008</EM></P>
+<HR CLASS="RedGateCmdLine">
+<H3 CLASS="RedGateCmdLine">Command: RedGate.SQLSnapper.exe</H3>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"></P>
+<HR CLASS="RedGateCmdLine">
+<H3 CLASS="RedGateCmdLine">Exit Codes</H3>
+<HR CLASS="RedGateCmdLine">
+<TABLE CLASS="RedGateCmdLine"><TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">0</TD><TD CLASS="RedGateDescription">Success.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">1</TD><TD CLASS="RedGateDescription">General error code.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">3</TD><TD CLASS="RedGateDescription">Illegal argument duplication.  Some arguments may not appear more than
+		once in a command-line.  If such arguments appear more than once this
+		exit code will be returned.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">8</TD><TD CLASS="RedGateDescription">Unsatisfied argument dependency or violated exclusion when user runs
+		command line.  E.g. /arg2 depends on /arg1 but you have specified
+		/arg2 without specifying /arg1, or alternatively /arg2 cannot be used
+		with /arg1 but you have tried to use them both.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">32</TD><TD CLASS="RedGateDescription">Value out of range.  Numeric value supplied for an argument
+		that is outside the range of valid values for that argument.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">33</TD><TD CLASS="RedGateDescription">Value overflow.  The magnitude of a value supplied for an argument is too large
+		and causes an overflow.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">34</TD><TD CLASS="RedGateDescription">Invalid value.  The value supplied for an argument is invalid.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">35</TD><TD CLASS="RedGateDescription">No / invalid software license or trial period has expired.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">64</TD><TD CLASS="RedGateDescription">General command-line usage error.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">65</TD><TD CLASS="RedGateDescription">Data error.  Some input data required by the tool is invalid or corrupt.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">69</TD><TD CLASS="RedGateDescription">A resource or service required to run the tool is unavailable.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">73</TD><TD CLASS="RedGateDescription">Failed to create report</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">74</TD><TD CLASS="RedGateDescription">IO error occurred.  Generally returned if the program attempts to write
+		to a file that already exists without the user having specified the
+		/force option.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">77</TD><TD CLASS="RedGateDescription">Action cannot be completed because the user does not have permission.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">126</TD><TD CLASS="RedGateDescription">Execution failed because of an error.</TD></TR>
+<TR CLASS="RedGateCmdLine"><TD CLASS="RedGateExitCode">130</TD><TD CLASS="RedGateDescription">Execution stopped because Ctrl+Break.</TD></TR>
+</TABLE>
+<HR CLASS="RedGateCmdLine">
+<H3 CLASS="RedGateCmdLine">Options</H3>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/help</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/?</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">Displays this help message.  Use in conjunction with /verbose for more
+			detailed information.</P>
+<P CLASS="RedGateCmdLine">If this switch is used with any switches other than /verbose then those
+			switches will be ignored, the help message will be printed, and 0 will be
+			returned as the process exit code.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/html</STRONG><BR>
+</P>
+<P CLASS="RedGateCmdLine">Causes help to be output as HTML.</P>
+<P CLASS="RedGateCmdLine">Must be used with the /help switch.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/quiet</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/q</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">Quiet mode - no output.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/verbose</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/v</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">Verbose mode.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/database:&lt;database&gt;</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/db</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">The name of the database to create a snapshot of.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/username:&lt;username&gt;</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/u</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">The username for the database.</P>
+<P CLASS="RedGateCmdLine">If no username is specified then integrated security is used.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/password:&lt;password&gt;</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/p</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">The password for the database.</P>
+<P CLASS="RedGateCmdLine">You must also provide a username.  If you do not specify a username
+			and password combination then integrated security is used.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/server:&lt;server&gt;</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/s</CODE><BR>
+<EM CLASS="RedGateCmdLine">Default: </EM><CODE CLASS="RedGateCmdLine">(local)</CODE></P>
+<P CLASS="RedGateCmdLine">The name of the SQL server.</P>
+<HR CLASS="RedGateCmdLine">
+<P CLASS="RedGateCmdLine"><STRONG CLASS="RedGateCmdLine">/makesnapshot:&lt;makesnapshot&gt;</STRONG><BR>
+ <EM CLASS="RedGateCmdLine">Alias: </EM><CODE CLASS="RedGateCmdLine">/mksnap</CODE><BR>
+</P>
+<P CLASS="RedGateCmdLine">Creates a snapshot of the database with the path specified.</P>
+<HR CLASS="RedGateCmdLine">
+<DIV ALIGN="CENTER"><EM CLASS="RedGateCmdLine">Copyright Copyright &copy; Red Gate Software Ltd 2008</EM></DIV></BODY></HTML>

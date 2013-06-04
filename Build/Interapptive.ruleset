@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Interapptive Ruleset" Description="This is based off of Microsoft All Rules and supresses certain rules that do not make sense for ShipWorks.  It also contains custom Interapptive rules." ToolsVersion="10.0">
+  <RuleHintPaths>
+    <Path>.\Interapptive.FxCopRules.dll</Path>
+  </RuleHintPaths>
+  <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1002" Action="None" />
+    <Rule Id="CA1003" Action="None" />
+    <Rule Id="CA1011" Action="None" />
+    <Rule Id="CA1020" Action="None" />
+    <Rule Id="CA1026" Action="None" />
+    <Rule Id="CA1032" Action="None" />
+    <Rule Id="CA1300" Action="None" />
+    <Rule Id="CA1303" Action="None" />
+    <Rule Id="CA1304" Action="None" />
+    <Rule Id="CA1305" Action="None" />
+    <Rule Id="CA1306" Action="None" />
+    <Rule Id="CA1502" Action="None" />
+    <Rule Id="CA1709" Action="None" />
+    <Rule Id="CA2202" Action="None" />
+    <Rule Id="CA2210" Action="None" />
+  </Rules>
+</RuleSet>

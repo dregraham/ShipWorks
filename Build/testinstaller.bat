@@ -1,0 +1,1 @@
+"C:\Program Files\Inno Setup 5\ISCC.EXE" Installer\ShipWorks.iss /O"C:\InstallerTest" /F"InstallerTest" /DSETUP_TYPE=CD /DVersion=3.4.5.6 /DAppArtifacts="C:\Data Store\Interapptive\Development\Applications\ShipWorks\Trunk\Artifacts\Latest\Application"

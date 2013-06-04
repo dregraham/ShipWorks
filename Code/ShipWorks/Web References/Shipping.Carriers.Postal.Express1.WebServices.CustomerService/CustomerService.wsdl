@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.express1.com/2010/06" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CustomerService" targetNamespace="http://www.express1.com/2010/06" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.express1.com/2010/06/Imports">
+      <xsd:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd0" namespace="http://www.express1.com/2010/06" />
+      <xsd:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ExpressOne.Services" />
+      <xsd:import schemaLocation="http://www.express1dev.com/Services/CustomerService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ExpressOne.Common" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICustomerService_GetCustomerCredentials_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerCredentials" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetCustomerCredentials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerCredentialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_RegisterCustomer_InputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterCustomer" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_RegisterCustomer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegisterCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetCustomerProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerProfile" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetCustomerProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetCustomerTransactions_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerTransactions" />
+  </wsdl:message>
+  <wsdl:message name="ICustomerService_GetCustomerTransactions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerTransactionsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ICustomerService">
+    <wsdl:operation name="GetCustomerCredentials">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/ICustomerService/GetCustomerCredentials" message="tns:ICustomerService_GetCustomerCredentials_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/ICustomerService/GetCustomerCredentialsResponse" message="tns:ICustomerService_GetCustomerCredentials_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RegisterCustomer">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/ICustomerService/RegisterCustomer" message="tns:ICustomerService_RegisterCustomer_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/ICustomerService/RegisterCustomerResponse" message="tns:ICustomerService_RegisterCustomer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerProfile">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/ICustomerService/GetCustomerProfile" message="tns:ICustomerService_GetCustomerProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/ICustomerService/GetCustomerProfileResponse" message="tns:ICustomerService_GetCustomerProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerTransactions">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/ICustomerService/GetCustomerTransactions" message="tns:ICustomerService_GetCustomerTransactions_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/ICustomerService/GetCustomerTransactionsResponse" message="tns:ICustomerService_GetCustomerTransactions_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ICustomerService" type="tns:ICustomerService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCustomerCredentials">
+      <soap:operation soapAction="http://www.express1.com/2010/06/ICustomerService/GetCustomerCredentials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterCustomer">
+      <soap:operation soapAction="http://www.express1.com/2010/06/ICustomerService/RegisterCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerProfile">
+      <soap:operation soapAction="http://www.express1.com/2010/06/ICustomerService/GetCustomerProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerTransactions">
+      <soap:operation soapAction="http://www.express1.com/2010/06/ICustomerService/GetCustomerTransactions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CustomerService">
+    <wsdl:port name="BasicHttpBinding_ICustomerService" binding="tns:BasicHttpBinding_ICustomerService">
+      <soap:address location="http://www.express1dev.com/Services/CustomerService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

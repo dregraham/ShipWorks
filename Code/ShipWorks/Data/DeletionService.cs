@@ -1,0 +1,357 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using ShipWorks.UI;
+using System.Threading;
+using ShipWorks.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Adapter.Custom;
+using log4net;
+using System.Diagnostics;
+using ShipWorks.Data.Connection;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model;
+using System.Linq;
+using System.Data;
+using System.Windows.Forms;
+using ShipWorks.Templates.Printing;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
+using ShipWorks.Stores.Content;
+using ShipWorks.Data.Administration;
+using System.Data.SqlClient;
+using ShipWorks.Stores;
+using ShipWorks.Actions;
+
+namespace ShipWorks.Data
+{
+    /// <summary>
+    /// Provides methods for deleting certain types of entities
+    /// </summary>
+    public static class DeletionService
+    {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(DeletionService));
+
+        // Global flag indicating if we are currently in the process of deleting the store
+        static volatile bool deletingStore = false;
+
+        /// <summary>
+        /// Indicates if ShipWorks is currently in the process of deleting a store
+        /// </summary>
+        public static bool IsDeletingStore
+        {
+            get { return deletingStore; }
+        }
+
+        /// <summary>
+        /// Delete the entity with the specified EntityID
+        /// </summary>
+        public static void DeleteEntity(long entityID)
+        {
+            switch (EntityUtility.GetEntityType(entityID))
+            {
+                case EntityType.OrderEntity:
+                    DeleteOrder(entityID);
+                    break;
+
+                case EntityType.CustomerEntity:
+                    DeleteCustomer(entityID);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Invalid entity type " + entityID);
+            }
+        }
+
+        /// <summary>
+        /// Permanently delete the selected store from ShipWorks
+        /// </summary>
+        public static void DeleteStore(StoreEntity store)
+        {
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            UserSession.Security.DemandPermission(PermissionType.ManageStores, store.StoreID);
+
+            deletingStore = true;
+
+            try
+            {
+                ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteStore(store, adapter); }, 3);
+            }
+            finally
+            {
+                deletingStore = false;
+            }
+        }
+
+        /// <summary>
+        /// Delete the specified order.
+        /// </summary>
+        public static void DeleteOrder(long orderID)
+        {
+            UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
+
+            DeleteWithCascade(EntityType.OrderEntity, orderID);
+
+            DataProvider.RemoveEntity(orderID);
+        }
+
+        /// <summary>
+        /// Delete the specified order within an existing adapter/transaction.
+        /// </summary>
+        public static void DeleteOrder(long orderID, SqlAdapter adapter)
+        {
+            UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
+
+            ExecuteWithDeadlockRetry((SqlAdapter a) => DeleteWithCascade(EntityType.OrderEntity, orderID, a), 5, adapter);
+
+            DataProvider.RemoveEntity(orderID);
+        }
+
+        /// <summary>
+        /// Delete the specified customer
+        /// </summary>
+        public static void DeleteCustomer(long customerID)
+        {
+            UserSession.Security.DemandPermission(PermissionType.CustomersDelete, customerID);
+
+            DeleteWithCascade(EntityType.CustomerEntity, customerID);
+
+            DataProvider.RemoveEntity(customerID);
+        }
+
+        /// <summary>
+        /// Delete the specified EntityType, as found using the given starting predicate (that must be PK based), while
+        /// first deleting all child records.
+        /// </summary>
+        private static void DeleteWithCascade(EntityType entityType, long id)
+        {
+            ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteWithCascade(entityType, id, adapter); }, 5);
+        }
+
+        /// <summary>
+        /// Executes the given method with an adapter that is setup for deadlock connection and automatic retry.
+        /// </summary>
+        private static void ExecuteWithDeadlockRetry(MethodInvoker<SqlAdapter> method, int deadlockRetries)
+        {
+            using (SqlDeadlockPriorityScope deadlockPriorityScope = new SqlDeadlockPriorityScope(-5))
+            {
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    adapter.CommandTimeOut = (int)TimeSpan.FromMinutes(10).TotalSeconds;
+
+                    ExecuteWithDeadlockRetry(method, deadlockRetries, adapter);
+
+                    adapter.Commit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the given method with an adapter that is setup for deadlock connection and automatic retry.
+        /// </summary>
+        private static void ExecuteWithDeadlockRetry(MethodInvoker<SqlAdapter> method, int deadlockRetries, SqlAdapter adapter)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+
+            try
+            {
+                // Execute our method - we don't commit the work performed by the adapter here since
+                // we didn't create the adapter.
+                method(adapter);
+            }
+            catch (SqlDeadlockException)
+            {
+                log.WarnFormat("Deadlock detected while trying to delete.  Retrying {0} more times.", deadlockRetries);
+
+                if (deadlockRetries > 0)
+                {
+                    // Wait before trying again, give the other guy some time to resolve itself
+                    Thread.Sleep(1000);
+
+                    // Try again
+                    ExecuteWithDeadlockRetry(method, deadlockRetries - 1, adapter);
+                }
+                else
+                {
+                    log.ErrorFormat("Could not delete due to deadlock retry failure.");
+                }
+            }
+
+            log.InfoFormat("Delete {0}", sw.Elapsed.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Delete the given store 
+        /// </summary>
+        private static void DeleteStore(StoreEntity store, SqlAdapter adapter)
+        {
+            // At first I was just doing the following:
+            //   C#: DeleteWithCascade(EntityType.StoreEntity, store.StoreID);
+            // However, this
+            //  1) Does not delete any customers, so a lot of customers are left over with zero orders.
+            //  2) Makes it hard to deal with removing notes.
+
+            // So now the strategy is:
+            //  1) Delete all customers that only have orders for the given store.
+            //  2) Delete all orders in the store (which may leave customers remaining that have orders from other stores)
+
+            // We can shortcut all the orders\customers deleting if the store isn't even setup yet
+            if (store.SetupComplete)
+            {
+                ResultsetFields customerFields = new ResultsetFields(1);
+                customerFields.DefineField(CustomerFields.CustomerID, 0, "CustomerID", "");
+
+                // SELECT COUNT(OrderID) FROM Order WHERE Order.CustomerID = CustomerID
+                EntityField2 customerOrdersAll = OrderFields.OrderID;
+                customerOrdersAll.ExpressionToApply = new ScalarQueryExpression(OrderFields.OrderID.SetAggregateFunction(AggregateFunction.Count),
+                    OrderFields.CustomerID == CustomerFields.CustomerID);
+
+                // SELECT COUNT(OrderID) FROM Order WHERE Order.CustomerID = CustomerID AND Order.StoreID = @storeID
+                EntityField2 customerOrdersStore = OrderFields.OrderID;
+                customerOrdersStore.ExpressionToApply = new ScalarQueryExpression(OrderFields.OrderID.SetAggregateFunction(AggregateFunction.Count),
+                    OrderFields.CustomerID == CustomerFields.CustomerID & OrderFields.StoreID == store.StoreID);
+
+                //  Delete all customers who have orders that are only in the store being deleted, or that have zero orders.
+                RelationPredicateBucket customerBucket = new RelationPredicateBucket(customerOrdersAll == customerOrdersStore);
+
+                // Delete all notes and print results for customers and orders defined by this bucket
+                NoteManager.DeleteNotesForDeletedStore(customerBucket, adapter);
+                PrintResultLogger.DeleteForDeletedStore(customerBucket, adapter);
+
+                // Now, delete all the customers
+                DeleteChildRelations(customerBucket, EntityType.CustomerEntity, adapter);
+
+                // Now find all leftover orders.  These will be the ones who have a customer that has an order from another store.  There shouldnt
+                // be too many of these, so we should be ok to do these one at a time.
+                ResultsetFields orderFields = new ResultsetFields(1);
+                orderFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
+                RelationPredicateBucket orderBucket = new RelationPredicateBucket(OrderFields.StoreID == store.StoreID);
+
+                // Keep deleting order's until there are no more
+                while (true)
+                {
+                    DataTable result = new DataTable();
+                    adapter.FetchTypedList(orderFields, result, orderBucket, 1000, false);
+
+                    if (result.Rows.Count == 0)
+                    {
+                        break;
+                    }
+
+                    foreach (DataRow row in result.Rows)
+                    {
+                        DeleteWithCascade(EntityType.OrderEntity, (long) row[0], adapter);
+                    }
+                }
+            }
+
+            // Allow the store to delete any additional FK data it may have
+            StoreType storeType = StoreTypeManager.GetType(store);
+            storeType.DeleteStoreAdditionalData(adapter);
+
+            // Delete any actions that are specific only to the store
+            ActionManager.DeleteStoreActions(store.StoreID);
+
+            // We delete the clone, so the original store doesnt get marked as Deleted until the StoreManager updates itself.
+            StoreEntity clone = (StoreEntity) GeneralEntityFactory.Create(EntityUtility.GetEntityType(store.GetType()));
+            clone.Fields = store.Fields.Clone();
+
+            // Delete the store
+            adapter.DeleteEntity(clone);
+        }
+
+        /// <summary>
+        /// Delete the specified EntityType, as found using the given starting predicate (that must be PK based), while
+        /// first deleting all child records. 
+        /// </summary>
+        private static void DeleteWithCascade(EntityType entityType, long id, SqlAdapter adapter)
+        {
+            log.InfoFormat("Cascade delete {0} {1}", EntityTypeProvider.GetEntityTypeName(entityType), id);
+
+            // Cleanup notes for those entities that use them
+            if (entityType == EntityType.OrderEntity || entityType == EntityType.CustomerEntity)
+            {
+                NoteManager.DeleteNotesForDeletedEntity(id, adapter);
+                PrintResultLogger.DeleteForDeletedEntity(id, adapter);
+            }
+
+            IEntityField2 primaryKeyField = GeneralEntityFactory.Create(entityType).Fields.PrimaryKeyFields[0];
+
+            // Create the base filter, based on ok
+            RelationPredicateBucket bucket = new RelationPredicateBucket(new FieldCompareValuePredicate(primaryKeyField, null, ComparisonOperator.Equal, id));
+
+            // Delete recursively, bottom up
+            DeleteChildRelations(bucket, entityType, adapter);
+        }
+
+        /// <summary>
+        /// Deletes all child relations recursively, bottom up, using the specified bucket as the base filter for deletion.
+        /// </summary>
+        private static void DeleteChildRelations(RelationPredicateBucket baseFilter, EntityType parentType, SqlAdapter adapter)
+        {
+            EntityBase2 parentEntity = (EntityBase2) GeneralEntityFactory.Create(parentType);
+
+            foreach (IEntityRelation relation in parentEntity.GetAllRelations())
+            {
+                // If we are the PK, then we delete the children
+                if (relation.StartEntityIsPkSide)
+                {
+                    // Add this relation
+                    RelationPredicateBucket bucket = EntityUtility.ClonePredicateBucket(baseFilter);
+                    bucket.Relations.Add(relation);
+
+                    // We need the current entity type
+                    EntityType childType = EntityTypeProvider.GetEntityType(relation.GetFKEntityFieldCore(0).ContainingObjectName);
+
+                    // Delete child relations
+                    DeleteChildRelations(bucket, childType, adapter);
+                }
+            }
+
+            // Delete any inherited tables
+            DeleteInheritanceSubTypes(baseFilter, parentType, adapter);
+
+            // Now delete ourself
+            adapter.DeleteEntitiesDirectly(EntityTypeProvider.GetSystemType(parentType), baseFilter);
+        }
+
+        /// <summary>
+        /// Delete all rows related to the given entity type via inheritance, using the specified bucket as the starting filter point.
+        /// </summary>
+        private static void DeleteInheritanceSubTypes(RelationPredicateBucket baseFilter, EntityType entityType, SqlAdapter adapter)
+        {
+            EntityBase2 entity = (EntityBase2) GeneralEntityFactory.Create(entityType);
+            IInheritanceInfo inheritanceInfo = entity.GetInheritanceInfo();
+
+            if (inheritanceInfo == null)
+            {
+                return;
+            }
+
+            IRelationFactory relationFactory = EntityTypeProvider.GetInheritanceRelationFactory(entityType);
+
+            // Go through each inherited leaf
+            foreach (string subTypeEntityName in inheritanceInfo.EntityNamesOfPathsToLeafs)
+            {
+                IEntityRelation relation = relationFactory.GetSubTypeRelation(subTypeEntityName);
+
+                // Add this relation
+                RelationPredicateBucket bucket = EntityUtility.ClonePredicateBucket(baseFilter);
+                bucket.Relations.Add(relation);
+
+                // log.InfoFormat("Deleting inherited subtype {0}", subTypeEntityName);
+
+                adapter.DeleteEntitiesDirectly(EntityTypeProvider.GetSystemType(subTypeEntityName), bucket);
+            }
+        }
+    }
+}

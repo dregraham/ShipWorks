@@ -1,0 +1,1808 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rebex.Net.SecureSocket</name>
+    </assembly>
+    <members>
+        <member name="T:Rebex.Security.Cryptography.Ssl3Mac">
+            <summary>
+            MAC for SSL3 records and SSL3 Finished message
+            </summary>
+            <remarks>
+            The MAC is generated as:
+            alg(K + pad_2 + alg(text + K + pad_1))  // Handshake Finished message MAC
+            alg(K + pad_2 + alg(K + pad_1 + text))  // Record MAC
+            where K is an n byte key<br/>
+            pad_1 is the character 0x36 repeated 48 times for MD5 or 40 times for SHA
+            pad_2 is the character 0x5c repeated 48 times for MD5 or 40 times for SHA
+            and text is the data being protected<br/>
+            </remarks>
+        </member>
+        <member name="T:Rebex.IO.EnhancedMemoryStream">
+            <summary>
+            Summary description for EnhancedMemoryStream.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Messages">
+            <summary>
+            Provides methods for constructing exception messages.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.RebexAsyncResult">
+            <summary>
+            Universal class for asynchronous method invocation.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose(bool disposing) executes in two distinct scenarios.
+            If disposing equals true, the method has been called directly
+            or indirectly by a user's code. Managed and unmanaged resources
+            can be disposed.
+            If disposing equals false, the method has been called by the 
+            runtime from inside the finalizer and you should not reference 
+            other objects. Only unmanaged resources can be disposed.
+            </summary>
+            <param name="disposing"> If true, is called by IDisposable.Dispose. 
+            Otherwise it is called by finalizer.</param>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.Dispose">
+            <summary>
+            Implementation of IDisposable.Dispose()
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.SimpleThreadPool.Find(System.Threading.Thread)">
+            <summary>
+            Find the ThreadInfo instance that corresponds to the thread
+            </summary>
+            <param name="thread"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.SimpleThreadPool.FindFreeThread">
+            <summary>
+            Find a free thread
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Rebex.Net.TlsDebugEventGroup">
+            <summary>
+            The event group.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventGroup.Info">
+            <summary>
+            Debug info.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventGroup.HandshakeMessage">
+            <summary>
+            Handshake message.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventGroup.Alert">
+            <summary>
+            Alert message.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventGroup.StateChange">
+            <summary>
+            State changed.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventGroup.CipherSpec">
+            <summary>
+            Cipher specification messages.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsDebugEventType">
+            <summary>
+            The event type.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ResumingCachedSession">
+            <summary>A cached session is being re-established.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.UnknownMessageType">
+            <summary>Received data of unknown message type.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.UnexpectedException">
+            <summary>Unexpected exception encountered.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.HelloRequest">
+            <summary>HelloRequest handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ClientHello">
+            <summary>ClientHello handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ServerHello">
+            <summary>ServerHello handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.Certificate">
+            <summary>Certificate handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ServerKeyExchange">
+            <summary>ServerKeyExchange handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.CertificateRequest">
+            <summary>CertificateRequest handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ServerHelloDone">
+            <summary>ServerHelloDone handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.CertificateVerify">
+            <summary>CertificateVerify handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ClientKeyExchange">
+            <summary>ClientKeyExchange handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.Finished">
+            <summary>Finished handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.UnknownHandshakeMessage">
+            <summary>Unknown handshake message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.Alert">
+            <summary>Alert message.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.Negotiating">
+            <summary>Cipher negotiation has begun.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.Secured">
+            <summary>Socket was secured.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.Closed">
+            <summary>Socket was closed.</summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventType.ChangeCipherSpec">
+            <summary>ChangeCipherSpec message.</summary>
+        </member>
+        <member name="T:Rebex.Net.TlsDebugEventSource">
+            <summary>
+            The source of the event.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventSource.Unspecified">
+            <summary>
+            Not specified.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventSource.Sent">
+            <summary>
+            Sent by the local computer.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugEventSource.Received">
+            <summary>
+            Received from the remote computer.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsDebugLevel">
+            <summary>
+            Debug level.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugLevel.None">
+            <summary>
+            No debug events.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugLevel.Important">
+            <summary>
+            Important events only. This is the default.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsDebugLevel.Detailed">
+            <summary>
+            All events.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsDebugEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Rebex.Net.TlsSocket.Debug">Debug</see> event of a <see cref="T:Rebex.Net.TlsSocket"/> class.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">A <see cref="T:Rebex.Net.TlsDebugEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Rebex.Net.TlsDebugEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Rebex.Net.TlsSocket.Debug">Message</see> event.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TlsDebugEventArgs.GetRawData">
+            <summary>
+            Returns the raw data of the message, if available.
+            </summary>
+            <returns>Raw data of the message.</returns>
+        </member>
+        <member name="M:Rebex.Net.TlsDebugEventArgs.#ctor(Rebex.Net.TlsDebugEventType,Rebex.Net.TlsDebugEventSource,Rebex.Net.TlsDebugLevel)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TlsDebugEventArgs"/> class.
+            </summary>
+            <param name="type">Event type.</param>
+            <param name="source">Event source.</param>
+            <param name="level">Event level.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsDebugEventArgs.#ctor(Rebex.Net.TlsDebugEventType,Rebex.Net.TlsDebugEventSource,Rebex.Net.TlsDebugLevel,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TlsDebugEventArgs"/> class.
+            </summary>
+            <param name="type">Event type.</param>
+            <param name="source">Event source.</param>
+            <param name="level">Event level.</param>
+            <param name="buffer">Buffer containing the unparsed message.</param>
+            <param name="offset">Offset of the message in buffer.</param>
+            <param name="count">Length of the message.</param>
+        </member>
+        <member name="P:Rebex.Net.TlsDebugEventArgs.Type">
+            <summary>
+            Gets the event type.
+            </summary>
+            <value>The event type.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsDebugEventArgs.Group">
+            <summary>
+            Gets the event group.
+            </summary>
+            <value>The event group.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsDebugEventArgs.Source">
+            <summary>
+            Gets the event source.
+            </summary>
+            <value>The event source.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsDebugEventArgs.Level">
+            <summary>
+            Gets the event level.
+            </summary>
+            <value>The event level.</value>
+        </member>
+        <member name="T:Rebex.Net.ICertificateVerifier">
+            <summary>
+            Defines the interface that certificate verifier classes must implement.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.ICertificateVerifier.Verify(Rebex.Net.TlsSocket,System.String,Rebex.Security.Certificates.CertificateChain)">
+            <summary>
+            Validates a certificate.
+            </summary>
+            <param name="socket">The socket that needs the certificate verification.</param>
+            <param name="commonName">Common name of the server.</param>
+            <param name="certificateChain">Certificate chain to be validated.</param>
+            <returns>True to accept the chain, False to reject.</returns>
+        </member>
+        <member name="T:Rebex.Net.ICertificateRequestHandler">
+            <summary>
+            Defines the interface that certificate request handler classes must implement.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.ICertificateRequestHandler.Request(Rebex.Net.TlsSocket,Rebex.Security.Certificates.DistinguishedName[])">
+            <summary>
+            Validates a certificate.
+            </summary>
+            <param name="socket">The socket that needs the certificate verification.</param>
+            <param name="issuers">The list of acceptable issuers' names.</param>
+            <returns>Certificate chain.</returns>
+        </member>
+        <member name="T:Rebex.Net.CertificateVerifier">
+            <summary>
+            Provides a set of common verifiers.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.CertificateVerifier.AcceptAll">
+            <summary>
+            A verifier that accepts all certificates - no verification is done.
+            </summary>
+            <remarks>This is very insecure. Only use this during debugging.</remarks>
+        </member>
+        <member name="F:Rebex.Net.CertificateVerifier.Default">
+            <summary>
+            Default verifier. Recommended.
+            </summary>
+            <remarks>Uses the SSPI provider to validate the certificate chain.</remarks>
+        </member>
+        <member name="T:Rebex.Net.CertificateRequestHandler">
+            <summary>
+            Provides a set of common certificate request handlers.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.CertificateRequestHandler.NoCertificate">
+            <summary>
+            A certificate request handler that selects no certificate.
+            </summary>
+            <remarks>Use this if you don't want to authenticate using the client certificate.</remarks>
+        </member>
+        <member name="F:Rebex.Net.CertificateRequestHandler.StoreSearch">
+            <summary>
+            Inteligent certificate request handler. Recommended for non-GUI applications.
+            </summary>
+            <remarks>Uses the SSPI provider to select a first suitable certificate found in user's certificate store.</remarks>
+        </member>
+        <member name="M:Rebex.Net.CertificateRequestHandler.CreateRequestHandler(Rebex.Security.Certificates.CertificateChain)">
+            <summary>
+            A certificate request handler that returns the certificate specified by the supplied chain.
+            </summary>
+            <param name="certificateChain">Certificate chain with an associated private key.</param>
+            <returns>A new instance of ICertificateRequestHandler.</returns>
+        </member>
+        <member name="T:Rebex.Net.HelloRequest">
+            <summary>
+            The hello request message may be sent by the server at any time.
+            Hello request is a simple notification that the client should
+            begin the negotiation process anew by sending a client hello
+            message when convenient. 
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ClientHello">
+            <summary>
+            When a client first connects to a server it is required to send
+            the client hello as its first message. The client can also send a
+            client hello in response to a hello request or on its own
+            initiative in order to renegotiate the security parameters in an
+            existing connection.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ServerHello">
+            <summary>
+            The server will send this message in response to a client hello
+            message when it was able to find an acceptable set of algorithms.
+            If it cannot find such a match, it will respond with a handshake
+            failure alert.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.HandshakeCertificate">
+            <summary>
+            The server must send a certificate whenever the agreed-upon key
+            exchange method is not an anonymous one. This message will always
+            immediately follow the server hello message.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ServerKeyExchange">
+            <summary>
+            <p>
+            This message will be sent immediately after the server
+            certificate message (or the server hello message, if this is an
+            anonymous negotiation).
+            </p>
+            <p>
+            The server key exchange message is sent by the server only when
+            the server certificate message (if sent) does not contain enough
+            data to allow the client to exchange a premaster secret.
+            </p>
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ServerHelloDone">
+            <summary>
+            The server hello done message is sent by the server to indicate
+            the end of the server hello and associated messages. After
+            sending this message the server will wait for a client response.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ClientKeyExchange">
+            <summary>
+            This message is always sent by the client. It will immediately
+            follow the client certificate message, if it is sent. Otherwise
+            it will be the first message sent by the client after it receives
+            the server hello done message.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Finished">
+            <summary>
+            A finished message is always sent immediately after a change
+            cipher spec message to verify that the key exchange and
+            authentication processes were successful. It is essential that a
+            change cipher spec message be received between the other
+            handshake messages and the Finished message.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBase._owner">
+            <summary>
+            The TLS socket.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBase._socket">
+            <summary>
+            The underlying socket.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBase._start">
+            <summary>
+            Timeout fields.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBase._state">
+            <summary>
+            Specifies the current socket state.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBase._parameters">
+            <summary>
+            Security parameters.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsCipher">
+            <summary>
+            Represents a TLS/SSL cipher.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TlsCipher.ToString">
+            <summary>
+            Returns a description of the cipher.
+            </summary>
+            <returns>Description of the cipher.</returns>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.CipherAlgorithm">
+            <summary>
+            Gets the active cipher algorithm.
+            </summary>
+            <value>Active cipher algorithm.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.MacAlgorithm">
+            <summary>
+            Gets the active message authentication code (MAC) algorithm.
+            </summary>
+            <value>Active MAC algorithm.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.Cbc">
+            <summary>
+            Gets the value indicating whether the cipher is a block cipher in CBC mode.
+            </summary>
+            <value>true if block cipher, false if stream cipher.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.KeyMaterialSize">
+            <summary>
+            Gets the size of key material.
+            </summary>
+            <value>Size of key material.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.KeySize">
+            <summary>
+            Gets the key size.
+            </summary>
+            <value>Key size.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.EffectiveKeySize">
+            <summary>
+            Gets the effective key size.
+            </summary>
+            <value>Effective key size.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.BlockSize">
+            <summary>
+            Gets the cipher's block size.
+            </summary>
+            <value>Block size.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.MacSize">
+            <summary>
+            Gets the MAC algorithm block size.
+            </summary>
+            <value>MAC algorithm block size.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.Exportable">
+            <summary>
+            Gets the value indicating whether the cipher is exportable.
+            </summary>
+            <value>true if exportable, false if not exportable.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.Protocol">
+            <summary>
+            Gets the active protocol version.
+            </summary>
+            <value>The active protocol version.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.KeyExchangeAlgorithm">
+            <summary>
+            Gets the selected key exchange algorithm.
+            </summary>
+            <value>Selected key exchange algorithm.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsCipher.Suite">
+            <summary>
+            Returns the cipher suite ID.
+            </summary>
+            <value>Cipher suite ID.</value>
+        </member>
+        <member name="T:Rebex.Net.TlsException">
+            <summary>
+            The exception that is thrown when a TLS/SSL error occurs.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TlsException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TlsException"/> class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the <see cref="T:Rebex.Net.TlsException"/>.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TlsException"/> class with the specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.TlsException"/> class with the specified error message
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="inner">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsException.GetData(System.Object)">
+            <summary>
+            This method is only intended to be used internally by Rebex infrastructure.
+            </summary>
+            <param name="argument">Argument.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="T:Rebex.Net.TlsParameters">
+            <summary>
+            Security parameters.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TlsParameters.Clone">
+            <summary>
+            Returns a shallow copy of the current parameters.
+            </summary>
+            <returns>A shallow copy of current parameters.</returns>
+        </member>
+        <member name="M:Rebex.Net.TlsParameters.#ctor">
+            <summary>
+            Initializes a new instance of TlsParameters with default parameters.
+            </summary>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.Version">
+            <summary>
+            Gets or sets the allowed protocol versions.
+            </summary>
+            <value>Allowed protocol versions.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.Entity">
+            <summary>
+            Gets or sets the entity of a socket.
+            </summary>
+            <value>Connection entity.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.Options">
+            <summary>
+            Gets or sets the connection options.
+            </summary>
+            <value>Connection options.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.AllowedSuites">
+            <summary>
+            Gets or sets the group of allowed cipher suites.
+            </summary>
+            <value>The group of allowed cipher suites.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.CommonName">
+            <summary>
+            Gets or sets the common name of the server.
+            </summary>
+            <value>The common name of the server.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.CertificateVerifier">
+            <summary>
+            Gets or sets the certificate verifier. 
+            </summary>
+            <value>The certificate verifier.</value>
+            <remarks>Verifier is used for verifying the server's or client's certificate.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.Certificate">
+            <summary>
+            Gets or sets the certificate to be used.
+            </summary>
+            <value>The certificate to be used.</value>
+            <remarks>
+            <p>
+            This is only used to set the server certificate.
+            </p>
+            <p>
+            For client sockets, this is the certificate that is sent to the server if no certificate is requested.
+            Otherwise, the certificate returned by <see cref="P:Rebex.Net.TlsParameters.CertificateRequestHandler"/> is used.
+            </p>
+            <p>
+            This certificate will be used to sign data, so it must have a private key associated.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.CertificateRequestHandler">
+            <summary>
+            Gets or sets the certificate request handler. 
+            </summary>
+            <value>The certificate request handler.</value>
+            <remarks>
+            <p>
+            This is only used by client sockets.
+            </p>
+            <p>
+            When a server requests a client to send a certificate,
+            this will be used to select the appropriate client certificate.
+            </p>
+            <p>
+            Default value is <see cref="F:Rebex.Net.CertificateRequestHandler.NoCertificate"/>.
+            You might want to use <see cref="F:Rebex.Net.CertificateRequestHandler.StoreSearch"/> if
+            client authentication is needed.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.SessionID">
+            <summary>
+            Gets or sets the session ID.
+            </summary>
+            <value>The session ID.</value>
+            <remarks>This property is deprecated. Please use the <see cref="P:Rebex.Net.TlsParameters.Session"/> property instead.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.Session">
+            <summary>
+            Gets or sets the session to resume.
+            </summary>
+            <value>The session to resume.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.AcceptableAuthorities">
+            <summary>
+            Gets or sets the list of acceptable certificate authorities.
+            </summary>
+            <value>The list of acceptable certificate authorities.</value>
+            <remarks>
+            This is only used by server sockets.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.CertificatePolicy">
+            <summary>
+            Gets or sets the certificate policy for server sockets.
+            </summary>
+            <value>The certificate policy.</value>
+            <remarks>
+            This is only used by server sockets.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.EphemeralDiffieHellmanParameters">
+            <summary>
+            Gets or sets the ephemeral Hellman-Diffie parameters for
+            DHE key exchange on server sockets.
+            </summary>
+            <value>The ephemeral Hellman-Diffie parameters.</value>
+            <remarks>
+            <p>
+            This is only used by server sockets.
+            </p>
+            <p>
+            Only P and G parameters are used.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsParameters.TemporaryRSAParameters">
+            <summary>
+            Gets or sets the temporary RSA key parameters for RSA_EXPORT
+            key exchange on server sockets with certificates with key length >512.
+            </summary>
+            <value>The ephemeral Hellman-Diffie parameters.</value>
+            <remarks>
+            <p>
+            This is only used by server sockets.
+            </p>
+            </remarks>
+        </member>
+        <member name="T:Rebex.Net.TlsSession">
+            <summary>
+            Represents a cached TLS/SSL session.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsSocket">
+            <summary>
+            Represents a TLS/SSL-enabled TCP socket.
+            </summary>
+            <remarks>
+            <p>
+            This class is suitable for securing your socket communication using
+            the TLS 1.0 protocol or its predecesor SSL 3.0.
+            </p>
+            <p>
+            Only TCP protocol is supported.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.GetConnectionState">
+            <summary>
+            Gets a value that indicates whether the <see cref="T:Rebex.Net.SocketState"/> is currently connected to a remote host.
+            </summary>
+            <value>true if the <see cref="T:Rebex.Net.SocketState"/> is connected; otherwise, false.</value>
+            <remarks>
+            <p>
+            As long as there is still data available to be read from the socket, this method will indicate that
+            the <see cref="T:Rebex.Net.SocketState"/> is connected, even though technically it might have already be considered
+            disconnected based on one's point of view.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Poll(System.Int32,Rebex.Net.SocketSelectMode)">
+            <summary>
+            Determines the status of the socket.
+            </summary>
+            <param name="microSeconds">Time to wait for a response, in microseconds.</param>
+            <param name="mode">Select mode.</param>
+            <returns>True if data can be sent or read or if the connection was closed.</returns>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.OnDebug(Rebex.Net.TlsDebugEventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.Net.TlsSocket.Debug"/> event.
+            </summary>
+            <param name="e">A <see cref="T:Rebex.Net.TlsDebugEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.#ctor">
+            <summary>
+            Initializes an instance of the <see cref="T:Rebex.Net.TlsSocket"/> class.
+            </summary>
+            <remarks>
+            The default constructor initializes an instance of the <see cref="T:Rebex.Net.TlsSocket"/>.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.#ctor(System.Net.Sockets.AddressFamily)">
+            <summary>
+            Initializes an instance of the <see cref="T:Rebex.Net.TlsSocket"/> class with the specified address family.
+            </summary>
+            <param name="addressFamily">Address family.</param>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.#ctor(System.Net.Sockets.Socket)">
+            <summary>
+            Initializes an instance of the <see cref="T:Rebex.Net.TlsSocket"/> class with the specified base socket.
+            </summary>
+            <param name="socket">Base socket.</param>
+            <remarks>Use this if you need to upgrade an existing socket to use TLS/SSL.</remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.#ctor(Rebex.Net.ISocket)">
+            <summary>
+            Initializes an instance of the <see cref="T:Rebex.Net.TlsSocket"/> class with the specified base socket.
+            </summary>
+            <param name="socket">Base socket.</param>
+            <remarks>Use this if you need to upgrade an existing socket to use TLS/SSL.</remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Send(System.Byte[])">
+            <summary>
+            Sends data to a connected <see cref="T:Rebex.Net.TlsSocket"/>.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Send(System.Byte[],System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends data to a connected <see cref="T:Rebex.Net.TlsSocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Send(System.Byte[],System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends the specified amount of data to a connected <see cref="T:Rebex.Net.TlsSocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="size">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Receive(System.Byte[])">
+            <summary>
+            Receives data from a connected <see cref="T:Rebex.Net.TlsSocket"/>.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Receive(System.Byte[],System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives data from a connected <see cref="T:Rebex.Net.TlsSocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Receive(System.Byte[],System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives the specified amount of data from a connected <see cref="T:Rebex.Net.TlsSocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="size">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Negotiate">
+            <summary>
+            Negotiates TLS/SSL cipher.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Unprotect">
+            <summary>
+            Reverts back to an unencrypted socket.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)">
+            <summary>
+            Establishes a connection to a remote device.
+            </summary>
+            <param name="remoteEP">An <see cref="T:System.Net.EndPoint"/> that represents the remote device.</param>
+            <remarks>
+            The Connect method establishes a network connection to a device identified by the remoteEP
+            parameter. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Connect(System.String,System.Int32)">
+            <summary>
+            Establishes a connection to a remote device.
+            </summary>
+            <param name="serverName">The hostname (or IP address) of the remote device.</param>
+            <param name="serverPort">The port number associated with the hostname.</param>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the serverName and serverPort
+            parameters. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.BeginConnect(System.Net.EndPoint,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request for a connection to a network device.
+            </summary>
+            <param name="remoteEP">An <see cref="T:System.Net.EndPoint"/> that represents the remote device.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous connection.
+            </returns>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the remoteEP
+            parameter. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.BeginConnect(System.String,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request for a connection to a network device.
+            </summary>
+            <param name="serverName">The hostname (or IP address) of the remote device.</param>
+            <param name="serverPort">The port number associated with the hostname.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous connection.
+            </returns>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the serverName and serverPort
+            parameters. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.EndConnect(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous connection request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <remarks>
+            The EndConnect method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.TlsSocket.BeginConnect(System.Net.EndPoint,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)">
+            <summary>
+            Starts a request to listen for an incoming connection using the specified control socket as a base.
+            </summary>
+            <param name="controlSocket">The control socket to use as a base.</param>
+            <returns>The endpoint to which a connection from a remote host can be made.</returns>
+            <remarks>
+            <p>
+            This method differs from <see cref="M:System.Net.Sockets.Socket.Listen(System.Int32)"/>:
+            <ul>
+            <li>A control connection socket needs to be specified. This might be needed by a proxy server
+            socket.</li>
+            <li>Only a single incoming connection is accepted.</li>
+            </ul>
+            To accept an incoming connection, use the <see cref="M:Rebex.Net.TlsSocket.Accept"/> or <see cref="M:Rebex.Net.TlsSocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </p>
+            <p>
+            <b>Note:</b> When connected through a HTTP proxy server, this method will fail.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronously request to listen for an incoming connection using the specified control socket as a base.
+            </summary>
+            <param name="controlSocket">The control socket to use as a base.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+            </returns>
+            <remarks>
+            <p>
+            This method differs from <see cref="M:System.Net.Sockets.Socket.Listen(System.Int32)"/>:
+            <ul>
+            <li>A control connection socket needs to be specified. This might be needed by a proxy server
+            socket.</li>
+            <li>Only a single incoming connection is accepted.</li>
+            </ul>
+            To accept an incoming connection, use the <see cref="M:Rebex.Net.TlsSocket.Accept"/> or <see cref="M:Rebex.Net.TlsSocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </p>
+            <p>
+            <b>Note:</b> When connected through a HTTP proxy server, this method will fail.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.EndListen(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous request to listen for an incoming connection.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The endpoint to which a connection from a remote host can be made.</returns>
+            <remarks>
+            The EndListen method completes a request to listen for a connection that was started with the <see cref="M:Rebex.Net.TlsSocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Accept">
+            <summary>
+            Accepts an incoming connection.
+            </summary>
+            <returns>An instance of connected <see cref="T:Rebex.Net.ISocket"/>.</returns>
+            <remarks>
+            <p>
+            A call to Accept is only allowed after a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> or <see cref="M:Rebex.Net.TlsSocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/>/<see cref="M:Rebex.Net.TlsSocket.EndListen(System.IAsyncResult)"/> methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.BeginAccept(System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request to accept an incoming connection.
+            </summary>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+            </returns>
+            <remarks>
+            <p>
+            A call to Accept is only allowed after a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> or <see cref="M:Rebex.Net.TlsSocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/>/<see cref="M:Rebex.Net.TlsSocket.EndListen(System.IAsyncResult)"/> methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.EndAccept(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous request to accept an incoming connection.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>An instance of connected <see cref="T:Rebex.Net.ISocket"/>.</returns>
+            <remarks>
+            The EndAccept method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.TlsSocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Send(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends the specified amount of data to a connected <see cref="T:Rebex.Net.TlsSocket"/> starting at the indicated location in the data and using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="offset">The position in the data buffer to begin sending data.</param>
+            <param name="size">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.BeginSend(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)">
+            <summary>
+            Sends data asynchronously to a connected <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="offset">The position in the data buffer to begin sending data.</param>
+            <param name="size">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous send.
+            </returns>
+            <remarks>
+            <p>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </p>
+            <p>
+            The BeginSend method starts asynchronously sending data through the ISocket.
+            You should create a callback method that implements the AsyncCallback delegate.
+            This callback method should use the EndSend method to complete the asynchronous operation.
+            See the .NET Framework SDK Reference for more information on asynchronous methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.EndSend(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous send.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            The EndSend method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.TlsSocket.BeginSend(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Receive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives the specified amount of data from a connected <see cref="T:Rebex.Net.TlsSocket"/> into a specific location of the receive buffer and using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="offset">The position in the buffer at which to store the received data.</param>
+            <param name="size">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.TlsSocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.TlsSocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.TlsSocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)">
+            <summary>
+            Ends a pending asynchronous read.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="offset">The position in the buffer at which to store the received data.</param>
+            <param name="size">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous send.
+            </returns>
+            <remarks>
+            The EndReceive method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.TlsSocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.EndReceive(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous read.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            The EndReceive method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.TlsSocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.GetObject(System.Object)">
+            <summary>
+            Used internally by Rebex components.
+            </summary>
+            <param name="arg">Argument.</param>
+            <returns>Result.</returns>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Shutdown(System.Net.Sockets.SocketShutdown)">
+            <summary>
+            Disables sends and receives on a <see cref="T:Rebex.Net.TlsSocket"/>.
+            </summary>
+            <param name="how">The <see cref="T:System.Net.Sockets.SocketShutdown"/> value specifying the operation that will no longer be allowed.</param>
+            <remarks>
+            See the reference for <see cref="M:System.Net.Sockets.Socket.Shutdown(System.Net.Sockets.SocketShutdown)"/> for details.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.TlsSocket.Close">
+            <summary>
+            Forces a <see cref="T:Rebex.Net.TlsSocket"/> connection to close.
+            </summary>
+            <remarks>
+            <p>
+            The application should call <see cref="M:Rebex.Net.TlsSocket.Shutdown(System.Net.Sockets.SocketShutdown)"/> before calling Close to ensure that
+            all pending data is sent or received before the Socket is closed.
+            </p>
+            </remarks>
+        </member>
+        <member name="E:Rebex.Net.TlsSocket.Debug">
+            <summary>
+            Occurs when a TLS/SSL event is processed.
+            </summary>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Socket">
+            <summary>
+            Gets the internal <see cref="T:System.Net.Sockets.Socket"/> value (only for sockets based on Socket or ProxySocket, otherwise null is returned).
+            </summary>
+            <value>The internal <see cref="T:System.Net.Sockets.Socket"/> value.</value>
+            <remarks>Use with care.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Timeout">
+            <summary>
+            Gets or sets the length of time before the operation times out.
+            </summary>
+            <value>
+            The length of time, in milliseconds, until the operation times out,
+            or the value -1 or 0 to indicate that the request does not time out.
+            Default is -1 (infinite).
+            </value>
+            <remarks>
+            <p>
+            The internal timeout counter is reset every time data is sent
+            or received from to server.
+            </p>
+            <p>
+            The <see cref="P:Rebex.Net.TlsSocket.Timeout"/> property only affects synchronous methods.
+            </p>
+            <p>
+            Minimal value is 500. Setting this to a value lower than 1000 will set it to 1000.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.RemoteEndPoint">
+            <summary>
+            Gets the remote endpoint.
+            </summary>
+            <value>The remote endpoint that the <see cref="T:Rebex.Net.TlsSocket"/> is using for communications.</value>
+            <remarks>
+            The RemoteEndPoint property gets the network connection information associated with
+            either the remote host or the proxy server.
+            RemoteEndPoint is set by <see cref="T:Rebex.Net.TlsSocket"/> methods that establish a connection
+            to a remote host.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.LocalEndPoint">
+            <summary>
+            Gets the local endpoint.
+            </summary>
+            <value>The local endpoint that the <see cref="T:Rebex.Net.TlsSocket"/> is using for communications.</value>
+            <remarks>
+            The LocalEndPoint property contains the network connection information associated with the local network device.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Connected">
+            <summary>
+            Gets a value indicating whether a <see cref="T:Rebex.Net.TlsSocket"/> is connected to a remote resource.
+            </summary>
+            <value>true if the <see cref="T:Rebex.Net.TlsSocket"/> is connected to a remote resource; otherwise, false.</value>
+            <remarks>
+            <p>
+            Gets the connection state of the <see cref="T:Rebex.Net.TlsSocket"/>. This property will return
+            the latest known state of the SecureSocket. When it returns false, the socket was either never
+            connected, or no longer connected. When it returns true, the socket was connected at the
+            time of the last I/O operation or the <see cref="M:Rebex.Net.TlsSocket.GetConnectionState"/> method.
+            </p>
+            <p>
+            <b>Note:</b> There is no guarantee that the Socket is still connected even though
+            Connected returns true.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Available">
+            <summary>
+            Gets the amount of data that has been received from the network and is available to be read.
+            </summary>
+            <value>
+            The number of bytes of data that has been received from the network and is available
+            to be read, or 0 if no data is available.
+            </value>
+            <remarks>
+            After the socket has been closed, this property will still indicate there is data to be read
+            if there is 1 byte or more data in the receive buffer. If there is no more data to be read,
+            a value of 0 will be returned.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.SessionID">
+            <summary>
+            Gets the session ID of the connection.
+            </summary>
+            <value>The session ID of the connection.</value>
+            <remarks>This property is deprecated. Please use the <see cref="P:Rebex.Net.TlsSocket.Session"/> property instead.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Session">
+            <summary>
+            Gets the connection session
+            </summary>
+            <value>The connection session.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Cipher">
+            <summary>
+            Gets the active cipher.
+            </summary>
+            <value>Active cipher.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.ServerCertificate">
+            <summary>
+            Gets the server's certificate chain.
+            </summary>
+            <value>The server's certificate chain.</value>
+            <remarks>The first certificate in the chain is the server's certificate.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.ClientCertificate">
+            <summary>
+            Gets the client's certificate chain.
+            </summary>
+            <value>The client's certificate chain.</value>
+            <remarks>The first certificate in the chain is the client's certificate.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.IsSecure">
+            <summary>
+            Gets the current security state of the connection.
+            </summary>
+            <value>True if all data (send or received) is beign encrypted.</value>
+            <remarks>
+            Use <see cref="M:Rebex.Net.TlsSocket.Negotiate"/> method to secure the connection.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Entity">
+            <summary>
+            Gets the entity.
+            </summary>
+            <value>Entity.</value>
+            <remarks>Entity is Client for client sockets and Server for server sockets.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.CompressionMethod">
+            <summary>
+            Gets the active data compression method.
+            </summary>
+            <value>Active data compression method.</value>
+            <remarks>No data compression is currently supported.</remarks>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Parameters">
+            <summary>
+            Gets or sets the security parameters of the current socket.
+            </summary>
+            <value>The security parameters of the current socket.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.DebugLevel">
+            <summary>
+            Gets or sets the debug level that specifies an amount of messages <see cref="E:Rebex.Net.TlsSocket.Debug"/> event handlers receive.
+            </summary>
+            <value>Debug level.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.LogWriter">
+            <summary>
+            Gets or sets the logger used by this object.
+            </summary>
+            <value>Logger.</value>
+        </member>
+        <member name="P:Rebex.Net.TlsSocket.Factory">
+            <summary>
+            Gets the instance of <see cref="T:Rebex.Net.ISocketFactory"/> that created this <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <value>An instance of <see cref="T:Rebex.Net.ISocketFactory"/>.</value>
+        </member>
+        <member name="T:Rebex.Net.TlsProtocol">
+            <summary>
+            TLS/SSL protocol version.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsProtocol.None">
+            <summary>
+            No SSL/TLS used.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsProtocol.SSL30">
+            <summary>
+            SSL 3.0 protocol. Deprecated.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsProtocol.TLS10">
+            <summary>
+            TLS 1.0 protocol.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsProtocol.TLS11">
+            <summary>
+            TLS 1.1 protocol. Experimental.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsVersion">
+            <summary>
+            TLS/SSL protocol version flags.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsVersion.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsVersion.SSL30">
+            <summary>
+            SSL 3.0 protocol. Deprecated.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsVersion.TLS10">
+            <summary>
+            TLS 1.0 protocol.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsVersion.TLS11">
+            <summary>
+            TLS 1.1 protocol. Experimental.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsVersion.Any">
+            <summary>
+            Use any supported protocol
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsConnectionEnd">
+            <summary>
+            Connection end.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionEnd.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionEnd.Server">
+            <summary>
+            Server socket.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionEnd.Client">
+            <summary>
+            Client socket.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsBulkCipherAlgorithm">
+            <summary>
+            Bulk cipher algorithm.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBulkCipherAlgorithm.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBulkCipherAlgorithm.RC4">
+            <summary>
+            RC4.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBulkCipherAlgorithm.RC2">
+            <summary>
+            RC2.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBulkCipherAlgorithm.DES">
+            <summary>
+            DES.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBulkCipherAlgorithm.TripleDES">
+            <summary>
+            TripleDES.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsBulkCipherAlgorithm.AES">
+            <summary>
+            AES.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsMacAlgorithm">
+            <summary>
+            Specifies the MAC algorithm in use.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsMacAlgorithm.None">
+            <summary>
+            No MAC algorithm in use.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsMacAlgorithm.MD5">
+            <summary>
+            MD5 algorithm.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsMacAlgorithm.SHA1">
+            <summary>
+            SHA1 algorithm.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsCompressionMethod">
+            <summary>
+            Specifies the compression method.
+            </summary>
+            <remarks>
+            Currently, no compression is supported.
+            </remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCompressionMethod.None">
+            <summary>
+            No compression.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsKeyExchangeAlgorithm">
+            <summary>
+            Specifies the key exchange algorithm.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsKeyExchangeAlgorithm.None">
+            <summary>
+            No key exchange.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsKeyExchangeAlgorithm.RSA">
+            <summary>
+            RSA signature, RSA encryption.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsKeyExchangeAlgorithm.DHE_RSA">
+            <summary>
+            RSA signature, ephemeral Diffie-Hellman.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsKeyExchangeAlgorithm.DHE_DSS">
+            <summary>
+            DSS signature, ephemeral Diffie-Hellman.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsKeyExchangeAlgorithm.DH_anon">
+            <summary>
+            Anonymous Diffie-Hellman.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsConnectionState">
+            <summary>
+            Specifies the current connection state.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionState.Unsecured">
+            <summary>
+            Connection is not secured yet.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionState.Negotiating">
+            <summary>
+            Security parameters negotiation is in progress.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionState.Secure">
+            <summary>
+            Connection is secured, transfers are encrypted.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsConnectionState.Closed">
+            <summary>
+            Connection has been closed.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsCipherSuite">
+            <summary>
+            Specifies the set of desired cipher suites.
+            </summary>
+            <remarks>
+            The following ciphers are currently considered secure:<br/>
+            RSA_WITH_RC4_128_SHA<br/>
+            RSA_WITH_3DES_EDE_CBC_SHA<br/>
+            RSA_WITH_AES_128_CBC_SHA<br/>
+            RSA_WITH_AES_256_CBC_SHA<br/>
+            DHE_DSS_WITH_3DES_EDE_CBC_SHA<br/>
+            DHE_DSS_WITH_AES_128_CBC_SHA<br/>
+            DHE_DSS_WITH_AES_256_CBC_SHA<br/>
+            DHE_DSS_WITH_RC4_128_SHA<br/>
+            DHE_RSA_WITH_3DES_EDE_CBC_SHA<br/>
+            DHE_RSA_WITH_AES_128_CBC_SHA<br/>
+            DHE_RSA_WITH_AES_256_CBC_SHA<br/>
+            </remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.None">
+            <summary>
+            No cipher suite.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_EXPORT_WITH_RC4_40_MD5">
+            <summary>
+            Exportable 40bit RC4 with MD5 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_WITH_RC4_128_MD5">
+            <summary>
+            128bit RC4 with MD5 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_WITH_RC4_128_SHA">
+            <summary>
+            128bit RC4 with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_EXPORT_WITH_RC2_CBC_40_MD5">
+            <summary>
+            Exportable 40bit RC2 in CBC mode with MD5 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_EXPORT_WITH_DES40_CBC_SHA">
+            <summary>
+            Exportable 40bit DES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_WITH_DES_CBC_SHA">
+            <summary>
+            56bit DES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_WITH_3DES_EDE_CBC_SHA">
+            <summary>
+            TripleDES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_EXPORT1024_WITH_DES_CBC_SHA">
+            <summary>
+            Exportable 56bit DES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_EXPORT1024_WITH_RC4_56_SHA">
+            <summary>
+            Exportable 56bit RC4 mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is not considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_WITH_AES_128_CBC_SHA">
+            <summary>
+            128bit AES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.RSA_WITH_AES_256_CBC_SHA">
+            <summary>
+            256bit AES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_EXPORT_WITH_DES40_CBC_SHA">
+            <summary>
+            Exportable 40bit DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_WITH_DES_CBC_SHA">
+            <summary>
+            56bit DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_WITH_3DES_EDE_CBC_SHA">
+            <summary>
+            TripleDES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_WITH_AES_128_CBC_SHA">
+            <summary>
+            128bit AES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_WITH_AES_256_CBC_SHA">
+            <summary>
+            256bit AES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_EXPORT1024_WITH_DES_CBC_SHA">
+            <summary>
+            Exportable 56bit DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_EXPORT1024_WITH_RC4_56_SHA">
+            <summary>
+            Exportable 40bit RC4 with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_DSS_WITH_RC4_128_SHA">
+            <summary>
+            128bit RC4 with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_RSA_EXPORT_WITH_DES40_CBC_SHA">
+            <summary>
+            Exportable 40bit DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_RSA_WITH_DES_CBC_SHA">
+            <summary>
+            56bit DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_RSA_WITH_3DES_EDE_CBC_SHA">
+            <summary>
+            TripleDES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_RSA_WITH_AES_128_CBC_SHA">
+            <summary>
+            128bit AES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DHE_RSA_WITH_AES_256_CBC_SHA">
+            <summary>
+            256bit AES in CBC mode with SHA1 hash.
+            </summary>
+            <remarks>This cipher is currently considered secure.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DH_anon_WITH_RC4_128_MD5">
+            <summary>
+            Anonymous 128bit RC4 with MD5 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DH_anon_WITH_3DES_EDE_CBC_SHA">
+            <summary>
+            Anonymous TripleDES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DH_anon_WITH_DES_CBC_SHA">
+            <summary>
+            Anonymous DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DH_anon_EXPORT_WITH_RC4_40_MD5">
+            <summary>
+            Anonymous exportable 40bit RC4 with MD5 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.DH_anon_EXPORT_WITH_DES40_CBC_SHA">
+            <summary>
+            Anonymous exportable 40bit DES in CBC mode with SHA1 hash.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.Secure">
+            <summary>
+            Specifies all ciphers that are currently considered secure.
+            </summary>
+            <remarks>See <see cref="T:Rebex.Net.TlsCipherSuite"/> for the list.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.Anonymous">
+            <summary>
+            Specifies anonymous ciphers.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCipherSuite.All">
+            <summary>
+            Specifies all ciphers, including the weak ciphers, excluding anonymous ciphers.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsCertificatePolicy">
+            <summary>
+            Specifies the certificate policy for the server sockets.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificatePolicy.NoClientCertificate">
+            <summary>
+            Don't request a client certificate.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificatePolicy.AllowClientCertificate">
+            <summary>
+            Request a client certificate, but do not fail if none is provided.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificatePolicy.RequireClientCertificate">
+            <summary>
+            Request a client certificate and fail if none is provided.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsCertificateAcceptance">
+            <summary>
+            Specifies certificate acceptance values.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.Accept">
+            <summary>
+            A certificate is to be accepted.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.CommonNameMismatch">
+            <summary>
+            The certificate common name does not match the server's name.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.Bad">
+            <summary>
+            A certificate is corrupt, contains signatures that do not verify correctly, etc.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.Unsupported">
+            <summary>
+            A certificate is of an unsupported type.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.Revoked">
+            <summary>
+            A certificate was revoked by its signer.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.Expired">
+            <summary>
+            A certificate has expired or is not currently valid.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.UnknownAuthority">
+            <summary>
+            A CA certificate could not be found or untrusted CA.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsCertificateAcceptance.Other">
+            <summary>
+            Some other issue arose in processing the certificate, rendering it unacceptable.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.TlsOptions">
+            <summary>
+            Specifies secure connection options.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.DoNotCacheSessions">
+            <summary>
+            Do not cache any sessions.
+            </summary>
+            <remarks>Mostly useful for debugging purposes.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.StayConnected">
+            <summary>
+            Do not shutdown and close the underlying socket after sending
+            or receiving fatal alert or close notify.
+            </summary>
+            <remarks>Protocols like FTP use this feature.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.DoNotInsertEmptyFragment">
+            <summary>
+            Do not send empty record after sucessful handshake with CBC ciphers.
+            </summary>
+            <remarks>For compatibility with broken implementations.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.SkipRollbackDetection">
+            <summary>
+            Ignore the client version in premaster secret. This only affects server sockets.
+            </summary>
+            <remarks>For compatibility with broken client implementations.</remarks>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.SilentUnprotect">
+            <summary>
+            Forces the <see cref="M:Rebex.Net.TlsSocket.Unprotect"/> method to do immediate unprotect without exchange
+            of CloseNotify alert messages. This is in violation of the RFC, but some broken servers need it,
+            unfortunately.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.Reserved">
+            <summary>
+            This option is currently unused.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.TlsOptions.AllowCloseWhileNegotiating">
+            <summary>
+            Causes an exception not to be thrown when a socket is closed by the server during negotiation.
+            Instead, the negotiation will appear as successful, followed by an immediate socket closure.
+            </summary>
+            <remarks>
+            This is needed by Serv-U FTP server that behaves like this when downloading an empty file
+            or directory listing. Even though this behavior is almost certainly bad and could pose
+            a potential security threat, we have to enable this option for this server to be able to work
+            with it.
+            </remarks>
+        </member>
+    </members>
+</doc>

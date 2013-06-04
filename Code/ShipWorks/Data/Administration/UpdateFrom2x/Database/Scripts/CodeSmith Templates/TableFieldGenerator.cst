@@ -1,0 +1,135 @@
+<%-- 
+Name:
+Author: 
+Description: 
+--%>
+<%@ CodeTemplate Language="C#" TargetLanguage="Text" Src="" Inherits="" Debug="False" CompilerVersion="v3.5" Description="Template description here." ClassName="TableFieldGenerator" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Register Name="Common" Template="Common.cst" MergeProperties="False" ExcludeProperties="" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table" %>
+<%@ Property Name="OutputMode" Type="System.Int32" Default="0" Optional="False" Category="SQL Generation" Description="" OnChanged="" Editor="" EditorBase="" Serializer="" %>
+<%@ Property Name="VariablePrefix" Type="System.String" Default="" Optional="True" Category="Sql Generation" Description="" OnChanged="" Editor="" EditorBase="" Serializer="" %>
+<%
+    Common.FieldOutputMode mode = (Common.FieldOutputMode)OutputMode;
+    switch (mode)
+    {   
+        // Outputs the cursor receiving variable list
+        case Common.FieldOutputMode.Variables:
+        {
+            int i = 0;
+            foreach (ColumnSchema column in SourceTable.Columns)
+            {
+                %>
+        @<%= VariablePrefix + column.Name %><%=(i < SourceTable.Columns.Count - 1) ? "," : ""%>
+                <%
+                i++;
+            }
+       
+            break;
+        }
+        // Outputs the cursor SELECT variable list
+        case Common.FieldOutputMode.SelectList:
+        {
+            int i = 0;
+            foreach (ColumnSchema column in SourceTable.Columns)
+            {
+                %>
+        [<%= column.Name %>]<%=(i < SourceTable.Columns.Count - 1) ? "," : ""%>
+                <%
+                i++;
+            }
+         
+            break;
+        }
+        // Outputs the TSQL variable declarations for the fields
+        case Common.FieldOutputMode.VariableDeclaration:
+        {
+            int i = 0;
+            foreach (ColumnSchema column in SourceTable.Columns)
+            {
+                %>                
+    @<%= VariablePrefix + column.Name%> <%= GetTSqlType(column)%><%= (i < SourceTable.Columns.Count - 1) ? "," : "" %> 
+                <%
+                i++;
+            }
+            break;
+        }   
+        // output the TSQL INSERT statement
+        case Common.FieldOutputMode.InsertStatement:
+        {
+            
+            %>
+    INSERT INTO dbo.<%= SourceTable.Name%>  (
+            <%
+                // Call self, this time to output select list                
+                TableFieldGenerator thisTemplateCopy = Create<TableFieldGenerator>();
+                this.CopyPropertiesTo(thisTemplateCopy);
+                thisTemplateCopy.OutputMode = (int)Common.FieldOutputMode.SelectList;                
+                thisTemplateCopy.Render(this.Response);%>
+    )
+    VALUES
+    (
+            <%
+                // call self this time to output variable list
+                thisTemplateCopy = Create<TableFieldGenerator>();
+                this.CopyPropertiesTo(thisTemplateCopy);
+                thisTemplateCopy.OutputMode = (int)Common.FieldOutputMode.Variables;
+                thisTemplateCopy.Render(this.Response);%>            
+    )             
+            <%
+            break;    
+        }
+        // variable SET statements
+        case Common.FieldOutputMode.VariableSet:
+        {
+            foreach (ColumnSchema column in SourceTable.Columns)
+            {
+                %>
+    SET @<%= VariablePrefix + column.Name %> =
+                <%
+            }
+            break;
+        }        
+        case Common.FieldOutputMode.SelectIntoVariables:
+        {
+            %>
+    SELECT 
+            <%
+            int i = 0;
+            foreach (ColumnSchema column in SourceTable.Columns)
+            {
+            %>            
+        @<%= VariablePrefix + column.Name %> = [<%= column.Name %>]<%= (i < SourceTable.Columns.Count - 1) ? "," : "" %>       
+         <%
+                i++;
+            } 
+        %>
+    FROM dbo.[<%= SourceTable.Name %>]
+    WHERE [<%= SourceTable.Columns[0].Name %>] = 
+            <%
+            break;    
+        }
+    }
+%>
+<script runat="template">
+    string GetTSqlType(ColumnSchema column)
+    {
+        if (column.NativeType == "text")
+        {
+            return "varchar(max)";    
+        }
+        else if (column.NativeType  == "varchar")
+        {
+            return "varchar(" + column.Size + ")";    
+        }
+        else if (column.NativeType == "nvarchar")
+        {
+            return "nvarchar(" + column.Size + ")";    
+        }
+        else 
+        {
+            return column.NativeType;
+        }               
+    }
+</script>

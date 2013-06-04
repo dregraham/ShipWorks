@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://www.express1.com/2010/06" elementFormDefault="qualified" targetNamespace="http://www.express1.com/2010/06" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="GetPostageLabel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:LabelRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="LabelRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AccountID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PassPhrase" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailClass" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DateAdvance" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeightOz" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailpieceShape" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailpieceDimensions" type="tns:Dimensions" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AutomationRate" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Machinable" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ServiceLevel" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SundayHolidayDelivery" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SortType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="IncludePostage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReplyPostage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ShowReturnAddress" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Stealth" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ValidateAddress" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SignatureWaiver" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NoWeekendDelivery" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Services" type="tns:SpecialServices" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CostCenter" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Value" type="xs:float" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="CODAmount" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="InsuredValue" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="RegisteredMailValue" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="IntegratedFormType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsFormType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsFormImageFormat" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsFormImageResolution" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OriginCountry" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ContentsType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ContentsExplanation" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NonDeliveryOption" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PartnerCustomerID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PartnerTransactionID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BpodClientDunsNumber" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RubberStamp1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RubberStamp2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RubberStamp3" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="EntryFacility" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="POZipCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ShipDate" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ShipTime" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsInfo" type="tns:CustomsInfo" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsCertify" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsSigner" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ResponseOptions" type="tns:ResponseOptions" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromCompany" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReturnAddress1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReturnAddress2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReturnAddress3" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReturnAddress4" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromCity" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromState" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromPostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromZIP4" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromCountry" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromPhone" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromEMail" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCompany" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToAddress1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToAddress2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToAddress3" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToAddress4" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCity" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToState" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToZIP4" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToDeliveryPoint" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCountry" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToPhone" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToEMail" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsCountry1" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsDescription1" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsQuantity1" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsValue1" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsWeight1" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsCountry2" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsDescription2" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsQuantity2" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsValue2" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsWeight2" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsCountry3" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsDescription3" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsQuantity3" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsValue3" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsWeight3" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsCountry4" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsDescription4" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsQuantity4" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsValue4" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsWeight4" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsCountry5" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsDescription5" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsQuantity5" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsValue5" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CustomsWeight5" type="xs:unsignedInt" />
+          <xs:element minOccurs="0" maxOccurs="1" name="EelPfc" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="ImageFormat" type="xs:string" />
+        <xs:attribute name="LabelSize" type="xs:string" />
+        <xs:attribute name="ImageRotation" type="xs:string" />
+        <xs:attribute name="ImageResolution" type="xs:string" />
+        <xs:attribute name="Test" type="xs:string" />
+        <xs:attribute name="Provider" type="tns:Provider" use="required" />
+        <xs:attribute name="LabelSubtype" type="xs:string" />
+        <xs:attribute name="LabelType" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DataValidator" />
+  <xs:complexType name="PostageRatesRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailClass" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeightOz" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailpieceShape" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailpieceDimensions" type="tns:Dimensions" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Machinable" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Services" type="tns:SpecialServices" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CODAmount" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="InsuredValue" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RegisteredMailValue" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromPostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCountry" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CertifiedIntermediary">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="AccountID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PassPhrase" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Dimensions">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Length" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Width" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Height" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SpecialServices">
+    <xs:attribute name="CertifiedMail" type="xs:string" />
+    <xs:attribute name="COD" type="xs:string" />
+    <xs:attribute name="DeliveryConfirmation" type="xs:string" />
+    <xs:attribute name="ElectronicReturnReceipt" type="xs:string" />
+    <xs:attribute name="InsuredMail" type="xs:string" />
+    <xs:attribute name="RegisteredMail" type="xs:string" />
+    <xs:attribute name="RestrictedDelivery" type="xs:string" />
+    <xs:attribute name="ReturnReceipt" type="xs:string" />
+    <xs:attribute name="SignatureConfirmation" type="xs:string" />
+    <xs:attribute name="AdultSignature" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="CustomsItem">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Quantity" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Weight" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Value" type="xs:decimal" />
+          <xs:element minOccurs="0" maxOccurs="1" name="HSTariffNumber" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CountryOfOrigin" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CustomsInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="ContentsType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ContentsExplanation" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RestrictionType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RestrictionComments" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SendersCustomsReference" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ImportersCustomsReference" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LicenseNumber" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CertificateNumber" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="InvoiceNumber" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NonDeliveryOption" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="InsuredNumber" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="EelPfc" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomsItems" type="tns:ArrayOfCustomsItem" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCustomsItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomsItem" nillable="true" type="tns:CustomsItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AccountStatusRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RequestID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PostageRateRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailClass" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Pricing" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeightOz" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailpieceShape" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MailpieceDimensions" type="tns:Dimensions" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AutomationRate" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Machinable" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ServiceLevel" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SundayHolidayDelivery" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SortType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Services" type="tns:SpecialServices" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Value" type="xs:float" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="CODAmount" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="InsuredValue" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" default="0" name="RegisteredMailValue" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="EntryFacility" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FromPostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCountry" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ShipDate" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ShipTime" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ResponseOptions" type="tns:ResponseOptions" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ResponseOptions">
+    <xs:attribute name="PostagePrice" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="ChangePassPhraseRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RequestID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NewPassPhrase" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecreditRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DataValidator">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RequestID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RecreditAmount" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="Provider">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="Endicia" />
+      <xs:enumeration value="Express1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GetPostageLabelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="GetPostageLabelResult" type="tns:LabelRequestResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="LabelRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Base64LabelImage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Label" type="tns:ImageSet" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CustomsForm" type="tns:ImageSet" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PIC" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CustomsNumber" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FinalPostage" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TransactionID" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TransactionDateTime" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PostmarkDate" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PostagePrice" type="tns:PostagePrice" />
+    </xs:sequence>
+    <xs:attribute name="Provider" type="tns:Provider" use="required" />
+  </xs:complexType>
+  <xs:complexType name="ImageSet">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Image" type="tns:ImageData" />
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="ImageData">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="PartNumber" type="xs:int" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="PostagePrice">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Postage" type="tns:Postage" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Fees" type="tns:Fees" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MailClass" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="TotalAmount" type="xs:decimal" use="required" />
+  </xs:complexType>
+  <xs:complexType name="Postage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="MailService" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Zone" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="IntraBMC" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Pricing" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="TotalAmount" type="xs:decimal" use="required" />
+  </xs:complexType>
+  <xs:complexType name="Fees">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CertificateOfMailing" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CertifiedMail" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CollectOnDelivery" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeliveryConfirmation" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ElectronicReturnReceipt" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="InsuredMail" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RegisteredMail" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RestrictedDelivery" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ReturnReceipt" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ReturnReceiptForMerchandise" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SignatureConfirmation" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpecialHandling" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AdultSignature" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute name="TotalAmount" type="xs:decimal" use="required" />
+  </xs:complexType>
+  <xs:element name="BuyPostage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:RecreditRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuyPostageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="BuyPostageResult" type="tns:RecreditRequestResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="RecreditRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequestID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediaryStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CertifiedIntermediaryStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="AccountID" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SerialNumber" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="xs:decimal" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AscendingBalance" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AccountStatus" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DeviceID" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ChangePassPhrase">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:ChangePassPhraseRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangePassPhraseResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="ChangePassPhraseResult" type="tns:ChangePassPhraseRequestResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ChangePassPhraseRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequestID" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CalculatePostageRate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:PostageRateRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CalculatePostageRateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="CalculatePostageRateResult" type="tns:PostageRateResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PostageRateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Zone" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Postage" type="tns:PostageRate" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PostagePrice" type="tns:PostagePrice" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PostageRate">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="MailService" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rate" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CalculatePostageRates">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:PostageRatesRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CalculatePostageRatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="CalculatePostageRatesResult" type="tns:PostageRatesResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PostageRatesResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PostagePrice" type="tns:PostagePrice" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetAccountStatus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:AccountStatusRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAccountStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="GetAccountStatusResult" type="tns:AccountStatusResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="AccountStatusResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequesterID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequestID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediaryStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RefundRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="requestXml" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RefundRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="RefundRequestResult" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SCANRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="requestXml" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SCANRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="SCANRequestResult" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StatusRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="requestXml" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StatusRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="StatusRequestResult" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CarrierPickupRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="requestXml" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CarrierPickupRequestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="CarrierPickupRequestResult" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

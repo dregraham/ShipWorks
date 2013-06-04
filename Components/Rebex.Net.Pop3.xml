@@ -1,0 +1,1993 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rebex.Net.Pop3</name>
+    </assembly>
+    <members>
+        <member name="T:Rebex.Security.Cryptography.CryptMD5Cram">
+            <summary>
+            Implementation of CRAM-MD5 function according to RFC 2195 and 2104.
+            </summary>
+        </member>
+        <member name="T:Rebex.Security.Cryptography.CryptMD5Digest">
+            <summary>
+            Cryptography algorithm for DIGEST-MD5 cryptography.<BR></BR>
+            RFC 1321, RFC 2831
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.CryptMD5Digest._digestChallenge">
+             <summary>
+             Description of digest algorithm:
+             <example>
+             <code>
+            digest-challenge  =
+            1#( realm | nonce | qop-options | stale | maxbuf | charset
+            algorithm | cipher-opts | auth-param )
+            realm             = "realm" "=" " realm-value "
+            realm-value       = qdstr-val
+            nonce             = "nonce" "=" "nonce-value "
+            nonce-value       = qdstr-val
+            qop-options       = "qop" "=" " qop-list "
+            qop-list          = 1#qop-value
+            qop-value         = "auth" | "auth-int" | "auth-conf" |
+            token
+            stale             = "stale" "=" "true"
+            maxbuf            = "maxbuf" "=" maxbuf-value
+            maxbuf-value      = 1*DIGIT
+            charset           = "charset" "=" "utf-8"
+            algorithm         = "algorithm" "=" "md5-sess"
+            cipher-opts       = "cipher" "=" "1#cipher-value"
+            cipher-value      = "3des" | "des" | "rc4-40" | "rc4" |
+            "rc4-56" | token
+            auth-param        = token "=" ( token | quoted-string )
+             </code></example>
+             </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.CryptMD5Digest._digestData">
+            <summary>
+            Array after parsing digest challenge from server.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.CryptMD5Digest._service">
+            <summary>
+            Digest-uri value  imap/servername.com.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.CryptMD5Digest._cnonce_value">
+            <summary>
+            Client string unique for each response.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.CryptMD5Digest._server_response">
+            <summary>
+            Response value from server after send client authentication string.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.CryptMD5Digest._qopLevel">
+            <summary>
+            Ordering for the "quality of protection" tokens
+            (server presents a list, client selects the best from it).
+            </summary>
+            <remarks>
+            Maps string to int.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.DigestMD5(System.String,System.String)">
+            <summary>
+            Create Digest-MD5 hash string.
+            </summary>
+            <param name="username">User name.</param>
+            <param name="password">Password.</param>
+            <returns>Digest-MD5 hash string.</returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.GetQop">
+            <summary>
+            Selects the best "quality of protection" from the list
+            sent by server.
+            </summary>
+            <returns>One of "", "auth", "auth-int" or "auth-conf".</returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.DigestResponse(System.String,System.String)">
+            <summary>
+            Create digest response string.
+            </summary>
+            <param name="username">User name to server.</param>
+            <param name="password">Password to server.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.GetEncodedClientData(System.String)">
+            <summary>
+            Username and password encoding, as specified by RFC 2831:
+            Even if "charset=UTF-8" is present, if all the characters 
+            are in the ISO 8859-1 character set, then the value must be
+            converted to ISO 8859-1 before being hashed.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.CompareResponse(System.String)">
+            <summary>
+            Compare computing client digest-value and value from the server.
+            </summary>
+            <param name="data">BASE64 encoding string digest-response from the server.
+            </param>
+            <returns>True if response from server equals
+            the response string generated by client.
+            </returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.DigestValue(System.String)">
+            <summary>
+            Return digest val from values sent from server.
+            </summary>
+            <param name="command">digest property.</param>
+            <returns>Value of digest property.</returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CryptMD5Digest.ToWide(System.Byte[])">
+            <summary>
+            Casts bytes to characters without changing their
+            numerical values.
+            </summary>
+            <remarks>
+            Encoding.GetString gives
+            the same results as this method for ASCII data,
+            but not in general (i.e. Windows 1250 converts
+            byte 135 into character 8825).
+            </remarks>
+        </member>
+        <member name="T:Rebex.Security.Cryptography.MD5DigestExceptionCause">
+            <summary>
+            The ways DIGEST-MD5 can fail (currently just one).
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.MD5DigestExceptionCause.InsufficientEncoding">
+            <summary>
+            Authentication data doesn't fit into Latin 1, but
+            server doesn't support any other charset.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Cryptography.MD5DigestExceptionCause.NoQopValueRecognized">
+            <summary>
+            Server offers no recognizable quality of
+            protection values.
+            </summary>
+        </member>
+        <member name="T:Rebex.Mime.Util.LineReceiver">
+            <summary>
+            LineReceiver is an abstract write-only stream that breaks all incoming data into
+            lines of a given maximum length delimited by CRLF sequences.
+            When a complete line is processed, the <see cref="M:Rebex.Mime.Util.LineReceiver.ProcessLine(System.Byte[],System.Int32,System.Int32,System.Boolean)"/> virtual method is called
+            and the line is passed as a parameter. Classes that need this functionality should inherit
+            from <see cref="T:Rebex.Mime.Util.LineReceiver"/> and override the <see cref="M:Rebex.Mime.Util.LineReceiver.ProcessLine(System.Byte[],System.Int32,System.Int32,System.Boolean)"/> method.
+            </summary>
+        </member>
+        <member name="M:Rebex.Mime.Util.LineReceiver.ProcessLine(System.Byte[],System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            A method that is called for each received line.
+            </summary>
+            <param name="buffer">A buffer that contains the received line.</param>
+            <param name="offset">An offset indicating the start of the received line in the buffer.</param>
+            <param name="count">Number of bytes in line, starting at offset.</param>
+            <param name="terminated">True if a complete CRLF-terminated line was received; false if no CRLF was found.</param>
+        </member>
+        <member name="M:Rebex.Mime.Util.LineReceiver.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of LineReceiver class.
+            </summary>
+            <param name="maxLineLength">Maximum line length, allowed range is 74 to 256K.</param>
+        </member>
+        <member name="M:Rebex.Mime.Util.LineReceiver.#ctor">
+            <summary>
+            Creates a new instance of LineReceiver class with a maximum line length of 65536.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.CspHashAlgorithm.HashFinal">
+            <summary>
+            Finalizes the hash computation after the last data is processed by the cryptographic stream object.
+            </summary>
+            <returns>The computed hash code.</returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.MD4.Create">
+            <summary>
+            Creates a cryptographic object to compute the MD4 hash.
+            </summary>
+            <returns>A cryptographic object to compute the MD4 hash.</returns>
+        </member>
+        <member name="T:Rebex.Net.Messages">
+            <summary>
+            Provides methods for constructing exception messages.
+            </summary>
+        </member>
+        <member name="T:Rebex.Security.Cryptography.UnmanagedBlockLite">
+            <summary>
+            Represents a block of unmanaged memory.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.#ctor(System.Int32)">
+            <summary>
+            Allocates a block of unmanaged memory with the specified length.
+            </summary>
+            <param name="length">The length of unmanaged memory block.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.#ctor(System.IntPtr)">
+            <summary>
+            Creates an unmanaged block that represents a block of memory specified by the supplied pointer.
+            </summary>
+            <param name="ptr">Pointer to a block of unmanaged memory.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.ToIntPtr">
+            <summary>
+            Returns a pointer to the current unmanaged memory block.
+            </summary>
+            <returns>A pointer to unamanged memory block.</returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.ReadInt32(System.Int32)">
+            <summary>
+            Reads a 32-bit signed integer from the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.WriteInt32(System.Int32,System.Int32)">
+            <summary>
+            Writes a 32-bit signed integer to the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+            <param name="val">The value to write.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.WriteIntPtr(System.Int32,System.IntPtr)">
+            <summary>
+            Writes a pointer to the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+            <param name="val">The value to write.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.Dispose">
+            <summary>
+            Disposes the object and releases resources.
+            </summary>
+            <remarks>
+            Calling this method ensures that all resources are freed.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources and optionally releases the managed resources.
+            </summary>
+            <param name="disposing"><b>true</b> to release both managed and unmanaged resources; <b>false</b> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.Finalize">
+            <summary>
+            Finalizer called by garbage collector.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.RebexAsyncResult">
+            <summary>
+            Universal class for asynchronous method invocation.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose(bool disposing) executes in two distinct scenarios.
+            If disposing equals true, the method has been called directly
+            or indirectly by a user's code. Managed and unmanaged resources
+            can be disposed.
+            If disposing equals false, the method has been called by the 
+            runtime from inside the finalizer and you should not reference 
+            other objects. Only unmanaged resources can be disposed.
+            </summary>
+            <param name="disposing"> If true, is called by IDisposable.Dispose. 
+            Otherwise it is called by finalizer.</param>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.Dispose">
+            <summary>
+            Implementation of IDisposable.Dispose()
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.SimpleThreadPool.Find(System.Threading.Thread)">
+            <summary>
+            Find the ThreadInfo instance that corresponds to the thread
+            </summary>
+            <param name="thread"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.SimpleThreadPool.FindFreeThread">
+            <summary>
+            Find a free thread
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Rebex.Net.DestuffingStream">
+            <summary>
+            A <see cref="T:System.IO.Stream"/> adapter removing byte-stuffing
+            (as defined by RFC 1939, i.e. replacing two dots at the start
+            of a line with one) and the finishing line (consisting
+            of a single dot) of POP3 multi-line responses written into it.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.DestuffingStream.Close">
+            <summary>
+            Writes all data buffered by this object to the underlying stream
+            and closes that stream.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3">
+            <summary>
+            Provides methods for communication with POP3 servers.
+            </summary>
+            <remarks>All members of this class are thread-safe.</remarks>
+        </member>
+        <member name="F:Rebex.Net.Pop3.DefaultPort">
+            <summary>
+            Default POP3 port (110).
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3.DefaultImplicitSslPort">
+            <summary>
+            Default POP3/Implicit SSL port (995).
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3.OnResponseRead(Rebex.Net.Pop3ResponseReadEventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.Net.Pop3.ResponseRead"/> event.
+            </summary>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3ResponseReadEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.OnCommandSent(Rebex.Net.Pop3CommandSentEventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.Net.Pop3.CommandSent"/> event.
+            </summary>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3CommandSentEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.OnStateChanged(Rebex.Net.Pop3StateChangedEventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.Net.Pop3.StateChanged"/> event.
+            </summary>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3StateChangedEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.OnTransferProgress(Rebex.Net.Pop3TransferProgressEventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.Net.Pop3.TransferProgress"/> event.
+            </summary>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3TransferProgressEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.OnTlsDebug(Rebex.Net.TlsDebugEventArgs)">
+            <summary>
+            Raises the <see cref="E:Rebex.Net.Pop3.TlsDebug"/> event.
+            </summary>
+            <param name="e">A <see cref="T:Rebex.Net.TlsDebugEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.#ctor">
+            <summary>
+            Initializes a new instance of the Pop3 class.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Dispose">
+            <summary>
+            Disposes the <see cref="T:Rebex.Net.Pop3"/> object and all the socket objects.
+            </summary>
+            <remarks>
+            Calling this method ensures that all resources are freed.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources used by the <see cref="T:Rebex.Net.Pop3"/>
+            and optionally releases the managed resources.
+            </summary>
+            <param name="disposing"><b>true</b> to release both managed and unmanaged resources; <b>false</b> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Finalize">
+            <summary>
+            Finalizer. Called by garbage collector during object destruction.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Abort">
+            <summary>
+            Aborts the current operation.
+            </summary>
+            <remarks>
+            <p>
+            The aborted operation will end either successfully, or with
+            <see cref="T:Rebex.Net.Pop3Exception"/> of status <see cref="T:Rebex.Net.Pop3ExceptionStatus">OperationAborted</see>
+            or <see cref="T:Rebex.Net.Pop3ExceptionStatus">Timeout</see>.
+            The <see cref="T:Rebex.Net.Pop3"/> object may remain in <see cref="T:Rebex.Net.Pop3State">Reading</see>,
+            <see cref="T:Rebex.Net.Pop3State">Sending</see> or <see cref="T:Rebex.Net.Pop3State">Processing</see>
+            state. In this case, the <see cref="T:Rebex.Net.Pop3"/> object is not usable any more and a call
+            to <see cref="M:Rebex.Net.Pop3.Disconnect"/> is recommended.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Connect(System.String,System.Int32)">
+            <summary>
+            Connects to the POP3 server.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+            <param name="serverPort">The server port (eg. 110).</param>
+            <returns>The welcome message returned by the server.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Connect(System.String,System.Int32,Rebex.Net.TlsParameters,Rebex.Net.Pop3Security)">
+            <summary>
+            Connects to the POP3 server with the specified security.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+            <param name="serverPort">The server port (eg. 110).</param>
+            <param name="parameters">Security parameters</param>
+            <param name="security">Connection security.</param>
+            <returns>The welcome message returned by the server.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Disconnect(System.Boolean)">
+            <summary>
+            Deletes any messages marked as deleted and terminate the connection.
+            </summary>
+            <param name="rollbackChanges">True if messages marked as deleted should be left on the server.</param>
+            <returns>The exit message returned by the server.</returns>
+            <remarks>Represents POP3 QUIT command, with optional preceeding RSET.</remarks>	
+        </member>
+        <member name="M:Rebex.Net.Pop3.Secure(Rebex.Net.TlsParameters)">
+            <summary>
+            Secures the connection with TLS/SSL using the specified parameters.
+            </summary>
+            <param name="parameters">Security parameters.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Secure">
+            <summary>
+            Secures the connection with TLS/SSL using default parameters.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageSizeList">
+            <summary>
+            Retrieves message numbers using the LIST command.
+            </summary>
+            <returns>An array (of positive length) containing
+            the message numbers, or null (meaning that the server
+            didn't list any messages).
+            </returns>
+            <remarks>
+            This method may only be called in Transaction state.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageUniqueIdList">
+            <summary>
+            Retrieves message numbers using the LIST command.
+            </summary>
+            <returns>An array (of positive length) containing
+            the message numbers, or null (meaning that the server
+            didn't list any messages).
+            </returns>
+            <remarks>
+            This method may only be called in Transaction state.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageUniqueId(System.Int32)">
+            <summary>
+            Determines the unique ID of the message with the specified number.
+            </summary>
+            <returns>The unique ID of the message.</returns>
+            <remarks>
+            Uses POP3 UIDL command to retrieve the unique ID.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageLength(System.Int32)">
+            <summary>
+            Determines the length of the message with the specified number.
+            </summary>
+            <returns>The length of the message.</returns>
+            <remarks>
+            Uses POP3 LIST command to retrieve the length.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Login(Rebex.Net.Pop3Authentication)">
+            <summary>
+            Authenticates the user to the POP3 server using the specified authentication method that does not require credentials (NTLM or GSSAPI).
+            </summary>
+            <param name="method">Authentication method.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Login(Rebex.Net.GssApiProvider)">
+            <summary>
+            Authenticates the user to the POP3 server using the specified GSSAPI provider.
+            </summary>
+            <param name="provider">GSSAPI provider.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Login(System.String,System.String,Rebex.Net.Pop3Authentication)">
+            <summary>
+            Authenticates the user to the POP3 server using the specified authentication method.
+            </summary>
+            <param name="userName">User name.</param>
+            <param name="password">Password.</param>
+            <param name="method">Authentication method.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Stat(System.Int32@,System.Int64@)">
+            <summary>
+            Send STAT command to a POP3 server and parse the response.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Undelete">
+            <summary>
+            Unmarks any messages that have been marked as deleted.
+            </summary>
+            <remarks>Represents POP3 RSET command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Delete(System.Int32)">
+            <summary>
+            Marks a message as deleted. Messages marked as deleted will actually be deleted after a call to <see cref="M:Rebex.Net.Pop3.Disconnect"/> method.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to delete.</param>
+            <remarks>
+            <p>Represents POP3 DELE command.</p>
+            <p>Use <see cref="M:Rebex.Net.Pop3.Undelete"/> method to unmarked messages marked as deleted.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageList(Rebex.Net.Pop3ListFields)">
+            <summary>
+            Retrieves a list of messages in the mailbox.
+            </summary>
+            <param name="fields">Specifies the scope of information to determine about each message.</param>
+            <returns>The list of messages.</returns>
+            <remarks>Uses either POP3 LIST command, UIDL command, or a combination of both.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageHeaders(System.Int32,System.IO.Stream)">
+            <summary>
+            Downloads the headers of a message with a specified number from the server and writes
+            it into a supplied stream.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download headers from.</param>
+            <param name="output">Stream that will receive the message headers.</param>
+            <remarks>"Uses POP3 "TOP 1" command to retrieve the headers.</remarks>
+            <returns>The length of the headers in bytes.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageInfo(System.Int32,Rebex.Net.Pop3ListFields)">
+            <summary>
+            Gets information about a message with the specified sequence number.
+            </summary>
+            <param name="sequenceNumber">Message sequence number.</param>
+            <param name="fields">Specifies the scope of information to determine about each message.</param>
+            <returns>A message info.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.SendCommand(System.String,System.Boolean)">
+            <summary>
+            Sends a custom command to the POP3 server.
+            </summary>
+            <param name="command">Command (eg. "HELP").</param>
+            <param name="multiline">Indicates whether the response for the command is multiline or single line.</param>
+            <remarks>
+            <p>Must be followed by either one or more calls to <see cref="M:Rebex.Net.Pop3.ReadResponse">ReadResponse</see> method, depending on the value of multiline parameter.</p>
+            <p>Use <see cref="M:Rebex.Net.Pop3.ReadResponse">ReadResponse</see> and SendCommand to implement various custom commands.</p>
+            <p>After a successful call to SendCommand, the <see cref="T:Rebex.Net.Pop3"/> object will be in <see cref="T:Rebex.Net.Pop3State">Reading</see> state.</p>
+            <p>The <see cref="T:Rebex.Net.Pop3"/> object <see cref="P:Rebex.Net.Pop3.State"/> must be <see cref="T:Rebex.Net.Pop3State">Ready</see> when calling this method.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.ReadResponse">
+            <summary>
+            Returns a single line of response of the POP3 server to the command.
+            </summary>
+            <returns>Response of the POP3 server.</returns>
+            <remarks>
+            <p>Must be preceeded by a call to <see cref="M:Rebex.Net.Pop3.SendCommand(System.String,System.Boolean)">SendCommand</see> method. (Or, more exactly, the <see cref="P:Rebex.Net.Pop3.State"/> must be <see cref="T:Rebex.Net.Pop3State">Reading</see>.</p>
+            <p>Use ReadResponse and <see cref="M:Rebex.Net.Pop3.SendCommand(System.String,System.Boolean)">SendCommand</see> to implement various custom commands.</p>
+            <p>If the response is multiline, ReadResponse must be called multiple times until it returns null, which indicates an and of response.</p>
+            <p>If the response is single line, ReadResponse must be called only once.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.CheckConnectionState">
+            <summary>
+            Checks whether the POP3 session is still connected. Throws an exception on error.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetConnectionState">
+            <summary>
+            Checks whether the POP3 session is still connected and returns its state.
+            </summary>
+            <returns>Connection state.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.ToString">
+            <summary>
+            Returns a string representation of this object.
+            </summary>
+            <returns>A string representing this object</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Login(System.String,System.String)">
+            <summary>
+            Authenticates the user to the POP3 server.
+            </summary>
+            <param name="userName">User name.</param>
+            <param name="password">Password.</param>
+            <remarks>
+            This method tries to authenticate using one of the following methods
+            in this order of preference: CRAM-MD5, DIGEST-MD5, APOP, PLAIN, LOGIN, ClearText.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Disconnect">
+            <summary>
+            Deletes any messages marked as deleted and terminates the connection.
+            </summary>
+            <returns>The exit message returned by the server.</returns>
+            <remarks>Represents POP3 QUIT command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessage(System.Int32,System.IO.Stream)">
+            <summary>
+            Downloads the message with a specified number from the server and writes
+            its data into a supplied stream.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <param name="output">Stream that will receive the message.</param>
+            <remarks>Represents POP3 RETR command.</remarks>
+            <returns>The length of the message in bytes.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.Connect(System.String)">
+            <summary>
+            Connects to the POP3 server.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+            <returns>The welcome message returned by the server.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageList">
+            <summary>
+            Retrieves a list of messages in the mailbox with unique IDs and lengths.
+            </summary>
+            <returns>The list of messages.</returns>
+            <remarks>Uses a combination of POP3 LIST and UIDL commands.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessage(System.Int32,System.String)">
+            <summary>
+            Downloads the message with a specified number from the server and writes
+            its data into a local file.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <param name="fileName">The path of the local file. This cannot be a directory.</param>
+            <remarks>Represents POP3 RETR command.</remarks>
+            <returns>The length of the message in bytes.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageCount">
+            <summary>
+            Retrieve the number of messages in the mailbox.
+            </summary>
+            <returns>Number of messages.</returns>
+            <remarks>
+            <p>Uses POP3 STAT command.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMailboxSize">
+            <summary>
+            Retrieve the size of the mailbox - the sum of lengths of all messages.
+            </summary>
+            <returns>Mailbox size.</returns>
+            <remarks>
+            <p>Uses POP3 STAT command.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMimeMessage(System.Int32)">
+            <summary>
+            Downloads a message with a specified number from the server and loads
+            it into an instance of <see cref="T:Rebex.Mime.MimeMessage"/>.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <remarks>Represents POP3 RETR command.</remarks>
+            <returns>A downloaded message.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMailMessage(System.Int32)">
+            <summary>
+            Downloads a message with a specified number from the server and loads
+            it into an instance of <see cref="T:Rebex.Mime.MimeMessage"/>.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <remarks>Represents POP3 RETR command.</remarks>
+            <returns>A downloaded message.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetMessageSequenceNumber(System.String)">
+            <summary>
+            Converts a unique ID to sequence number. Returns the sequence number of the specified message, or null (Nothing in VB.NET) if not found.
+            </summary>
+            <param name="uniqueId">Unique ID of the message.</param>
+            <returns>Sequence number of the specified message, or null (Nothing in VB.NET) if not found.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.SetSocketFactory(Rebex.Net.ISocketFactory)">
+            <summary>
+            Sets the socket factory to be used to create communication sockets.
+            </summary>
+            <param name="factory">Socket factory.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.GetSupportedAuthenticationMethods">
+            <summary>
+            Gets the list of supported authentication methods.
+            </summary>
+            <returns>The list of supported authentication methods.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginConnect(System.String,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to connect to the POP3 server.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+            <param name="serverPort">The server port (eg. 110).</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndConnect(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous connect request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The welcome message returned by the server.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginLogin(Rebex.Net.Pop3Authentication,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins asynchronous Login operation.
+            Authenticates the user to the POP3 server using the specified authentication method that does not require credentials (NTLM or GSSAPI).
+            </summary>
+            <param name="method">Authentication method.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.
+            </returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginLogin(Rebex.Net.GssApiProvider,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins asynchronous Login operation.
+            Authenticates the user to the POP3 server using the specified GSSAPI provider.
+            </summary>
+            <param name="provider">GSSAPI provider.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.
+            </returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginLogin(System.String,System.String,Rebex.Net.Pop3Authentication,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to authenticate the user to the POP3 server using the specified authentication method.
+            </summary>
+            <param name="userName">User name.</param>
+            <param name="password">Password.</param>
+            <param name="method">Authentication method.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndLogin(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous login request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginDisconnect(System.Boolean,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to delete any messages marked as deleted and terminate the connection.
+            </summary>
+            <param name="rollbackChanges">True if messages marked as deleted should be left on the server.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>Represents POP3 QUIT command, with optional preceeding RSET.</remarks>	
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndDisconnect(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous disconnect request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The exit message returned by the server.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginDelete(System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to mark a message as deleted. Messages marked as deleted will actually be deleted after a call to <see cref="M:Rebex.Net.Pop3.Disconnect"/> method.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to delete.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>
+            <p>Represents POP3 DELE command.</p>
+            <p>Use <see cref="M:Rebex.Net.Pop3.Undelete"/> method to unmarked messages marked as deleted.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndDelete(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous delete request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginUndelete(System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to unmark any messages that have been marked as deleted.
+            </summary>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>Represents POP3 RSET command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndUndelete(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous undelete request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginSendCommand(System.String,System.Boolean,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to send a custom command to the POP3 server.
+            </summary>
+            <param name="command">Command (eg. "HELP").</param>
+            <param name="multiline">Indicates whether the response for the command is multiline or single line.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>
+            <p>Must be followed by either one or more calls to <see cref="M:Rebex.Net.Pop3.ReadResponse">ReadResponse</see> method, depending on the value of multiline parameter.</p>
+            <p>Use <see cref="M:Rebex.Net.Pop3.ReadResponse">ReadResponse</see> and SendCommand to implement various custom commands.</p>
+            <p>After a successful call to SendCommand, the <see cref="T:Rebex.Net.Pop3"/> object will be in <see cref="T:Rebex.Net.Pop3State">Reading</see> state.</p>
+            <p>The <see cref="T:Rebex.Net.Pop3"/> object <see cref="P:Rebex.Net.Pop3.State"/> must be <see cref="T:Rebex.Net.Pop3State">Ready</see> state when calling this method.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndSendCommand(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous send command.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessageCount(System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to retrieve the number of messages in the mailbox.
+            </summary>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>
+            <p>Uses POP3 STAT command.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMessageCount(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous message count request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>Number of messages.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMailboxSize(System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to retrieve the size of the mailbox - the sum of lengths of all messages.
+            </summary>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>
+            <p>Uses POP3 STAT command.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMailboxSize(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous mailbox size request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>Number of messages.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginReadResponse(System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to return a single line of response of the POP3 server to the command
+            </summary>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>
+            <p>Must be preceeded by a call to <see cref="M:Rebex.Net.Pop3.SendCommand(System.String,System.Boolean)">SendCommand</see> method. (Or, more exactly, the <see cref="P:Rebex.Net.Pop3.State"/> must be <see cref="T:Rebex.Net.Pop3State">Reading</see>.</p>
+            <p>Use ReadResponse and <see cref="M:Rebex.Net.Pop3.SendCommand(System.String,System.Boolean)">SendCommand</see> to implement various custom commands.</p>
+            <p>If the response is multiline, ReadResponse have to be called multiple times until it returns null, which indicates an and of response.</p>
+            <p>If the response is single line, ReadResponse must be called only once.</p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndReadResponse(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous read response.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>Response of the POP3 server.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessageList(Rebex.Net.Pop3ListFields,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to retrieve a list of messages in the mailbox.
+            </summary>
+            <param name="fields">Specifies the scope of information to determine about each message.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            /// <remarks>Uses either POP3 LIST command, UIDL command, or a combination of both.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMessageList(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get message list.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The list of messages.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMimeMessage(System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to download a message with a specified number from the server and load
+            it into an instance of <see cref="T:Rebex.Mime.MimeMessage"/>.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>Represents POP3 RETR command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMimeMessage(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get mime message.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>A downloaded message.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMailMessage(System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to download a message with a specified number from the server and load
+            it into an instance of <see cref="T:Rebex.Mail.MailMessage"/>.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>Represents POP3 RETR command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMailMessage(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get mime message.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>A downloaded message.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessage(System.Int32,System.String,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to download the message with a specified number from the server and write
+            its data into a local file.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <param name="fileName">The path of the local file. This cannot be a directory.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>Represents POP3 RETR command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessage(System.Int32,System.IO.Stream,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to download the message with a specified number from the server and write
+            its data into a supplied stream.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download.</param>
+            <param name="output">Stream that will receive the message.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+            <remarks>Represents POP3 RETR command.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMessage(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get message.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The length of the message in bytes.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessageInfo(System.Int32,Rebex.Net.Pop3ListFields,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to get information about a message with the specified sequence number.
+            </summary>
+            <param name="sequenceNumber">Message sequence number.</param>
+            <param name="fields">Specifies the scope of information to determine about each message.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMessageInfo(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get message info.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>A message info.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessageHeaders(System.Int32,System.IO.Stream,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to download the headers of a message with a specified number from the server and write
+            it into a supplied stream.
+            </summary>
+            <param name="sequenceNumber">The sequence number of the message to download headers from.</param>
+            <param name="output">Stream that will receive the message headers.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <remarks>"Uses POP3 "TOP 1" command to retrieve the headers.</remarks>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMessageHeaders(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get message headers.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The length of the headers in bytes.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginGetMessageSequenceNumber(System.String,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronous operation to retrieve sequence number of a message in current session for specified unique id.
+            </summary>
+            <param name="uniqueId">Unique id of the message.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndGetMessageSequenceNumber(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous get message sequence number.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>Returns sequence number of the message in current session or null, if message is not found.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginConnect(System.String,System.Int32,Rebex.Net.TlsParameters,Rebex.Net.Pop3Security,System.AsyncCallback,System.Object)">
+            <summary>
+            Connects to the TLS/SSL POP3 server.
+            </summary>
+            <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+            <param name="serverPort">The server port (eg. 110).</param>
+            <param name="parameters">Security parameters</param>
+            <param name="security">POP3 security type.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.BeginSecure(Rebex.Net.TlsParameters,System.AsyncCallback,System.Object)">
+            <summary>
+            Secures the connection with TLS/SSL using the specified parameters.
+            </summary>
+            <param name="parameters">Security parameters.</param>
+            <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+            <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+            <returns>An <see cref="T:System.IAsyncResult"/> that references the asynchronous operation.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3.EndSecure(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous TLS/SSL securing request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+        </member>
+        <member name="E:Rebex.Net.Pop3.ResponseRead">
+            <summary>
+            Occurs when a response is received from the server.
+            </summary>
+        </member>
+        <member name="E:Rebex.Net.Pop3.CommandSent">
+            <summary>
+            Occurs when a command is send to the server.
+            </summary>
+        </member>
+        <member name="E:Rebex.Net.Pop3.StateChanged">
+            <summary>
+            Occurs when the state of the <see cref="T:Rebex.Net.Pop3"/> object is changed.
+            </summary>
+        </member>
+        <member name="E:Rebex.Net.Pop3.TransferProgress">
+            <summary>
+            Occurs when data is send or received.
+            </summary>
+        </member>
+        <member name="P:Rebex.Net.Pop3.TlsDebugLevel">
+            <summary>
+            Gets or sets the debug level that specifies an amount of messages <see cref="E:Rebex.Net.Pop3.TlsDebug"/> event handlers receive.
+            </summary>
+            <value>Debug level.</value>
+        </member>
+        <member name="E:Rebex.Net.Pop3.TlsDebug">
+            <summary>
+            Occurs when a TLS/SSL event is processed.
+            </summary>
+        </member>
+        <member name="P:Rebex.Net.Pop3.Proxy">
+            <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+            <value>The <see cref="P:Rebex.Net.Pop3.Proxy"/> to use to access a remote server.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.Encoding">
+            <summary>
+            Gets or sets the <see cref="T:System.Text.Encoding">Encoding</see> used to encode
+            command arguments sent to the server and decode received answers.
+            </summary>
+            <value>
+            The <see cref="T:System.Text.Encoding">Encoding</see> used to encode
+            command arguments sent to the server and decode received answers.
+            Default is <see cref="T:System.Text.Encoding">Encoding.Default</see>.
+            </value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.Options">
+            <summary>
+            Gets or sets POP3 object options.
+            </summary>
+            <value>POP3 object options.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.SupportedExtensions">
+            <summary>
+            Gets the bit field specifying the extensions supported by the server.
+            </summary>
+            <value>Extensions supported by the server.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.IsSecured">
+            <summary>
+            Gets the value indicating whether the control connection is secured.
+            </summary>
+            <value>True if secure, false if not secure.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.TlsSocket">
+            <summary>
+            Returns the TLS/SSL socket of secured control connection.
+            </summary>
+            <returns>The TLS/SSL socket of secured control connection, or null if the connection is not secured.</returns>
+            <remarks>
+            This property is intended for advanced users only.
+            <see cref="T:Rebex.Net.Pop3"/> class does not expect the socket to be altered in any way.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3.Timeout">
+            <summary>
+            Gets or sets the length of time before the operation times out (specify -1 or 0 to indicate that the request does not time out).
+            </summary>
+            <value>
+            The length of time, in milliseconds, until the operation times out,
+            or the value -1 or 0 to indicate that the request does not time out.
+            Default is 60000 (60 seconds).
+            </value>
+            <remarks>
+            <p>
+            The internal timeout counter is reset every time data is sent
+            or received from to server.
+            </p>
+            <p>
+            The <see cref="P:Rebex.Net.Pop3.Timeout"/> property affects both synchronous and asynchronous methods.
+            </p>
+            <p>
+            Minimal value is 1000. Setting this to a value lower than 1000 will set it to 1000.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3.AbortTimeout">
+            <summary>
+            Gets or sets the length of time before the abort operation times out.
+            </summary>
+            <value>The length of time, in milliseconds, until the abort operation times out.
+            Default is 3000, which seems to be a reasonable value.
+            </value>
+            <remarks>
+            Minimal value is 1000. Setting this to a value lower than 1000 will set it to 1000.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3.State">
+            <summary>
+            Gets the current state of the <see cref="T:Rebex.Net.Pop3"/> object.
+            </summary>
+            <value>The current state.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.LocalEndPoint">
+            <summary>
+            Gets the local client <see cref="T:System.Net.EndPoint"/>.
+            </summary>
+            <value>The local client <see cref="T:System.Net.EndPoint"/>.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.RemoteEndPoint">
+            <summary>
+            Gets the remote server <see cref="T:System.Net.EndPoint"/>.
+            </summary>
+            <value>The remote server <see cref="T:System.Net.EndPoint"/>.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3.IsAuthenticated">
+            <summary>
+            Returns a value indicating whether the session is authenticated.
+            </summary>
+            <value>A value indicating whether the session is authenticated.</value>
+            <remarks>
+            Use this to detect whether the session has been automatically preauthenticated
+            prior to calling the Login method.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3.IsBusy">
+            <summary>
+            Gets a value indicating whether there any operation (method) in progress.
+            </summary>
+            <returns>True if there is any operation in progress; false otherwise.</returns>
+        </member>
+        <member name="P:Rebex.Net.Pop3.Version">
+            <summary>
+            Returns the version of the POP3 component.
+            </summary>
+            <value>The version of the POP3 component.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3ResponseReadEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Rebex.Net.Pop3.ResponseRead">ResponseRead</see> event of a <see cref="T:Rebex.Net.Pop3"/> class.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3ResponseReadEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Rebex.Net.Pop3CommandSentEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Rebex.Net.Pop3.CommandSent">CommandSent</see> event of a <see cref="T:Rebex.Net.Pop3"/> class.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3CommandSentEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Rebex.Net.Pop3StateChangedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Rebex.Net.Pop3.StateChanged">StateChanged</see> event of a <see cref="T:Rebex.Net.Pop3"/> class.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3StateChangedEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Rebex.Net.Pop3TransferProgressEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Rebex.Net.Pop3.TransferProgress">TransferProgress</see> event of a <see cref="T:Rebex.Net.Pop3"/> class.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">A <see cref="T:Rebex.Net.Pop3TransferProgressEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="T:Rebex.Net.Pop3ResponseReadEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Rebex.Net.Pop3.ResponseRead">ResponseRead</see> event.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3ResponseReadEventArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3ResponseReadEventArgs"/> class with the specified response string.
+            </summary>
+            <param name="response">The raw response line that was read.</param>
+        </member>
+        <member name="P:Rebex.Net.Pop3ResponseReadEventArgs.Response">
+            <summary>
+            Gets the raw POP3 response.
+            </summary>
+            <value>The raw POP3 response.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3CommandSentEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Rebex.Net.Pop3.CommandSent">CommandSent</see> event.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3CommandSentEventArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3CommandSentEventArgs"/> class with the specified command string.
+            </summary>
+            <param name="command">The command that was sent.</param>
+        </member>
+        <member name="P:Rebex.Net.Pop3CommandSentEventArgs.Command">
+            <summary>
+            Gets the command string.
+            </summary>
+            <value>The command string.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3StateChangedEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Rebex.Net.Pop3.StateChanged">StateChanged</see> event.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3StateChangedEventArgs.#ctor(Rebex.Net.Pop3State,Rebex.Net.Pop3State)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3StateChangedEventArgs"/> class with the specified old state and new state.
+            </summary>
+            <param name="oldState">The old state.</param>
+            <param name="newState">The new state.</param>
+        </member>
+        <member name="P:Rebex.Net.Pop3StateChangedEventArgs.OldState">
+            <summary>
+            Gets the old state.
+            </summary>
+            <value>The state that was changed.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3StateChangedEventArgs.NewState">
+            <summary>
+            Gets the new state.
+            </summary>
+            <value>The new and current state.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3TransferProgressEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Rebex.Net.Pop3.TransferProgress">TransferProgress</see> event.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3TransferProgressEventArgs.#ctor(Rebex.Net.Pop3TransferState,System.Int64,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3TransferProgressEventArgs"/> class with the specified state,
+            number of bytes transferred during the current transfer and progress since the last time the event was raised.
+            </summary>
+            <param name="state">Current state.</param>
+            <param name="bytesTransferred">Number of bytes transferred. Ignored if <b>state</b> is <see cref="T:Rebex.Net.Pop3TransferState">Pop3TransferState.None</see>.</param>
+            <param name="bytesSinceLastEvent">Number of bytes transferred since the last time the event was raised. Ignored if <b>state</b> is <see cref="T:Rebex.Net.Pop3TransferState">Pop3TransferState.None</see>.</param>
+        </member>
+        <member name="P:Rebex.Net.Pop3TransferProgressEventArgs.State">
+            <summary>
+            Gets the transfer state.
+            </summary>
+            <value>The transfer state.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3TransferProgressEventArgs.BytesTransferred">
+            <summary>
+            Gets the total number of bytes transferred during the current transfer.
+            </summary>
+            <value>The number of bytes transferred.</value>
+            <remarks>This value is valid only when <see cref="P:Rebex.Net.Pop3TransferProgressEventArgs.State"/> is not <see cref="P:Rebex.Net.Pop3TransferProgressEventArgs.State">None</see>.</remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3TransferProgressEventArgs.BytesSinceLastEvent">
+            <summary>
+            Gets the number of bytes transferred during the current transfer since the last time the event was raised.
+            </summary>
+            <value>The number of bytes transferred since the last time the event was raised.</value>
+            <remarks>This value is valid only when <see cref="P:Rebex.Net.Pop3TransferProgressEventArgs.State"/> is not <see cref="P:Rebex.Net.Pop3TransferProgressEventArgs.State">None</see>.</remarks>
+        </member>
+        <member name="T:Rebex.Net.Pop3ExceptionStatus">
+            <summary>
+            Defines status codes for the <see cref="T:Rebex.Net.Pop3Exception"/> class.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.ConnectFailure">
+            <summary>
+            The remote service point could not be contacted at the transport level.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.ConnectionClosed">
+            <summary>
+            The connection was prematurely closed.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.SocketError">
+            <summary>
+            The error at transport level occured.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.NameResolutionFailure">
+            <summary>
+            The name resolver service could not resolve the host name.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.Pending">
+            <summary>
+            An operation is pending.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.ProtocolError">
+            <summary>
+            The response received from the server was complete but indicated a protocol-level error.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.ProxyNameResolutionFailure">
+            <summary>
+            The name resolver service could not resolve the proxy host name.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.OperationAborted">
+            <summary>
+            The operation was aborted by a call to the <see cref="M:Rebex.Net.Pop3.Abort"/> method.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.UnclassifiableError">
+            <summary>
+            An unclassifiable error occurred. This is the default value for <see cref="P:Rebex.Net.Pop3Exception.Status"/>.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.ServerProtocolViolation">
+            <summary>
+            The server response was not a valid POP3 response.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.Timeout">
+            <summary>
+            No response was received during the time-out period for a request.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.AsyncError">
+            <summary>
+            General exception in asynchronous call.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.LoginRequired">
+            <summary>
+            The operation cannot be performed before a successful login.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ExceptionStatus.OperationFailure">
+            <summary>
+            The requested operation could not be completed.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3Exception">
+            <summary>
+            The exception that is thrown when an error occurs while using Pop3 component.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3Exception"/> class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the <see cref="T:Rebex.Net.Pop3Exception"/>.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3Exception"/> class.
+            </summary>
+            <remarks>This constructor initializes the <see cref="P:System.Exception.Message">Message</see> property of the new instance to a message that describes the general error.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3Exception"/> class with the specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.#ctor(System.String,Rebex.Net.Pop3ExceptionStatus)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3Exception"/> class with the specified error message and status.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="status">One of the <see cref="T:Rebex.Net.Pop3ExceptionStatus"/> values.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3Exception"/> class with the specified error message
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="innerException">The exception that is the cause of the current exception. If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3Exception.#ctor(System.String,System.Exception,Rebex.Net.Pop3ExceptionStatus)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3Exception"/> class with the specified error message, status,
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="innerException">The exception that is the cause of the current exception. If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+            <param name="status">One of the <see cref="T:Rebex.Net.Pop3ExceptionStatus"/> values.</param>
+        </member>
+        <member name="P:Rebex.Net.Pop3Exception.Status">
+            <summary>
+            Gets the status of the response.
+            </summary>
+            <value>One of the <see cref="T:Rebex.Net.Pop3ExceptionStatus"/> values.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3MessageCollection">
+            <summary>
+            Provides a container for a collection of <see cref="T:Rebex.Net.Pop3MessageInfo"/> objects.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3MessageCollection"/> class.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3MessageCollection"/> class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Clone">
+            <summary>
+            Creates a shallow copy of the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <returns>A shallow copy of the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</returns>
+            <remarks>
+            A shallow copy of a collection copies only the elements
+            of the collection, whether they are reference types or value
+            types, but it does not copy the objects that the references
+            refer to. The references in the new collection point to the same
+            objects that the references in the original collection point to.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that can iterate through the <see cref="T:Rebex.Net.Pop3MessageCollection"/>
+            </summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator"/>.</returns>
+            <remarks>GetEnumerator is the method that implements the foreach statement (For Each in Visual Basic). You should not need to call this method directly.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.GetEnumerator(System.Int32,System.Int32)">
+            <summary>
+            Returns an enumerator for a section of the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <param name="index">The zero-based starting index of the <see cref="T:Rebex.Net.Pop3MessageCollection"/> section that the enumerator should refer to.</param>
+            <param name="count">The number of elements in the <see cref="T:Rebex.Net.Pop3MessageCollection"/> section that the enumerator should refer to.</param>
+            <returns>An <see cref="T:System.Collections.IEnumerator"/> for the specified section of the ArrayList.</returns>
+            <remarks>Not supported by Rebex POP3 for .NET Compact Framework.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.GetEnumerator">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerator`1"/> for the <see cref="T:Rebex.Net.Pop3MessageCollection"/> collection.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1"/> for the collection.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Add(Rebex.Net.Pop3MessageInfo)">
+            <summary>
+            Adds the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:Rebex.Net.Pop3MessageInfo"/> to be added to the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Remove(Rebex.Net.Pop3MessageInfo)">
+            <summary>
+            Removes the specified <see cref="T:Rebex.Net.Pop3MessageInfo"/> from the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:Rebex.Net.Pop3MessageInfo"/> to remove from the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Remove(System.String)">
+            <summary>
+            Removes <see cref="T:Rebex.Net.Pop3MessageInfo"/> from the <see cref="T:Rebex.Net.Pop3MessageCollection"/> having specified unique id.
+            </summary>
+            <param name="uniqueId">Unique id of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to remove from the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Remove(System.Int32)">
+            <summary>
+            Removes <see cref="T:Rebex.Net.Pop3MessageInfo"/> from the <see cref="T:Rebex.Net.Pop3MessageCollection"/> having specified sequence number.
+            </summary>
+            <param name="sequenceNumber">Sequence number of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to remove from the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.RemoveAt(System.Int32)">
+            <summary>
+            Removes the <see cref="T:Rebex.Net.Pop3MessageInfo"/> at the specified index from the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <param name="index">The zero-based index of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to remove.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Find(System.String)">
+            <summary>
+            Returns the <see cref="T:Rebex.Net.Pop3MessageInfo"/> of the specified unique id.
+            </summary>
+            <param name="uniqueId">The unique ID of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to get.</param>
+            <returns><see cref="T:Rebex.Net.Pop3MessageInfo"/> of the specified name.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Find(System.Int32)">
+            <summary>
+            Returns the <see cref="T:Rebex.Net.Pop3MessageInfo"/> of the specified id.
+            </summary>
+            <param name="sequenceNumber">The ID of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to get.</param>
+            <returns><see cref="T:Rebex.Net.Pop3MessageInfo"/> of the specified name.</returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Sort">
+            <summary>
+            Sorts the messages in the entire <see cref="T:Rebex.Net.Pop3MessageCollection"/> by sequence number ascending.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Sort(System.Collections.IComparer)">
+            <summary>
+            Sorts the elements in the entire <see cref="T:Rebex.Net.Pop3MessageCollection"/> using the specified comparer.
+            </summary>
+            <param name="comparer">The <see cref="T:System.Collections.IComparer"/> implementation to use when comparing elements, or a null reference to sort by sequence number ascending.</param>
+            <remarks>This method uses <see cref="M:System.Collections.ArrayList.Sort(System.Collections.IComparer)"/>, which uses QuickSort algorithm. See its description for more information.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageCollection.Sort(System.Int32,System.Int32,System.Collections.IComparer)">
+            <summary>
+            Sorts the elements in a section of <see cref="T:Rebex.Net.Pop3MessageCollection"/> using the specified comparer.
+            </summary>
+            <param name="index">The zero-based starting index of the range to sort.</param>
+            <param name="count">The length of the range to sort.</param>
+            <param name="comparer">The <see cref="T:System.Collections.IComparer"/> implementation to use when comparing elements, or a null reference to sort by sequence number ascending.</param>
+            <remarks>This method uses <see cref="M:System.Collections.ArrayList.Sort(System.Int32,System.Int32,System.Collections.IComparer)"/>, which uses QuickSort algorithm. See its description for more information.</remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageCollection.SyncRoot">
+            <summary>
+            Gets an object that can be used to synchronize access to the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <value>An object that can be used to synchronize access to the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageCollection.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.
+            </summary>
+            <value>The number of elements contained in the <see cref="T:Rebex.Net.Pop3MessageCollection"/>.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageCollection.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Rebex.Net.Pop3MessageInfo"/> at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> to get.</param>
+            <value><see cref="T:Rebex.Net.Pop3MessageInfo"/> of the specified index.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3MessageInfo">
+            <summary>
+            Contains information about a single mail message on the POP3 server.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageInfo.#ctor(System.Int32,System.String,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Pop3MessageInfo"/> class.
+            </summary>
+            <param name="number">The message number.</param>
+            <param name="length">The size of the message.</param>
+            <param name="uniqueId">The unique ID of the message.</param>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.SequenceNumber">
+            <summary>
+            Gets the message sequence number.
+            </summary>
+            <value>Sequence number.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.Length">
+            <summary>
+            Gets the length of the message.
+            </summary>
+            <value>Message length.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.UniqueId">
+            <summary>
+            Gets the unique ID of the message.
+            </summary>
+            <value>Unique ID.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.HeadersParsed">
+            <summary>
+            Gets the value indicating whether the message headers were parsed.
+            </summary>
+            <value>True if parsed; false if not.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.HeadersParsingError">
+            <summary>
+            Gets an error that occured during message headers parsing.
+            </summary>
+            <value>An error that occured during message headers parsing.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.Date">
+            <summary>
+            Gets the origination date of this message.
+            </summary>
+            <value>The origination date.</value>
+            <remarks>
+            The origination date specifies the date and time at which the creator
+            of the message indicated that the message was complete and ready to enter
+            the mail delivery system.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.From">
+            <summary>
+            Gets the list of authors of this message.
+            </summary>
+            <value>The list of authors.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.Sender">
+            <summary>
+            Gets the sender of this message. May be null.
+            </summary>
+            <value>The sender of this message.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.ReplyTo">
+            <summary>
+            Gets the list of addresses that should receive replies
+            to this message.
+            </summary>
+            <value>The list of addresses that should receive replies.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.To">
+            <summary>
+            Gets the list of addresses of primary recipients of the message.
+            </summary>
+            <value>The list of primary recipients.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.CC">
+            <summary>
+            Gets the list of addresses of others who are to receive the message.
+            </summary>
+            <value>The list of other recipients.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.MessageId">
+            <summary>
+            Gets the unique identifier of the message.
+            </summary>
+            <value>The unique identifier.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.InReplyTo">
+            <summary>
+            Gets the list of identifiers of messages to which the message is a reply.
+            </summary>
+            <value>The list of message identifiers.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.Subject">
+            <summary>
+            Gets the subject of the message.
+            </summary>
+            <value>The subject.</value>
+            <remarks>
+            This property contains a short string identifying the topic
+            of the message.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.Pop3MessageInfo.Headers">
+            <summary>
+            Gets the list of headers of this entity.
+            </summary>
+            <value>The list of headers.</value>
+        </member>
+        <member name="T:Rebex.Net.Pop3MessageInfoComparerType">
+            <summary>
+            List of possible compare types for the Pop3MessageComparer class.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3MessageInfoComparerType.SequenceNumber">
+            <summary>
+            Sequence number.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3MessageInfoComparerType.OriginationDate">
+            <summary>
+            Origination date.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3MessageInfoComparerType.From">
+            <summary>
+            From.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3MessageInfoComparerType.To">
+            <summary>
+            To.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3MessageInfoComparerType.Subject">
+            <summary>
+            Subject.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3MessageInfoComparer">
+            <summary>
+            Class used to compare Pop3MessageInfo objects. 
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageInfoComparer.#ctor">
+            <summary>
+            Creates a new instance of Pop3MessageInfoComparer with default sorting by sequence number name and with ascending sort mode.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageInfoComparer.#ctor(Rebex.Net.Pop3MessageInfoComparerType)">
+            <summary>
+            Creates a new instance of Pop3MessageInfoComparer with specified comparer type and ascending sort mode.
+            </summary>
+            <param name="comparerType">Type of comparer.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageInfoComparer.#ctor(Rebex.Net.Pop3MessageInfoComparerType,Rebex.SortingOrder)">
+            <summary>
+            Creates a new instance of Pop3MessageInfoComparer with specified comparer type and sort mode.
+            </summary>
+            <param name="comparerType">Type of comparer.</param>
+            <param name="sortOrder">Sort order to use.</param>
+        </member>
+        <member name="M:Rebex.Net.Pop3MessageInfoComparer.Compare(System.Object,System.Object)">
+            <summary>
+            IComparer interface implementation. Compares two instances of Pop3MessageInfo.
+            </summary>
+            <param name="x">First object to compare.</param>
+            <param name="y">Second object to compare.</param>
+            <returns>Value greater than zero when x is greater then y, zero when they are equal a or less than zero when x is lesser than y.</returns>
+        </member>
+        <member name="T:Rebex.Net.Pop3Security">
+            <summary>
+            Specifies the POP3 connection security.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Security.Unsecure">
+            <summary>
+            Initially unsecured connection.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Security.Implicit">
+            <summary>
+            Implicitly secured connection.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Security.Explicit">
+            <summary>
+            Explicitly secured connection. Same as Secure.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Security.Secure">
+            <summary>
+            Explicitly secured connection. Same as Explicit.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3Options">
+            <summary>
+            Specifies various POP3 options.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Options.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Options.IgnoreUnparsableHeaders">
+            <summary>
+            Ignore unparsable headers when parsing mail message.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Options.IgnoreUnparsableSignatures">
+            <summary>
+            Ignore unparsable S/MIME signature entities when parsing mail message.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Options.DoNotAllowDuplicateUniqueIds">
+            <summary>
+            Throw an exception if duplicate unique ID is encountered by the GetMessageList method.
+            This was default behavior until Rebex Mail 1.0.3333.0 (inclusive).
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Options.IgnoreInvalidEndings">
+            <summary>
+            Ignore invalid endings before the actual end of message data.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Options.DisableGmailRetrieveWorkaround">
+            <summary>
+            Disables workaroud for non-standard behavior of Gmail's RETR command.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3Authentication">
+            <summary>
+            POP3 authentication method.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.Auto">
+            <summary>
+            Choose automatically.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.Plain">
+            <summary>
+            RFC 2595 TLS plaintext authentication.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.DigestMD5">
+            <summary>
+            RFC 2831 DIGEST-MD5 authentication.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.CramMD5">
+            <summary>
+            RFC 2195 CRAM-MD5 authentication.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.Login">
+            <summary>
+            Login authentication.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.ClearText">
+            <summary>
+            Clear text USER/PASS login.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.APop">
+            <summary>
+            APOP.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.Ntlm">
+            <summary>
+            NTLM authentication.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Authentication.GssApi">
+            <summary>
+            GSSAPI/SSPI authentication (only Kerberos, NTLM and Negotiate (SPNEGO) are currently supported).
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3State">
+            <summary>
+            State of the <see cref="T:Rebex.Net.Pop3"/> object.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Disconnected">
+            <summary>Client is not connected.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Connecting">
+            <summary>Connecting to server.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Ready">
+            <summary>Server is ready and awaiting commands.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Sending">
+            <summary>Sending command to the server.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Reading">
+            <summary>Waiting for response or receiving response.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Downloading">
+            <summary>Receiving multiline response data.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3State.Disposed">
+            <summary>Object is disposed and must not be used.</summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3TransferState">
+            <summary>
+            State of the POP3 transfer.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3TransferState.None">
+            <summary>No transfer pending.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3TransferState.Downloading">
+            <summary>Downloading mail message.</summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3ListFields">
+            <summary>
+            Specifies what information to include in a <see cref="T:Rebex.Net.Pop3MessageCollection">message list</see>.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ListFields.SequenceNumber">
+            <summary>Sequence number.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ListFields.UniqueId">
+            <summary>Unique ID.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ListFields.Length">
+            <summary>Length.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ListFields.Fast">
+            <summary>Sequence number, Length and Unique ID.</summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3ListFields.FullHeaders">
+            <summary>Full headers, sequence number, unique ID and length. Might take a VERY long time!</summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3Extensions">
+            <summary>
+            POP3 extensions.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Extensions.APop">
+            <summary>
+            APOP, an enhanced authorization method.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.Pop3Extensions.All">
+            <summary>
+            All extensions.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.Pop3ConnectionState">
+            <summary>
+            Represents the Pop3 object connection state.
+            </summary>
+        </member>
+        <member name="P:Rebex.Net.Pop3ConnectionState.Connection">
+            <summary>
+            Returns a value indicating whether the object is connected.
+            </summary>
+            <value>True if connectet; oherwise false.</value>
+        </member>
+        <member name="P:Rebex.Net.Pop3ConnectionState.NativeErrorCode">
+            <summary>
+            Gets the Win32 socket error code.
+            </summary>
+            <value>Win32 error code.</value>
+            <remarks>Returns 0 if no socket error code is available.</remarks>
+        </member>
+        <member name="M:Rebex.Net.Pop3Control.Dispose">
+            <summary>
+            Closes the underlying socket.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Pop3Control.ReceiveLine(System.Int32@)">
+            <summary>
+            Reads a line from server (blocking until the server sends it).
+            </summary>
+            <remarks>
+            If the server doesn't send anything at all in <see cref="T:System.Threading.Timeout"/>
+            milliseconds, this method throws.</remarks>
+            <returns>An array (never null) of at least 2 bytes ending with CR LF.
+            </returns>
+        </member>
+        <member name="M:Rebex.Net.Pop3Control.SendLine(System.Byte[])">
+            <summary>
+            Sends data to the connected server.
+            </summary>
+            <param name="line">The bytes to send (the array must be non-null
+            and have a positive length).</param>
+            <remarks>
+            Callers wishing to end the line with CR LF
+            must add the characters themselves.
+            </remarks>
+        </member>
+    </members>
+</doc>

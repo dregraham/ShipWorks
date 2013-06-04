@@ -1,0 +1,1211 @@
+<html XMLNS:IE>
+<head>
+    <?IMPORT NAMESPACE="IE" IMPLEMENTATION="#default">
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <meta HTTP-EQUIV="MSThemeCompatible" CONTENT="Yes" />
+    
+    <title>Print Preview</title>
+        
+<style type="text/css">
+
+    .pagewrapper
+    {
+        position:absolute;
+        left:-200000in;
+        top:0in;
+        width:0in;
+        height:0in;
+        margin:0in;
+        padding:0in;
+        overflow:hidden;
+        background:white;
+        border: 1px #000022 dotted;
+    }
+                
+    .pagestyle
+    { 
+        left:0in;
+        top:0in;
+        width:0in;
+        height:0in;
+        margin:0in;
+        padding:0in;
+        background:white;
+        overflow:hidden;
+    }
+    
+    .lorstyleFirst, .lorstyleBeyond
+    {
+        position:absolute;
+        left:0in;
+        top: 0in;
+        top:0in;
+        width:0in;
+        height:0in;
+        margin:.50in;
+        padding:0in;
+        background:white;   
+    }
+        
+    .overflowcontainer
+    {
+        position:absolute; 
+        left:0; 
+        width:100%; 
+        overflow:auto; 
+        border:none; 
+        background:rgb(157,157,161);
+    }
+    
+    body 
+    { 
+        overflow: hidden; 
+        padding: 0; 
+        margin: 0; 
+    }
+    
+    table 
+    { 
+        margin: 0px; 
+        padding: 0px; 
+    }
+    
+    td 
+    { 
+        padding: 0; 
+        margin: 0; 
+        border: none; 
+    }
+    
+    td.ButtonContainer 
+    {   
+        width: 23px; 
+        border: none; 
+        font-family: 'Tahoma'; 
+        font-size: 8.25pt; 
+    }
+    
+    td.ToolbarSeparator 
+    { 
+        width: 1px; 
+        border-left: 1px threedhighlight ridge; 
+    }
+    
+    button
+    {
+		width: 23px;
+		height: 25px;
+		border: none;
+		background-color: Transparent;
+        font-family: 'Tahoma'; 
+        font-size: 8.25pt; 
+    }
+    
+</style>
+
+<script DEFER>
+
+var iNextPageToCreate = 1;
+
+var pageWrapperClass;
+var pageStyleClass;
+var lorStyleFirstClass;
+var lorStyleBeyondClass;
+
+window.onerror = HandleError;
+
+var g_pageTotal = 0;
+var g_initialLayoutLoadingComplete = false;
+var g_lastContentSource = "";
+
+var g_nDispPage = -1;
+var g_nZoomFactor = 0;
+var g_cPagesDisplayed = 0;
+var g_cxDisplaySlots = 1;
+var g_cyDisplaySlots = 1;
+
+var g_imgUnderMouse = null;
+var g_buttonDepressed = null;
+
+var g_previewPrinted = false;
+
+var externalBridge = dialogArguments.__IE_BrowseDocument.parentWindow.external;
+
+function LoadWindowPosition()
+{
+    if (dialogArguments.__IE_PrintType == "Preview")
+    {
+        externalBridge.WindowPosition.Load();
+        
+        // Width and height have to come first - otherwise the left\top will be constrained by how far over\down
+        // the window can be pushed at its original width\height without going past the screen edge.
+        window.dialogWidth = externalBridge.WindowPosition.Width;
+        window.dialogHeight = externalBridge.WindowPosition.Height;
+        
+        window.dialogTop = externalBridge.WindowPosition.Top;
+        window.dialogLeft = externalBridge.WindowPosition.Left;        
+    }
+}
+
+function Init()
+{
+    printer.ensurePrintDialogDefaults();
+    
+	if (dialogArguments.__IE_BrowseDocument.readyState == "complete")
+	{
+		FinishInit();
+	}
+	else
+    {
+		dialogArguments.__IE_BrowseDocument.onreadystatechange = FinishInit;
+	}
+}
+
+function FinishInit()
+{
+    if (dialogArguments.__IE_BrowseDocument.readyState == "complete")
+    {            
+	    dialogArguments.__IE_BrowseDocument.onreadystatechange = null;
+	    
+        pageWrapperClass = FindStyleRule(".pagewrapper");
+        pageStyleClass = FindStyleRule(".pagestyle");
+        lorStyleFirstClass = FindStyleRule(".lorstyleFirst");
+        lorStyleBeyondClass = FindStyleRule(".lorstyleBeyond");
+                
+        UpdatePageSettingsFromExternal();
+        
+        AddFirstPage();
+    }
+}
+
+function UpdatePageSettingsFromExternal()
+{
+    var pageWidth  = externalBridge.PageSettings.PageWidth;
+    var pageHeight = externalBridge.PageSettings.PageHeight;
+        
+    var marginLeft   = externalBridge.PageSettings.MarginLeft;
+    var marginRight  = externalBridge.PageSettings.MarginRight;
+    var marginTop    = externalBridge.PageSettings.MarginTop;
+    var marginBottom = externalBridge.PageSettings.MarginBottom;
+
+    pageWrapperClass.style.width = pageWidth + "in";
+    pageWrapperClass.style.height = pageHeight + "in";
+                                   
+    pageStyleClass.style.width = pageWidth + "in";
+    pageStyleClass.style.height = pageHeight + "in";
+    
+    lorStyleFirstClass.style.width = (pageWidth - marginLeft - marginRight) + "in";
+    lorStyleFirstClass.style.height = (pageHeight - marginTop - marginBottom) + "in"; 
+    
+    lorStyleFirstClass.style.marginLeft = marginLeft + "in";
+    lorStyleFirstClass.style.marginTop = marginTop + "in";
+    lorStyleFirstClass.style.marginRight = marginRight + "in";
+    lorStyleFirstClass.style.marginBottom = marginBottom + "in";
+
+    // If its not a label sheet, it uses the same setings as the first class
+    if (!externalBridge.DocumentContent.IsLabelSheet) 
+    {
+        lorStyleBeyondClass.style.width = lorStyleFirstClass.style.width;
+        lorStyleBeyondClass.style.height = lorStyleFirstClass.style.height;
+
+        lorStyleBeyondClass.style.marginLeft = lorStyleFirstClass.style.marginLeft;
+        lorStyleBeyondClass.style.marginTop = lorStyleFirstClass.style.marginTop;
+        lorStyleBeyondClass.style.marginRight = lorStyleFirstClass.style.marginRight;
+        lorStyleBeyondClass.style.marginBottom = lorStyleFirstClass.style.marginBottom;
+    }
+    else 
+    {
+        // We need to keep the left margin on every page.  But we only need the top margin on the first page, not all those beyond
+        lorStyleBeyondClass.style.width = lorStyleFirstClass.style.width;
+        lorStyleBeyondClass.style.height = pageHeight + "in";;
+
+        lorStyleBeyondClass.style.marginLeft = lorStyleFirstClass.style.marginLeft;
+        lorStyleBeyondClass.style.marginTop = 0;
+        lorStyleBeyondClass.style.marginRight = 0;
+        lorStyleBeyondClass.style.marginBottom = 0;    
+    }
+}
+
+function UpdateResultsTruncatedDisplay()
+{
+    if (externalBridge.DocumentContent.TemplateResultsDisplayed < externalBridge.DocumentContent.TemplateResultsTotal)
+    {
+        truncatedWarning.style.display = "block";
+        templateResultsDisplayed.innerText = externalBridge.DocumentContent.TemplateResultsDisplayed;
+        templateResultsTotal.innerText = externalBridge.DocumentContent.TemplateResultsTotal;
+    }
+    else
+    {
+        truncatedWarning.style.display = "none";
+    }
+    
+    overflowContainer.style.top = idDivToolbar.offsetHeight;
+    overflowContainer.style.height = document.body.clientHeight - idDivToolbar.offsetHeight;
+}
+
+function AddFirstPage()
+{
+    g_lastContentSource = externalBridge.DocumentContent.ContentSource;
+    
+    newHTML = "<div ID='wrapper' class='pagewrapper'>";
+    newHTML += "<IE:DEVICERECT ID='page1' MEDIA='print' CLASS='pagestyle'>";
+    newHTML += "<IE:LAYOUTRECT ID='layoutrect1' CONTENTSRC='" + g_lastContentSource + "' ONLAYOUTCOMPLETE='OnRectComplete()' NEXTRECT='layoutrect2' CLASS='lorstyleFirst' tabindex=-1 onbeforefocusenter='event.returnValue=false;' />";
+    newHTML += "</IE:DEVICERECT>";
+    newHTML += "</div>";
+
+    pageContainer.insertAdjacentHTML("afterBegin", newHTML);
+ 
+    iNextPageToCreate = 2;
+}
+
+function AddNewPage()
+{    
+    newHTML = "<div ID='wrapper' class='pagewrapper'>";
+    newHTML += "<IE:DEVICERECT ID='page" + iNextPageToCreate +  "' MEDIA='print' CLASS='pagestyle'>";
+    newHTML += "<IE:LAYOUTRECT ID='layoutrect" + iNextPageToCreate + "' ONLAYOUTCOMPLETE='OnRectComplete()' NEXTRECT='layoutrect" + (iNextPageToCreate + 1) + "'  CLASS='lorstyleBeyond' tabindex=-1 onbeforefocusenter='event.returnValue=false;'/>";
+    newHTML += "</IE:DEVICERECT>";
+    newHTML += "</div>";
+
+    pageContainer.insertAdjacentHTML("beforeEnd", newHTML);
+    
+    iNextPageToCreate++;
+}
+
+// Called when a layout rect is completed for a new layout rect
+function OnRectComplete()
+{
+    var thisPage = parseInt(event.srcElement.parentElement.id.substring(4), 10);
+
+    if (event.contentOverflow == true)
+    {
+        // If this is actually the last page
+        if (thisPage == iNextPageToCreate - 1)
+        {
+            AddNewPage();
+        }
+    }
+    else 
+    {  
+        if (!g_initialLayoutLoadingComplete)
+        {
+            g_initialLayoutLoadingComplete = true;
+
+            // Due to the margins used to offset for print calibration, we could overflow on to blank sheets
+            g_pageTotal = externalBridge.DocumentContent.IsLabelSheet ?
+                externalBridge.DocumentContent.LabelSheetsRequired :
+                iNextPageToCreate - 1;
+            
+            setTimeout("CheckPrint();", 10);
+        }
+        else 
+        {
+            // Due to the margins used to offset for print calibration, we could overflow on to blank sheets
+            var newPageTotal = externalBridge.DocumentContent.IsLabelSheet ?
+                externalBridge.DocumentContent.LabelSheetsRequired :
+                thisPage;
+            
+            // See if the page count has changed
+            if (newPageTotal != g_pageTotal)
+            {
+                g_pageTotal = newPageTotal;
+                setTimeout("UpdatePageCounts();", 10);
+            }
+        }
+    }
+}
+
+function CheckPrint()
+{                   
+    switch (dialogArguments.__IE_PrintType)
+    {
+        case "NoPrompt":
+        {
+            PrintPrep();
+            break;
+        }
+        
+        case "Preview":
+        {
+            UpdateResultsTruncatedDisplay();
+        
+            AttachDialogEvents();
+            
+            ChangeZoom(100);
+            ChangeDispPage(1);
+            
+            window.onunload = OnClosePreview;
+        	externalBridge.NotifyPreviewReady();
+        }
+        
+        default:
+            break;
+    }
+}
+
+function PrintPrep()
+{
+	if (layoutrect1.contentDocument.readyState == "complete")
+	{
+		// This block will be called when printing with user prompt
+		// because the Print dialog box gives time for the content
+		// document to complete loading
+		PrintNow();
+	}
+	else
+	{
+		// This block will usually be called when printing w/o user prompt
+		// and sets an event handler that listens for the loading of the content
+		// document before printing. Sometimes, however, the content document
+		// will be loaded in time for the previous block to execute
+		layoutrect1.contentDocument.onreadystatechange = PrintWhenContentDocComplete;
+	}
+}
+
+function PrintWhenContentDocComplete()
+{
+	if (layoutrect1.contentDocument.readyState == "complete")
+	{
+		layoutrect1.contentDocument.onreadystatechange = null;
+		PrintNow();
+	}
+}
+
+function PrintNow()
+{   
+    var oDeviceRectCollection = document.all.tags("DEVICERECT");
+    
+    var startPage = 1;
+    var endPage = g_pageTotal;
+          
+    printer.orientation = externalBridge.PageSettings.Orientation;
+    
+    var copies = externalBridge.SpoolerSettings.Copies;
+    var collate = externalBridge.SpoolerSettings.Collate;
+    	
+	if (printer.startDoc("ShipWorks - " + externalBridge.SpoolerSettings.JobName))
+	{
+	    // If collating, print each page in order, for as many copies as requested
+	    if (collate)
+	    {
+	        for (var copy = 1; copy <= copies; copy++)
+	        {
+                for (i = startPage - 1; i < endPage; i++)
+                {
+	                printer.printPage(oDeviceRectCollection[i]);
+	            }
+	        }
+	    }
+	    else
+	    {
+            for (i = startPage - 1; i < endPage; i++)
+            {
+                // Print each page as many times as requested
+	            for (var copy = 1; copy <= copies; copy++)
+	            {
+                    printer.printPage(oDeviceRectCollection[i]);
+                }
+            }
+	    }
+    
+        printer.stopDoc();
+    }
+    else
+    {
+        externalBridge.NotifyError("Print job has failed to start.  Check that a printer is installed.", "54");
+        return;
+    }
+	
+	externalBridge.NotifyPrintingComplete();
+	
+	Close();
+}
+
+function HandleError(message, url, line)
+{	
+	externalBridge.NotifyError(message, line);
+	
+	// Notification of the error takes the place of notifying that the preview was canceled
+    g_previewPrinted = true;
+
+    // Close the window
+	window.close();
+	
+	return true;
+}
+
+function HandlePrintClick()
+{
+    idDivToolbar.style.cursor = "wait";
+    pageContainer.style.cursor = "wait";
+    overflowContainer.style.cursor = "wait";
+    
+    // Notify that printing is requested
+    var wasPrinted = externalBridge.NotifyPreviewPrintNow();
+
+    if (wasPrinted) {
+        // Uhnook the cancel event listener
+        g_previewPrinted = true;
+
+        window.close();
+    }
+    else {
+        idDivToolbar.style.cursor = "auto";
+        pageContainer.style.cursor = "auto";
+        overflowContainer.style.cursor = "auto";
+    }
+}
+
+function HandleSettingsClick()
+{
+    // Ask the external to open the settings window
+    externalBridge.NotifyShowSettings();
+    
+    if (g_lastContentSource != externalBridge.DocumentContent.ContentSource)
+    {
+        g_lastContentSource = externalBridge.DocumentContent.ContentSource;
+        layoutrect1.contentSrc = g_lastContentSource;
+    }
+    
+    UpdateResultsTruncatedDisplay();
+    UpdatePageSettingsFromExternal();
+}
+
+function UpdatePageCounts()
+{
+    ChangeZoom(g_nZoomFactor);
+    ChangeDispPage(Math.min(g_nDispPage, g_pageTotal));
+}
+
+function OnClosePreview()
+{
+    externalBridge.WindowPosition.Save(window.dialogWidth, window.dialogHeight);
+
+    if (!g_previewPrinted)
+    {
+        externalBridge.NotifyPreviewCancel();
+    }
+}
+
+function OnResizeBody()
+{
+    overflowContainer.style.height = Math.max(0, document.body.clientHeight - idDivToolbar.offsetHeight);
+    HandleDynamicZoom();
+    PositionPages(g_nDispPage);
+}
+    
+// Returns the object corresponding to a named style rule
+function FindStyleRule(styleName)
+{
+    for (i = 0; i < document.styleSheets.length; i++)
+    {
+        for (j = 0; j < document.styleSheets(i).rules.length; j++)
+        {
+            if (document.styleSheets(i).rules(j).selectorText == styleName)
+                return document.styleSheets(i).rules(j);
+        }     
+    }
+}
+function OnKeyPress()
+{
+    if (event.keyCode == 27)
+    {
+        Close();
+    }
+}
+
+function OnKeyDown()
+{
+    if (event.altKey)
+    {
+        switch (event.keyCode)
+        {
+        case 37:
+            ChangeDispPage(g_nDispPage-1);
+            break;
+        case 39:
+            ChangeDispPage(g_nDispPage+1);
+            break;
+        case 107:
+        case 187:
+            HandleZoom(-1);
+            break;
+        case 109:
+        case 189:
+            HandleZoom(1);
+            break;
+        case 35:
+            HandleLastPage();
+            break;
+        case 36:
+            HandleFirstPage();
+            break;
+        }
+    }
+}
+
+function GetPageWidth()
+{
+    var pageWrappers = document.all.item("wrapper");
+        
+    if (pageWrappers == null)
+        return "8.5in";
+        
+    if (pageWrappers.length == null)
+        return pageWrappers.offsetWidth;
+                
+    return pageWrappers[0].offsetWidth;
+}
+
+function GetPageHeight()
+{
+    var pageWrappers = document.all.item("wrapper");
+
+    if (pageWrappers == null)
+        return "11.0in";
+
+    if (pageWrappers.length == null)
+        return pageWrappers.offsetHeight;
+        
+    return pageWrappers[0].offsetHeight;
+}
+
+function TotalDisplayPages()
+{
+    var pageWrappers = document.all.item("wrapper");
+    
+    if (pageWrappers == null)
+        return 0;
+        
+    if (pageWrappers.length == null)
+        return 1;
+        
+    return g_pageTotal;
+}
+
+function DisplayPage(nWhichPage)
+{       
+    var pageWrappers = document.all.item("wrapper");
+            
+    if (pageWrappers.length == null)
+        return pageWrappers;
+        
+    return pageWrappers[nWhichPage - 1];
+}
+
+function UndisplayPages()
+{
+    while (g_cPagesDisplayed > 0)
+    {
+        var oPage = DisplayPage(g_nDispPage + g_cPagesDisplayed - 1);
+        
+        if (oPage != null)
+        {
+            oPage.style.top = "-20000px";
+            oPage.style.left = "10px";
+        }
+        g_cPagesDisplayed--;
+    }
+}
+
+function PositionPages(nDispPage)
+{
+    UndisplayPages();
+    
+    var xPageWidth = GetPageWidth();
+    var yPageHeight = GetPageHeight();
+    var nMaxPage = TotalDisplayPages();
+    
+    g_cxDisplaySlots = Math.max(1, Math.floor((overflowContainer.offsetWidth*100)/(g_nZoomFactor*(xPageWidth+10))));
+    g_cyDisplaySlots = Math.max(1, Math.floor((overflowContainer.offsetHeight*100)/(g_nZoomFactor*(yPageHeight+10))));
+    
+    var nMaxPageRequest = Math.max(nMaxPage - g_cxDisplaySlots * g_cyDisplaySlots + 1, 1);
+    
+    if ( nDispPage < 1 )
+    {
+        nDispPage = 1;
+    }
+    else if (nDispPage > nMaxPageRequest)
+    {
+        nDispPage = nMaxPageRequest;
+    }    
+        
+    g_nDispPage = nDispPage;
+    
+    document.all.spanPageTotal.innerText = nMaxPage;
+    document.all.inputPageNum.value = g_nDispPage;
+    
+    updateNavButtons();
+    
+    var xDisplaySlot = 1;
+    var yDisplaySlot = 1;
+    var iPage = g_nDispPage;
+    
+    g_cPagesDisplayed = 0;
+    
+    while (iPage <= nMaxPage && yDisplaySlot <= g_cyDisplaySlots)
+    {
+        var xPos = xDisplaySlot*10 + (xDisplaySlot-1)*xPageWidth;
+        var yPos = yDisplaySlot*10 + (yDisplaySlot-1)*yPageHeight;
+        
+        var oPage = DisplayPage(iPage);
+        
+        oPage.style.left = xPos;
+            
+        oPage.style.top = yPos;
+        iPage++;
+        
+        if (++xDisplaySlot > g_cxDisplaySlots)
+        {
+            xDisplaySlot = 1;
+            yDisplaySlot++;
+        }
+        
+        g_cPagesDisplayed++;
+    }
+}
+
+function ChangeDispPage(nDispPageNew)
+{
+    if (isNaN(nDispPageNew))
+    {
+        inputPageNum.value = g_nDispPage;
+    }
+    else
+    {
+        if (nDispPageNew < 1)
+        {
+            nDispPageNew = 1;
+        }
+        else if (nDispPageNew > TotalDisplayPages())
+        {
+            nDispPageNew = TotalDisplayPages();
+        }
+            
+        overflowContainer.scrollTop = 0;
+        PositionPages(nDispPageNew);
+    }
+    
+    return g_nDispPage;
+}
+
+function ChangeZoom(nNewVal)
+{
+    if (nNewVal < 10)
+        nNewVal = 10;
+    else if (nNewVal > 1000)
+        nNewVal = 1000;
+    else if (isNaN(nNewVal))
+        nNewVal = g_nZoomFactor;
+        
+    if (nNewVal != g_nZoomFactor)
+    {
+        pageContainer.style.zoom = nNewVal + "%";
+        g_nZoomFactor = nNewVal;
+        updateZoomButtons();
+        PositionPages(g_nDispPage);
+    }
+    
+    pageWrapperClass.style.borderWidth = Math.max(1, Math.ceil(100.0 / g_nZoomFactor)) + "px";
+    
+    if (g_nZoomFactor < 50)
+    {
+        pageWrapperClass.style.borderStyle = "solid";
+    }
+    else
+    {
+        pageWrapperClass.style.borderStyle = "dashed";
+    }
+    
+    return g_nZoomFactor;
+}
+
+function AttachDialogEvents()
+{
+    butPrint.onclick = HandlePrintClick;
+    butSettings.onclick = HandleSettingsClick;
+    butFirstPage.onclick = HandleFirstPage;
+    butBackPage.onclick = HandleBackPage;
+    butNextPage.onclick = HandleForwardPage;
+    butLastPage.onclick = HandleLastPage;
+    butZoomIn.onclick = HandleZoomInButton;
+    butZoomOut.onclick = HandleZoomOutButton;
+    
+    butPrint.onmousedown = buttonDown;
+    butPrint.onmouseup = buttonUp;
+    print_now.onmouseover = buttonOver;
+    print_now.onmouseout = buttonOut;
+    
+    print_now_text.onmouseover = buttonOver;
+    print_now_text.onmouseout = buttonOut;
+    
+    butSettings.onmousedown = buttonDown;
+    butSettings.onmouseup = buttonUp;
+    print_settings.onmouseover = buttonOver;
+    print_settings.onmouseout = buttonOut;
+    
+    print_settings_text.onmouseover = buttonOver;
+    print_settings_text.onmouseout = buttonOut;
+
+    butFirstPage.onmousedown = buttonDown;
+    navigate_first.onmouseover = buttonOver;
+    navigate_first.onmouseout = buttonOut;
+
+    butBackPage.onmousedown = buttonDown;
+    navigate_left.onmouseover = buttonOver;
+    navigate_left.onmouseout = buttonOut;
+
+    butNextPage.onmousedown = buttonDown;
+    navigate_right.onmouseover = buttonOver;
+    navigate_right.onmouseout = buttonOut;
+
+    butLastPage.onmousedown = buttonDown;
+    navigate_last.onmouseover = buttonOver;
+    navigate_last.onmouseout = buttonOut;
+
+    butZoomIn.onmousedown = buttonDown;
+    zoom_in.onmouseover = buttonOver;
+    zoom_in.onmouseout = buttonOut;
+
+    butZoomOut.onmousedown = buttonDown;
+    zoom_out.onmouseover = buttonOver;
+    zoom_out.onmouseout = buttonOut;
+    
+    inputPageNum.onkeypress = HandleInputKeyPress;
+    inputPageNum.onchange = HandlePageSelect;
+    selectZoom.onchange = HandleZoomSelect;
+
+    window.onresize = OnResizeBody;
+    window.onfocus = new Function("pageContainer.focus()");
+ 
+    document.body.onkeypress = OnKeyPress;
+    document.body.onkeydown = OnKeyDown;
+}
+
+function updateNavButtons()
+{
+    if (g_nDispPage == 1)
+    {
+        disableButton(butFirstPage, navigate_first);
+        disableButton(butBackPage, navigate_left);
+    }
+    else
+    {
+        enableButton(butFirstPage, navigate_first);
+        enableButton(butBackPage, navigate_left);
+    }
+    
+    if (TotalDisplayPages() - g_nDispPage < g_cxDisplaySlots * g_cyDisplaySlots)
+    {
+        disableButton(butNextPage, navigate_right);
+        disableButton(butLastPage, navigate_last);
+    }
+    else
+    {
+        enableButton(butNextPage, navigate_right);
+        enableButton(butLastPage, navigate_last);
+    }
+}
+
+function updateZoomButtons()
+{
+    var fZoomOutDisabled = false;
+    var fZoomInDisabled = false;
+    var oOptions = selectZoom.options;
+    
+    if (g_nZoomFactor >= parseInt(oOptions[0].value))
+    {
+        disableButton(butZoomIn, zoom_in);
+        fZoomInDisabled = true;
+    }
+    else if (g_nZoomFactor <= parseInt(oOptions[oOptions.length-1-3].value))
+    {
+        disableButton(butZoomOut, zoom_out);
+        fZoomOutDisabled = true;
+    }
+    
+    if (!fZoomOutDisabled)
+    {
+        enableButton(butZoomOut, zoom_out);
+    }
+    
+    if (!fZoomInDisabled)
+    {
+        enableButton(butZoomIn, zoom_in);
+    }
+}
+
+function enableButton(btn, img)
+{
+    btn.disabled = false;
+    img.src = img.base + ".png";
+    
+    if (g_imgUnderMouse == img)
+    {
+        buttonRaise(btn);
+    }
+    else
+    {
+        buttonLower(btn);
+    }
+}
+
+function disableButton(btn, img)
+{
+    btn.disabled = true;
+    buttonLower(btn);
+    
+    if (img != null)
+    {
+        img.src = img.base + "_disabled.png";
+    }
+}
+
+function buttonRaise( elem )
+{
+    if (elem == g_buttonDepressed)
+    {
+        buttonDepress(elem);
+    }
+    else
+    {
+        if (elem == butPrint || elem == butSettings)
+        {
+            elem.style.backgroundImage = 'url(button_hover_big.gif)';
+        }
+        else
+        {
+            elem.style.backgroundImage = 'url(button_hover.gif)';
+        }
+    }
+}
+
+function buttonLower( elem )
+{
+    elem.style.backgroundImage = '';
+}
+
+function buttonDepress(elem)
+{
+    if (elem == butPrint || elem == butSettings)
+    {
+       elem.style.backgroundImage = 'url(button_pushed_big.gif)';
+    }
+    else
+    {
+       elem.style.backgroundImage = 'url(button_pushed.gif)';
+    }
+}
+
+function buttonOver()
+{
+    var imgSrc = event.srcElement;
+    g_imgUnderMouse = imgSrc;
+    
+    if (imgSrc == navigate_first || imgSrc == navigate_left || imgSrc == navigate_right || imgSrc == navigate_last)
+    {
+        updateNavButtons();
+    }
+    else if (imgSrc == zoom_in || imgSrc == zoom_out)
+    {
+        updateZoomButtons();
+    }
+    else
+    {
+        buttonRaise( imgSrc.parentNode );
+    }
+}
+
+function buttonOut()
+{
+    var imgSrc = event.srcElement;
+    g_imgUnderMouse = null;
+    
+    if (imgSrc == navigate_first || imgSrc == navigate_left || imgSrc == navigate_right || imgSrc == navigate_last)
+    {
+        updateNavButtons();
+    }
+    else if (imgSrc == zoom_in || imgSrc == zoom_out)
+    {
+        updateZoomButtons();
+    }
+    else
+    {
+        buttonLower( imgSrc.parentNode );
+    }
+}
+
+function buttonDown()
+{
+    g_buttonDepressed = event.srcElement;
+    buttonDepress(event.srcElement);
+}
+
+function buttonUp()
+{
+    buttonLower(event.srcElement);
+}
+
+function HandlePageSelect()
+{
+    event.srcElement.value = ChangeDispPage(parseInt(inputPageNum.value));
+    pageContainer.focus();
+}
+
+function HandleForwardPage()
+{
+    ChangeDispPage(g_nDispPage + 1);
+    pageContainer.focus();
+}
+
+function HandleBackPage()
+{
+    ChangeDispPage(g_nDispPage - 1);
+    pageContainer.focus();
+}
+
+function HandleFirstPage()
+{
+    ChangeDispPage(1);
+    pageContainer.focus();
+}
+
+function HandleLastPage()
+{
+    ChangeDispPage(TotalDisplayPages());
+    pageContainer.focus();
+}
+
+function NumericFromSpecialZoom(fnBounder)
+{
+    var iMaxNumericZoom = selectZoom.options.length-1-3;
+    var iBelow = -1;
+    var nBelow = 0;
+    var iAbove = iMaxNumericZoom + 1;
+    var i;
+    
+    for (i = 0; i <= iMaxNumericZoom; i++)
+    {
+        var nThisIndex = parseInt(selectZoom.options[i].value);
+        
+        if (nThisIndex >= g_nZoomFactor)
+        {
+            iBelow = i;
+            nBelow = nThisIndex;
+        }
+        else
+        {
+            break;
+        }
+    }
+    
+    if (nBelow > g_nZoomFactor)
+    {
+        iAbove = iBelow + 1;
+    }
+    else
+    {
+        iAbove = iBelow;
+    }
+    return fnBounder(iBelow, iAbove);
+}
+
+function HandleZoom(nZoomIndexDelta)
+{
+    var iCurrZoom = selectZoom.selectedIndex;
+    var iMaxNumericZoom = selectZoom.options.length-1-3;
+    
+    if (iCurrZoom > iMaxNumericZoom)
+    {
+        var fnRemapBounder = null;
+        if (nZoomIndexDelta == 1)
+        {
+            fnRemapBounder = Math.min;
+        }
+        else
+        {
+            fnRemapBounder = Math.max;
+        }
+        
+        iCurrZoom = NumericFromSpecialZoom(fnRemapBounder);
+    }
+    
+    selectZoom.selectedIndex = Math.min(Math.max(0, iCurrZoom + nZoomIndexDelta), iMaxNumericZoom);
+    ChangeZoom(parseInt(selectZoom.options[selectZoom.selectedIndex].value));
+}
+
+function HandleDynamicZoom()
+{
+    var nZoomType = parseInt(selectZoom.options[selectZoom.selectedIndex].value);
+    if (nZoomType < 0)
+    {
+        var nZoomFactor = 100;
+        var xPageWidth = GetPageWidth();
+        switch (nZoomType)
+        {
+        case -1:
+            nZoomFactor = Math.floor(((overflowContainer.offsetWidth - 20) * 100) / xPageWidth);
+            break;
+        case -2:
+            var xZoom = Math.floor(((overflowContainer.offsetWidth - 20) * 100) / xPageWidth);
+            var yZoom = Math.floor(((overflowContainer.offsetHeight - 20) * 100) / GetPageHeight());
+            nZoomFactor = Math.min(xZoom, yZoom);
+            break;
+        case -3:
+            nZoomFactor = Math.floor(((overflowContainer.offsetWidth - 30) * 100) / (2 * xPageWidth));
+            break;
+        default:
+            nZoomFactor = 100;
+            break;
+        }
+        
+        ChangeZoom(nZoomFactor);
+    }
+}
+
+function HandleZoomSelect()
+{
+    var nZoomFactor = parseInt(selectZoom.options[selectZoom.selectedIndex].value);
+    if (nZoomFactor < 0)
+    {
+        HandleDynamicZoom();
+    }
+    else
+    {
+        ChangeZoom(nZoomFactor);
+    }
+}
+
+function HandleZoomInButton()
+{
+    HandleZoom(-1);
+    pageContainer.focus();
+}
+
+function HandleZoomOutButton()
+{
+    HandleZoom(1);
+    pageContainer.focus();
+}
+
+function HandleInputKeyPress()
+{
+    var keyStroke = event.keyCode;
+    if (keyStroke == 13)
+    {
+        event.srcElement.onchange();
+    }
+    else if (keyStroke < 48 || keyStroke > 57)
+    {
+        event.returnValue = false;
+    }
+}
+
+function Close()
+{
+    printer.updatePageStatus(-1);
+    window.close();
+}
+
+</script>
+</head>
+
+    <body onload="LoadWindowPosition(); setTimeout('Init()', 10);" onmouseup="g_buttonDepressed = null;">
+    
+        <!-- Controls for printing -->
+        <IE:TemplatePrinter id="printer" />
+        
+        <div id="idDivToolbar" style="width:100%; overflow:hidden;">
+            <div style="height: 30px; width=100%; background: url(toolbar_background.gif) repeat-x top left;" >
+                <table>
+                    <tr>
+                        <td class="ButtonContainer">
+                            <button id="butPrint" hideFocus="true" accesskey="p" style="width: 54px;">
+                                <img id="print_now" base="print_now" src="print_now.png" alt="Print Document (Alt+P)" style="vertical-align: middle;"><span id="print_now_text"> Print</span>
+                            </button>
+                        </td>
+                         <td class="ButtonContainer">
+                            <button id="butSettings" hideFocus="true"  style="width: 54px;">
+                                <img id="print_settings" base="print_settings" src="print_settings.png" alt="Print Setup" style="vertical-align: middle;"><span id="print_settings_text">  Setup</span>
+                            </button>
+                        </td>
+                       <td class="ToolbarSeparator"><img width="0" height="0"/></td>
+                        <td class="ButtonContainer">
+                            <button id="butFirstPage" hideFocus="true">
+                                <img id="navigate_first" base="navigate_first" src="navigate_first.png" alt="First Page (Alt+Home)">
+                            </button>
+                        </td>
+                        <td class="ButtonContainer">
+                            <button id="butBackPage" hideFocus="true">
+                                <img id="navigate_left" base="navigate_left" src="navigate_left.png" alt="Previous Page (Alt+LeftArrow)">
+                            </button>
+                        </td>
+                        <td class="ButtonContainer">
+                            <span style="color:windowtext;">
+                                <NOBR Loc>&nbsp;
+                                    <ID id="idTdPageXofYLocText1">P<U>a</U>ge</ID>&nbsp;
+                                    <input type="text" id="inputPageNum" title="Preview Page (Alt+A)" value="1" style="height:1.5em; width: 2em; color:windowtext;" accesskey="a">
+                                    <ID id="idTdPageXofYLocText2"> of </ID>
+                                    <span id="spanPageTotal"></span>&nbsp;
+                                </NOBR>
+                            </span>
+                        </td>
+                        <td class="ButtonContainer">
+                            <button id="butNextPage" hideFocus="true">
+                                <img id="navigate_right" base="navigate_right" src="navigate_right.png" alt="Next Page (Alt+RightArrow)">
+                            </button>
+                        </td>
+                        <td class="ButtonContainer">
+                            <button id="butLastPage" hideFocus="true">
+                                <img id="navigate_last" base="navigate_last" src="navigate_last.png" alt="Last Page (Alt+End)">
+                            </button>
+                        </td>
+                        <td class="ToolbarSeparator"><img width="0" height="0"></td>
+                        <td class="ButtonContainer">
+                            <button id="butZoomOut" hideFocus="true">
+                                <img id="zoom_out" base="zoom_out" src="zoom_out.png" alt="Zoom Out (Alt+Minus)">
+                            </button>
+                        </td>
+                        <td class="ButtonContainer">
+                            <button id="butZoomIn" hideFocus="true">
+                                <img id="zoom_in" base="zoom_in" src="zoom_in.png" alt="Zoom In (Alt+Plus)">
+                            </button>
+                        </td>
+                        <td class="ButtonContainer">
+                            <SELECT id="selectZoom" accesskey="z">
+                                <OPTION VALUE="500">
+                                500%
+                                <OPTION VALUE="200">
+                                200%
+                                <OPTION VALUE="150">
+                                150%
+                                <OPTION VALUE="100" SELECTED >
+                                100%
+                                <OPTION VALUE="75">
+                                75%
+                                <OPTION VALUE="50">
+                                50%
+                                <OPTION VALUE="25">
+                                25%
+                                <OPTION VALUE="10">
+                                10% 
+                                <!-- ID's are for localization -->
+                                <OPTION VALUE="-1" id="idPageWidth">Page Width</OPTION>
+                                <OPTION VALUE="-2"id="idWholePage">Whole Page</OPTION>
+                                <OPTION VALUE="-3" id="idTwoPages">Two Pages
+                                </OPTION>
+                            </SELECT>
+                        </td>
+                </table>
+            </div>
+            <div id="truncatedWarning" style="display: none; height: 24px; padding: 2px 0px 0px 3px; background-color: rgb(255, 255, 225); border-bottom: 1px solid rgb(157, 157, 161); font: 8.25pt Tahoma;" valign="center">
+                <img src="information2.png" style="vertical-align: middle;" />
+                Only the first&nbsp;<span id="templateResultsDisplayed"></span>&nbsp;of&nbsp;<span id="templateResultsTotal"></span>&nbsp;results are shown in the preview.  All results will used when printed.
+            </div>
+        </div>
+        <div id="overflowContainer" onclick="this.focus();" onfocus="butPrint.scrollIntoView();" tabindex="1" class="overflowcontainer">
+            <div id="pageContainer" tabindex="0" style="width:100%; position:absolute; ">
+                <!-- Pages go here -->
+            </div>
+        </div>
+    </BODY>
+</html>

@@ -1,0 +1,1611 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
+using System.Web.Services.Protocols;
+using System.Net;
+using ShipWorks.Data;
+using System.IO;
+using System.Drawing;
+using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Templates.Tokens;
+using log4net;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Win32;
+using ShipWorks.UI;
+using System.Drawing.Imaging;
+using ShipWorks.ApplicationCore;
+using Interapptive.Shared.Net;
+using ShipWorks.Editions;
+using ShipWorks.Editions.Freemium;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
+using System.Diagnostics;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Insurance;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia
+{
+    /// <summary>
+    /// Wraps access to the Endicia API
+    /// </summary>
+    public static class EndiciaApiClient
+    {
+        static readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
+
+        static string testServerUrl = "https://www.envmgr.com/LabelService/EwsLabelService.asmx";
+        static string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
+
+        static string standardEndiciaPartnerID = "lswk";
+        static string freemiumEndiciaPartnerID = "lseb";
+
+        /// <summary>
+        /// Indicates if the test server should be used instead of hte live server
+        /// </summary>
+        public static bool UseTestServer
+        {
+            get { return InterapptiveOnly.Registry.GetValue("EndiciaTestServer", false); }
+            set { InterapptiveOnly.Registry.SetValue("EndiciaTestServer", value); }
+        }
+
+        /// <summary>
+        /// The PartnerID ShipWorks is using to communicate with Endicia as.
+        /// </summary>
+        public static string GetInterapptivePartnerID(EndiciaReseller reseller)
+        {
+            switch (reseller)
+            {
+                case EndiciaReseller.Express1:
+                    {
+                        return Express1Utility.ApiKey;
+                    }
+
+                case EndiciaReseller.None:
+                default:
+                    {
+                        if (FreemiumFreeEdition.IsActive)
+                        {
+                            return freemiumEndiciaPartnerID;
+                        }
+                        else
+                        {
+                            // non-freemium, and freemium-paid use our standard partnerID
+                            return standardEndiciaPartnerID;
+                        }
+                    }
+            }
+        }
+
+        /// <summary>
+        /// Gets the PartnerID for ShipWorks to use when communicating with Endicia, based on
+        /// the type of Endicia account
+        /// </summary>
+        public static string GetInterapptivePartnerID(EndiciaAccountType accountType)
+        {
+            if (accountType == EndiciaAccountType.Freemium)
+            {
+                return freemiumEndiciaPartnerID;
+            }
+            else
+            {
+                return standardEndiciaPartnerID;
+            }
+        }
+
+        /// <summary>
+        /// Create the webserivce instance with the appropriate URL
+        /// </summary>
+        private static EwsLabelService CreateWebService(string logName, EndiciaReseller reseller)
+        {
+            EwsLabelService webService = null;
+            switch (reseller)
+            {
+                // Express1
+                case EndiciaReseller.Express1:
+                    {
+                        webService = new Express1ServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1, logName));
+                        webService.Url = Express1Utility.UseTestServer ? Express1Utility.Express1DevelopmentUrl : Express1Utility.Express1ProductionUrl;
+                        break;
+                    }
+
+                // Endicia Label Server
+                default:
+                    {
+                        webService = new EwsLabelService(new ApiLogEntry(ApiLogSource.UspsEndicia, logName));
+                        webService.Url = UseTestServer ? testServerUrl : productionUrl;
+                        break;
+                    }
+            }
+
+            return webService;
+        }
+
+        /// <summary>
+        /// Process the given shipment
+        /// </summary>
+        public static void ProcessShipment(ShipmentEntity shipment)
+        {
+            PostalShipmentEntity postal = shipment.Postal;
+
+            EndiciaAccountEntity account = GetAccount(postal);
+
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            PostalPackagingType packagingType = (PostalPackagingType) postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType) postal.Service;
+
+            PersonAdapter from = new PersonAdapter(shipment, "Origin");
+            PersonAdapter recipient = new PersonAdapter(shipment, "Ship");
+
+            // Create the request
+            LabelRequest request = new LabelRequest();
+
+            // Our partner id
+            request.RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment));
+
+            // Account credentials
+            request.AccountID = account.AccountNumber;
+            request.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
+
+            bool isInternational = PostalUtility.GetInternationalServices(ShipmentTypeCode.Endicia).Contains(serviceType);
+
+            // Express1
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.PostalExpress1)
+            {
+                request.Test = (Express1Utility.UseTestServer || account.TestAccount) ? "YES" : "NO";
+
+                // If this is an Express1 shipment, and Single-Source is turned on, we need to make sure it is a packaging type Express1 supports or
+                if (settings.Express1SingleSource)
+                {
+                    // If its not a postage saving service, express1 would automatically reroute to Endicia.  It's only when the service could save, but the packaging is goofed that there's a problem.
+                    if (Express1Utility.IsPostageSavingService(serviceType) && !Express1Utility.IsValidPackagingType(serviceType, packagingType))
+                    {
+                        request.Provider = "Endicia";
+                    }
+                }
+            }
+            // Endicia
+            else
+            {
+                request.Test = (UseTestServer || account.TestAccount) ? "YES" : "NO";
+            }
+
+            ThermalLabelType? thermalType;
+            bool thermalDocTab;
+            ThermalDocTabType thermalDocTabType;
+
+            // Determine what thermal type, if any to use.  Use the Endicia settings if it is an Endicia shipment being auto-switched to an Express1 shipment
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+            {
+                thermalType = settings.EndiciaThermal ? (ThermalLabelType) settings.EndiciaThermalType : (ThermalLabelType?) null;
+                thermalDocTab = settings.EndiciaThermalDocTab;
+                thermalDocTabType = (ThermalDocTabType) settings.EndiciaThermalDocTabType;
+            }
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1)
+            {
+                thermalType = settings.Express1Thermal ? (ThermalLabelType) settings.Express1ThermalType : (ThermalLabelType?) null;
+                thermalDocTab = settings.Express1ThermalDocTab;
+                thermalDocTabType = (ThermalDocTabType) settings.Express1ThermalDocTabType;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown endicia reseller");
+            }
+
+            // Critical mail does not support thermal
+            if (serviceType == PostalServiceType.CriticalMail)
+            {
+                thermalType = null;
+            }
+
+            // International is always marked international
+            if (isInternational)
+            {
+                request.LabelType = "International";
+                request.LabelSubtype = "Integrated";
+                request.LabelSize = "4x6";
+
+                // First class is always the simple form CN22
+                if (serviceType == PostalServiceType.InternationalFirst)
+                {
+                    request.IntegratedFormType = "Form2976";
+
+                    if (shipment.CustomsItems.Count > 5)
+                    {
+                        throw new ShippingException("International First Class only supports up to 5 customs items.");
+                    }
+                }
+                else if (serviceType == PostalServiceType.InternationalPriority)
+                {
+                    // Flat envelopes, and Flat small box, can have the small form
+                    if (packagingType == PostalPackagingType.FlatRateEnvelope ||
+                        packagingType == PostalPackagingType.FlatRatePaddedEnvelope ||
+                        packagingType == PostalPackagingType.FlatRateLegalEnvelope ||
+                        packagingType == PostalPackagingType.FlatRateSmallBox)
+                    {
+                        request.IntegratedFormType = "Form2976";
+
+                        if (shipment.CustomsItems.Count > 5)
+                        {
+                            throw new ShippingException(string.Format("International Priority with {0} only supports up to 5 customs items.", EnumHelper.GetDescription(packagingType)));
+                        }
+                    }
+                    else
+                    {
+                        request.IntegratedFormType = "Form2976A";
+                    }
+                }
+                // Otherwise the big form will be required CP72
+                else
+                {
+                    request.IntegratedFormType = "Form2976A";
+                }
+
+                if (shipment.CustomsItems.Count > 5)
+                {
+                    request.IntegratedFormType = "Form2976A";
+                    request.LabelSize = "";
+
+                    // Can't be thermal
+                    thermalType = null;
+                }
+                else
+                {
+                    if (request.IntegratedFormType == "Form2976A" && thermalType != null)
+                    {
+                        request.LabelSize = "4x6c";
+                    }
+                }
+            }
+            // APO/FPO gets marked as "Domestic"
+            else if (CustomsManager.IsCustomsRequired(shipment) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            {
+                request.LabelType = "Domestic";
+                request.LabelSubtype = "Integrated";
+
+                // For APO/FPO customs - the non-A (CN22) form is the only supported for thermal.  So if we are doing thermal we'll just use that. USPS site says that's ok
+                // if the "A" (CP72) is too big for the package.  Whatever - we need thermal to work.
+                // BN: Reverted bakc to 'A' due to customers complaining USPS wont accept
+                request.IntegratedFormType = "Form2976A";
+
+                if (shipment.CustomsItems.Count > 5)
+                {
+                    request.LabelSize = "";
+                }
+                else
+                {
+                    request.LabelSize = "4x6";
+                }
+
+                // Thermal is unsupported
+                thermalType = null;
+            }
+            // Check for special FirstClass envelopes that are "Destination Confirm"
+            else if (serviceType == PostalServiceType.FirstClass && (packagingType == PostalPackagingType.LargeEnvelope || packagingType == PostalPackagingType.Envelope))
+            {
+                request.LabelType = "DestinationConfirm";
+                request.LabelSize = "6x4";
+
+                // Thermal is unsupported
+                thermalType = null;
+            }
+            // Otherwise a 'standard' (Default) domestic label
+            else
+            {
+                request.LabelType = "Default";
+                request.LabelSize = "4x6";
+            }
+
+            // Set the thermal type for the shipment
+            shipment.ThermalType = (int?) thermalType;
+            request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLabelType.EPL) ? "EPL2" : "ZPLII";
+
+            // Set if this is reply postage
+            if (shipment.ReturnShipment)
+            {
+                request.ReplyPostage = "TRUE";
+            }
+
+            // Not sure why these are required fields - i don't think they show up anywhere
+            request.PartnerCustomerID = shipment.Order.CustomerID.ToString();
+            request.PartnerTransactionID = shipment.ShipmentID.ToString();
+
+            // Service and packaging
+            request.MailClass = GetMailClassCode(serviceType, packagingType);
+            request.MailpieceShape = GetMailpieceShapeCode(packagingType);
+
+            // Date advance
+            request.ShipDate = shipment.ShipDate.ToString("MM/dd/yyyy"); 
+            request.DateAdvance = (int) Math.Max(0, ((TimeSpan) (shipment.ShipDate.Date - DateTime.Now.Date)).TotalDays);
+
+            // Weight
+            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+
+            // Dims
+            if (packagingType == PostalPackagingType.Package || packagingType == PostalPackagingType.Cubic)
+            {
+                request.MailpieceDimensions = new Dimensions();
+                request.MailpieceDimensions.Length = postal.DimsLength;
+                request.MailpieceDimensions.Width = postal.DimsWidth;
+                request.MailpieceDimensions.Height = postal.DimsHeight;
+            }
+
+            // Machinable
+            request.Machinable = postal.NonMachinable ? "FALSE" : "TRUE";
+
+            // Hidden postage
+            request.IncludePostage = postal.Endicia.NoPostage ? "FALSE" : "TRUE";
+            request.Stealth = postal.Endicia.StealthPostage ? "TRUE" : "FALSE";
+
+            // Service options
+            request.Services = new SpecialServices();
+            request.Services.SignatureConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Signature) ? "ON" : "OFF";
+            // request.Services.DeliveryConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Delivery) ? "ON" : "OFF"; -> Documented as set automatically and ignored by ELS
+
+            // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
+            if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType) && request.Services.SignatureConfirmation != "ON")
+            {
+                request.Services.DeliveryConfirmation = "ON";
+            }
+
+            // For express mail, see if the user is waiving signature
+            if (serviceType == PostalServiceType.ExpressMail)
+            {
+                request.SignatureWaiver = shipment.Postal.ExpressSignatureWaiver ? "TRUE" : "FALSE";
+            }
+
+            // Parcel Select
+            if (serviceType == PostalServiceType.ParcelSelect || ShipmentTypeManager.IsEndiciaDhl(serviceType))
+            {
+                request.SortType = GetSortTypeCode((PostalSortType) shipment.Postal.SortType);
+                request.EntryFacility = GetEntryFacilityCode((PostalEntryFacility) shipment.Postal.EntryFacility);
+            }
+
+            // DHL GM
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType))
+            {
+                // Per documentation, IncludePostage MUST be false
+                request.IncludePostage = "FALSE";
+
+                // And this must be true
+                request.PrintConsolidatorLabel = "true";
+            }
+
+            // Postage vs. Pricing
+            request.ResponseOptions = new ResponseOptions();
+            request.ResponseOptions.PostagePrice = "TRUE";
+
+            // From
+            request.FromName = new PersonName(from).FullName;
+            request.FromCompany = from.Company;
+            request.ReturnAddress1 = from.Street1;
+            request.ReturnAddress2 = from.Street2;
+            request.ReturnAddress3 = from.Street3;
+            request.FromCity = from.City;
+            request.FromState = from.StateProvCode;
+            request.FromPostalCode = from.PostalCode;
+            request.FromPhone = from.Phone10Digits;
+            request.FromEMail = from.Email;
+
+            var mailingPostOfficeAccount = account;
+
+            // If this is an Express1 shipment that was really an Endicia shipment auto-using Express1, we need to use the originally selected Endicia account setting,
+            // as that is what the user will expect.
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1 && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+            {
+                mailingPostOfficeAccount = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.OriginalEndiciaAccountID.Value) ?? account;
+            }
+
+            // We can only using the MailingPostalCode configured for the account if it's not a Return Shipment - since it's not coming from this account if its a return
+            if (!shipment.ReturnShipment && !string.IsNullOrWhiteSpace(mailingPostOfficeAccount.MailingPostalCode))
+            {
+                request.POZipCode = PersonUtility.GetZip5(mailingPostOfficeAccount.MailingPostalCode);
+            }
+
+            // POZipCode is always required for ParcelSelect if EntryFacility is not 'Other'.
+            if (string.IsNullOrWhiteSpace(request.POZipCode) && (serviceType == PostalServiceType.ParcelSelect || ShipmentTypeManager.IsEndiciaDhl(serviceType)))
+            {
+                request.POZipCode = shipment.ReturnShipment ? recipient.PostalCode5 : from.PostalCode5;
+            }
+
+            // To
+            request.ToName = new PersonName(recipient).FullName;
+            request.ToCompany = recipient.Company;
+            request.ToAddress1 = recipient.Street1;
+            request.ToAddress2 = recipient.Street2;
+            request.ToAddress3 = recipient.Street3;
+            request.ToCity = PostalUtility.StripPunctuation(recipient.City);
+            request.ToState = recipient.StateProvCode;
+            request.ToPostalCode = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode5 : recipient.PostalCode;
+            request.ToZIP4 = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode4 : "";
+            request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
+            request.ToPhone = recipient.Phone10Digits;
+            request.ToEMail = recipient.Email;
+
+            // Special case for US territories, that Endicia wants the state code filled out
+            if (string.IsNullOrWhiteSpace(request.ToState) && PostalUtility.IsDomesticCountry(recipient.CountryCode))
+            {
+                request.ToState = request.ToCountryCode;
+            }
+
+            // Reference and rubber
+            postal.Endicia.RubberStamp1 = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.RubberStamp1, postal), 50);
+            postal.Endicia.RubberStamp2 = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.RubberStamp2, postal), 50);
+            postal.Endicia.RubberStamp3 = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.RubberStamp3, postal), 50);
+            postal.Endicia.ReferenceID = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.ReferenceID, postal), 50);
+
+            request.RubberStamp1 = postal.Endicia.RubberStamp1;
+            request.RubberStamp2 = postal.Endicia.RubberStamp2;
+            request.RubberStamp3 = postal.Endicia.RubberStamp3;
+            request.ReferenceID = postal.Endicia.ReferenceID;
+
+            // If it's supposed to be Endicia insurance
+            if (shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                // Make sure that even makes sense
+                if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia && EndiciaUtility.IsEndiciaInsuranceActive)
+                {
+                    // Then if it's insured, do it
+                    if (shipment.Insurance)
+                    {
+                        // Ensure Services is created
+                        request.Services = request.Services ?? new SpecialServices();
+                        request.Services.InsuredMail = "Endicia";
+                        request.InsuredValue = shipment.Postal.InsuranceValue.ToString("0.00");
+                    }
+                }
+                // If it doesn't make sense, reset the carrier
+                else
+                {
+                    shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+                }
+            }
+
+
+            // If international we need customs
+            if (CustomsManager.IsCustomsRequired(shipment))
+            {
+                ApplyCustoms(request, shipment);
+            }
+
+            try
+            {
+                using (EwsLabelService service = CreateWebService("Process", GetReseller(account, shipment)))
+                {
+                    LabelRequestResponse response = service.GetPostageLabel(request);
+
+                    // Check for errors
+                    if (response.Status != 0)
+                    {
+                        if ((response.Status == 12503 || response.Status == 12104) ||
+                            (response.Status == 100002 && response.ErrorMessage.Contains("not enough money in the account to produce the indicium")) ||
+                            (response.Status == -1 && response.ErrorMessage.Contains("insufficient funds")))
+
+                        {
+                            throw new EndiciaInsufficientFundsException(account, response.Status, response.ErrorMessage);
+                        }
+                        else
+                        {
+                            string errorMessage = response.ErrorMessage;
+
+                            // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
+                            // an authentication error message in the response; also do some fuzzy logic in case there are other errors when 
+                            // rates are not found for cubic packages
+                            if (response.Status == 55001 && response.ErrorMessage.ToUpperInvariant().Contains("CUBIC"))
+                            {
+                                errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
+                            }
+
+                            throw new EndiciaApiException(response.Status, errorMessage, serviceType);
+                        }
+                    }
+
+                    // Tracking and cost
+                    shipment.TrackingNumber = response.TrackingNumber;
+                    shipment.ShipmentCost = postal.Endicia.NoPostage ? 0 : response.FinalPostage;
+                    shipment.Postal.Endicia.TransactionID = response.TransactionID;
+
+                    SaveLabelImages(shipment, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
+        /// Get the account to use for the given shipment
+        /// </summary>
+        private static EndiciaAccountEntity GetAccount(PostalShipmentEntity postal)
+        {
+            EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(postal.Endicia.EndiciaAccountID);
+            if (account == null)
+            {
+                throw new EndiciaException("No Endicia account is selected for the shipment.");
+            }
+            else if (account.IsDazzleMigrationPending)
+            {
+                throw new EndiciaException("The Endicia account selected for the shipment was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
+            }
+
+            if (postal.Shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
+            {
+                var accountRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountNumber, account.AccountNumber);
+                if (accountRestriction.Level != EditionRestrictionLevel.None)
+                {
+                    throw new ShippingException(accountRestriction.GetDescription());
+                }
+
+                var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountLimit, EndiciaAccountManager.EndiciaAccounts.Count);
+                if (quantityRestriction.Level != EditionRestrictionLevel.None)
+                {
+                    throw new ShippingException(quantityRestriction.GetDescription());
+                }
+            }
+
+            return account;
+        }
+
+        /// <summary>
+        /// Process the token for use in an endicia reference\stamp field.
+        /// </summary>
+        private static string ProcessTokenizedField(string token, PostalShipmentEntity postal)
+        {
+            return TemplateTokenProcessor.ProcessTokens(token, postal.ShipmentID);
+        }
+
+        /// <summary>
+        /// Apply all the customs stuff from the shipment to the request
+        /// </summary>
+        private static void ApplyCustoms(LabelRequest request, ShipmentEntity shipment)
+        {
+            PostalShipmentEntity postal = shipment.Postal;
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            request.Value = (float) shipment.CustomsValue;
+            request.Description = postal.CustomsContentDescription;
+
+            // If it's an Endicia shipment - OR - if it was an endicia shipment that is being automatically processed as Express1 instead
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+            {
+                request.CustomsCertify = settings.EndiciaCustomsCertify ? "TRUE" : "FALSE";
+                request.CustomsSigner = settings.EndiciaCustomsSigner;
+            }
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1)
+            {
+                request.CustomsCertify = settings.Express1CustomsCertify ? "TRUE" : "FALSE";
+                request.CustomsSigner = settings.Express1CustomsSigner;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown endicia reseller");
+            }
+
+            CustomsInfo customs = new CustomsInfo();
+            request.CustomsInfo = customs;
+
+            customs.NonDeliveryOption = "Return";
+
+            customs.ContentsType = GetCustomsContentTypeCode((PostalCustomsContentType) postal.CustomsContentType);
+            customs.ContentsExplanation = postal.CustomsContentDescription;
+
+            List<CustomsItem> customsItems = new List<CustomsItem>();
+            for (int i = 0; i < Math.Min(30, shipment.CustomsItems.Count); i++)
+            {
+                ShipmentCustomsItemEntity customsItem = shipment.CustomsItems[i];
+
+                int weightOz = (int) Math.Floor(new WeightValue(customsItem.Weight).TotalOunces * customsItem.Quantity);
+                decimal value = customsItem.UnitValue * (decimal) customsItem.Quantity;
+
+                // Round up to 1oz if we floored down to zero - but if the original value was zero, leave it zero.
+                if (weightOz == 0 && customsItem.Weight > 0)
+                {
+                    weightOz = 1;
+                }
+
+                customsItems.Add(new CustomsItem
+                {
+                    Description = StringUtility.Truncate(customsItem.Description, 50),
+                    Quantity = (int) Math.Ceiling(customsItem.Quantity),
+                    Weight = weightOz,
+                    Value = value,
+                    CountryOfOrigin = customsItem.CountryOfOrigin,
+                    HSTariffNumber = customsItem.HarmonizedCode
+                });
+            }
+
+            customs.CustomsItems = customsItems.ToArray();
+        }
+
+        /// <summary>
+        /// Our psuedo duck typing that sets the given property to the specified value on the given object
+        /// </summary>
+        private static void SetReflectedValue(object duck, string property, object value)
+        {
+            duck.GetType().GetProperty(property).SetValue(duck, value, null);
+        }
+
+        /// <summary>
+        /// Get the country code given the specified country.  This gives us an opportunity to use Endicia specific country name values, if necessary, 
+        /// which i think it will be.
+        /// </summary>
+        private static string GetElsCountryCode(string country)
+        {
+            // First ensure its a code
+            string code = Geography.GetCountryCode(country);
+
+            // ELS does wants Great Britain to be UK
+            if (code == "UK")
+            {
+                code = "GB";
+            }
+
+            return code;
+        }
+
+        /// <summary>
+        /// Save the label images generated for the shipment
+        /// </summary>
+        private static void SaveLabelImages(ShipmentEntity shipment, LabelRequestResponse response)
+        {
+            // If we had saved an image for this shipment previously clear it.  
+            ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
+
+            // Primary image
+            if (!string.IsNullOrEmpty(response.Base64LabelImage))
+            {
+                SaveLabelImage(shipment, "LabelPrimary", response.Base64LabelImage, false);
+            }
+
+            // Image sets
+            if (response.Label != null)
+            {
+                foreach (ImageData imageData in response.Label.Image)
+                {
+                    // For international endicia was sending down all 5 copies in the ImageData sets.  In that case we promote the first one to be the "Primary" label.
+                    if (string.IsNullOrEmpty(response.Base64LabelImage) && response.Label.Image[0] == imageData)
+                    {
+                        SaveLabelImage(shipment, "LabelPrimary", imageData.Value, true);
+                    }
+                    else
+                    {
+                        SaveLabelImage(shipment, string.Format("LabelPart{0}", imageData.PartNumber), imageData.Value, true);
+                    }
+                }
+            }
+
+            // Customs
+            if (response.CustomsForm != null)
+            {
+                foreach (ImageData imageData in response.CustomsForm.Image)
+                {
+                    SaveLabelImage(shipment, string.Format("Customs{0}", imageData.PartNumber), imageData.Value, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save the given label image
+        /// </summary>
+        private static void SaveLabelImage(ShipmentEntity shipment, string name, string base64, bool crop)
+        {
+            using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64)))
+            {
+                // If not cropping, or if it is thermal, just save it as-is
+                if (!crop || shipment.ThermalType != null)
+                {
+                    DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, name);
+                }
+                else
+                {
+                    using (Image imageOriginal = Image.FromStream(stream))
+                    {
+                        // imageOriginal.Save(string.Format(@"D:\Brian\Desktop\ELS\Shipment{0}-{1}.png", shipment.ShipmentID, name), ImageFormat.Png);
+
+                        // For endicia we are just cropping off the "Cut here along line", and its at the same spot on every label that needs it
+                        using (Image imageLabelCrop = DisplayHelper.CropImage(imageOriginal, 0, 0, imageOriginal.Width, Math.Min(imageOriginal.Height, 1580)))
+                        {
+                            // imageLabelCrop.Save(string.Format(@"D:\Brian\Desktop\ELS\Shipment{0}-{1}-Cropped.png", shipment.ShipmentID, name), ImageFormat.Png);
+
+                            using (MemoryStream imageStream = new MemoryStream())
+                            {
+                                imageLabelCrop.Save(imageStream, ImageFormat.Png);
+
+                                DataResourceManager.CreateFromBytes(imageStream.ToArray(), shipment.ShipmentID, name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get postal rates for the given shipment for all possible mail classes and rates.
+        /// </summary>
+        public static List<RateResult> GetRatesFast(ShipmentEntity shipment)
+        {
+            PostalShipmentEntity postal = shipment.Postal;
+
+            EndiciaAccountEntity account = GetAccount(postal);
+
+            PostalPackagingType packagingType = (PostalPackagingType) postal.PackagingType;
+
+            // Create the request
+            PostageRatesRequest request = new PostageRatesRequest();
+
+            // Our requester ID
+            request.RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment));
+
+            // Account information
+            request.CertifiedIntermediary = new CertifiedIntermediary();
+            request.CertifiedIntermediary.AccountID = account.AccountNumber;
+            request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
+
+            // Weight
+            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+
+            bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
+
+            // Service and packaging
+            request.MailClass = isDomestic ? "Domestic" : "International";
+            request.MailpieceShape = GetMailpieceShapeCode(packagingType);
+
+            // Dims
+            if (packagingType == PostalPackagingType.Package)
+            {
+                request.MailpieceDimensions = new Dimensions();
+
+                // Force at least 1x1x1 here so we at least get an answer back
+                request.MailpieceDimensions.Length = Math.Max(1, postal.DimsLength);
+                request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
+                request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
+            }
+            else if (packagingType == PostalPackagingType.Cubic)
+            {
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // round up to 1 like is done with the Package type
+                request.MailpieceDimensions = new Dimensions();
+
+                request.MailpieceDimensions.Length = postal.DimsLength;
+                request.MailpieceDimensions.Width = postal.DimsWidth;
+                request.MailpieceDimensions.Height = postal.DimsHeight;
+            }
+
+            // Machinable
+            request.Machinable = postal.NonMachinable ? "FALSE" : "TRUE";
+
+            PersonAdapter from = new PersonAdapter(shipment, "Origin");
+            PersonAdapter recipient = new PersonAdapter(shipment, "Ship");
+
+            // Address stuff
+            if (!string.IsNullOrWhiteSpace(account.MailingPostalCode) && !shipment.ReturnShipment)
+            {
+                request.FromPostalCode = PersonUtility.GetZip5(account.MailingPostalCode);
+            }
+            else
+            {
+                request.FromPostalCode = from.PostalCode5;
+            }
+
+            request.ToPostalCode = recipient.PostalCode5;
+            request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
+
+            // We show rate matrix based on delivery and signature options
+            if (isDomestic)
+            {
+                request.Services = new SpecialServices();
+                request.Services.DeliveryConfirmation = "ON";
+                request.Services.SignatureConfirmation = "ON";
+            }
+            else
+            {
+                // There are no rates for regional boxes for international
+                if (packagingType == PostalPackagingType.RateRegionalBoxA || packagingType == PostalPackagingType.RateRegionalBoxB || packagingType == PostalPackagingType.RateRegionalBoxC)
+                {
+                    return new List<RateResult>();
+                }
+            }
+
+            // If they want insurance... (Endicia only - not Express1)
+            if (shipment.Insurance && shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
+            {
+                // If they have Endicia selected as the insurance provider - AND that's enabled for their account
+                if (EndiciaUtility.IsEndiciaInsuranceActive && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+                {
+                    // Ensure Services is created
+                    request.Services = request.Services ?? new SpecialServices();
+                    request.Services.InsuredMail = "Endicia";
+                    request.InsuredValue = (double) shipment.Postal.InsuranceValue;
+                }
+            }
+
+            try
+            {
+                List<RateResult> rates = new List<RateResult>();
+
+                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment)))
+                {
+                    PostageRatesResponse response = service.CalculatePostageRates(request);
+
+                    // Check for errors
+                    if (response.Status != 0)
+                    {
+                        string errorMessage = response.ErrorMessage;
+
+                        // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
+                        // an authentication error message in the response; do some fuzzy logic in case there are other errors when 
+                        // rates are not found for cubic packages
+                        if (response.Status == 55001 && response.ErrorMessage.ToUpperInvariant().Contains("CUBIC"))
+                        {
+                            errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
+                        }
+
+                        throw new EndiciaApiException(response.Status, errorMessage);
+                    }
+
+                    // No rates available for this service\class\type
+                    if (response.PostagePrice == null)
+                    {
+                        return new List<RateResult>();
+                    }
+                    
+                    // Go through each item in the result
+                    foreach (PostagePrice price in response.PostagePrice)
+                    {
+                        var serviceResult = GetServiceTypeFromRateMailService(price.Postage.MailService);
+
+                        // Skip services we dont know about within SW... so we don't break if new ones are added
+                        if (serviceResult == null)
+                        {
+                            continue;
+                        }
+
+                        PostalServiceType serviceType = serviceResult.Value;
+
+                        // Don't confuse people by showing them Standard Post - almost no one will qualify for it.  If they do qualify, they can still manually select it.
+                        if (serviceType == PostalServiceType.StandardPost)
+                        {
+                            continue;
+                        }
+
+                        // Days in transit
+                        string days = PostalUtility.GetServiceTransitDays(serviceType);
+
+                        List<PostalConfirmationType> confirmationOptions = new List<PostalConfirmationType>();
+
+                        if (isDomestic)
+                        {
+                            // If domestic, assume they are all available (may be overridden later)
+                            confirmationOptions.Add(PostalConfirmationType.Delivery);
+                            confirmationOptions.Add(PostalConfirmationType.Signature);
+
+                            if (serviceType == PostalServiceType.ExpressMail)
+                            {
+                                confirmationOptions.Clear();
+                            }
+
+                            if (serviceType == PostalServiceType.FirstClass)
+                            {
+                                // Special DestinationConfirmation (not Delivery) handling
+                                if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
+                                {
+                                    confirmationOptions.Clear();
+                                }
+                            }
+                        }
+                        else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(recipient.CountryCode, serviceType, packagingType))
+                        {
+                            confirmationOptions.Add(PostalConfirmationType.Delivery);
+                        }
+
+                        if (confirmationOptions.Count > 0)
+                        {
+                            // Add the 'base' rate for the service type, without any confirmations\extras
+                            rates.Add(new RateResult(EnumHelper.GetDescription(serviceType), days));
+
+                            if (confirmationOptions.Contains(PostalConfirmationType.Delivery))
+                            {
+                                rates.Add(new RateResult(string.Format("       Delivery Confirmation ({0:c})", price.Fees.DeliveryConfirmation), "", price.Postage.TotalAmount + price.Fees.DeliveryConfirmation, new PostalRateSelection(serviceType, PostalConfirmationType.Delivery)));
+                            }
+
+                            if (confirmationOptions.Contains(PostalConfirmationType.Signature))
+                            {
+                                rates.Add(new RateResult(string.Format("       Signature Confirmation ({0:c})", price.Fees.SignatureConfirmation), "", price.Postage.TotalAmount + price.Fees.SignatureConfirmation, new PostalRateSelection(serviceType, PostalConfirmationType.Signature)));
+                            }
+                        }
+                        else
+                        {
+                            // Add the single rate for this service
+                            rates.Add(new RateResult(EnumHelper.GetDescription(serviceType), days, price.Postage.TotalAmount, new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                        }
+                    }
+
+                    if (isDomestic && (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope))
+                    {
+                        // Special case - endicia not returning a rate for first class envelopes
+                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == PostalServiceType.FirstClass))
+                        {
+                            try
+                            {
+                                rates.Insert(0, GetRate(shipment, PostalServiceType.FirstClass, PostalConfirmationType.None));
+                            }
+                            catch (EndiciaException ex)
+                            {
+                                log.Error("Failed getting first class destination confirm rate: " + ex.Message, ex);
+                            }
+                        }
+                    }
+
+                    if (isDomestic)
+                    {
+                        // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning Standard Post instead.  If we can't find Parcel Select, try
+                        // to get those rates manually.  In the future if Endicia updates\fixes it we may be able to remove this.
+                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == PostalServiceType.ParcelSelect))
+                        {
+                            try
+                            {
+                                // We do these here, then add them later, so that in case they throw an Exception we don't end up adding the "Header" line of "Parcel Select" with nothing below it to select.
+                                RateResult withDelivery = GetRate(shipment, PostalServiceType.ParcelSelect, PostalConfirmationType.Delivery);
+                                RateResult withSignature = GetRate(shipment, PostalServiceType.ParcelSelect, PostalConfirmationType.Signature);
+
+                                rates.Add(new RateResult(EnumHelper.GetDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect)));
+                                rates.Add(withDelivery);
+                                rates.Add(withSignature);
+                            }
+                            catch (EndiciaException ex)
+                            {
+                                log.Error("Failed getting first class destination confirm rate: " + ex.Message, ex);
+                            }
+                        }
+                    }
+
+                    return rates;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
+        /// Get postal rates for the given shipment for all possible mail classes and rates.
+        /// </summary>
+        public static List<RateResult> GetRatesSlow(ShipmentEntity shipment)
+        {
+            List<RateResult> results = new List<RateResult>();
+            List<Exception> errors = new List<Exception>();
+
+            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            {
+                PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
+
+                // Special DestinationConfirmation (not Delivery) handling
+                if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
+                {
+                    try
+                    {
+                        results.Add(GetRate(shipment, PostalServiceType.FirstClass, PostalConfirmationType.None));
+                    }
+                    catch (EndiciaException ex)
+                    {
+                        errors.Add(ex);
+                    }
+                }
+                else
+                {
+                    errors.Add(AddRateResultsWithConfirmationOptions(shipment, PostalServiceType.FirstClass, results));
+                }
+
+                errors.Add(AddRateResultsWithConfirmationOptions(shipment, PostalServiceType.PriorityMail, results));
+
+                // Express doesn't have confirmation options, we add it's result manually
+                try
+                {
+                    results.Add(GetRate(shipment, PostalServiceType.ExpressMail, PostalConfirmationType.None));
+                }
+                catch (EndiciaException ex)
+                {
+                    errors.Add(ex);
+                }
+
+                errors.Add(AddRateResultsWithConfirmationOptions(shipment, PostalServiceType.StandardPost, results)); 
+                errors.Add(AddRateResultsWithConfirmationOptions(shipment, PostalServiceType.MediaMail, results));
+            }
+            else
+            {
+                try
+                {
+                    results.Add(GetRate(shipment, PostalServiceType.InternationalExpress, PostalConfirmationType.None));
+                }
+                catch (EndiciaException ex)
+                {
+                    errors.Add(ex);
+                }
+
+                try
+                {
+                    results.Add(GetRate(shipment, PostalServiceType.InternationalPriority, PostalConfirmationType.None));
+                }
+                catch (EndiciaException ex)
+                {
+                    errors.Add(ex);
+                }
+
+                try
+                {
+                    results.Add(GetRate(shipment, PostalServiceType.InternationalFirst, PostalConfirmationType.None));
+                }
+                catch (EndiciaException ex)
+                {
+                    errors.Add(ex);
+                }
+
+                // If there are results, try to fill in the delivery days
+                if (results.Count > 0)
+                {
+                    try
+                    {
+                        List<RateResult> webToolsRates = PostalWebClientRates.GetRates(shipment);
+
+                        List<RateResult> resultsWithDays = new List<RateResult>();
+
+                        foreach (RateResult result in results)
+                        {
+                            RateResult webToolRate = webToolsRates.FirstOrDefault(r => ((PostalRateSelection) r.Tag).ServiceType == ((PostalRateSelection) result.Tag).ServiceType);
+                            if (webToolRate != null)
+                            {
+                                resultsWithDays.Add(new RateResult(
+                                    result.Description,
+                                    webToolRate.Days,
+                                    result.Amount,
+                                    result.Tag));
+                            }
+                            else
+                            {
+                                resultsWithDays.Add(result);
+                            }
+                        }
+
+                        results.Clear();
+                        results.AddRange(resultsWithDays);
+                    }
+                    catch (ShippingException ex)
+                    {
+                        log.Error("Could not get international transit times for rates.", ex);
+                    }
+                }
+            }
+
+            // Error trimming
+            errors = errors
+
+                // Obviously we don't want null
+                .Where(e => e != null)
+
+                // Filter out any we really don't care about
+                .Where(e =>
+                    {
+                        EndiciaApiException apiEx = e as EndiciaApiException;
+                        if (apiEx != null)
+                        {
+                            // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the 
+                            // user just won't get the rate for it (which makes sense)
+                            return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    })
+
+                .ToList();
+
+            if (results.Count == 0 && errors.Count > 0)
+            {
+                throw new EndiciaException(string.Join("\r\n", errors.Select(e => e.Message).Distinct()));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Get the rate for the service with all possible confirmation types and add to the rate result list
+        /// </summary>
+        private static Exception AddRateResultsWithConfirmationOptions(ShipmentEntity shipment, PostalServiceType serviceType, List<RateResult> results)
+        {
+            // Ensures all or nothing if error
+            List<RateResult> localResults = new List<RateResult>();
+
+            try
+            {
+                // Add the base rate
+                localResults.Add(new RateResult(EnumHelper.GetDescription(serviceType), PostalUtility.GetServiceTransitDays(serviceType)));
+
+                // Add the confirmation rates
+                localResults.Add(GetRate(shipment, serviceType, PostalConfirmationType.Delivery));
+                localResults.Add(GetRate(shipment, serviceType, PostalConfirmationType.Signature));
+
+                results.AddRange(localResults);
+
+                return null;
+            }
+            catch (EndiciaException ex)
+            {
+                return ex;
+            }
+        }
+
+        /// <summary>
+        /// Get the postal rate for the given shipment, service, and confirmation selection.
+        /// </summary>
+        private static RateResult GetRate(ShipmentEntity shipment, PostalServiceType serviceType, PostalConfirmationType confirmation)
+        {
+            PostalShipmentEntity postal = shipment.Postal;
+
+            EndiciaAccountEntity account = GetAccount(postal);
+
+            PostalPackagingType packagingType = (PostalPackagingType) postal.PackagingType;
+
+            // Create the request
+            PostageRateRequest request = new PostageRateRequest();
+
+            // Our requester ID
+            request.RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment));
+
+            // Account information
+            request.CertifiedIntermediary = new CertifiedIntermediary();
+            request.CertifiedIntermediary.AccountID = account.AccountNumber;
+            request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
+
+            // Weight
+            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+
+            // Service and packaging
+            request.MailClass = GetMailClassCode(serviceType, packagingType);
+            request.MailpieceShape = GetMailpieceShapeCode(packagingType);
+
+            // Dims
+            if (packagingType == PostalPackagingType.Package)
+            {
+                request.MailpieceDimensions = new Dimensions();
+
+                // Force at least 1x1x1 here so we at least get an answer back
+                request.MailpieceDimensions.Length = Math.Max(1, postal.DimsLength);
+                request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
+                request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
+            }
+            else if (packagingType == PostalPackagingType.Cubic)
+            {
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // round up to 1 like is done with the Package type
+                request.MailpieceDimensions = new Dimensions();
+
+                request.MailpieceDimensions.Length = postal.DimsLength;
+                request.MailpieceDimensions.Width = postal.DimsWidth;
+                request.MailpieceDimensions.Height = postal.DimsHeight;
+            }
+
+            // Parcel Select
+            if (serviceType == PostalServiceType.ParcelSelect)
+            {
+                // Just hardcode these to make sure we get rates back
+                request.SortType = "Presorted";
+                request.EntryFacility = "Other";
+            }
+
+            // Machinable
+            request.Machinable = postal.NonMachinable ? "FALSE" : "TRUE";
+
+            PersonAdapter from = new PersonAdapter(shipment, "Origin");
+            PersonAdapter recipient = new PersonAdapter(shipment, "Ship");
+
+            // Address stuff
+            if (!string.IsNullOrWhiteSpace(account.MailingPostalCode))
+            {
+                request.FromPostalCode = account.MailingPostalCode;
+            }
+            else
+            {
+                request.FromPostalCode = from.PostalCode;
+            }
+            
+            // Address stuff
+            request.ToPostalCode = recipient.PostalCode5;
+            request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
+
+            // When shipping
+            request.ShipDate = shipment.ShipDate.ToString("MM/dd/yyyy");
+
+            // Service options
+            request.Services = new SpecialServices();
+            request.Services.DeliveryConfirmation = (confirmation == PostalConfirmationType.Delivery) ? "ON" : "OFF";
+            request.Services.SignatureConfirmation = (confirmation == PostalConfirmationType.Signature) ? "ON" : "OFF";
+
+            // If they want insurance... (Endicia only - not Express1)
+            if (shipment.Insurance && shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
+            {
+                // If they have Endicia selected as the insurance provider - AND that's enabled for their account
+                if (EndiciaUtility.IsEndiciaInsuranceActive && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+                {
+                    request.Services.InsuredMail = "ENDICIA";
+                    request.InsuredValue = shipment.Postal.InsuranceValue.ToString("0.00");
+                }
+            }
+
+            // Postage vs. Pricing
+            request.ResponseOptions = new ResponseOptions();
+            request.ResponseOptions.PostagePrice = "TRUE";
+
+            try
+            {
+                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment)))
+                {
+                    PostageRateResponse response = service.CalculatePostageRate(request);
+
+                    // Check for errors
+                    if (response.Status != 0)
+                    {
+                        throw new EndiciaApiException(response.Status, response.ErrorMessage);
+                    }
+
+                    string days = "";
+
+                    if (PostalUtility.GetDomesticServices(ShipmentTypeCode.Endicia).Contains(serviceType))
+                    {
+                        days = PostalUtility.GetServiceTransitDays(serviceType);
+                    }
+
+                    string description;
+
+                    if (confirmation == PostalConfirmationType.None)
+                    {
+                        description = EnumHelper.GetDescription(serviceType);
+                    }
+                    else if (confirmation == PostalConfirmationType.Delivery)
+                    {
+                        description = string.Format("       Delivery Confirmation ({0:c})", response.PostagePrice[0].Fees.DeliveryConfirmation);
+                        days = "";
+                    }
+                    else
+                    {
+                        description = string.Format("       Signature Confirmation ({0:c})", response.PostagePrice[0].Fees.SignatureConfirmation);
+                        days = "";
+                    }
+
+                    return new RateResult(
+                        description,
+                        days,
+                        response.PostagePrice[0].TotalAmount,
+                        new PostalRateSelection(serviceType, confirmation));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
+        /// Get the EndiciaReseller value for the given shipment and account
+        /// </summary>
+        private static EndiciaReseller GetReseller(EndiciaAccountEntity account, ShipmentEntity shipment = null)
+        {
+            EndiciaReseller endiciaReseller = (EndiciaReseller) account.EndiciaReseller;
+
+            // We juse use the shipment to verify
+            if (shipment != null)
+            {
+                if (endiciaReseller != ((shipment.ShipmentType == (int)ShipmentTypeCode.Endicia) ? EndiciaReseller.None : EndiciaReseller.Express1))
+                {
+                    throw new ShippingException(string.Format("The selected account is not for use with {0}.", ShipmentTypeManager.GetType((ShipmentTypeCode) shipment.ShipmentType).ShipmentTypeName));
+                }
+            }
+
+            return endiciaReseller;
+        }
+
+        /// <summary>
+        /// Purchase postage for the given amount
+        /// </summary>
+        public static void BuyPostage(EndiciaAccountEntity account, decimal amount)
+        {
+            if (amount < 10)
+            {
+                throw new EndiciaException("At least $10.00 of postage must be purchased at a time.");
+            }
+
+            if (amount >= 100000)
+            {
+                throw new EndiciaException("The postage amount requested is too large.");
+            }
+
+            try
+            {
+                using (EwsLabelService service = CreateWebService("BuyPostage", GetReseller(account)))
+                {
+                    RecreditRequest request = new RecreditRequest();
+                    request.RequesterID = GetInterapptivePartnerID(GetReseller(account));
+                    request.RequestID = Guid.NewGuid().ToString();
+                    request.CertifiedIntermediary = new CertifiedIntermediary
+                    {
+                        AccountID = account.AccountNumber,
+                        PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                    };
+
+                    request.RecreditAmount = amount.ToString("0.00");
+                    RecreditRequestResponse response = service.BuyPostage(request);
+
+                    // Check for errors
+                    if (response.Status != 0)
+                    {
+                        throw new EndiciaApiException(response.Status, response.ErrorMessage);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
+        /// Get the account status of the account, including the current postage balance.
+        /// </summary>
+        public static EndiciaAccountStatus GetAccountStatus(EndiciaAccountEntity account)
+        {
+            try
+            {
+                using (EwsLabelService service = CreateWebService("AccountStatus", GetReseller(account)))
+                {
+                    AccountStatusRequest request = new AccountStatusRequest();
+                    request.RequesterID = GetInterapptivePartnerID(GetReseller(account));
+                    request.RequestID = Guid.NewGuid().ToString();
+                    request.CertifiedIntermediary = new CertifiedIntermediary 
+                    {
+                        AccountID = account.AccountNumber,
+                        PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia")
+                    };
+
+                    AccountStatusResponse response = service.GetAccountStatus(request);
+
+                    // Check for errors
+                    if (response.Status != 0)
+                    {
+                        throw new EndiciaApiException(response.Status, response.ErrorMessage);
+                    }
+
+                    // Save the new password to the account
+                    return new EndiciaAccountStatus(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
+        /// Change the api passphrase for the given account.  Returns the encyrpted updated password if successful
+        /// </summary>
+        public static string ChangeApiPassphrase(string accountNumber, EndiciaReseller reseller, string oldPassword, string newPassword)
+        {
+            try
+            {
+                using (EwsLabelService service = CreateWebService("ChangePassphrase", reseller))
+                {
+                    ChangePassPhraseRequest request = new ChangePassPhraseRequest();
+                    request.RequesterID = GetInterapptivePartnerID(reseller);
+                    request.RequestID = Guid.NewGuid().ToString();
+
+                    request.CertifiedIntermediary = new CertifiedIntermediary 
+                    {
+                        AccountID = accountNumber, 
+                        PassPhrase = oldPassword 
+                    };
+
+                    request.NewPassPhrase = newPassword;
+
+                    ChangePassPhraseRequestResponse response = service.ChangePassPhrase(request);
+
+                    // Check for errors
+                    if (response.Status != 0)
+                    {
+                        throw new EndiciaApiException(response.Status, response.ErrorMessage);
+                    }
+
+                    // Save the new password to the account
+                    return SecureText.Encrypt(newPassword, "Endicia");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
+            }
+        }
+
+        /// <summary>
+        /// Get the endicia MailClass code for the given service
+        /// </summary>
+        private static string GetMailClassCode(PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            switch (serviceType)
+            {
+                case PostalServiceType.ExpressMail: return "Express";
+                case PostalServiceType.FirstClass: return "First";
+                case PostalServiceType.LibraryMail: return "LibraryMail";
+                case PostalServiceType.MediaMail: return "MediaMail";
+                case PostalServiceType.StandardPost: return "StandardPost";
+                case PostalServiceType.ParcelSelect: return "ParcelSelect";
+                case PostalServiceType.PriorityMail: return "Priority";
+                case PostalServiceType.CriticalMail: return "CriticalMail";
+
+                case PostalServiceType.InternationalExpress: return "ExpressMailInternational";
+                case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
+
+                case PostalServiceType.InternationalFirst:
+                    {
+                        return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
+                    }
+            }
+
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType))
+            {
+                return EnumHelper.GetApiValue(serviceType);
+            }
+
+            throw new EndiciaException(string.Format("{0} is not supported when shipping with Endicia.", EnumHelper.GetDescription(serviceType)));
+        }
+
+        /// <summary>
+        /// Get the mailpiece shape code to use for the given packaging type
+        /// </summary>
+        private static string GetMailpieceShapeCode(PostalPackagingType packagingType)
+        {
+            switch (packagingType)
+            {
+                case PostalPackagingType.Envelope: return "Letter";
+                case PostalPackagingType.LargeEnvelope: return "Flat";
+                case PostalPackagingType.FlatRateEnvelope: return "FlatRateEnvelope";
+                case PostalPackagingType.FlatRatePaddedEnvelope: return "FlatRatePaddedEnvelope";
+                case PostalPackagingType.FlatRateLegalEnvelope: return "FlatRateLegalEnvelope";
+                case PostalPackagingType.FlatRateSmallBox: return "SmallFlatRateBox";
+                case PostalPackagingType.FlatRateMediumBox: return "MediumFlatRateBox";
+                case PostalPackagingType.FlatRateLargeBox: return "LargeFlatRateBox";
+                case PostalPackagingType.Package: return "Parcel";
+                case PostalPackagingType.RateRegionalBoxA: return "RegionalRateBoxA";
+                case PostalPackagingType.RateRegionalBoxB: return "RegionalRateBoxB";
+                case PostalPackagingType.RateRegionalBoxC: return "RegionalRateBoxC";
+                case PostalPackagingType.Cubic: return "Cubic";
+            }
+
+            throw new InvalidOperationException("Invalid packagingType: " + packagingType);
+        }
+
+        /// <summary>
+        /// Get the label server value to use for the given customs content type
+        /// </summary>
+        private static string GetCustomsContentTypeCode(PostalCustomsContentType contentType)
+        {
+            switch (contentType)
+            {
+                case PostalCustomsContentType.Documents: return "Documents";
+                case PostalCustomsContentType.Gift: return "Gift";
+                case PostalCustomsContentType.Merchandise: return "Merchandise";
+                case PostalCustomsContentType.Other: return "Other";
+                case PostalCustomsContentType.ReturnedGoods: return "ReturnedGoods";
+                case PostalCustomsContentType.Sample: return "Sample";
+            }
+
+            throw new InvalidOperationException("Invalid postal content type: " + contentType);
+        }
+
+        /// <summary>
+        /// Get the Endicia API sort type code for the given PostalSortType value
+        /// </summary>
+        private static string GetSortTypeCode(PostalSortType sortType)
+        {
+            switch (sortType)
+            {
+                case PostalSortType.SinglePiece: return "SinglePiece";
+                case PostalSortType.BMC: return "BMC";
+                case PostalSortType.FiveDigit: return "FiveDigit";
+                case PostalSortType.MixedBMC: return "MixedBMC";
+                case PostalSortType.Nonpresorted: return "Nonpresorted";
+                case PostalSortType.Presorted: return "Presorted";
+                case PostalSortType.SCF: return "SCF";
+                case PostalSortType.ThreeDigit: return "ThreeDigit";
+            }
+
+            throw new InvalidOperationException("Invalid postal sort type: " + sortType);
+        }
+
+        /// <summary>
+        /// Get the Endicia API entry facility value for the given PostalEntryFacility value
+        /// </summary>
+        private static string GetEntryFacilityCode(PostalEntryFacility entryFacility)
+        {
+            switch (entryFacility)
+            {
+                case PostalEntryFacility.Other: return "Other";
+                case PostalEntryFacility.DBMC: return "DBMC";
+                case PostalEntryFacility.DDU: return "DDU";
+                case PostalEntryFacility.DSCF: return "DSCF";
+                case PostalEntryFacility.OBMC: return "OBMC";
+            }
+
+            throw new InvalidOperationException("Invalid postal entry facility: " + entryFacility);
+        }
+
+
+        /// <summary>
+        /// Get the PostalServiceType value representing the returned mail class from the rates request
+        /// </summary>
+        private static PostalServiceType? GetServiceTypeFromRateMailService(string mailClass)
+        {
+            // Endicia is retardo and adds ' X Rate Box' after service type if you've selected that
+            if (mailClass.StartsWith("Express Mail"))
+            {
+                mailClass = mailClass.Contains("International") ? "Express Mail International" : "Express Mail";
+            }
+
+            // Endicia is retardo and adds ' X Rate Box' after service type if you've selected that
+            if (mailClass.StartsWith("Priority Mail"))
+            {
+                mailClass = mailClass.Contains("International") ? "Priority Mail International" : "Priority Mail";
+            }
+
+            // Endicia adds "Letter"
+            if (mailClass.StartsWith("Critical Mail"))
+            {
+                mailClass = "Critical Mail";
+            }
+
+            // They add on a bunch of junk for Parcel Select
+            if (mailClass.StartsWith("Parcel Select"))
+            {
+                mailClass = "Parcel Select";
+            }
+
+            switch (mailClass)
+            {
+                case "Express Mail":  return PostalServiceType.ExpressMail;
+                case "First-Class Mail": return PostalServiceType.FirstClass;
+                case "Library Mail": return PostalServiceType.LibraryMail;
+                case "Media Mail": return PostalServiceType.MediaMail;
+                case "Standard Post": return PostalServiceType.StandardPost;
+                case "Parcel Select": return PostalServiceType.ParcelSelect;
+                case "Priority Mail": return PostalServiceType.PriorityMail;
+                case "Critical Mail": return PostalServiceType.CriticalMail;
+
+                case "Express Mail International": return PostalServiceType.InternationalExpress;
+                case "Priority Mail International" : return PostalServiceType.InternationalPriority;
+
+                // Endicia changed the value to First Class Package International Service; keeping the original 
+                // case statement for First Class Mail International per Brian in case Endicia changes it back
+                case "First Class Mail International":
+                case "First Class Package International Service": return PostalServiceType.InternationalFirst;
+            }
+
+            // Known values we ignore
+            switch (mailClass)
+            {
+                case "Global Express Guaranteed":
+                    return null;
+            }
+
+            Debug.Fail("Unknown mailClass value while getting rates: " + mailClass);
+
+            return null;
+        }
+    }
+}

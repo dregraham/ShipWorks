@@ -1,0 +1,2030 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="www.envmgr.com/LabelService" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="www.envmgr.com/LabelService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">You have reached the Help page for the Label Server Web Service.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="www.envmgr.com/LabelService">
+      <s:element name="GetChallengeQuestion">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChallengeQuestionRequest" type="tns:ChallengeQuestionRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChallengeQuestionRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EMail" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DataValidator" />
+      <s:element name="GetChallengeQuestionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChallengeQuestionResponse" type="tns:ChallengeQuestionResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChallengeQuestionResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Question" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetChallengeQuestionXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChallengeQuestionRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetChallengeQuestionXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChallengeQuestionResponse" type="tns:ChallengeQuestionResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAccountStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AccountStatusRequest" type="tns:AccountStatusRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AccountStatusRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CertifiedIntermediary">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PassPhrase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAccountStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AccountStatusResponse" type="tns:AccountStatusResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AccountStatusResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediaryStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CertifiedIntermediaryStatus">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SerialNumber" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="AscendingBalance" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeviceID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAccountStatusXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AccountStatusRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAccountStatusXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AccountStatusResponse" type="tns:AccountStatusResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CalculatePostageRates">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRatesRequest" type="tns:PostageRatesRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PostageRatesRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailClass" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="WeightOz" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailpieceShape" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailpieceDimensions" type="tns:Dimensions" />
+              <s:element minOccurs="0" maxOccurs="1" name="Machinable" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Services" type="tns:SpecialServices" />
+              <s:element minOccurs="1" maxOccurs="1" name="CODAmount" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="InsuredValue" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="RegisteredMailValue" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountry" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" default="0" name="DateAdvance" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Extension" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Dimensions">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Length" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:double" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SpecialServices">
+        <s:attribute name="DeliveryConfirmation" type="s:string" />
+        <s:attribute name="MailClassOnly" type="s:string" />
+        <s:attribute name="CertifiedMail" type="s:string" />
+        <s:attribute name="COD" type="s:string" />
+        <s:attribute name="ElectronicReturnReceipt" type="s:string" />
+        <s:attribute name="InsuredMail" type="s:string" />
+        <s:attribute name="RegisteredMail" type="s:string" />
+        <s:attribute name="RestrictedDelivery" type="s:string" />
+        <s:attribute name="ReturnReceipt" type="s:string" />
+        <s:attribute name="SignatureConfirmation" type="s:string" />
+        <s:attribute name="HoldForPickup" type="s:string" />
+        <s:attribute name="MerchandiseReturnService" type="s:string" />
+        <s:attribute name="OpenAndDistribute" type="s:string" />
+        <s:attribute name="AdultSignature" type="s:string" />
+        <s:attribute name="AdultSignatureRestrictedDelivery" type="s:string" />
+      </s:complexType>
+      <s:element name="CalculatePostageRatesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRatesResponse" type="tns:PostageRatesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PostageRatesResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PostagePrice" type="tns:PostagePrice" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PostagePrice">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MailClass" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Postage" type="tns:Postage" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fees" type="tns:Fees" />
+        </s:sequence>
+        <s:attribute name="TotalAmount" type="s:decimal" use="required" />
+      </s:complexType>
+      <s:complexType name="Postage">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MailService" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Zone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IntraBMC" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Pricing" type="s:string" />
+        </s:sequence>
+        <s:attribute name="TotalAmount" type="s:decimal" use="required" />
+      </s:complexType>
+      <s:complexType name="Fees">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CertificateOfMailing" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="CertifiedMail" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="CollectOnDelivery" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="DeliveryConfirmation" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="ElectronicReturnReceipt" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="InsuredMail" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="RegisteredMail" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="RestrictedDelivery" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="ReturnReceipt" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="ReturnReceiptForMerchandise" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="SignatureConfirmation" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="SpecialHandling" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="CriticalMail" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="MerchandiseReturn" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="OpenAndDistribute" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="AdultSignature" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="AdultSignatureRestrictedDelivery" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="LiveAnimalSurcharge" type="s:decimal" />
+        </s:sequence>
+        <s:attribute name="TotalAmount" type="s:decimal" use="required" />
+      </s:complexType>
+      <s:element name="CalculatePostageRatesXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRatesRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CalculatePostageRatesXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRatesResponse" type="tns:PostageRatesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BuyPostage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecreditRequest" type="tns:RecreditRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RecreditRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+              <s:element minOccurs="0" maxOccurs="1" name="RecreditAmount" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="BuyPostageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecreditRequestResponse" type="tns:RecreditRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RecreditRequestResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediaryStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="BuyPostageXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecreditRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BuyPostageXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecreditRequestResponse" type="tns:RecreditRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPostageIndicium">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IndiciumRequest" type="tns:IndiciumRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="IndiciumRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SoftwareID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SoftwareVersion" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PassPhrase" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PicMailerID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ClientMailerID" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="DateAdvance" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailClass" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceType" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ServiceFee" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="Weight" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="Zone" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailpieceShape" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Dimensions" type="tns:Dimensions" />
+              <s:element minOccurs="1" maxOccurs="1" name="Machinable" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="SortType" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Postage" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="Fees" type="s:decimal" />
+              <s:element minOccurs="0" maxOccurs="1" name="Pricing" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PriceTier" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CertifiedMail" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="CertifiedMailFee" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="COD" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="CODFee" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="CODAmount" type="s:decimal" />
+              <s:element minOccurs="0" maxOccurs="1" name="InsuredMail" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="InsuredMailFee" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="InsuredValue" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="RegisteredMail" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="RegisteredMailFee" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="RegisteredMailValue" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="RestrictedDelivery" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="RestrictedDeliveryFee" type="s:decimal" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReturnReceipt" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ReturnReceiptFee" type="s:decimal" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceLevel" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="HoldForPickup" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpEmailAddress" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpSMS" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityAddress" type="tns:AddressInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityAddress1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityCity" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityState" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityZIP4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SundayHolidayDelivery" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="NoDeliverySaturday" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="WaiverOfSignature" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceClassV2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="DialAZipOptions" type="tns:DialAZipOptions" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromCompany" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromAddress1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromAddress2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromCity" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromState" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromZIP5" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromZIP4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromPhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromEMail" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EntryFacility" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="POZipCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCompany" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress3" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCity" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToState" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToDeliveryPoint" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountry" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToPhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToFax" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToEMail" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ToPOBox" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="DestinationFacility" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="originCountryField" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="contentsTypeField" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="contentsExplanationField" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="nonDeliveryOptionField" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PackageReference1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PackageReference2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PackageReference3" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CostCenter" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="SurchargeType" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="SurchargeAmount" type="s:decimal" />
+              <s:element minOccurs="0" maxOccurs="1" name="SurchargeDescription" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShipDate" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShipTime" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsInfo" type="tns:CustomsInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="customsCertify" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="customsSigner" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ComputeRDC" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="validationLevel" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="domesticMail" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="PackageTypeIndicator" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ValidateAddress" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="PrintConsolidatorLabel" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="DHLMailClass" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="DHLFacilityCode" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="IncludePostage" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="consoliatorAccountNumber" type="s:string" />
+            </s:sequence>
+            <s:attribute name="Test" type="s:boolean" use="required" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="AddressInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLines" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Company" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeliveryPoint" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EMail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZIP4" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DialAZipOptions">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="ValidateSenderAddress" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="ValidateRecipientAddress" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllowAPOFPOAddressNotFound" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllowStreetAddressNotMatch" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllowDefaultMatch" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CustomsInfo">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="ContentsType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ContentsExplanation" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RestrictionType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RestrictionComments" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SendersCustomsReference" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ImportersCustomsReference" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="LicenseNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CertificateNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="InvoiceNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="NonDeliveryOption" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="InsuredNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EelPfc" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsItems" type="tns:ArrayOfCustomsItem" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfCustomsItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CustomsItem" nillable="true" type="tns:CustomsItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CustomsItem">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="Weight" type="s:decimal" />
+              <s:element minOccurs="1" maxOccurs="1" name="Value" type="s:decimal" />
+              <s:element minOccurs="0" maxOccurs="1" name="HSTariffNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CountryOfOrigin" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="GetPostageIndiciumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IndiciumResponse" type="tns:IndiciumResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="IndiciumResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BarcodeDisplayNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BarcodeNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityAddress1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityZIP4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DHLInboundSortCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DHLOutboundSortCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DHLDestMailTerminal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DHLMailType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DHLITVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Indicium" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="TransactionAmount" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionDateTime" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="LabelNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LabelNumberType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LabelDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RecipientAddress" type="tns:ValidatedAddress" />
+          <s:element minOccurs="1" maxOccurs="1" name="SDRValue" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="RDC" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServerDateTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Banner" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ValidatedAddress">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ReturnCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Company" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZIP5" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Plus4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeliveryPoint" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CRT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RDI" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ValidationRequestHeader" type="tns:ValidationRequestHeader" />
+      <s:complexType name="ValidationRequestHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ValidClientCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ValidClientName" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="GetPostageIndiciumXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IndiciumRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPostageIndiciumXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IndiciumResponse" type="tns:IndiciumResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ResetSuspendedAccount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ResetSuspendedAccountRequest" type="tns:ResetSuspendedAccountRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ResetSuspendedAccountRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ChallengeAnswer" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="NewPassPhrase" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="ResetSuspendedAccountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ResetSuspendedAccountRequestResponse" type="tns:ResetSuspendedAccountRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ResetSuspendedAccountRequestResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ResetSuspendedAccountXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ResetSuspendedAccountRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ResetSuspendedAccountXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ResetSuspendedAccountRequestResponse" type="tns:ResetSuspendedAccountRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CalculatePostageRate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRateRequest" type="tns:PostageRateRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PostageRateRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CommonLabelRequestAndPostageRateRequest">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+              <s:element minOccurs="0" maxOccurs="1" name="AutomationRate" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Machinable" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceLevel" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SortType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Services" type="tns:SpecialServices" />
+              <s:element minOccurs="1" maxOccurs="1" name="Value" type="s:float" />
+              <s:element minOccurs="0" maxOccurs="1" default="0" name="CODAmount" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="InsuredValue" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" default="0" name="RegisteredMailValue" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="EntryFacility" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountry" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShipDate" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShipTime" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ResponseOptions" type="tns:ResponseOptions" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CommonLabelRequestAndPostageRateRequest" abstract="true">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="MailpieceShape" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailClass" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="WeightOz" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="PackageTypeIndicator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MailpieceDimensions" type="tns:Dimensions" />
+              <s:element minOccurs="0" maxOccurs="1" default="0" name="DateAdvance" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Pricing" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SundayHolidayDelivery" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="LiveAnimalSurcharge" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Extension" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ResponseOptions">
+        <s:attribute name="PostagePrice" type="s:string" />
+      </s:complexType>
+      <s:element name="CalculatePostageRateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRateResponse" type="tns:PostageRateResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PostageRateResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Zone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Postage" type="tns:PostageRate" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PostagePrice" type="tns:PostagePrice" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PostageRate">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MailService" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Rate" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CalculatePostageRateXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRateRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CalculatePostageRateXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostageRateResponse" type="tns:PostageRateResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVersion">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetVersionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVersionResults" type="tns:GetVersionResults" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GetVersionResults">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalSystem" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Version" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetVersionXML">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetVersionXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVersionResults" type="tns:GetVersionResults" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangePassPhrase">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangePassPhraseRequest" type="tns:ChangePassPhraseRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChangePassPhraseRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DataValidator">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CertifiedIntermediary" type="tns:CertifiedIntermediary" />
+              <s:element minOccurs="0" maxOccurs="1" name="NewPassPhrase" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="ChangePassPhraseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangePassPhraseRequestResponse" type="tns:ChangePassPhraseRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChangePassPhraseRequestResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ChangePassPhraseXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangePassPhraseRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangePassPhraseXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangePassPhraseRequestResponse" type="tns:ChangePassPhraseRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPostageLabel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LabelRequest" type="tns:LabelRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="LabelRequest">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CommonLabelRequestAndPostageRateRequest">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PassPhrase" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="AutomationRate" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Machinable" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServiceLevel" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SortType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="IncludePostage" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReplyPostage" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShowReturnAddress" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Stealth" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ValidateAddress" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="SignatureWaiver" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="NoWeekendDelivery" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Services" type="tns:SpecialServices" />
+              <s:element minOccurs="1" maxOccurs="1" name="CostCenter" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="Value" type="s:float" />
+              <s:element minOccurs="0" maxOccurs="1" default="0" name="CODAmount" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="InsuredValue" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" default="0" name="RegisteredMailValue" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="IntegratedFormType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsFormType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsFormImageFormat" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsFormImageResolution" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OriginCountry" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ContentsType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ContentsExplanation" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="NonDeliveryOption" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReferenceID2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReferenceID3" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReferenceID4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PartnerCustomerID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PartnerTransactionID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="BpodClientDunsNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RubberStamp1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RubberStamp2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RubberStamp3" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EntryFacility" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="POZipCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShipDate" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ShipTime" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsInfo" type="tns:CustomsInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsCertify" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsSigner" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpEmailAddress" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpSMS" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MRSPermitNo" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MRSPermitCityStateZIP" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MRSPermitFirm" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MRSPermitStreet" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MRSRMANumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OpenAndDistributeFacilityType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OpenAndDistributeFacilityName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OpenAndDistributeTray" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OpenAndDistributeMailClassEnclosed" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OpenAndDistributeMailClassOther" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="GXGFedexTrackingNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="GXGUSPSTrackingNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PrintConsolidatorLabel" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ResponseOptions" type="tns:ResponseOptions" />
+              <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EmailMiscNotes" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromCompany" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReturnAddress1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReturnAddress2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReturnAddress3" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ReturnAddress4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromCity" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromState" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromZIP4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromCountry" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromPhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FromEMail" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCompany" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress3" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToAddress4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCity" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToState" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToZIP4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToDeliveryPoint" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountry" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToCountryCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToPhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ToEMail" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsCountry1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsDescription1" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsQuantity1" type="s:unsignedInt" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsValue1" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsWeight1" type="s:unsignedInt" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsCountry2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsDescription2" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsQuantity2" type="s:unsignedInt" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsValue2" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsWeight2" type="s:unsignedInt" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsCountry3" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsDescription3" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsQuantity3" type="s:unsignedInt" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsValue3" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsWeight3" type="s:unsignedInt" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsCountry4" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsDescription4" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsQuantity4" type="s:unsignedInt" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsValue4" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsWeight4" type="s:unsignedInt" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsCountry5" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CustomsDescription5" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsQuantity5" type="s:unsignedInt" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsValue5" type="s:float" />
+              <s:element minOccurs="1" maxOccurs="1" name="CustomsWeight5" type="s:unsignedInt" />
+              <s:element minOccurs="0" maxOccurs="1" name="EelPfc" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityAddress1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityCity" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityState" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityPostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityZIP4" type="s:string" />
+            </s:sequence>
+            <s:attribute name="Test" type="s:string" />
+            <s:attribute name="LabelType" type="s:string" />
+            <s:attribute name="LabelSubtype" type="s:string" />
+            <s:attribute name="LabelSize" type="s:string" />
+            <s:attribute name="ImageFormat" type="s:string" />
+            <s:attribute name="ImageResolution" type="s:string" />
+            <s:attribute name="ImageRotation" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="GetPostageLabelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LabelRequestResponse" type="tns:LabelRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="LabelRequestResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Base64LabelImage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Label" type="tns:ImageSet" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomsForm" type="tns:ImageSet" />
+          <s:element minOccurs="0" maxOccurs="1" name="PIC" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomsNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="FinalPostage" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionDateTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostmarkDate" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CostCenter" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityAddress1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HfpFacilityZIP4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostagePrice" type="tns:PostagePrice" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequesterID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID4" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ImageSet">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Image" type="tns:ImageData" />
+        </s:sequence>
+        <s:attribute name="Name" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ImageData">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="PartNumber" type="s:int" use="required" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:element name="GetPostageLabelXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LabelRequestXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPostageLabelXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LabelRequestResponse" type="tns:LabelRequestResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChallengeQuestionResponse" nillable="true" type="tns:ChallengeQuestionResponse" />
+      <s:element name="AccountStatusResponse" nillable="true" type="tns:AccountStatusResponse" />
+      <s:element name="PostageRatesResponse" nillable="true" type="tns:PostageRatesResponse" />
+      <s:element name="RecreditRequestResponse" nillable="true" type="tns:RecreditRequestResponse" />
+      <s:element name="IndiciumResponse" nillable="true" type="tns:IndiciumResponse" />
+      <s:element name="ResetSuspendedAccountRequestResponse" nillable="true" type="tns:ResetSuspendedAccountRequestResponse" />
+      <s:element name="PostageRateResponse" nillable="true" type="tns:PostageRateResponse" />
+      <s:element name="GetVersionResults" nillable="true" type="tns:GetVersionResults" />
+      <s:element name="ChangePassPhraseRequestResponse" nillable="true" type="tns:ChangePassPhraseRequestResponse" />
+      <s:element name="LabelRequestResponse" nillable="true" type="tns:LabelRequestResponse" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetChallengeQuestionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetChallengeQuestion" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetChallengeQuestionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetChallengeQuestionXML" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetChallengeQuestionXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAccountStatus" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAccountStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAccountStatusXML" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAccountStatusXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesSoapIn">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRates" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesSoapOut">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRatesXML" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRatesXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageSoapIn">
+    <wsdl:part name="parameters" element="tns:BuyPostage" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageSoapOut">
+    <wsdl:part name="parameters" element="tns:BuyPostageResponse" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:BuyPostageXML" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:BuyPostageXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPostageIndicium" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPostageIndiciumResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumValidationRequestHeader">
+    <wsdl:part name="ValidationRequestHeader" element="tns:ValidationRequestHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPostageIndiciumXML" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPostageIndiciumXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLValidationRequestHeader">
+    <wsdl:part name="ValidationRequestHeader" element="tns:ValidationRequestHeader" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountSoapIn">
+    <wsdl:part name="parameters" element="tns:ResetSuspendedAccount" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountSoapOut">
+    <wsdl:part name="parameters" element="tns:ResetSuspendedAccountResponse" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:ResetSuspendedAccountXML" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:ResetSuspendedAccountXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateSoapIn">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRate" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateSoapOut">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRateResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRateXML" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRateXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVersion" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVersionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVersionXML" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVersionXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangePassPhrase" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangePassPhraseResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangePassPhraseXML" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangePassPhraseXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPostageLabel" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPostageLabelResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPostageLabelXML" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPostageLabelXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionXMLHttpGetIn">
+    <wsdl:part name="ChallengeQuestionRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:ChallengeQuestionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusXMLHttpGetIn">
+    <wsdl:part name="accountStatusRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:AccountStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesXMLHttpGetIn">
+    <wsdl:part name="postageRatesRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:PostageRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageXMLHttpGetIn">
+    <wsdl:part name="recreditRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecreditRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLHttpGetIn">
+    <wsdl:part name="indiciumRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:IndiciumResponse" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountXMLHttpGetIn">
+    <wsdl:part name="resetSuspendedAccountRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:ResetSuspendedAccountRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateXMLHttpGetIn">
+    <wsdl:part name="postageRateRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:PostageRateResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionHttpGetIn" />
+  <wsdl:message name="GetVersionHttpGetOut">
+    <wsdl:part name="Body" element="tns:GetVersionResults" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionXMLHttpGetIn" />
+  <wsdl:message name="GetVersionXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:GetVersionResults" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseXMLHttpGetIn">
+    <wsdl:part name="changePassPhraseRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:ChangePassPhraseRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelXMLHttpGetIn">
+    <wsdl:part name="labelRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:LabelRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionXMLHttpPostIn">
+    <wsdl:part name="ChallengeQuestionRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeQuestionXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:ChallengeQuestionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusXMLHttpPostIn">
+    <wsdl:part name="accountStatusRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountStatusXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:AccountStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesXMLHttpPostIn">
+    <wsdl:part name="postageRatesRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRatesXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:PostageRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageXMLHttpPostIn">
+    <wsdl:part name="recreditRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="BuyPostageXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecreditRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLHttpPostIn">
+    <wsdl:part name="indiciumRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageIndiciumXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:IndiciumResponse" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountXMLHttpPostIn">
+    <wsdl:part name="resetSuspendedAccountRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ResetSuspendedAccountXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:ResetSuspendedAccountRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateXMLHttpPostIn">
+    <wsdl:part name="postageRateRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CalculatePostageRateXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:PostageRateResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionHttpPostIn" />
+  <wsdl:message name="GetVersionHttpPostOut">
+    <wsdl:part name="Body" element="tns:GetVersionResults" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionXMLHttpPostIn" />
+  <wsdl:message name="GetVersionXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:GetVersionResults" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseXMLHttpPostIn">
+    <wsdl:part name="changePassPhraseRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ChangePassPhraseXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:ChangePassPhraseRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelXMLHttpPostIn">
+    <wsdl:part name="labelRequestXML" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPostageLabelXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:LabelRequestResponse" />
+  </wsdl:message>
+  <wsdl:portType name="EwsLabelServiceSoap">
+    <wsdl:operation name="GetChallengeQuestion">
+      <wsdl:input message="tns:GetChallengeQuestionSoapIn" />
+      <wsdl:output message="tns:GetChallengeQuestionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <wsdl:input message="tns:GetChallengeQuestionXMLSoapIn" />
+      <wsdl:output message="tns:GetChallengeQuestionXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatus">
+      <wsdl:input message="tns:GetAccountStatusSoapIn" />
+      <wsdl:output message="tns:GetAccountStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <wsdl:input message="tns:GetAccountStatusXMLSoapIn" />
+      <wsdl:output message="tns:GetAccountStatusXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRates">
+      <wsdl:input message="tns:CalculatePostageRatesSoapIn" />
+      <wsdl:output message="tns:CalculatePostageRatesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <wsdl:input message="tns:CalculatePostageRatesXMLSoapIn" />
+      <wsdl:output message="tns:CalculatePostageRatesXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostage">
+      <wsdl:input message="tns:BuyPostageSoapIn" />
+      <wsdl:output message="tns:BuyPostageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <wsdl:input message="tns:BuyPostageXMLSoapIn" />
+      <wsdl:output message="tns:BuyPostageXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndicium">
+      <wsdl:input message="tns:GetPostageIndiciumSoapIn" />
+      <wsdl:output message="tns:GetPostageIndiciumSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <wsdl:input message="tns:GetPostageIndiciumXMLSoapIn" />
+      <wsdl:output message="tns:GetPostageIndiciumXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccount">
+      <wsdl:input message="tns:ResetSuspendedAccountSoapIn" />
+      <wsdl:output message="tns:ResetSuspendedAccountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <wsdl:input message="tns:ResetSuspendedAccountXMLSoapIn" />
+      <wsdl:output message="tns:ResetSuspendedAccountXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRate">
+      <wsdl:input message="tns:CalculatePostageRateSoapIn" />
+      <wsdl:output message="tns:CalculatePostageRateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <wsdl:input message="tns:CalculatePostageRateXMLSoapIn" />
+      <wsdl:output message="tns:CalculatePostageRateXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <wsdl:input message="tns:GetVersionSoapIn" />
+      <wsdl:output message="tns:GetVersionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <wsdl:input message="tns:GetVersionXMLSoapIn" />
+      <wsdl:output message="tns:GetVersionXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhrase">
+      <wsdl:input message="tns:ChangePassPhraseSoapIn" />
+      <wsdl:output message="tns:ChangePassPhraseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <wsdl:input message="tns:ChangePassPhraseXMLSoapIn" />
+      <wsdl:output message="tns:ChangePassPhraseXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabel">
+      <wsdl:input message="tns:GetPostageLabelSoapIn" />
+      <wsdl:output message="tns:GetPostageLabelSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <wsdl:input message="tns:GetPostageLabelXMLSoapIn" />
+      <wsdl:output message="tns:GetPostageLabelXMLSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="EwsLabelServiceHttpGet">
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <wsdl:input message="tns:GetChallengeQuestionXMLHttpGetIn" />
+      <wsdl:output message="tns:GetChallengeQuestionXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <wsdl:input message="tns:GetAccountStatusXMLHttpGetIn" />
+      <wsdl:output message="tns:GetAccountStatusXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <wsdl:input message="tns:CalculatePostageRatesXMLHttpGetIn" />
+      <wsdl:output message="tns:CalculatePostageRatesXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <wsdl:input message="tns:BuyPostageXMLHttpGetIn" />
+      <wsdl:output message="tns:BuyPostageXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <wsdl:input message="tns:GetPostageIndiciumXMLHttpGetIn" />
+      <wsdl:output message="tns:GetPostageIndiciumXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <wsdl:input message="tns:ResetSuspendedAccountXMLHttpGetIn" />
+      <wsdl:output message="tns:ResetSuspendedAccountXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <wsdl:input message="tns:CalculatePostageRateXMLHttpGetIn" />
+      <wsdl:output message="tns:CalculatePostageRateXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <wsdl:input message="tns:GetVersionHttpGetIn" />
+      <wsdl:output message="tns:GetVersionHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <wsdl:input message="tns:GetVersionXMLHttpGetIn" />
+      <wsdl:output message="tns:GetVersionXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <wsdl:input message="tns:ChangePassPhraseXMLHttpGetIn" />
+      <wsdl:output message="tns:ChangePassPhraseXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <wsdl:input message="tns:GetPostageLabelXMLHttpGetIn" />
+      <wsdl:output message="tns:GetPostageLabelXMLHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="EwsLabelServiceHttpPost">
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <wsdl:input message="tns:GetChallengeQuestionXMLHttpPostIn" />
+      <wsdl:output message="tns:GetChallengeQuestionXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <wsdl:input message="tns:GetAccountStatusXMLHttpPostIn" />
+      <wsdl:output message="tns:GetAccountStatusXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <wsdl:input message="tns:CalculatePostageRatesXMLHttpPostIn" />
+      <wsdl:output message="tns:CalculatePostageRatesXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <wsdl:input message="tns:BuyPostageXMLHttpPostIn" />
+      <wsdl:output message="tns:BuyPostageXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <wsdl:input message="tns:GetPostageIndiciumXMLHttpPostIn" />
+      <wsdl:output message="tns:GetPostageIndiciumXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <wsdl:input message="tns:ResetSuspendedAccountXMLHttpPostIn" />
+      <wsdl:output message="tns:ResetSuspendedAccountXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <wsdl:input message="tns:CalculatePostageRateXMLHttpPostIn" />
+      <wsdl:output message="tns:CalculatePostageRateXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <wsdl:input message="tns:GetVersionHttpPostIn" />
+      <wsdl:output message="tns:GetVersionHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <wsdl:input message="tns:GetVersionXMLHttpPostIn" />
+      <wsdl:output message="tns:GetVersionXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <wsdl:input message="tns:ChangePassPhraseXMLHttpPostIn" />
+      <wsdl:output message="tns:ChangePassPhraseXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <wsdl:input message="tns:GetPostageLabelXMLHttpPostIn" />
+      <wsdl:output message="tns:GetPostageLabelXMLHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EwsLabelServiceSoap" type="tns:EwsLabelServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetChallengeQuestion">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetChallengeQuestion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetChallengeQuestionXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatus">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetAccountStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetAccountStatusXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRates">
+      <soap:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRatesXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostage">
+      <soap:operation soapAction="www.envmgr.com/LabelService/BuyPostage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/BuyPostageXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndicium">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetPostageIndicium" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetPostageIndiciumValidationRequestHeader" part="ValidationRequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetPostageIndiciumXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetPostageIndiciumXMLValidationRequestHeader" part="ValidationRequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccount">
+      <soap:operation soapAction="www.envmgr.com/LabelService/ResetSuspendedAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/ResetSuspendedAccountXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRate">
+      <soap:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRateXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetVersion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetVersionXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhrase">
+      <soap:operation soapAction="www.envmgr.com/LabelService/ChangePassPhrase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/ChangePassPhraseXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabel">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetPostageLabel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <soap:operation soapAction="www.envmgr.com/LabelService/GetPostageLabelXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EwsLabelServiceSoap12" type="tns:EwsLabelServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetChallengeQuestion">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetChallengeQuestion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetChallengeQuestionXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatus">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetAccountStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetAccountStatusXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRates">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRatesXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostage">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/BuyPostage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/BuyPostageXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndicium">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetPostageIndicium" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetPostageIndiciumValidationRequestHeader" part="ValidationRequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetPostageIndiciumXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetPostageIndiciumXMLValidationRequestHeader" part="ValidationRequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccount">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/ResetSuspendedAccount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/ResetSuspendedAccountXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRate">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/CalculatePostageRateXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetVersion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetVersionXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhrase">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/ChangePassPhrase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/ChangePassPhraseXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabel">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetPostageLabel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <soap12:operation soapAction="www.envmgr.com/LabelService/GetPostageLabelXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EwsLabelServiceHttpGet" type="tns:EwsLabelServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <http:operation location="/GetChallengeQuestionXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <http:operation location="/GetAccountStatusXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <http:operation location="/CalculatePostageRatesXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <http:operation location="/BuyPostageXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <http:operation location="/GetPostageIndiciumXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <http:operation location="/ResetSuspendedAccountXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <http:operation location="/CalculatePostageRateXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <http:operation location="/GetVersion" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <http:operation location="/GetVersionXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <http:operation location="/ChangePassPhraseXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <http:operation location="/GetPostageLabelXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EwsLabelServiceHttpPost" type="tns:EwsLabelServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetChallengeQuestionXML">
+      <http:operation location="/GetChallengeQuestionXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatusXML">
+      <http:operation location="/GetAccountStatusXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRatesXML">
+      <http:operation location="/CalculatePostageRatesXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostageXML">
+      <http:operation location="/BuyPostageXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageIndiciumXML">
+      <http:operation location="/GetPostageIndiciumXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResetSuspendedAccountXML">
+      <http:operation location="/ResetSuspendedAccountXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRateXML">
+      <http:operation location="/CalculatePostageRateXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersion">
+      <http:operation location="/GetVersion" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionXML">
+      <http:operation location="/GetVersionXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhraseXML">
+      <http:operation location="/ChangePassPhraseXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPostageLabelXML">
+      <http:operation location="/GetPostageLabelXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EwsLabelService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">You have reached the Help page for the Label Server Web Service.</wsdl:documentation>
+    <wsdl:port name="EwsLabelServiceSoap" binding="tns:EwsLabelServiceSoap">
+      <soap:address location="https://labelserver.endicia.com/LabelService/EwsLabelService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="EwsLabelServiceSoap12" binding="tns:EwsLabelServiceSoap12">
+      <soap12:address location="https://labelserver.endicia.com/LabelService/EwsLabelService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="EwsLabelServiceHttpGet" binding="tns:EwsLabelServiceHttpGet">
+      <http:address location="https://labelserver.endicia.com/LabelService/EwsLabelService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="EwsLabelServiceHttpPost" binding="tns:EwsLabelServiceHttpPost">
+      <http:address location="https://labelserver.endicia.com/LabelService/EwsLabelService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

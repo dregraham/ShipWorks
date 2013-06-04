@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright © 2001 World Wide Web Consortium, (Massachusetts Institute of
+    Technology, European Research Consortium for Informatics and Mathematics,
+    Keio University). All Rights Reserved. This work is distributed under
+    the W3C® Software License [1].
+
+    [1] http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
+
+    Portions © 2004-2005 Microsoft Corporation.  All rights reserved.
+    This file was derived from http://www.w3.org/TR/xslt#dtd.
+-->
+<xs:schema targetNamespace="http://www.w3.org/1999/XSL/Transform"
+           xmlns="http://www.w3.org/1999/XSL/Transform"
+           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+  
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+
+  <xs:element name="stylesheet" type="TransformType" />
+  <xs:element name="transform" type="TransformType" />
+
+  <xs:complexType name="TransformType">
+    <xs:sequence>
+      <xs:group ref="TransformChildElementGroup"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="TransformChildAttributeGroup"/>
+  </xs:complexType>
+
+  <xs:group name="TransformChildElementGroup">
+    <xs:sequence>
+      <xs:element name="import" type="ImportType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="include" type="IncludeType"/>
+        <xs:element name="strip-space" type="StripSpaceType"/>
+        <xs:element name="preserve-space" type="PreserveSpaceType"/>
+        <xs:element name="key" type="KeyType"/>
+        <xs:element name="decimal-format" type="DecimalFormatType"/>
+        <xs:element name="namespace-alias" type="NamespaceAliasType"/>
+        <xs:element name="output" type="OutputType"/>
+        <xs:element name="attribute-set" type="AttributeSetType"/>
+        <xs:element name="variable" type="VariableType"/>
+        <xs:element name="param" type="ParamType"/>
+        <xs:element name="template" type="TemplateType"/>
+        <xs:any namespace="##other" processContents="lax"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="TransformChildAttributeGroup">
+    <xs:attribute name="exclude-result-prefixes" type="xs:string" />
+    <xs:attribute name="extension-element-prefixes" type="xs:string" />
+    <xs:attribute name="id" type="xs:ID" />
+    <xs:attribute name="version" type="xs:NMTOKEN" use="required" />
+    <xs:attribute ref="xml:space" />
+  </xs:attributeGroup>
+
+  <xs:complexType name="TemplateType" mixed="true">
+    <xs:sequence>
+      <xs:element name="param" type="ParamType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="InstructionsType" />
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="match" type="xs:string" />
+    <xs:attribute name="mode" type="xs:NMTOKEN" />
+    <xs:attribute name="name" type="xs:NMTOKEN" />
+    <xs:attribute name="priority" type="xs:NMTOKEN" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+
+  <xs:complexType name="ParamType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+    <xs:attribute name="select" type="xs:string" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+
+  <xs:group name="InstructionsType">
+    <xs:choice>
+      <xs:group ref="CharInstructionsType"/>
+      <xs:element name="processing-instruction" type="ProcessingInstructionType"/>
+      <xs:element name="comment" type="CommentType"/>
+      <xs:element name="element" type="ElementType"/>
+      <xs:element name="attribute" type="AttributeType"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="CharInstructionsType">
+    <xs:choice>
+      <xs:element name="apply-templates" type="ApplyTemplatesType"/>
+      <xs:element name="call-template" type="CallTemplateType"/>
+      <xs:element name="apply-imports" type="ApplyImportsType"/>
+      <xs:element name="for-each" type="ForEachType"/>
+      <xs:element name="value-of" type="ValueOfType"/>
+      <xs:element name="copy-of" type="CopyOfType"/>
+      <xs:element name="number" type="NumberType"/>
+      <xs:element name="choose" type="ChooseType"/>
+      <xs:element name="if" type="IfType"/>
+      <xs:element name="text" type="TextType"/>
+      <xs:element name="copy" type="CopyType"/>
+      <xs:element name="variable" type="VariableType"/>
+      <xs:element name="message" type="MessageType"/>
+      <xs:element name="fallback" type="FallbackType"/>
+      <xs:any namespace="##other" processContents="lax"/>
+      <xs:any namespace="##local" processContents="lax"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:complexType name="CommentType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="CharInstructionsType"/>
+    </xs:choice>
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+
+  <xs:complexType name="ElementType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="namespace" type="xs:string" />
+    <xs:attribute name="use-attribute-sets" type="xs:NMTOKENS" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="AttributeType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="CharInstructionsType"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="namespace" type="xs:string" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="AttributeSetType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="attribute" type="AttributeType" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+    <xs:attribute name="use-attribute-sets" type="xs:NMTOKENS" />
+  </xs:complexType>
+  
+  <xs:complexType name="ApplyImportsType"/>
+  
+  <xs:complexType name="ApplyTemplatesType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="sort" type="SortType" />
+      <xs:element name="with-param" type="WithParamType" />
+    </xs:choice>
+    <xs:attribute name="mode" type="xs:NMTOKEN" />
+    <xs:attribute name="select" type="xs:string" default="node()" />
+  </xs:complexType>
+  
+  <xs:complexType name="CallTemplateType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="with-param" type="WithParamType" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType name="ChooseType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="when" type="WhenType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="otherwise" type="OtherwiseType" />
+    </xs:sequence>
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="CopyType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="use-attribute-sets" type="xs:NMTOKENS" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="CopyOfType">
+    <xs:attribute name="select" type="xs:string" use="required" />
+  </xs:complexType>
+      
+  <xs:complexType name="FallbackType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="ForEachType" mixed="true">
+    <xs:sequence>
+      <xs:element name="sort" type="SortType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="InstructionsType" />
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="select" type="xs:string" use="required" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="IfType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="test" type="xs:string" use="required" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+    
+  <xs:complexType name="MessageType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="terminate" default="no" >
+      <xs:simpleType>
+        <xs:restriction base="xs:NMTOKEN">
+          <xs:enumeration value="yes" />
+          <xs:enumeration value="no" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+    
+  <xs:complexType name="NumberType">
+    <xs:attribute name="count" type="xs:string" />
+    <xs:attribute default="1" name="format" type="xs:string" />
+    <xs:attribute name="from" type="xs:string" />
+    <xs:attribute name="grouping-separator" type="xs:string" />
+    <xs:attribute name="grouping-size" type="xs:string" />
+    <xs:attribute name="lang" type="xs:string" />
+    <xs:attribute name="letter-value" type="xs:string" />
+    <xs:attribute default="single" name="level">
+      <xs:simpleType>
+        <xs:restriction base="xs:NMTOKEN">
+          <xs:enumeration value="single" />
+          <xs:enumeration value="multiple" />
+          <xs:enumeration value="any" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" type="xs:string" />
+  </xs:complexType>
+  
+  <xs:complexType name="OtherwiseType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+      
+  <xs:complexType name="ProcessingInstructionType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="CharInstructionsType"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="SortType">
+    <xs:attribute name="select" type="xs:string" default="." />
+    <xs:attribute name="lang" type="xs:NMTOKEN" />
+    <xs:attribute name="data-type" default="text">
+      <xs:simpleType>
+        <xs:union>
+          <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+              <xs:enumeration value="text" />
+              <xs:enumeration value="number" />
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:string"/>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="order" default="ascending">
+      <xs:simpleType>
+        <xs:union>
+          <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+              <xs:enumeration value="ascending" />
+              <xs:enumeration value="descending" />
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:string"/>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="case-order">
+      <xs:simpleType>
+        <xs:union>
+          <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+              <xs:enumeration value="lower-first" />
+              <xs:enumeration value="upper-first" />
+            </xs:restriction>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:string"/>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+    
+  <xs:complexType name="TextType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute default="no" name="disable-output-escaping">
+          <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+              <xs:enumeration value="yes" />
+              <xs:enumeration value="no" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute ref="xml:space" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+    
+  <xs:complexType name="ValueOfType">
+    <xs:attribute name="disable-output-escaping" default="no">
+      <xs:simpleType>
+        <xs:restriction base="xs:NMTOKEN">
+          <xs:enumeration value="yes" />
+          <xs:enumeration value="no" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="select" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType name="VariableType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+    <xs:attribute name="select" type="xs:string" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="WhenType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="test" type="xs:string" use="required" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+  
+  <xs:complexType name="WithParamType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="InstructionsType" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+    <xs:attribute name="select" type="xs:string" />
+    <xs:attribute ref="xml:space" />
+  </xs:complexType>
+
+  <!--
+     Attribute only content, mostly stuff used by just Transform
+  -->
+  
+  <xs:complexType name="ImportType">
+    <xs:attribute name="href" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="IncludeType">
+    <xs:attribute name="href" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="StripSpaceType">
+    <xs:attribute name="elements" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="PreserveSpaceType">
+    <xs:attribute name="elements" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="KeyType">
+    <xs:attribute name="match" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+    <xs:attribute name="use" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="DecimalFormatType">
+    <xs:attribute default="." name="decimal-separator" type="xs:string" />
+    <xs:attribute default="#" name="digit" type="xs:string" />
+    <xs:attribute default="," name="grouping-separator" type="xs:string" />
+    <xs:attribute default="Infinity" name="infinity" type="xs:string" />
+    <xs:attribute default="-" name="minus-sign" type="xs:string" />
+    <xs:attribute name="name" type="xs:NMTOKEN" />
+    <xs:attribute default="NaN" name="NaN" type="xs:string" />
+    <xs:attribute default=";" name="pattern-separator" type="xs:string" />
+    <xs:attribute default="%" name="percent" type="xs:string" />
+    <xs:attribute default="&#x2030;" name="per-mille" type="xs:string" />
+    <xs:attribute default="0" name="zero-digit" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="NamespaceAliasType">
+    <xs:attribute name="result-prefix" type="xs:string" use="required" />
+    <xs:attribute name="stylesheet-prefix" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="OutputType">
+    <xs:attribute name="cdata-section-elements" type="xs:NMTOKENS" />
+    <xs:attribute name="doctype-public" type="xs:string" />
+    <xs:attribute name="doctype-system" type="xs:string" />
+    <xs:attribute name="encoding" type="EncodingType" />
+    <xs:attribute name="indent">
+      <xs:simpleType>
+        <xs:restriction base="xs:NMTOKEN">
+          <xs:enumeration value="yes" />
+          <xs:enumeration value="no" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="media-type" type="xs:string" />
+    <xs:attribute name="method">
+      <xs:simpleType>
+        <xs:union>
+          <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN"/>
+          </xs:simpleType>
+          <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+              <xs:enumeration value="html" />
+              <xs:enumeration value="text" />
+              <xs:enumeration value="xml" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="omit-xml-declaration">
+      <xs:simpleType>
+        <xs:restriction base="xs:NMTOKEN">
+          <xs:enumeration value="yes" />
+          <xs:enumeration value="no" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="standalone">
+      <xs:simpleType>
+        <xs:restriction base="xs:NMTOKEN">
+          <xs:enumeration value="yes" />
+          <xs:enumeration value="no" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:NMTOKEN" />
+  </xs:complexType>
+
+  <xs:simpleType name="EncodingType" >
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+
+  <!-- 
+    global attributes for literal result elements 
+    -->
+  
+  <xs:attribute name="exclude-result-prefixes" type="xs:string" />
+  <xs:attribute name="extension-element-prefixes" type="xs:string" />
+  <xs:attribute name="use-attribute-sets" type="xs:NMTOKENS" />
+  <xs:attribute name="version" type="xs:string" />
+  
+</xs:schema>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.express1.com/2010/06" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EwsLabelService" targetNamespace="http://www.express1.com/2010/06" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.express1.com/2010/06/Imports">
+      <xsd:import schemaLocation="http://www.express1dev.com/Services/EwsLabelService.svc?xsd=xsd0" namespace="http://www.express1.com/2010/06" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IEwsLabelService_GetPostageLabel_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPostageLabel" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_GetPostageLabel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPostageLabelResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_BuyPostage_InputMessage">
+    <wsdl:part name="parameters" element="tns:BuyPostage" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_BuyPostage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BuyPostageResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_ChangePassPhrase_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePassPhrase" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_ChangePassPhrase_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePassPhraseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_CalculatePostageRate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRate" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_CalculatePostageRate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_CalculatePostageRates_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRates" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_CalculatePostageRates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculatePostageRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_GetAccountStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAccountStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_GetAccountStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAccountStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_RefundRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:RefundRequest" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_RefundRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RefundRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_SCANRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SCANRequest" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_SCANRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SCANRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_StatusRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:StatusRequest" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_StatusRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StatusRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_CarrierPickupRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:CarrierPickupRequest" />
+  </wsdl:message>
+  <wsdl:message name="IEwsLabelService_CarrierPickupRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CarrierPickupRequestResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IEwsLabelService">
+    <wsdl:operation name="GetPostageLabel">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/GetPostageLabel" message="tns:IEwsLabelService_GetPostageLabel_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/GetPostageLabelResponse" message="tns:IEwsLabelService_GetPostageLabel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostage">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/BuyPostage" message="tns:IEwsLabelService_BuyPostage_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/BuyPostageResponse" message="tns:IEwsLabelService_BuyPostage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhrase">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/ChangePassPhrase" message="tns:IEwsLabelService_ChangePassPhrase_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/ChangePassPhraseResponse" message="tns:IEwsLabelService_ChangePassPhrase_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRate">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/CalculatePostageRate" message="tns:IEwsLabelService_CalculatePostageRate_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/CalculatePostageRateResponse" message="tns:IEwsLabelService_CalculatePostageRate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRates">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/CalculatePostageRates" message="tns:IEwsLabelService_CalculatePostageRates_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/CalculatePostageRatesResponse" message="tns:IEwsLabelService_CalculatePostageRates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatus">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/GetAccountStatus" message="tns:IEwsLabelService_GetAccountStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/GetAccountStatusResponse" message="tns:IEwsLabelService_GetAccountStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundRequest">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/RefundRequest" message="tns:IEwsLabelService_RefundRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/RefundRequestResponse" message="tns:IEwsLabelService_RefundRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SCANRequest">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/SCANRequest" message="tns:IEwsLabelService_SCANRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/SCANRequestResponse" message="tns:IEwsLabelService_SCANRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StatusRequest">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/StatusRequest" message="tns:IEwsLabelService_StatusRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/StatusRequestResponse" message="tns:IEwsLabelService_StatusRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CarrierPickupRequest">
+      <wsdl:input wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/CarrierPickupRequest" message="tns:IEwsLabelService_CarrierPickupRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2010/06/IEwsLabelService/CarrierPickupRequestResponse" message="tns:IEwsLabelService_CarrierPickupRequest_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IEwsLabelService" type="tns:IEwsLabelService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPostageLabel">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/GetPostageLabel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuyPostage">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/BuyPostage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassPhrase">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/ChangePassPhrase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRate">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/CalculatePostageRate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculatePostageRates">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/CalculatePostageRates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountStatus">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/GetAccountStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundRequest">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/RefundRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SCANRequest">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/SCANRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StatusRequest">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/StatusRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CarrierPickupRequest">
+      <soap:operation soapAction="http://www.express1.com/2010/06/IEwsLabelService/CarrierPickupRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EwsLabelService">
+    <wsdl:port name="BasicHttpBinding_IEwsLabelService" binding="tns:BasicHttpBinding_IEwsLabelService">
+      <soap:address location="http://www.express1dev.com/Services/EwsLabelService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

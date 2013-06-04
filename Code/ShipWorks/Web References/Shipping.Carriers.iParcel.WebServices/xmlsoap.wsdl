@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.i-parcel.com/soap/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.i-parcel.com/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.i-parcel.com/soap/">
+      <s:element name="UploadXMLFileString">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="requestFor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlFile" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadXMLFileStringResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UploadXMLFileStringResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadXMLFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="requestFor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlFile" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadXMLFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UploadXMLFileResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="DataSet" nillable="true">
+        <s:complexType>
+          <s:sequence>
+            <s:element ref="s:schema" />
+            <s:any />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="UploadXMLFileStringSoapIn">
+    <wsdl:part name="parameters" element="tns:UploadXMLFileString" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileStringSoapOut">
+    <wsdl:part name="parameters" element="tns:UploadXMLFileStringResponse" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileSoapIn">
+    <wsdl:part name="parameters" element="tns:UploadXMLFile" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileSoapOut">
+    <wsdl:part name="parameters" element="tns:UploadXMLFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileStringHttpGetIn">
+    <wsdl:part name="requestFor" type="s:string" />
+    <wsdl:part name="xmlFile" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileStringHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileHttpGetIn">
+    <wsdl:part name="requestFor" type="s:string" />
+    <wsdl:part name="xmlFile" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileStringHttpPostIn">
+    <wsdl:part name="requestFor" type="s:string" />
+    <wsdl:part name="xmlFile" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileStringHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileHttpPostIn">
+    <wsdl:part name="requestFor" type="s:string" />
+    <wsdl:part name="xmlFile" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UploadXMLFileHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:portType name="XMLSOAPSoap">
+    <wsdl:operation name="UploadXMLFileString">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Accepts XML file based on REST requirements and returns an XML file also based on the REST specifications  --requestFor should be one of the following (SubmitPack, RequestCredit, RequestCreditStatus, PackageContents, RemoveSKU, RemoveSKUPackage, RequestReturn, BannedSKU, VerifySKU, Geocode, PaymentMethods, Exchange, DutyTaxRequest, RequestReceived, RequestClockStop, RequestClockStopRange) --xmlFile should be a string of the XML</wsdl:documentation>
+      <wsdl:input message="tns:UploadXMLFileStringSoapIn" />
+      <wsdl:output message="tns:UploadXMLFileStringSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Accepts XML file based on REST requirements and returns an XML file also based on the REST specifications  --requestFor should be one of the following (SubmitPack, RequestCredit, RequestCreditStatus, PackageContents, RemoveSKU, RemoveSKUPackage, RequestReturn, BannedSKU, VerifySKU, Geocode, PaymentMethods, Exchange, DutyTaxRequest, RequestReceived, RequestClockStop, RequestClockStopRange) --xmlFile should be a string of the XML</wsdl:documentation>
+      <wsdl:input message="tns:UploadXMLFileSoapIn" />
+      <wsdl:output message="tns:UploadXMLFileSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="XMLSOAPHttpGet">
+    <wsdl:operation name="UploadXMLFileString">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Accepts XML file based on REST requirements and returns an XML file also based on the REST specifications  --requestFor should be one of the following (SubmitPack, RequestCredit, RequestCreditStatus, PackageContents, RemoveSKU, RemoveSKUPackage, RequestReturn, BannedSKU, VerifySKU, Geocode, PaymentMethods, Exchange, DutyTaxRequest, RequestReceived, RequestClockStop, RequestClockStopRange) --xmlFile should be a string of the XML</wsdl:documentation>
+      <wsdl:input message="tns:UploadXMLFileStringHttpGetIn" />
+      <wsdl:output message="tns:UploadXMLFileStringHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Accepts XML file based on REST requirements and returns an XML file also based on the REST specifications  --requestFor should be one of the following (SubmitPack, RequestCredit, RequestCreditStatus, PackageContents, RemoveSKU, RemoveSKUPackage, RequestReturn, BannedSKU, VerifySKU, Geocode, PaymentMethods, Exchange, DutyTaxRequest, RequestReceived, RequestClockStop, RequestClockStopRange) --xmlFile should be a string of the XML</wsdl:documentation>
+      <wsdl:input message="tns:UploadXMLFileHttpGetIn" />
+      <wsdl:output message="tns:UploadXMLFileHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="XMLSOAPHttpPost">
+    <wsdl:operation name="UploadXMLFileString">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Accepts XML file based on REST requirements and returns an XML file also based on the REST specifications  --requestFor should be one of the following (SubmitPack, RequestCredit, RequestCreditStatus, PackageContents, RemoveSKU, RemoveSKUPackage, RequestReturn, BannedSKU, VerifySKU, Geocode, PaymentMethods, Exchange, DutyTaxRequest, RequestReceived, RequestClockStop, RequestClockStopRange) --xmlFile should be a string of the XML</wsdl:documentation>
+      <wsdl:input message="tns:UploadXMLFileStringHttpPostIn" />
+      <wsdl:output message="tns:UploadXMLFileStringHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Accepts XML file based on REST requirements and returns an XML file also based on the REST specifications  --requestFor should be one of the following (SubmitPack, RequestCredit, RequestCreditStatus, PackageContents, RemoveSKU, RemoveSKUPackage, RequestReturn, BannedSKU, VerifySKU, Geocode, PaymentMethods, Exchange, DutyTaxRequest, RequestReceived, RequestClockStop, RequestClockStopRange) --xmlFile should be a string of the XML</wsdl:documentation>
+      <wsdl:input message="tns:UploadXMLFileHttpPostIn" />
+      <wsdl:output message="tns:UploadXMLFileHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="XMLSOAPSoap" type="tns:XMLSOAPSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="UploadXMLFileString">
+      <soap:operation soapAction="http://www.i-parcel.com/soap/UploadXMLFileString" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <soap:operation soapAction="http://www.i-parcel.com/soap/UploadXMLFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="XMLSOAPSoap12" type="tns:XMLSOAPSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="UploadXMLFileString">
+      <soap12:operation soapAction="http://www.i-parcel.com/soap/UploadXMLFileString" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <soap12:operation soapAction="http://www.i-parcel.com/soap/UploadXMLFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="XMLSOAPHttpGet" type="tns:XMLSOAPHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="UploadXMLFileString">
+      <http:operation location="/UploadXMLFileString" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <http:operation location="/UploadXMLFile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="XMLSOAPHttpPost" type="tns:XMLSOAPHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="UploadXMLFileString">
+      <http:operation location="/UploadXMLFileString" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadXMLFile">
+      <http:operation location="/UploadXMLFile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="XMLSOAP">
+    <wsdl:port name="XMLSOAPSoap" binding="tns:XMLSOAPSoap">
+      <soap:address location="http://www.i-parcel.com/soap/xmlsoap.asmx" />
+    </wsdl:port>
+    <wsdl:port name="XMLSOAPSoap12" binding="tns:XMLSOAPSoap12">
+      <soap12:address location="http://www.i-parcel.com/soap/xmlsoap.asmx" />
+    </wsdl:port>
+    <wsdl:port name="XMLSOAPHttpGet" binding="tns:XMLSOAPHttpGet">
+      <http:address location="http://www.i-parcel.com/soap/xmlsoap.asmx" />
+    </wsdl:port>
+    <wsdl:port name="XMLSOAPHttpPost" binding="tns:XMLSOAPHttpPost">
+      <http:address location="http://www.i-parcel.com/soap/xmlsoap.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

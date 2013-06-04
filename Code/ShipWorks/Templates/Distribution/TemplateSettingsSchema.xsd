@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="TemplateSettingsSchema"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:element type="TemplateSettings" name="TemplateSettings"/>
+
+  <xs:complexType name="TemplateSettings">
+    <xs:sequence>
+
+      <xs:element name="General">
+        <xs:complexType>
+          <xs:sequence>
+
+            <xs:element name="Type">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Standard" />
+                  <xs:enumeration value="Label" />
+                  <xs:enumeration value="Report" />
+                  <xs:enumeration value="Thermal" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+
+            <xs:element name="Context">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Automatic" />
+                  <xs:enumeration value="Customer" />
+                  <xs:enumeration value="Order" />
+                  <xs:enumeration value="Shipment" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+
+            <xs:element name="OutputFormat">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Html" />
+                  <xs:enumeration value="XML" />
+                  <xs:enumeration value="Text" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+
+            <xs:element name="OutputEncoding" type="xs:string" minOccurs="0" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:choice>
+        
+        <xs:element name="PageSetup" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Width" type="xs:decimal" />
+              <xs:element name="Height" type="xs:decimal" />
+              <xs:element name="MarginLeft" type="xs:decimal" />
+              <xs:element name="MarginRight" type="xs:decimal" />
+              <xs:element name="MarginTop" type="xs:decimal" />
+              <xs:element name="MarginBottom" type="xs:decimal" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        
+        <xs:element name="LabelSheet" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="LabelSheetID" type="xs:long" />
+             </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        
+      </xs:choice>
+
+      <xs:element name="Printing" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Copies" type="xs:int" minOccurs="0" />
+            <xs:element name="Collate" type="xs:boolean"  minOccurs="0" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="Saving"  minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Filename" type="xs:string"  minOccurs="0" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      
+    </xs:sequence>  
+  </xs:complexType>
+    
+</xs:schema>

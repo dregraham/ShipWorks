@@ -1,0 +1,3 @@
+﻿<tr {SwDetailRowClass}>
+   <td colspan=4 valign='top' >{SwActivity}</td>
+</tr>

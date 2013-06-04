@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://notifications.amazon.com/doc/2007-01-16/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsa="http://www.w3.org/2005/08/addressing" name="EventNotificationService" targetNamespace="http://notifications.amazon.com/doc/2007-01-16/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://notifications.amazon.com/doc/2007-01-16/">
+      <xsd:complexType name="EventTypeDetails">
+        <xsd:annotation>
+          <xsd:documentation>Details about a given event type, including its human readable name and description.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="EventType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>The unique identifier for this event type</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" maxOccurs="1" name="EventTypeName" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>A human-readable name for this event type, suitable for display.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" maxOccurs="1" name="EventTypeDescription" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>A human-readable description for this event type.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="EventNotification">
+        <xsd:annotation>
+          <xsd:documentation>An EventNotification is an atomic occurrance of a given event represented by a XML document matching a particular schema and having a particular type. It also occurs at a particular instant in time.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="EventType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>The type of event that this is, such as a new order being placed or a new claim filing.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xsd:dateTime">
+            <xsd:annotation>
+              <xsd:documentation>The date and time (GMT) at which the event occurred.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="1" maxOccurs="1" name="EventBody" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>The actual XML document that contains the details of the event.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PagingCookie">
+        <xsd:annotation>
+          <xsd:documentation>A PagingCookie is an opaque token returned by a Event Notification Service request that can be used to retrieve additional events at a later time. In essence, it represents a "bookmark" into the set of all events. It also contains the details of the initial query, so subsequent calls will return only events matching the types and filters provided in the initial query.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="Cookie" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>An opaque key that represents the earliest event that will be returned by the next call to GetMore.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="1" maxOccurs="1" name="TimeToLive" type="xsd:duration">
+            <xsd:annotation>
+              <xsd:documentation>The duration of time for which this PagingCookie is valid, starting after the time of the Web Service response.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="1" maxOccurs="1" name="BackOffTime" type="xsd:duration">
+            <xsd:annotation>
+              <xsd:documentation>The minimum amount of time that must elapse before this PagingCookie can be used in a subsequent GetMoreEvents call. Calls to GetMoreEvents made with this cookie before the specified duration of time has elapsed will be rejected.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="EventNotificationPage">
+        <xsd:annotation>
+          <xsd:documentation>Contains all the matching Events along with a flag representing whether or not there are more pages to pull right now and a PagingCookie to allow those additional events to be pulled.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="EventNotifications">
+            <xsd:annotation>
+              <xsd:documentation>A set of Events that match the filters, date ranges, and types provided in the client's query.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="EventNotification" type="tns:EventNotification" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" maxOccurs="1" name="MorePagesExist" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>A boolean flag representing whether more pages of Events are available to be retrieved. If "true", the client can then query using GetMore to retrieve additional Events. </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" maxOccurs="1" name="PagingCookie" type="tns:PagingCookie">
+            <xsd:annotation>
+              <xsd:documentation>If additional Events can still be retrieved based on this query, a PagingCookie will be provided to allow access to them. A call to GetMore using the PagingCookie returned will allow those additional pages to be retrieved. If the PagingCookie is not present, no more events can be retrieved using this query.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="IsEventTypeSupported">
+        <xsd:annotation>
+          <xsd:documentation>Allows a client to query to see whether a given event type is supported by the Notification Service.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="EventType" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="ClientAppID" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>String identifying the client communicating with ENS.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="IsEventTypeSupportedResponse">
+        <xsd:annotation>
+          <xsd:documentation>Whether or not the given event type is supported.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="IsSupported" type="xsd:boolean" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="ClientAppID" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>String identifying the client communicating with ENS.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetSupportedEventTypes">
+        <xsd:annotation>
+          <xsd:documentation>Allows a client to query for EventTypes matching a given pattern.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="MatchString" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="ClientAppID" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>String identifying the client communicating with ENS.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetSupportedEventTypesResponse">
+        <xsd:annotation>
+          <xsd:documentation>The EventTypes matching the pattern.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="SupportedEventTypes" type="tns:EventTypeDetails" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetEvents">
+        <xsd:annotation>
+          <xsd:documentation>Allows clients to retrieve a set of events given certain critera, including StartDate, EndDate, and a Limit on the number of events to return. At least StartDate or Limit must be specified. If the amount of events returned exceeds the EventsPerPage parameter or the maximum allowed by the service, the results will be split up into multiple "pages", and a PagingCookie will be returned that will allow clients to continue where they left off using the GetMore operation. If an EndDate was specified, no events after that date will be returned. If a Limit was specified, only that many of the latest events will be returned. Events are returned in cronological order, with the oldest event first.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="EventType" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>The type of event to be returned.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="StartDate" type="xsd:dateTime">
+              <xsd:annotation>
+                <xsd:documentation>The earliest date and time of events to be returned.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="Limit" type="xsd:unsignedInt">
+              <xsd:annotation>
+                <xsd:documentation>If specified, only this many of the latest events will be returned.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="EventsPerPage" type="xsd:unsignedInt">
+              <xsd:annotation>
+                <xsd:documentation>The maximum number of items that the client would like returned for each "page" in the query.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="ClientAppID" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>String identifying the client communicating with ENS.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetEventsResponse">
+        <xsd:annotation>
+          <xsd:documentation>Contains the results and PagingCookie resulting from a call to GetEvents.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="Results" type="tns:EventNotificationPage" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetMore">
+        <xsd:annotation>
+          <xsd:documentation>Contains all the matching Events along with a flag representing whether or not there are more pages to pull right now and a PagingCookie to allow those additional events to be pulled.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="PagingCookie" type="tns:PagingCookie">
+              <xsd:annotation>
+                <xsd:documentation>The PagingCookie returned by a previous call to GetEvents or GetMore.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="EventsPerPage" type="xsd:unsignedInt">
+              <xsd:annotation>
+                <xsd:documentation>The maximum number of items that the client would like returned for each "page" in the query.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="ClientAppID" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>String identifying the client communicating with ENS.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetMoreResponse">
+        <xsd:annotation>
+          <xsd:documentation>Contains the results and PagingCookie resulting from a call to GetMore.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="Results" type="tns:EventNotificationPage" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IsEventTypeSupportedRequestMsg">
+    <wsdl:part name="body" element="tns:IsEventTypeSupported" />
+  </wsdl:message>
+  <wsdl:message name="IsEventTypeSupportedResponseMsg">
+    <wsdl:part name="body" element="tns:IsEventTypeSupportedResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSupportedEventTypesRequestMsg">
+    <wsdl:part name="body" element="tns:GetSupportedEventTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetSupportedEventTypesResponseMsg">
+    <wsdl:part name="body" element="tns:GetSupportedEventTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEventsRequestMsg">
+    <wsdl:part name="body" element="tns:GetEvents" />
+  </wsdl:message>
+  <wsdl:message name="GetEventsResponseMsg">
+    <wsdl:part name="body" element="tns:GetEventsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMoreRequestMsg">
+    <wsdl:part name="body" element="tns:GetMore" />
+  </wsdl:message>
+  <wsdl:message name="GetMoreResponseMsg">
+    <wsdl:part name="body" element="tns:GetMoreResponse" />
+  </wsdl:message>
+  <wsdl:message name="InvalidParameterFaultMsg">
+    <wsdl:part name="message" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="InternalErrorFaultMsg">
+    <wsdl:part name="message" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="ExpiredPagingCookieFaultMsg">
+    <wsdl:part name="message" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="PrematurePagingCookieFaultMsg">
+    <wsdl:part name="message" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="InvalidPagingCookieFaultMsg">
+    <wsdl:part name="message" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:portType name="EventNotificationPort">
+    <wsdl:operation name="IsEventTypeSupported">
+      <wsdl:input wsa:action="urn:IsEventTypeSupported" message="tns:IsEventTypeSupportedRequestMsg" />
+      <wsdl:output wsa:action="urn:IsEventTypeSupported:Response" message="tns:IsEventTypeSupportedResponseMsg" />
+      <wsdl:fault name="InvalidParameterFault" message="tns:InvalidParameterFaultMsg" />
+      <wsdl:fault name="InternalErrorFault" message="tns:InternalErrorFaultMsg" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSupportedEventTypes">
+      <wsdl:input wsa:action="urn:GetSupportedEventTypes" message="tns:GetSupportedEventTypesRequestMsg" />
+      <wsdl:output wsa:action="urn:IsEventTypeSupported:Response" message="tns:GetSupportedEventTypesResponseMsg" />
+      <wsdl:fault name="InvalidParameterFault" message="tns:InvalidParameterFaultMsg" />
+      <wsdl:fault name="InternalErrorFault" message="tns:InternalErrorFaultMsg" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEvents">
+      <wsdl:input wsa:action="urn:GetEvents" message="tns:GetEventsRequestMsg" />
+      <wsdl:output wsa:action="urn:GetEvents:Response" message="tns:GetEventsResponseMsg" />
+      <wsdl:fault name="InvalidParameterFault" message="tns:InvalidParameterFaultMsg" />
+      <wsdl:fault name="InternalErrorFault" message="tns:InternalErrorFaultMsg" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMore">
+      <wsdl:input wsa:action="urn:GetMore" message="tns:GetMoreRequestMsg" />
+      <wsdl:output wsa:action="urn:GetMore:Response" message="tns:GetMoreResponseMsg" />
+      <wsdl:fault name="InvalidParameterFault" message="tns:InvalidParameterFaultMsg" />
+      <wsdl:fault name="InternalErrorFault" message="tns:InternalErrorFaultMsg" />
+      <wsdl:fault name="PrematurePagingCookieFault" message="tns:PrematurePagingCookieFaultMsg" />
+      <wsdl:fault name="ExpiredPagingCookieFault" message="tns:ExpiredPagingCookieFaultMsg" />
+      <wsdl:fault name="InvalidPagingCookieFault" message="tns:InvalidPagingCookieFaultMsg" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EventNotificationServiceSOAPBinding" type="tns:EventNotificationPort">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IsEventTypeSupported">
+      <wsdlsoap:operation soapAction="urn:IsEventTypeSupported" />
+      <wsdl:input>
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSupportedEventTypes">
+      <wsdlsoap:operation soapAction="urn:GetSupportedEventTypes" />
+      <wsdl:input>
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEvents">
+      <wsdlsoap:operation soapAction="urn:GetEvents" />
+      <wsdl:input>
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMore">
+      <wsdlsoap:operation soapAction="urn:GetMore" />
+      <wsdl:input>
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EventNotificationService">
+    <wsdl:port name="EventNotificationService" binding="tns:EventNotificationServiceSOAPBinding">
+      <wsdlsoap:address location="https://notifications.amazon.com" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

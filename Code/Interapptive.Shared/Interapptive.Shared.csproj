@@ -1,0 +1,639 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Interapptive.Shared</RootNamespace>
+    <AssemblyName>Interapptive.Shared</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+    <SccProjectName>Interapptive.Shared</SccProjectName>
+    <SccLocalPath>2~4dc65538-e67f-4277-9622-0ab008abf2fc</SccLocalPath>
+    <SccAuxPath>http://vault.interapptive.com/VaultService</SccAuxPath>
+    <SccProvider>SourceGear Vault Visual Studio 2005 Client:{1EA47954-8515-402d-82D9-B5C332120A8D}</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <CodeAnalysisModuleSuppressionsFile>AnalysisSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyDateAttribute.cs" />
+    <Compile Include="Business\AddressCasing.cs" />
+    <Compile Include="Business\Geography.cs" />
+    <Compile Include="Business\PersonAdapter.cs" />
+    <Compile Include="Business\PersonName.cs" />
+    <Compile Include="Business\PersonNameParseStatus.cs" />
+    <Compile Include="Business\PersonUtility.cs" />
+    <Compile Include="Business\RequiredFieldChecker.cs" />
+    <Compile Include="Business\WeightValue.cs" />
+    <Compile Include="AnalysisSuppressions.cs" />
+    <Compile Include="Collections\ArrayUtility.cs" />
+    <Compile Include="Collections\CollectionChangedEvent.cs" />
+    <Compile Include="Collections\LruCache.cs" />
+    <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
+    <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Data\OdbcManager.cs" />
+    <Compile Include="Data\OdbcManagerException.cs" />
+    <Compile Include="Data\SqlCommandProvider.cs" />
+    <Compile Include="Data\SqlScript.cs" />
+    <Compile Include="Data\SqlScriptBatchCompletedEvent.cs" />
+    <Compile Include="Data\SqlScriptException.cs" />
+    <Compile Include="Data\SqlScriptLoader.cs" />
+    <Compile Include="Data\SqlUtility.cs" />
+    <Compile Include="Enums\CurrencyType.cs" />
+    <Compile Include="Enums\WeightUnitOfMeasure.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleReader.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleReadResult.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleReadStatus.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleSerialPortReader.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleType.cs" />
+    <Compile Include="IO\Hardware\Scales\ScaleUsbReader.cs" />
+    <Compile Include="IO\Hardware\Usb\HidDevice.cs" />
+    <Compile Include="IO\Hardware\Usb\HidDeviceAttributes.cs" />
+    <Compile Include="IO\Hardware\Usb\HidDeviceCapabilities.cs" />
+    <Compile Include="IO\Hardware\Usb\HidDeviceManager.cs" />
+    <Compile Include="IO\Hardware\Usb\HidException.cs" />
+    <Compile Include="IO\Hardware\Usb\NativeUsb.cs" />
+    <Compile Include="IO\Text\Csv\CachedCsvReader.cs" />
+    <Compile Include="IO\Text\Csv\CsvReader.cs" />
+    <Compile Include="IO\Text\Csv\Events\ParseErrorEventArgs.cs" />
+    <Compile Include="IO\Text\Csv\Exceptions\MalformedCsvException.cs" />
+    <Compile Include="IO\Text\Csv\Exceptions\MissingFieldCsvException.cs" />
+    <Compile Include="IO\Text\Csv\MissingFieldAction.cs" />
+    <Compile Include="IO\Text\Csv\ParseErrorAction.cs" />
+    <Compile Include="IO\Text\Csv\Resources\ExceptionMessage.Designer.cs">
+      <DependentUpon>ExceptionMessage.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IO\Text\EncodingStringWriter.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\crc32.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\EncodingFoundException.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlAgilityDocument.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlAttribute.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlAttributeCollection.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlCmdLine.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlCommentNode.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlConsoleListener.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlElementFlag.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlEntity.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlNameTable.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlNode.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlNodeCollection.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlNodeNavigator.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlNodeType.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlParseError.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlParseErrorCode.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlTextNode.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlWeb.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\HtmlWebException.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\IOLibrary.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\MixedCodeDocument.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\MixedCodeDocumentCodeFragment.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\MixedCodeDocumentFragment.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\MixedCodeDocumentFragmentList.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\MixedCodeDocumentFragmentType.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\MixedCodeDocumentTextFragment.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\NameValuePair.cs" />
+    <Compile Include="IO\Text\HtmlAgilityPack\NameValuePairList.cs" />
+    <Compile Include="IO\Text\Ini\IniFile.cs" />
+    <Compile Include="IO\Text\Ini\IniFileException.cs" />
+    <Compile Include="IO\Text\Sgml\SgmlParser.cs" />
+    <Compile Include="IO\Text\Sgml\SgmlReader.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\Diffgram.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\DiffgramGenerator.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\DiffgramOperation.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\EditScript.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\HashAlgorithm.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\OperationDescriptor.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\PathDescriptorParser.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\Perf.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\TreeMappingAlgorithm.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlDiff.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlDiffDocument.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlDiffNodes.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlHash.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlPatch.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlPatchError.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlPatchNodeLists.cs" />
+    <Compile Include="IO\Text\XmlDiffPatch\XmlPatchOperations.cs" />
+    <Compile Include="IO\Zip\GZipUtility.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2Constants.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2Exception.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2InputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\BZip2\BZip2OutputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Checksums\Adler32.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Checksums\CRC32.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Checksums\IChecksum.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Checksums\StrangeCRC.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\FileSystemScanner.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\INameTransform.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\IScanFilter.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\NameFilter.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\PathFilter.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\StreamUtils.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Core\WindowsPathUtils.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Encryption\PkzipClassic.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\GZip\GZIPConstants.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\GZip\GZipException.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\GZip\GzipInputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\GZip\GzipOutputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\SharpZipBaseException.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\InvalidHeaderException.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarArchive.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarBuffer.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarEntry.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarException.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarHeader.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarInputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Tar\TarOutputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Deflater.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterConstants.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterEngine.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterHuffman.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\DeflaterPending.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Inflater.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\InflaterDynHeader.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\PendingBuffer.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\OutputWindow.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\FastZip.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\IEntryFactory.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\WindowsNameTransform.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipConstants.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipEntry.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipEntryFactory.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipException.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipExtraData.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipFile.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipHelperStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipInputStream.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipNameTransform.cs" />
+    <Compile Include="IO\Zip\SharpZipLib\Zip\ZipOutputStream.cs" />
+    <Compile Include="IO\Zip\ZipExtractProgressEventArgs.cs" />
+    <Compile Include="IO\Zip\ZipReader.cs" />
+    <Compile Include="IO\Zip\ZipReaderItem.cs" />
+    <Compile Include="IO\Zip\ZipReaderProgressEventArgs.cs" />
+    <Compile Include="IO\Zip\ZipWriter.cs" />
+    <Compile Include="IO\Zip\ZipWriterBinaryItem.cs" />
+    <Compile Include="IO\Zip\ZipWriterFileItem.cs" />
+    <Compile Include="IO\Zip\ZipWriterFolderHelper.cs" />
+    <Compile Include="IO\Zip\ZipWriterItem.cs" />
+    <Compile Include="IO\Zip\ZipWriterProgressEventArgs.cs" />
+    <Compile Include="IO\Zip\ZipWriterStringItem.cs" />
+    <Compile Include="MyComputer.cs" />
+    <Compile Include="Net\ClientCertificate.cs" />
+    <Compile Include="Net\HttpRequestSubmitterFactory.cs" />
+    <Compile Include="Net\HttpTextPostRequestSubmitter.cs" />
+    <Compile Include="Net\HttpBinaryPostRequestSubmitter.cs" />
+    <Compile Include="Net\HttpFile.cs" />
+    <Compile Include="Net\HttpFileCollection.cs" />
+    <Compile Include="Net\HttpFilePostRequestSubmitter.cs" />
+    <Compile Include="Net\HttpRequestSubmitter.cs" />
+    <Compile Include="Net\HttpResponseReader.cs" />
+    <Compile Include="Net\HttpVariable.cs" />
+    <Compile Include="Net\HttpVariableCollection.cs" />
+    <Compile Include="Net\HttpVariableRequestSubmitter.cs" />
+    <Compile Include="Net\HttpVerb.cs" />
+    <Compile Include="Net\IHttpRequestSubmitterFactory.cs" />
+    <Compile Include="Net\IHttpResponseReader.cs" />
+    <Compile Include="Net\InvalidSoapException.cs" />
+    <Compile Include="Net\JsonException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Net\JsonExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Net\PortListener.cs" />
+    <Compile Include="Net\OAuth\OAuth.cs" />
+    <Compile Include="Net\OAuth\Pair.cs" />
+    <Compile Include="Net\OAuth\PairComparer.cs" />
+    <Compile Include="Net\PortListenerRequestBeginEventArgs.cs" />
+    <Compile Include="Net\QueryStringEncodingCasing.cs" />
+    <Compile Include="Net\QueryStringUtility.cs" />
+    <Compile Include="Net\HttpRequestSubmittingEvent.cs" />
+    <Compile Include="Net\WebServiceRawSoap.cs" />
+    <Compile Include="Net\WebHelper.cs" />
+    <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />
+    <Compile Include="NotFoundException.cs" />
+    <Compile Include="ObjectDeletedException.cs" />
+    <Compile Include="Properties\Flags.Designer.cs">
+      <DependentUpon>Flags.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Threading\ReaderWriterReadLock.cs" />
+    <Compile Include="Threading\ReaderWriterWriteLock.cs" />
+    <Compile Include="Threading\ThreadSafeCollection.cs" />
+    <Compile Include="Threading\ThreadSafeCollectionBehavior.cs" />
+    <Compile Include="UI\MessageHelper.cs" />
+    <Compile Include="UI\WindowState.cs" />
+    <Compile Include="UI\WindowStateSaver.cs" />
+    <Compile Include="UI\WindowStateSaverOptions.cs" />
+    <Compile Include="Utility\ApiValueAttribute.cs" />
+    <Compile Include="Utility\BreakpointTimer.cs" />
+    <Compile Include="Utility\ByteUtility.cs" />
+    <Compile Include="Utility\DateTimeUtility.cs" />
+    <Compile Include="Utility\DeprecatedAttribute.cs" />
+    <Compile Include="Utility\GuidHelper.cs" />
+    <Compile Include="Utility\NDesk.Options.cs" />
+    <Compile Include="Utility\PathUtility.cs" />
+    <Compile Include="Utility\ResourceUtility.cs" />
+    <Compile Include="Utility\ResourceUtilityException.cs" />
+    <Compile Include="Utility\SecureText.cs" />
+    <Compile Include="Utility\SerializableObject.cs" />
+    <Compile Include="Utility\SerializationUtility.cs" />
+    <Compile Include="Utility\SortOrderAttribute.cs" />
+    <Compile Include="Utility\StreamUtility.cs" />
+    <Compile Include="Utility\StringUtility.cs" />
+    <Compile Include="Utility\VersionUtility.cs" />
+    <Compile Include="Utility\WeightUtility.cs" />
+    <Compile Include="Utility\XmlUtility.cs" />
+    <Compile Include="Utility\XPathNamespaceNavigator.cs" />
+    <Compile Include="Utility\XPathUtility.cs" />
+    <Compile Include="Win32\ClipboardHelper.cs" />
+    <Compile Include="Win32\NativeMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\EnumEntry.cs" />
+    <Compile Include="Utility\EnumHelper.cs" />
+    <Compile Include="Utility\EnumList.cs" />
+    <Compile Include="Utility\ImageResourceAttribute.cs" />
+    <Compile Include="Win32\NativeWindowHandle.cs" />
+    <Compile Include="Win32\RegistryHelper.cs" />
+    <Compile Include="Win32\WindowsExitType.cs" />
+    <Compile Include="Win32\WindowsFirewallException.cs" />
+    <Compile Include="Win32\WindowsFirewallUtility.cs" />
+    <Compile Include="Win32\WindowsUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\interapptive_public.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IO\Text\Csv\Resources\ExceptionMessage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessage.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Flags.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Flags.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
+      <Link>Properties\AnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+    <Content Include="Resources\flags\afghanistan.png" />
+    <Content Include="Resources\flags\albania.png" />
+    <Content Include="Resources\flags\algeria.png" />
+    <Content Include="Resources\flags\american_samoa.png" />
+    <Content Include="Resources\flags\andorra.png" />
+    <Content Include="Resources\flags\angola.png" />
+    <Content Include="Resources\flags\anguilla.png" />
+    <Content Include="Resources\flags\antigua_and_barbuda.png" />
+    <Content Include="Resources\flags\argentina.png" />
+    <Content Include="Resources\flags\armenia.png" />
+    <Content Include="Resources\flags\aruba.png" />
+    <Content Include="Resources\flags\australia.png" />
+    <Content Include="Resources\flags\austria.png" />
+    <Content Include="Resources\flags\azerbaijan.png" />
+    <Content Include="Resources\flags\bahamas.png" />
+    <Content Include="Resources\flags\bahrain.png" />
+    <Content Include="Resources\flags\bangladesh.png" />
+    <Content Include="Resources\flags\barbados.png" />
+    <Content Include="Resources\flags\belarus.png" />
+    <Content Include="Resources\flags\belgium.png" />
+    <Content Include="Resources\flags\belize.png" />
+    <Content Include="Resources\flags\benin.png" />
+    <Content Include="Resources\flags\bermuda.png" />
+    <Content Include="Resources\flags\bhutan.png" />
+    <Content Include="Resources\flags\bolivia.png" />
+    <Content Include="Resources\flags\bosnia_and_herzegovina.png" />
+    <Content Include="Resources\flags\botswana.png" />
+    <Content Include="Resources\flags\brazil.png" />
+    <Content Include="Resources\flags\british_indian_ocean_territory.png" />
+    <Content Include="Resources\flags\british_virgin_islands.png" />
+    <Content Include="Resources\flags\brunei.png" />
+    <Content Include="Resources\flags\bulgaria.png" />
+    <Content Include="Resources\flags\burkina_faso.png" />
+    <Content Include="Resources\flags\burma.png" />
+    <Content Include="Resources\flags\burundi.png" />
+    <Content Include="Resources\flags\cambodia.png" />
+    <Content Include="Resources\flags\cameroon.png" />
+    <Content Include="Resources\flags\canada.png" />
+    <Content Include="Resources\flags\cape_verde.png" />
+    <Content Include="Resources\flags\cayman_islands.png" />
+    <Content Include="Resources\flags\central_african_republic.png" />
+    <Content Include="Resources\flags\chad.png" />
+    <Content Include="Resources\flags\chile.png" />
+    <Content Include="Resources\flags\china.png" />
+    <Content Include="Resources\flags\colombia.png" />
+    <Content Include="Resources\flags\comoros.png" />
+    <Content Include="Resources\flags\congo_democratic_republic.png" />
+    <Content Include="Resources\flags\congo_republic.png" />
+    <Content Include="Resources\flags\cook_islands.png" />
+    <Content Include="Resources\flags\costa_rica.png" />
+    <Content Include="Resources\flags\cote_divoire.png" />
+    <Content Include="Resources\flags\croatia.png" />
+    <Content Include="Resources\flags\cuba.png" />
+    <Content Include="Resources\flags\cyprus.png" />
+    <Content Include="Resources\flags\czech_republic.png" />
+    <Content Include="Resources\flags\denmark.png" />
+    <Content Include="Resources\flags\djibouti.png" />
+    <Content Include="Resources\flags\dominica.png" />
+    <Content Include="Resources\flags\dominican_republic.png" />
+    <Content Include="Resources\flags\east_timor.png" />
+    <Content Include="Resources\flags\egypt.png" />
+    <Content Include="Resources\flags\el_salvador.png" />
+    <Content Include="Resources\flags\england.png" />
+    <Content Include="Resources\flags\equador.png" />
+    <Content Include="Resources\flags\equatorial_guinea.png" />
+    <Content Include="Resources\flags\eritrea.png" />
+    <Content Include="Resources\flags\estonia.png" />
+    <Content Include="Resources\flags\ethiopia.png" />
+    <Content Include="Resources\flags\eu.png" />
+    <Content Include="Resources\flags\falkland_islands.png" />
+    <Content Include="Resources\flags\faroe_islands.png" />
+    <Content Include="Resources\flags\fiji.png" />
+    <Content Include="Resources\flags\finland.png" />
+    <Content Include="Resources\flags\france.png" />
+    <Content Include="Resources\flags\french_polynesia.png" />
+    <Content Include="Resources\flags\gabon.png" />
+    <Content Include="Resources\flags\gambia.png" />
+    <Content Include="Resources\flags\generic.png" />
+    <Content Include="Resources\flags\georgia.png" />
+    <Content Include="Resources\flags\germany.png" />
+    <Content Include="Resources\flags\ghana.png" />
+    <Content Include="Resources\flags\gibraltar.png" />
+    <Content Include="Resources\flags\great_britain.png" />
+    <Content Include="Resources\flags\greece.png" />
+    <Content Include="Resources\flags\greenland.png" />
+    <Content Include="Resources\flags\grenada.png" />
+    <Content Include="Resources\flags\guam.png" />
+    <Content Include="Resources\flags\guatemala.png" />
+    <Content Include="Resources\flags\guernsey.png" />
+    <Content Include="Resources\flags\guinea.png" />
+    <Content Include="Resources\flags\guinea_bissau.png" />
+    <Content Include="Resources\flags\guyana.png" />
+    <Content Include="Resources\flags\haiti.png" />
+    <Content Include="Resources\flags\honduras.png" />
+    <Content Include="Resources\flags\hong_kong.png" />
+    <Content Include="Resources\flags\hungary.png" />
+    <Content Include="Resources\flags\iceland.png" />
+    <Content Include="Resources\flags\india.png" />
+    <Content Include="Resources\flags\indonesia.png" />
+    <Content Include="Resources\flags\iran.png" />
+    <Content Include="Resources\flags\iraq.png" />
+    <Content Include="Resources\flags\ireland.png" />
+    <Content Include="Resources\flags\isle_of_man.png" />
+    <Content Include="Resources\flags\israel.png" />
+    <Content Include="Resources\flags\italy.png" />
+    <Content Include="Resources\flags\jamaica.png" />
+    <Content Include="Resources\flags\japan.png" />
+    <Content Include="Resources\flags\jersey.png" />
+    <Content Include="Resources\flags\jordan.png" />
+    <Content Include="Resources\flags\kazakhstan.png" />
+    <Content Include="Resources\flags\kenya.png" />
+    <Content Include="Resources\flags\kiribati.png" />
+    <Content Include="Resources\flags\kuwait.png" />
+    <Content Include="Resources\flags\kyrgyzstan.png" />
+    <Content Include="Resources\flags\laos.png" />
+    <Content Include="Resources\flags\latvia.png" />
+    <Content Include="Resources\flags\lebanon.png" />
+    <Content Include="Resources\flags\lesotho.png" />
+    <Content Include="Resources\flags\liberia.png" />
+    <Content Include="Resources\flags\libya.png" />
+    <Content Include="Resources\flags\liechtenstein.png" />
+    <Content Include="Resources\flags\lithuania.png" />
+    <Content Include="Resources\flags\luxembourg.png" />
+    <Content Include="Resources\flags\macau.png" />
+    <Content Include="Resources\flags\macedonia.png" />
+    <Content Include="Resources\flags\madagascar.png" />
+    <Content Include="Resources\flags\malawi.png" />
+    <Content Include="Resources\flags\malaysia.png" />
+    <Content Include="Resources\flags\maledives.png" />
+    <Content Include="Resources\flags\mali.png" />
+    <Content Include="Resources\flags\malta.png" />
+    <Content Include="Resources\flags\marshall_islands.png" />
+    <Content Include="Resources\flags\martinique.png" />
+    <Content Include="Resources\flags\mauretania.png" />
+    <Content Include="Resources\flags\mauritius.png" />
+    <Content Include="Resources\flags\mexico.png" />
+    <Content Include="Resources\flags\micronesia.png" />
+    <Content Include="Resources\flags\moldova.png" />
+    <Content Include="Resources\flags\monaco.png" />
+    <Content Include="Resources\flags\mongolia.png" />
+    <Content Include="Resources\flags\montserrat.png" />
+    <Content Include="Resources\flags\morocco.png" />
+    <Content Include="Resources\flags\mozambique.png" />
+    <Content Include="Resources\flags\namibia.png" />
+    <Content Include="Resources\flags\nauru.png" />
+    <Content Include="Resources\flags\nepal.png" />
+    <Content Include="Resources\flags\netherlands.png" />
+    <Content Include="Resources\flags\netherlands_antilles.png" />
+    <Content Include="Resources\flags\new_zealand.png" />
+    <Content Include="Resources\flags\nicaragua.png" />
+    <Content Include="Resources\flags\niger.png" />
+    <Content Include="Resources\flags\nigeria.png" />
+    <Content Include="Resources\flags\niue.png" />
+    <Content Include="Resources\flags\norfolk_island.png" />
+    <Content Include="Resources\flags\northern_mariana_islands.png" />
+    <Content Include="Resources\flags\north_korea.png" />
+    <Content Include="Resources\flags\norway.png" />
+    <Content Include="Resources\flags\oman.png" />
+    <Content Include="Resources\flags\pakistan.png" />
+    <Content Include="Resources\flags\palau.png" />
+    <Content Include="Resources\flags\panama.png" />
+    <Content Include="Resources\flags\papua_new_guinea.png" />
+    <Content Include="Resources\flags\paraquay.png" />
+    <Content Include="Resources\flags\peru.png" />
+    <Content Include="Resources\flags\philippines.png" />
+    <Content Include="Resources\flags\pitcairn_islands.png" />
+    <Content Include="Resources\flags\poland.png" />
+    <Content Include="Resources\flags\portugal.png" />
+    <Content Include="Resources\flags\puerto_rico.png" />
+    <Content Include="Resources\flags\qatar.png" />
+    <Content Include="Resources\flags\romania.png" />
+    <Content Include="Resources\flags\russia.png" />
+    <Content Include="Resources\flags\rwanda.png" />
+    <Content Include="Resources\flags\saint_helena.png" />
+    <Content Include="Resources\flags\saint_kitts_and_nevis.png" />
+    <Content Include="Resources\flags\saint_lucia.png" />
+    <Content Include="Resources\flags\saint_pierre_and_miquelon.png" />
+    <Content Include="Resources\flags\saint_vincent_and_the_grenadines.png" />
+    <Content Include="Resources\flags\samoa.png" />
+    <Content Include="Resources\flags\san_marino.png" />
+    <Content Include="Resources\flags\sao_tome_and_principe.png" />
+    <Content Include="Resources\flags\saudi_arabia.png" />
+    <Content Include="Resources\flags\scotland.png" />
+    <Content Include="Resources\flags\senegal.png" />
+    <Content Include="Resources\flags\serbia_montenegro.png" />
+    <Content Include="Resources\flags\seychelles.png" />
+    <Content Include="Resources\flags\sierra_leone.png" />
+    <Content Include="Resources\flags\singapore.png" />
+    <Content Include="Resources\flags\slovakia.png" />
+    <Content Include="Resources\flags\slovenia.png" />
+    <Content Include="Resources\flags\solomon_islands.png" />
+    <Content Include="Resources\flags\somalia.png" />
+    <Content Include="Resources\flags\south_africa.png" />
+    <Content Include="Resources\flags\south_georgia.png" />
+    <Content Include="Resources\flags\south_korea.png" />
+    <Content Include="Resources\flags\spain.png" />
+    <Content Include="Resources\flags\sri_lanka.png" />
+    <Content Include="Resources\flags\sudan.png" />
+    <Content Include="Resources\flags\suriname.png" />
+    <Content Include="Resources\flags\swaziland.png" />
+    <Content Include="Resources\flags\sweden.png" />
+    <Content Include="Resources\flags\switzerland.png" />
+    <Content Include="Resources\flags\syria.png" />
+    <Content Include="Resources\flags\taiwan.png" />
+    <Content Include="Resources\flags\tajikistan.png" />
+    <Content Include="Resources\flags\tanzania.png" />
+    <Content Include="Resources\flags\thailand.png" />
+    <Content Include="Resources\flags\tibet.png" />
+    <Content Include="Resources\flags\togo.png" />
+    <Content Include="Resources\flags\tonga.png" />
+    <Content Include="Resources\flags\trinidad_and_tobago.png" />
+    <Content Include="Resources\flags\tunisia.png" />
+    <Content Include="Resources\flags\turkey.png" />
+    <Content Include="Resources\flags\turkmenistan.png" />
+    <Content Include="Resources\flags\turks_and_caicos_islands.png" />
+    <Content Include="Resources\flags\tuvalu.png" />
+    <Content Include="Resources\flags\uganda.png" />
+    <Content Include="Resources\flags\ukraine.png" />
+    <Content Include="Resources\flags\united_arab_emirates.png" />
+    <Content Include="Resources\flags\uruquay.png" />
+    <Content Include="Resources\flags\usa.png" />
+    <Content Include="Resources\flags\uzbekistan.png" />
+    <Content Include="Resources\flags\vanuatu.png" />
+    <Content Include="Resources\flags\vatican_city.png" />
+    <Content Include="Resources\flags\venezuela.png" />
+    <Content Include="Resources\flags\vietnam.png" />
+    <Content Include="Resources\flags\virgin_islands.png" />
+    <Content Include="Resources\flags\wales.png" />
+    <Content Include="Resources\flags\wallis_and_futuna.png" />
+    <Content Include="Resources\flags\yemen.png" />
+    <Content Include="Resources\flags\zambia.png" />
+    <Content Include="Resources\flags\zimbabwe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>  -->
+  <PropertyGroup>
+    <CopyAfterBuild>true</CopyAfterBuild>
+    <!--  Condition="$(AutomatedBuild) == ''"-->
+  </PropertyGroup>
+  <Target Name="AfterBuild" Condition="$(CopyAfterBuild) == 'true'">
+    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config">
+      <Output TaskParameter="Include" ItemName="BuildOutputs" />
+    </CreateItem>
+    <Message Text="Copying output to libraries directory:" Importance="high" />
+    <Message Text="     %(BuildOutputs.Filename)%(BuildOutputs.Extension)" Importance="high" />
+    <Copy SourceFiles="@(BuildOutputs)" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Libraries\" />
+  </Target>
+</Project>

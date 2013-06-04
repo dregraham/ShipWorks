@@ -1,0 +1,2006 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rebex.Net.ProxySocket</name>
+    </assembly>
+    <members>
+        <member name="T:Rebex.Net.Messages">
+            <summary>
+            Provides methods for constructing exception messages.
+            </summary>
+        </member>
+        <member name="T:Rebex.Security.Cryptography.UnmanagedBlockLite">
+            <summary>
+            Represents a block of unmanaged memory.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.#ctor(System.Int32)">
+            <summary>
+            Allocates a block of unmanaged memory with the specified length.
+            </summary>
+            <param name="length">The length of unmanaged memory block.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.#ctor(System.IntPtr)">
+            <summary>
+            Creates an unmanaged block that represents a block of memory specified by the supplied pointer.
+            </summary>
+            <param name="ptr">Pointer to a block of unmanaged memory.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.ToIntPtr">
+            <summary>
+            Returns a pointer to the current unmanaged memory block.
+            </summary>
+            <returns>A pointer to unamanged memory block.</returns>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.ReadInt32(System.Int32)">
+            <summary>
+            Reads a 32-bit signed integer from the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.WriteInt32(System.Int32,System.Int32)">
+            <summary>
+            Writes a 32-bit signed integer to the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+            <param name="val">The value to write.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.WriteIntPtr(System.Int32,System.IntPtr)">
+            <summary>
+            Writes a pointer to the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+            <param name="val">The value to write.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.Dispose">
+            <summary>
+            Disposes the object and releases resources.
+            </summary>
+            <remarks>
+            Calling this method ensures that all resources are freed.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources and optionally releases the managed resources.
+            </summary>
+            <param name="disposing"><b>true</b> to release both managed and unmanaged resources; <b>false</b> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Rebex.Security.Cryptography.UnmanagedBlockLite.Finalize">
+            <summary>
+            Finalizer called by garbage collector.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.RebexAsyncResult">
+            <summary>
+            Universal class for asynchronous method invocation.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose(bool disposing) executes in two distinct scenarios.
+            If disposing equals true, the method has been called directly
+            or indirectly by a user's code. Managed and unmanaged resources
+            can be disposed.
+            If disposing equals false, the method has been called by the 
+            runtime from inside the finalizer and you should not reference 
+            other objects. Only unmanaged resources can be disposed.
+            </summary>
+            <param name="disposing"> If true, is called by IDisposable.Dispose. 
+            Otherwise it is called by finalizer.</param>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.Dispose">
+            <summary>
+            Implementation of IDisposable.Dispose()
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.SimpleThreadPool.Find(System.Threading.Thread)">
+            <summary>
+            Find the ThreadInfo instance that corresponds to the thread
+            </summary>
+            <param name="thread"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rebex.Net.RebexAsyncResult.SimpleThreadPool.FindFreeThread">
+            <summary>
+            Find a free thread
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Rebex.SortingOrder">
+            <summary>
+            Sorting order enum
+            </summary>
+        </member>
+        <member name="F:Rebex.SortingOrder.Ascending">
+            <summary>
+            Ascending sort order
+            </summary>
+        </member>
+        <member name="F:Rebex.SortingOrder.Descending">
+            <summary>
+            Descending sort order
+            </summary>
+        </member>
+        <member name="T:Rebex.FileLogWriter">
+            <summary>
+            File-based log writer that saves log messages into a text file.
+            </summary>
+        </member>
+        <member name="T:Rebex.LogWriterBase">
+            <summary>
+            Common base class for log writers. A derived class must override either the WriteMessage or Write method.
+            </summary>
+        </member>
+        <member name="T:Rebex.ILogWriter">
+            <summary>
+            Defines methods and properties all log writers must implement.
+            </summary>
+        </member>
+        <member name="M:Rebex.ILogWriter.Write(Rebex.LogLevel,System.Type,System.Int32,System.String,System.String)">
+            <summary>
+            Write a message into the log.
+            </summary>
+            <param name="level">Message level.</param>
+            <param name="objectType">Logging object type.</param>
+            <param name="objectId">Logging object ID.</param>
+            <param name="area">Logging area.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Rebex.ILogWriter.Write(Rebex.LogLevel,System.Type,System.Int32,System.String,System.String,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Write a message and data block into the log.
+            </summary>
+            <param name="level">Message level.</param>
+            <param name="objectType">Logging object type.</param>
+            <param name="objectId">Logging object ID.</param>
+            <param name="area">Logging area.</param>
+            <param name="message">Message.</param>
+            <param name="buffer">Data block.</param>
+            <param name="offset">Data offset.</param>
+            <param name="length">Date length</param>
+        </member>
+        <member name="P:Rebex.ILogWriter.Level">
+            <summary>
+            Get or set the log level - only log messages with log level equal to or greater than the specified one.
+            </summary>
+            <value>Log level.</value>
+        </member>
+        <member name="M:Rebex.LogWriterBase.Close">
+            <summary>
+            Closes the log writer.
+            </summary>
+        </member>
+        <member name="M:Rebex.LogWriterBase.Dispose(System.Boolean)">
+            <summary>
+            Dispose(bool disposing) executes in two distinct scenarios.
+            If disposing equals true, the method has been called directly
+            or indirectly by a user's code. Managed and unmanaged resources
+            can be disposed.
+            If disposing equals false, the method has been called by the 
+            runtime from inside the finalizer and you should not reference 
+            other objects. Only unmanaged resources can be disposed.
+            </summary>
+            <param name="disposing"> If true, is called by IDisposable.Dispose. 
+            Otherwise it is called by finalizer.</param>
+        </member>
+        <member name="M:Rebex.LogWriterBase.Write(Rebex.LogLevel,System.Type,System.Int32,System.String,System.String)">
+            <summary>
+            Writes a message into the log.
+            </summary>
+            <param name="level">Message level.</param>
+            <param name="objectType">Logging object type.</param>
+            <param name="objectId">Logging object ID.</param>
+            <param name="area">Logging area.</param>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:Rebex.LogWriterBase.Write(Rebex.LogLevel,System.Type,System.Int32,System.String,System.String,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes a message and data block into the log.
+            </summary>
+            <param name="level">Message level.</param>
+            <param name="objectType">Logging object type.</param>
+            <param name="objectId">Logging object ID.</param>
+            <param name="area">Logging area.</param>
+            <param name="message">Message.</param>
+            <param name="buffer">Data block.</param>
+            <param name="offset">Data offset.</param>
+            <param name="length">Date length</param>
+        </member>
+        <member name="M:Rebex.LogWriterBase.WriteMessage(System.String)">
+            <summary>
+            Appends the specified message text into a text-based log. This method is only called by <see cref="M:Rebex.LogWriterBase.Write(Rebex.LogLevel,System.Type,System.Int32,System.String,System.String)"/> method
+            and is only used by text-based loggers.
+            </summary>
+            <param name="message">Full message info.</param>
+        </member>
+        <member name="M:Rebex.LogWriterBase.Dispose">
+            <summary>
+            Implements the interface method IDisposable.Dispose
+            Use this method to explicitly release all resources hold by the object instance.
+            </summary>
+        </member>
+        <member name="P:Rebex.LogWriterBase.Level">
+            <summary>
+            Gets or sets the log level - only log messages with log level equal to or greater than the specified one.
+            </summary>
+            <value>Log level.</value>
+        </member>
+        <member name="P:Rebex.LogWriterBase.IsClosed">
+            <summary>
+            Get a value indicating whether the log writer is closed.
+            </summary>
+            <value>True when log writer is closed. False if log writer is opened and ready for writing.</value>
+            <remarks>Implementation in this base class returns false, as the close method actually does not close any resource.</remarks>
+        </member>
+        <member name="M:Rebex.FileLogWriter.#ctor(System.String)">
+            <summary>
+            Creates a new instance of file log writer based on the specified file and the default &quot;Info&quot; log level.
+            </summary>
+            <param name="path">Path to log file.</param>
+        </member>
+        <member name="M:Rebex.FileLogWriter.#ctor(System.String,Rebex.LogLevel)">
+            <summary>
+            Creates a new instance of file log writer based on the specified file and log level.
+            </summary>
+            <param name="path">Path to log file.</param>
+            <param name="level">Log level.</param>
+        </member>
+        <member name="M:Rebex.FileLogWriter.Dispose(System.Boolean)">
+            <summary>
+            Dispose(bool disposing) executes in two distinct scenarios.
+            If disposing equals true, the method has been called directly
+            or indirectly by a user's code. Managed and unmanaged resources
+            can be disposed.
+            If disposing equals false, the method has been called by the 
+            runtime from inside the finalizer and you should not reference 
+            other objects. Only unmanaged resources can be disposed.
+            </summary>
+            <param name="disposing"> If true, is called by IDisposable.Dispose. 
+            Otherwise it is called by finalizer.</param>
+        </member>
+        <member name="M:Rebex.FileLogWriter.WriteMessage(System.String)">
+            <summary>
+            Appends the specified message text into a text-based log.
+            </summary>
+            <param name="message">Full message info.</param>
+        </member>
+        <member name="M:Rebex.FileLogWriter.Finalize">
+            <summary>
+            Finalizer. Called by garbage collector during object destruction.
+            </summary>
+        </member>
+        <member name="P:Rebex.FileLogWriter.Filename">
+            <summary>
+            Path to the file the log is written to.
+            </summary>
+        </member>
+        <member name="P:Rebex.FileLogWriter.IsClosed">
+            <summary>
+            Get a value indicating whether the log writer is closed.
+            </summary>
+            <value>True when logfile is closed. False if logfile is opened and ready for writing.</value>
+        </member>
+        <member name="T:Rebex.Net.GssApiProvider">
+            <summary>
+            Encapsulates GSSAPI provider information.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.GssApiProvider.GetSspiProvider(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Gets an instance of SSPI-based GSSAPI-compatible authentication provider. Only works on Windows.
+            </summary>
+            <param name="mechanism">Requested SSPI mechanism ('NTLM', 'Kerberos' or 'Negotiate').</param>
+            <param name="targetName">The target name. If it is set to null ('Nothing' in VB.NET), server hostname will be used instead.</param>
+            <param name="userName">The user name. If it is set to null ('Nothing' in VB.NET), integrated authentication (single sign-on) will be used.</param>
+            <param name="password">User's password. Can be set to null ('Nothing' in VB.NET) if integrated authentication (single sign-on) is to be used.</param>
+            <param name="domain">User's domain. If it is set to null ('Nothing' in VB.NET), it will be determined from the user name. If not available, the default domain will be used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rebex.Net.GssApiProvider.GetParameter(System.Int32)">
+            <summary>
+            This method is only intended to be used by Rebex components internally and should not be used by third-part code.
+            </summary>
+            <param name="index">Index.</param>
+            <returns>Parameter.</returns>
+        </member>
+        <member name="T:Rebex.LogLevel">
+            <summary>
+            Log level - specifies the levels of severity.
+            </summary>
+        </member>
+        <member name="F:Rebex.LogLevel.Verbose">
+            <summary>
+            Be verbose - log everything.
+            </summary>
+        </member>
+        <member name="F:Rebex.LogLevel.Debug">
+            <summary>
+            Log all messages useful for debugging purposes.
+            </summary>
+        </member>
+        <member name="F:Rebex.LogLevel.Info">
+            <summary>
+            Only log informative messages.
+            </summary>
+        </member>
+        <member name="F:Rebex.LogLevel.Error">
+            <summary>
+            Only log errors.
+            </summary>
+        </member>
+        <member name="F:Rebex.LogLevel.Off">
+            <summary>
+            The Off level designates a higher level than all the rest.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ISocketFactory">
+            <summary>
+            Defines a method to create a an instance of the generalized <see cref="T:Rebex.Net.ISocket"/> interface.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.ISocketFactory.CreateSocket">
+            <summary>
+            Creates an unconnected instance of the generalized <see cref="T:Rebex.Net.ISocket"/> interface.
+            </summary>
+            <returns>An instance of <see cref="T:Rebex.Net.ISocket"/>.</returns>
+        </member>
+        <member name="T:Rebex.Net.SocketState">
+            <summary>
+            Defines all the possible states of an <see cref="T:Rebex.Net.ISocket"/> object
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.SocketState.NotConnected">
+            <summary>
+            The <see cref="T:Rebex.Net.ISocket"/> was either never connected, or is no longer connected.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.SocketState.Connected">
+            <summary>
+            The <see cref="T:Rebex.Net.ISocket"/> is connected or data is still available to be read.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.SocketSelectMode">
+            <summary>
+            Defines the polling modes for the <see cref="M:Rebex.Net.ISocket.Poll(System.Int32,Rebex.Net.SocketSelectMode)"/> method.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.SocketSelectMode.SelectRead">
+            <summary>
+            Read status mode.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ISocket">
+            <summary>
+            Defines a generalized socket API.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.ISocket.GetConnectionState">
+            <summary>
+            Gets a value that indicates whether the <see cref="T:Rebex.Net.ISocket"/> is currently connected to a remote host.
+            </summary>
+            <returns>Current connection state.</returns>
+            <remarks>
+            <p>
+            As long as there is still data available to be read from the socket, this method will indicate that
+            the <see cref="T:Rebex.Net.ISocket"/> is connected, even though technically it might have already be considered
+            disconnected based on one's point of view.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Poll(System.Int32,Rebex.Net.SocketSelectMode)">
+            <summary>
+            Determines the status of the socket.
+            </summary>
+            <param name="microSeconds">Time to wait for a response, in microseconds.</param>
+            <param name="mode">Select mode.</param>
+            <returns>True if data can be sent or read or if the connection was closed.</returns>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Connect(System.Net.EndPoint)">
+            <summary>
+            Establishes a connection to a remote device.
+            </summary>
+            <param name="remoteEP">An <see cref="T:System.Net.IPEndPoint"/> that represents the remote device.</param>
+            <remarks>
+            The Connect method establishes a network connection to a device identified by the remoteEP
+            parameter. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Connect(System.String,System.Int32)">
+            <summary>
+            Establishes a connection to a remote device.
+            </summary>
+            <param name="serverName">The hostname (or IP address) of the remote device.</param>
+            <param name="serverPort">The port number associated with the hostname.</param>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the serverName and serverPort
+            parameters. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.BeginConnect(System.Net.EndPoint,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request for a connection to a network device.
+            </summary>
+            <param name="remoteEP">An <see cref="T:System.Net.IPEndPoint"/> that represents the remote device.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous connection.
+            </returns>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the remoteEP
+            parameter. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.BeginConnect(System.String,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request for a connection to a network device.
+            </summary>
+            <param name="serverName">The hostname (or IP address) of the remote device.</param>
+            <param name="serverPort">The port number associated with the hostname.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous connection.
+            </returns>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the serverName and serverPort
+            parameters. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.EndConnect(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous connection request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <remarks>
+            The EndConnect method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ISocket.BeginConnect(System.Net.EndPoint,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)">
+            <summary>
+            Starts a request to listen for an incoming connection using the specified control socket as a base.
+            </summary>
+            <param name="controlSocket">The control socket to use as a base.</param>
+            <returns>The endpoint to which a connection from a remote host can be made.</returns>
+            <remarks>
+            <p>
+            This method differs from <see cref="M:System.Net.Sockets.Socket.Listen(System.Int32)"/>:
+            <ul>
+            <li>A control connection socket needs to be specified. This might be needed by a proxy server
+            socket.</li>
+            <li>Only a single incoming connection is accepted.</li>
+            </ul>
+            To accept an incoming connection, use the <see cref="M:Rebex.Net.ISocket.Accept"/> or <see cref="M:Rebex.Net.ISocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </p>
+            <p>
+            <b>Note:</b> When connected through a HTTP proxy server, this method will fail.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronously request to listen for an incoming connection using the specified control socket as a base.
+            </summary>
+            <param name="controlSocket">The control socket to use as a base.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+            </returns>
+            <remarks>
+            <p>
+            This method differs from <see cref="M:System.Net.Sockets.Socket.Listen(System.Int32)"/>:
+            <ul>
+            <li>A control connection socket needs to be specified. This might be needed by a proxy server
+            socket.</li>
+            <li>Only a single incoming connection is accepted.</li>
+            </ul>
+            To accept an incoming connection, use the <see cref="M:Rebex.Net.ISocket.Accept"/> or <see cref="M:Rebex.Net.ISocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </p>
+            <p>
+            <b>Note:</b> When connected through a HTTP proxy server, this method will fail.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.EndListen(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous request to listen for an incoming connection.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The endpoint to which a connection from a remote host can be made.</returns>
+            <remarks>
+            The EndListen method completes a request to listen for a connection that was started with the <see cref="M:Rebex.Net.ISocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Accept">
+            <summary>
+            Accepts an incoming connection.
+            </summary>
+            <returns>An instance of connected <see cref="T:Rebex.Net.ISocket"/>.</returns>
+            <remarks>
+            <p>
+            A call to Accept is only allowed after a call to <see cref="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)"/> or <see cref="M:Rebex.Net.ISocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/>/<see cref="M:Rebex.Net.ISocket.EndListen(System.IAsyncResult)"/> methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.BeginAccept(System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request to accept an incoming connection.
+            </summary>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+            </returns>
+            <remarks>
+            <p>
+            A call to Accept is only allowed after a call to <see cref="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)"/> or <see cref="M:Rebex.Net.ISocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/>/<see cref="M:Rebex.Net.ISocket.EndListen(System.IAsyncResult)"/> methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.EndAccept(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous request to accept an incoming connection.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>An instance of connected <see cref="T:Rebex.Net.ISocket"/>.</returns>
+            <remarks>
+            The EndAccept method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ISocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Send(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends the specified amount of data to the connected <see cref="T:Rebex.Net.ISocket"/> starting at the indicated location in the data and using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="offset">The position in the data buffer to begin sending data.</param>
+            <param name="count">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ISocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ISocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.BeginSend(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)">
+            <summary>
+            Sends data asynchronously to a connected <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="offset">The position in the data buffer to begin sending data.</param>
+            <param name="count">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous send.
+            </returns>
+            <remarks>
+            <p>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ISocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ISocket.Accept"/> methods.
+            </p>
+            <p>
+            The BeginSend method starts asynchronously sending data through the ISocket.
+            You should create a callback method that implements the AsyncCallback delegate.
+            This callback method should use the EndSend method to complete the asynchronous operation.
+            See the .NET Framework SDK Reference for more information on asynchronous methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.EndSend(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous send.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            The EndSend method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ISocket.BeginSend(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Receive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives the specified amount of data from the connected <see cref="T:Rebex.Net.ISocket"/> into a specific location of the receive buffer and using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="offset">The position in the buffer at which to store the received data.</param>
+            <param name="count">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ISocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ISocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins to asynchronously receive data from the connected <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="offset">The position in the buffer at which to store the received data.</param>
+            <param name="count">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous read.
+            </returns>
+            <remarks>
+            <p>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ISocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ISocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ISocket.Accept"/> methods.
+            </p>
+            <p>
+            The BeginReceive method starts asynchronously reading data from the ISocket.
+            You should create a callback method that implements the AsyncCallback delegate.
+            This callback method should use the EndSend method to complete the asynchronous operation.
+            See the .NET Framework SDK Reference for more information on asynchronous methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.EndReceive(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous read.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            The EndReceive method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ISocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Shutdown(System.Net.Sockets.SocketShutdown)">
+            <summary>
+            Disables sends and receives on the <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <param name="how">The <see cref="T:System.Net.Sockets.SocketShutdown"/> value specifying the operation that will no longer be allowed.</param>
+            <remarks>
+            See the reference for <see cref="M:System.Net.Sockets.Socket.Shutdown(System.Net.Sockets.SocketShutdown)"/> for details.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ISocket.Close">
+            <summary>
+            Forces the <see cref="T:Rebex.Net.ISocket"/> connection to close.
+            </summary>
+            <remarks>
+            <p>
+            The application should call <see cref="M:Rebex.Net.ISocket.Shutdown(System.Net.Sockets.SocketShutdown)"/> before calling Close to ensure that
+            all pending data is sent or received before the Socket is closed.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ISocket.Factory">
+            <summary>
+            Gets the instance of <see cref="T:Rebex.Net.ISocketFactory"/> that created this <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <value>An instance of <see cref="T:Rebex.Net.ISocketFactory"/>.</value>
+        </member>
+        <member name="P:Rebex.Net.ISocket.Timeout">
+            <summary>
+            Gets or sets the length of time before the operation times out (specify -1 or 0 to indicate that the request does not time out which is default).
+            </summary>
+            <value>
+            The length of time, in milliseconds, until the operation times out,
+            or the value -1 or 0 to indicate that the request does not time out.
+            Default is -1 (infinite).
+            </value>
+            <remarks>
+            <p>
+            The internal timeout counter is reset every time data is sent
+            or received from to server.
+            </p>
+            <p>
+            The <see cref="P:Rebex.Net.ISocket.Timeout"/> property only affects synchronous methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ISocket.Available">
+            <summary>
+            Gets the amount of data that has been received from the network and is available to be read.
+            </summary>
+            <value>
+            The number of bytes of data that has been received from the network and is available
+            to be read, or 0 if no data is available.
+            </value>
+            <remarks>
+            After the socket has been closed, this property will still indicate there is data to be read
+            if there is 1 byte or more data in the receive buffer. If there is no more data to be read,
+            a value of 0 will be returned.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ISocket.Connected">
+            <summary>
+            Gets a value that indicates whether the <see cref="T:Rebex.Net.ISocket"/> is connected to a remote host as of the last Send or Receive operation. 
+            </summary>
+            <value>true if the <see cref="T:Rebex.Net.ISocket"/> is connected; otherwise, false.</value>
+            <remarks>
+            <p>
+            If you need to determine the current state of the connection, use the <see cref="M:Rebex.Net.ISocket.GetConnectionState">method</see>.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ISocket.LocalEndPoint">
+            <summary>
+            Gets the local endpoint.
+            </summary>
+            <value>The local endpoint that the <see cref="T:Rebex.Net.ISocket"/> is using for communications.</value>
+            <remarks>
+            The LocalEndPoint property contains the network connection information associated with the local network device.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ISocket.RemoteEndPoint">
+            <summary>
+            Gets the remote endpoint.
+            </summary>
+            <value>The remote endpoint that the <see cref="T:Rebex.Net.ISocket"/> is using for communications.</value>
+            <remarks>
+            The RemoteEndPoint property gets the network connection information associated with
+            either the remote host or the proxy server.
+            RemoteEndPoint is set by the <see cref="T:Rebex.Net.ISocket"/> methods that establish a connection
+            to a remote host.
+            </remarks>
+        </member>
+        <member name="T:Rebex.MultiComparer">
+            <summary>
+            Class for chained comparision of objects
+            </summary>
+        </member>
+        <member name="F:Rebex.MultiComparer._comparerChain">
+            <summary>
+            Chain of comparers used for multi comparision
+            </summary>
+        </member>
+        <member name="M:Rebex.MultiComparer.#ctor(System.Collections.IComparer[])">
+            <summary>
+            Creates a new instance of MultiComparer
+            </summary>
+            <param name="comparerChain"></param>
+        </member>
+        <member name="M:Rebex.MultiComparer.Compare(System.Object,System.Object)">
+            <summary>
+            IComparer interface implementation. Compares two instances of provided objects.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Rebex.Net.NetworkSession">
+            <summary>
+            A base class from which all Rebex session-based network protocol objects derive.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.NetworkSession.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:Rebex.Net.NetworkSession"/> object.
+            </summary>
+        </member>
+        <member name="P:Rebex.Net.NetworkSession.UserName">
+            <summary>
+            Gets the authenticated user name, if available.
+            </summary>
+            <value>User name, or null (Nothing in VB.NET).</value>
+        </member>
+        <member name="P:Rebex.Net.NetworkSession.ServerName">
+            <summary>
+            Gets the server name, if available.
+            </summary>
+            <value>Server name, or null (Nothing in VB.NET).</value>
+        </member>
+        <member name="P:Rebex.Net.NetworkSession.ServerPort">
+            <summary>
+            Gets the server port, if available.
+            </summary>
+            <value>server port, or 0.</value>
+        </member>
+        <member name="P:Rebex.Net.NetworkSession.LogWriter">
+            <summary>
+            Gets or sets the logger used by this object.
+            </summary>
+            <value>Logger.</value>
+        </member>
+        <member name="P:Rebex.Net.NetworkSession.InstanceId">
+            <summary>
+            Gets instance ID (intended for logging purposes).
+            </summary>
+            <value>Instance ID.</value>
+        </member>
+        <member name="T:Rebex.Net.Proxy">
+            <summary>
+            Contains proxy settings for a socket connection.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.Proxy.Rebex#Net#ISocketFactory#CreateSocket">
+            <summary>
+            Creates an instance of proxy socket.
+            </summary>
+            <returns>An instance of proxy socket.</returns>
+        </member>
+        <member name="M:Rebex.Net.Proxy.ToString">
+            <summary>
+            Returns a string representation of this proxy.
+            </summary>
+            <returns>String representation of this proxy.</returns>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Proxy"/> class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.Proxy.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the <see cref="T:Rebex.Net.Proxy"/>.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.Proxy.Clone">
+            <summary>
+            Creates a copy of the <see cref="T:Rebex.Net.Proxy"/> instance.
+            </summary>
+            <returns>A new <see cref="T:Rebex.Net.Proxy"/> instance.</returns>
+        </member>
+        <member name="M:Rebex.Net.Proxy.GetProxy(System.Uri)">
+            <summary>
+            Returns the proxied URI for a destination.
+            </summary>
+            <param name="destination">The <see cref="T:System.Uri"/> of the requested FTP server.</param>
+            <returns>The <see cref="T:System.Uri"/> of the FTP server if the resource is on the bypass list; otherwise, the <see cref="T:System.Uri"/> of the proxy.</returns>
+        </member>
+        <member name="M:Rebex.Net.Proxy.IsBypassed(System.Uri)">
+            <summary>
+            Indicates whether to use the proxy server for the specified host.
+            </summary>
+            <param name="host">The <see cref="T:System.Uri"/> of the host to check for proxy use.</param>
+            <returns><b>true</b> if the proxy server should not be used for <i>host</i>; otherwise, <b>false</b>.</returns>
+        </member>
+        <member name="M:Rebex.Net.Proxy.IsBypassed(System.String,System.Int32)">
+            <summary>
+            Indicates whether to use the proxy server for the specified host.
+            </summary>
+            <param name="hostName">The host address to check for proxy use.</param>
+            <param name="port">The port port.</param>
+            <returns><b>true</b> if the proxy server should not be used for <i>host</i>; otherwise, <b>false</b>.</returns>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor">
+            <summary>
+            Initializes an empty instance of the <see cref="T:System.Net.WebProxy"/> class.
+            </summary>
+            <remarks>
+            The default constructor initializes an empty instance of the <see cref="T:Rebex.Net.Proxy"/>
+            class with the <see cref="P:Rebex.Net.Proxy.ProxyType"/> property set to <see cref="P:Rebex.Net.Proxy.ProxyType">ProxyType.None</see>.
+            When the <see cref="P:Rebex.Net.Proxy.ProxyType"/> is set to <see cref="P:Rebex.Net.Proxy.ProxyType">ProxyType.None</see>, the <see cref="M:Rebex.Net.Proxy.IsBypassed(System.Uri)"/> method
+            returns <b>true</b>, and the <see cref="M:Rebex.Net.Proxy.GetProxy(System.Uri)"/> method returns the destination address.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor(Rebex.Net.ProxyType,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Proxy"/> class with the specified type, hostname, and port.
+            </summary>
+            <param name="proxyType">The type of the proxy.</param>
+            <param name="host">The hostname of the proxy server.</param>
+            <param name="port">The port of the proxy server.</param>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor(Rebex.Net.ProxyType,System.String,System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Proxy"/> class with the specified type, hostname, port, and username.
+            </summary>
+            <param name="proxyType">The type of the proxy.</param>
+            <param name="host">The hostname of the proxy server.</param>
+            <param name="port">The port of the proxy server.</param>
+            <param name="username">A user name to submit to the proxy server for authentication.</param>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor(Rebex.Net.ProxyType,Rebex.Net.ProxyAuthentication,System.String,System.Int32,System.Net.NetworkCredential)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Proxy"/> 
+            class with the specified type, hostname, port, and credentials
+            with base authentification.
+            </summary>
+            <param name="proxyType">The type of the proxy.</param>
+            <param name="authenticationMethod">Authentication method.</param>
+            <param name="host">The hostname of the proxy server.</param>
+            <param name="port">The port of the proxy server.</param>
+            <param name="credentials">A <see cref="T:System.Net.NetworkCredential"/> to submit to the proxy server for authentication.</param>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor(Rebex.Net.ProxyType,Rebex.Net.ProxyAuthentication,System.String,System.Int32,System.Boolean,System.Net.NetworkCredential)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Proxy"/> 
+            class with the specified type, hostname, port, bypass setting, list of URIs to bypass, and credentials,
+            with base authentification.
+            </summary>
+            <param name="proxyType">The type of the proxy.</param>
+            <param name="authenticationMethod">Authentication method.</param>
+            <param name="host">The hostname of the proxy server.</param>
+            <param name="port">The port of the proxy server.</param>
+            <param name="bypassOnLocal"><b>true</b> to bypass the proxy for local addresses; otherwise, <b>false</b>.</param>
+            <param name="credentials">A <see cref="T:System.Net.NetworkCredential"/> to submit to the proxy server for authentication.</param>
+        </member>
+        <member name="M:Rebex.Net.Proxy.#ctor(Rebex.Net.ProxyType,Rebex.Net.ProxyAuthentication,System.String,System.Int32,System.Boolean,System.String[],System.Net.NetworkCredential)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.Proxy"/> class with the specified type, hostname, port, bypass setting, list of URIs to bypass, and credentials.
+            </summary>
+            <param name="proxyType">The type of the proxy.</param>
+            <param name="authenticationMethod">Authentication method.</param>
+            <param name="host">The hostname of the proxy server.</param>
+            <param name="port">The port of the proxy server.</param>
+            <param name="bypassOnLocal"><b>true</b> to bypass the proxy for local addresses; otherwise, <b>false</b>.</param>
+            <param name="bypassList">An array of regular expression strings containing the URIs of the servers to bypass.</param>
+            <param name="credentials">A <see cref="T:System.Net.NetworkCredential"/> to submit to the proxy server for authentication.</param>
+            <remarks>Not supported by Rebex FTP for .NET Compact Framework.</remarks>
+        </member>
+        <member name="P:Rebex.Net.Proxy.Host">
+            <summary>
+            Gets or sets the hostname of the proxy server.
+            </summary>
+            <value>The hostname of the proxy server.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.Port">
+            <summary>
+            Gets or sets the port of the proxy server.
+            </summary>
+            <value>The port of the proxy server.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.ProxyType">
+            <summary>
+            Gets or sets the type of the proxy server.
+            </summary>
+            <value>The type of the proxy server.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.AuthenticationMethod">
+            <summary>
+            Gets or sets the authentication method to use for HTTP CONNECT proxy.
+            NTLM authentication is only supported by some HTTP CONNECT proxies.
+            </summary>
+            <value>An authentication method.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.Credentials">
+            <summary>
+            Gets or sets the credentials to submit to the proxy server for authentication.
+            Password authentication is not supported by SOCKS4 and SOCKS4a.
+            </summary>
+            <value>An <see cref="T:System.Net.ICredentials"/> containing the credentials to submit to the proxy server for authentication.</value>
+            <remarks>Only credentials of type <see cref="T:System.Net.NetworkCredential"/> are supported.</remarks>
+        </member>
+        <member name="P:Rebex.Net.Proxy.UserName">
+            <summary>
+            Gets or sets the username to submit to the proxy server for authentication.
+            </summary>
+            <value>A username to submit to the proxy server for authentication.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.Password">
+            <summary>
+            Gets or sets the username to submit to the proxy server for authentication.
+            Password authentication is not supported by SOCKS4 and SOCKS4a.
+            </summary>
+            <value>A username to submit to the proxy server for authentication.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.Domain">
+            <summary>
+            Gets or sets the domain to submit to the proxy server for authentication.
+            </summary>
+            <value>A domain to submit to the proxy server for authentication.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.LocalPortRange">
+            <summary>
+            Gets or sets the local TCP port range to which to bind the connections.
+            </summary>
+            <value>The port range.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.BypassProxyOnLocal">
+            <summary>
+            Gets or sets a value indicating whether to bypass the proxy server for local addresses.
+            </summary>
+            <value><b>true</b> to bypass the proxy server for local addresses; otherwise, <b>false</b>. The default value is <b>false</b>.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.BypassArrayList">
+            <summary>
+            Gets a list of addresses that do not use the proxy server.
+            </summary>
+            <value>An <see cref="T:System.Collections.ArrayList"/> containing a list of regular expressions that describe URIs that will not use the proxy server when accessed.</value>
+            <remarks>Not supported by Rebex FTP for .NET Compact Framework.</remarks>
+        </member>
+        <member name="P:Rebex.Net.Proxy.BypassList">
+            <summary>
+            Gets or sets an array of addresses that do not use the proxy server.
+            </summary>
+            <value>An array containing a list of regular expressions that describe URIs that will not use the proxy server when accessed.</value>
+            <remarks>Not supported by Rebex FTP for .NET Compact Framework.</remarks>
+        </member>
+        <member name="P:Rebex.Net.Proxy.Encoding">
+            <summary>
+            Gets or sets the <see cref="T:System.Text.Encoding">Encoding</see> to use to encode and decode requests and responses.
+            </summary>
+            <value>The <see cref="T:System.Text.Encoding">Encoding</see> to use to encode and decode requests and responses. Default is <see cref="T:System.Text.Encoding">Encoding.Default</see>.</value>
+        </member>
+        <member name="P:Rebex.Net.Proxy.SendRetryTimeout">
+            <summary>
+            Specifies how long (in miliseconds) to continue try sending data before giving up on slow networks. Set it to 0 or -1 means to use the same value as <see cref="T:Rebex.Net.ProxySocket"/>'s <see cref="P:Rebex.Net.ProxySocket.Timeout"/> property.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Rebex.Net.ProxyBase">
+            <summary>
+            Base class for proxied sockets.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ProxyHttpConnect">
+            <summary>
+            Implements socket connections through HTTP CONNECT method.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ProxyAuthentication">
+            <summary>
+            HTTP CONNECT proxy server authentication method.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyAuthentication.Basic">
+            <summary>
+            Basic authentication.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyAuthentication.Ntlm">
+            <summary>
+            NTLM authentication. This can only be used for HTTP CONNECT proxies (see <see cref="T:Rebex.Net.ProxyType"/> enum and <see cref="P:Rebex.Net.ProxySocket.ProxyType"/> property.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ProxyType">
+            <summary>
+            Type of proxy to use to connect to the remote machine.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyType.None">
+            <summary>No proxy. Direct connection.</summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyType.Socks4">
+            <summary>Connection through Socks4 proxy. This is a legacy proxy protocol that does not support password authentication.</summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyType.Socks4a">
+            <summary>Connection through Socks4A proxy (capable of resolving domain names). This is a legacy proxy protocol that does not support password authentication.</summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyType.Socks5">
+            <summary>Connection through Socks5 proxy.</summary>
+        </member>
+        <member name="F:Rebex.Net.ProxyType.HttpConnect">
+            <summary>Connection through HTTP proxy using the CONNECT method.</summary>
+        </member>
+        <member name="T:Rebex.Net.ProxySocketExceptionStatus">
+            <summary>
+            Defines status codes for the <see cref="T:Rebex.Net.ProxySocketException"/> class.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.ConnectFailure">
+            <summary>
+            The remote service point could not be contacted at the transport level.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.ConnectionClosed">
+            <summary>
+            The connection was prematurely closed
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.SocketError">
+            <summary>
+            The error at transport level occured.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.NameResolutionFailure">
+            <summary>
+            The name resolver service could not resolve the host name.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.ProtocolError">
+            <summary>
+            The response received from the server was complete but indicated a protocol-level error. For example, an FTP protocol error such as 550 Access Denied would use this status.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.ProxyNameResolutionFailure">
+            <summary>
+            The name resolver service could not resolve the proxy host name.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.ReceiveFailure">
+            <summary>
+            A complete response was not received from the remote server.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.UnclassifiableError">
+            <summary>
+            An unclassifiable error occurred. This is the default value for <see cref="P:Rebex.Net.ProxySocketException.Status"/>.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.ServerProtocolViolation">
+            <summary>
+            The server response was not a valid response.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.AsyncError">
+            <summary>
+            General exception in asynchronous call.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.NotConnected">
+            <summary>
+            The socket is not connected.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.ProxySocketExceptionStatus.SendRetryTimeout">
+            <summary>
+            An incomplete block of data was sent and the operation timed out.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ProxySocketException">
+            <summary>
+            The exception that is thrown when a proxy error or socket error occurs.
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.ProxySocketException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.ProxySocketException"/> class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocketException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the <see cref="T:Rebex.Net.ProxySocketException"/>.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocketException.#ctor(System.String,Rebex.Net.ProxySocketExceptionStatus)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.ProxySocketException"/> class with the specified error message and status.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="status">One of the <see cref="T:Rebex.Net.ProxySocketExceptionStatus"/> values.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocketException.#ctor(System.String,Rebex.Net.ProxySocketExceptionStatus,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.ProxySocketException"/> class with the specified error message, status,
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="status">One of the <see cref="T:Rebex.Net.ProxySocketExceptionStatus"/> values.</param>
+            <param name="innerException">The exception that is the cause of the current exception. If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocketException.#ctor(System.Net.Sockets.SocketException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.ProxySocketException"/> class with the reference to the socket exception that is the cause of this exception.
+            </summary>
+            <param name="e">The socket exception that is the cause of the current exception.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocketException.GetSocketExceptionMessage(System.Net.Sockets.SocketException)">
+            <summary>
+            Returns an exception message for the supplied SocketException.
+            </summary>
+            <param name="error">Socket exception.</param>
+            <returns>Exception message.</returns>
+        </member>
+        <member name="P:Rebex.Net.ProxySocketException.Status">
+            <summary>
+            Gets the status of the error.
+            </summary>
+            <value>One of the <see cref="T:Rebex.Net.ProxySocketExceptionStatus"/> values.</value> 
+        </member>
+        <member name="P:Rebex.Net.ProxySocketException.ErrorCode">
+            <summary>
+            Gets the error code associated with this exception if the error status is <see cref="T:Rebex.Net.ProxySocketExceptionStatus">SocketError</see> or <see cref="T:Rebex.Net.ProxySocketExceptionStatus">ProtocolError</see>. Returns 0 otherwise.
+            </summary>
+            <value>An integer error code associated with this exception (or 0).</value>
+        </member>
+        <member name="T:Rebex.Net.PortRange">
+            <summary>
+            Represents a TCP/IP port range.
+            </summary>
+        </member>
+        <member name="F:Rebex.Net.PortRange.Any">
+            <summary>
+            Specifies a port range that makes the OS assign an available port number. 
+            </summary>
+        </member>
+        <member name="M:Rebex.Net.PortRange.#ctor(System.Int32)">
+            <summary>
+            Creates a port range that includes a single port.
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="M:Rebex.Net.PortRange.ToString">
+            <summary>
+            Returns the string representation of the port range.
+            </summary>
+            <returns>Port range.</returns>
+        </member>
+        <member name="M:Rebex.Net.PortRange.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a port range that includes a single port.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ProxySocket">
+            <summary>
+            Implements the subset of the Berkeley sockets interface (or the <see cref="T:System.Net.Sockets.Socket"/> class)
+            and adds the ability to connect through Socks4/Socks5 or HTTP proxies.
+            </summary>
+            <remarks>
+            <p>
+            This class is suitable for extending your client applications with the ability
+            to connect through proxies.
+            </p>
+            <p>
+            This class is limited to operations supported by proxies - it is not a
+            replacementfor the <see cref="T:System.Net.Sockets.Socket"/>. This means
+            it is perfect for writing clients, but useless for writing servers.
+            </p>
+            <p>
+            Only connection-oriented protocols are supported at the moment
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.GetConnectionState">
+            <summary>
+            Gets a value that indicates whether the <see cref="T:Rebex.Net.ProxySocket"/> is currently connected to a remote host.
+            </summary>
+            <value>true if the <see cref="T:Rebex.Net.ProxySocket"/> is connected; otherwise, false.</value>
+            <remarks>
+            <p>
+            As long as there is still data available to be read from the socket, this method will indicate that
+            the <see cref="T:Rebex.Net.ProxySocket"/> is connected, even though technically it might have already be considered
+            disconnected based on one's point of view.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Poll(System.Int32,Rebex.Net.SocketSelectMode)">
+            <summary>
+            Determines the status of the socket.
+            </summary>
+            <param name="microSeconds">Time to wait for a response, in microseconds.</param>
+            <param name="mode">Select mode.</param>
+            <returns>True if data can be sent or read or if the connection was closed.</returns>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.#ctor">
+            <summary>
+            Initializes an empty instance of the <see cref="T:Rebex.Net.ProxySocket"/> class.
+            </summary>
+            <remarks>
+            The default constructor initializes an instance of the <see cref="T:Rebex.Net.ProxySocket"/>
+            class with the <see cref="P:Rebex.Net.ProxySocket.ProxyType"/> property set to <see cref="P:Rebex.Net.ProxySocket.ProxyType">ProxyType.None</see>.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.#ctor(System.Net.Sockets.Socket)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.ProxySocket"/> class based on the specified socket.
+            </summary>
+            <param name="socket">Socket to base the <see cref="T:Rebex.Net.ProxySocket"/> instance on.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.#ctor(Rebex.Net.Proxy)">
+            <summary>
+            Initializes a new instance of <see cref="T:Rebex.Net.ProxySocket"/> class with parameters provided in the supplied <see cref="T:Rebex.Net.Proxy"/> object.
+            </summary>
+            <param name="proxy">Contains parameters used to initialize this <see cref="T:Rebex.Net.ProxySocket"/>.</param>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Send(System.Byte[])">
+            <summary>
+            Sends data to a connected <see cref="T:Rebex.Net.ProxySocket"/>.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Send(System.Byte[],System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends data to a connected <see cref="T:Rebex.Net.ProxySocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Send(System.Byte[],System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends the specified amount of data to a connected <see cref="T:Rebex.Net.ProxySocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="size">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Send(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Sends the specified amount of data to a connected <see cref="T:Rebex.Net.ProxySocket"/> starting at the indicated location in the data and using the supplied flags.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="offset">The position in the data buffer to begin sending data.</param>
+            <param name="size">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.BeginSend(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)">
+            <summary>
+            Sends data asynchronously to a connected <see cref="T:Rebex.Net.ProxySocket"/>.
+            </summary>
+            <param name="buffer">The data to be sent.</param>
+            <param name="offset">The position in the data buffer to begin sending data.</param>
+            <param name="size">The number of bytes to send.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous send.
+            </returns>
+            <remarks>
+            <p>
+            Prior to sending data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </p>
+            <p>
+            The BeginSend method starts asynchronously sending data through a ProxySocket.
+            You should create a callback method that implements the AsyncCallback delegate.
+            This callback method should use the EndSend method to complete the asynchronous operation.
+            See the .NET Framework SDK Reference for more information on asynchronous methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.EndSend(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous send.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <returns>The number of bytes sent.</returns>
+            <remarks>
+            The EndSend method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ProxySocket.BeginSend(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Receive(System.Byte[])">
+            <summary>
+            Receives data from a connected <see cref="T:Rebex.Net.ProxySocket"/>.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Receive(System.Byte[],System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives data from a connected <see cref="T:Rebex.Net.ProxySocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Receive(System.Byte[],System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives the specified amount of data from a connected <see cref="T:Rebex.Net.ProxySocket"/> using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="size">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Receive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags)">
+            <summary>
+            Receives the specified amount of data from a connected <see cref="T:Rebex.Net.ProxySocket"/> into a specific location of the receive buffer and using the supplied flags.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="offset">The position in the buffer at which to store the received data.</param>
+            <param name="size">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins to asynchronously receive data from a connected <see cref="T:Rebex.Net.ProxySocket"/>.
+            </summary>
+            <param name="buffer">The storage location for the received data.</param>
+            <param name="offset">The position in the buffer at which to store the received data.</param>
+            <param name="size">The number of bytes to receive.</param>
+            <param name="socketFlags">A bitwise combination of the <see cref="T:System.Net.Sockets.SocketFlags"/> values.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous read.
+            </returns>
+            <remarks>
+            <p>
+            Prior to receiving data, the socket must be connected using either a call to <see cref="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)"/> method or a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> and <see cref="M:Rebex.Net.ProxySocket.Accept"/> methods.
+            </p>
+            <p>
+            The BeginReceive method starts asynchronously reading data from a ProxySocket.
+            You should create a callback method that implements the AsyncCallback delegate.
+            This callback method should use the EndReceive method to complete the asynchronous operation.
+            See the .NET Framework SDK Reference for more information on asynchronous methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.EndReceive(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous read.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <returns>The number of bytes received.</returns>
+            <remarks>
+            The EndReceive method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ProxySocket.BeginReceive(System.Byte[],System.Int32,System.Int32,System.Net.Sockets.SocketFlags,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Close">
+            <summary>
+            Forces the <see cref="T:Rebex.Net.ProxySocket"/> connection to close.
+            </summary>
+            <remarks>
+            <p>
+            The application should call <see cref="M:Rebex.Net.ProxySocket.Shutdown(System.Net.Sockets.SocketShutdown)"/> before calling Close to ensure that
+            all pending data is sent or received before the Socket is closed.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Shutdown(System.Net.Sockets.SocketShutdown)">
+            <summary>
+            Disables sends and receives on the <see cref="T:Rebex.Net.ProxySocket"/>.
+            </summary>
+            <param name="how">The <see cref="T:System.Net.Sockets.SocketShutdown"/> value specifying the operation that will no longer be allowed.</param>
+            <remarks>
+            See the reference for <see cref="M:System.Net.Sockets.Socket.Shutdown(System.Net.Sockets.SocketShutdown)"/> for details.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.IsValidHost(System.String)">
+            <summary>
+            Checks whether the host address is a valid hostname or IP address.
+            </summary>
+            <param name="host">Host name or IP address.</param>
+            <returns>True if valid, false if otherwise.</returns>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.ToEndPoint(System.String,System.Int32)">
+            <summary>
+            Converts the host address and port into an IP endpoint. If the host address is not an IP address, returns null.
+            </summary>
+            <param name="host">Host name or IP address.</param>
+            <param name="port">Host port.</param>
+            <returns>IP endpoint.</returns>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.ToEndPoint(System.Net.IPHostEntry,System.Int32)">
+            <summary>
+            Chooses the most appropriate IP endpoint to use from the host entry.
+            </summary>
+            <param name="hostEntry">Host entry.</param>
+            <param name="port">Port.</param>
+            <returns>IP endpoint.</returns>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.GetAddressLong(System.Net.IPAddress)">
+            <summary>
+            Returns the long value of the IP address of the instance of IPAddress.
+            </summary>
+            <param name="address">An instance of IPAddress.</param>
+            <returns>The long value of the IP address.</returns>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.GetAddressBytes(System.Net.IPAddress)">
+            <summary>
+            Returns an array of bytes of the IP address of the instance of IPAddress.
+            </summary>
+            <param name="address">An instance of IPAddress.</param>
+            <returns>An array of address bytes.</returns>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)">
+            <summary>
+            Starts a request to listen for an incoming connection using the specified control socket as a base.
+            </summary>
+            <param name="controlSocket">The control socket to use as a base.</param>
+            <returns>The endpoint to which a connection from a remote host can be made.</returns>
+            <remarks>
+            <p>
+            This method differs from <see cref="M:System.Net.Sockets.Socket.Listen(System.Int32)"/>:
+            <ul>
+            <li>A control connection socket needs to be specified. This might be needed by a proxy server
+            socket.</li>
+            <li>Only a single incoming connection is accepted.</li>
+            </ul>
+            To accept an incoming connection, use the <see cref="M:Rebex.Net.ProxySocket.Accept"/> or <see cref="M:Rebex.Net.ProxySocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </p>
+            <p>
+            <b>Note:</b> When connected through a HTTP proxy server, this method will fail.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Connect(System.String,System.Int32)">
+            <summary>
+            Establishes a connection to a remote device.
+            </summary>
+            <param name="serverName">The hostname (or IP address) of the remote device.</param>
+            <param name="serverPort">The port number associated with the hostname.</param>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the serverName and serverPort
+            parameters. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Connect(System.Net.EndPoint)">
+            <summary>
+            Establishes a connection to a remote device.
+            </summary>
+            <param name="remoteEP">An <see cref="T:System.Net.IPEndPoint"/> that represents the remote device.</param>
+            <remarks>
+            The Connect method establishes a network connection to a device identified by the remoteEP
+            parameter. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.Accept">
+            <summary>
+            Accepts an incoming connection.
+            </summary>
+            <returns>An instance of connected <see cref="T:Rebex.Net.ProxySocket"/>.</returns>
+            <remarks>
+            <p>
+            A call to Accept is only allowed after a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> or <see cref="M:Rebex.Net.ProxySocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/>/<see cref="M:Rebex.Net.ProxySocket.EndListen(System.IAsyncResult)"/> methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)">
+            <summary>
+            Starts an asynchronously request to listen for an incoming connection using the specified control socket as a base.
+            </summary>
+            <param name="controlSocket">The control socket to use as a base.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+            </returns>
+            <remarks>
+            <p>
+            This method differs from <see cref="M:System.Net.Sockets.Socket.Listen(System.Int32)"/>:
+            <ul>
+            <li>A control connection socket needs to be specified. This might be needed by a proxy server
+            socket.</li>
+            <li>Only a single incoming connection is accepted.</li>
+            </ul>
+            To accept an incoming connection, use the <see cref="M:Rebex.Net.ProxySocket.Accept"/> or <see cref="M:Rebex.Net.ProxySocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </p>
+            <p>
+            <b>Note:</b> When connected through a HTTP proxy server, this method will fail.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.BeginAccept(System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request to accept an incoming connection.
+            </summary>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+            </returns>
+            <remarks>
+            <p>
+            A call to Accept is only allowed after a call to <see cref="M:Rebex.Net.ProxySocket.Listen(Rebex.Net.ISocket)"/> or <see cref="M:Rebex.Net.ProxySocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/>/<see cref="M:Rebex.Net.ProxySocket.EndListen(System.IAsyncResult)"/> methods.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.BeginConnect(System.String,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request for a connection to a network device.
+            </summary>
+            <param name="serverName">The hostname (or IP address) of the remote device.</param>
+            <param name="serverPort">The port number associated with the hostname.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous connection.
+            </returns>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the serverName and serverPort
+            parameters. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.BeginConnect(System.Net.EndPoint,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous request for a connection to a network device.
+            </summary>
+            <param name="remoteEP">An <see cref="T:System.Net.IPEndPoint"/> that represents the remote device.</param>
+            <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+            <param name="state">An object containing state information for this request.</param>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that references the asynchronous connection.
+            </returns>
+            <remarks>
+            The Connect method establishes a network connection to a host identified by the remoteEP
+            parameter. Once the connection has been made, you can send data to the remote device with
+            the Send method, or receive data from the remote device with the Receive method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.EndConnect(System.IAsyncResult)">
+            <summary>
+            Ends a pending asynchronous connection request.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user-defined data.</param>
+            <remarks>
+            The EndConnect method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ProxySocket.BeginConnect(System.Net.EndPoint,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.EndAccept(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous request to accept an incoming connection.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>An instance of connected <see cref="T:Rebex.Net.ProxySocket"/>.</returns>
+            <remarks>
+            The EndAccept method completes a request to accept a connection that was started with the <see cref="M:Rebex.Net.ProxySocket.BeginAccept(System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Net.ProxySocket.EndListen(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous request to listen for an incoming connection.
+            </summary>
+            <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+            <returns>The endpoint to which a connection from a remote host can be made.</returns>
+            <remarks>
+            The EndListen method completes a request to listen for a connection that was started with the <see cref="M:Rebex.Net.ProxySocket.BeginListen(Rebex.Net.ISocket,System.AsyncCallback,System.Object)"/> method.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.ProxyHost">
+            <summary>
+            Gets the hostname of the proxy server.
+            </summary>
+            <value>The hostname of the proxy server.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.ProxyPort">
+            <summary>
+            Gets the port of the proxy server.
+            </summary>
+            <value>The port of the proxy server.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.LocalPortRange">
+            <summary>
+            Gets the local TCP port range to which to bind the connections.
+            </summary>
+            <value>The port range.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.ProxyType">
+            <summary>
+            Gets the type of the proxy server.
+            </summary>
+            <value>The type of the proxy server.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.AuthenticationMethod">
+            <summary>
+            Gets the authentication method to use for HTTP CONNECT proxy.
+            NTLM authentication is only supported by some HTTP CONNECT proxies.
+            </summary>
+            <value>An authentication method.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.UserName">
+            <summary>
+            Gets the username to submit to the proxy server for authentication.
+            </summary>
+            <value>A username to submit to the proxy server for authentication.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Password">
+            <summary>
+            Gets the username to submit to the proxy server for authentication.
+            Password authentication is not supported by SOCKS4 and SOCKS4a.
+            </summary>
+            <value>A username to submit to the proxy server for authentication.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Domain">
+            <summary>
+            Gets the domain to submit to the proxy server for authentication.
+            </summary>
+            <value>A domain to submit to the proxy server for authentication.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.SendBufferSize">
+            <summary>
+            Gets or sets send buffer size. Must be set before calling the <see cref="M:Rebex.Net.ProxySocket.Connect(System.String,System.Int32)"/> method.
+            </summary>
+            <value>Send buffer size.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.ReceiveBufferSize">
+            <summary>
+            Gets or sets receive buffer size. Must be set before calling the <see cref="M:Rebex.Net.ProxySocket.Connect(System.String,System.Int32)"/> method.
+            </summary>
+            <value>Receive buffer size.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Timeout">
+            <summary>
+            Gets or sets the length of time before the operation times out (specify -1 or 0 to indicate that the request does not time out which is default).
+            </summary>
+            <value>
+            The length of time, in milliseconds, until the operation times out,
+            or the value -1 or 0 to indicate that the request does not time out.
+            Default is -1 (infinite).
+            </value>
+            <remarks>
+            <p>
+            The internal timeout counter is reset every time data is sent
+            or received from to server.
+            </p>
+            <p>
+            The <see cref="P:Rebex.Net.ProxySocket.Timeout"/> property only affects synchronous methods.
+            </p>
+            <p>
+            Minimal value is 500. Setting this to a value lower than 500 will set it to 500.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Socket">
+            <summary>
+            Gets the internal <see cref="T:System.Net.Sockets.Socket"/> value.
+            </summary>
+            <value>The internal <see cref="T:System.Net.Sockets.Socket"/> value.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Rebex#Net#ISocket#Factory">
+            <summary>
+            Gets an instance of <see cref="T:Rebex.Net.ISocketFactory"/> that created this <see cref="T:Rebex.Net.ISocket"/>.
+            </summary>
+            <value>An instance of <see cref="T:Rebex.Net.ISocketFactory"/>.</value>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.RemoteEndPoint">
+            <summary>
+            Gets the remote endpoint.
+            </summary>
+            <value>The remote endpoint that the <see cref="T:Rebex.Net.ProxySocket"/> is using for communications.</value>
+            <remarks>
+            The RemoteEndPoint property gets the network connection information associated with
+            either the remote host or the proxy server.
+            RemoteEndPoint is set by <see cref="T:Rebex.Net.ProxySocket"/> methods that establish a connection
+            to a remote host.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.LocalEndPoint">
+            <summary>
+            Gets the local endpoint.
+            </summary>
+            <value>The local endpoint that the <see cref="T:Rebex.Net.ProxySocket"/> is using for communications.</value>
+            <remarks>
+            The LocalEndPoint property contains the network connection information associated with the local network device.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Available">
+            <summary>
+            Gets the amount of data that has been received from the network and is available to be read.
+            </summary>
+            <value>
+            The number of bytes of data that has been received from the network and is available
+            to be read, or 0 if no data is available.
+            </value>
+            <remarks>
+            After the socket has been closed, this property will still indicate there is data to be read
+            if there is 1 byte or more data in the receive buffer. If there is no more data to be read,
+            a value of 0 will be returned.
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Connected">
+            <summary>
+            Gets a value that indicates whether the <see cref="T:Rebex.Net.ProxySocket"/> is connected to a remote host as of the last Send or Receive operation. 
+            </summary>
+            <value>true if the <see cref="T:Rebex.Net.ProxySocket"/> is connected; otherwise, false.</value>
+            <remarks>
+            <p>
+            If you need to determine the current state of the connection, use the <see cref="M:Rebex.Net.ProxySocket.GetConnectionState">method</see>.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:Rebex.Net.ProxySocket.Handle">
+            <summary>
+            Gets the operating system handle for the inner <see cref="T:System.Net.Sockets.Socket"/>.
+            </summary>
+            <value>An <see cref="T:System.IntPtr"/> representing the operating system handle for the <see cref="T:System.Net.Sockets.Socket"/>.</value>
+        </member>
+        <member name="T:Rebex.Net.ProxySocks4Base">
+            <summary>
+            Implements Socks4 and Socks4a protocols.
+            </summary>
+        </member>
+        <member name="T:Rebex.Net.ProxySocks5">
+            <summary>
+            Implements Socks5 protocol.
+            </summary>
+        </member>
+        <member name="T:Rebex.Security.Authentication.SspiRequirements">
+            <summary>
+            SSPI requirements flag.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Authentication.SspiRequirements.Confidentiality">
+            <summary>Confidentiality.</summary>
+        </member>
+        <member name="F:Rebex.Security.Authentication.SspiRequirements.Connection">
+            <summary>Connection.</summary>
+        </member>
+        <member name="F:Rebex.Security.Authentication.SspiRequirements.Integrity">
+            <summary>Integrity.</summary>
+        </member>
+        <member name="T:Rebex.Security.Authentication.SspiDataRepresentation">
+            <summary>
+            SSPI data representation.
+            </summary>
+        </member>
+        <member name="F:Rebex.Security.Authentication.SspiDataRepresentation.Native">
+            <summary>Native.</summary>
+        </member>
+        <member name="F:Rebex.Security.Authentication.SspiDataRepresentation.Network">
+            <summary>Network.</summary>
+        </member>
+        <member name="T:Rebex.Security.Authentication.UnmanagedBlockLite">
+            <summary>
+            Represents a block of unmanaged memory.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.#ctor(System.Int32)">
+            <summary>
+            Allocates a block of unmanaged memory with the specified length.
+            </summary>
+            <param name="length">The length of unmanaged memory block.</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.#ctor(System.IntPtr)">
+            <summary>
+            Creates an unmanaged block that represents a block of memory specified by the supplied pointer.
+            </summary>
+            <param name="ptr">Pointer to a block of unmanaged memory.</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.ToIntPtr">
+            <summary>
+            Returns a pointer to the current unmanaged memory block.
+            </summary>
+            <returns>A pointer to unamanged memory block.</returns>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.ReadInt32(System.Int32)">
+            <summary>
+            Reads a 32-bit signed integer from the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.WriteInt32(System.Int32,System.Int32)">
+            <summary>
+            Writes a 32-bit signed integer to the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+            <param name="val">The value to write.</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.WriteIntPtr(System.Int32,System.IntPtr)">
+            <summary>
+            Writes a pointer to the specified offset of the memory block.
+            </summary>
+            <param name="ofs">Offset in the memory block.</param>
+            <param name="val">The value to write.</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.Dispose">
+            <summary>
+            Disposes the object and releases resources.
+            </summary>
+            <remarks>
+            Calling this method ensures that all resources are freed.
+            </remarks>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources and optionally releases the managed resources.
+            </summary>
+            <param name="disposing"><b>true</b> to release both managed and unmanaged resources; <b>false</b> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.UnmanagedBlockLite.Finalize">
+            <summary>
+            Finalizer called by garbage collector.
+            </summary>
+        </member>
+        <member name="T:Rebex.Security.Authentication.SspiException">
+            <summary>
+            Represents an SSPI error.
+            </summary>
+        </member>
+        <member name="T:Rebex.Security.Authentication.SspiAuthentication">
+            <summary>
+            Wrapper class for SSPI authentication.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.#ctor(System.String,Rebex.Security.Authentication.SspiDataRepresentation,System.String,Rebex.Security.Authentication.SspiRequirements,System.String,System.String,System.String)">
+            <summary>
+            Creates a new SSPI session.
+            </summary>
+            <param name="package">Authentication package.</param>
+            <param name="dataRepresentation">Data representation.</param>
+            <param name="targetName">Target name.</param>
+            <param name="requirements">Requirements.</param>
+            <param name="userName">User name.</param>
+            <param name="password">Password.</param>
+            <param name="userDomain">User domain</param>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.Finalize">
+            <summary>
+            Finalizer.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.Dispose">
+            <summary>
+            Disposes the SSPI session.
+            </summary>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.GetNextMessage(System.Byte[],System.Boolean@)">
+            <summary>
+            Get next SSPI message.
+            </summary>
+            <param name="challenge">Challenge.</param>
+            <param name="complete">Receives a value indicating whether the SSPI has finished.</param>
+            <returns>Next SSPI message.</returns>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.MakeSignature(System.Byte[])">
+            <summary>
+            Creates a SSPI signature.
+            </summary>
+            <param name="challenge">Challenge.</param>
+            <returns>Signature.</returns>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.Unwrap(System.Byte[],System.Int32@)">
+            <summary>
+            Unwraps (decrypts) the SSPI message.
+            </summary>
+            <param name="challenge">Challenge.</param>
+            <param name="qop">QOP</param>
+            <returns>Unwrapped (decrypted) message.</returns>
+        </member>
+        <member name="M:Rebex.Security.Authentication.SspiAuthentication.Wrap(System.Byte[],System.Int32,System.Boolean@)">
+            <summary>
+            Wraps (encryptes) SSPI message.
+            </summary>
+            <param name="response">Response.</param>
+            <param name="qop">QOP</param>
+            <param name="complete">Receives a value indicating whether the SSPI has finished.</param>
+            <returns>Wrapped (encrypted) message.</returns>
+        </member>
+        <member name="T:Rebex.TraceLogWriter">
+            <summary>
+            Trace-based log writer that writes log messages to all trace listeners.
+            </summary>
+            <remarks>
+            For general informatiuon about NET trace, see for instance
+            <see href="http://www.15seconds.com/issue/020910.htm"/>
+            </remarks>
+        </member>
+        <member name="M:Rebex.TraceLogWriter.#ctor">
+            <summary>
+            Creates a new instance of trace log writer based on the default &quot;Info&quot; log level.
+            </summary>
+        </member>
+        <member name="M:Rebex.TraceLogWriter.#ctor(Rebex.LogLevel)">
+            <summary>
+            Creates a new instance of trace log writer based on the specified log level.
+            </summary>
+            <param name="level">Log level.</param>
+        </member>
+        <member name="M:Rebex.TraceLogWriter.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Rebex.TraceLogWriter.WriteMessage(System.String)">
+            <summary>
+            Appends the specified message text to the trace listeners log. This method is only called by <see cref="M:Rebex.LogWriterBase.Write(Rebex.LogLevel,System.Type,System.Int32,System.String,System.String)"/> method
+            and is only used by text-based loggers.
+            </summary>
+            <param name="message">Full message info.</param>
+        </member>
+        <member name="P:Rebex.TraceLogWriter.IsClosed">
+            <summary>
+            Get a value indicating whether the log writer is closed.
+            </summary>
+            <value>True when log writer is closed. False if log writer is opened and ready for writing.</value>
+        </member>
+    </members>
+</doc>

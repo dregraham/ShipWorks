@@ -1,0 +1,115 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ApplicationCore;
+
+namespace ShipWorks.Stores
+{
+    /// <summary>
+    /// Manager of all the StoreTypes available in ShipWorks
+    /// </summary>
+    public static class StoreTypeManager
+    {        
+        /// <summary>
+        /// Returns all store types in ShipWorks
+        /// </summary>
+        public static List<StoreType> StoreTypes
+        {
+            get
+            {
+                List<StoreType> storeTypes = new List<StoreType>();
+
+                foreach (StoreTypeCode typeCode in Enum.GetValues(typeof(StoreTypeCode)))
+                {
+                    // Skip the invalid one
+                    if (typeCode == StoreTypeCode.Invalid)
+                    {
+                        continue;
+                    }
+
+                    StoreType storeType = GetType(typeCode);
+                    storeTypes.Add(storeType);
+                }
+
+                // Sort based on the store name
+                storeTypes.Sort(new Comparison<StoreType>( delegate (StoreType left, StoreType right)
+                    {
+                        return left.StoreTypeName.CompareTo(right.StoreTypeName);  
+                    }));
+
+                return storeTypes;
+            }
+        }
+
+        /// <summary>
+        /// Get the StoreType instance of the specified StoreEntity
+        /// </summary>
+        public static StoreType GetType(StoreEntity store)
+        {
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            return GetType((StoreTypeCode) store.TypeCode, store);
+        }
+
+        /// <summary>
+        /// The indexer of the class based on store type
+        /// </summary>
+        public static StoreType GetType(StoreTypeCode typeCode)
+        {
+            return GetType(typeCode, null);
+        }
+
+        /// <summary>
+        /// Return the StoreType for the given store type.  If store is not null,
+        /// then any "instance" methods of the StoreType will use it.
+        /// </summary>
+        private static StoreType GetType(StoreTypeCode typeCode, StoreEntity store)
+        {
+            switch (typeCode)
+            {
+                case StoreTypeCode.ChannelAdvisor: return new Platforms.ChannelAdvisor.ChannelAdvisorStoreType(store);
+                case StoreTypeCode.CreLoaded: return new Platforms.CreLoaded.CreLoadedStoreType(store);
+                case StoreTypeCode.GenericModule: return new Platforms.GenericModule.GenericModuleStoreType(store);
+                case StoreTypeCode.GenericFile: return new Platforms.GenericFile.GenericFileStoreType(store);
+                case StoreTypeCode.Magento: return new Platforms.Magento.MagentoStoreType(store);
+                case StoreTypeCode.osCommerce: return new Platforms.osCommerce.oscStoreType(store);
+                case StoreTypeCode.ShopSite: return new Platforms.ShopSite.ShopSiteStoreType(store);
+                case StoreTypeCode.VirtueMart: return new Platforms.VirtueMart.VirtueMartStoreType(store);
+                case StoreTypeCode.XCart: return new Platforms.XCart.XCartStoreType(store);
+                case StoreTypeCode.ZenCart: return new Platforms.ZenCart.ZenCartStoreType(store);
+                case StoreTypeCode.Infopia: return new Platforms.Infopia.InfopiaStoreType(store);
+                case StoreTypeCode.PayPal: return new Platforms.PayPal.PayPalStoreType(store);
+                case StoreTypeCode.Amazon: return new Platforms.Amazon.AmazonStoreType(store);
+                case StoreTypeCode.Ebay: return new Platforms.Ebay.EbayStoreType(store);
+                case StoreTypeCode.Miva: return new Platforms.Miva.MivaStoreType(store);
+                case StoreTypeCode.MarketplaceAdvisor: return new Platforms.MarketplaceAdvisor.MarketplaceAdvisorStoreType(store);
+                case StoreTypeCode.Yahoo: return new Platforms.Yahoo.YahooStoreType(store);
+                case StoreTypeCode.AuctionSound: return new Platforms.AuctionSound.AuctionSoundStoreType(store);
+                case StoreTypeCode.OrderDynamics: return new Platforms.OrderDynamics.OrderDynamicsStoreType(store);
+                case StoreTypeCode.WebShopManager: return new Platforms.WebShopManager.WebShopManagerStoreType(store);
+                case StoreTypeCode.SearchFit: return new Platforms.SearchFit.SearchFitStoreType(store);
+                case StoreTypeCode.ProStores: return new Platforms.ProStores.ProStoresStoreType(store);
+                case StoreTypeCode.AmeriCommerce: return new Platforms.AmeriCommerce.AmeriCommerceStoreType(store);
+                case StoreTypeCode.NetworkSolutions: return new Platforms.NetworkSolutions.NetworkSolutionsStoreType(store);
+                case StoreTypeCode.Volusion: return new Platforms.Volusion.VolusionStoreType(store);
+                case StoreTypeCode.OrderMotion: return new Platforms.OrderMotion.OrderMotionStoreType(store);
+                case StoreTypeCode.ClickCartPro: return new Platforms.ClickCartPro.ClickCartProStoreType(store);
+                case StoreTypeCode.CommerceInterface: return new Platforms.CommerceInterface.CommerceInterfaceStoreType(store);
+                case StoreTypeCode.ThreeDCart: return new Platforms.ThreeDCart.ThreeDCartStoreType(store);
+                case StoreTypeCode.BigCommerce: return new Platforms.BigCommerce.BigCommerceStoreType(store);
+                case StoreTypeCode.Etsy: return new Platforms.Etsy.EtsyStoreType(store);
+                case StoreTypeCode.Shopify: return new Platforms.Shopify.ShopifyStoreType(store);
+                case StoreTypeCode.NeweggMarketplace: return new Platforms.Newegg.NeweggStoreType(store);             
+                case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
+                case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
+            }
+
+            throw new InvalidOperationException("Invalid store type.");
+        }
+
+    }
+}

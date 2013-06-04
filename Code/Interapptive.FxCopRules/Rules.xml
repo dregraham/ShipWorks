@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Rules FriendlyName="Interapptive Rules">
+  <Rule TypeName="WrapThreadsWithExceptionMonitor" Category="Interapptive" CheckId="SW0001">
+    <Name>Wrap all thread starts with ExceptionMonitor</Name>
+    <Description>When starting a new thread with Thread.Start or ThreadPool.QueueUserWorkItem, use ExceptionMonitor to ensure that 
+    callstacks from the thread-start site are captured.</Description>
+    <Url></Url>
+    <Resolution>Use one of the ExceptionMonitor.WrapXXX methods.</Resolution>
+    <MessageLevel Certainty="70">Warning</MessageLevel>
+    <Email></Email>
+    <FixCategories>NonBreaking</FixCategories>
+    <Owner></Owner>
+  </Rule>
+</Rules>
