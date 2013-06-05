@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NeweggAPIResponse>
+  <IsSuccess>true</IsSuccess>
+  <SellerID>A0XA</SellerID>
+  <OperationType>GetOrderInfoResponse</OperationType>
+  <ResponseBody>
+    <PageInfo>
+      <TotalCount>70</TotalCount>
+      <TotalPageCount>1</TotalPageCount>
+      <PageSize>100</PageSize>
+      <PageIndex>1</PageIndex>
+    </PageInfo>
+    <OrderInfoList>
+      <OrderInfo>
+        <SellerID>A0XA</SellerID>
+        <OrderNumber>117833739</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>01/06/2013 17:28:06</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>shane mcwilliams</CustomerName>
+        <CustomerPhoneNumber>504-215-8285</CustomerPhoneNumber>
+        <CustomerEmailAddress>cjdmf94srwsqlsofr@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>5528 wabash dr</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>marrero</ShipToCityName>
+        <ShipToStateCode>LA</ShipToStateCode>
+        <ShipToZipCode>70072</ShipToZipCode>
+        <ShipToCountryCode>US</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-7 business days)</ShipService>
+        <ShipToFirstName>shane</ShipToFirstName>
+        <ShipToLastName>mcwilliams</ShipToLastName>
+        <ShipToCompany></ShipToCompany>
+        <OrderItemAmount>63.98</OrderItemAmount>
+        <ShippingAmount>0.00</ShippingAmount>
+        <DiscountAmount>0.00</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>63.98</OrderTotalAmount>
+        <OrderQty>1</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>8-LED-KIT</SellerPartNumber>
+            <NeweggItemNumber>9SIA0XA0CK4658</NeweggItemNumber>
+            <MfrPartNumber>8-LED-KIT</MfrPartNumber>
+            <UPCCode></UPCCode>
+            <Description>RV/Party Bus/Décor/Accent LED NEON Interior Kit Sound Activated</Description>
+            <OrderedQty>1</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>63.98</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+    </OrderInfoList>
+  </ResponseBody>
+  <Memo></Memo>
+  <ResponseDate>01/07/2013 10:52:59</ResponseDate>
+</NeweggAPIResponse>

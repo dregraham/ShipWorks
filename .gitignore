@@ -20,9 +20,8 @@ _sgbak
 *.opensdf
 *.sdf
 *.vcxproj.user
-Artifacts
+/Artifacts
 Code/ShipWorks.Native/x64
-
 /Backup2
 *.dbmdl
 /_UpgradeReport_Files
