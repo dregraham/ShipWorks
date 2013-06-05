@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
 	ProjectSection(SolutionItems) = preProject
 		Build\shared.targets = Build\shared.targets
@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks", "Code\ShipWorks
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShipWorks.Native", "Code\ShipWorks.Native\Native.vcxproj", "{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.SqlServer", "Code\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj", "{CFF69808-F073-42B7-96A2-2616987F6737}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ShipWorks.SqlServer", "Code\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj", "{D9FBA556-68E0-4961-A400-636A9A6BC7BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Data.Adapter", "Code\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj", "{D5EB1EB5-DD70-4461-9377-B462031837DC}"
 EndProject
@@ -35,23 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Tests.Integration.MSTest", "Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj", "{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}"
 EndProject
 Global
-	GlobalSection(VaultVsipSolution-v2) = preSolution
-		VaultHost = http://vault.interapptive.com/VaultService
-		VaultRepositoryID = 2
-		VaultRepositoryGUID = 4dc65538-e67f-4277-9622-0ab008abf2fc
-		ProjectCount = 11
-		ProjectRelativeDiskPath1 = Code\ShipWorks\ShipWorks.csproj
-		ProjectRelativeDiskPath2 = Code\ShipWorks.Native\Native.vcxproj
-		ProjectRelativeDiskPath3 = Code\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj
-		ProjectRelativeDiskPath4 = Code\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj
-		ProjectRelativeDiskPath5 = Code\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj
-		ProjectRelativeDiskPath6 = Code\Interapptive.Shared\Interapptive.Shared.csproj
-		ProjectRelativeDiskPath7 = Code\ShipWorks.Shared\ShipWorks.Shared.csproj
-		ProjectRelativeDiskPath8 = Code\ShipWorks.Tests\ShipWorks.Tests.csproj
-		ProjectRelativeDiskPath9 = ShipWorks.sln
-		ProjectRelativeDiskPath10 = Code\ShipWorks.Tests.Integration.Fitnesse\ShipWorks.Tests.Integration.Fitnesse.csproj
-		ProjectRelativeDiskPath11 = Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj
-	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ShipWorks.vsmdi
 	EndGlobalSection
@@ -110,29 +93,29 @@ Global
 		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Mixed Platforms.Build.0 = Release|x64
 		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Win32.ActiveCfg = Release|Win32
 		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Win32.Build.0 = Release|Win32
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug (x86)|Any CPU.Deploy.0 = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug (x86)|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug (x86)|Win32.ActiveCfg = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release (x86)|Any CPU.Deploy.0 = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release (x86)|Mixed Platforms.Build.0 = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release (x86)|Win32.ActiveCfg = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{CFF69808-F073-42B7-96A2-2616987F6737}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.Deploy.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Win32.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release (x86)|Any CPU.Deploy.0 = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release (x86)|Mixed Platforms.Build.0 = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release (x86)|Win32.ActiveCfg = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Release|Win32.ActiveCfg = Release|Any CPU
 		{D5EB1EB5-DD70-4461-9377-B462031837DC}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5EB1EB5-DD70-4461-9377-B462031837DC}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
 		{D5EB1EB5-DD70-4461-9377-B462031837DC}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -276,5 +259,22 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(VaultVsipSolution-v2) = preSolution
+		VaultHost = http://vault.interapptive.com/VaultService
+		VaultRepositoryID = 2
+		VaultRepositoryGUID = 4dc65538-e67f-4277-9622-0ab008abf2fc
+		ProjectCount = 11
+		ProjectRelativeDiskPath1 = Code\ShipWorks\ShipWorks.csproj
+		ProjectRelativeDiskPath2 = Code\ShipWorks.Native\Native.vcxproj
+		ProjectRelativeDiskPath3 = Code\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj
+		ProjectRelativeDiskPath4 = Code\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj
+		ProjectRelativeDiskPath5 = Code\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj
+		ProjectRelativeDiskPath6 = Code\Interapptive.Shared\Interapptive.Shared.csproj
+		ProjectRelativeDiskPath7 = Code\ShipWorks.Shared\ShipWorks.Shared.csproj
+		ProjectRelativeDiskPath8 = Code\ShipWorks.Tests\ShipWorks.Tests.csproj
+		ProjectRelativeDiskPath9 = ShipWorks.sln
+		ProjectRelativeDiskPath10 = Code\ShipWorks.Tests.Integration.Fitnesse\ShipWorks.Tests.Integration.Fitnesse.csproj
+		ProjectRelativeDiskPath11 = Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj
 	EndGlobalSection
 EndGlobal
