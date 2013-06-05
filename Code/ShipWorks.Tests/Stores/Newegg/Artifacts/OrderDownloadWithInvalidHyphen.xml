@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NeweggAPIResponse>
+  <IsSuccess>true</IsSuccess>
+  <SellerID>A1K5</SellerID>
+  <OperationType>GetOrderInfoResponse</OperationType>
+  <ResponseBody>
+    <PageInfo>
+      <TotalCount>100</TotalCount>
+      <TotalPageCount>1</TotalPageCount>
+      <PageSize>100</PageSize>
+      <PageIndex>1</PageIndex>
+    </PageInfo>
+    <OrderInfoList>
+      <OrderInfo>
+        <SellerID>A1K5</SellerID>
+        <OrderNumber>152486435</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>12/06/2012 12:45:44</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>Allan Lesser</CustomerName>
+        <CustomerPhoneNumber>301-442-6923</CustomerPhoneNumber>
+        <CustomerEmailAddress>cq3yw1d3erc0t96km@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>7100 Pyle Rd</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>Bethesda</ShipToCityName>
+        <ShipToStateCode>MD</ShipToStateCode>
+        <ShipToZipCode>20817-5622</ShipToZipCode>
+        <ShipToCountryCode>US</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-7 business days)</ShipService>
+        <ShipToFirstName>Allan</ShipToFirstName>
+        <ShipToLastName>Lesser</ShipToLastName>
+        <ShipToCompany></ShipToCompany>
+        <OrderItemAmount>1079.95</OrderItemAmount>
+        <ShippingAmount>29.95</ShippingAmount>
+        <DiscountAmount>0.00</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>1109.90</OrderTotalAmount>
+        <OrderQty>1</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>ONTXNR818</SellerPartNumber>
+            <NeweggItemNumber>9SIA1K50H66939</NeweggItemNumber>
+            <MfrPartNumber>TX-NR818</MfrPartNumber>
+            <UPCCode>751398010545</UPCCode>
+            <Description>ONKYO TX-NR818 7.2-Channel Network A/V Receiver – Black</Description>
+            <OrderedQty>1</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>1079.95</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+    </OrderInfoList>
+  </ResponseBody>
+  <Memo></Memo>
+  <ResponseDate>12/06/2012 15:12:36</ResponseDate>
+</NeweggAPIResponse>

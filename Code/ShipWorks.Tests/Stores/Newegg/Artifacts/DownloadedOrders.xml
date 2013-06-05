@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NeweggAPIResponse>
+  <IsSuccess>true</IsSuccess>
+  <SellerID>A09V</SellerID>
+  <OperationType>GetOrderInfoResponse</OperationType>
+  <ResponseBody>
+    <PageInfo>
+      <TotalCount>42</TotalCount>
+      <TotalPageCount>1</TotalPageCount>
+      <PageSize>100</PageSize>
+      <PageIndex>1</PageIndex>
+    </PageInfo>
+    <OrderInfoList>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>150109083</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>06/20/2012 16:48:53</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>Estella Pan</CustomerName>
+        <CustomerPhoneNumber>626-271-9700EXT2225</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpin0l4tdojyl956z@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>17708 Rowland St</ShipToAddress1>
+        <ShipToAddress2>Suite 100</ShipToAddress2>
+        <ShipToCityName>Rowland Heights</ShipToCityName>
+        <ShipToStateCode>CA</ShipToStateCode>
+        <ShipToZipCode>91748-1119</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-15 business days)</ShipService>
+        <ShipToFirstName>Estella</ShipToFirstName>
+        <ShipToLastName>Pan</ShipToLastName>
+        <ShipToCompany>Newegg - Test</ShipToCompany>
+        <OrderItemAmount>24.90</OrderItemAmount>
+        <ShippingAmount>1.00</ShippingAmount>
+        <DiscountAmount>2.20</DiscountAmount>
+        <RefundAmount>7.00</RefundAmount>
+        <OrderTotalAmount>23.70</OrderTotalAmount>
+        <OrderQty>10</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-001</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876393</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-001</MfrPartNumber>
+            <UPCCode>123456780000</UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>5</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>1.99</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-002</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876392</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-002</MfrPartNumber>
+            <UPCCode></UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>5</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>2.99</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>150108843</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>06/20/2012 16:46:27</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>Estella Pan</CustomerName>
+        <CustomerPhoneNumber>626-271-9700EXT2225</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpin0l4tdojyl956z@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>17708 Rowland St</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>Rowland Heights</ShipToCityName>
+        <ShipToStateCode>CA</ShipToStateCode>
+        <ShipToZipCode>91748-1119</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-15 business days)</ShipService>
+        <ShipToFirstName>Estella</ShipToFirstName>
+        <ShipToLastName>Pan</ShipToLastName>
+        <ShipToCompany>Newegg - Test</ShipToCompany>
+        <OrderItemAmount>2.99</OrderItemAmount>
+        <ShippingAmount>1.00</ShippingAmount>
+        <DiscountAmount>0.00</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>3.99</OrderTotalAmount>
+        <OrderQty>1</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-002</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876392</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-002</MfrPartNumber>
+            <UPCCode></UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>1</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>2.99</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>150108663</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>06/20/2012 16:41:24</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>Estella Pan</CustomerName>
+        <CustomerPhoneNumber>626-271-9700EXT2225</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpin0l4tdojyl956z@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>17708 Rowland St</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>Rowland Heights</ShipToCityName>
+        <ShipToStateCode>CA</ShipToStateCode>
+        <ShipToZipCode>91748-1119</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-15 business days)</ShipService>
+        <ShipToFirstName>Estella</ShipToFirstName>
+        <ShipToLastName>Pan</ShipToLastName>
+        <ShipToCompany>Newegg - Test</ShipToCompany>
+        <OrderItemAmount>8.97</OrderItemAmount>
+        <ShippingAmount>1.00</ShippingAmount>
+        <DiscountAmount>0.00</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>9.97</OrderTotalAmount>
+        <OrderQty>3</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-002</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876392</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-002</MfrPartNumber>
+            <UPCCode></UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>3</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>2.99</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>150108343</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>06/20/2012 16:39:28</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>Estella Pan</CustomerName>
+        <CustomerPhoneNumber>626-271-9700EXT2225</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpin0l4tdojyl956z@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>17708 Rowland St</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>Rowland Heights</ShipToCityName>
+        <ShipToStateCode>CA</ShipToStateCode>
+        <ShipToZipCode>91748-1119</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-15 business days)</ShipService>
+        <ShipToFirstName>Estella</ShipToFirstName>
+        <ShipToLastName>Pan</ShipToLastName>
+        <ShipToCompany>Newegg - Test</ShipToCompany>
+        <OrderItemAmount>1.99</OrderItemAmount>
+        <ShippingAmount>0.00</ShippingAmount>
+        <DiscountAmount>0.00</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>1.99</OrderTotalAmount>
+        <OrderQty>1</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-001</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876393</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-001</MfrPartNumber>
+            <UPCCode>123456780000</UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>1</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>1.99</UnitPrice>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>126104715</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>03/23/2012 14:31:39</OrderDate>
+        <OrderStatus>4</OrderStatus>
+        <OrderStatusDescription>Voided</OrderStatusDescription>
+        <CustomerName>Cory Ivy</CustomerName>
+        <CustomerPhoneNumber>256-541-6912</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpwp0laidomql946z@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>19 Killian Ln</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>Asheville</ShipToCityName>
+        <ShipToStateCode>NC</ShipToStateCode>
+        <ShipToZipCode>28804-1720</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Two-Day Shipping</ShipService>
+        <ShipToFirstName>Cory</ShipToFirstName>
+        <ShipToLastName>Ivy</ShipToLastName>
+        <ShipToCompany></ShipToCompany>
+        <OrderItemAmount>0</OrderItemAmount>
+        <ShippingAmount>0</ShippingAmount>
+        <DiscountAmount>-20.99</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>20.99</OrderTotalAmount>
+        <OrderQty>0</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList></ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>140271384</OrderNumber>
+        <InvoiceNumber>0</InvoiceNumber>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>03/23/2012 11:02:40</OrderDate>
+        <OrderStatus>4</OrderStatus>
+        <OrderStatusDescription>Voided</OrderStatusDescription>
+        <CustomerName>Craig Cormier</CustomerName>
+        <CustomerPhoneNumber>978-422-3637</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpwz0l0adoz8l9lfz@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>13 Pratts Junction Rd</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>Sterling</ShipToCityName>
+        <ShipToStateCode>MA</ShipToStateCode>
+        <ShipToZipCode>01564-2305</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-15 business days)</ShipService>
+        <ShipToFirstName>Craig</ShipToFirstName>
+        <ShipToLastName>Cormier</ShipToLastName>
+        <ShipToCompany>Anderson Power Products</ShipToCompany>
+        <OrderItemAmount>0</OrderItemAmount>
+        <ShippingAmount>0</ShippingAmount>
+        <DiscountAmount>-20.99</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>20.99</OrderTotalAmount>
+        <OrderQty>0</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList></ItemInfoList>
+        <PackageInfoList></PackageInfoList>
+      </OrderInfo>
+      <OrderInfo>
+        <SellerID>A09V</SellerID>
+        <OrderNumber>137956884</OrderNumber>
+        <InvoiceNumber>85548158</InvoiceNumber>
+        <OrderDownloaded>true</OrderDownloaded>
+        <OrderDate>02/28/2012 02:49:28</OrderDate>
+        <OrderStatus>3</OrderStatus>
+        <OrderStatusDescription>Invoiced</OrderStatusDescription>
+        <CustomerName>samuel oyang</CustomerName>
+        <CustomerPhoneNumber>901-332-2213EXT321</CustomerPhoneNumber>
+        <CustomerEmailAddress>cpis0l0pdou4l94oz@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>test</ShipToAddress1>
+        <ShipToAddress2></ShipToAddress2>
+        <ShipToCityName>test</ShipToCityName>
+        <ShipToStateCode>DC</ShipToStateCode>
+        <ShipToZipCode>20001</ShipToZipCode>
+        <ShipToCountryCode>USA</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-15 business days)</ShipService>
+        <ShipToFirstName>samuel</ShipToFirstName>
+        <ShipToLastName>oyang</ShipToLastName>
+        <ShipToCompany></ShipToCompany>
+        <OrderItemAmount>14.90</OrderItemAmount>
+        <ShippingAmount>1.00</ShippingAmount>
+        <DiscountAmount>1.49</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>14.41</OrderTotalAmount>
+        <OrderQty>10</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-002</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876392</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-002</MfrPartNumber>
+            <UPCCode></UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>5</OrderedQty>
+            <ShippedQty>5</ShippedQty>
+            <UnitPrice>1.99</UnitPrice>
+            <Status>2</Status>
+            <StatusDescription>Shipped</StatusDescription>
+          </ItemInfo>
+          <ItemInfo>
+            <SellerPartNumber>A09V-CA-001</SellerPartNumber>
+            <NeweggItemNumber>9SIA09V0876393</NeweggItemNumber>
+            <MfrPartNumber>A069-CA-001</MfrPartNumber>
+            <UPCCode>123456780000</UPCCode>
+            <Description>Testing items only, please do not make purchase</Description>
+            <OrderedQty>5</OrderedQty>
+            <ShippedQty>5</ShippedQty>
+            <UnitPrice>0.99</UnitPrice>
+            <Status>2</Status>
+            <StatusDescription>Shipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList>
+          <PackageInfo>
+            <PackageType>Shipped</PackageType>
+            <ShipCarrier>FedEx</ShipCarrier>
+            <ShipService>Ground - Smartpost</ShipService>
+            <TrackingNumber>02931504039050398192</TrackingNumber>
+            <ShipDate>03/26/2012 08:49:25</ShipDate>
+            <ShipFromAddress>111</ShipFromAddress>
+            <ShipFromAddress2>11</ShipFromAddress2>
+            <ShipFromCity>11</ShipFromCity>
+            <ShipFromState>NY</ShipFromState>
+            <ShipFromZipCode>12344</ShipFromZipCode>
+            <ShipFromName>Joe Blow</ShipFromName>
+            <ItemInfoList>
+              <ItemInfo>
+                <SellerPartNumber>A09V-CA-001</SellerPartNumber>
+                <MfrPartNumber>A069-CA-001</MfrPartNumber>
+                <ShippedQty>5</ShippedQty>
+              </ItemInfo>
+            </ItemInfoList>
+          </PackageInfo>
+          <PackageInfo>
+            <PackageType>Shipped</PackageType>
+            <ShipCarrier>FedEx</ShipCarrier>
+            <ShipService>Ground - Smartpost</ShipService>
+            <TrackingNumber>02931504039050398190</TrackingNumber>
+            <ShipDate>03/26/2012 08:34:28</ShipDate>
+            <ShipFromAddress>111</ShipFromAddress>
+            <ShipFromAddress2>11</ShipFromAddress2>
+            <ShipFromCity>11</ShipFromCity>
+            <ShipFromState></ShipFromState>
+            <ShipFromZipCode>12344</ShipFromZipCode>
+            <ShipFromName>USA</ShipFromName>
+            <ItemInfoList>
+              <ItemInfo>
+                <SellerPartNumber>A09V-CA-002</SellerPartNumber>
+                <MfrPartNumber>A069-CA-002</MfrPartNumber>
+                <ShippedQty>3</ShippedQty>
+              </ItemInfo>
+            </ItemInfoList>
+          </PackageInfo>
+          <PackageInfo>
+            <PackageType>Shipped</PackageType>
+            <ShipCarrier>FedEx</ShipCarrier>
+            <ShipService>Ground - Smartpost</ShipService>
+            <TrackingNumber>02931504039050398191</TrackingNumber>
+            <ShipDate>03/26/2012 08:34:28</ShipDate>
+            <ShipFromAddress>111</ShipFromAddress>
+            <ShipFromAddress2>11</ShipFromAddress2>
+            <ShipFromCity>11</ShipFromCity>
+            <ShipFromState></ShipFromState>
+            <ShipFromZipCode>12344</ShipFromZipCode>
+            <ShipFromName>USA</ShipFromName>
+            <ItemInfoList>
+              <ItemInfo>
+                <SellerPartNumber>A09V-CA-002</SellerPartNumber>
+                <MfrPartNumber>A069-CA-002</MfrPartNumber>
+                <ShippedQty>2</ShippedQty>
+              </ItemInfo>
+            </ItemInfoList>
+          </PackageInfo>
+        </PackageInfoList>
+      </OrderInfo>      
+    </OrderInfoList>
+  </ResponseBody>
+  <Memo></Memo>
+  <ResponseDate>06/21/2012 06:33:53</ResponseDate>
+</NeweggAPIResponse>
