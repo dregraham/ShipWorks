@@ -73,6 +73,9 @@ namespace :test do
 
 		puts "Executing UPS tests"
 		Rake::Task['test:ups'].execute
+	
+		puts "Executing Scheduled Action tests"
+		Rake::Task['test:scheduledAction'].execute		
 
 		puts "Executing Newegg tests"
 		Rake::Task['test:newegg'].execute
@@ -146,6 +149,16 @@ namespace :test do
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
 		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"UPS Tests\"", "/resultsfile:TestResults/ups-results.trx"
+	end
+	
+	desc "Execute the scheduled action tests"
+	mstest :scheduledAction do |mstest|
+		print "Deleting previous Scheduled Action test results...\r\n\r\n"
+		File.delete("TestResults/scheduled-action-results.trx") if File.exist?("TestResults/scheduled-action-results.trx")
+		print "Executing Scheduled Action tests...\r\n\r\n"
+		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
+		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
+		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"Scheduled Action Tests\"", "/resultsfile:TestResults/scheduled-action-results.trx"
 	end
 
 	desc "Execute the Newegg tests"

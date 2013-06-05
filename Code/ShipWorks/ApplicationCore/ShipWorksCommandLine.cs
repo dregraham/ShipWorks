@@ -28,6 +28,11 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
+        /// An empty command line.
+        /// </summary>
+        public static readonly ShipWorksCommandLine Empty = new ShipWorksCommandLine(new string[0]);
+
+        /// <summary>
         /// Can't instantiate publically
         /// </summary>
         private ShipWorksCommandLine(IEnumerable<string> args)

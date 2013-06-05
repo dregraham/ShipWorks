@@ -58,6 +58,7 @@
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -78,6 +79,10 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
+    <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
+    <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
+    <Compile Include="Actions\Triggers\CronTriggerTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\GuidTests.cs" />

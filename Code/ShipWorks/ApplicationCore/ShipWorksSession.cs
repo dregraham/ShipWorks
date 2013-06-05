@@ -132,7 +132,7 @@ namespace ShipWorks.ApplicationCore
             {
                 if (key != null)
                 {
-                    string value = key.GetValue(Application.StartupPath) as string;
+                    string value = key.GetValue(Program.AppLocation) as string;
 
                     if (value != null)
                     {

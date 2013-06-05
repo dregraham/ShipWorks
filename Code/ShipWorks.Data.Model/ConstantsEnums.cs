@@ -97,6 +97,8 @@ namespace ShipWorks.Data.Model
 		NextStep,
 		///<summary>ContextLock. </summary>
 		ContextLock,
+		///<summary>ActionQueueType. </summary>
+		ActionQueueType,
 		/// <summary></summary>
 		AmountOfFields
 	}

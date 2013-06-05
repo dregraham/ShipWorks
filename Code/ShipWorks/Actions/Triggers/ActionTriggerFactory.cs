@@ -23,6 +23,7 @@ namespace ShipWorks.Actions.Triggers
                 case ActionTriggerType.ShipmentProcessed: return new ShipmentProcessedTrigger(xmlSettings);
                 case ActionTriggerType.ShipmentVoided: return new ShipmentVoidedTrigger(xmlSettings);
                 case ActionTriggerType.FilterContentChanged: return new FilterContentTrigger(xmlSettings);
+                case ActionTriggerType.Cron: return new CronTrigger(xmlSettings);
             }
 
             throw new InvalidOperationException("Factory does not handle trigger type: " + type);

@@ -257,6 +257,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionQueueEntity", "Status", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.Status, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
+			base.AddElementFieldInfo("ActionQueueEntity", "ActionQueueType", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.ActionQueueType, 0, 0, 10);
 		}
 		/// <summary>Inits ActionQueueStepEntity's FieldInfo objects</summary>
 		private void InitActionQueueStepEntityInfos()

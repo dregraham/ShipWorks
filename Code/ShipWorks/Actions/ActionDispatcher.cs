@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Communication;
@@ -140,6 +141,42 @@ namespace ShipWorks.Actions
                 }
 
                 DispatchAction(action, shipment.ShipmentID, adapter);
+            }
+        }
+
+        /// <summary>
+        /// Creates an ActionQueue entry for a scheduled Action whose time has come.
+        /// </summary>
+        public static void DispatchScheduledAction(long actionID)
+        {
+            ActionEntity actionEntity = ActionManager.GetAction(actionID);
+            ActionTriggerType actionTriggerType = (ActionTriggerType) actionEntity.TriggerType;
+
+            // TODO: Verify we don't need to check StoreID similar to the calls to GetEligibleActions above.
+
+            // Get the specific action trigger type and check any specific settings
+            switch (actionTriggerType)
+            {
+                case ActionTriggerType.OrderDownloaded:
+                case ActionTriggerType.DownloadFinished:
+                case ActionTriggerType.ShipmentProcessed:
+                case ActionTriggerType.ShipmentVoided:
+                case ActionTriggerType.FilterContentChanged:
+                    log.WarnFormat("Scheduled Actions do not support trigger type: {0}", EnumHelper.GetDescription(actionTriggerType));
+                    return;
+                case ActionTriggerType.Cron:
+                    // TODO: Add any cron trigger checks...
+                    // CronTrigger cronTrigger = new CronTrigger(actionEntity.TriggerSettings);
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            // Scheduled actions should not be running in any sql adapter context, so create one now
+            using (SqlAdapter adapter = new SqlAdapter(false))
+            {
+                DispatchAction(actionEntity, null, adapter);
             }
         }
 

@@ -353,26 +353,29 @@ namespace ShipWorks.Data.Connection
             {
                 connectionLost = true;
 
-                // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be 
-                // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.
-                // But as far as I know we don't do this anyhwere
-                Program.MainForm.Invoke(new MethodInvoker(() =>
-                    {
-                        if (ex is SingleUserModeException)
+                if (Program.IsUserInteractive)
+                {
+                    // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be 
+                    // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.
+                    // But as far as I know we don't do this anyhwere
+                    Program.MainForm.Invoke(new MethodInvoker(() =>
                         {
-                            using (SingleUserModeDlg dlg = new SingleUserModeDlg())
+                            if (ex is SingleUserModeException)
                             {
-                                dlg.ShowDialog(DisplayHelper.GetActiveForm());
+                                using (SingleUserModeDlg dlg = new SingleUserModeDlg())
+                                {
+                                    dlg.ShowDialog(DisplayHelper.GetActiveForm());
+                                }
                             }
-                        }
-                        else
-                        {
-                            using (ConnectionTerminatedDlg dlg = new ConnectionTerminatedDlg())
+                            else
                             {
-                                dlg.ShowDialog(DisplayHelper.GetActiveForm());
+                                using (ConnectionTerminatedDlg dlg = new ConnectionTerminatedDlg())
+                                {
+                                    dlg.ShowDialog(DisplayHelper.GetActiveForm());
+                                }
                             }
-                        }
-                    }));
+                        }));
+                }
 
                 return true;
             }

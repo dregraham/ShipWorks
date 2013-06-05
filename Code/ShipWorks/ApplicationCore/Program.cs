@@ -1,45 +1,35 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Threading;
-using System.IO;
-using ShipWorks.UI;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore.Crashes;
 using System.Diagnostics;
-using log4net;
-using System.Reflection;
-using log4net.Config;
-using Microsoft.Win32;
-using ShipWorks.Data;
-using ShipWorks.ApplicationCore.MessageBoxes;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Administration;
-using System.Data.SqlClient;
-using System.Net;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore;
-using ActiproSoftware.SyntaxEditor;
-using ShipWorks.Filters;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore.Interaction;
+using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using Interapptive.Shared.Utility;
-using ShipWorks.Filters.Management;
-using ShipWorks.Filters.Grid;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Win32;
-using ShipWorks.Data.Administration.UpdateFrom2x;
-using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.UI.Controls;
+using System.Net;
+using System.Reflection;
+using System.ServiceProcess;
+using System.Threading;
+using System.Windows.Forms;
+using ActiproSoftware.SyntaxEditor;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using log4net;
+using NDesk.Options;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Management;
+using ShipWorks.UI;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
+using ShipWorks.ApplicationCore.WindowsServices;
 
 namespace ShipWorks
 {
@@ -76,13 +66,24 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Gets the folder path containing the ShipWorks executable.
+        /// </summary>
+        public static string AppLocation
+        {
+            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
+        }
+
+        /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.EnableVisualStyles();
+            if (Environment.UserInteractive)
+            {
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.EnableVisualStyles();
+            }
 
             SetupUnhandledExceptionHandling();
 
@@ -101,16 +102,22 @@ namespace ShipWorks
                 DataPath.Initialize();
                 LogSession.Initialize();
 
-                // Setup MessageHelper
-                MessageHelper.Initialize("ShipWorks");
+                if (Environment.UserInteractive)
+                {
+                    // Setup MessageHelper
+                    MessageHelper.Initialize("ShipWorks");
+                }
 
                 if (!CheckSystemRequirements())
                 {
                     return;
                 }
 
-                // If we are not running under the command line, make sure we are single instance
-                if (commandLine.IsCommandSpecified)
+                if (!Environment.UserInteractive)
+                {
+                    RunService(commandLine.ProgramOptions);
+                }
+                else if (commandLine.IsCommandSpecified)
                 {
                     RunCommand(commandLine.CommandName, commandLine.CommandOptions);
                 }
@@ -124,22 +131,78 @@ namespace ShipWorks
             }
             catch (FileNotFoundException ex)
             {
-                using (InstallationProblemDlg dlg = new InstallationProblemDlg("ShipWorks requires " + ex.FileName + ", but the file could not be found."))
+                if (Environment.UserInteractive)
                 {
-                    dlg.ShowDialog();
+                    using (InstallationProblemDlg dlg = new InstallationProblemDlg("ShipWorks requires " + ex.FileName + ", but the file could not be found."))
+                    {
+                        dlg.ShowDialog();
+                    }
                 }
+                else
+                    HandleUnhandledException(ex, false);
             }
             catch (InstallationException ex)
             {
-                using (InstallationProblemDlg dlg = new InstallationProblemDlg(ex.Message))
+                if (Environment.UserInteractive)
                 {
-                    dlg.ShowDialog();
+                    using (InstallationProblemDlg dlg = new InstallationProblemDlg(ex.Message))
+                    {
+                        dlg.ShowDialog();
+                    }
                 }
+                else
+                    HandleUnhandledException(ex, false);
             }
             catch (Exception ex)
             {
                 HandleUnhandledException(ex, false);
             }
+        }
+
+        /// <summary>
+        /// Runs ShipWorks as a service
+        /// </summary>
+        private static void RunService(List<string> options)
+        {
+            log.Info("Running as a service.");
+
+            CommonInitialization();
+
+            string serviceName = null;
+
+            var optionSet = new OptionSet {
+                { "service=", v =>  serviceName = v  }
+            };
+
+            optionSet.Parse(options);
+
+            if (null == serviceName)
+            {
+                log.Error("Service name was not specified.");
+                Environment.ExitCode = -1;
+                return;
+            }
+
+            log.InfoFormat("Starting the '{0}' service.", serviceName);
+
+            var serviceTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
+                .ToArray();
+
+            var service = serviceTypes
+                .Select(t => Activator.CreateInstance(t))
+                .Cast<ShipWorksServiceBase>()
+                .Where(s => s.BaseServiceName == serviceName)
+                .SingleOrDefault();
+
+            if (null == service)
+            {
+                log.ErrorFormat("'{0}' is not a valid service name.", serviceName);
+                Environment.ExitCode = -1;
+                return;
+            }
+
+            ServiceBase.Run(service);
         }
 
         /// <summary>
@@ -291,9 +354,12 @@ namespace ShipWorks
             {
                 log.Error("Service Pack 2 is required when running Windows XP.");
 
-                using (NeedWindowsXPSP2 dlg = new NeedWindowsXPSP2())
+                if (Environment.UserInteractive)
                 {
-                    dlg.ShowDialog();
+                    using (NeedWindowsXPSP2 dlg = new NeedWindowsXPSP2())
+                    {
+                        dlg.ShowDialog();
+                    }
                 }
 
                 return false;
@@ -304,9 +370,12 @@ namespace ShipWorks
             {
                 log.Error("MDAC 2.8 is required.");
 
-                using (NeedMdac28 dlg = new NeedMdac28())
+                if (Environment.UserInteractive)
                 {
-                    dlg.ShowDialog();
+                    using (NeedMdac28 dlg = new NeedMdac28())
+                    {
+                        dlg.ShowDialog();
+                    }
                 }
 
                 return false;
@@ -317,9 +386,12 @@ namespace ShipWorks
             {
                 log.Error("en-US culture is required");
 
-                using (EnglishCultureRequiredDlg dlg = new EnglishCultureRequiredDlg())
+                if (Environment.UserInteractive)
                 {
-                    dlg.ShowDialog();
+                    using (EnglishCultureRequiredDlg dlg = new EnglishCultureRequiredDlg())
+                    {
+                        dlg.ShowDialog();
+                    }
                 }
 
                 return false;
@@ -330,7 +402,10 @@ namespace ShipWorks
             {
                 log.Info("A reboot is required before running ShipWorks.");
 
-                MessageHelper.ShowInformation(null, "Your computer must be restarted before running ShipWorks.");
+                if (Environment.UserInteractive)
+                {
+                    MessageHelper.ShowInformation(null, "Your computer must be restarted before running ShipWorks.");
+                }
 
                 return false;
             }
@@ -346,11 +421,14 @@ namespace ShipWorks
             // Handle non-gui thread exceptions.  These should never happen if we do things right.
             AppDomain.CurrentDomain.UnhandledException += new System.UnhandledExceptionEventHandler(OnAppDomainException);
 
-            // Handle exceptions from GUI threads.
-            Application.ThreadException += new ThreadExceptionEventHandler(OnApplicationException);
+            if (Environment.UserInteractive)
+            {
+                // Handle exceptions from GUI threads.
+                Application.ThreadException += new ThreadExceptionEventHandler(OnApplicationException);
 
-            // Make sure app exceptions route to the "ThreadException" event
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+                // Make sure app exceptions route to the "ThreadException" event
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            }
         }
         
         /// <summary>
@@ -400,29 +478,35 @@ namespace ShipWorks
             {
                 log.Fatal("Application Crashed", ex);
 
-                // If the splash is shown, the crash window will close it.
-                using (CrashWindow dlg = new CrashWindow(ex, guiThread, userEmail))
+                if (Environment.UserInteractive)
                 {
-                    // Need to not set a parent here, in case we are on another thread.  Causes
-                    // potential Invoke deadlock.
-                    dlg.ShowDialog();
+                    // If the splash is shown, the crash window will close it.
+                    using (CrashWindow dlg = new CrashWindow(ex, guiThread, userEmail))
+                    {
+                        // Need to not set a parent here, in case we are on another thread.  Causes
+                        // potential Invoke deadlock.
+                        dlg.ShowDialog();
+                    }
                 }
             }
 
-            try
+            if (Environment.UserInteractive)
             {
-                // This forces windows to close.  If they try to save state or do other stupid things
-                // while closing then they will throw an exception.
-                Application.Exit();
-            }
-            catch (Exception termEx)
-            {
-                log.Error("Termination error", termEx);
-            }
+                try
+                {
+                    // This forces windows to close.  If they try to save state or do other stupid things
+                    // while closing then they will throw an exception.
+                    Application.Exit();
+                }
+                catch (Exception termEx)
+                {
+                    log.Error("Termination error", termEx);
+                }
 
-            // Application.Exit does not gaurnteed that the windows close.  It only tries.  If an exception
-            // gets thrown, or they set e.Cancel = true, they won't have closed.
-            Application.ExitThread();
+                // Application.Exit does not gaurnteed that the windows close.  It only tries.  If an exception
+                // gets thrown, or they set e.Cancel = true, they won't have closed.
+                Application.ExitThread();
+            }
         }
     }
 }

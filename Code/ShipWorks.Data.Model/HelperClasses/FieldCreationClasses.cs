@@ -167,6 +167,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ContextLock);}
 		}
+		/// <summary>Creates a new ActionQueueEntity.ActionQueueType field instance</summary>
+		public static EntityField2 ActionQueueType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionQueueType);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ActionQueueStepEntity</summary>

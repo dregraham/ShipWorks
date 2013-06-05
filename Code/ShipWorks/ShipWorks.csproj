@@ -134,6 +134,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -192,6 +195,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -250,9 +254,15 @@
     <Compile Include="Actions\ActionQueueStatus.cs" />
     <Compile Include="Actions\ActionQueueStepStatus.cs" />
     <Compile Include="Actions\ActionProcessingContext.cs" />
+    <Compile Include="Actions\ActionQueueType.cs" />
     <Compile Include="Actions\ActionRunnerResult.cs" />
     <Compile Include="Actions\ActionStepContext.cs" />
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
+    <Compile Include="Actions\Scheduling\ISchedulingEngine.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngine.cs" />
+    <Compile Include="Actions\Scheduling\Scheduler.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionJob.cs" />
+    <Compile Include="Actions\Scheduling\SchedulingException.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFlowInfoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -305,6 +315,13 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\PrintShipmentsTask.cs" />
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
+    <Compile Include="Actions\Triggers\CronTrigger.cs" />
+    <Compile Include="Actions\Triggers\Editors\CronTriggerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Triggers\Editors\CronTriggerEditor.Designer.cs">
+      <DependentUpon>CronTriggerEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
@@ -357,6 +374,14 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksScheduler.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksScheduler.Designer.cs">
+      <DependentUpon>ShipWorksScheduler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksServiceInstaller.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
@@ -578,6 +603,12 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuredType.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.Designer.cs">
+      <DependentUpon>MasterInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
@@ -5164,6 +5195,9 @@
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksScheduler.resx">
+      <DependentUpon>ShipWorksScheduler.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\CreateSchema.sql">
       <SubType>
       </SubType>
@@ -6139,6 +6173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileTransfer\FtpAccountEditorDlg.resx">
       <DependentUpon>FtpAccountEditorDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.resx">
+      <DependentUpon>MasterInstaller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -9423,6 +9460,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
