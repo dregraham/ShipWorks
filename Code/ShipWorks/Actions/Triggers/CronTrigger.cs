@@ -10,7 +10,7 @@ namespace ShipWorks.Actions.Triggers
         /// Initializes a new instance of the <see cref="CronTrigger"/> class.
         /// </summary>
         public CronTrigger()
-            : base(null)
+            : this(null)
         { }
 
         /// <summary>
@@ -19,7 +19,13 @@ namespace ShipWorks.Actions.Triggers
         /// <param name="xmlSettings"></param>
         public CronTrigger(string xmlSettings)
             : base(xmlSettings)
-        { }
+        {
+            if (StartDateTimeInUtc.Year == 1)
+            {
+                // Initialize the start date since it wasn't included in the settings
+                StartDateTimeInUtc = DateTime.UtcNow;
+            }
+        }
 
         /// <summary>
         /// Overridden to provide the trigger type

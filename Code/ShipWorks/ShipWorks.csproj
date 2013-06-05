@@ -262,6 +262,7 @@
     <Compile Include="Actions\ActionRunnerResult.cs" />
     <Compile Include="Actions\ActionStepContext.cs" />
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
+    <Compile Include="Actions\Scheduling\IScheduler.cs" />
     <Compile Include="Actions\Scheduling\ISchedulingEngine.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngine.cs" />
     <Compile Include="Actions\Scheduling\Scheduler.cs" />
@@ -379,11 +380,11 @@
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />
-    <Compile Include="ApplicationCore\WindowsServices\ShipWorksScheduler.cs">
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\WindowsServices\ShipWorksScheduler.Designer.cs">
-      <DependentUpon>ShipWorksScheduler.cs</DependentUpon>
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.Designer.cs">
+      <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksServiceInstaller.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
@@ -5183,6 +5184,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Actions\Triggers\Editors\CronTriggerEditor.resx">
+      <DependentUpon>CronTriggerEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Help\SubmitHelpRequestDlg.resx">
       <DependentUpon>SubmitHelpRequestDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -5199,8 +5203,8 @@
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksScheduler.resx">
-      <DependentUpon>ShipWorksScheduler.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.resx">
+      <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\CreateSchema.sql">
       <SubType>

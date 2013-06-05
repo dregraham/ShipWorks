@@ -5,7 +5,7 @@ using System.ServiceProcess;
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
     [System.ComponentModel.DesignerCategory("")]
-    class ShipWorksServiceBase : ServiceBase
+    public class ShipWorksServiceBase : ServiceBase
     {
         [Browsable(false)]
         public string BaseServiceName { get; private set; }

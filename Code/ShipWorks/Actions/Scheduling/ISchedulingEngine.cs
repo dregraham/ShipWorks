@@ -1,5 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Triggers;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShipWorks.Actions.Scheduling
 {
@@ -29,5 +31,12 @@ namespace ShipWorks.Actions.Scheduling
         /// <param name="action">The action.</param>
         /// <returns>A CronTrigger object.</returns>
         CronTrigger GetTrigger(ActionEntity action);
+
+        /// <summary>
+        /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
+        /// </summary>
+        /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
+        /// <returns>The running engine task.</returns>
+        Task RunAsync(CancellationToken cancellationToken);
     }
 }

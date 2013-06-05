@@ -4,6 +4,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Triggers;
 using System;
+using System.Threading;
 
 namespace ShipWorks.Tests.Actions.Scheduling
 {
@@ -141,6 +142,16 @@ namespace ShipWorks.Tests.Actions.Scheduling
             testObject.GetCronTrigger(action);
 
             schedulingEngine.Verify(e => e.GetTrigger(action), Times.Once());
+        }
+
+        [TestMethod]
+        public void RunAsync_DelegatesToSchedulingEngine()
+        {
+            var token = new CancellationToken(false);
+
+            testObject.RunAsync(token);
+
+            schedulingEngine.Verify(x => x.RunAsync(token), Times.Once());
         }
     }
 }

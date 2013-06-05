@@ -6,13 +6,15 @@ using ShipWorks.Actions.Scheduling.QuartzNet;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Triggers;
 using Quartz.Impl;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShipWorks.Actions.Scheduling
 {
     /// <summary>
     /// The Scheduler class is a facade that will create, edit, and delete scheduled actions/jobs in ShipWorks. 
     /// </summary>
-    public class Scheduler
+    public class Scheduler : IScheduler
     {
         private readonly ISchedulingEngine schedulingEngine;
 
@@ -70,6 +72,16 @@ namespace ShipWorks.Actions.Scheduling
         public CronTrigger GetCronTrigger(ActionEntity action)
         {
             return schedulingEngine.GetTrigger(action);
+        }
+
+        /// <summary>
+        /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
+        /// </summary>
+        /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
+        /// <returns>The running engine task.</returns>
+        public Task RunAsync(CancellationToken cancellationToken)
+        {
+            return schedulingEngine.RunAsync(cancellationToken);
         }
     }
 }

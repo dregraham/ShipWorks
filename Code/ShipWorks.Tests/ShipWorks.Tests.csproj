@@ -71,6 +71,7 @@
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
@@ -317,6 +318,8 @@
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
+    <Compile Include="WindowsServices\Fakes\FakeShipWorksSchedulerService.cs" />
+    <Compile Include="WindowsServices\ShipWorksSchedulerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

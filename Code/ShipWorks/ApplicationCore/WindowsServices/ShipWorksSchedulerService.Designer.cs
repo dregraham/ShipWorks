@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    partial class ShipWorksScheduler
+    partial class ShipWorksSchedulerService
     {
         /// <summary> 
         /// Required designer variable.
