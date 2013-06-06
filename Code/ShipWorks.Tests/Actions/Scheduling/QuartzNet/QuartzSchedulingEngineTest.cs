@@ -19,7 +19,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         public void Initialize()
         {
             scheduler = new Mock<Quartz.IScheduler>();
-            target = new QuartzSchedulingEngine(scheduler.Object);
+
+            var schedulerFactory = new Mock<Quartz.ISchedulerFactory>();
+            schedulerFactory.Setup(x => x.GetScheduler()).Returns(scheduler.Object);
+
+            target = new QuartzSchedulingEngine(schedulerFactory.Object);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using ShipWorks.Actions.Triggers;
+﻿using log4net;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Threading;
@@ -13,24 +14,24 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
     /// </summary>
     public class QuartzSchedulingEngine : ISchedulingEngine
     {
-        static Quartz.IScheduler CreateDefaultScheduler()
+        static Quartz.ISchedulerFactory CreateDefaultSchedulerFactory()
         {
             var factory = new Quartz.Impl.StdSchedulerFactory();
 
-            return factory.GetScheduler();
+            return factory;
         }
 
 
-        readonly Quartz.IScheduler scheduler;
+        readonly Quartz.ISchedulerFactory schedulerFactory;
 
         public QuartzSchedulingEngine()
-            : this(CreateDefaultScheduler()) { }
+            : this(CreateDefaultSchedulerFactory()) { }
 
-        public QuartzSchedulingEngine(Quartz.IScheduler scheduler)
+        public QuartzSchedulingEngine(Quartz.ISchedulerFactory schedulerFactory)
         {
-            if (null == scheduler)
-                throw new ArgumentNullException("scheduler");
-            this.scheduler = scheduler;
+            if (null == schedulerFactory)
+                throw new ArgumentNullException("schedulerFactory");
+            this.schedulerFactory = schedulerFactory;
         }
 
 
@@ -75,6 +76,8 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// <returns>The running engine task.</returns>
         public Task RunAsync(CancellationToken cancellationToken)
         {
+            var scheduler = schedulerFactory.GetScheduler();
+
             scheduler.Start();
 
             var taskSource = new TaskCompletionSource<object>();
