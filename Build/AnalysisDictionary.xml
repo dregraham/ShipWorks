@@ -47,6 +47,7 @@
       <Word>write_shipping</Word>
       <Word>pgp</Word>
       <Word>partnerid</Word>
+      <Word>api</Word>
 		</Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
