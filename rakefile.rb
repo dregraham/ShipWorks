@@ -3,7 +3,7 @@ require 'albacore'
 
 # Location of MSBuild and MSTest on this computer
 @msBuildPath = "#{ENV['SystemRoot']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
-@msTestPath = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
+@msTestPath = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
 
 
 # Assumes rake will be executed from the directory containing the rakefile and solution file
