@@ -22,3 +22,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "DotCom", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#BuyDotCom")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Trac", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#OnTrac")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "i", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#iParcel")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "os", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#osCommerce")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UpsOn", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#UpsOnLineTools")]

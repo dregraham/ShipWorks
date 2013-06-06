@@ -53,6 +53,10 @@
     <Reference Include="Moq">
       <HintPath>..\..\Components\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -430,11 +434,6 @@
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithUnicodeCharacter.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-    </CodeAnalysisDictionary>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

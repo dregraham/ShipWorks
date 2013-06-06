@@ -9403,6 +9403,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateOrderRollups.sql" />
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
       <Link>Properties\AnalysisDictionary.xml</Link>
+      <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateCustomerRollups.sql" />
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Users.estimate.sql" />
@@ -9469,10 +9470,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
-    <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-      <SubType>Designer</SubType>
-    </CodeAnalysisDictionary>
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

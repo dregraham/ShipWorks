@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions.Triggers;
-using System.Threading.Tasks;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
@@ -12,6 +13,27 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
     /// </summary>
     public class QuartzSchedulingEngine : ISchedulingEngine
     {
+        static Quartz.IScheduler CreateDefaultScheduler()
+        {
+            var factory = new Quartz.Impl.StdSchedulerFactory();
+
+            return factory.GetScheduler();
+        }
+
+
+        readonly Quartz.IScheduler scheduler;
+
+        public QuartzSchedulingEngine()
+            : this(CreateDefaultScheduler()) { }
+
+        public QuartzSchedulingEngine(Quartz.IScheduler scheduler)
+        {
+            if (null == scheduler)
+                throw new ArgumentNullException("scheduler");
+            this.scheduler = scheduler;
+        }
+
+
         /// <summary>
         /// Schedules the specified action according to the details of the cron trigger.
         /// </summary>
@@ -53,7 +75,16 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// <returns>The running engine task.</returns>
         public Task RunAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            scheduler.Start();
+
+            var taskSource = new TaskCompletionSource<object>();
+
+            cancellationToken.Register(() => {
+                scheduler.Shutdown(true);
+                taskSource.SetCanceled();
+            });
+
+            return taskSource.Task;
         }
     }
 }

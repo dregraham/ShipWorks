@@ -1,28 +1,34 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using ShipWorks.Actions.Scheduling.QuartzNet;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
+using System.Threading;
+
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 {
     [TestClass]
     public class QuartzSchedulingEngineTest
     {
-        private QuartzSchedulingEngine testObject;
+        Mock<Quartz.IScheduler> scheduler;
+        QuartzSchedulingEngine target;
 
         [TestInitialize]
         public void Initialize()
         {
-            testObject = new QuartzSchedulingEngine();
+            scheduler = new Mock<Quartz.IScheduler>();
+            target = new QuartzSchedulingEngine(scheduler.Object);
         }
+
 
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void Schedule_ThrowsNotImplementedException_Test()
         {
             // This will obviously need to change as the Quartz scheduling engine gets implemented
-            testObject.Schedule(new ActionEntity(), new CronTrigger());
+            target.Schedule(new ActionEntity(), new CronTrigger());
         }
 
         [TestMethod]
@@ -30,7 +36,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         public void IsExistingJob_ThrowsNotImplementedException_Test()
         {
             // This will obviously need to change as the Quartz scheduling engine gets implemented
-            testObject.IsExistingJob(new ActionEntity(), new CronTrigger());
+            target.IsExistingJob(new ActionEntity(), new CronTrigger());
         }
 
         [TestMethod]
@@ -38,7 +44,30 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         public void GetTrigger_ThrowsNotImplementedException_Test()
         {
             // This will obviously need to change as the Quartz scheduling engine gets implemented
-            testObject.GetTrigger(new ActionEntity());
+            target.GetTrigger(new ActionEntity());
+        }
+
+
+        [TestMethod]
+        public void CanStartScheduler()
+        {
+            target.RunAsync(CancellationToken.None);
+
+            scheduler.Verify(x => x.Start(), Times.Once());
+        }
+
+        [TestMethod]
+        public void CanStopScheduler()
+        {
+            var canceller = new CancellationTokenSource();
+
+            var task = target.RunAsync(canceller.Token);
+
+            canceller.Cancel();
+
+            scheduler.Verify(x => x.Shutdown(true), Times.Once());
+
+            Assert.IsTrue(task.IsCanceled);
         }
     }
 }
