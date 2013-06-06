@@ -48,6 +48,14 @@
       <Word>pgp</Word>
       <Word>partnerid</Word>
       <Word>api</Word>
+      <Word>auth</Word>
+      <Word>Usb</Word>
+      <Word>iso</Word>
+      <Word>ascii</Word>
+      <Word>lbs</Word>
+      <Word>sku</Word>
+      <Word>nafta</Word>
+      <Word>ups</Word>
 		</Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
