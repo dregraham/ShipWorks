@@ -20,7 +20,6 @@ namespace ShipWorks.Tests.Actions.Scheduling
         {
             schedulingEngine = new Mock<ISchedulingEngine>();
             schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>()));
-            schedulingEngine.Setup(e => e.GetTrigger(It.IsAny<ActionEntity>())).Returns(new CronTrigger());
             schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(false);
 
             testObject = new Scheduler(schedulingEngine.Object);
@@ -133,17 +132,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             // Throws scheduling exception
             testObject.ScheduleAction(action, trigger);
         }
-
-        [TestMethod]
-        public void GetCronTrigger_DelegatesToSchedulingEngine_Test()
-        {
-            ActionEntity action = new ActionEntity();
-            
-            testObject.GetCronTrigger(action);
-
-            schedulingEngine.Verify(e => e.GetTrigger(action), Times.Once());
-        }
-
+        
         [TestMethod]
         public void RunAsync_DelegatesToSchedulingEngine()
         {

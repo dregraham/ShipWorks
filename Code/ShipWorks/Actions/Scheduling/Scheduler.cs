@@ -64,16 +64,7 @@ namespace ShipWorks.Actions.Scheduling
             }
             
         }
-
-        /// <summary>
-        /// Gets all of the scheduled actions in ShipWorks.
-        /// </summary>
-        /// <returns>A List of ActionEntity objects.</returns>
-        public CronTrigger GetCronTrigger(ActionEntity action)
-        {
-            return schedulingEngine.GetTrigger(action);
-        }
-
+        
         /// <summary>
         /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
         /// </summary>

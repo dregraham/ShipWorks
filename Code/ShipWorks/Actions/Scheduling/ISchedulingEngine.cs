@@ -23,15 +23,7 @@ namespace ShipWorks.Actions.Scheduling
         ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
         /// </returns>
         bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger);
-
-        /// <summary>
-        /// Gets the schedule/trigger from the scheduling engine that the action
-        /// is configured with.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <returns>A CronTrigger object.</returns>
-        CronTrigger GetTrigger(ActionEntity action);
-
+        
         /// <summary>
         /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
         /// </summary>

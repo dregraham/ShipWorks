@@ -5,6 +5,8 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Threading;
+using Quartz.Impl;
+using Quartz;
 
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
@@ -13,7 +15,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
     public class QuartzSchedulingEngineTest
     {
         Mock<Quartz.IScheduler> scheduler;
-        QuartzSchedulingEngine target;
+        QuartzSchedulingEngine testObject;
 
         [TestInitialize]
         public void Initialize()
@@ -23,39 +25,61 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             var schedulerFactory = new Mock<Quartz.ISchedulerFactory>();
             schedulerFactory.Setup(x => x.GetScheduler()).Returns(scheduler.Object);
 
-            target = new QuartzSchedulingEngine(schedulerFactory.Object);
+            testObject = new QuartzSchedulingEngine(schedulerFactory.Object);
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Schedule_ThrowsNotImplementedException_Test()
+        public void Schedule_DelegatesToScheduler_Test()
         {
+            scheduler.Setup(s => s.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ITrigger>()));
+            
+            ActionEntity action = new ActionEntity { ActionID = 1 };
+            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+
             // This will obviously need to change as the Quartz scheduling engine gets implemented
-            target.Schedule(new ActionEntity(), new CronTrigger());
+            testObject.Schedule(action, trigger);
+
+            scheduler.Verify(s => s.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ISimpleTrigger>()), Times.Once());
+        }
+        
+        [TestMethod]
+        public void IsExistingJob_DelegatesToScheduler_Test()
+        {
+            ActionEntity action = new ActionEntity { ActionID = 1 };
+            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
+
+            testObject.IsExistingJob(action, trigger);
+
+            scheduler.Verify(s => s.GetJobDetail(It.IsAny<JobKey>()), Times.Once());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void IsExistingJob_ThrowsNotImplementedException_Test()
+        public void IsExistingJob_ReturnsFalse_WhenSchedulerReturnsNull_Test()
         {
-            // This will obviously need to change as the Quartz scheduling engine gets implemented
-            target.IsExistingJob(new ActionEntity(), new CronTrigger());
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
+
+            Assert.IsFalse(testObject.IsExistingJob(new ActionEntity(), new CronTrigger()));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void GetTrigger_ThrowsNotImplementedException_Test()
+        public void IsExistingJob_ReturnsTrue_WhenReturnsNonNull_Test()
         {
-            // This will obviously need to change as the Quartz scheduling engine gets implemented
-            target.GetTrigger(new ActionEntity());
-        }
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
 
+            ActionEntity action = new ActionEntity { ActionID = 1 };
+            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+
+            testObject.Schedule(action, trigger);
+            Assert.IsTrue(testObject.IsExistingJob(action, trigger));
+        }
 
         [TestMethod]
         public void CanStartScheduler()
         {
-            target.RunAsync(CancellationToken.None);
+            testObject.RunAsync(CancellationToken.None);
 
             scheduler.Verify(x => x.Start(), Times.Once());
         }
@@ -65,7 +89,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         {
             var canceller = new CancellationTokenSource();
 
-            var task = target.RunAsync(canceller.Token);
+            var task = testObject.RunAsync(canceller.Token);
 
             canceller.Cancel();
 

@@ -1,4 +1,10 @@
-﻿using log4net;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Globalization;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Impl.Triggers;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
@@ -24,16 +30,27 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
         readonly Quartz.ISchedulerFactory schedulerFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
+        /// </summary>
         public QuartzSchedulingEngine()
-            : this(CreateDefaultSchedulerFactory()) { }
+            : this(CreateDefaultSchedulerFactory()) 
+        { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
+        /// </summary>
+        /// <param name="schedulerFactory">The scheduler factory.</param>
+        /// <exception cref="System.ArgumentNullException">schedulerFactory</exception>
         public QuartzSchedulingEngine(Quartz.ISchedulerFactory schedulerFactory)
         {
             if (null == schedulerFactory)
+            {
                 throw new ArgumentNullException("schedulerFactory");
+            }
+
             this.schedulerFactory = schedulerFactory;
         }
-
 
         /// <summary>
         /// Schedules the specified action according to the details of the cron trigger.
@@ -42,7 +59,10 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// <param name="cronTrigger">The cron trigger.</param>
         public void Schedule(ActionEntity action, CronTrigger cronTrigger)
         {
-            throw new NotImplementedException();
+            IJobDetail jobDetail = new JobDetailImpl(action.ActionID.ToString(CultureInfo.InvariantCulture), null, typeof (ActionJob));
+            SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
+
+            schedulerFactory.GetScheduler().ScheduleJob(jobDetail, trigger);
         }
 
         /// <summary>
@@ -55,20 +75,10 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// </returns>
         public bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger)
         {
-            throw new NotImplementedException();
+            JobKey jobKey = new JobKey(action.ActionID.ToString(CultureInfo.InvariantCulture));
+            return schedulerFactory.GetScheduler().GetJobDetail(jobKey) != null;
         }
-
-        /// <summary>
-        /// Gets the schedule/trigger from the scheduling engine that the action
-        /// is configured with.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <returns>A CronTrigger object.</returns>
-        public CronTrigger GetTrigger(ActionEntity action)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
         /// </summary>
