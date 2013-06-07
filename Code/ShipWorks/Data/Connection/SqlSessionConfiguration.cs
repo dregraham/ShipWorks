@@ -78,6 +78,9 @@ namespace ShipWorks.Data.Connection
 
         public void CopyFrom(ISqlSessionConfiguration copy)
         {
+            if (null == copy)
+                throw new ArgumentNullException("copy");
+
             if (frozen)
             {
                 throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
@@ -356,16 +359,18 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public void Save()
         {
-            XmlTextWriter xmlWriter = new XmlTextWriter(SettingsFile, Encoding.UTF8);
-            xmlWriter.Formatting = Formatting.Indented;
+            using (var xmlWriter = new XmlTextWriter(SettingsFile, Encoding.UTF8))
+            {
+                xmlWriter.Formatting = Formatting.Indented;
 
-            xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartDocument();
 
-            InternalSave(xmlWriter);
+                InternalSave(xmlWriter);
 
-            // Close
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Close();
+                // Close
+                xmlWriter.WriteEndDocument();
+                xmlWriter.Close();
+            }
         }
 
         /// <summary>
