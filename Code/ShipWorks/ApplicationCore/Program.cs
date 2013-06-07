@@ -190,10 +190,9 @@ namespace ShipWorks
                 .ToArray();
 
             var service = serviceTypes
-                .Select(t => Activator.CreateInstance(t))
+                .Select(Activator.CreateInstance)
                 .Cast<ShipWorksServiceBase>()
-                .Where(s => s.BaseServiceName == serviceName)
-                .SingleOrDefault();
+                .SingleOrDefault(s => s.BaseServiceName == serviceName);
 
             if (null == service)
             {

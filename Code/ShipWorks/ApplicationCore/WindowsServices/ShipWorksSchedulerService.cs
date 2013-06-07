@@ -2,7 +2,10 @@
 using ShipWorks.Actions.Scheduling;
 using System.Threading;
 using ShipWorks.Data.Connection;
-
+using System.Timers;
+using ShipWorks.Actions;
+using ShipWorks.Data.Utility;
+using Timer = System.Timers.Timer;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
@@ -11,6 +14,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     {
         IScheduler scheduler;
         CancellationTokenSource canceller;
+
+        Timer timer = new Timer();
+        TimestampTracker timestampTracker;
 
         public ShipWorksSchedulerService()
         {
@@ -39,6 +45,12 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         protected override void OnStart(string[] args)
         {
+            timestampTracker = new TimestampTracker();
+
+            timer.Enabled = true;
+            timer.Interval = 30000;
+            timer.Elapsed += OnTimerInterval;
+
             canceller = new CancellationTokenSource();
 
             Scheduler.RunAsync(canceller.Token);
@@ -46,7 +58,22 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         protected override void OnStop()
         {
+            timer.Stop();
+            timer.Close();
+            timer.Dispose();
+
             canceller.Cancel();
+        }
+
+        /// <summary>
+        /// If DB changes, make sure ActionProcessor is running.
+        /// </summary>
+        private void OnTimerInterval(object source, ElapsedEventArgs args)
+        {
+            if (timestampTracker.CheckForChange())
+            {
+                ActionProcessor.StartProcessing();
+            }
         }
     }
 }
