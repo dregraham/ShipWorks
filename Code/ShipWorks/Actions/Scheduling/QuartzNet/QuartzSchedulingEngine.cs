@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Globalization;
-using Quartz;
+﻿using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,21 +17,13 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
     /// </summary>
     public class QuartzSchedulingEngine : ISchedulingEngine
     {
-        static Quartz.ISchedulerFactory CreateDefaultSchedulerFactory()
-        {
-            var factory = new Quartz.Impl.StdSchedulerFactory();
-
-            return factory;
-        }
-
-
         readonly Quartz.ISchedulerFactory schedulerFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
         /// </summary>
         public QuartzSchedulingEngine()
-            : this(CreateDefaultSchedulerFactory()) 
+            : this(new QuartzSchedulerFactory()) 
         { }
 
         /// <summary>
