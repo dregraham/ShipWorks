@@ -27,6 +27,7 @@ namespace ShipWorks.Actions
                 resultFields.DefineField(ActionQueueFields.ActionQueueID, 0, "ActionQueueID", "");
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
+                        (ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType) &
                         (ActionQueueFields.ActionQueueID > lastQueueID) &
                         (ActionQueueFields.RunComputerID == DBNull.Value | ActionQueueFields.RunComputerID == UserSession.Computer.ComputerID) &
                         (ActionQueueFields.Status == (int) ActionQueueStatus.Dispatched | 

@@ -248,5 +248,23 @@ namespace ShipWorks.Actions
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Gets the ActionQueueType based on UserInteractive.
+        /// </summary>
+        public static ActionQueueType ActionQueueType
+        {
+            get
+            {
+                ActionQueueType actionQueueType = ActionQueueType.Scheduled;
+
+                if (Environment.UserInteractive)
+                {
+                    actionQueueType = ActionQueueType.UserInterface;
+                }
+
+                return actionQueueType;
+            }
+        }
     }
 }

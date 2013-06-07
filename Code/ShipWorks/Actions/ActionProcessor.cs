@@ -95,7 +95,8 @@ namespace ShipWorks.Actions
                     // First see if there are any to process
                     using (SqlCommand cmd = SqlCommandProvider.Create(con))
                     {
-                        cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue";
+                        cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue where ActionQueueType = @ActionQueueType";
+                        cmd.Parameters.AddWithValue("@ActionQueueType", (int) ActionManager.ActionQueueType);
                         if (SqlCommandProvider.ExecuteScalar(cmd) == null)
                         {
                             return;
@@ -108,7 +109,12 @@ namespace ShipWorks.Actions
                         cmd.CommandText = @"
                             UPDATE ActionQueue
                                SET ContextLock = NULL
-                               WHERE ContextLock IS NOT NULL AND APPLOCK_TEST('public', ContextLock, 'Exclusive', 'Session') = 1";
+                               WHERE ContextLock IS NOT NULL 
+                                AND APPLOCK_TEST('public', ContextLock, 'Exclusive', 'Session') = 1
+                                AND ActionQueueType = @ActionQueueType";
+
+                        cmd.Parameters.AddWithValue("@ActionQueueType", (int) ActionManager.ActionQueueType);
+
                         int updated = SqlCommandProvider.ExecuteNonQuery(cmd);
                         if (updated > 0)
                         {
@@ -123,7 +129,10 @@ namespace ShipWorks.Actions
                         cmd.CommandText = @"
                             UPDATE ActionQueue 
                                SET Status = @incomplete
-                               WHERE Status = @postponed AND ContextLock IS NULL";
+                               WHERE Status = @postponed 
+                                    AND ContextLock IS NULL
+                                    AND ActionQueueType = @ActionQueueType";
+                        cmd.Parameters.AddWithValue("@ActionQueueType", (int) ActionManager.ActionQueueType);
                         cmd.Parameters.AddWithValue("@incomplete", (int) ActionQueueStatus.Incomplete);
                         cmd.Parameters.AddWithValue("@postponed", (int) ActionQueueStatus.Postponed);
 
