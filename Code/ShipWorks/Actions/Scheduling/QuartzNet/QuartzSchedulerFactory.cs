@@ -17,9 +17,14 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             sqlConfig.Load();
 
             var properties = new NameValueCollection {
-                { StdSchedulerFactory.PropertyCheckConfiguration,         "true" },
-                { StdSchedulerFactory.PropertyDataSourceConnectionString, sqlConfig.GetConnectionString() },
-                { StdSchedulerFactory.PropertyTablePrefix,                "Scheduling" }
+                { "quartz.checkConfiguration",                    "true"                                              },
+                { "quartz.jobStore.type",                         "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz"        },
+                { "quartz.jobStore.driverDelegateType",           "Quartz.Impl.AdoJobStore.SqlServerDelegate, Quartz" },
+                { "quartz.jobStore.dataSource",                   "shipWorks"                                         },
+                { "quartz.dataSource.shipWorks.provider",         "SqlServer-20"                                      },
+                { "quartz.dataSource.shipWorks.connectionString", sqlConfig.GetConnectionString()                     },
+                { "quartz.jobStore.tablePrefix",                  "Scheduling_"                                       },
+                { "quartz.jobStore.useProperties",                "true"                                              }
             };
 
             this.innerFactory = new StdSchedulerFactory(properties);
