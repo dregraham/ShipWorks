@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Data.Connection;
@@ -442,6 +443,21 @@ namespace ShipWorks.Actions
                     return;
                 }
 
+                if ((ActionTriggerType) triggerCombo.SelectedValue != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Cron)
+                {
+                    try
+                    {
+                        // User changed the trigger from a cron trigger to another type of trigger, so we need to make sure
+                        // the action is remvoed from the schedule
+                        new Scheduler().UnscheduleAction(action, originalTrigger as CronTrigger);
+                    }
+                    catch (SchedulingException schedulingException)
+                    {
+                        MessageHelper.ShowError(this, string.Format("An error occurred trying to remove a scheduled action. {0}", schedulingException.Message));
+                        return;
+                    }
+                }
+
                 // Transacted since we affect multiple action tables
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -519,6 +535,11 @@ namespace ShipWorks.Actions
             catch (SqlForeignKeyException)
             {
                 MessageHelper.ShowError(this, "The action has been deleted by another user.");
+                DialogResult = DialogResult.Abort;
+            }
+            catch (SchedulingException schedulingException)
+            {
+                MessageHelper.ShowError(this, string.Format("An error occurred and the action was not been scheduled correctly. {0}", schedulingException.Message));
                 DialogResult = DialogResult.Abort;
             }
         }

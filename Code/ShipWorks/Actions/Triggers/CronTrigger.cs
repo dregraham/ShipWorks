@@ -22,8 +22,8 @@ namespace ShipWorks.Actions.Triggers
         {
             if (StartDateTimeInUtc.Year == 1)
             {
-                // Initialize the start date since it wasn't included in the settings
-                StartDateTimeInUtc = DateTime.UtcNow;
+                // Initialize the start date to the top of the next hour since it wasn't included in the settings
+                StartDateTimeInUtc = DateTime.UtcNow.AddMinutes(60 - DateTime.UtcNow.Minute);
             }
         }
 

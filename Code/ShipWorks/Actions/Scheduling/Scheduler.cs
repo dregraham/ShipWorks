@@ -1,7 +1,11 @@
-﻿using ShipWorks.Actions.Scheduling.QuartzNet;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using ShipWorks.Actions.Scheduling.QuartzNet;
 using ShipWorks.Actions.Triggers;
-using ShipWorks.Data.Model.EntityClasses;
-using System;
+using Quartz.Impl;
+using System.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,7 +63,28 @@ namespace ShipWorks.Actions.Scheduling
                 string message = string.Format("An error occurred while scheduling the action: {0}", exception.Message);
                 throw new SchedulingException(message, exception);
             }
-            
+        }
+
+        /// <summary>
+        /// Removes the specified action/trigger from the schedule.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="cronTrigger">The cron trigger.</param>
+        /// <exception cref="SchedulingException"></exception>
+        public void UnscheduleAction(ActionEntity action, CronTrigger cronTrigger)
+        {
+            try
+            {
+                if (schedulingEngine.IsExistingJob(action, cronTrigger))
+                {
+                    schedulingEngine.Unschedule(action);
+                }
+            }
+            catch (Exception exception)
+            {
+                string message = string.Format("An error occurred while trying to remove the action from the schedule. {0}", exception.Message);
+                throw new SchedulingException(message, exception);
+            }
         }
         
         /// <summary>

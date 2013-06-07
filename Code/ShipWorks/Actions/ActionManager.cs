@@ -16,6 +16,7 @@ using ShipWorks.Filters;
 using log4net;
 using System.Transactions;
 using ShipWorks.Data;
+using ShipWorks.Actions.Scheduling;
 
 namespace ShipWorks.Actions
 {
@@ -171,6 +172,12 @@ namespace ShipWorks.Actions
             // We have to give the trigger a chance to cleanup its state too
             ActionTrigger trigger = LoadTrigger(action);
 
+            if (trigger.TriggerType == ActionTriggerType.Cron)
+            {
+                // We need to unschedule the scheudled action
+                new Scheduler().UnscheduleAction(action, trigger as CronTrigger);
+            }
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Delete all the tasks
@@ -221,11 +228,24 @@ namespace ShipWorks.Actions
             try
             {
                 adapter.SaveAndRefetch(action);
+
+                if (action.TriggerType == (int) ActionTriggerType.Cron)
+                {
+                    CronTrigger cronTrigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Cron, action.TriggerSettings) as CronTrigger;
+
+                    Scheduler scheduler = new Scheduler();
+                    scheduler.ScheduleAction(action, cronTrigger);
+                }
             }
             catch (ORMConcurrencyException ex)
             {
                 throw new ActionConcurrencyException("Another user has recently made changes.\n\n" +
-                    "Your changes cannot be saved since they would overwrite the other changes.", ex);
+                                                     "Your changes cannot be saved since they would overwrite the other changes.", ex);
+            }
+            catch (SchedulingException schedulingException)
+            {
+                log.Error(string.Format("An error occurred while scheduling an action: {0}", schedulingException.Message), schedulingException);
+                throw;
             }
         }
 

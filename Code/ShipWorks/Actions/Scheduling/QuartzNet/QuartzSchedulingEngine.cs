@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using System.Collections.Generic;
+using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using ShipWorks.Actions.Triggers;
@@ -48,10 +49,19 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// <param name="cronTrigger">The cron trigger.</param>
         public void Schedule(ActionEntity action, CronTrigger cronTrigger)
         {
-            IJobDetail jobDetail = new JobDetailImpl(action.ActionID.ToString(CultureInfo.InvariantCulture), null, typeof (ActionJob));
-            SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
+            Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
-            schedulerFactory.GetScheduler().ScheduleJob(jobDetail, trigger);
+            if (IsExistingJob(action, cronTrigger))
+            {
+                // Simplest way to update a job in Quartz is to delete it along with all of its triggers
+                // (http://stackoverflow.com/questions/6728012/quartz-net-update-delete-jobs-triggers)
+                RemoveJob(action, quartzScheduler);
+            }
+
+            IJobDetail jobDetail = new JobDetailImpl(action.ActionID.ToString(CultureInfo.InvariantCulture), null, typeof(ActionJob));
+            SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
+            
+            quartzScheduler.ScheduleJob(jobDetail, trigger);
         }
 
         /// <summary>
@@ -67,7 +77,39 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             JobKey jobKey = new JobKey(action.ActionID.ToString(CultureInfo.InvariantCulture));
             return schedulerFactory.GetScheduler().GetJobDetail(jobKey) != null;
         }
-        
+
+        /// <summary>
+        /// Unschedules the specified action by removing the job/action from the schedule.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        public void Unschedule(ActionEntity action)
+        {
+            Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
+            RemoveJob(action, quartzScheduler);
+        }
+
+        /// <summary>
+        /// Removes the job from the schedule.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="quartzScheduler">The quartz scheduler.</param>
+        private void RemoveJob(ActionEntity action, Quartz.IScheduler quartzScheduler)
+        {
+            if (action != null)
+            {
+                JobKey jobKey = new JobKey(action.ActionID.ToString(CultureInfo.InvariantCulture));
+
+                // We need to detach the job from any triggers before deleting the job
+                IList<ITrigger> existingTriggers = schedulerFactory.GetScheduler().GetTriggersOfJob(jobKey);
+                foreach (ITrigger existingTrigger in existingTriggers)
+                {
+                    quartzScheduler.UnscheduleJob(existingTrigger.Key);
+                }
+
+                quartzScheduler.DeleteJob(jobKey);
+            }
+        }
+
         /// <summary>
         /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
         /// </summary>
@@ -87,6 +129,6 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             });
 
             return taskSource.Task;
-        }
+        }       
     }
 }

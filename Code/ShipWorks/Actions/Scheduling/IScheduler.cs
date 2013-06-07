@@ -17,7 +17,14 @@ namespace ShipWorks.Actions.Scheduling
         /// <param name="action">The action.</param>
         /// <param name="cronTrigger">The cron trigger.</param>
         void ScheduleAction(ActionEntity action, CronTrigger cronTrigger);
-        
+
+        /// <summary>
+        /// Removes the specified action/trigger from the schedule.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="cronTrigger">The cron trigger.</param>
+        void UnscheduleAction(ActionEntity action, CronTrigger cronTrigger);
+
         /// <summary>
         /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
         /// </summary>
