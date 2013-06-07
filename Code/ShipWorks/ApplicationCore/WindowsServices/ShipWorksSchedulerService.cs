@@ -9,32 +9,39 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     [System.ComponentModel.DesignerCategory("Component")]
     public partial class ShipWorksSchedulerService : ShipWorksServiceBase
     {
-        readonly IScheduler scheduler;
+        IScheduler scheduler;
         CancellationTokenSource canceller;
 
         public ShipWorksSchedulerService()
-            : this(new Scheduler()) { }
-
-        public ShipWorksSchedulerService(IScheduler scheduler)
         {
-            if (null == scheduler)
-                throw new ArgumentNullException("scheduler");
-            this.scheduler = scheduler;
-
             InitializeComponent();
             InitializeInstance();
         }
 
 
+        public IScheduler Scheduler
+        {
+            get
+            {
+                if (null == scheduler)
+                {
+                    scheduler = new Scheduler();
+                }
+
+                return scheduler;
+            }
+            set
+            {
+                scheduler = value;
+            }
+        }
+
+
         protected override void OnStart(string[] args)
         {
-            //SqlSession.Initialize();
-            //if (!SqlSession.IsConfigured)
-            //    throw new ApplicationException("ShipWorks database is not configured.");
-
             canceller = new CancellationTokenSource();
 
-            scheduler.RunAsync(canceller.Token);
+            Scheduler.RunAsync(canceller.Token);
         }
 
         protected override void OnStop()

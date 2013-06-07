@@ -8,7 +8,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Tests
     public class FakeShipWorksSchedulerService : ShipWorksSchedulerService
     {
         public FakeShipWorksSchedulerService(IScheduler scheduler)
-            : base(scheduler) { }
+        {
+            base.Scheduler = scheduler;
+        }
 
 
         new public void OnStart(string[] args)

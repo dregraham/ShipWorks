@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Scheduling.QuartzNet;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Actions.Scheduling.QuartzNet;
 using ShipWorks.Actions.Triggers;
-using Quartz.Impl;
-using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace ShipWorks.Actions.Scheduling
 {
