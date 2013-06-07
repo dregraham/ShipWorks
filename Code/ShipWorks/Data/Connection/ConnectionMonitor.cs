@@ -243,13 +243,13 @@ namespace ShipWorks.Data.Connection
                         try
                         {
                             SqlSession master = new SqlSession(SqlSession.Current);
-                            master.DatabaseName = "master";
+                            master.Configuration.DatabaseName = "master";
 
-                            using (SqlConnection testConnection = new SqlConnection(master.GetConnectionString()))
+                            using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
                             {
                                 testConnection.Open();
 
-                                isSingleUser = SqlUtility.IsSingleUser(testConnection, SqlSession.Current.DatabaseName);
+                                isSingleUser = SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
                             }
                         }
                         catch (Exception textEx)

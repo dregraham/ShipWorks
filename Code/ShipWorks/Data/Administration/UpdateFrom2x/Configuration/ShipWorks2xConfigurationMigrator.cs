@@ -314,14 +314,14 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
 
                 // If the destination settings file already exists, they must have installed 3x, installed 2x, and now reinstalled 3x.  We have to get rid
                 // of it so the move can work.
-                if (File.Exists(SqlSession.SettingsFile))
+                if (File.Exists(SqlSessionConfiguration.SettingsFile))
                 {
                     log.InfoFormat("Deleting existing SQL Session before migrating 2x");
-                    File.Delete(SqlSession.SettingsFile);
+                    File.Delete(SqlSessionConfiguration.SettingsFile);
                 }
 
                 log.Info("Copying pre 3.0 sql session to new location.");
-                File.Copy(dataPaths.Post24SqlSessionFile, SqlSession.SettingsFile);
+                File.Copy(dataPaths.Post24SqlSessionFile, SqlSessionConfiguration.SettingsFile);
 
                 // See if the config file is there to pull app-data out of 
                 string oldConfiguration = Path.Combine(dataPaths.Configuration, "configuration.xml");
@@ -411,12 +411,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
                 SqlSession sqlSession = new SqlSession();
 
                 // Set the settings into the new format
-                sqlSession.ServerInstance = sqlServerInstance;
-                sqlSession.DatabaseName = "ShipWorks";
-                sqlSession.Username = username;
-                sqlSession.Password = password;
-                sqlSession.RememberPassword = remember;
-                sqlSession.WindowsAuth = false;
+                sqlSession.Configuration.ServerInstance = sqlServerInstance;
+                sqlSession.Configuration.DatabaseName = "ShipWorks";
+                sqlSession.Configuration.Username = username;
+                sqlSession.Configuration.Password = password;
+                sqlSession.Configuration.RememberPassword = remember;
+                sqlSession.Configuration.WindowsAuth = false;
 
                 log.Info("Migrating SqlSession from pre 2.4 configuration.");
                 sqlSession.SaveAsCurrent();

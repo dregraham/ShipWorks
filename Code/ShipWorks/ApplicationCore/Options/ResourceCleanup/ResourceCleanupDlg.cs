@@ -92,7 +92,7 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             string script = LoadScript("ShipWorks.ApplicationCore.Options.ResourceCleanup.ResourceCleanup.sql");
 
             script = script.Replace("{CUTOFFDATE}", deleteDate.Value.ToShortDateString());
-            script = script.Replace("{DATABASENAME}", SqlSession.Current.DatabaseName);
+            script = script.Replace("{DATABASENAME}", SqlSession.Current.Configuration.DatabaseName);
 
             progressItem.Detail = "Connecting...";
             using (SqlConnection con = SqlSession.Current.OpenConnection())

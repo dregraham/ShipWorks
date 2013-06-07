@@ -88,7 +88,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         {
             this.controller = controller;
             this.taskPrototypes = taskPrototypes.AsReadOnly();
-            this.mainDatabaseName = SqlSession.Current.DatabaseName;
+            this.mainDatabaseName = SqlSession.Current.Configuration.DatabaseName;
         }
 
         /// <summary>

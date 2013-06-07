@@ -258,7 +258,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         private MigrationController(Version installedDbVersion, string scriptLoaderBase)
         {
             migrationProperties = new MigrationPropertyBag();
-            migrationProperties["MasterDatabase"] = SqlSession.Current.DatabaseName;
+            migrationProperties["MasterDatabase"] = SqlSession.Current.Configuration.DatabaseName;
 
             taskPrototypes = new List<MigrationTaskBase>();
             inspectionTasks = new List<MigrationTaskBase>();

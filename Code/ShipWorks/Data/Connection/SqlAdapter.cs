@@ -120,7 +120,7 @@ namespace ShipWorks.Data.Connection
         /// If transacted is true, all calls to the adapter will be executed on the same connection within a transaction.
         /// </summary>
         private SqlAdapter(System.Transactions.TransactionScope transactionScope) :
-            base(SqlSession.Current.GetConnectionString(), false, catalogNameOverwrites, null)
+            base(SqlSession.Current.Configuration.GetConnectionString(), false, catalogNameOverwrites, null)
         {
             this.transactionScope = transactionScope;
 

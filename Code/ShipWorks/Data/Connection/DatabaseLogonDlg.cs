@@ -38,10 +38,10 @@ namespace ShipWorks.Data.Connection
                 throw new InvalidOperationException("Attempt to log on to SQL Server without valid SqlSession.");
             }
 
-            sqlServer.Text = SqlSession.Current.ServerInstance;
-            database.Text = SqlSession.Current.DatabaseName;
+            sqlServer.Text = SqlSession.Current.Configuration.ServerInstance;
+            database.Text = SqlSession.Current.Configuration.DatabaseName;
 
-            if (SqlSession.Current.WindowsAuth)
+            if (SqlSession.Current.Configuration.WindowsAuth)
             {
                 windowsAuth.Checked = true;
                 ActiveControl = ok;
@@ -49,11 +49,11 @@ namespace ShipWorks.Data.Connection
             else
             {
                 sqlServerAuth.Checked = true;
-                username.Text = SqlSession.Current.Username;
+                username.Text = SqlSession.Current.Configuration.Username;
 
-                if (SqlSession.Current.RememberPassword)
+                if (SqlSession.Current.Configuration.RememberPassword)
                 {
-                    password.Text = SqlSession.Current.Password;
+                    password.Text = SqlSession.Current.Configuration.Password;
                     ActiveControl = ok;
                 }
                 else
@@ -61,7 +61,7 @@ namespace ShipWorks.Data.Connection
                     ActiveControl = password;
                 }
 
-                remember.Checked = SqlSession.Current.RememberPassword;
+                remember.Checked = SqlSession.Current.Configuration.RememberPassword;
             }
         }
 
@@ -81,14 +81,14 @@ namespace ShipWorks.Data.Connection
         private void OnConnect(object sender, System.EventArgs e)
         {
             SqlSession session = new SqlSession();
-            session.ServerInstance = sqlServer.Text;
-            session.DatabaseName = database.Text;
+            session.Configuration.ServerInstance = sqlServer.Text;
+            session.Configuration.DatabaseName = database.Text;
 
             // Set them to the new settings
-            session.Username = username.Text;
-            session.Password = password.Text;
-            session.RememberPassword = remember.Checked;
-            session.WindowsAuth = windowsAuth.Checked;
+            session.Configuration.Username = username.Text;
+            session.Configuration.Password = password.Text;
+            session.Configuration.RememberPassword = remember.Checked;
+            session.Configuration.WindowsAuth = windowsAuth.Checked;
 
             try
             {

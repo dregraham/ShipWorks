@@ -29,40 +29,16 @@ namespace ShipWorks.Data.Connection
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
 
-        // File from which to save and restore settings
-        static string filename;
-
         // Global instance of the SQL Session
         static SqlSession current;
 
-        // Instance of SQL Server the app uses to connect to
-        string serverInstance = "";
 
-        // The database name to connect to
-        string databaseName = "";
-
-        // SQL Server Username
-        string username = "";
-
-        // SQL Server Password
-        string password = "";
-
-        // Remember password
-        bool remember = false;
-
-        // Use windows authentication
-        bool windowsAuth = false;
+        readonly SqlSessionConfiguration configuration;
 
         // Cached properties of the server
         DateTime serverLocalDate;
         Stopwatch timeSinceTimeTaken;
 
-        // Used to track change to the connection string for logging purposes
-        [ThreadStatic]
-        static string lastConnectionString;
-
-        // Default connection timeout
-        static TimeSpan defaultTimeout = TimeSpan.FromSeconds(10);
 
         /// <summary>
         /// Static constructor
@@ -81,26 +57,29 @@ namespace ShipWorks.Data.Connection
             }
         }
 
+
         /// <summary>
         /// Constructor
         /// </summary>
         public SqlSession()
-        {
-
-        }
+            : this(new SqlSessionConfiguration()) { }
 
         /// <summary>
         /// Copy constructor
         /// </summary>
         public SqlSession(SqlSession copy)
+            : this(copy.Configuration) { }
+
+        /// <summary>
+        /// Constructor with configuration
+        /// </summary>
+        SqlSession(SqlSessionConfiguration configuration)
         {
-            this.serverInstance = copy.serverInstance;
-            this.databaseName = copy.databaseName;
-            this.username = copy.username;
-            this.password = copy.password;
-            this.remember = copy.remember;
-            this.windowsAuth = copy.windowsAuth;
+            this.configuration = new SqlSessionConfiguration(configuration);
+
+            Configuration.ConnectionChanged += delegate { ConnectionChanged(); };
         }
+
 
         /// <summary>
         /// One-time initializtion of the SqlSession.
@@ -108,27 +87,12 @@ namespace ShipWorks.Data.Connection
         public static void Initialize()
         {
             SqlSession session = new SqlSession();
-            session.Load();
+            session.Configuration.Load();
 
             // Set the loaded session as current
             Current = session;
         }
 
-        /// <summary>
-        /// The file the settings are stored in.
-        /// </summary>
-        public static string SettingsFile
-        {
-            get
-            {
-                if (filename == null)
-                {
-                    filename = Path.Combine(DataPath.InstanceSettings, "sqlsession.xml");
-                }
-
-                return filename;
-            }
-        }
 
         /// <summary>
         /// Gets the global instance of the SqlSession object.  If the server and database have not been configured, null is returned.
@@ -148,7 +112,7 @@ namespace ShipWorks.Data.Connection
                     return null;
                 }
 
-                if (string.IsNullOrEmpty(current.DatabaseName) || string.IsNullOrEmpty(current.ServerInstance))
+                if (string.IsNullOrEmpty(current.Configuration.DatabaseName) || string.IsNullOrEmpty(current.Configuration.ServerInstance))
                 {
                     return null;
                 }
@@ -166,18 +130,11 @@ namespace ShipWorks.Data.Connection
                 }
 
                 current = value;
+                current.Configuration.Freeze();
             }
         }
 
-        /// <summary>
-        /// Create the connection string based on the sql session
-        /// </summary>
-        public string GetConnectionString()
-        {
-            string cs = InternalGetConnectionString(defaultTimeout);
 
-            return cs;
-        }
 
         /// <summary>
         /// Needs to be called whenver a core property of teh connection string changes
@@ -188,67 +145,13 @@ namespace ShipWorks.Data.Connection
             timeSinceTimeTaken = null;
         }
 
-        /// <summary>
-        /// Get the connection string that specified the given timeout value
-        /// </summary>
-        private string InternalGetConnectionString(TimeSpan timeout)
-        {
-            if (string.IsNullOrEmpty(ServerInstance))
-            {
-                return "";
-            }
-
-            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
-
-            csb.ApplicationName = "ShipWorks";
-            csb.DataSource = ServerInstance;
-            csb.InitialCatalog = DatabaseName;
-
-            csb.IntegratedSecurity = WindowsAuth;
-
-            if (!windowsAuth)
-            {
-                csb.UserID = Username;
-                csb.Password = Password;
-            }
-
-            // The WorkstationID is how we pass the UserID and ComputerID to use for auditing on this connection
-            csb.WorkstationID = UserSession.WorkstationID;
-
-            // Timeout for connect
-            csb.ConnectTimeout = (int) timeout.TotalSeconds;
-
-            // http://blogs.msdn.com/florinlazar/archive/2008/05/05/8460156.aspx
-            csb.TransactionBinding = "Explicit Unbind";
-
-            // Generate the connection string
-            string connectionString = csb.ConnectionString;
-
-            // If it's different than the last time log it
-            if (connectionString != lastConnectionString)
-            {
-                var logCsb = new SqlConnectionStringBuilder(connectionString);
-
-                // Have to make sure the password is stripped
-                if (!windowsAuth)
-                {
-                    logCsb.Password = "";
-                }
-
-                log.InfoFormat("ConnectionString: {0}", logCsb);
-
-                lastConnectionString = connectionString;
-            }
-
-            return connectionString;
-        }
         
         /// <summary>
         /// Open a connection using the current properties of the SqlSession
         /// </summary>
         public SqlConnection OpenConnection()
         {
-            SqlConnection con = new SqlConnection(GetConnectionString());
+            SqlConnection con = new SqlConnection(Configuration.GetConnectionString());
 
             ConnectionMonitor.OpenConnection(con);
 
@@ -260,15 +163,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public void TestConnection()
         {
-            TestConnection(defaultTimeout);
-        }
-
-        /// <summary>
-        /// Tries to connect to SQL Server.  Throws an exception on failure.
-        /// </summary>
-        private void TestConnection(TimeSpan timeout)
-        {
-            using (SqlConnection con = new SqlConnection(InternalGetConnectionString(timeout)))
+            using (SqlConnection con = new SqlConnection(Configuration.GetConnectionString()))
             {
                 con.Open();
 
@@ -310,7 +205,7 @@ namespace ShipWorks.Data.Connection
         {
             using (SqlConnection con = OpenConnection())
             {
-                log.InfoFormat("Connected to '{0}', ServerVersion: '{1}'", ServerInstance, con.ServerVersion);
+                log.InfoFormat("Connected to '{0}', ServerVersion: '{1}'", Configuration.ServerInstance, con.ServerVersion);
 
                 // If its an old version of SQL Server
                 return new Version(con.ServerVersion) >= new Version(10, 0);
@@ -548,249 +443,23 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-        /// <summary>
-        /// The SQL Server instance to which we connect
-        /// </summary>
-        public string ServerInstance
-        {
-            get
-            {
-                return serverInstance;
-            }
-            set
-            {
-                if (this == current)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSession.");
-                }
 
-                serverInstance = value;
-                ConnectionChanged();
-            }
+        public SqlSessionConfiguration Configuration
+        {
+            get { return configuration; }
         }
 
-        /// <summary>
-        /// The name of the database to which to connect
-        /// </summary>
-        public string DatabaseName
-        {
-            get
-            {
-                return databaseName;
-            }
-            set
-            {
-                if (this == current)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSession.");
-                }
-
-                databaseName = value;
-                ConnectionChanged();
-            }
-        }
-
-        /// <summary>
-        /// The username
-        /// </summary>
-        public string Username
-        {
-            get
-            {
-                return username;
-            }
-            set
-            {
-                if (this == current)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSession.");
-                }
-
-                string tempDecrypt = Password;
-
-                username = value;
-                password = SecureText.Encrypt(tempDecrypt, username);
-
-                ConnectionChanged();
-            }
-        }
-
-        /// <summary>
-        /// The password
-        /// </summary>
-        public string Password
-        {
-            get
-            {
-                return SecureText.Decrypt(password, username);
-            }
-            set
-            {
-                if (this == current)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSession.");
-                }
-
-                password = SecureText.Encrypt(value, username);
-                ConnectionChanged();
-            }
-        }
-
-        /// <summary>
-        /// Set whether the password should be saved to disk.
-        /// </summary>
-        public bool RememberPassword
-        {
-            get
-            {
-                return remember;
-            }
-            set
-            {
-                if (this == current)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSession.");
-                }
-
-                remember = value;
-            }
-        }
-
-        /// <summary>
-        /// Whether to use windows authentication
-        /// </summary>
-        public bool WindowsAuth
-        {
-            get
-            {
-                return windowsAuth;
-            }
-            set
-            {
-                if (this == current)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSession.");
-                }
-
-                windowsAuth = value;
-                ConnectionChanged();
-            }
-        }
-
-        /// <summary>
-        /// Clear all the fields
-        /// </summary>
-        private void Clear()
-        {
-            if (this == current)
-            {
-                throw new InvalidOperationException("Cannot modify the current SqlSession.");
-            }
-
-            serverInstance = string.Empty;
-            databaseName = string.Empty;
-            username = string.Empty;
-            password = string.Empty;
-            remember = false;
-            windowsAuth = false;
-
-            ConnectionChanged();
-        }
-
-        /// <summary>
-        /// Load SQL Session state from disk
-        /// </summary>
-        private void Load()
-        {
-            Clear();
-
-            log.InfoFormat("Loading SqlSession from {0}.", SettingsFile);
-
-            // If the file does not exist, do nothing
-            if (!File.Exists(SettingsFile))
-            {
-                log.Info("SqlSession file not found.");
-                return;
-            }
-
-            InternalLoad(File.ReadAllText(SettingsFile));
-        }
-
-        /// <summary>
-        /// Load the settings based on the given xml string
-        /// </summary>
-        private void InternalLoad(string xml)
-        {
-            XmlDocument xmlSettings = new XmlDocument();
-
-            try
-            {
-                xmlSettings.LoadXml(xml);
-            }
-            catch (XmlException ex)
-            {
-                log.Error("Could not load SqlSession XML", ex);
-
-                return;
-            }
-
-            XPathNavigator xpath = xmlSettings.CreateNavigator();
-
-            // Load the settings
-            serverInstance = XPathUtility.Evaluate(xpath, "//Instance", "");
-            databaseName = XPathUtility.Evaluate(xpath, "//Database", "");
-            username = XPathUtility.Evaluate(xpath, "//Username", "");
-            password = XPathUtility.Evaluate(xpath, "//Password", "");
-            remember = XPathUtility.Evaluate(xpath, "//Remember", false);
-            windowsAuth = XPathUtility.Evaluate(xpath, "//WindowsAuth", false);
-
-            ConnectionChanged();
-        }
 
         /// <summary>
         /// Saves the state of the SqlSession object and sets it as the current sql session.
         /// </summary>
         public void SaveAsCurrent()
         {
-            XmlTextWriter xmlWriter = new XmlTextWriter(SettingsFile, Encoding.UTF8);
-            xmlWriter.Formatting = Formatting.Indented;
-
-            xmlWriter.WriteStartDocument();
-
-            InternalSave(xmlWriter);
-
-            // Close
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Close();
+            Configuration.Save();
 
             Current = this;
         }
 
-        /// <summary>
-        /// Save SQL Session state to the given xml writer
-        /// </summary>
-        private void InternalSave(XmlTextWriter xmlWriter)
-        {
-            // Open
-            xmlWriter.WriteStartElement("SqlSession");
-
-            // Server
-            xmlWriter.WriteStartElement("Server");
-            xmlWriter.WriteElementString("Instance", serverInstance);
-            xmlWriter.WriteElementString("Database", databaseName);
-            xmlWriter.WriteEndElement();
-
-            // Credentials
-            xmlWriter.WriteStartElement("Credentials");
-            xmlWriter.WriteElementString("Username", username);
-            xmlWriter.WriteElementString("Password", remember ? password : "");
-            xmlWriter.WriteElementString("Remember", remember.ToString());
-            xmlWriter.WriteElementString("WindowsAuth", windowsAuth.ToString());
-            xmlWriter.WriteEndElement();
-
-            // Close
-            xmlWriter.WriteEndElement();
-        }
 
         /// <summary>
         /// The state of the configuration used to connect to SQL Server

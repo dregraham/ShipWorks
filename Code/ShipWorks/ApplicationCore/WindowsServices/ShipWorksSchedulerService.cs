@@ -1,6 +1,7 @@
 ﻿using System;
 using ShipWorks.Actions.Scheduling;
 using System.Threading;
+using ShipWorks.Data.Connection;
 
 
 namespace ShipWorks.ApplicationCore.WindowsServices
@@ -27,6 +28,10 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         protected override void OnStart(string[] args)
         {
+            //SqlSession.Initialize();
+            //if (!SqlSession.IsConfigured)
+            //    throw new ApplicationException("ShipWorks database is not configured.");
+
             canceller = new CancellationTokenSource();
 
             scheduler.RunAsync(canceller.Token);

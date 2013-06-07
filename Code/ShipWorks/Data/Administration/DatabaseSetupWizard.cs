@@ -101,7 +101,7 @@ namespace ShipWorks.Data.Administration
             // Prepopulate the instance box with the current
             if (SqlSession.IsConfigured)
             {
-                comboSqlServers.Text = SqlSession.Current.ServerInstance;
+                comboSqlServers.Text = SqlSession.Current.Configuration.ServerInstance;
             }
 
             StartSearchingSqlServers();
@@ -211,11 +211,11 @@ namespace ShipWorks.Data.Administration
                         installedInstances.Add(instanceName.Text);
 
                         // Reload all the SQL Session from last time
-                        sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
-                        sqlSession.Username = "sa";
-                        sqlSession.Password = SecureText.Decrypt((string) afterInstallSuccess.Attribute("password"), "sa");
-                        sqlSession.RememberPassword = true;
-                        sqlSession.WindowsAuth = false;
+                        sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                        sqlSession.Configuration.Username = "sa";
+                        sqlSession.Configuration.Password = SecureText.Decrypt((string)afterInstallSuccess.Attribute("password"), "sa");
+                        sqlSession.Configuration.RememberPassword = true;
+                        sqlSession.Configuration.WindowsAuth = false;
 
                         // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
                         // a reboot was required (which is why we are here now)
@@ -284,15 +284,8 @@ namespace ShipWorks.Data.Administration
         {
             if (radioRestoreIntoCurrent.Checked)
             {
-                SqlSession current = SqlSession.Current;
-
                 // We are going to restore into the current, so we will be using the current settings
-                sqlSession.ServerInstance = current.ServerInstance;
-                sqlSession.DatabaseName = current.DatabaseName;
-                sqlSession.Username = current.Username;
-                sqlSession.Password = current.Password;
-                sqlSession.RememberPassword = current.RememberPassword;
-                sqlSession.WindowsAuth = current.WindowsAuth;
+                sqlSession.Configuration.CopyFrom(SqlSession.Current.Configuration);
 
                 e.NextPage = wizardPageRestoreLogin;
             }
@@ -338,7 +331,7 @@ namespace ShipWorks.Data.Administration
                     else
                     {
                         // Save the instance
-                        sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                        sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
 
                         e.NextPage = pageFirstPrerequisite;
                     }
@@ -461,7 +454,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Save the instance
-            sqlSession.ServerInstance = comboSqlServers.Text;
+            sqlSession.Configuration.ServerInstance = comboSqlServers.Text;
 
             e.NextPage = wizardPageLoginSqlServer;
         }
@@ -478,18 +471,18 @@ namespace ShipWorks.Data.Administration
             // Set the credentials
             if (sqlServerAuth.Checked)
             {
-                sqlSession.Username = username.Text;
-                sqlSession.Password = password.Text;
-                sqlSession.RememberPassword = remember.Checked;
-                sqlSession.WindowsAuth = false;
+                sqlSession.Configuration.Username = username.Text;
+                sqlSession.Configuration.Password = password.Text;
+                sqlSession.Configuration.RememberPassword = remember.Checked;
+                sqlSession.Configuration.WindowsAuth = false;
             }
             else
             {
-                sqlSession.WindowsAuth = true;
+                sqlSession.Configuration.WindowsAuth = true;
             }
 
             // Ensure the database name is cleared
-            sqlSession.DatabaseName = "";
+            sqlSession.Configuration.DatabaseName = "";
 
             // Try to login
             try
@@ -551,7 +544,7 @@ namespace ShipWorks.Data.Administration
             catch (SqlException ex)
             {
                 MessageHelper.ShowError(this,
-                    "ShipWorks could not login to SQL Server '" + sqlSession.ServerInstance + "' using " +
+                    "ShipWorks could not login to SQL Server '" + sqlSession.Configuration.ServerInstance + "' using " +
                     "the given login information.\n\n" +
                     "Detail: " + ex.Message);
 
@@ -581,7 +574,7 @@ namespace ShipWorks.Data.Administration
             string previousSelection = (string) databaseNames.SelectedItem;
             if (previousSelection == null && SqlSession.IsConfigured)
             {
-                previousSelection = SqlSession.Current.DatabaseName;
+                previousSelection = SqlSession.Current.Configuration.DatabaseName;
             }
 
             databaseNames.Items.Clear();
@@ -606,7 +599,7 @@ namespace ShipWorks.Data.Administration
             {
                 MessageHelper.ShowError(this,
                     "There was an error trying to read the database names " +
-                    "from SQL Server instance '" + sqlSession.ServerInstance + "'.\n\n" +
+                    "from SQL Server instance '" + sqlSession.Configuration.ServerInstance + "'.\n\n" +
                     "Detail: " + ex.Message);
             }
 
@@ -651,7 +644,7 @@ namespace ShipWorks.Data.Administration
                     Version version = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
 
                     // We get this far, we must be ok
-                    sqlSession.DatabaseName = database;
+                    sqlSession.Configuration.DatabaseName = database;
 
                     // Complete
                     e.NextPage = wizardPageShipWorksAdmin;
@@ -731,10 +724,10 @@ namespace ShipWorks.Data.Administration
             }
 
             // Save user\pass info
-            sqlSession.Username = "sa";
-            sqlSession.Password = saPassword.Text.Trim();
-            sqlSession.RememberPassword = true;
-            sqlSession.WindowsAuth = false;
+            sqlSession.Configuration.Username = "sa";
+            sqlSession.Configuration.Password = saPassword.Text.Trim();
+            sqlSession.Configuration.RememberPassword = true;
+            sqlSession.Configuration.WindowsAuth = false;
 
             e.NextPage = wizardPageDownloadSqlServer;
         }
@@ -861,7 +854,7 @@ namespace ShipWorks.Data.Administration
             // If it was successful, we should now be able to connect.
             if (sqlInstaller.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))
             {
-                sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
                 installedInstances.Add(instanceName.Text);
 
                 // Since we installed it, we can do this without asking
@@ -882,7 +875,7 @@ namespace ShipWorks.Data.Administration
                             return new XElement("Replay",
                                 new XElement("InstanceName", instanceName.Text),
                                 new XElement("Restore", radioRestoreDatabase.Checked),
-                                new XElement("AfterInstallSuccess", new XAttribute("password", SecureText.Encrypt(sqlSession.Password, "sa")), true));
+                                new XElement("AfterInstallSuccess", new XAttribute("password", SecureText.Encrypt(sqlSession.Configuration.Password, "sa")), true));
                         }));
 
                 MoveNext();
@@ -920,7 +913,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoWindowsFirewall(object sender, WizardSteppingIntoEventArgs e)
         {
-            e.Skip = !MyComputer.HasWindowsFirewall || firewallOpenedInstances.Contains(sqlSession.ServerInstance);
+            e.Skip = !MyComputer.HasWindowsFirewall || firewallOpenedInstances.Contains(sqlSession.Configuration.ServerInstance);
 
             if (!e.Skip)
             {
@@ -947,7 +940,7 @@ namespace ShipWorks.Data.Administration
                     SqlWindowsFirewallUtility.OpenWindowsFirewall();
                 }
 
-                firewallOpenedInstances.Add(sqlSession.ServerInstance);
+                firewallOpenedInstances.Add(sqlSession.Configuration.ServerInstance);
 
                 updateWindowsFirewall.Enabled = false;
                 firewallUpdatedPicture.Visible = true;
@@ -1006,10 +999,10 @@ namespace ShipWorks.Data.Administration
                     SqlDatabaseCreator.CreateDatabase(name, con);
                 }
 
-                sqlSession.DatabaseName = name;
+                sqlSession.Configuration.DatabaseName = name;
 
                 pendingDatabaseCreated = true;
-                pendingDatabaseName = sqlSession.DatabaseName;
+                pendingDatabaseName = sqlSession.Configuration.DatabaseName;
 
                 // Restoring
                 if (radioRestoreDatabase.Checked)
@@ -1102,7 +1095,7 @@ namespace ShipWorks.Data.Administration
                     SqlCommandProvider.ExecuteNonQuery(con, "drop database " + pendingDatabaseName);
                 }
 
-                sqlSession.DatabaseName = "";
+                sqlSession.Configuration.DatabaseName = "";
             }
             catch (SqlException ex)
             {

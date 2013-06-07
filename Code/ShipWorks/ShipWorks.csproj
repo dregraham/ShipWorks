@@ -408,6 +408,7 @@
     <Compile Include="Data\Caching\EntityTypeChangeMonitor.cs" />
     <Compile Include="Data\Caching\EntityTypeChangeNotifier.cs" />
     <Compile Include="Data\Caching\EntityTypeChangeVersion.cs" />
+    <Compile Include="Data\Connection\ISqlSessionConfiguration.cs" />
     <Compile Include="Data\Connection\SingleUserModeDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -538,6 +539,7 @@
     <Compile Include="Data\Import\Xml\IGenericXmlOrderLoadObserver.cs" />
     <Compile Include="Data\OrderHeader.cs" />
     <Compile Include="Data\OrderHeaderProvider.cs" />
+    <Compile Include="Data\Connection\SqlSessionConfiguration.cs" />
     <Compile Include="Data\Utility\SortDefinition.cs" />
     <Compile Include="Editions\Brown\BrownEdition.cs" />
     <Compile Include="Editions\Brown\BrownEditionUtility.cs" />

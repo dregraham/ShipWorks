@@ -97,7 +97,7 @@ namespace ShipWorks.Users
             }
             else
             {
-                log.InfoFormat("ShipWorksSession initialized ({0}, {1})", SqlSession.Current.ServerInstance, SqlSession.Current.DatabaseName);
+                log.InfoFormat("ShipWorksSession initialized ({0}, {1})", SqlSession.Current.Configuration.ServerInstance, SqlSession.Current.Configuration.DatabaseName);
 
                 // Ensure this computer is registered on the current connection.
                 thisComputer = ComputerManager.RegisterThisComputer();

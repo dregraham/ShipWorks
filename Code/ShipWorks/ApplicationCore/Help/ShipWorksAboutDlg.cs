@@ -46,9 +46,9 @@ namespace ShipWorks.ApplicationCore.Help
 
             if (SqlSession.IsConfigured)
             {
-                labelSqlServer.Text = SqlSession.Current.ServerInstance;
-                labelDatabase.Text = SqlSession.Current.DatabaseName;
-                labelCredentials.Text = FormatCredentials(SqlSession.Current);
+                labelSqlServer.Text = SqlSession.Current.Configuration.ServerInstance;
+                labelDatabase.Text = SqlSession.Current.Configuration.DatabaseName;
+                labelCredentials.Text = FormatCredentials(SqlSession.Current.Configuration);
             }
 
 
@@ -75,15 +75,15 @@ namespace ShipWorks.ApplicationCore.Help
         /// <summary>
         /// Format the credentials display
         /// </summary>
-        private static string FormatCredentials(SqlSession sqlSession)
+        private static string FormatCredentials(SqlSessionConfiguration sqlConfig)
         {
-            if (sqlSession.WindowsAuth)
+            if (sqlConfig.WindowsAuth)
             {
                 return "Windows Authentication";
             }
             else
             {
-                return sqlSession.Username;
+                return sqlConfig.Username;
             }
         }
 

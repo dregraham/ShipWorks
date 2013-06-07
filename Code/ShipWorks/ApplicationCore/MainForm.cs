@@ -421,13 +421,13 @@ namespace ShipWorks
                 try
                 {
                     SqlSession master = new SqlSession(SqlSession.Current);
-                    master.DatabaseName = "master";
+                    master.Configuration.DatabaseName = "master";
 
-                    using (SqlConnection testConnection = new SqlConnection(master.GetConnectionString()))
+                    using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
                     {
                         testConnection.Open();
 
-                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.DatabaseName))
+                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
                         {
                             using (SingleUserModeDlg dlg = new SingleUserModeDlg())
                             {

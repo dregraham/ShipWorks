@@ -52,7 +52,7 @@ namespace ShipWorks.Data.Connection
 
             if (this.connectionToOpen == null)
             {
-                this.connectionToOpen = new SqlConnection(SqlSession.Current.GetConnectionString());
+                this.connectionToOpen = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString());
                 this.closeOnSuccess = true;
             }
         }

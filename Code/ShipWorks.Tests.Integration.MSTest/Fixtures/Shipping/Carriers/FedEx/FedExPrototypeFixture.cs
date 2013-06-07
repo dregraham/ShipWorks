@@ -79,8 +79,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 ApplicationCore.ShipWorksSession.Initialize(swInstance);
                 SqlSession.Initialize();
 
-                Console.WriteLine(SqlSession.Current.DatabaseName);
-                Console.WriteLine(SqlSession.Current.ServerInstance);
+                Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
+                Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
 
                 DataProvider.InitializeForApplication();
                 AuditProcessor.InitializeForApplication();
@@ -327,7 +327,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             {
                 command.CommandTimeout = 15;
                 command.CommandType = CommandType.Text;
-                using (SqlConnection connection = new SqlConnection(SqlSession.Current.GetConnectionString()))
+                using (SqlConnection connection = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
                 {
                     command.Connection = connection;
                     command.Connection.Open();

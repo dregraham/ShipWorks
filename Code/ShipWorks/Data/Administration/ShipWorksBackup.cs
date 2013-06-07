@@ -222,7 +222,7 @@ namespace ShipWorks.Data.Administration
 
             BackupDatabase primary = new BackupDatabase 
                 {
-                    DatabaseName = SqlSession.Current.DatabaseName,
+                    DatabaseName = SqlSession.Current.Configuration.DatabaseName,
                     BackupFile = Path.Combine(tempPath, "shipworks.dat"),
                     Progress = new ProgressItem("Create SQL Server Backup"),
                     IsArchive = false
@@ -267,8 +267,8 @@ namespace ShipWorks.Data.Administration
             xmlWriter.WriteElementString("Date", DateTime.UtcNow.ToString("u"));
 
             xmlWriter.WriteStartElement("SqlServer");
-            xmlWriter.WriteElementString("Instance", SqlSession.Current.ServerInstance);
-            xmlWriter.WriteElementString("Database", SqlSession.Current.DatabaseName);
+            xmlWriter.WriteElementString("Instance", SqlSession.Current.Configuration.ServerInstance);
+            xmlWriter.WriteElementString("Database", SqlSession.Current.Configuration.DatabaseName);
             xmlWriter.WriteEndElement();
 
             xmlWriter.WriteStartElement("ShipWorks");
@@ -561,7 +561,7 @@ namespace ShipWorks.Data.Administration
                         BackupDatabase database = new BackupDatabase();
                         database.BackupFile = targetPath;
                         database.IsArchive = !item.Name.EndsWith("shipworks.dat");
-                        database.DatabaseName = database.IsArchive ? Path.GetFileNameWithoutExtension(item.Name) : SqlSession.Current.DatabaseName;
+                        database.DatabaseName = database.IsArchive ? Path.GetFileNameWithoutExtension(item.Name) : SqlSession.Current.Configuration.DatabaseName;
                         database.Progress = database.IsArchive ? new ProgressItem(string.Format("Restore Archive ({0})", databases.Count(b => b.IsArchive) + 1)) : null;
 
                         databases.Add(database);
