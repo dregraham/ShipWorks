@@ -11,6 +11,7 @@
     </PostConversionAddToScc>
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,7 +38,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation>C:\GitCC\Trunk\Backup\Code\ShipWorks.SqlServer\</UpgradeBackupLocation>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -55,7 +56,7 @@
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisModuleSuppressionsFile>AnalysisSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ConnectionString />
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <Name>ShipWorks.SqlServer</Name>
     <ProjectVersion>4.0</ProjectVersion>
     <ProjectGuid>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</ProjectGuid>
