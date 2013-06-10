@@ -58,7 +58,9 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 RemoveJob(action, quartzScheduler);
             }
 
-            IJobDetail jobDetail = new JobDetailImpl(action.ActionID.ToString(CultureInfo.InvariantCulture), null, typeof(ActionJob));
+            IJobDetail jobDetail = new JobDetailImpl(GetQuartzJobName(action), null, typeof(ActionJob));
+            jobDetail.JobDataMap.Add("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture));
+
             SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
             
             quartzScheduler.ScheduleJob(jobDetail, trigger);
@@ -74,7 +76,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// </returns>
         public bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger)
         {
-            JobKey jobKey = new JobKey(action.ActionID.ToString(CultureInfo.InvariantCulture));
+            JobKey jobKey = new JobKey(GetQuartzJobName(action));
             return schedulerFactory.GetScheduler().GetJobDetail(jobKey) != null;
         }
 
@@ -97,7 +99,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         {
             if (action != null)
             {
-                JobKey jobKey = new JobKey(action.ActionID.ToString(CultureInfo.InvariantCulture));
+                JobKey jobKey = new JobKey(GetQuartzJobName(action));
 
                 // We need to detach the job from any triggers before deleting the job
                 IList<ITrigger> existingTriggers = schedulerFactory.GetScheduler().GetTriggersOfJob(jobKey);
@@ -108,6 +110,18 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
                 quartzScheduler.DeleteJob(jobKey);
             }
+        }
+
+        /// <summary>
+        /// There are numerous points in the engine where the job must be retreived by name, so this is just a helper
+        /// method to create/get the name of the quartz job based on the name and action ID of the action provided.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>The name of the job.</returns>
+        private string GetQuartzJobName(ActionEntity action)
+        {
+            // The job name must be unique, so include the action ID in the name
+            return string.Format("{0} (ID {1})", action.Name, action.ActionID.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
