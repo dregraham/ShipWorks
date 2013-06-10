@@ -25,6 +25,10 @@ namespace ShipWorks.Actions.Triggers
                 // Initialize the start date to the top of the next hour since it wasn't included in the settings
                 StartDateTimeInUtc = DateTime.UtcNow.AddMinutes(60 - DateTime.UtcNow.Minute);
             }
+            else if (StartDateTimeInUtc.Kind == DateTimeKind.Unspecified)
+            {
+                StartDateTimeInUtc = DateTime.SpecifyKind(StartDateTimeInUtc, DateTimeKind.Utc);
+            }
         }
 
         /// <summary>
