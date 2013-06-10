@@ -244,7 +244,7 @@ namespace ShipWorks.Actions
             }
             catch (SchedulingException schedulingException)
             {
-                log.Error(string.Format("An error occurred while scheduling an action: {0}", schedulingException.Message), schedulingException);
+                log.Error(string.Format("An error occurred while scheduling an action. {0}", schedulingException.Message), schedulingException);
                 throw;
             }
         }

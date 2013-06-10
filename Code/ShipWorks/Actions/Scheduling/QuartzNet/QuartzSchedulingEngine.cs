@@ -51,19 +51,31 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
-            if (IsExistingJob(action, cronTrigger))
+            try
             {
-                // Simplest way to update a job in Quartz is to delete it along with all of its triggers
-                // (http://stackoverflow.com/questions/6728012/quartz-net-update-delete-jobs-triggers)
-                RemoveJob(action, quartzScheduler);
+                if (IsExistingJob(action, cronTrigger, quartzScheduler))
+                {
+                    // Simplest way to update a job in Quartz is to delete it along with all of its triggers
+                    // (http://stackoverflow.com/questions/6728012/quartz-net-update-delete-jobs-triggers)
+                    RemoveJob(action, quartzScheduler);
+                }
+
+                IJobDetail jobDetail = new JobDetailImpl(GetQuartzJobName(action), null, typeof (ActionJob));
+                jobDetail.JobDataMap.Add("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture));
+
+                SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
+
+                quartzScheduler.ScheduleJob(jobDetail, trigger);
             }
-
-            IJobDetail jobDetail = new JobDetailImpl(GetQuartzJobName(action), null, typeof(ActionJob));
-            jobDetail.JobDataMap.Add("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture));
-
-            SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
-            
-            quartzScheduler.ScheduleJob(jobDetail, trigger);
+            finally
+            {
+                if (quartzScheduler != null)
+                {
+                    // The scheduler needs to be explicitly shutdown(even though it was never actually started) 
+                    // otherwise the process will continue to run after exiting the ShipWorks UI
+                    quartzScheduler.Shutdown(true);
+                }
+            }
         }
 
         /// <summary>
@@ -76,8 +88,34 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// </returns>
         public bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger)
         {
+            Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
+
+            try
+            {
+                JobKey jobKey = new JobKey(GetQuartzJobName(action));
+                return quartzScheduler.GetJobDetail(jobKey) != null;
+            }
+            finally
+            {
+                // The scheduler needs to be explicitly shutdown(even though it was never actually started) 
+                // otherwise the process will continue to run after exiting the ShipWorks UI
+                quartzScheduler.Shutdown(true);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether a job for the given action/trigger exists.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="cronTrigger">The cron trigger.</param>
+        /// <param name="quartzScheduler">The quartz scheduler.</param>
+        /// <returns>
+        ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
+        /// </returns>
+        private bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger, Quartz.IScheduler quartzScheduler)
+        {
             JobKey jobKey = new JobKey(GetQuartzJobName(action));
-            return schedulerFactory.GetScheduler().GetJobDetail(jobKey) != null;
+            return quartzScheduler.GetJobDetail(jobKey) != null;
         }
 
         /// <summary>
@@ -87,7 +125,20 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         public void Unschedule(ActionEntity action)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
-            RemoveJob(action, quartzScheduler);
+
+            try
+            {
+                RemoveJob(action, quartzScheduler);
+            }
+            finally
+            {
+                if (quartzScheduler != null)
+                {
+                    // The scheduler needs to be explicitly shutdown(even though it was never actually started) 
+                    // otherwise the process will continue to run after exiting the ShipWorks UI
+                    quartzScheduler.Shutdown(true);
+                }
+            }
         }
 
         /// <summary>
@@ -143,6 +194,6 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             });
 
             return taskSource.Task;
-        }       
+        }
     }
 }

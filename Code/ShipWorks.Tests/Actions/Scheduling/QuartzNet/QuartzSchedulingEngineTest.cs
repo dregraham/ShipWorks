@@ -77,7 +77,20 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Never());
         }
-        
+
+        [TestMethod]
+        public void Schedule_ShutsdownScheduler_Test()
+        {
+            scheduler.Setup(s => s.Shutdown(It.IsAny<bool>()));
+
+            ActionEntity action = new ActionEntity { ActionID = 1 };
+            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+
+            testObject.Schedule(action, trigger);
+
+            scheduler.Verify(s => s.Shutdown(true), Times.Once());
+        }
+
         [TestMethod]
         public void IsExistingJob_DelegatesToScheduler_Test()
         {
@@ -108,6 +121,19 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             Assert.IsTrue(testObject.IsExistingJob(action, trigger));
+        }
+
+        [TestMethod]
+        public void IsExistingJob_ShutsdownScheduler_Test()
+        {
+            scheduler.Setup(s => s.Shutdown(It.IsAny<bool>()));
+
+            ActionEntity action = new ActionEntity { ActionID = 1 };
+            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+
+            testObject.IsExistingJob(action, trigger);
+
+            scheduler.Verify(s => s.Shutdown(true), Times.Once());
         }
 
         [TestMethod]
@@ -234,6 +260,20 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             testObject.Unschedule(null);
 
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Never());
+        }
+
+        [TestMethod]
+        public void Unschedule_ShutsdownScheduler_Test()
+        {
+            scheduler.Setup(s => s.UnscheduleJob(It.IsAny<TriggerKey>()));
+            scheduler.Setup(s => s.DeleteJob(It.IsAny<JobKey>()));
+            scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
+         
+            scheduler.Setup(s => s.Shutdown(It.IsAny<bool>()));
+
+            testObject.Unschedule(new ActionEntity { ActionID = 1 });
+
+            scheduler.Verify(s => s.Shutdown(true), Times.Once());
         }
 
         [TestMethod]
