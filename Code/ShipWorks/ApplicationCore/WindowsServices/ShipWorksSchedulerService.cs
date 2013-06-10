@@ -75,8 +75,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         private static void InitializeForApplication()
         {
-            Debugger.Launch();
-
             SqlSession.Initialize();
             
             DataProvider.InitializeForApplication();
