@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             if(!UserSession.Logon("shipworks", "shipworks", true))
             {
                 throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
-            };
+            }
 
             ShippingManager.InitializeForCurrentDatabase();
             LogSession.Initialize();

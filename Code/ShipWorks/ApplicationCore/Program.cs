@@ -215,7 +215,7 @@ namespace ShipWorks
             CommonInitialization();
 
             var types = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && !type.IsInterface && typeof(ICommandLineCommandHandler).IsAssignableFrom(type));
-            var handlers = types.Select(t => Activator.CreateInstance(t)).Cast<ICommandLineCommandHandler>().ToList();
+            var handlers = types.Select(Activator.CreateInstance).Cast<ICommandLineCommandHandler>().ToList();
 
             var duplicate = handlers.GroupBy(h => h.CommandName).Where(g => g.Count() > 1).FirstOrDefault();
             if (duplicate != null)
