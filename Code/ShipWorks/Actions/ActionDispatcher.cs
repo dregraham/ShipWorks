@@ -189,6 +189,7 @@ namespace ShipWorks.Actions
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
+            entity.ActionQueueType = (int)ActionManager.ActionQueueType;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;

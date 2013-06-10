@@ -100,6 +100,8 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             LogSession.Initialize();
 
             TemplateManager.InitializeForCurrentUser();
+
+            ActionManager.InitializeForCurrentUser();
         }
 
         protected override void OnStop()
