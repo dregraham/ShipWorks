@@ -2510,10 +2510,7 @@ namespace ShipWorks.UI.Controls.Html
         /// </summary>
         public void WaitForComplete(TimeSpan timeout)
         {
-            if (ReadyState == HtmlReadyState.Complete)
-                return;
-
-            if (!InvokeRequired)
+            if (Program.IsUserInteractive && !InvokeRequired)
             {
                 throw new InvalidOperationException("This function can only work if it is called from a different thread than the UI thread.");
             }
