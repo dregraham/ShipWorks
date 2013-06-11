@@ -380,6 +380,8 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksCommandInstaller.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ServiceManager.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.cs">
       <SubType>Component</SubType>
@@ -6187,6 +6189,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.resx">
       <DependentUpon>MasterInstaller.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
