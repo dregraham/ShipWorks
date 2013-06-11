@@ -164,9 +164,13 @@ namespace ShipWorks
         /// </summary>
         private static void RunService(List<string> options)
         {
+            Debugger.Launch();
+
             log.Info("Running as a service.");
 
             CommonInitialization();
+
+            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
 
             string serviceName = null;
 

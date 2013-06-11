@@ -24,7 +24,8 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 { "quartz.dataSource.shipWorks.provider",         "SqlServer-20"                                      },
                 { "quartz.dataSource.shipWorks.connectionString", sqlConfig.GetConnectionString()                     },
                 { "quartz.jobStore.tablePrefix",                  "Scheduling_"                                       },
-                { "quartz.jobStore.useProperties",                "true"                                              }
+                { "quartz.jobStore.useProperties",                "true"                                              },
+                { "quartz.threadPool.threadCount",                "2"                                                 }
             };
 
             this.innerFactory = new StdSchedulerFactory(properties);

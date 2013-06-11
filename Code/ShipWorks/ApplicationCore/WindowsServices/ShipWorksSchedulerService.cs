@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             timestampTracker = new TimestampTracker();
 
             timer.Enabled = true;
-            timer.Interval = 30000;
+            timer.Interval = 1000;
             timer.Elapsed += OnTimerInterval;
 
             canceller = new CancellationTokenSource();
@@ -111,6 +111,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         private void OnTimerInterval(object source, ElapsedEventArgs args)
         {
+            timer.Interval = 30000;
             if (timestampTracker.CheckForChange())
             {
                 ActionProcessor.StartProcessing();
