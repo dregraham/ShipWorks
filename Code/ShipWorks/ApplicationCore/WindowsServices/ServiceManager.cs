@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using ShipWorks.Actions.Scheduling;
+using System.Windows.Forms;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
@@ -13,7 +10,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     /// </summary>
     public class ShipWorksServiceManager
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceManager));
 
         private readonly ShipWorksServiceBase shipWorksService;
 
@@ -46,6 +43,77 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                 log.Error("Can't start service " + shipWorksService.ServiceName, ex);
 
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether [is service installed].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [is service installed]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsServiceInstalled()
+        {
+            // According to Microsoft documentation, if the service doesn't exist, ArgumentException is thrown
+            // during construction.
+            // While testing, no exception was thrown at construction and InvalidOperationException is thrown
+            // when checking any field in serviceController. I'm leaving both in case Microsoft turns out to be right.
+            bool serviceExists = false;
+            try
+            {
+                using (var serviceController = new ServiceController(shipWorksService.ServiceName))
+                {
+                    try
+                    {
+                        // This variable isn't used. The only reason it is here is to see if .Status raises an exception.
+                        ServiceControllerStatus serviceControllerStatus = serviceController.Status;
+
+                        serviceExists = true;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+
+                }
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            return serviceExists;
+        }
+
+        /// <summary>
+        /// Gets the service status.
+        /// </summary>
+        /// <returns>Status of the service.</returns>
+        public ServiceControllerStatus GetServiceStatus()
+        {
+            using (var service = new ServiceController(shipWorksService.ServiceName))
+            {
+                return service.Status;
+            }
+        }
+
+        /// <summary>
+        /// Prompts user for new credentials and updates the service with new credentials.
+        /// </summary>
+        public void ChangeCredentials()
+        {
+            using (GetWindowsCredentialsDlg getWindowsCredentialsDlg = new GetWindowsCredentialsDlg())
+            {
+                DialogResult dialogResult = getWindowsCredentialsDlg.ShowDialog();
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    string usernameWithDomain = string.Format(@"{0}\{1}",
+                        getWindowsCredentialsDlg.Domain ?? ".",
+                        getWindowsCredentialsDlg.Username);
+
+                    ChangeServiceCredentials changeServiceCredentials = new ChangeServiceCredentials();
+
+                    changeServiceCredentials.ServicePasswordChange(usernameWithDomain, getWindowsCredentialsDlg.Password, shipWorksService.ServiceName);
+                }
             }
         }
     }

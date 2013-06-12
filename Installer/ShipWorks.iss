@@ -137,6 +137,7 @@ Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueNam
 [Run]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
+Filename: {app}\ShipWorks.exe; Descriptoin: Install as Service Parameters: "/cmd:installserviceinteractive"
 
 [Dirs]
 Name: {app}
@@ -261,16 +262,7 @@ begin
                    'Please select a different installation directory.  The first time you run ShipWorks 3 it will walk you through upgrading your data from ShipWorks 2.',
                  mbCriticalError,
                  MB_OK);
-             Result := False; 
-        
-		(*	if (MsgBox('The installation folder you selected contains ShipWorks 2.' + #13 +
-					   '' + #13 +
-					   'Continue and upgrade to ShipWorks 3?',
-				mbConfirmation,
-				MB_OKCANCEL) = IDCANCEL)
-			then begin
-				Result := False;
-			end; *)
+             Result := False;
 		end
 
 		// Existing 3x version

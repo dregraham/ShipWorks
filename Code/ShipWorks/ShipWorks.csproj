@@ -207,6 +207,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.IdentityModel">
@@ -380,6 +381,19 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\ChangeServicePassword.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\GetWindowsCredentialsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\GetWindowsCredentialsDlg.Designer.cs">
+      <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.Designer.cs">
+      <DependentUpon>MasterInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksCommandInstaller.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ServiceManager.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />
@@ -390,6 +404,7 @@
       <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksServiceInstaller.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceException.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
@@ -613,12 +628,6 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuredType.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
-    <Compile Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.Designer.cs">
-      <DependentUpon>MasterInstaller.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
@@ -5208,6 +5217,12 @@
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\GetWindowsCredentialsDlg.resx">
+      <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.resx">
+      <DependentUpon>MasterInstaller.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.resx">
       <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
     </EmbeddedResource>
@@ -6186,10 +6201,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileTransfer\FtpAccountEditorDlg.resx">
       <DependentUpon>FtpAccountEditorDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.resx">
-      <DependentUpon>MasterInstaller.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

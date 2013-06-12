@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration.Install;
-using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
 using ShipWorks.ApplicationCore.Interaction;
 
 namespace ShipWorks.ApplicationCore.WindowsServices.Installers
@@ -12,14 +9,17 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
     /// <summary>
     /// Installs ShipWorks Service. Triggered command from command line (ShipWorks.exe /cmd:installservice
     /// </summary>
-    class ShipWorksCommandInstaller : ICommandLineCommandHandler
+    internal class ShipWorksCommandInstaller : ICommandLineCommandHandler
     {
         /// <summary>
         /// The name of the command handled by the handler.  Must be unique within the application
         /// </summary>
         public string CommandName
         {
-            get { return "installservice"; }
+            get
+            {
+                return "installservice";
+            }
         }
 
         /// <summary>
@@ -29,19 +29,34 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
         /// <param name="args"></param>
         public void Execute(List<string> args)
         {
-            InstallService();
+            using (var shipWorksSchedulerService = new ShipWorksSchedulerService())
+            {
+                var serviceManager = new ShipWorksServiceManager(shipWorksSchedulerService);
+
+                InstallService(serviceManager);
+
+                serviceManager.ChangeCredentials();
+
+                if (serviceManager.GetServiceStatus() == ServiceControllerStatus.Stopped)
+                {
+                    serviceManager.StartService();
+                }
+            }
         }
 
         /// <summary>
         /// Installs the service.
         /// </summary>
-        public static void InstallService()
+        /// <param name="serviceManager">The service manager.</param>
+        private static void InstallService(ShipWorksServiceManager serviceManager)
         {
-            ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
-            using (var shipWorksSchedulerService = new ShipWorksSchedulerService())
+            if (!serviceManager.IsServiceInstalled())
             {
-                var serviceManager = new ShipWorksServiceManager(shipWorksSchedulerService);
-                serviceManager.StartService();
+                // Install service
+                ManagedInstallerClass.InstallHelper(new[]
+                {
+                    Assembly.GetExecutingAssembly().Location
+                });
             }
         }
     }
