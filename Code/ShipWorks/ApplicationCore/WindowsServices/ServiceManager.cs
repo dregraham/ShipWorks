@@ -8,38 +8,45 @@ using log4net;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    public class ServiceManager
+    /// <summary>
+    /// Manages the starting and stopping of a ShipWorks service.
+    /// </summary>
+    public class ShipWorksServiceManager
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ServiceManager));
+        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceManager));
 
-        private readonly ShipWorksSchedulerService schedulerService;
+        private readonly ShipWorksServiceBase shipWorksService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceManager"/> class.
+        /// Initializes a new instance of the <see cref="ShipWorksServiceManager" /> class.
         /// </summary>
-        /// <param name="schedulerService">The scheduler service.</param>
-        public ServiceManager(ShipWorksSchedulerService schedulerService)
+        /// <param name="shipWorksService">The service to manage.</param>
+        public ShipWorksServiceManager(ShipWorksServiceBase shipWorksService)
         {
-            this.schedulerService = schedulerService;
+            this.shipWorksService = shipWorksService;
         }
 
+        /// <summary>
+        /// Starts the service.
+        /// </summary>
         public void StartService()
         {
-            ServiceController service = new ServiceController(schedulerService.ServiceName);
             try
             {
-                TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
+                using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
+                {
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
 
-                service.Start();
-                service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    service.Start();
+                    service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                log.Error("Can't start service " + schedulerService.ServiceName, ex);
+                log.Error("Can't start service " + shipWorksService.ServiceName, ex);
 
                 throw;
             }
         }
-
     }
 }
