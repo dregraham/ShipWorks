@@ -122,7 +122,10 @@ namespace ShipWorks.Users
         {
             ComputerManager.InitializeForCurrentUser();
             ObjectLabelManager.InitializeForCurrentUser();
-            GridColumnDefinitionManager.InitializeForCurrentUser();
+
+            if (UserSession.IsLoggedOn)
+                GridColumnDefinitionManager.InitializeForCurrentUser();
+
             FilterContentManager.InitializeForCurrentUser();
             ActionManager.InitializeForCurrentUser();
             FtpAccountManager.InitializeForCurrentUser();
@@ -131,9 +134,15 @@ namespace ShipWorks.Users
             LabelSheetManager.InitializeForCurrentUser();
             EmailAccountManager.InitializeForCurrentUser();
             SearchManager.InitializeForCurrentUser();
-            ServerMessageManager.InitializeForCurrentUser();
+
+            if (UserSession.IsLoggedOn)
+                ServerMessageManager.InitializeForCurrentUser();
+
             DownloadManager.InitializeForCurrentUser();
-            FilterLayoutContext.InitializeForCurrentUser();
+
+            if (UserSession.IsLoggedOn)
+                FilterLayoutContext.InitializeForCurrentUser();
+
             FilterNodeColumnManager.InitializeForCurrentUser();
             ShippingOriginManager.InitializeForCurrentUser();
             StampsAccountManager.InitializeForCurrentUser();

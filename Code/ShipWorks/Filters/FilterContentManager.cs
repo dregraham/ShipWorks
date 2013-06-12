@@ -270,7 +270,7 @@ namespace ShipWorks.Filters
         private static void InitiateCalculation(TimeSpan wait, bool initial)
         {
             // Since we need to register an operation with the ApplicationBusyManager, we've got to start our work from the UI thread.
-            if (Program.MainForm.InvokeRequired)
+            if (Program.IsUserInteractive && Program.MainForm.InvokeRequired)
             {
                 Program.MainForm.BeginInvoke((MethodInvoker) delegate { InitiateCalculation(wait, initial); });
                 return;

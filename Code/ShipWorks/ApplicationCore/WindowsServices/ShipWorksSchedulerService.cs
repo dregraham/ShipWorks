@@ -76,18 +76,10 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         private static void InitializeForApplication()
         {
             SqlSession.Initialize();
+            LogSession.Initialize();
             
             DataProvider.InitializeForApplication();
             AuditProcessor.InitializeForApplication();
-
-            ShippingSettings.InitializeForCurrentDatabase();
-            ShippingProfileManager.InitializeForCurrentUser();
-            ShippingDefaultsRuleManager.InitializeForCurrentUser();
-            ShippingProviderRuleManager.InitializeForCurrentUser();
-
-            StoreManager.InitializeForCurrentUser();
-
-            UserManager.InitializeForCurrentUser();
 
             UserSession.InitializeForCurrentDatabase();
 
@@ -96,12 +88,8 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             //    throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
             //}
 
-            ShippingManager.InitializeForCurrentDatabase();
-            LogSession.Initialize();
-
-            TemplateManager.InitializeForCurrentUser();
-
-            ActionManager.InitializeForCurrentUser();
+            UserManager.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentUser();
         }
 
         protected override void OnStop()

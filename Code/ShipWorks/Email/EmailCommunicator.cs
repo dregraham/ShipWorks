@@ -206,8 +206,6 @@ namespace ShipWorks.Email
         /// </summary>
         public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages, bool skipDontSendBefore = true)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
-
             IEnumerable<EmailOutboundEntity> messagesToSend = messages;
 
             if (skipDontSendBefore)
@@ -239,8 +237,6 @@ namespace ShipWorks.Email
         /// </summary>
         private static void AddToEmailQueue(EmailOutboundThrottler throttler)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
-
             lock (emailQueueLock)
             {
                 log.InfoFormat("Adding throttler for ({0}) to email queue.", throttler.EmailAccount.AccountName);
