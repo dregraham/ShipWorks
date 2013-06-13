@@ -539,8 +539,7 @@ namespace ShipWorks.Actions
             }
             catch (SchedulingException schedulingException)
             {
-                MessageHelper.ShowError(this, string.Format("An error occurred and the action was not been scheduled correctly. {0}", schedulingException.Message));
-                DialogResult = DialogResult.Abort;
+                MessageHelper.ShowError(this, string.Format("An error occurred, and the action was not scheduled correctly. {0}", schedulingException.Message));
             }
         }
 
