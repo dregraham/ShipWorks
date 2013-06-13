@@ -267,23 +267,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     // We have shipping information, so get the shipment details   
                     ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
 
-                    try
-                    {
-                        ShippingManager.EnsureShipmentLoaded(shipment);
-                    }
-                    catch (ObjectDeletedException)
-                    {
-                        log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
-                        continue;
-                    }
-                    catch (SqlForeignKeyException)
-                    {
-                        log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
-                        continue;
-                    }
-
                     if (shipment != null)
                     {
+                        try
+                        {
+                            ShippingManager.EnsureShipmentLoaded(shipment);
+                        }
+                        catch (ObjectDeletedException)
+                        {
+                            log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
+                            continue;
+                        }
+                        catch (SqlForeignKeyException)
+                        {
+                            log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
+                            continue;
+                        }
+
                         carrierType = GetShippingCarrier(shipment);
 
                         // tracking number to upload
