@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using Interapptive.Shared.UI;
 using ShipWorks.Actions.Scheduling;
 using System.Threading;
 using ShipWorks.ApplicationCore.Logging;
@@ -90,6 +92,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             UserManager.InitializeForCurrentUser();
             UserSession.InitializeForCurrentUser();
+
+            // Required for printing
+            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
         }
 
         protected override void OnStop()

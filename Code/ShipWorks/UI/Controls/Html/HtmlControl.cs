@@ -2518,9 +2518,16 @@ namespace ShipWorks.UI.Controls.Html
             int totalMsWaited = 0;
             int loopMsWaitTime = 5;
 
-            // We can only do this without Application.DoEvents because we know we are not on the UI thread. 
+            // We can only do this without Application.DoEvents (when running ShipWorks with a UI) because we know we are not on the UI thread. 
             while (ReadyState != HtmlReadyState.Complete && totalMsWaited < timeout.TotalMilliseconds)
             {
+                if (!Environment.UserInteractive)
+                {
+                    // We need to trigger the message pump to run if ShipWorks is running as a Windows service
+                    // otherwise the ReadyState never gets set to Complete
+                    Application.DoEvents();
+                }
+                
                 Thread.Sleep(loopMsWaitTime);
                 totalMsWaited += loopMsWaitTime;
             }
