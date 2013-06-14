@@ -5,6 +5,7 @@ using System.Text;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
+    [Serializable]
     public class ShipWorksServiceException : Exception
     {
         public ShipWorksServiceException(string message) : base(message)

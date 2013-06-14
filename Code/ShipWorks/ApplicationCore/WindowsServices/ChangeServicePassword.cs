@@ -7,7 +7,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     /// <summary>
     /// Change credentials of a service.  Code found on StackOverflow
     /// </summary>
-    internal class ChangeServiceCredentials
+    internal static class ChangeServiceCredentials
     {
 
 
@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// or
         /// Could not change password :  + win32Exception.Message
         /// </exception>
-        public bool ServicePasswordChange(string domainAndUser, string password, string serviceName)
+        public static bool ServicePasswordChange(string domainAndUser, string password, string serviceName)
         {
             IntPtr databaseHandle = NativeMethods.OpenSCManager(null, null, SC_MANAGER_ALL_ACCESS);
             if (databaseHandle == IntPtr.Zero)
@@ -62,13 +62,14 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// 
         /// Includes methods using P/Invokes, Code analysis states it needs to be in a seperate class.
         /// </summary>
-        internal class NativeMethods
+        internal static class NativeMethods
         {
             [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
             public static extern Boolean ChangeServiceConfig(IntPtr hService, UInt32 nServiceType, UInt32 nStartType, UInt32 nErrorControl, String lpBinaryPathName, String lpLoadOrderGroup, IntPtr lpdwTagId, [In] char[] lpDependencies, String lpServiceStartName, String lpPassword, String lpDisplayName);
 
             [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-            public static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, uint dwDesiredAccess);
+            public static extern IntPtr OpenService(IntPtr hSCManager, [MarshalAs(UnmanagedType.LPTStr)]string lpServiceName, uint dwDesiredAccess);
 
             [DllImport("advapi32.dll", EntryPoint = "OpenSCManagerW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
             public static extern IntPtr OpenSCManager(string machineName, string databaseName, uint dwAccess);

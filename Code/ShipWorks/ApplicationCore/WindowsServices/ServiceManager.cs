@@ -108,11 +108,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                 {
                     string usernameWithDomain = string.Format(@"{0}\{1}",
                         getWindowsCredentialsDlg.Domain ?? ".",
-                        getWindowsCredentialsDlg.Username);
+                        getWindowsCredentialsDlg.UserName);
 
-                    ChangeServiceCredentials changeServiceCredentials = new ChangeServiceCredentials();
-
-                    changeServiceCredentials.ServicePasswordChange(usernameWithDomain, getWindowsCredentialsDlg.Password, shipWorksService.ServiceName);
+                    ChangeServiceCredentials.ServicePasswordChange(usernameWithDomain, getWindowsCredentialsDlg.Password, shipWorksService.ServiceName);
                 }
             }
         }

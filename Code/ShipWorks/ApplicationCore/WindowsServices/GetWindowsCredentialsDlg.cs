@@ -25,7 +25,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// <value>
         /// The username.
         /// </value>
-        public string Username
+        public string UserName
         {
             get
             {
@@ -101,7 +101,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                 using (PrincipalContext pc = new PrincipalContext(contextType, Domain))
                 {
                     // validate the credentials
-                    isValid = pc.ValidateCredentials(Username, Password);
+                    isValid = pc.ValidateCredentials(UserName, Password);
                 }
 
                 if (!isValid)
@@ -126,7 +126,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             var errorMessage = new StringBuilder();
 
-            if (string.IsNullOrEmpty(Username))
+            if (string.IsNullOrEmpty(UserName))
             {
                 errorMessage.AppendLine("Enter a Username.");
             }
