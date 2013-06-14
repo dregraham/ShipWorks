@@ -13,6 +13,7 @@ namespace ShipWorks.Actions.Tasks
     {
         string displayName;
         string identifier;
+        bool allowedForScheduledTask;
 
         /// <summary>
         /// Constructor
@@ -21,6 +22,17 @@ namespace ShipWorks.Actions.Tasks
         {
             this.displayName = displayName;
             this.identifier = identifier;
+            allowedForScheduledTask = true;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ActionTaskAttribute(string displayName, string identifier, bool allowedForScheduledTask)
+        {
+            this.displayName = displayName;
+            this.identifier = identifier;
+            this.allowedForScheduledTask = allowedForScheduledTask;
         }
 
         /// <summary>
@@ -44,6 +56,18 @@ namespace ShipWorks.Actions.Tasks
             {
                 return identifier;
             }
-        }    
+        }
+
+        /// <summary>
+        /// If this task is allowed to be added to an Action that is of Scheduled type.  For example, "Play a Sound" is not allowed
+        /// as the sound will not be heard when run as a service.
+        /// </summary>
+        public bool AllowedForScheduledTask
+        {
+            get
+            {
+                return allowedForScheduledTask;
+            }
+        }  
     }
 }

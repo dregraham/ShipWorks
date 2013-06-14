@@ -9,10 +9,16 @@ using log4net;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
+    /// <summary>
+    /// IJob implementation for dispatching a scheduled action
+    /// </summary>
     public class ActionJob : Quartz.IJob
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ActionJob));
 
+        /// <summary>
+        /// Dispatches a scheduled action
+        /// </summary>
         public void Execute(IJobExecutionContext context)
         {
             log.InfoFormat("ActionJob: {0} Running at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
@@ -22,14 +28,13 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             if (!long.TryParse(context.JobDetail.JobDataMap["ActionID"].ToString(), out actionID))
             {
                 log.ErrorFormat("ActionID not provided for job with Key: {0}.", context.JobDetail.Key);
-                // TODO: Disable ActionEntity so that it does not continue to run.
-                // TODO: Add message to SW UI boxes (at the top) to inform the user the action has been disabled due to invalid scheduling data.
-                // TODO: Disable Quartz job so it does not continue to run.  Would need to enable it when the SW Action is re-enabled.
+                
+                // Delete Quartz job so it does not continue to run.
+                context.Scheduler.DeleteJob(context.JobDetail.Key);
                 
                 return;
             }
 
-            // TODO: Do we need to catch exceptions?  Need to make sure the service does not exit.
             ActionDispatcher.DispatchScheduledAction(actionID);   
         }
     }

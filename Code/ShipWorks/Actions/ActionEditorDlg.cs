@@ -443,7 +443,23 @@ namespace ShipWorks.Actions
                     return;
                 }
 
-                if ((ActionTriggerType) triggerCombo.SelectedValue != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Cron)
+                ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
+                
+                // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
+                List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).AllowedForScheduledTask).ToList();
+                if (actionTriggerType == ActionTriggerType.Cron && invalidTasks.Any())
+                {
+                    string invalidTasksMsg = string.Join<string>(", ", invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName));
+
+                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} not allowed for use with '{3}'", 
+                        invalidTasks.Count == 1 ? "" : "s", 
+                        invalidTasksMsg,
+                        invalidTasks.Count == 1 ? "is" : "are", 
+                        EnumHelper.GetDescription(actionTriggerType)));
+                    return;
+                }
+
+                if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Cron)
                 {
                     try
                     {

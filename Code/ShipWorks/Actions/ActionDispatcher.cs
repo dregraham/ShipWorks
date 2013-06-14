@@ -150,9 +150,7 @@ namespace ShipWorks.Actions
         public static void DispatchScheduledAction(long actionID)
         {
             ActionEntity actionEntity = ActionManager.GetAction(actionID);
-            ActionTriggerType actionTriggerType = (ActionTriggerType) actionEntity.TriggerType;
-
-            // TODO: Verify we don't need to check StoreID similar to the calls to GetEligibleActions above.
+            ActionTriggerType actionTriggerType = (ActionTriggerType)actionEntity.TriggerType;
 
             // Get the specific action trigger type and check any specific settings
             switch (actionTriggerType)

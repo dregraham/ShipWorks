@@ -111,7 +111,8 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         private void OnTimerInterval(object source, ElapsedEventArgs args)
         {
-            timer.Interval = 30000;
+            // Switch to checking every 2 seconds
+            timer.Interval = 2000;
             if (timestampTracker.CheckForChange())
             {
                 ActionProcessor.StartProcessing();
