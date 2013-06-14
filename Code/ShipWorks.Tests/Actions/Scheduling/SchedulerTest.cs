@@ -74,8 +74,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SchedulingException))]
-        public void ScheduleAction_ThrowsSchedulingException_WhenJobExists_AndStartDateOccursInPast_Test()
+        public void ScheduleAction_DelegatesToScheduler_WhenJobExists_AndStartDateOccursInPast_Test()
         {
             ActionEntity action = new ActionEntity();
 
@@ -89,8 +88,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SchedulingException))]
-        public void ScheduleAction_ThrowsSchedulingException_WhenJobExists_AndStartDateOccursNow_Test()
+        public void ScheduleAction_DelegatesToScheduler_WhenJobExists_AndStartDateOccursNow_Test()
         {
             ActionEntity action = new ActionEntity();
 

@@ -40,6 +40,15 @@ namespace ShipWorks.Actions.Scheduling
         /// <param name="cronTrigger">The cron trigger.</param>
         public void ScheduleAction(ActionEntity action, CronTrigger cronTrigger)
         {
+            if (!schedulingEngine.IsExistingJob(action, cronTrigger))
+            {
+                // New jobs/actions cannot be scheduled to occur in the past
+                if (cronTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
+                {
+                    throw new SchedulingException("The start date must be in the future when scheduling a new action.");
+                }
+            }
+
             try
             {
                 // Delegate to the scheduling engine to take care of the details of scheduling the action
