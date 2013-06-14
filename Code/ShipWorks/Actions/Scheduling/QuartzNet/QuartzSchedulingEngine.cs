@@ -165,14 +165,14 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
         /// <summary>
         /// There are numerous points in the engine where the job must be retreived by name, so this is just a helper
-        /// method to create/get the name of the quartz job based on the name and action ID of the action provided.
+        /// method to create/get the name of the quartz job based on the action ID of the action provided.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns>The name of the job.</returns>
         private string GetQuartzJobName(ActionEntity action)
         {
-            // The job name must be unique, so include the action ID in the name
-            return string.Format("{0} (ID {1})", action.Name, action.ActionID.ToString(CultureInfo.InvariantCulture));
+            // The job name must be unique, so just use action ID for the job name
+            return action.ActionID.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
