@@ -227,14 +227,41 @@ namespace ShipWorks.Actions
         {
             try
             {
-                adapter.SaveAndRefetch(action);
-
+                // If we are a scheduled action, we need to do additional checking before trying to save.
                 if (action.TriggerType == (int) ActionTriggerType.Cron)
                 {
+                    // Get the cron trigger for this action.
                     CronTrigger cronTrigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Cron, action.TriggerSettings) as CronTrigger;
 
-                    Scheduler scheduler = new Scheduler();
-                    scheduler.ScheduleAction(action, cronTrigger);
+                    // We need to see if any field has changed (other than the Enabled field, since the user could modify it on the Action list dialog)
+                    var changedFields = action.Fields.GetAsEntityFieldCoreArray().Where(f => f.FieldIndex != ActionFields.Enabled.FieldIndex && f.IsChanged);
+
+                    bool updateJob = action.IsDirty && changedFields.Any();
+
+                    // If we are to update the job, validate the date
+                    if (updateJob)
+                    {
+                        // Jobs/actions cannot be scheduled to occur in the past
+                        if (cronTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
+                        {
+                            throw new SchedulingException("The start date must be in the future when scheduling a new action.");
+                        }
+                    }
+
+                    // Now we can save it to the db
+                    adapter.SaveAndRefetch(action);
+
+                    // And finally schedule the action
+                    if (updateJob)
+                    {
+                        Scheduler scheduler = new Scheduler();
+                        scheduler.ScheduleAction(action, cronTrigger);
+                    }
+                }
+                else
+                {
+                    // The action isn't a scheduled one, so save.
+                    adapter.SaveAndRefetch(action);
                 }
             }
             catch (ORMConcurrencyException ex)
