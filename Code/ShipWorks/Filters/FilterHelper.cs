@@ -210,6 +210,16 @@ namespace ShipWorks.Filters
         /// </summary>
         public static bool IsValidName(FilterEntity filter, string name)
         {
+            // When copying, we add " (Copy)" to the filter name which can push the filter's name over the max length.
+            // Check here and throw if the requested name is too long.
+            if (name.Length > filter.Fields[(int)FilterFieldIndex.Name].MaxLength)
+            {
+                throw new FilterException(
+                    string.Format(
+                        "Filter names may only be {0} characters or less.  Please shorten the requested filter name '{1}'.",
+                        filter.Fields[(int)FilterFieldIndex.Name].MaxLength, name));
+            }
+
             int count = FilterCollection.GetCount(SqlAdapter.Default,
                 FilterFields.Name == name & FilterFields.IsFolder == filter.IsFolder & FilterFields.FilterTarget == filter.FilterTarget);
 
