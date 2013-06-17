@@ -447,7 +447,7 @@ namespace ShipWorks.Actions
                 
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).AllowedForScheduledTask).ToList();
-                if (actionTriggerType == ActionTriggerType.Cron && invalidTasks.Any())
+                if (actionTriggerType == ActionTriggerType.Scheduled && invalidTasks.Any())
                 {
                     string invalidTasksMsg = string.Join<string>(", ", invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName));
 
@@ -459,13 +459,13 @@ namespace ShipWorks.Actions
                     return;
                 }
 
-                if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Cron)
+                if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Scheduled)
                 {
                     try
                     {
-                        // User changed the trigger from a cron trigger to another type of trigger, so we need to make sure
+                        // User changed the trigger from a scheduled trigger to another type of trigger, so we need to make sure
                         // the action is remvoed from the schedule
-                        new Scheduler().UnscheduleAction(action, originalTrigger as CronTrigger);
+                        new Scheduler().UnscheduleAction(action, originalTrigger as ScheduledTrigger);
                     }
                     catch (SchedulingException schedulingException)
                     {

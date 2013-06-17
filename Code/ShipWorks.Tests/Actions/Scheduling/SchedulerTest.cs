@@ -19,8 +19,8 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void Initialize()
         {
             schedulingEngine = new Mock<ISchedulingEngine>();
-            schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>()));
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(false);
+            schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>()));
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(false);
 
             testObject = new Scheduler(schedulingEngine.Object);
         }
@@ -32,10 +32,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
             ActionEntity action = new ActionEntity();
 
             // Set the trigger to be five seconds in the past
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5)};
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5)};
 
             // Simulate engine to see this as a new job
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(false);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(false);
 
             // Throw scheduling exception
             testObject.ScheduleAction(action, trigger);
@@ -48,10 +48,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
             ActionEntity action = new ActionEntity();
 
             // Set the trigger to be now
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             // Simulate engine to see this as a new job
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(false);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(false);
 
             // Throw scheduling exception
             testObject.ScheduleAction(action, trigger);
@@ -63,10 +63,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
             ActionEntity action = new ActionEntity();
 
             // Set the trigger to be in the future
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(5) };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(5) };
 
             // Simulate engine to see this as a new job
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(false);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(false);
 
             testObject.ScheduleAction(action, trigger);
 
@@ -79,10 +79,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
             ActionEntity action = new ActionEntity();
 
             // Set the trigger to be five seconds in the past
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5) };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5) };
 
             // Simulate engine to see this as an existing job
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(true);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(true);
 
             testObject.ScheduleAction(action, trigger);
         }
@@ -93,10 +93,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
             ActionEntity action = new ActionEntity();
 
             // Set the trigger to be now
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             // Simulate engine to see this as an existing job
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(true);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(true);
 
             testObject.ScheduleAction(action, trigger);
         }
@@ -107,10 +107,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
             ActionEntity action = new ActionEntity();
 
             // Set the trigger to be in the future
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(5) };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(5) };
 
             // Simulate engine to see this as an existing job
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(true);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(true);
 
             testObject.ScheduleAction(action, trigger);
 
@@ -122,12 +122,12 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void ScheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
         {
             ActionEntity action = new ActionEntity();
-            CronTrigger trigger = new CronTrigger();
+            ScheduledTrigger trigger = new ScheduledTrigger();
 
             // Simulate engine to see this as an existing job (so trigger start date does not matter)
             // and setup the schedule method throws an out of memory exception
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(true);
-            schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Throws(new OutOfMemoryException());
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(true);
+            schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Throws(new OutOfMemoryException());
 
             // Throws scheduling exception
             testObject.ScheduleAction(action, trigger);
@@ -137,10 +137,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void UnscheduleAction_DelegatesToSchedulingEngine_WhenJobExists_Test()
         {
             ActionEntity action = new ActionEntity();
-            CronTrigger trigger = new CronTrigger();
+            ScheduledTrigger trigger = new ScheduledTrigger();
 
             // Simulate that the job exists
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(true);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(true);
 
             testObject.UnscheduleAction(action, trigger);
 
@@ -151,10 +151,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void UnscheduleAction_DoesNotDelegateToSchedulingEngine_WhenJobDoesNotExist_Test()
         {
             ActionEntity action = new ActionEntity();
-            CronTrigger trigger = new CronTrigger();
+            ScheduledTrigger trigger = new ScheduledTrigger();
 
             // Simulate that the job does not exist
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Returns(false);
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Returns(false);
 
             testObject.UnscheduleAction(action, trigger);
 
@@ -166,10 +166,10 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void UnscheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
         {
             ActionEntity action = new ActionEntity();
-            CronTrigger trigger = new CronTrigger();
+            ScheduledTrigger trigger = new ScheduledTrigger();
 
             // Simulate that the job does not exist
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<CronTrigger>())).Throws(new InvalidOperationException());
+            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ScheduledTrigger>())).Throws(new InvalidOperationException());
 
             // Throws an exception
             testObject.UnscheduleAction(action, trigger);

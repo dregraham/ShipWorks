@@ -162,7 +162,7 @@ namespace ShipWorks.Actions
                 case ActionTriggerType.FilterContentChanged:
                     log.WarnFormat("Scheduled Actions do not support trigger type: {0}", EnumHelper.GetDescription(actionTriggerType));
                     return;
-                case ActionTriggerType.Cron:
+                case ActionTriggerType.Scheduled:
                     // TODO: Add any cron trigger checks...
                     // CronTrigger cronTrigger = new CronTrigger(actionEntity.TriggerSettings);
 

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Actions.Triggers.Editors
 {
-    partial class CronTriggerEditor
+    partial class ScheduledTriggerEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -62,14 +62,14 @@
             this.startTime.TabIndex = 2;
             this.startTime.ValueChanged += new System.EventHandler(this.OnStartDateTimeChanged);
             // 
-            // CronTriggerEditor
+            // ScheduledTriggerEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.startTime);
             this.Controls.Add(this.startDateTimeLabel);
             this.Controls.Add(this.startDate);
-            this.Name = "CronTriggerEditor";
+            this.Name = "ScheduledTriggerEditor";
             this.Size = new System.Drawing.Size(312, 32);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);

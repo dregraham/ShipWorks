@@ -43,17 +43,17 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         }
 
         /// <summary>
-        /// Schedules the specified action according to the details of the cron trigger.
+        /// Schedules the specified action according to the details of the scheduled trigger.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
-        public void Schedule(ActionEntity action, CronTrigger cronTrigger)
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        public void Schedule(ActionEntity action, ScheduledTrigger scheduledTrigger)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
             try
             {
-                if (IsExistingJob(action, cronTrigger, quartzScheduler))
+                if (IsExistingJob(action, scheduledTrigger, quartzScheduler))
                 {
                     // Simplest way to update a job in Quartz is to delete it along with all of its triggers
                     // (http://stackoverflow.com/questions/6728012/quartz-net-update-delete-jobs-triggers)
@@ -63,7 +63,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 IJobDetail jobDetail = new JobDetailImpl(GetQuartzJobName(action), null, typeof (ActionJob));
                 jobDetail.JobDataMap.Add("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture));
 
-                SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, cronTrigger.StartDateTimeInUtc);
+                SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, scheduledTrigger.StartDateTimeInUtc);
 
                 quartzScheduler.ScheduleJob(jobDetail, trigger);
             }
@@ -82,11 +82,11 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// Determines whether a job for the given action/trigger exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger)
+        public bool IsExistingJob(ActionEntity action, ScheduledTrigger scheduledTrigger)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
@@ -107,12 +107,12 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// Determines whether a job for the given action/trigger exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
         /// <param name="quartzScheduler">The quartz scheduler.</param>
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsExistingJob(ActionEntity action, CronTrigger cronTrigger, Quartz.IScheduler quartzScheduler)
+        private bool IsExistingJob(ActionEntity action, ScheduledTrigger scheduledTrigger, Quartz.IScheduler quartzScheduler)
         {
             JobKey jobKey = new JobKey(GetQuartzJobName(action));
             return quartzScheduler.GetJobDetail(jobKey) != null;
@@ -176,7 +176,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         }
 
         /// <summary>
-        /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
+        /// Runs the scheduler engine, which queues actions based on the scheduled triggers.
         /// </summary>
         /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
         /// <returns>The running engine task.</returns>

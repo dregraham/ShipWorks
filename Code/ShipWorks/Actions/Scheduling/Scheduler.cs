@@ -34,16 +34,16 @@ namespace ShipWorks.Actions.Scheduling
         }
 
         /// <summary>
-        /// Schedules the specified action to run at the time specified by the cron trigger.
+        /// Schedules the specified action to run at the time specified by the scheduled trigger.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
-        public void ScheduleAction(ActionEntity action, CronTrigger cronTrigger)
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        public void ScheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger)
         {
-            if (!schedulingEngine.IsExistingJob(action, cronTrigger))
+            if (!schedulingEngine.IsExistingJob(action, scheduledTrigger))
             {
                 // New jobs/actions cannot be scheduled to occur in the past
-                if (cronTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
+                if (scheduledTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
                 {
                     throw new SchedulingException("The start date must be in the future when scheduling a new action.");
                 }
@@ -52,7 +52,7 @@ namespace ShipWorks.Actions.Scheduling
             try
             {
                 // Delegate to the scheduling engine to take care of the details of scheduling the action
-                schedulingEngine.Schedule(action, cronTrigger);
+                schedulingEngine.Schedule(action, scheduledTrigger);
             }
             catch (Exception exception)
             {
@@ -65,13 +65,13 @@ namespace ShipWorks.Actions.Scheduling
         /// Removes the specified action/trigger from the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
         /// <exception cref="SchedulingException"></exception>
-        public void UnscheduleAction(ActionEntity action, CronTrigger cronTrigger)
+        public void UnscheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger)
         {
             try
             {
-                if (schedulingEngine.IsExistingJob(action, cronTrigger))
+                if (schedulingEngine.IsExistingJob(action, scheduledTrigger))
                 {
                     schedulingEngine.Unschedule(action);
                 }
@@ -84,7 +84,7 @@ namespace ShipWorks.Actions.Scheduling
         }
         
         /// <summary>
-        /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
+        /// Runs the scheduler engine, which queues actions based on the scheduled triggers.
         /// </summary>
         /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
         /// <returns>The running engine task.</returns>

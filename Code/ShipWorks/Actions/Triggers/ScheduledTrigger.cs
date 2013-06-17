@@ -4,20 +4,20 @@ using ShipWorks.Data.Model;
 
 namespace ShipWorks.Actions.Triggers
 {
-    public class CronTrigger : ActionTrigger
+    public class ScheduledTrigger : ActionTrigger
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CronTrigger"/> class.
+        /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
         /// </summary>
-        public CronTrigger()
+        public ScheduledTrigger()
             : this(null)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CronTrigger"/> class.
+        /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
         /// </summary>
         /// <param name="xmlSettings"></param>
-        public CronTrigger(string xmlSettings)
+        public ScheduledTrigger(string xmlSettings)
             : base(xmlSettings)
         {
             if (StartDateTimeInUtc.Year == 1)
@@ -37,7 +37,7 @@ namespace ShipWorks.Actions.Triggers
         /// <exception cref="System.NotImplementedException"></exception>
         public override ActionTriggerType TriggerType
         {
-            get { return ActionTriggerType.Cron; }
+            get { return ActionTriggerType.Scheduled; }
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ShipWorks.Actions.Triggers
         /// <exception cref="System.NotImplementedException"></exception>
         public override ActionTriggerEditor CreateEditor()
         {
-            return new CronTriggerEditor(this);
+            return new ScheduledTriggerEditor(this);
         }
 
         /// <summary>

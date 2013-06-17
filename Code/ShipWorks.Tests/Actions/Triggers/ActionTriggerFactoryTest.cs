@@ -47,11 +47,11 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [TestMethod]
-        public void CreateTrigger_ReturnsCronTrigger_Test()
+        public void CreateTrigger_ReturnsScheduledTrigger_Test()
         {
-            ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Cron, null);
+            ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(CronTrigger));
+            Assert.IsInstanceOfType(trigger, typeof(ScheduledTrigger));
         }
 
     }

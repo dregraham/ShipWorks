@@ -12,21 +12,21 @@ namespace ShipWorks.Actions.Scheduling
     public interface IScheduler
     {
         /// <summary>
-        /// Schedules the specified action to run at the time specified by the cron trigger.
+        /// Schedules the specified action to run at the time specified by the scheduled trigger.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
-        void ScheduleAction(ActionEntity action, CronTrigger cronTrigger);
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        void ScheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger);
 
         /// <summary>
         /// Removes the specified action/trigger from the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="cronTrigger">The cron trigger.</param>
-        void UnscheduleAction(ActionEntity action, CronTrigger cronTrigger);
+        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        void UnscheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger);
 
         /// <summary>
-        /// Runs the scheduler engine, which queues actions based on the scheduled cron triggers.
+        /// Runs the scheduler engine, which queues actions based on the scheduled triggers.
         /// </summary>
         /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
         /// <returns>The running engine task.</returns>

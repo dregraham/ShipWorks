@@ -2,15 +2,15 @@
 
 namespace ShipWorks.Actions.Triggers.Editors
 {
-    public partial class CronTriggerEditor : ActionTriggerEditor
+    public partial class ScheduledTriggerEditor : ActionTriggerEditor
     {
-        private readonly CronTrigger trigger;
+        private readonly ScheduledTrigger trigger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CronTriggerEditor"/> class.
+        /// Initializes a new instance of the <see cref="ScheduledTriggerEditor"/> class.
         /// </summary>
         /// <param name="trigger">The trigger.</param>
-        public CronTriggerEditor(CronTrigger trigger)
+        public ScheduledTriggerEditor(ScheduledTrigger trigger)
         {
             InitializeComponent();
 

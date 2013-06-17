@@ -172,10 +172,10 @@ namespace ShipWorks.Actions
             // We have to give the trigger a chance to cleanup its state too
             ActionTrigger trigger = LoadTrigger(action);
 
-            if (trigger.TriggerType == ActionTriggerType.Cron)
+            if (trigger.TriggerType == ActionTriggerType.Scheduled)
             {
                 // We need to unschedule the scheudled action
-                new Scheduler().UnscheduleAction(action, trigger as CronTrigger);
+                new Scheduler().UnscheduleAction(action, trigger as ScheduledTrigger);
             }
 
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -228,10 +228,10 @@ namespace ShipWorks.Actions
             try
             {
                 // If we are a scheduled action, we need to do additional checking before trying to save.
-                if (action.TriggerType == (int) ActionTriggerType.Cron)
+                if (action.TriggerType == (int) ActionTriggerType.Scheduled)
                 {
-                    // Get the cron trigger for this action.
-                    CronTrigger cronTrigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Cron, action.TriggerSettings) as CronTrigger;
+                    // Get the scheduled trigger for this action.
+                    ScheduledTrigger scheduledTrigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, action.TriggerSettings) as ScheduledTrigger;
 
                     // We need to see if any field has changed (other than the Enabled field, since the user could modify it on the Action list dialog)
                     var changedFields = action.Fields.GetAsEntityFieldCoreArray().Where(f => f.FieldIndex != ActionFields.Enabled.FieldIndex && f.IsChanged);
@@ -242,7 +242,7 @@ namespace ShipWorks.Actions
                     if (updateJob)
                     {
                         // Jobs/actions cannot be scheduled to occur in the past
-                        if (cronTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
+                        if (scheduledTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
                         {
                             throw new SchedulingException("The start date must be in the future when scheduling a new action.");
                         }
@@ -255,7 +255,7 @@ namespace ShipWorks.Actions
                     if (updateJob)
                     {
                         Scheduler scheduler = new Scheduler();
-                        scheduler.ScheduleAction(action, cronTrigger);
+                        scheduler.ScheduleAction(action, scheduledTrigger);
                     }
                 }
                 else

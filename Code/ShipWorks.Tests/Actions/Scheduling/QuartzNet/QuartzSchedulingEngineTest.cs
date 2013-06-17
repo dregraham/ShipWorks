@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ITrigger>()));
             
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             testObject.Schedule(action, trigger);
 
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
 
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             testObject.Schedule(action, trigger);
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
             
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
             
             testObject.Schedule(action, trigger);
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.Shutdown(It.IsAny<bool>()));
 
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             testObject.Schedule(action, trigger);
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         public void IsExistingJob_DelegatesToScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
 
@@ -109,7 +109,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
 
-            Assert.IsFalse(testObject.IsExistingJob(new ActionEntity(), new CronTrigger()));
+            Assert.IsFalse(testObject.IsExistingJob(new ActionEntity(), new ScheduledTrigger()));
         }
 
         [TestMethod]
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
             
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             Assert.IsTrue(testObject.IsExistingJob(action, trigger));
         }
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.Shutdown(It.IsAny<bool>()));
 
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            CronTrigger trigger = new CronTrigger { StartDateTimeInUtc = DateTime.UtcNow };
+            ScheduledTrigger trigger = new ScheduledTrigger { StartDateTimeInUtc = DateTime.UtcNow };
 
             testObject.IsExistingJob(action, trigger);
 

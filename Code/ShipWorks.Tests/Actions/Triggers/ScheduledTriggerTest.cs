@@ -7,26 +7,26 @@ using ShipWorks.Data.Model;
 namespace ShipWorks.Tests.Actions.Triggers
 {
     [TestClass]
-    public class CronTriggerTest
+    public class ScheduledTriggerTest
     {
-        private CronTrigger testObject;
+        private ScheduledTrigger testObject;
 
         [TestInitialize]
         public void Initialize()
         {
-            testObject = new CronTrigger();
+            testObject = new ScheduledTrigger();
         }
 
         [TestMethod]
-        public void TriggerType_ReturnsCron_Test()
+        public void TriggerType_ReturnsScheduled_Test()
         {
-            Assert.AreEqual(ActionTriggerType.Cron, testObject.TriggerType);
+            Assert.AreEqual(ActionTriggerType.Scheduled, testObject.TriggerType);
         }
 
         [TestMethod]
-        public void CreateEditor_ReturnsCronTriggerEditor_Test()
+        public void CreateEditor_ReturnsScheduledTriggerEditor_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(CronTriggerEditor));
+            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(ScheduledTriggerEditor));
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             DateTime now = DateTime.UtcNow;
 
-            testObject = new CronTrigger(null);
+            testObject = new ScheduledTrigger(null);
             
             // A little fuzzy logic to try to make sure the start date was 
             // initialized in the constructor
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             DateTime now = DateTime.UtcNow;
 
-            testObject = new CronTrigger(string.Empty);
+            testObject = new ScheduledTrigger(string.Empty);
 
             // A little fuzzy logic to try to make sure the start date was 
             // initialized in the constructor
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Actions.Triggers
                   <SomeDateValue value=""6/8/2013 12:07:00 AM"" />
                 </Settings>";
 
-            testObject = new CronTrigger(xmlSettings);
+            testObject = new ScheduledTrigger(xmlSettings);
 
             // A little fuzzy logic to try to make sure the start date was 
             // initialized in the constructor
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Actions.Triggers
                   <StartDateTimeInUtc value=""6/8/2013 12:07:00 AM"" />
                 </Settings>";
 
-            testObject = new CronTrigger(xmlSettings);
+            testObject = new ScheduledTrigger(xmlSettings);
 
             Assert.AreEqual(DateTime.Parse("6/8/2013 12:07:00 AM"), testObject.StartDateTimeInUtc);
         }
