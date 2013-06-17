@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedulingEngine = new Mock<ISchedulingEngine>();
 
             // Simulate engine to see jobs as new by default
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ActionSchedule>())).Returns(false);
+            schedulingEngine.Setup(e => e.HasExistingSchedule(It.IsAny<ActionEntity>())).Returns(false);
 
             testObject = new Scheduler(schedulingEngine.Object);
         }
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedule.StartTime = DateTime.UtcNow.AddSeconds(-5);
 
             // Simulate engine to see this as an existing job
-            schedulingEngine.Setup(e => e.IsExistingJob(action, schedule)).Returns(true);
+            schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
 
             testObject.ScheduleAction(action, schedule);
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedule.StartTime = DateTime.UtcNow;
 
             // Simulate engine to see this as an existing job
-            schedulingEngine.Setup(e => e.IsExistingJob(action, schedule)).Returns(true);
+            schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
 
             testObject.ScheduleAction(action, schedule);
         }
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedule.StartTime = DateTime.UtcNow.AddSeconds(5);
 
             // Simulate engine to see this as an existing job
-            schedulingEngine.Setup(e => e.IsExistingJob(action, schedule)).Returns(true);
+            schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
 
             testObject.ScheduleAction(action, schedule);
 
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Simulate engine to see this as an existing job (so trigger start date does not matter)
             // and setup the schedule method throws an out of memory exception
-            schedulingEngine.Setup(e => e.IsExistingJob(action, schedule)).Returns(true);
+            schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
             schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<ActionSchedule>())).Throws(new OutOfMemoryException());
 
             // Throws scheduling exception
@@ -135,12 +135,11 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void UnscheduleAction_DelegatesToSchedulingEngine_WhenJobExists_Test()
         {
             ActionEntity action = new ActionEntity();
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
 
             // Simulate that the job exists
-            schedulingEngine.Setup(e => e.IsExistingJob(action, schedule)).Returns(true);
+            schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
 
-            testObject.UnscheduleAction(action, schedule);
+            testObject.UnscheduleAction(action);
 
             schedulingEngine.Verify(s => s.Unschedule(action), Times.Once());
         }
@@ -149,9 +148,8 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void UnscheduleAction_DoesNotDelegateToSchedulingEngine_WhenJobDoesNotExist_Test()
         {
             ActionEntity action = new ActionEntity();
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
 
-            testObject.UnscheduleAction(action, schedule);
+            testObject.UnscheduleAction(action);
 
             schedulingEngine.Verify(s => s.Unschedule(action), Times.Never());
         }
@@ -161,13 +159,12 @@ namespace ShipWorks.Tests.Actions.Scheduling
         public void UnscheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
         {
             ActionEntity action = new ActionEntity();
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
 
             // Simulate that the job does not exist
-            schedulingEngine.Setup(e => e.IsExistingJob(It.IsAny<ActionEntity>(), It.IsAny<ActionSchedule>())).Throws(new InvalidOperationException());
+            schedulingEngine.Setup(e => e.HasExistingSchedule(It.IsAny<ActionEntity>())).Throws(new InvalidOperationException());
 
             // Throws an exception
-            testObject.UnscheduleAction(action, schedule);
+            testObject.UnscheduleAction(action);
         }
 
         [TestMethod]

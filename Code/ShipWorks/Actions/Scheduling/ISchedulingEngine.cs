@@ -15,14 +15,13 @@ namespace ShipWorks.Actions.Scheduling
         void Schedule(ActionEntity action, ActionSchedule schedule);
 
         /// <summary>
-        /// Determines whether a job for the given action/trigger exists.
+        /// Determines whether a job for the given action exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="schedule">The schedule.</param>
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action; otherwise, <c>false</c>.
         /// </returns>
-        bool IsExistingJob(ActionEntity action, ActionSchedule schedule);
+        bool HasExistingSchedule(ActionEntity action);
 
         /// <summary>
         /// Unschedules the specified action by removing the job/action from the schedule.

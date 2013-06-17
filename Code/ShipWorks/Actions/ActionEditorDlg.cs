@@ -465,7 +465,7 @@ namespace ShipWorks.Actions
                     {
                         // User changed the trigger from a scheduled trigger to another type of trigger, so we need to make sure
                         // the action is remvoed from the schedule
-                        new Scheduler().UnscheduleAction(action, ((ScheduledTrigger)originalTrigger).Schedule);
+                        new Scheduler().UnscheduleAction(action);
                     }
                     catch (SchedulingException schedulingException)
                     {

@@ -22,8 +22,7 @@ namespace ShipWorks.Actions.Scheduling
         /// Removes the specified action from the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="schedule">The schedule.</param>
-        void UnscheduleAction(ActionEntity action, ActionSchedule schedule);
+        void UnscheduleAction(ActionEntity action);
 
         /// <summary>
         /// Runs the scheduler engine, which queues ShipWorks actions.

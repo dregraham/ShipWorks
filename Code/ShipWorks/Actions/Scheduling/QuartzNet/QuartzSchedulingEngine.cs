@@ -82,18 +82,16 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// Determines whether a job for the given action exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The schedule.</param>
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsExistingJob(ActionEntity action, ActionSchedule schedule)
+        public bool HasExistingSchedule(ActionEntity action)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
             try
             {
-                JobKey jobKey = new JobKey(GetQuartzJobName(action));
-                return quartzScheduler.GetJobDetail(jobKey) != null;
+                return IsExistingJob(action, quartzScheduler);
             }
             finally
             {

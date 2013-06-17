@@ -40,7 +40,7 @@ namespace ShipWorks.Actions.Scheduling
         /// <param name="schedule">The schedule.</param>
         public void ScheduleAction(ActionEntity action, ActionSchedule schedule)
         {
-            if (!schedulingEngine.IsExistingJob(action, schedule))
+            if (!schedulingEngine.HasExistingSchedule(action))
             {
                 // New jobs/actions cannot be scheduled to occur in the past
                 if (schedule.StartTime <= DateTime.UtcNow)
@@ -65,13 +65,12 @@ namespace ShipWorks.Actions.Scheduling
         /// Removes the specified action from the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="schedule">The schedule.</param>
         /// <exception cref="SchedulingException"></exception>
-        public void UnscheduleAction(ActionEntity action, ActionSchedule schedule)
+        public void UnscheduleAction(ActionEntity action)
         {
             try
             {
-                if (schedulingEngine.IsExistingJob(action, schedule))
+                if (schedulingEngine.HasExistingSchedule(action))
                 {
                     schedulingEngine.Unschedule(action);
                 }

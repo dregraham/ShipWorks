@@ -88,9 +88,8 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         public void IsExistingJob_DelegatesToScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
 
-            testObject.IsExistingJob(action, schedule);
+            testObject.HasExistingSchedule(action);
 
             scheduler.Verify(s => s.GetJobDetail(It.IsAny<JobKey>()), Times.Once());
         }
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
 
-            Assert.IsFalse(testObject.IsExistingJob(new ActionEntity(), new Mock<ActionSchedule>().Object));
+            Assert.IsFalse(testObject.HasExistingSchedule(new ActionEntity()));
         }
 
         [TestMethod]
@@ -109,18 +108,16 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
 
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
 
-            Assert.IsTrue(testObject.IsExistingJob(action, schedule));
+            Assert.IsTrue(testObject.HasExistingSchedule(action));
         }
 
         [TestMethod]
         public void IsExistingJob_ShutsdownScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
 
-            testObject.IsExistingJob(action, schedule);
+            testObject.HasExistingSchedule(action);
 
             scheduler.Verify(s => s.Shutdown(true), Times.Once());
         }
