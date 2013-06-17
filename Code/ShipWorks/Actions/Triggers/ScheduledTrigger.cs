@@ -1,6 +1,7 @@
 ﻿using System;
 using ShipWorks.Actions.Triggers.Editors;
 using ShipWorks.Data.Model;
+using ShipWorks.Actions.Scheduling.ActionSchedules;
 
 namespace ShipWorks.Actions.Triggers
 {
@@ -20,6 +21,7 @@ namespace ShipWorks.Actions.Triggers
         public ScheduledTrigger(string xmlSettings)
             : base(xmlSettings)
         {
+            //TODO: move initialization once ActionSchedule work is done
             if (StartDateTimeInUtc.Year == 1)
             {
                 // Initialize the start date to the top of the next hour since it wasn't included in the settings
@@ -59,10 +61,34 @@ namespace ShipWorks.Actions.Triggers
             get { return null; }
         }
 
+
         /// <summary>
-        /// Gets or sets the start date time in UTC.
+        /// Gets or sets the schedule for this trigger.
         /// </summary>
-        /// <value>The start date time in UTC.</value>
-        public DateTime StartDateTimeInUtc { get; set; }
+        [System.Xml.Serialization.XmlIgnore]
+        public ActionSchedule Schedule
+        {
+            get { return schedule ?? (schedule = new TempActionScheduleBridge()); }
+            set { schedule = value; }
+        }
+
+        ActionSchedule schedule;
+
+        /// <summary>
+        /// TODO: remove this and TempActionScheduleBridge when ActionSchedule work is done
+        /// </summary>
+        public DateTime StartDateTimeInUtc
+        {
+            get { return Schedule.StartTime; }
+            set { Schedule.StartTime = value; }
+        }
+
+        class TempActionScheduleBridge : ActionSchedule
+        {
+            public override Scheduling.ActionScheduleType ScheduleType
+            {
+                get { throw new NotImplementedException(); }
+            }
+        }
     }
 }

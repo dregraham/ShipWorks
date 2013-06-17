@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Scheduling.Enums;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
@@ -33,6 +29,5 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
             get;
             set;
         }
-
     }
 }

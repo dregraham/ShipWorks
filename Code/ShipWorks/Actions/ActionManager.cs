@@ -175,7 +175,7 @@ namespace ShipWorks.Actions
             if (trigger.TriggerType == ActionTriggerType.Scheduled)
             {
                 // We need to unschedule the scheudled action
-                new Scheduler().UnscheduleAction(action, trigger as ScheduledTrigger);
+                new Scheduler().UnscheduleAction(action, ((ScheduledTrigger)trigger).Schedule);
             }
 
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -255,7 +255,7 @@ namespace ShipWorks.Actions
                     if (updateJob)
                     {
                         Scheduler scheduler = new Scheduler();
-                        scheduler.ScheduleAction(action, scheduledTrigger);
+                        scheduler.ScheduleAction(action, scheduledTrigger.Schedule);
                     }
                 }
                 else

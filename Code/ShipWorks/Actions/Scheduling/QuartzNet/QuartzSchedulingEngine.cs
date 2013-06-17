@@ -2,7 +2,7 @@
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
-using ShipWorks.Actions.Triggers;
+using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Globalization;
@@ -43,17 +43,17 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         }
 
         /// <summary>
-        /// Schedules the specified action according to the details of the scheduled trigger.
+        /// Schedules the specified action according to the details of the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
-        public void Schedule(ActionEntity action, ScheduledTrigger scheduledTrigger)
+        /// <param name="scheduledTrigger">The schedule.</param>
+        public void Schedule(ActionEntity action, ActionSchedule schedule)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
             try
             {
-                if (IsExistingJob(action, scheduledTrigger, quartzScheduler))
+                if (IsExistingJob(action, quartzScheduler))
                 {
                     // Simplest way to update a job in Quartz is to delete it along with all of its triggers
                     // (http://stackoverflow.com/questions/6728012/quartz-net-update-delete-jobs-triggers)
@@ -63,7 +63,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 IJobDetail jobDetail = new JobDetailImpl(GetQuartzJobName(action), null, typeof (ActionJob));
                 jobDetail.JobDataMap.Add("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture));
 
-                SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, scheduledTrigger.StartDateTimeInUtc);
+                SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, schedule.StartTime);
 
                 quartzScheduler.ScheduleJob(jobDetail, trigger);
             }
@@ -79,14 +79,14 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         }
 
         /// <summary>
-        /// Determines whether a job for the given action/trigger exists.
+        /// Determines whether a job for the given action exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        /// <param name="scheduledTrigger">The schedule.</param>
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsExistingJob(ActionEntity action, ScheduledTrigger scheduledTrigger)
+        public bool IsExistingJob(ActionEntity action, ActionSchedule schedule)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
 
@@ -104,15 +104,15 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         }
 
         /// <summary>
-        /// Determines whether a job for the given action/trigger exists.
+        /// Determines whether a job for the given action exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        /// <param name="schedule">The schedule.</param>
         /// <param name="quartzScheduler">The quartz scheduler.</param>
         /// <returns>
-        ///   <c>true</c> if [a job exists] for the given action/trigger; otherwise, <c>false</c>.
+        ///   <c>true</c> if [a job exists] for the given action; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsExistingJob(ActionEntity action, ScheduledTrigger scheduledTrigger, Quartz.IScheduler quartzScheduler)
+        private bool IsExistingJob(ActionEntity action, Quartz.IScheduler quartzScheduler)
         {
             JobKey jobKey = new JobKey(GetQuartzJobName(action));
             return quartzScheduler.GetJobDetail(jobKey) != null;

@@ -1,9 +1,9 @@
 ﻿using System;
 using ShipWorks.Actions.Scheduling.QuartzNet;
-using ShipWorks.Actions.Triggers;
 using System.Threading.Tasks;
 using System.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Actions.Scheduling.ActionSchedules;
 
 
 namespace ShipWorks.Actions.Scheduling
@@ -34,16 +34,16 @@ namespace ShipWorks.Actions.Scheduling
         }
 
         /// <summary>
-        /// Schedules the specified action to run at the time specified by the scheduled trigger.
+        /// Schedules the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
-        public void ScheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger)
+        /// <param name="schedule">The schedule.</param>
+        public void ScheduleAction(ActionEntity action, ActionSchedule schedule)
         {
-            if (!schedulingEngine.IsExistingJob(action, scheduledTrigger))
+            if (!schedulingEngine.IsExistingJob(action, schedule))
             {
                 // New jobs/actions cannot be scheduled to occur in the past
-                if (scheduledTrigger.StartDateTimeInUtc <= DateTime.UtcNow)
+                if (schedule.StartTime <= DateTime.UtcNow)
                 {
                     throw new SchedulingException("The start date must be in the future when scheduling a new action.");
                 }
@@ -52,7 +52,7 @@ namespace ShipWorks.Actions.Scheduling
             try
             {
                 // Delegate to the scheduling engine to take care of the details of scheduling the action
-                schedulingEngine.Schedule(action, scheduledTrigger);
+                schedulingEngine.Schedule(action, schedule);
             }
             catch (Exception exception)
             {
@@ -62,16 +62,16 @@ namespace ShipWorks.Actions.Scheduling
         }
 
         /// <summary>
-        /// Removes the specified action/trigger from the schedule.
+        /// Removes the specified action from the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
+        /// <param name="schedule">The schedule.</param>
         /// <exception cref="SchedulingException"></exception>
-        public void UnscheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger)
+        public void UnscheduleAction(ActionEntity action, ActionSchedule schedule)
         {
             try
             {
-                if (schedulingEngine.IsExistingJob(action, scheduledTrigger))
+                if (schedulingEngine.IsExistingJob(action, schedule))
                 {
                     schedulingEngine.Unschedule(action);
                 }
@@ -84,7 +84,7 @@ namespace ShipWorks.Actions.Scheduling
         }
         
         /// <summary>
-        /// Runs the scheduler engine, which queues actions based on the scheduled triggers.
+        /// Runs the scheduler engine, which queues ShipWorks actions.
         /// </summary>
         /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
         /// <returns>The running engine task.</returns>

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Actions.Scheduling.ActionSchedules;
 
 
 namespace ShipWorks.Actions.Scheduling
@@ -12,21 +12,21 @@ namespace ShipWorks.Actions.Scheduling
     public interface IScheduler
     {
         /// <summary>
-        /// Schedules the specified action to run at the time specified by the scheduled trigger.
+        /// Schedules the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
-        void ScheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger);
+        /// <param name="schedule">The schedule.</param>
+        void ScheduleAction(ActionEntity action, ActionSchedule schedule);
 
         /// <summary>
-        /// Removes the specified action/trigger from the schedule.
+        /// Removes the specified action from the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The scheduled trigger.</param>
-        void UnscheduleAction(ActionEntity action, ScheduledTrigger scheduledTrigger);
+        /// <param name="schedule">The schedule.</param>
+        void UnscheduleAction(ActionEntity action, ActionSchedule schedule);
 
         /// <summary>
-        /// Runs the scheduler engine, which queues actions based on the scheduled triggers.
+        /// Runs the scheduler engine, which queues ShipWorks actions.
         /// </summary>
         /// <param name="cancellationToken">The token used to cancel (stop) the engine.</param>
         /// <returns>The running engine task.</returns>
