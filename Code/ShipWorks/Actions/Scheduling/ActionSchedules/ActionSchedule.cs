@@ -1,11 +1,12 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
     /// <summary>
     /// Abstract ActionSchedule type
     /// </summary>
-    public abstract class ActionSchedule
+    public abstract class ActionSchedule : SerializableObject
     {
         /// <summary>
         /// Gets the type of the schedule.
