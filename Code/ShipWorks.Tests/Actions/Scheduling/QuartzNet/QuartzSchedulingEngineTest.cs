@@ -9,6 +9,7 @@ using System.Threading;
 using Quartz.Impl;
 using Quartz;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
+using Quartz.Spi;
 
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
@@ -17,6 +18,8 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
     public class QuartzSchedulingEngineTest
     {
         Mock<Quartz.IScheduler> scheduler;
+        Mock<IActionScheduleAdapter> scheduleAdapter;
+
         QuartzSchedulingEngine testObject;
 
         [TestInitialize]
@@ -27,7 +30,9 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             var schedulerFactory = new Mock<Quartz.ISchedulerFactory>();
             schedulerFactory.Setup(x => x.GetScheduler()).Returns(scheduler.Object);
 
-            testObject = new QuartzSchedulingEngine(schedulerFactory.Object);
+            scheduleAdapter = new Mock<IActionScheduleAdapter>();
+
+            testObject = new QuartzSchedulingEngine(schedulerFactory.Object, scheduleAdapter.Object);
         }
 
 
@@ -262,6 +267,24 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(x => x.Shutdown(true), Times.Once());
 
             Assert.IsTrue(task.IsCanceled);
+        }
+
+        [TestMethod]
+        public void ActionScheduleIsAdaptedOntoTrigger()
+        {
+            var actionSchedule = new Mock<ActionSchedule>().Object;
+
+            var trigger = new Mock<IMutableTrigger>().Object;
+
+            var quartzSchedule = new Mock<IScheduleBuilder>();
+            quartzSchedule.Setup(x => x.Build()).Returns(trigger);
+
+            scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
+                .Returns(quartzSchedule.Object);
+
+            testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
+
+            scheduler.Verify(x => x.ScheduleJob(It.IsAny<IJobDetail>(), trigger));
         }
     }
 }

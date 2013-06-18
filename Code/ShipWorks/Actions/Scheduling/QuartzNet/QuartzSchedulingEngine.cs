@@ -19,27 +19,30 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
     public class QuartzSchedulingEngine : ISchedulingEngine
     {
         readonly Quartz.ISchedulerFactory schedulerFactory;
+        readonly IActionScheduleAdapter scheduleAdapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
         /// </summary>
         public QuartzSchedulingEngine()
-            : this(new QuartzSchedulerFactory()) 
+            : this(new SqlSchedulerFactory(), new ReflectingActionScheduleAdapter()) 
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
         /// </summary>
         /// <param name="schedulerFactory">The scheduler factory.</param>
+        /// <param name="scheduleAdapter">The action schedule adapter.</param>
         /// <exception cref="System.ArgumentNullException">schedulerFactory</exception>
-        public QuartzSchedulingEngine(Quartz.ISchedulerFactory schedulerFactory)
+        public QuartzSchedulingEngine(Quartz.ISchedulerFactory schedulerFactory, IActionScheduleAdapter scheduleAdapter)
         {
             if (null == schedulerFactory)
-            {
                 throw new ArgumentNullException("schedulerFactory");
-            }
+            if (null == scheduleAdapter)
+                throw new ArgumentNullException("scheduleAdapter");
 
             this.schedulerFactory = schedulerFactory;
+            this.scheduleAdapter = scheduleAdapter;
         }
 
         /// <summary>
@@ -60,12 +63,18 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                     RemoveJob(action, quartzScheduler);
                 }
 
-                IJobDetail jobDetail = new JobDetailImpl(GetQuartzJobName(action), null, typeof (ActionJob));
-                jobDetail.JobDataMap.Add("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture));
+                var job = JobBuilder.Create<ActionJob>()
+                    .WithIdentity(GetQuartzJobName(action))
+                    .UsingJobData("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture))
+                    .Build();
 
-                SimpleTriggerImpl trigger = new SimpleTriggerImpl(jobDetail.Key.Name, null, schedule.StartTime);
+                var trigger = TriggerBuilder.Create()
+                    .WithIdentity(job.Key.Name)
+                    .StartAt(schedule.StartTime)
+                    .WithSchedule(scheduleAdapter.Adapt(schedule))
+                    .Build();
 
-                quartzScheduler.ScheduleJob(jobDetail, trigger);
+                quartzScheduler.ScheduleJob(job, trigger);
             }
             finally
             {
@@ -109,7 +118,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsExistingJob(ActionEntity action, Quartz.IScheduler quartzScheduler)
+        private static bool IsExistingJob(ActionEntity action, Quartz.IScheduler quartzScheduler)
         {
             JobKey jobKey = new JobKey(GetQuartzJobName(action));
             return quartzScheduler.GetJobDetail(jobKey) != null;
@@ -166,7 +175,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns>The name of the job.</returns>
-        private string GetQuartzJobName(ActionEntity action)
+        private static string GetQuartzJobName(ActionEntity action)
         {
             // The job name must be unique, so just use action ID for the job name
             return action.ActionID.ToString(CultureInfo.InvariantCulture);

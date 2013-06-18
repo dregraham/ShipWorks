@@ -90,5 +90,13 @@ namespace ShipWorks.Actions.Triggers
                 get { throw new NotImplementedException(); }
             }
         }
+
+        class TempActionScheduleBridgeAdapter : ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapter<TempActionScheduleBridge>
+        {
+            public override Quartz.IScheduleBuilder Adapt(TempActionScheduleBridge schedule)
+            {
+                return Quartz.SimpleScheduleBuilder.Create();
+            }
+        }
     }
 }

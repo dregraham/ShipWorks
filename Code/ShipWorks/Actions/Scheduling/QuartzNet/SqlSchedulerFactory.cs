@@ -7,11 +7,11 @@ using System.Collections.Specialized;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
-    public class QuartzSchedulerFactory : Quartz.ISchedulerFactory
+    public class SqlSchedulerFactory : Quartz.ISchedulerFactory
     {
         readonly Quartz.ISchedulerFactory innerFactory;
 
-        public QuartzSchedulerFactory()
+        public SqlSchedulerFactory()
         {
             var sqlConfig = new SqlSessionConfiguration();
             sqlConfig.Load();
