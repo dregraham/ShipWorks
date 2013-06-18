@@ -516,6 +516,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ExcludeFBA", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DomainName", fieldHashtable);
 		}
 		#endregion
 
@@ -741,6 +744,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AmazonStoreFieldIndex.ExcludeFBA, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.ExcludeFBA, value); }
+		}
+
+		/// <summary> The DomainName property of the Entity AmazonStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonStore"."DomainName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String DomainName
+		{
+			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.DomainName, true); }
+			set	{ SetValue((int)AmazonStoreFieldIndex.DomainName, value); }
 		}
 
 

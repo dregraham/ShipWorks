@@ -21,5 +21,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             get;
             set;
         }
+
+        public string DomainName
+        {
+            get; 
+            set;
+        }
     }
 }

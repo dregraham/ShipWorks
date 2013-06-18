@@ -337,6 +337,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonStoreEntity", "MerchantID", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MerchantID, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "MarketplaceID", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MarketplaceID, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.ExcludeFBA, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonStoreEntity", "DomainName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.DomainName, 50, 0, 0);
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitAmeriCommerceStoreEntityInfos()
@@ -1915,7 +1916,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("SearsOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)SearsOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "LineNumber", typeof(System.Int32), false, false, false, false,  (int)SearsOrderItemFieldIndex.LineNumber, 0, 0, 10);
-			base.AddElementFieldInfo("SearsOrderItemEntity", "ItemID", typeof(System.String), false, false, false, false,  (int)SearsOrderItemFieldIndex.ItemID, 20, 0, 0);
+			base.AddElementFieldInfo("SearsOrderItemEntity", "ItemID", typeof(System.String), false, false, false, false,  (int)SearsOrderItemFieldIndex.ItemID, 300, 0, 0);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "Commission", typeof(System.Decimal), false, false, false, false,  (int)SearsOrderItemFieldIndex.Commission, 0, 4, 19);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "Shipping", typeof(System.Decimal), false, false, false, false,  (int)SearsOrderItemFieldIndex.Shipping, 0, 4, 19);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "OnlineStatus", typeof(System.String), false, false, false, false,  (int)SearsOrderItemFieldIndex.OnlineStatus, 20, 0, 0);
