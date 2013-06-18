@@ -85,7 +85,7 @@ namespace ShipWorks.Actions.Triggers
 
         class TempActionScheduleBridge : ActionSchedule
         {
-            public override Scheduling.ActionScheduleType ScheduleType
+            public override ActionScheduleType ScheduleType
             {
                 get { throw new NotImplementedException(); }
             }
