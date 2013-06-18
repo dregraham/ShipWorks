@@ -70,7 +70,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
                 var trigger = TriggerBuilder.Create()
                     .WithIdentity(job.Key.Name)
-                    .StartAt(schedule.StartTime)
+                    .StartAt(schedule.StartDateTimeInUtc)
                     .WithSchedule(scheduleAdapter.Adapt(schedule))
                     .Build();
 

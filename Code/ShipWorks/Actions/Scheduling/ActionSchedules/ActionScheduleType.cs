@@ -7,6 +7,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     public enum ActionScheduleType
     {
         [Description("One Time")]
-        OneTime = 0
+        OneTime = 0,
+
+        [Description("Hourly")]
+        Hourly = 1
     }
 }

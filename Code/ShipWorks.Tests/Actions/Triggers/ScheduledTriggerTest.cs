@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             
             // A little fuzzy logic to try to make sure the start date was 
             // initialized in the constructor
-            Assert.IsTrue(testObject.StartDateTimeInUtc >= now);
+            Assert.IsTrue(testObject.Schedule.StartDateTimeInUtc >= now);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             // A little fuzzy logic to try to make sure the start date was 
             // initialized in the constructor
-            Assert.IsTrue(testObject.StartDateTimeInUtc >= now);
+            Assert.IsTrue(testObject.Schedule.StartDateTimeInUtc >= now);
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             // A little fuzzy logic to try to make sure the start date was 
             // initialized in the constructor
-            Assert.IsTrue(testObject.StartDateTimeInUtc >= now);
+            Assert.IsTrue(testObject.Schedule.StartDateTimeInUtc >= now);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject = new ScheduledTrigger(xmlSettings);
 
-            Assert.AreEqual(DateTime.Parse("6/8/2013 12:07:00 AM"), testObject.StartDateTimeInUtc);
+            Assert.AreEqual(DateTime.Parse("6/8/2013 12:07:00 AM"), testObject.Schedule.StartDateTimeInUtc);
         }
     }
 }

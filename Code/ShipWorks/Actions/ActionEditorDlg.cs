@@ -206,6 +206,9 @@ namespace ShipWorks.Actions
         private void CreateTriggerEditor()
         {
             ActionTriggerEditor editor = trigger.CreateEditor();
+
+            editor.SizeChanged += OnActionTriggerEditorSizeChanged;
+
             panelTrigger.Height = editor.Height;
 
             editor.Dock = DockStyle.Fill;
@@ -220,6 +223,15 @@ namespace ShipWorks.Actions
             }
 
             UpdateTaskBubbles();
+        }
+
+        /// <summary>
+        /// Updates the panel height when the action trigger editor changes it's height.
+        /// </summary>
+        void OnActionTriggerEditorSizeChanged(object sender, EventArgs e)
+        {
+            panelTrigger.Height = ((ActionTriggerEditor) sender).Height;
+            UpdateTaskArea();
         }
 
         /// <summary>

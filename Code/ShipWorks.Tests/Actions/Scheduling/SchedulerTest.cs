@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Set the trigger to be five seconds in the past
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartTime = DateTime.UtcNow.AddSeconds(-5);
+            schedule.StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5);
 
             // Throw scheduling exception
             testObject.ScheduleAction(action, schedule);
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Set the trigger to be now
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartTime = DateTime.UtcNow;
+            schedule.StartDateTimeInUtc = DateTime.UtcNow;
 
             // Throw scheduling exception
             testObject.ScheduleAction(action, schedule);
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Set the trigger to be in the future
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartTime = DateTime.UtcNow.AddSeconds(5);
+            schedule.StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(5);
 
             testObject.ScheduleAction(action, schedule);
 
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Set the trigger to be five seconds in the past
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartTime = DateTime.UtcNow.AddSeconds(-5);
+            schedule.StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5);
 
             // Simulate engine to see this as an existing job
             schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Set the trigger to be now
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartTime = DateTime.UtcNow;
+            schedule.StartDateTimeInUtc = DateTime.UtcNow;
 
             // Simulate engine to see this as an existing job
             schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             // Set the trigger to be in the future
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartTime = DateTime.UtcNow.AddSeconds(5);
+            schedule.StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(5);
 
             // Simulate engine to see this as an existing job
             schedulingEngine.Setup(e => e.HasExistingSchedule(action)).Returns(true);

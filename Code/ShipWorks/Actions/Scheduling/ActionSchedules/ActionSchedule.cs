@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
@@ -15,9 +16,21 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         public abstract ActionScheduleType ScheduleType { get; }
 
         /// <summary>
-        /// Gets or sets the start time.
+        /// Gets or sets the start time (in UTC).
         /// </summary>
-        /// <value>The start time. </value>
-        public DateTime StartTime{ get; set; }
+        /// <value>StartDateTimeInUtc
+        /// The start time in UTC
+        /// </value>
+        public DateTime StartDateTimeInUtc
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Creates and returns an ActionScheduleEditor for the specific ActionSchedule
+        /// </summary>
+        public abstract ActionScheduleEditor CreateEditor();
+
     }
 }

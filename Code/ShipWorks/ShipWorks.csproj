@@ -264,7 +264,19 @@
     <Compile Include="Actions\ActionStepContext.cs" />
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleType.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\ActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.Designer.cs">
+      <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\IScheduler.cs" />
     <Compile Include="Actions\Scheduling\ISchedulingEngine.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ReflectingActionScheduleAdapter.cs" />
@@ -5203,6 +5215,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.resx">
+      <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
     </EmbeddedResource>

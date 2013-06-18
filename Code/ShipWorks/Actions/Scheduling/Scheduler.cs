@@ -43,7 +43,7 @@ namespace ShipWorks.Actions.Scheduling
             if (!schedulingEngine.HasExistingSchedule(action))
             {
                 // New jobs/actions cannot be scheduled to occur in the past
-                if (schedule.StartTime <= DateTime.UtcNow)
+                if (schedule.StartDateTimeInUtc <= DateTime.UtcNow)
                 {
                     throw new SchedulingException("The start date must be in the future when scheduling a new action.");
                 }

@@ -22,14 +22,14 @@ namespace ShipWorks.Actions.Triggers
             : base(xmlSettings)
         {
             //TODO: move initialization once ActionSchedule work is done
-            if (StartDateTimeInUtc.Year == 1)
+            if (Schedule.StartDateTimeInUtc.Year == 1)
             {
                 // Initialize the start date to the top of the next hour since it wasn't included in the settings
-                StartDateTimeInUtc = DateTime.UtcNow.AddMinutes(60 - DateTime.UtcNow.Minute);
+                Schedule.StartDateTimeInUtc = DateTime.UtcNow.AddMinutes(60 - DateTime.UtcNow.Minute);
             }
-            else if (StartDateTimeInUtc.Kind == DateTimeKind.Unspecified)
+            else if (Schedule.StartDateTimeInUtc.Kind == DateTimeKind.Unspecified)
             {
-                StartDateTimeInUtc = DateTime.SpecifyKind(StartDateTimeInUtc, DateTimeKind.Utc);
+                Schedule.StartDateTimeInUtc = DateTime.SpecifyKind(Schedule.StartDateTimeInUtc, DateTimeKind.Utc);
             }
         }
 
@@ -61,41 +61,26 @@ namespace ShipWorks.Actions.Triggers
             get { return null; }
         }
 
-
+        // TODO: Revist when serialization/deserialization is working for ActionSchedule
+        private ActionSchedule actionSchedule;
         /// <summary>
         /// Gets or sets the schedule for this trigger.
         /// </summary>
         [System.Xml.Serialization.XmlIgnore]
         public ActionSchedule Schedule
         {
-            get { return schedule ?? (schedule = new TempActionScheduleBridge()); }
-            set { schedule = value; }
-        }
-
-        ActionSchedule schedule;
-
-        /// <summary>
-        /// TODO: remove this and TempActionScheduleBridge when ActionSchedule work is done
-        /// </summary>
-        public DateTime StartDateTimeInUtc
-        {
-            get { return Schedule.StartTime; }
-            set { Schedule.StartTime = value; }
-        }
-
-        class TempActionScheduleBridge : ActionSchedule
-        {
-            public override ActionScheduleType ScheduleType
+            get
             {
-                get { throw new NotImplementedException(); }
+                if (actionSchedule == null)
+                {
+                    actionSchedule = new OneTimeActionSchedule();
+                }
+
+                return actionSchedule;
             }
-        }
-
-        class TempActionScheduleBridgeAdapter : ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapter<TempActionScheduleBridge>
-        {
-            public override Quartz.IScheduleBuilder Adapt(TempActionScheduleBridge schedule)
+            set 
             {
-                return Quartz.SimpleScheduleBuilder.Create();
+                actionSchedule = value; 
             }
         }
     }
