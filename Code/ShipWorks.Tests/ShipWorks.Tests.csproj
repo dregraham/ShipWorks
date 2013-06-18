@@ -88,6 +88,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />

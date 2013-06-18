@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Quartz;
-using Quartz.Job;
-using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
@@ -14,7 +9,24 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
     /// </summary>
     public class ActionJob : Quartz.IJob
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ActionJob));
+        private readonly ILog log;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActionJob"/> class.
+        /// </summary>
+        public ActionJob()
+            : this(LogManager.GetLogger(typeof(ActionJob)))
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActionJob"/> class. This
+        /// version of the constructor is primarily for testin purposes.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public ActionJob(ILog log)
+        {
+            this.log = log;
+        }
 
         /// <summary>
         /// Dispatches a scheduled action
@@ -23,9 +35,9 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         {
             log.InfoFormat("ActionJob: {0} Running at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
 
-            long actionID = 0;
+            long actionId = 0;
 
-            if (!long.TryParse(context.JobDetail.JobDataMap["ActionID"].ToString(), out actionID))
+            if (context.JobDetail.JobDataMap["ActionID"] == null || !long.TryParse(context.JobDetail.JobDataMap["ActionID"].ToString(), out actionId))
             {
                 log.ErrorFormat("ActionID not provided for job with Key: {0}.", context.JobDetail.Key);
                 
@@ -35,7 +47,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 return;
             }
 
-            ActionDispatcher.DispatchScheduledAction(actionID);   
+            ActionDispatcher.DispatchScheduledAction(actionId);   
         }
     }
 }

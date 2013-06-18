@@ -46,7 +46,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// Schedules the specified action according to the details of the schedule.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="scheduledTrigger">The schedule.</param>
+        /// <param name="schedule">The schedule.</param>
         public void Schedule(ActionEntity action, ActionSchedule schedule)
         {
             Quartz.IScheduler quartzScheduler = schedulerFactory.GetScheduler();
@@ -105,7 +105,6 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// Determines whether a job for the given action exists.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="schedule">The schedule.</param>
         /// <param name="quartzScheduler">The quartz scheduler.</param>
         /// <returns>
         ///   <c>true</c> if [a job exists] for the given action; otherwise, <c>false</c>.

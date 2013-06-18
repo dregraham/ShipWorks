@@ -11,24 +11,13 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Gets the type of the schedule.
         /// </summary>
-        /// <value>
-        /// The type of the schedule.
-        /// </value>
-        public abstract ActionScheduleType ScheduleType
-        {
-            get;
-        }
+        /// <value>The type of the schedule.</value>
+        public abstract ActionScheduleType ScheduleType { get; }
 
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
-        /// <value>
-        /// The start time.
-        /// </value>
-        public DateTime StartTime
-        {
-            get;
-            set;
-        }
+        /// <value>The start time. </value>
+        public DateTime StartTime{ get; set; }
     }
 }
