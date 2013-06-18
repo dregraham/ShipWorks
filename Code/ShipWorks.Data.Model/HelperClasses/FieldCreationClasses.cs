@@ -997,6 +997,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ExcludeFBA);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.DomainName field instance</summary>
+		public static EntityField2 DomainName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomainName);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmeriCommerceStoreEntity</summary>

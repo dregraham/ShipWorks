@@ -329,7 +329,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			base.AddElementMapping( "AmazonStoreEntity", "ShipWorksLocal", @"dbo", "AmazonStore", 15 );
+			base.AddElementMapping( "AmazonStoreEntity", "ShipWorksLocal", @"dbo", "AmazonStore", 16 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonApi", "AmazonApi", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "SellerCentralUsername", "SellerCentralUsername", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -345,6 +345,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantID", "MerchantID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 12 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 14 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
 		private void InitAmeriCommerceStoreEntityMappings()
@@ -2023,7 +2024,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementMapping( "SearsOrderItemEntity", "ShipWorksLocal", @"dbo", "SearsOrderItem", 6 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "LineNumber", "LineNumber", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
-			base.AddElementFieldMapping( "SearsOrderItemEntity", "ItemID", "ItemID", false, (int)SqlDbType.VarChar, 20, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "SearsOrderItemEntity", "ItemID", "ItemID", false, (int)SqlDbType.VarChar, 300, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "Commission", "Commission", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 3 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "Shipping", "Shipping", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 4 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "OnlineStatus", "OnlineStatus", false, (int)SqlDbType.VarChar, 20, 0, 0, false, "", null, typeof(System.String), 5 );

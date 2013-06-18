@@ -169,8 +169,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 string id = (string) xElement.Element(amz + "MarketplaceId");
                 string name = (string) xElement.Element(amz + "Name");
+                string domain = (string)xElement.Element(amz + "DomainName");
 
-                marketplaces.Add(new AmazonMwsMarketplace { MarketplaceID = id, Name = name });
+                marketplaces.Add(new AmazonMwsMarketplace { MarketplaceID = id, Name = name, DomainName = domain });
             }
 
             return marketplaces;
