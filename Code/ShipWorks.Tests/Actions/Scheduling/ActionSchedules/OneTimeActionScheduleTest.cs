@@ -11,17 +11,16 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         OneTimeActionSchedule testObject;
 
         [TestMethod]
-        public void StartDateTimeInUtc_IsNow_WhenNullConstructorIsCalled_Test()
+        public void StartDateTimeInUtc_IsTopOfTheHour_WhenNullConstructorIsCalled_Test()
         {
-            DateTime before = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
+
+            DateTime topOfHour = now.AddMinutes(60 - now.Minute);
 
             testObject = new OneTimeActionSchedule();
 
-            DateTime after = DateTime.UtcNow;
-
             // Make sure the time is between before the call and after the call.
-            Assert.IsTrue(testObject.StartDateTimeInUtc >= before 
-                && testObject.StartDateTimeInUtc <= after);
+            Assert.AreEqual(topOfHour, testObject.StartDateTimeInUtc);
         }
     }
 }

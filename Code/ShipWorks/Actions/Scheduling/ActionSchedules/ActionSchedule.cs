@@ -16,7 +16,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// </summary>
         protected ActionSchedule()
         {
-            StartDateTimeInUtc = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
+
+            StartDateTimeInUtc = now.AddMinutes(60 - now.Minute);
         }
 
         /// <summary>
