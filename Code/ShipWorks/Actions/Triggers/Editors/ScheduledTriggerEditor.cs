@@ -83,6 +83,7 @@ namespace ShipWorks.Actions.Triggers.Editors
                 DisposeRecurringSettingsGroupControls();
                 recurringSettingsGroup.Controls.Add(actionScheduleEditor);
 
+                recurringSettingsGroup.Height = actionScheduleEditor.Bottom + 5;
                 this.Height = recurringSettingsGroup.Bottom + 5;
             }
             else

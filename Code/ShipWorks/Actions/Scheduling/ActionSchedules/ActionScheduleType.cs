@@ -10,6 +10,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         OneTime = 0,
 
         [Description("Hourly")]
-        Hourly = 1
+        Hourly = 1,
+
+        [Description("Daily")]
+        Daily = 2
     }
 }

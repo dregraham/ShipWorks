@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
@@ -20,8 +17,13 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
             {
                 case ActionScheduleType.OneTime:
                     return new OneTimeActionSchedule();
+                
                 case ActionScheduleType.Hourly:
                     return new HourlyActionSchedule();
+                
+                case ActionScheduleType.Daily:
+                    return new DailyActionSchedule();
+                
                 default:
                     throw new ArgumentOutOfRangeException("actionScheduleType");
             }

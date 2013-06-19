@@ -64,11 +64,10 @@
             // 
             this.recurringSettingsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.recurringSettingsGroup.AutoSize = true;
-            this.recurringSettingsGroup.Location = new System.Drawing.Point(0, 45);
+            this.recurringSettingsGroup.Location = new System.Drawing.Point(0, 50);
             this.recurringSettingsGroup.Name = "recurringSettingsGroup";
             this.recurringSettingsGroup.Padding = new System.Windows.Forms.Padding(0);
-            this.recurringSettingsGroup.Size = new System.Drawing.Size(403, 27);
+            this.recurringSettingsGroup.Size = new System.Drawing.Size(403, 14);
             this.recurringSettingsGroup.TabIndex = 20;
             this.recurringSettingsGroup.TabStop = false;
             this.recurringSettingsGroup.Visible = false;
@@ -82,7 +81,7 @@
             this.startTime.ShowUpDown = true;
             this.startTime.Size = new System.Drawing.Size(101, 21);
             this.startTime.TabIndex = 38;
-			this.startTime.ValueChanged += new System.EventHandler(this.OnStartDateTimeChanged);
+            this.startTime.ValueChanged += new System.EventHandler(this.OnStartDateTimeChanged);
             // 
             // startDateTimeLabel
             // 
@@ -100,7 +99,7 @@
             this.startDate.Name = "startDate";
             this.startDate.Size = new System.Drawing.Size(98, 21);
             this.startDate.TabIndex = 36;
-			this.startDate.ValueChanged += new System.EventHandler(this.OnStartDateTimeChanged);
+            this.startDate.ValueChanged += new System.EventHandler(this.OnStartDateTimeChanged);
             // 
             // ScheduledTriggerEditor
             // 
