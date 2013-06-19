@@ -52,11 +52,11 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [TestMethod]
-        public void ScheduleIsNull_IsNow_WhenNoSettings_Test()
+        public void Schedule_IsOneTimeActionSchedule_WhenNoSettings_Test()
         {
             testObject = new ScheduledTrigger();
 
-            Assert.IsNull(testObject.Schedule);
+            Assert.IsInstanceOfType(testObject.Schedule, typeof(OneTimeActionSchedule));
         }
 
         [TestMethod]
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [TestMethod]
-        public void StartDateTimeCorrect_IsNow_WhenSerializedAndDeserailized_Test()
+        public void StartDateTimeInUtc_IsCorrect_WhenSerializedAndDeserailized_Test()
         {
 
             MemoryStream stream = new MemoryStream();

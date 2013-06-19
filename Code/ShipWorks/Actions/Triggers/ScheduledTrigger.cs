@@ -19,9 +19,7 @@ namespace ShipWorks.Actions.Triggers
         /// </summary>
         public ScheduledTrigger()
             : this(null)
-        {
-            
-        }
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
@@ -33,6 +31,10 @@ namespace ShipWorks.Actions.Triggers
             if (!string.IsNullOrEmpty(xmlSettings))
             {
                 Schedule = DeserializeSchedule(xmlSettings);
+            }
+            else
+            {
+                Schedule = new OneTimeActionSchedule();
             }
         }
 
