@@ -25,9 +25,10 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// Gets the type of the schedule.
         /// </summary>
         /// <value>The type of the schedule.</value>
+        [XmlElement("ScheduleType")]
         public abstract ActionScheduleType ScheduleType
         {
-            get;
+            get; set;
         }
 
         /// <summary>

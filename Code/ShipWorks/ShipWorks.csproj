@@ -268,6 +268,7 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\WeeklyActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Editors\ActionScheduleEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -282,6 +283,12 @@
     </Compile>
     <Compile Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.Designer.cs">
       <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.Designer.cs">
+      <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionSchedule.cs" />
@@ -5230,6 +5237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.resx">
       <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.resx">
+      <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>

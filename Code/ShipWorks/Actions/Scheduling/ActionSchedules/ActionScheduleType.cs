@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
@@ -7,12 +8,23 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     public enum ActionScheduleType
     {
         [Description("One Time")]
+        [XmlEnumAttribute("0")]
         OneTime = 0,
 
         [Description("Hourly")]
+        [XmlEnumAttribute("1")]
         Hourly = 1,
 
         [Description("Daily")]
-        Daily = 2
+        [XmlEnumAttribute("2")]
+        Daily = 2,
+
+        [Description("Weekly")]
+        [XmlEnumAttribute("3")]
+        Weekly = 3,
+
+        [Description("Monthly")]
+        [XmlEnumAttribute("4")]
+        Monthly = 4
     }
 }

@@ -16,11 +16,16 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// ActionScheduleType - Hourly in this case
         /// </summary>
+        [XmlElement("ScheduleType")]
         public override ActionScheduleType ScheduleType
         {
             get
             {
                 return ActionScheduleType.Hourly;
+            }
+            set
+            {
+                // For serialization to work, we MUST have a setter, so don't delete this!
             }
         }
 

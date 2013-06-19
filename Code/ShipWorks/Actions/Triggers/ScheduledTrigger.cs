@@ -7,13 +7,15 @@ using ShipWorks.Data.Model;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using Interapptive.Shared.Utility;
 using System.Xml.Linq;
+using System.Linq;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Actions.Triggers
 {
     public class ScheduledTrigger : ActionTrigger
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
         /// </summary>
@@ -25,14 +27,14 @@ namespace ShipWorks.Actions.Triggers
         /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
         /// </summary>
         /// <param name="xmlSettings"></param>
-        public ScheduledTrigger(string xmlSettings)
-            :base(string.Empty)
+        public ScheduledTrigger(string xmlSettings) : base(string.Empty)
         {
             if (!string.IsNullOrEmpty(xmlSettings))
             {
                 Schedule = DeserializeSchedule(xmlSettings);
             }
-            else
+            
+            if (Schedule == null)
             {
                 Schedule = new OneTimeActionSchedule();
             }
@@ -66,7 +68,6 @@ namespace ShipWorks.Actions.Triggers
             get { return null; }
         }
 
-
         /// <summary>
         /// Gets or sets the schedule for this trigger.
         /// </summary>
@@ -76,7 +77,6 @@ namespace ShipWorks.Actions.Triggers
             set;
         }
 
-
         /// <summary>
         /// Deserializes the schedule.
         /// </summary>
@@ -85,28 +85,35 @@ namespace ShipWorks.Actions.Triggers
         /// <exception cref="System.NotImplementedException"></exception>
         private ActionSchedule DeserializeSchedule(string xmlSettings)
         {
-            string localRootName;
+            XDocument settingsXDoc = XDocument.Parse(xmlSettings);
 
-            using (var settingsStream = new MemoryStream(Encoding.ASCII.GetBytes(xmlSettings)))
+            ActionScheduleType actionScheduleType = ActionScheduleType.OneTime;
+            if (!settingsXDoc.Descendants("ScheduleType").Any())
             {
-
-                XDocument settingsXDoc = XDocument.Load(settingsStream);
-
-                Debug.Assert(settingsXDoc.Root != null, "settingsXDoc.Root != null");
-
-                localRootName = settingsXDoc.Root.Name.LocalName;
+                return null;
             }
 
-            switch (localRootName)
+            actionScheduleType = (ActionScheduleType)int.Parse(settingsXDoc.Descendants("ScheduleType").First().Value);
+
+            string xml = string.Empty;
+            switch (actionScheduleType)
             {
-                case "HourlyActionSchedule":
-                    Schedule = SerializationUtility.DeserializeFromXml<HourlyActionSchedule>(xmlSettings);
+                case ActionScheduleType.OneTime:
+                    xml = string.Join("", settingsXDoc.Descendants("OneTimeActionSchedule").First()).Trim();
+                    Schedule = SerializationUtility.DeserializeFromXml<OneTimeActionSchedule>(xml);
                     break;
-                case "OneTimeActionSchedule":
-                    Schedule = SerializationUtility.DeserializeFromXml<OneTimeActionSchedule>(xmlSettings);
+                case ActionScheduleType.Hourly:
+                    xml = string.Join("", settingsXDoc.Descendants("HourlyActionSchedule").First()).Trim();
+                    Schedule = SerializationUtility.DeserializeFromXml<HourlyActionSchedule>(xml);
                     break;
+                case ActionScheduleType.Weekly:
+                    xml = string.Join("", settingsXDoc.Descendants("WeeklyActionSchedule").First()).Trim();
+                    Schedule = SerializationUtility.DeserializeFromXml<WeeklyActionSchedule>(xml);
+                    break;
+                case ActionScheduleType.Daily:
+                case ActionScheduleType.Monthly:
                 default:
-                    throw new Exception(string.Format("{0} is an unknown schedule type and can't be deserialized in ScheduledTrigger.cs", localRootName));
+                    throw new Exception(string.Format("{0} is an unknown schedule type and can't be deserialized in ScheduledTrigger.cs", EnumHelper.GetDescription(actionScheduleType)));
             }
 
             return Schedule;
@@ -137,8 +144,8 @@ namespace ShipWorks.Actions.Triggers
                 throw new ArgumentNullException("xmlWriter", "xmlWriter is null");
             }
             
-            string xml = SerializationUtility.SerializeToXml(Schedule);
-            
+            string xml = SerializationUtility.SerializeToXml(Schedule, true);
+
             xmlWriter.WriteRaw(xml);
         }
     }

@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             DateTime testTime = DateTime.Parse("6/8/2013 12:07:00 AM");
 
-            const string xmlSettings = "<?xml version=\"1.0\"?>\r\n<OneTimeActionSchedule>\r\n  <StartDateTimeInUtc>2013-06-08T00:07:00</StartDateTimeInUtc>\r\n</OneTimeActionSchedule>";
+            const string xmlSettings = "<Settings><WeeklyActionSchedule><ScheduleType>3</ScheduleType><StartDateTimeInUtc>2013-06-08T00:07:00</StartDateTimeInUtc><RecurrenceWeeks>1</RecurrenceWeeks></WeeklyActionSchedule></Settings>";
 
             testObject = new ScheduledTrigger(xmlSettings);
 

@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             // This test will pass until the next schedule type is added (i.e. the failure will be a 
             // "reminder" to add/edit these tests as factory is changed)
-            ActionScheduleFactory.CreateActionSchedule((ActionScheduleType) 3);
+            ActionScheduleFactory.CreateActionSchedule((ActionScheduleType) 5);
         }
     }
 }

@@ -25,9 +25,17 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// Gets the type of the schedule.
         /// </summary>
         /// <value>The type of the schedule.</value>
+        [XmlElement("ScheduleType")]
         public override ActionScheduleType ScheduleType
         {
-            get { return ActionScheduleType.Daily; }
+            get
+            {
+                return ActionScheduleType.Daily;
+            }
+            set
+            {
+                // For serialization to work, we MUST have a setter, so don't delete this!
+            }
         }
 
         /// <summary>

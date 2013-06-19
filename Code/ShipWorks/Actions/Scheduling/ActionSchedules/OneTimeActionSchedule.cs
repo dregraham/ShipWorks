@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
@@ -14,11 +15,16 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// ActionScheduleType - One time in this case
         /// </summary>
+        [XmlElement("ScheduleType")]
         public override ActionScheduleType ScheduleType
         {
             get
             {
                 return ActionScheduleType.OneTime;
+            }
+            set
+            {
+                // For serialization to work, we MUST have a setter, so don't delete this!
             }
         }
 
