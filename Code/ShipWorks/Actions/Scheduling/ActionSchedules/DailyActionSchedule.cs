@@ -1,4 +1,6 @@
-﻿using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
+﻿using System;
+using System.Xml.Serialization;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
@@ -6,6 +8,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     /// An implementation of the abstract ActionSchedule class for scheduling an actions that
     /// runs once a day.
     /// </summary>
+    [Serializable]
     public class DailyActionSchedule : ActionSchedule
     {
         private int frequencyInDays;
@@ -30,6 +33,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Gets or sets the frequency in number of days that an action should be executed.
         /// </summary>
+        [XmlElement("FrequencyInDays")]
         public int FrequencyInDays
         {
             get { return frequencyInDays; }
