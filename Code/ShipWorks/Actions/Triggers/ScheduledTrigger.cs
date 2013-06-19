@@ -19,7 +19,9 @@ namespace ShipWorks.Actions.Triggers
         /// </summary>
         public ScheduledTrigger()
             : this(null)
-        { }
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
@@ -81,21 +83,28 @@ namespace ShipWorks.Actions.Triggers
         /// <exception cref="System.NotImplementedException"></exception>
         private ActionSchedule DeserializeSchedule(string xmlSettings)
         {
-            var settingsStream = new MemoryStream(Encoding.ASCII.GetBytes(xmlSettings));
+            string localRootName;
 
-            XDocument settingsXDoc = XDocument.Load(settingsStream);
+            using (var settingsStream = new MemoryStream(Encoding.ASCII.GetBytes(xmlSettings)))
+            {
 
-            Debug.Assert(settingsXDoc.Root != null, "settingsXDoc.Root != null");
+                XDocument settingsXDoc = XDocument.Load(settingsStream);
 
-            string localRootName = settingsXDoc.Root.Name.LocalName;
+                Debug.Assert(settingsXDoc.Root != null, "settingsXDoc.Root != null");
+
+                localRootName = settingsXDoc.Root.Name.LocalName;
+            }
 
             switch (localRootName)
             {
                 case "HourlyActionSchedule":
                     Schedule = SerializationUtility.DeserializeFromXml<HourlyActionSchedule>(xmlSettings);
                     break;
+                case "OneTimeActionSchedule":
+                    Schedule = SerializationUtility.DeserializeFromXml<OneTimeActionSchedule>(xmlSettings);
+                    break;
                 default:
-                    throw new Exception(string.Format("{0} is an unknown schedule type and can't be deserailized in ScheduledTrigger.cs", localRootName));
+                    throw new Exception(string.Format("{0} is an unknown schedule type and can't be deserialized in ScheduledTrigger.cs", localRootName));
             }
 
             return Schedule;
@@ -107,6 +116,11 @@ namespace ShipWorks.Actions.Triggers
         /// <param name="xpath"></param>
         public override void DeserializeXml(System.Xml.XPath.XPathNavigator xpath)
         {
+            if (xpath == null)
+            {
+                throw new ArgumentNullException("xpath", "xpath is null");
+            }
+
             Schedule = DeserializeSchedule(xpath.OuterXml);
         }
 
@@ -116,8 +130,13 @@ namespace ShipWorks.Actions.Triggers
         /// <param name="xmlWriter"></param>
         public override void SerializeXml(System.Xml.XmlTextWriter xmlWriter)
         {
+            if (xmlWriter == null)
+            {
+                throw new ArgumentNullException("xmlWriter", "xmlWriter is null");
+            }
+            
             string xml = SerializationUtility.SerializeToXml(Schedule);
-
+            
             xmlWriter.WriteRaw(xml);
         }
     }

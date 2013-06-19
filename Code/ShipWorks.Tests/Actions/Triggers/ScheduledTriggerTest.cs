@@ -75,33 +75,31 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [TestMethod]
-        public void StartDateTimeInUtc_IsNow_WhenXmlSettingsDoesNotContainStartDate_Test()
+        public void ScheduleIsNull_IsNow_WhenNoSettings_Test()
         {
-            DateTime now = DateTime.UtcNow;
+            testObject = new ScheduledTrigger();
 
-            const string xmlSettings = @"
-                <Settings>
-                  <SomeDateValue value=""6/8/2013 12:07:00 AM"" />
-                </Settings>";
-
-            testObject = new ScheduledTrigger(xmlSettings);
-
-            // A little fuzzy logic to try to make sure the start date was 
-            // initialized in the constructor
-            Assert.IsTrue(testObject.Schedule.StartDateTimeInUtc >= now);
+            Assert.IsNull(testObject.Schedule);
         }
 
         [TestMethod]
         public void StartDateTimeInUtc_UsesStartDateFromSettings_WhenXmlSettingsContainsStartDate_Test()
         {
-            const string xmlSettings = @"
-                <Settings>
-                  <StartDateTimeInUtc value=""6/8/2013 12:07:00 AM"" />
-                </Settings>";
+            testObject = new ScheduledTrigger()
+            {
+                Schedule = new OneTimeActionSchedule()
+                {
+                    StartDateTimeInUtc = DateTime.UtcNow
+                }
+            };
+//            const string xmlSettings = @"
+//                <Settings>
+//                  <StartDateTimeInUtc value=""6/8/2013 12:07:00 AM"" />
+//                </Settings>";
 
-            testObject = new ScheduledTrigger(xmlSettings);
+//            testObject = new ScheduledTrigger(xmlSettings);
 
-            Assert.AreEqual(DateTime.Parse("6/8/2013 12:07:00 AM"), testObject.Schedule.StartDateTimeInUtc);
+//            Assert.AreEqual(DateTime.Parse("6/8/2013 12:07:00 AM"), testObject.Schedule.StartDateTimeInUtc);
         }
 
         [TestMethod]

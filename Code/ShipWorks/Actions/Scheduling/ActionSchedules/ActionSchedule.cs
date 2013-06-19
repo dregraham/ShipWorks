@@ -9,7 +9,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     /// Abstract ActionSchedule type
     /// </summary>
     [Serializable]
-    [XmlRoot("ActionSchedule", IsNullable = false)]
     public abstract class ActionSchedule
     {
         /// <summary>
@@ -27,7 +26,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <value>StartDateTimeInUtc
         /// The start time in UTC
         /// </value>
-        /// 
+        [XmlElement("StartDateTimeInUtc")]
         public DateTime StartDateTimeInUtc
         {
             get;
@@ -38,10 +37,5 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// Creates and returns an ActionScheduleEditor for the specific ActionSchedule
         /// </summary>
         public abstract ActionScheduleEditor CreateEditor();
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
