@@ -36,6 +36,25 @@ namespace Interapptive.Shared.Utility
                 value = 0.01m  + (decimal) value - 0.01m;
             }
 
+            var serializableObject = value as SerializableObject;
+            if (serializableObject != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.ASCII);
+
+                    serializableObject.SerializeXml(xmlTextWriter);
+
+                    xmlTextWriter.Flush();
+
+                    memoryStream.Position = 0;
+
+                    var textReader = new StreamReader(memoryStream);
+
+                    value = textReader.ReadToEnd();
+                }
+            }
+
             return string.Format("{0}", value);
         }
 

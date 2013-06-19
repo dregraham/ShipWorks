@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
@@ -9,6 +10,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     /// <summary>
     /// Hourly Action Schedule
     /// </summary>
+    [Serializable]
     public class HourlyActionSchedule : ActionSchedule
     {
         /// <summary>
@@ -25,6 +27,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Number of hours for which this action should be executed
         /// </summary>
+        [XmlElement("RecurrenceHours")]
         public int RecurrenceHours { get; set; }
 
         /// <summary>

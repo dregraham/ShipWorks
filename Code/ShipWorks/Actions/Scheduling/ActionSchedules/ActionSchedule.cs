@@ -1,5 +1,6 @@
 ﻿using System;
-using Interapptive.Shared.Utility;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
@@ -7,13 +8,18 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     /// <summary>
     /// Abstract ActionSchedule type
     /// </summary>
-    public abstract class ActionSchedule : SerializableObject
+    [Serializable]
+    [XmlRoot("ActionSchedule", IsNullable = false)]
+    public abstract class ActionSchedule
     {
         /// <summary>
         /// Gets the type of the schedule.
         /// </summary>
         /// <value>The type of the schedule.</value>
-        public abstract ActionScheduleType ScheduleType { get; }
+        public abstract ActionScheduleType ScheduleType
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets or sets the start time (in UTC).
@@ -21,6 +27,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <value>StartDateTimeInUtc
         /// The start time in UTC
         /// </value>
+        /// 
         public DateTime StartDateTimeInUtc
         {
             get;
@@ -32,5 +39,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// </summary>
         public abstract ActionScheduleEditor CreateEditor();
 
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

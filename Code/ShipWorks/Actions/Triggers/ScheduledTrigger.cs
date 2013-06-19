@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using ShipWorks.Actions.Triggers.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
+using Interapptive.Shared.Utility;
+using System.Xml.Linq;
+using System.IO;
 
 namespace ShipWorks.Actions.Triggers
 {
     public class ScheduledTrigger : ActionTrigger
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
         /// </summary>
@@ -19,17 +26,11 @@ namespace ShipWorks.Actions.Triggers
         /// </summary>
         /// <param name="xmlSettings"></param>
         public ScheduledTrigger(string xmlSettings)
-            : base(xmlSettings)
+            :base(string.Empty)
         {
-            //TODO: move initialization once ActionSchedule work is done
-            if (Schedule.StartDateTimeInUtc.Year == 1)
+            if (!string.IsNullOrEmpty(xmlSettings))
             {
-                // Initialize the start date to the top of the next hour since it wasn't included in the settings
-                Schedule.StartDateTimeInUtc = DateTime.UtcNow.AddMinutes(60 - DateTime.UtcNow.Minute);
-            }
-            else if (Schedule.StartDateTimeInUtc.Kind == DateTimeKind.Unspecified)
-            {
-                Schedule.StartDateTimeInUtc = DateTime.SpecifyKind(Schedule.StartDateTimeInUtc, DateTimeKind.Utc);
+                Schedule = DeserializeSchedule(xmlSettings);
             }
         }
 
@@ -61,27 +62,63 @@ namespace ShipWorks.Actions.Triggers
             get { return null; }
         }
 
-        // TODO: Revist when serialization/deserialization is working for ActionSchedule
-        private ActionSchedule actionSchedule;
+
         /// <summary>
         /// Gets or sets the schedule for this trigger.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnore]
         public ActionSchedule Schedule
         {
-            get
-            {
-                if (actionSchedule == null)
-                {
-                    actionSchedule = new OneTimeActionSchedule();
-                }
+            get;
+            set;
+        }
 
-                return actionSchedule;
-            }
-            set 
+
+        /// <summary>
+        /// Deserializes the schedule.
+        /// </summary>
+        /// <param name="xmlSettings">The XML settings.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private ActionSchedule DeserializeSchedule(string xmlSettings)
+        {
+            var settingsStream = new MemoryStream(Encoding.ASCII.GetBytes(xmlSettings));
+
+            XDocument settingsXDoc = XDocument.Load(settingsStream);
+
+            Debug.Assert(settingsXDoc.Root != null, "settingsXDoc.Root != null");
+
+            string localRootName = settingsXDoc.Root.Name.LocalName;
+
+            switch (localRootName)
             {
-                actionSchedule = value; 
+                case "HourlyActionSchedule":
+                    Schedule = SerializationUtility.DeserializeFromXml<HourlyActionSchedule>(xmlSettings);
+                    break;
+                default:
+                    throw new Exception(string.Format("{0} is an unknown schedule type and can't be deserailized in ScheduledTrigger.cs", localRootName));
             }
+
+            return Schedule;
+        }
+
+        /// <summary>
+        /// Load the object data from the given XPath
+        /// </summary>
+        /// <param name="xpath"></param>
+        public override void DeserializeXml(System.Xml.XPath.XPathNavigator xpath)
+        {
+            Schedule = DeserializeSchedule(xpath.OuterXml);
+        }
+
+        /// <summary>
+        /// Save the instance as XML to the given writer
+        /// </summary>
+        /// <param name="xmlWriter"></param>
+        public override void SerializeXml(System.Xml.XmlTextWriter xmlWriter)
+        {
+            string xml = SerializationUtility.SerializeToXml(Schedule);
+
+            xmlWriter.WriteRaw(xml);
         }
     }
 }
