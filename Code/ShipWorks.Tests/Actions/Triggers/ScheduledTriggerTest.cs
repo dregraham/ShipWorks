@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Triggers;
@@ -51,30 +52,6 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [TestMethod]
-        public void StartDateTimeInUtc_IsNow_WhenXmlSettingsIsNull_Test()
-        {
-            DateTime now = DateTime.UtcNow;
-
-            testObject = new ScheduledTrigger(null);
-            
-            // A little fuzzy logic to try to make sure the start date was 
-            // initialized in the constructor
-            Assert.IsTrue(testObject.Schedule.StartDateTimeInUtc >= now);
-        }
-
-        [TestMethod]
-        public void StartDateTimeInUtc_IsNow_WhenXmlSettingsIsEmptyString_Test()
-        {
-            DateTime now = DateTime.UtcNow;
-
-            testObject = new ScheduledTrigger(string.Empty);
-
-            // A little fuzzy logic to try to make sure the start date was 
-            // initialized in the constructor
-            Assert.IsTrue(testObject.Schedule.StartDateTimeInUtc >= now);
-        }
-
-        [TestMethod]
         public void ScheduleIsNull_IsNow_WhenNoSettings_Test()
         {
             testObject = new ScheduledTrigger();
@@ -85,21 +62,13 @@ namespace ShipWorks.Tests.Actions.Triggers
         [TestMethod]
         public void StartDateTimeInUtc_UsesStartDateFromSettings_WhenXmlSettingsContainsStartDate_Test()
         {
-            testObject = new ScheduledTrigger()
-            {
-                Schedule = new OneTimeActionSchedule()
-                {
-                    StartDateTimeInUtc = DateTime.UtcNow
-                }
-            };
-//            const string xmlSettings = @"
-//                <Settings>
-//                  <StartDateTimeInUtc value=""6/8/2013 12:07:00 AM"" />
-//                </Settings>";
+            DateTime testTime = DateTime.Parse("6/8/2013 12:07:00 AM");
 
-//            testObject = new ScheduledTrigger(xmlSettings);
+            const string xmlSettings = "<?xml version=\"1.0\"?>\r\n<OneTimeActionSchedule>\r\n  <StartDateTimeInUtc>2013-06-08T00:07:00</StartDateTimeInUtc>\r\n</OneTimeActionSchedule>";
 
-//            Assert.AreEqual(DateTime.Parse("6/8/2013 12:07:00 AM"), testObject.Schedule.StartDateTimeInUtc);
+            testObject = new ScheduledTrigger(xmlSettings);
+
+            Assert.AreEqual(testTime, testObject.Schedule.StartDateTimeInUtc);
         }
 
         [TestMethod]

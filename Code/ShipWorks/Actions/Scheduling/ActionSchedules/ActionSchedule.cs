@@ -12,6 +12,14 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     public abstract class ActionSchedule
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ActionSchedule"/> class.
+        /// </summary>
+        protected ActionSchedule()
+        {
+            StartDateTimeInUtc = DateTime.UtcNow;
+        }
+
+        /// <summary>
         /// Gets the type of the schedule.
         /// </summary>
         /// <value>The type of the schedule.</value>
