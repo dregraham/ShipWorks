@@ -73,8 +73,6 @@ namespace ShipWorks.Actions.Triggers.Editors
             // Update the displayed text
             actionScheduleTypeLink.Text = EnumHelper.GetDescription(actionScheduleType);
 
-            trigger.Schedule = ActionScheduleFactory.CreateActionSchedule(actionScheduleType);
-
             if (actionScheduleType != ActionScheduleType.OneTime)
             {
                 UserControl actionScheduleEditor = (UserControl)trigger.Schedule.CreateEditor();
@@ -123,6 +121,7 @@ namespace ShipWorks.Actions.Triggers.Editors
             ActionScheduleType actionScheduleType = (ActionScheduleType) ((ToolStripMenuItem) sender).Tag;
             if (trigger.Schedule.ScheduleType != actionScheduleType)
             {
+                trigger.Schedule = ActionScheduleFactory.CreateActionSchedule(actionScheduleType);
                 SelectInputSource(actionScheduleType);
             }
         }

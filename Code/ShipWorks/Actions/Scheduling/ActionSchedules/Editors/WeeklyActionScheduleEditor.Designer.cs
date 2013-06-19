@@ -47,6 +47,7 @@
             this.recurrsEveryNumberOfWeeks.Name = "recurrsEveryNumberOfWeeks";
             this.recurrsEveryNumberOfWeeks.Size = new System.Drawing.Size(33, 21);
             this.recurrsEveryNumberOfWeeks.TabIndex = 6;
+            this.recurrsEveryNumberOfWeeks.SelectedIndexChanged += new System.EventHandler(this.OnRecurrenceWeeksChanged);
             // 
             // label2
             // 
@@ -75,6 +76,7 @@
             this.sunday.TabIndex = 7;
             this.sunday.Text = "Sunday";
             this.sunday.UseVisualStyleBackColor = true;
+            this.sunday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // saturday
             // 
@@ -85,6 +87,7 @@
             this.saturday.TabIndex = 8;
             this.saturday.Text = "Saturday";
             this.saturday.UseVisualStyleBackColor = true;
+            this.saturday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // friday
             // 
@@ -95,6 +98,7 @@
             this.friday.TabIndex = 9;
             this.friday.Text = "Friday";
             this.friday.UseVisualStyleBackColor = true;
+            this.friday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // thursday
             // 
@@ -105,6 +109,7 @@
             this.thursday.TabIndex = 10;
             this.thursday.Text = "Thursday";
             this.thursday.UseVisualStyleBackColor = true;
+            this.thursday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // wednesday
             // 
@@ -115,6 +120,7 @@
             this.wednesday.TabIndex = 11;
             this.wednesday.Text = "Wednesday";
             this.wednesday.UseVisualStyleBackColor = true;
+            this.wednesday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // tuesday
             // 
@@ -125,6 +131,7 @@
             this.tuesday.TabIndex = 12;
             this.tuesday.Text = "Tuesday";
             this.tuesday.UseVisualStyleBackColor = true;
+            this.tuesday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // monday
             // 
@@ -135,6 +142,7 @@
             this.monday.TabIndex = 13;
             this.monday.Text = "Monday";
             this.monday.UseVisualStyleBackColor = true;
+            this.monday.CheckedChanged += new System.EventHandler(this.OnDayCheckedChanged);
             // 
             // WeeklyActionScheduleEditor
             // 

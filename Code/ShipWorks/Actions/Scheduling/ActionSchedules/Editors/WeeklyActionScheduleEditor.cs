@@ -65,9 +65,13 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         /// </summary>
         public override void SaveActionSchedule()
         {
-            // Update the recurrance weeks
-            weeklyActionSchedule.RecurrenceWeeks = (int)recurrsEveryNumberOfWeeks.SelectedItem;
+        }
 
+        /// <summary>
+        /// Saves the control days selected to the ActionSchedule
+        /// </summary>
+        public void SaveExecuteOnDays()
+        {
             // Clear out the previous selected days.
             weeklyActionSchedule.ExecuteOnDays.Clear();
 
@@ -106,6 +110,23 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             {
                 weeklyActionSchedule.ExecuteOnDays.Add(DayOfWeek.Saturday);
             }
+        }
+
+        /// <summary>
+        /// Update the schedule when the recurrence weeks changes.
+        /// </summary>
+        private void OnRecurrenceWeeksChanged(object sender, EventArgs e)
+        {
+            // Update the recurrance weeks
+            weeklyActionSchedule.RecurrenceWeeks = (int)recurrsEveryNumberOfWeeks.SelectedItem;
+        }
+
+        /// <summary>
+        /// Update the schedule when the days change.
+        /// </summary>
+        private void OnDayCheckedChanged(object sender, EventArgs e)
+        {
+            SaveExecuteOnDays();
         }
     }
 }
