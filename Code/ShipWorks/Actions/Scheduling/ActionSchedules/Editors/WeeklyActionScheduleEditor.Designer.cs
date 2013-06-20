@@ -30,7 +30,7 @@
         {
             this.recurrsEveryNumberOfWeeks = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.frequencyLabel = new System.Windows.Forms.Label();
             this.sunday = new System.Windows.Forms.CheckBox();
             this.saturday = new System.Windows.Forms.CheckBox();
             this.friday = new System.Windows.Forms.CheckBox();
@@ -42,30 +42,31 @@
             // 
             // recurrsEveryNumberOfWeeks
             // 
+            this.recurrsEveryNumberOfWeeks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.recurrsEveryNumberOfWeeks.FormattingEnabled = true;
             this.recurrsEveryNumberOfWeeks.Location = new System.Drawing.Point(69, 2);
             this.recurrsEveryNumberOfWeeks.Name = "recurrsEveryNumberOfWeeks";
-            this.recurrsEveryNumberOfWeeks.Size = new System.Drawing.Size(33, 21);
+            this.recurrsEveryNumberOfWeeks.Size = new System.Drawing.Size(36, 21);
             this.recurrsEveryNumberOfWeeks.TabIndex = 6;
             this.recurrsEveryNumberOfWeeks.SelectedIndexChanged += new System.EventHandler(this.OnRecurrenceWeeksChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(106, 4);
+            this.label2.Location = new System.Drawing.Point(111, 5);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "weeks on:";
             // 
-            // label1
+            // frequencyLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Recur every ";
+            this.frequencyLabel.AutoSize = true;
+            this.frequencyLabel.Location = new System.Drawing.Point(4, 5);
+            this.frequencyLabel.Name = "frequencyLabel";
+            this.frequencyLabel.Size = new System.Drawing.Size(59, 13);
+            this.frequencyLabel.TabIndex = 4;
+            this.frequencyLabel.Text = "Run every:";
             // 
             // sunday
             // 
@@ -157,7 +158,7 @@
             this.Controls.Add(this.sunday);
             this.Controls.Add(this.recurrsEveryNumberOfWeeks);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.frequencyLabel);
             this.Name = "WeeklyActionScheduleEditor";
             this.Size = new System.Drawing.Size(312, 72);
             this.ResumeLayout(false);
@@ -169,7 +170,7 @@
 
         private System.Windows.Forms.ComboBox recurrsEveryNumberOfWeeks;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label frequencyLabel;
         private System.Windows.Forms.CheckBox sunday;
         private System.Windows.Forms.CheckBox saturday;
         private System.Windows.Forms.CheckBox friday;

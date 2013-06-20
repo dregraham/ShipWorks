@@ -36,16 +36,16 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 4);
+            this.label1.Location = new System.Drawing.Point(4, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
+            this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Recur every ";
+            this.label1.Text = "Run every:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(106, 4);
+            this.label2.Location = new System.Drawing.Point(113, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 2;
@@ -53,10 +53,11 @@
             // 
             // recurrsEveryNumberOfHours
             // 
+            this.recurrsEveryNumberOfHours.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.recurrsEveryNumberOfHours.FormattingEnabled = true;
-            this.recurrsEveryNumberOfHours.Location = new System.Drawing.Point(69, 2);
+            this.recurrsEveryNumberOfHours.Location = new System.Drawing.Point(71, 4);
             this.recurrsEveryNumberOfHours.Name = "recurrsEveryNumberOfHours";
-            this.recurrsEveryNumberOfHours.Size = new System.Drawing.Size(33, 21);
+            this.recurrsEveryNumberOfHours.Size = new System.Drawing.Size(36, 21);
             this.recurrsEveryNumberOfHours.TabIndex = 3;
             this.recurrsEveryNumberOfHours.SelectedIndexChanged += new System.EventHandler(this.OnRecurrenceHoursChanged);
             // 
@@ -69,7 +70,7 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "HourlyActionScheduleEditor";
-            this.Size = new System.Drawing.Size(165, 25);
+            this.Size = new System.Drawing.Size(156, 31);
             this.ResumeLayout(false);
             this.PerformLayout();
 
