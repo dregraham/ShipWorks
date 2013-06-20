@@ -13,13 +13,15 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     [Serializable]
     public class WeeklyActionSchedule : ActionSchedule
     {
+        private int frequencyInWeeks = 1;
+        private List<DayOfWeek> executeOnDays = new List<DayOfWeek>(); 
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public WeeklyActionSchedule()
         {
             ExecuteOnDays = new List<DayOfWeek>();
-            RecurrenceWeeks = 1;
         }
 
         /// <summary>
@@ -41,14 +43,49 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Number of weeks for which this action should be executed
         /// </summary>
-        [XmlElement("RecurrenceWeeks")]
-        public int RecurrenceWeeks { get; set; }
+        [XmlElement("FrequencyInWeeks")]
+        public int FrequencyInWeeks
+        {
+            get
+            {
+                return frequencyInWeeks;
+            }
+            set
+            {
+                // Fix any boundary conditions.
+                if (value < 1)
+                {
+                    frequencyInWeeks = 1;
+                }
+                else if (value > 52)
+                {
+                    frequencyInWeeks = 52;
+                }
+                else
+                {
+                    frequencyInWeeks = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Days of the week for which this action should be executed
         /// </summary>
         [XmlElement("ExecuteOnDays")]
-        public List<DayOfWeek> ExecuteOnDays { get; set; }
+        public List<DayOfWeek> ExecuteOnDays
+        {
+            get
+            {
+                return executeOnDays;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    executeOnDays = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Create and return the WeeklyActionScheduleEditor

@@ -34,19 +34,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         {
             hourlyActionSchedule = (HourlyActionSchedule)actionSchedule;
 
-            // Fix any boundary conditions.
-            if (hourlyActionSchedule.RecurrenceHours < 1)
-            {
-                hourlyActionSchedule.RecurrenceHours = 1;
-            }
-            else if (hourlyActionSchedule.RecurrenceHours > 23)
-            {
-                hourlyActionSchedule.RecurrenceHours = 23;
-            }
-
             // Set the selected hour
             recurrsEveryNumberOfHours.SelectedIndexChanged -= OnRecurrenceHoursChanged;
-            recurrsEveryNumberOfHours.SelectedItem = hourlyActionSchedule.RecurrenceHours;
+            recurrsEveryNumberOfHours.SelectedItem = hourlyActionSchedule.FrequencyInHours;
             recurrsEveryNumberOfHours.SelectedIndexChanged += OnRecurrenceHoursChanged;
         }
 
@@ -55,7 +45,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         /// </summary>
         private void OnRecurrenceHoursChanged(object sender, System.EventArgs e)
         {
-            hourlyActionSchedule.RecurrenceHours = (int)recurrsEveryNumberOfHours.SelectedItem;
+            hourlyActionSchedule.FrequencyInHours = (int)recurrsEveryNumberOfHours.SelectedItem;
         }
     }
 }

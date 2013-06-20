@@ -37,19 +37,10 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         {
             weeklyActionSchedule = (WeeklyActionSchedule)actionSchedule;
 
-            // Fix any boundary conditions.
-            if (weeklyActionSchedule.RecurrenceWeeks < 1)
-            {
-                weeklyActionSchedule.RecurrenceWeeks = 1;
-            }
-            else if (weeklyActionSchedule.RecurrenceWeeks > 52)
-            {
-                weeklyActionSchedule.RecurrenceWeeks = 52;
-            }
 
             // Set the selected week
             recurrsEveryNumberOfWeeks.SelectedIndexChanged -= OnRecurrenceWeeksChanged;
-            recurrsEveryNumberOfWeeks.SelectedItem = weeklyActionSchedule.RecurrenceWeeks;
+            recurrsEveryNumberOfWeeks.SelectedItem = weeklyActionSchedule.FrequencyInWeeks;
             recurrsEveryNumberOfWeeks.SelectedIndexChanged += OnRecurrenceWeeksChanged;
 
             // Set the days
@@ -143,7 +134,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         private void OnRecurrenceWeeksChanged(object sender, EventArgs e)
         {
             // Update the recurrance weeks
-            weeklyActionSchedule.RecurrenceWeeks = (int)recurrsEveryNumberOfWeeks.SelectedItem;
+            weeklyActionSchedule.FrequencyInWeeks = (int)recurrsEveryNumberOfWeeks.SelectedItem;
         }
 
         /// <summary>

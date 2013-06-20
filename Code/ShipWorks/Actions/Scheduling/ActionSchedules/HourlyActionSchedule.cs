@@ -13,6 +13,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     [Serializable]
     public class HourlyActionSchedule : ActionSchedule
     {
+        private int frequencyInHours = 1;
+
         /// <summary>
         /// ActionScheduleType - Hourly in this case
         /// </summary>
@@ -32,8 +34,30 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Number of hours for which this action should be executed
         /// </summary>
-        [XmlElement("RecurrenceHours")]
-        public int RecurrenceHours { get; set; }
+        [XmlElement("FrequencyInHours")]
+        public int FrequencyInHours
+        {
+            get
+            {
+                return frequencyInHours;
+            }
+            set
+            {
+                // Fix any boundary conditions.
+                if (value < 1)
+                {
+                    frequencyInHours = 1;
+                }
+                else if (value > 23)
+                {
+                    frequencyInHours = 23;
+                }
+                else
+                {
+                    frequencyInHours = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Create and return the HourlyActionScheduleEditor

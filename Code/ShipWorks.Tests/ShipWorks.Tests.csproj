@@ -88,9 +88,11 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactoryTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\WeeklyActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\DailyActionScheduleAdapterTests.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\Helpers\ActionScheduleAdapterExtensions.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\OneTimeActionScheduleAdapterTests.cs" />

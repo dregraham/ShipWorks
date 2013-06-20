@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Actions.Triggers
                 Schedule = new HourlyActionSchedule()
                 {
                     StartDateTimeInUtc = testDateTime,
-                    RecurrenceHours = 42
+                    FrequencyInHours = 42
                 }
             };
         }
