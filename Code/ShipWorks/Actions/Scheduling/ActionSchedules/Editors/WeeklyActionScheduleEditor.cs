@@ -48,9 +48,12 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             }
 
             // Set the selected week
+            recurrsEveryNumberOfWeeks.SelectedIndexChanged -= OnRecurrenceWeeksChanged;
             recurrsEveryNumberOfWeeks.SelectedItem = weeklyActionSchedule.RecurrenceWeeks;
+            recurrsEveryNumberOfWeeks.SelectedIndexChanged += OnRecurrenceWeeksChanged;
 
             // Set the days
+            SetDaysCheckedEvent(false);
             sunday.Checked = weeklyActionSchedule.ExecuteOnDays.Any(d => d == DayOfWeek.Sunday);
             monday.Checked = weeklyActionSchedule.ExecuteOnDays.Any(d => d == DayOfWeek.Monday);
             tuesday.Checked = weeklyActionSchedule.ExecuteOnDays.Any(d => d == DayOfWeek.Tuesday);
@@ -58,13 +61,35 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             thursday.Checked = weeklyActionSchedule.ExecuteOnDays.Any(d => d == DayOfWeek.Thursday);
             friday.Checked = weeklyActionSchedule.ExecuteOnDays.Any(d => d == DayOfWeek.Friday);
             saturday.Checked = weeklyActionSchedule.ExecuteOnDays.Any(d => d == DayOfWeek.Saturday);
+            SetDaysCheckedEvent(true);
         }
 
         /// <summary>
-        /// Saves the control properties to the ActionSchedule
+        /// Add/Remove the day of week checkboxes CheckedChanged event so that we can populate correctly.
         /// </summary>
-        public override void SaveActionSchedule()
+        /// <param name="enable"></param>
+        private void SetDaysCheckedEvent(bool enable)
         {
+            if (enable)
+            {
+                sunday.CheckedChanged += OnDayCheckedChanged;
+                monday.CheckedChanged += OnDayCheckedChanged;
+                tuesday.CheckedChanged += OnDayCheckedChanged;
+                wednesday.CheckedChanged += OnDayCheckedChanged;
+                thursday.CheckedChanged += OnDayCheckedChanged;
+                friday.CheckedChanged += OnDayCheckedChanged;
+                saturday.CheckedChanged += OnDayCheckedChanged;
+            }
+            else
+            {
+                sunday.CheckedChanged -= OnDayCheckedChanged;
+                monday.CheckedChanged -= OnDayCheckedChanged;
+                tuesday.CheckedChanged -= OnDayCheckedChanged;
+                wednesday.CheckedChanged -= OnDayCheckedChanged;
+                thursday.CheckedChanged -= OnDayCheckedChanged;
+                friday.CheckedChanged -= OnDayCheckedChanged;
+                saturday.CheckedChanged -= OnDayCheckedChanged; 
+            }
         }
 
         /// <summary>

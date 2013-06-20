@@ -36,7 +36,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         /// Update the ActionSchedule from the control properties.
         /// </summary>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override void SaveActionSchedule()
+        public void SaveActionSchedule()
         {
             if (!days.NumericValue.HasValue || days.NumericValue.Value <= 0)
             {

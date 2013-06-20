@@ -58,6 +58,7 @@
             this.recurrsEveryNumberOfHours.Name = "recurrsEveryNumberOfHours";
             this.recurrsEveryNumberOfHours.Size = new System.Drawing.Size(33, 21);
             this.recurrsEveryNumberOfHours.TabIndex = 3;
+            this.recurrsEveryNumberOfHours.SelectedIndexChanged += new System.EventHandler(this.OnRecurrenceHoursChanged);
             // 
             // HourlyActionScheduleEditor
             // 

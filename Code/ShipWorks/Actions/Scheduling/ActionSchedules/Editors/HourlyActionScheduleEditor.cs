@@ -45,13 +45,15 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             }
 
             // Set the selected hour
+            recurrsEveryNumberOfHours.SelectedIndexChanged -= OnRecurrenceHoursChanged;
             recurrsEveryNumberOfHours.SelectedItem = hourlyActionSchedule.RecurrenceHours;
+            recurrsEveryNumberOfHours.SelectedIndexChanged += OnRecurrenceHoursChanged;
         }
 
         /// <summary>
-        /// Saves the control properties to the ActionSchedule
+        /// Update the schedule to the newly selected recurrence hours
         /// </summary>
-        public override void SaveActionSchedule()
+        private void OnRecurrenceHoursChanged(object sender, System.EventArgs e)
         {
             hourlyActionSchedule.RecurrenceHours = (int)recurrsEveryNumberOfHours.SelectedItem;
         }
