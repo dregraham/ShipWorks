@@ -303,9 +303,11 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\IScheduler.cs" />
     <Compile Include="Actions\Scheduling\ISchedulingEngine.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\WeeklyActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\DailyActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\HourlyActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\OneTimeActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\MonthlyActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ReflectingActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\IActionScheduleAdapter.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\SqlSchedulerFactory.cs" />

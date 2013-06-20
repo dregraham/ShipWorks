@@ -10,7 +10,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
     /// <summary>
     /// Monthly ActionSchedule
     /// </summary>
-    class MonthlyActionSchedule : ActionSchedule
+    public class MonthlyActionSchedule : ActionSchedule
     {
         /// <summary>
         /// Gets the type of the schedule. DO NOT SET

@@ -93,6 +93,8 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactoryTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\WeeklyActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\WeeklyActionScheduleAdapterTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\MonthlyActionScheduleAdapterTests.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\DailyActionScheduleAdapterTests.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\Helpers\ActionScheduleAdapterExtensions.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\HourlyActionScheduleAdapterTest.cs" />
