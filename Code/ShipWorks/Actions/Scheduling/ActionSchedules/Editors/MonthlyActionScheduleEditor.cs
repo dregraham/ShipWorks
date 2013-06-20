@@ -33,14 +33,5 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         {
  
         }
-
-        /// <summary>
-        /// Update the ActionSchedule from the control properties.
-        /// </summary>
-        public override void SaveActionSchedule()
-        {
-
-        }
-
     }
 }
