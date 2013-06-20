@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.recurrenceLabel = new System.Windows.Forms.Label();
-            this.days = new ShipWorks.UI.Controls.NumericTextBox();
             this.unitsLabel = new System.Windows.Forms.Label();
+            this.days = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // recurrenceLabel
@@ -44,29 +44,32 @@
             this.recurrenceLabel.Text = "Run every:";
             this.recurrenceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // days
-            // 
-            this.days.Location = new System.Drawing.Point(71, 4);
-            this.days.Name = "days";
-            this.days.Size = new System.Drawing.Size(36, 21);
-            this.days.TabIndex = 1;
-            // 
             // unitsLabel
             // 
             this.unitsLabel.AutoSize = true;
-            this.unitsLabel.Location = new System.Drawing.Point(113, 7);
+            this.unitsLabel.Location = new System.Drawing.Point(109, 7);
             this.unitsLabel.Name = "unitsLabel";
             this.unitsLabel.Size = new System.Drawing.Size(30, 13);
             this.unitsLabel.TabIndex = 2;
             this.unitsLabel.Text = "days";
             this.unitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // days
+            // 
+            this.days.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.days.FormattingEnabled = true;
+            this.days.Location = new System.Drawing.Point(67, 4);
+            this.days.Name = "days";
+            this.days.Size = new System.Drawing.Size(36, 21);
+            this.days.TabIndex = 3;
+            this.days.SelectedIndexChanged += new System.EventHandler(this.OnDaysChanged);
+            // 
             // DailyActionScheduleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.unitsLabel);
             this.Controls.Add(this.days);
+            this.Controls.Add(this.unitsLabel);
             this.Controls.Add(this.recurrenceLabel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "DailyActionScheduleEditor";
@@ -79,7 +82,7 @@
         #endregion
 
         private System.Windows.Forms.Label recurrenceLabel;
-        private UI.Controls.NumericTextBox days;
         private System.Windows.Forms.Label unitsLabel;
+        private System.Windows.Forms.ComboBox days;
     }
 }

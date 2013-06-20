@@ -81,8 +81,8 @@ namespace ShipWorks.Actions.Triggers
         /// Deserializes the schedule.
         /// </summary>
         /// <param name="xmlSettings">The XML settings.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// <returns>An instance of an ActionSchedule object.</returns>
+        /// <exception cref="ActionScheduleException"></exception>
         private ActionSchedule DeserializeSchedule(string xmlSettings)
         {
             XDocument settingsXDoc = XDocument.Parse(xmlSettings);
@@ -102,18 +102,25 @@ namespace ShipWorks.Actions.Triggers
                     xml = string.Join("", settingsXDoc.Descendants("OneTimeActionSchedule").First()).Trim();
                     Schedule = SerializationUtility.DeserializeFromXml<OneTimeActionSchedule>(xml);
                     break;
+
                 case ActionScheduleType.Hourly:
                     xml = string.Join("", settingsXDoc.Descendants("HourlyActionSchedule").First()).Trim();
                     Schedule = SerializationUtility.DeserializeFromXml<HourlyActionSchedule>(xml);
                     break;
+
+                case ActionScheduleType.Daily:
+                    xml = string.Join("", settingsXDoc.Descendants("DailyActionSchedule").First()).Trim();
+                    Schedule = SerializationUtility.DeserializeFromXml<DailyActionSchedule>(xml);
+                    break;
+
                 case ActionScheduleType.Weekly:
                     xml = string.Join("", settingsXDoc.Descendants("WeeklyActionSchedule").First()).Trim();
                     Schedule = SerializationUtility.DeserializeFromXml<WeeklyActionSchedule>(xml);
                     break;
-                case ActionScheduleType.Daily:
+
                 case ActionScheduleType.Monthly:
                 default:
-                    throw new Exception(string.Format("{0} is an unknown schedule type and can't be deserialized in ScheduledTrigger.cs", EnumHelper.GetDescription(actionScheduleType)));
+                    throw new ActionScheduleException(string.Format("{0} is an unknown schedule type and can't be deserialized in ScheduledTrigger.cs", EnumHelper.GetDescription(actionScheduleType)));
             }
 
             return Schedule;

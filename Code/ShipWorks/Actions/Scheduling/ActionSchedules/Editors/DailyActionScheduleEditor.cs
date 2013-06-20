@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
 using System.Globalization;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
 {
@@ -14,6 +15,13 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         public DailyActionScheduleEditor()
         {
             InitializeComponent();
+
+            // Add the number of days to the combo box; if they need something greater 30, a monthly
+            // schedule should probably be used instead
+            for (int i = 1; i <= 30; i++)
+            {
+                days.Items.Add(i);
+            }
         }
 
         /// <summary>
@@ -29,21 +37,30 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
                 throw new InvalidOperationException("In invalid action schedule was provided to the daily action schedule editor; a daily action schedule was expected.");
             }
 
-            days.Text = dailyActionSchedule.FrequencyInDays.ToString(CultureInfo.InvariantCulture);
+            // Fix any boundary conditions
+            if (dailyActionSchedule.FrequencyInDays < 1)
+            {
+                dailyActionSchedule.FrequencyInDays = 1;
+            }
+            else if (dailyActionSchedule.FrequencyInDays > 30)
+            {
+                dailyActionSchedule.FrequencyInDays = 30;
+            }
+
+            // Unhook the event handler to set the selected frequency value
+            days.SelectedIndexChanged -= OnDaysChanged;
+            days.SelectedItem = dailyActionSchedule.FrequencyInDays;
+            days.SelectedIndexChanged += OnDaysChanged;
         }
 
         /// <summary>
-        /// Update the ActionSchedule from the control properties.
+        /// Called when [days change].
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public void SaveActionSchedule()
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnDaysChanged(object sender, EventArgs e)
         {
-            if (!days.NumericValue.HasValue || days.NumericValue.Value <= 0)
-            {
-                throw new ActionScheduleException("A positive numeric value must be provided for the number of days.");
-            }
-
-            dailyActionSchedule.FrequencyInDays = days.NumericValue.Value;
+            dailyActionSchedule.FrequencyInDays = (int)days.SelectedItem;
         }
     }
 }
