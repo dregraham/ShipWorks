@@ -290,7 +290,14 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.Designer.cs">
       <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.Designer.cs">
+      <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\MonthlyActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\IScheduler.cs" />
     <Compile Include="Actions\Scheduling\ISchedulingEngine.cs" />
@@ -5240,6 +5247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.resx">
       <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
+      <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>

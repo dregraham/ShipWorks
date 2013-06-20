@@ -27,6 +27,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
                 case ActionScheduleType.Weekly:
                     return new WeeklyActionSchedule();
 
+                case ActionScheduleType.Monthly:
+                    return new MonthlyActionSchedule();
+
                 default:
                     throw new ArgumentOutOfRangeException("actionScheduleType");
             }

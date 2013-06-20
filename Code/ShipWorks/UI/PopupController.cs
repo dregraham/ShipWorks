@@ -221,6 +221,7 @@ namespace ShipWorks.UI
 
             popupWindow.Controls.Add(control);
             control.Dock = DockStyle.Fill;
+            control.Visible = true;
 
             popupWindow.Owner = owner;
             popupWindow.OwnerMenuItem = menuItem;
