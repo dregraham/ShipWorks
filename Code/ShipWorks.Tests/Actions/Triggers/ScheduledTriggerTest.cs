@@ -92,7 +92,52 @@ namespace ShipWorks.Tests.Actions.Triggers
             ScheduledTrigger deserializedScheduledTrigger = new ScheduledTrigger(xml);
 
             Assert.AreEqual(testObject.Schedule.StartDateTimeInUtc, deserializedScheduledTrigger.Schedule.StartDateTimeInUtc);
+        }
 
+        [TestMethod]
+        public void DeserializeXml_ReturnsDailyActionSchedule_WhenScheduleTypeIsDaily_Test()
+        {
+            const string xmlSettings = 
+                @"<Settings>
+                  <DailyActionSchedule>
+                    <ScheduleType>2</ScheduleType>
+                    <StartDateTimeInUtc>2013-06-20T17:00:00.567402Z</StartDateTimeInUtc>
+                    <FrequencyInDays>30</FrequencyInDays>
+                  </DailyActionSchedule>
+                </Settings>";
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(xmlSettings);
+
+            XPathNavigator xpath = xmlDocument.CreateNavigator();
+            xpath.MoveToFirstChild();
+
+            testObject.DeserializeXml(xpath);
+
+            Assert.IsInstanceOfType(testObject.Schedule, typeof(DailyActionSchedule));
+        }
+
+        [TestMethod]
+        public void DeserializeXml_FrequencyInDaysEqualsXmlValue_WhenScheduleTypeIsDaily_Test()
+        {
+            const string xmlSettings =
+                @"<Settings>
+                  <DailyActionSchedule>
+                    <ScheduleType>2</ScheduleType>
+                    <StartDateTimeInUtc>2013-06-20T17:00:00.567402Z</StartDateTimeInUtc>
+                    <FrequencyInDays>30</FrequencyInDays>
+                  </DailyActionSchedule>
+                </Settings>";
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(xmlSettings);
+
+            XPathNavigator xpath = xmlDocument.CreateNavigator();
+            xpath.MoveToFirstChild();
+
+            testObject.DeserializeXml(xpath);
+
+            Assert.AreEqual(30, ((DailyActionSchedule)testObject.Schedule).FrequencyInDays);
         }
     }
 }
