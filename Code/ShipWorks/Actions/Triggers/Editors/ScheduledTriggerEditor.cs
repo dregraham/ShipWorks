@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Actions.Triggers.Editors
 {

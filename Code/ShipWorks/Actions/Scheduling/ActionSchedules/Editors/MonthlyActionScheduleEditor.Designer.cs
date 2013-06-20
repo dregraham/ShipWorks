@@ -60,8 +60,24 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.day2 = new System.Windows.Forms.CheckBox();
             this.day1 = new System.Windows.Forms.CheckBox();
-            this.popupComboBox1 = new ShipWorks.UI.Controls.PopupComboBox();
+            this.daysSelected = new System.Windows.Forms.RadioButton();
+            this.DaysLabel = new System.Windows.Forms.Label();
+            this.ofLabel = new System.Windows.Forms.Label();
+            this.onTheMonthsPanel = new System.Windows.Forms.Panel();
+            this.SelectAllMonths = new System.Windows.Forms.CheckBox();
+            this.onTheLabel = new System.Windows.Forms.Label();
+            this.onTheSelected = new System.Windows.Forms.RadioButton();
+            this.onTheWeekOfMonth = new System.Windows.Forms.ComboBox();
+            this.onTheDaySelector = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.daysMonthPanel = new System.Windows.Forms.Panel();
+            this.checkBox42 = new System.Windows.Forms.CheckBox();
+            this.onTheMonthSelctor = new ShipWorks.UI.Controls.PopupComboBox();
+            this.daysMonthSelector = new ShipWorks.UI.Controls.PopupComboBox();
+            this.daysDaySelector = new ShipWorks.UI.Controls.PopupComboBox();
             this.daysPanel.SuspendLayout();
+            this.onTheMonthsPanel.SuspendLayout();
+            this.daysMonthPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // daysPanel
@@ -98,7 +114,7 @@
             this.daysPanel.Controls.Add(this.checkBox2);
             this.daysPanel.Controls.Add(this.day2);
             this.daysPanel.Controls.Add(this.day1);
-            this.daysPanel.Location = new System.Drawing.Point(51, 64);
+            this.daysPanel.Location = new System.Drawing.Point(139, 79);
             this.daysPanel.Name = "daysPanel";
             this.daysPanel.Size = new System.Drawing.Size(294, 116);
             this.daysPanel.TabIndex = 0;
@@ -414,31 +430,191 @@
             this.day1.Text = "1";
             this.day1.UseVisualStyleBackColor = true;
             // 
-            // popupComboBox1
+            // daysSelected
             // 
-            this.popupComboBox1.DropDownHeight = 116;
-            this.popupComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.popupComboBox1.DropDownWidth = 294;
-            this.popupComboBox1.FormattingEnabled = true;
-            this.popupComboBox1.IntegralHeight = false;
-            this.popupComboBox1.Location = new System.Drawing.Point(14, 4);
-            this.popupComboBox1.Name = "popupComboBox1";
-            this.popupComboBox1.PopupController = null;
-            this.popupComboBox1.Size = new System.Drawing.Size(121, 21);
-            this.popupComboBox1.TabIndex = 1;
+            this.daysSelected.AutoSize = true;
+            this.daysSelected.Checked = true;
+            this.daysSelected.Location = new System.Drawing.Point(3, 18);
+            this.daysSelected.Name = "daysSelected";
+            this.daysSelected.Size = new System.Drawing.Size(14, 13);
+            this.daysSelected.TabIndex = 2;
+            this.daysSelected.TabStop = true;
+            this.daysSelected.UseVisualStyleBackColor = true;
+            // 
+            // DaysLabel
+            // 
+            this.DaysLabel.AutoSize = true;
+            this.DaysLabel.Location = new System.Drawing.Point(23, 18);
+            this.DaysLabel.Name = "DaysLabel";
+            this.DaysLabel.Size = new System.Drawing.Size(37, 13);
+            this.DaysLabel.TabIndex = 3;
+            this.DaysLabel.Text = "Day(s)";
+            // 
+            // ofLabel
+            // 
+            this.ofLabel.AutoSize = true;
+            this.ofLabel.Location = new System.Drawing.Point(193, 18);
+            this.ofLabel.Name = "ofLabel";
+            this.ofLabel.Size = new System.Drawing.Size(16, 13);
+            this.ofLabel.TabIndex = 4;
+            this.ofLabel.Text = "of";
+            // 
+            // onTheMonthsPanel
+            // 
+            this.onTheMonthsPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.onTheMonthsPanel.Controls.Add(this.SelectAllMonths);
+            this.onTheMonthsPanel.Location = new System.Drawing.Point(3, 79);
+            this.onTheMonthsPanel.Name = "onTheMonthsPanel";
+            this.onTheMonthsPanel.Size = new System.Drawing.Size(130, 306);
+            this.onTheMonthsPanel.TabIndex = 6;
+            this.onTheMonthsPanel.Visible = false;
+            // 
+            // SelectAllMonths
+            // 
+            this.SelectAllMonths.AutoSize = true;
+            this.SelectAllMonths.Location = new System.Drawing.Point(3, 3);
+            this.SelectAllMonths.Name = "SelectAllMonths";
+            this.SelectAllMonths.Size = new System.Drawing.Size(120, 17);
+            this.SelectAllMonths.TabIndex = 1;
+            this.SelectAllMonths.Text = "<Select All Months>";
+            this.SelectAllMonths.UseVisualStyleBackColor = true;
+            this.SelectAllMonths.CheckedChanged += new System.EventHandler(this.CheckChangedSelectAllMonths);
+            // 
+            // onTheLabel
+            // 
+            this.onTheLabel.AutoSize = true;
+            this.onTheLabel.Location = new System.Drawing.Point(23, 53);
+            this.onTheLabel.Name = "onTheLabel";
+            this.onTheLabel.Size = new System.Drawing.Size(39, 13);
+            this.onTheLabel.TabIndex = 8;
+            this.onTheLabel.Text = "On the";
+            // 
+            // onTheSelected
+            // 
+            this.onTheSelected.AutoSize = true;
+            this.onTheSelected.Location = new System.Drawing.Point(3, 53);
+            this.onTheSelected.Name = "onTheSelected";
+            this.onTheSelected.Size = new System.Drawing.Size(14, 13);
+            this.onTheSelected.TabIndex = 7;
+            this.onTheSelected.UseVisualStyleBackColor = true;
+            // 
+            // onTheWeekOfMonth
+            // 
+            this.onTheWeekOfMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.onTheWeekOfMonth.FormattingEnabled = true;
+            this.onTheWeekOfMonth.Location = new System.Drawing.Point(66, 50);
+            this.onTheWeekOfMonth.Name = "onTheWeekOfMonth";
+            this.onTheWeekOfMonth.Size = new System.Drawing.Size(121, 21);
+            this.onTheWeekOfMonth.TabIndex = 9;
+            // 
+            // onTheDaySelector
+            // 
+            this.onTheDaySelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.onTheDaySelector.FormattingEnabled = true;
+            this.onTheDaySelector.Location = new System.Drawing.Point(193, 50);
+            this.onTheDaySelector.Name = "onTheDaySelector";
+            this.onTheDaySelector.Size = new System.Drawing.Size(121, 21);
+            this.onTheDaySelector.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(320, 53);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(16, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "of";
+            // 
+            // daysMonthPanel
+            // 
+            this.daysMonthPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.daysMonthPanel.Controls.Add(this.checkBox42);
+            this.daysMonthPanel.Location = new System.Drawing.Point(439, 77);
+            this.daysMonthPanel.Name = "daysMonthPanel";
+            this.daysMonthPanel.Size = new System.Drawing.Size(130, 306);
+            this.daysMonthPanel.TabIndex = 14;
+            this.daysMonthPanel.Visible = false;
+            // 
+            // checkBox42
+            // 
+            this.checkBox42.AutoSize = true;
+            this.checkBox42.Location = new System.Drawing.Point(3, 3);
+            this.checkBox42.Name = "checkBox42";
+            this.checkBox42.Size = new System.Drawing.Size(120, 17);
+            this.checkBox42.TabIndex = 1;
+            this.checkBox42.Text = "<Select All Months>";
+            this.checkBox42.UseVisualStyleBackColor = true;
+            // 
+            // onTheMonthSelctor
+            // 
+            this.onTheMonthSelctor.DropDownHeight = 306;
+            this.onTheMonthSelctor.DropDownMinimumHeight = 306;
+            this.onTheMonthSelctor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.onTheMonthSelctor.DropDownWidth = 130;
+            this.onTheMonthSelctor.FormattingEnabled = true;
+            this.onTheMonthSelctor.IntegralHeight = false;
+            this.onTheMonthSelctor.Location = new System.Drawing.Point(342, 50);
+            this.onTheMonthSelctor.Name = "onTheMonthSelctor";
+            this.onTheMonthSelctor.PopupController = null;
+            this.onTheMonthSelctor.Size = new System.Drawing.Size(121, 21);
+            this.onTheMonthSelctor.TabIndex = 11;
+            // 
+            // daysMonthSelector
+            // 
+            this.daysMonthSelector.DropDownHeight = 306;
+            this.daysMonthSelector.DropDownMinimumHeight = 306;
+            this.daysMonthSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.daysMonthSelector.DropDownWidth = 130;
+            this.daysMonthSelector.FormattingEnabled = true;
+            this.daysMonthSelector.IntegralHeight = false;
+            this.daysMonthSelector.Location = new System.Drawing.Point(215, 15);
+            this.daysMonthSelector.Name = "daysMonthSelector";
+            this.daysMonthSelector.PopupController = null;
+            this.daysMonthSelector.Size = new System.Drawing.Size(121, 21);
+            this.daysMonthSelector.TabIndex = 5;
+            // 
+            // daysDaySelector
+            // 
+            this.daysDaySelector.DropDownHeight = 116;
+            this.daysDaySelector.DropDownMinimumHeight = 116;
+            this.daysDaySelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.daysDaySelector.DropDownWidth = 294;
+            this.daysDaySelector.FormattingEnabled = true;
+            this.daysDaySelector.IntegralHeight = false;
+            this.daysDaySelector.Location = new System.Drawing.Point(66, 15);
+            this.daysDaySelector.Name = "daysDaySelector";
+            this.daysDaySelector.PopupController = null;
+            this.daysDaySelector.Size = new System.Drawing.Size(121, 21);
+            this.daysDaySelector.TabIndex = 1;
             // 
             // MonthlyActionScheduleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.popupComboBox1);
+            this.Controls.Add(this.daysMonthPanel);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.onTheMonthSelctor);
+            this.Controls.Add(this.onTheDaySelector);
+            this.Controls.Add(this.onTheWeekOfMonth);
+            this.Controls.Add(this.onTheLabel);
+            this.Controls.Add(this.onTheSelected);
+            this.Controls.Add(this.onTheMonthsPanel);
+            this.Controls.Add(this.daysMonthSelector);
+            this.Controls.Add(this.ofLabel);
+            this.Controls.Add(this.DaysLabel);
+            this.Controls.Add(this.daysSelected);
+            this.Controls.Add(this.daysDaySelector);
             this.Controls.Add(this.daysPanel);
-            this.MinimumSize = new System.Drawing.Size(366, 183);
             this.Name = "MonthlyActionScheduleEditor";
-            this.Size = new System.Drawing.Size(366, 183);
+            this.Size = new System.Drawing.Size(479, 90);
             this.daysPanel.ResumeLayout(false);
             this.daysPanel.PerformLayout();
+            this.onTheMonthsPanel.ResumeLayout(false);
+            this.onTheMonthsPanel.PerformLayout();
+            this.daysMonthPanel.ResumeLayout(false);
+            this.daysMonthPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -476,7 +652,21 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox day2;
         private System.Windows.Forms.CheckBox day1;
-        private UI.Controls.PopupComboBox popupComboBox1;
+        private UI.Controls.PopupComboBox daysDaySelector;
+        private System.Windows.Forms.RadioButton daysSelected;
+        private System.Windows.Forms.Label DaysLabel;
+        private System.Windows.Forms.Label ofLabel;
+        private UI.Controls.PopupComboBox daysMonthSelector;
+        private System.Windows.Forms.Panel onTheMonthsPanel;
+        private System.Windows.Forms.CheckBox SelectAllMonths;
+        private System.Windows.Forms.Label onTheLabel;
+        private System.Windows.Forms.RadioButton onTheSelected;
+        private System.Windows.Forms.ComboBox onTheWeekOfMonth;
+        private System.Windows.Forms.ComboBox onTheDaySelector;
+        private UI.Controls.PopupComboBox onTheMonthSelctor;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel daysMonthPanel;
+        private System.Windows.Forms.CheckBox checkBox42;
 
 
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {

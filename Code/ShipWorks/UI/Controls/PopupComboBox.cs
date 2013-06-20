@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Interapptive.Shared;
 using System.Windows.Forms;
@@ -22,12 +23,14 @@ namespace ShipWorks.UI.Controls
         int selectedIndex = -1;
 
         Size? lastSize = null;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public PopupComboBox()
         {
+            DropDownMinimumHeight = 200;
+
             InitializeComponent();
 
             SetStyle(ControlStyles.ResizeRedraw, true);
@@ -44,6 +47,13 @@ namespace ShipWorks.UI.Controls
             // 
             this.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ResumeLayout(false);
+        }
+
+        [Category("Behavior"), DefaultValue(200)]
+        public int DropDownMinimumHeight
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -145,7 +155,7 @@ namespace ShipWorks.UI.Controls
                         idealSize.Width = Math.Min(idealSize.Width, Math.Max(400, Width));
 
                         // Start out at least 200px tall
-                        idealSize.Height = Math.Max(idealSize.Height, 200);
+                        idealSize.Height = Math.Max(idealSize.Height, DropDownMinimumHeight);
 
                         // But don't let it start out more than 1200px tall
                         idealSize.Height = Math.Min(idealSize.Height, 1200);

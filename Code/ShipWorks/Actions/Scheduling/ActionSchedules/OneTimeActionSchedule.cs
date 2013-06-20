@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {

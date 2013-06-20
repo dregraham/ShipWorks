@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Triggers.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions.Scheduling.ActionSchedules;

@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules
 {
