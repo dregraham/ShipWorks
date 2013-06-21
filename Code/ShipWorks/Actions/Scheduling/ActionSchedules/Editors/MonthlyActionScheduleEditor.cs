@@ -30,7 +30,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             InitializeComponent();
 
             daysDaySelector.PopupController = new PopupController(daysPanel);
-            daysMonthSelector.PopupController = new PopupController(daysMonthPanel);
+
             onTheMonthSelctor.PopupController = new PopupController(onTheMonthsPanel);
         }
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             onTheDaySelector.DataSource = Enum.GetValues(typeof(DayOfWeek));
 
             BindMonths(onTheMonthsList, onTheMonthsPanel);
-            BindMonths(daysMonthsList, daysMonthPanel);
+            
         }
 
         /// <summary>
@@ -67,6 +67,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
                 {
                     Text = month.Key, Location = new Point(3, verticlePosition)
                 }, month.Value);
+
+                checkboxAndMonthType.Item1.CheckedChanged += CheckChangedMonth;
+
                 monthsList.Add(checkboxAndMonthType);
 
                 // Add checkbox to panel
@@ -75,20 +78,48 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         }
 
         /// <summary>
-        /// Checks changed for select all months.
+        /// Check changed for month checkbox
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        void CheckChangedMonth(object sender, EventArgs e)
+        {
+            Tuple<CheckBox, MonthType> selectedMonth = onTheMonthsList.SingleOrDefault(m => m.Item1 == sender);
+            List<Tuple<CheckBox, MonthType>> monthsList = onTheMonthsList;
+            
+            if (selectedMonth==null)
+            {
+                selectedMonth = daysMonthsList.SingleOrDefault(m => m.Item1 == sender);
+                monthsList = daysMonthsList;
+            }
+
+            if (VScroll)
+            {
+                
+            }
+
+            
+        }
+
+        /// <summary>
+        /// Checks changed for select all months.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void CheckChangedSelectAllMonths(object sender, EventArgs e)
         {
-            foreach (var control in onTheMonthsPanel.Controls)
-            {
-                var monthCheckbox = control as CheckBox;
+            List<Tuple<CheckBox, MonthType>> monthsList = daysMonthsList;
 
-                if (monthCheckbox !=null)
-                {
-                    monthCheckbox.Checked = SelectAllMonths.Checked;
-                }
+            if (sender == onTheSelectAllMonths)
+            {
+                monthsList = onTheMonthsList;
+            }
+
+            bool isChecked = ((CheckBox) sender).Checked;
+
+            foreach (var months in monthsList)
+            {
+                months.Item1.Checked = isChecked;
             }
         }
     }

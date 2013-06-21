@@ -266,8 +266,19 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\Checkbox.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyComboPopup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyComboPopup.Designer.cs">
+      <DependentUpon>MonthlyComboPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\ActionScheduleType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Enums\MonthyCalendarType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\MonthType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\WeekOfMonthType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\WeeklyActionSchedule.cs" />
@@ -5251,6 +5262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.resx">
       <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyComboPopup.resx">
+      <DependentUpon>MonthlyComboPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.resx">
       <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>

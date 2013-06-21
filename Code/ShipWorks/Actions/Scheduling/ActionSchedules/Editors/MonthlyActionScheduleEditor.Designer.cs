@@ -64,14 +64,14 @@
             this.DaysLabel = new System.Windows.Forms.Label();
             this.ofLabel = new System.Windows.Forms.Label();
             this.onTheMonthsPanel = new System.Windows.Forms.Panel();
-            this.SelectAllMonths = new System.Windows.Forms.CheckBox();
+            this.onTheSelectAllMonths = new System.Windows.Forms.CheckBox();
             this.onTheLabel = new System.Windows.Forms.Label();
             this.onTheSelected = new System.Windows.Forms.RadioButton();
             this.onTheWeekOfMonth = new System.Windows.Forms.ComboBox();
             this.onTheDaySelector = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.daysMonthPanel = new System.Windows.Forms.Panel();
-            this.checkBox42 = new System.Windows.Forms.CheckBox();
+            this.daysSelectAllMonths = new System.Windows.Forms.CheckBox();
             this.onTheMonthSelctor = new ShipWorks.UI.Controls.PopupComboBox();
             this.daysMonthSelector = new ShipWorks.UI.Controls.PopupComboBox();
             this.daysDaySelector = new ShipWorks.UI.Controls.PopupComboBox();
@@ -114,7 +114,7 @@
             this.daysPanel.Controls.Add(this.checkBox2);
             this.daysPanel.Controls.Add(this.day2);
             this.daysPanel.Controls.Add(this.day1);
-            this.daysPanel.Location = new System.Drawing.Point(139, 79);
+            this.daysPanel.Location = new System.Drawing.Point(275, 82);
             this.daysPanel.Name = "daysPanel";
             this.daysPanel.Size = new System.Drawing.Size(294, 116);
             this.daysPanel.TabIndex = 0;
@@ -462,23 +462,23 @@
             // onTheMonthsPanel
             // 
             this.onTheMonthsPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.onTheMonthsPanel.Controls.Add(this.SelectAllMonths);
+            this.onTheMonthsPanel.Controls.Add(this.onTheSelectAllMonths);
             this.onTheMonthsPanel.Location = new System.Drawing.Point(3, 79);
             this.onTheMonthsPanel.Name = "onTheMonthsPanel";
             this.onTheMonthsPanel.Size = new System.Drawing.Size(130, 306);
             this.onTheMonthsPanel.TabIndex = 6;
             this.onTheMonthsPanel.Visible = false;
             // 
-            // SelectAllMonths
+            // onTheSelectAllMonths
             // 
-            this.SelectAllMonths.AutoSize = true;
-            this.SelectAllMonths.Location = new System.Drawing.Point(3, 3);
-            this.SelectAllMonths.Name = "SelectAllMonths";
-            this.SelectAllMonths.Size = new System.Drawing.Size(120, 17);
-            this.SelectAllMonths.TabIndex = 1;
-            this.SelectAllMonths.Text = "<Select All Months>";
-            this.SelectAllMonths.UseVisualStyleBackColor = true;
-            this.SelectAllMonths.CheckedChanged += new System.EventHandler(this.CheckChangedSelectAllMonths);
+            this.onTheSelectAllMonths.AutoSize = true;
+            this.onTheSelectAllMonths.Location = new System.Drawing.Point(3, 3);
+            this.onTheSelectAllMonths.Name = "onTheSelectAllMonths";
+            this.onTheSelectAllMonths.Size = new System.Drawing.Size(120, 17);
+            this.onTheSelectAllMonths.TabIndex = 1;
+            this.onTheSelectAllMonths.Text = "<Select All Months>";
+            this.onTheSelectAllMonths.UseVisualStyleBackColor = true;
+            this.onTheSelectAllMonths.CheckedChanged += new System.EventHandler(this.CheckChangedSelectAllMonths);
             // 
             // onTheLabel
             // 
@@ -528,22 +528,23 @@
             // daysMonthPanel
             // 
             this.daysMonthPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.daysMonthPanel.Controls.Add(this.checkBox42);
-            this.daysMonthPanel.Location = new System.Drawing.Point(439, 77);
+            this.daysMonthPanel.Controls.Add(this.daysSelectAllMonths);
+            this.daysMonthPanel.Location = new System.Drawing.Point(139, 79);
             this.daysMonthPanel.Name = "daysMonthPanel";
             this.daysMonthPanel.Size = new System.Drawing.Size(130, 306);
             this.daysMonthPanel.TabIndex = 14;
             this.daysMonthPanel.Visible = false;
             // 
-            // checkBox42
+            // daysSelectAllMonths
             // 
-            this.checkBox42.AutoSize = true;
-            this.checkBox42.Location = new System.Drawing.Point(3, 3);
-            this.checkBox42.Name = "checkBox42";
-            this.checkBox42.Size = new System.Drawing.Size(120, 17);
-            this.checkBox42.TabIndex = 1;
-            this.checkBox42.Text = "<Select All Months>";
-            this.checkBox42.UseVisualStyleBackColor = true;
+            this.daysSelectAllMonths.AutoSize = true;
+            this.daysSelectAllMonths.Location = new System.Drawing.Point(3, 3);
+            this.daysSelectAllMonths.Name = "daysSelectAllMonths";
+            this.daysSelectAllMonths.Size = new System.Drawing.Size(120, 17);
+            this.daysSelectAllMonths.TabIndex = 1;
+            this.daysSelectAllMonths.Text = "<Select All Months>";
+            this.daysSelectAllMonths.UseVisualStyleBackColor = true;
+            this.daysSelectAllMonths.CheckedChanged += new System.EventHandler(this.CheckChangedSelectAllMonths);
             // 
             // onTheMonthSelctor
             // 
@@ -606,7 +607,7 @@
             this.Controls.Add(this.daysDaySelector);
             this.Controls.Add(this.daysPanel);
             this.Name = "MonthlyActionScheduleEditor";
-            this.Size = new System.Drawing.Size(479, 90);
+            this.Size = new System.Drawing.Size(479, 98);
             this.daysPanel.ResumeLayout(false);
             this.daysPanel.PerformLayout();
             this.onTheMonthsPanel.ResumeLayout(false);
@@ -658,7 +659,7 @@
         private System.Windows.Forms.Label ofLabel;
         private UI.Controls.PopupComboBox daysMonthSelector;
         private System.Windows.Forms.Panel onTheMonthsPanel;
-        private System.Windows.Forms.CheckBox SelectAllMonths;
+        private System.Windows.Forms.CheckBox onTheSelectAllMonths;
         private System.Windows.Forms.Label onTheLabel;
         private System.Windows.Forms.RadioButton onTheSelected;
         private System.Windows.Forms.ComboBox onTheWeekOfMonth;
@@ -666,7 +667,7 @@
         private UI.Controls.PopupComboBox onTheMonthSelctor;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel daysMonthPanel;
-        private System.Windows.Forms.CheckBox checkBox42;
+        private System.Windows.Forms.CheckBox daysSelectAllMonths;
 
 
 
