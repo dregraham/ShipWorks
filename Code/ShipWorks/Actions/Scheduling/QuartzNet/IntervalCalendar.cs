@@ -21,17 +21,17 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         protected IntervalCalendar(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            info.AddValue("StartTimeUtc", StartTimeUtc);
-            info.AddValue("RepeatInterval", RepeatInterval);
-            info.AddValue("RepeatIntervalUnit", (int)RepeatIntervalUnit);
+            StartTimeUtc = (DateTimeOffset)info.GetValue("StartTimeUtc", typeof(DateTimeOffset));
+            RepeatInterval = info.GetInt32("RepeatInterval");
+            RepeatIntervalUnit = (IntervalUnit)info.GetInt32("RepeatIntervalUnit");
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            StartTimeUtc = (DateTimeOffset)info.GetValue("StartTimeUtc", typeof(DateTimeOffset));
-            RepeatInterval = info.GetInt32("RepeatInterval");
-            RepeatIntervalUnit = (IntervalUnit)info.GetInt32("RepeatIntervalUnit");
+            info.AddValue("StartTimeUtc", StartTimeUtc);
+            info.AddValue("RepeatInterval", RepeatInterval);
+            info.AddValue("RepeatIntervalUnit", (int)RepeatIntervalUnit);
         }
 
         public override object Clone()
