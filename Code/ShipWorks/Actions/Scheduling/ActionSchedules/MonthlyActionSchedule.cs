@@ -17,15 +17,10 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Gets the type of the schedule. DO NOT SET
         /// </summary>
-        /// <value>
-        /// The type of the schedule. 
-        /// </value>
+        /// <value>The type of the schedule.</value>
         public override ActionScheduleType ScheduleType
         {
-            get
-            {
-                return ActionScheduleType.Monthly;
-            }
+            get { return ActionScheduleType.Monthly; }
             set
             {
                 // needed for reflection. do not use.
@@ -46,80 +41,43 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <summary>
         /// Gets or sets the type of the calendar.
         /// </summary>
-        /// <value>
-        /// The type of the calendar.
-        /// </value>
+        /// <value>The type of the calendar.</value>
         [XmlElement("CalendarType")]
-        public MonthlyCalendarType CalendarType
-        {
-            get;
-            set;
-        }
+        public MonthlyCalendarType CalendarType { get; set; }
 
         /// <summary>
         /// The numeric days to run if CalendarType is Date.
         /// </summary>
-        /// <value>
-        /// The execute on dates.
-        /// </value>
+        /// <value>The execute on dates.</value>
         [XmlElement("ExecuteOnDates")]
-        public List<int> ExecuteOnDates
-        {
-            get;
-            set;
-        }
-        
+        public List<int> ExecuteOnDates { get; set; }
+
         /// <summary>
         /// The months to run if CalendarType is Date.
         /// </summary>
-        /// <value>
-        /// The execute on date months.
-        /// </value>
+        /// <value>The execute on date months.</value>
         [XmlElement("ExecuteOnDateMonths")]
-        public List<MonthType> ExecuteOnDateMonths
-        {
-            get;
-            set;
-        }
-
+        public List<MonthType> ExecuteOnDateMonths { get; set; }
 
         /// <summary>
         /// The day to run if CalendarType is Day.
         /// </summary>
-        /// <value>
-        /// The execute on day.
-        /// </value>
+        /// <value>The execute on day.</value>
         [XmlElement("ExecuteOnDay")]
-        public DayOfWeek ExecuteOnDay
-        {
-            get;
-            set;
-        }
+        public DayOfWeek ExecuteOnDay { get; set; }
 
         /// <summary>
         /// The week in the month to run if CalendarType is Day.
         /// </summary>
-        /// <value>
-        /// The execute on week.
-        /// </value>
+        /// <value>The execute on week.</value>
         [XmlElement("ExecuteOnWeek")]
-        public WeekOfMonthType ExecuteOnWeek
-        {
-            get;
-            set;
-        }
+        public WeekOfMonthType ExecuteOnWeek { get; set; }
 
         /// <summary>
         /// The month to run if CalendarType is Day
         /// </summary>
-        /// <value>
-        /// The execute on day months.
-        /// </value>
+        /// <value>The execute on day months.</value>
         [XmlElement("ExecuteOnDayMonths")]
-        public List<MonthType> ExecuteOnDayMonths
-        {
-            get;
-            set;
-        }
+        public List<MonthType> ExecuteOnDayMonths { get; set; }
     }
 }

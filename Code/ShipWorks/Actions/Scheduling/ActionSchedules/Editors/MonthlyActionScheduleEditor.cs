@@ -17,10 +17,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
     /// </summary>
     public partial class MonthlyActionScheduleEditor : ActionScheduleEditor
     {
-
-        List<Tuple<CheckBox,MonthType>> onTheMonthsList=new List<Tuple<CheckBox,MonthType>>(); 
-
-        List<Tuple<CheckBox,MonthType>> daysMonthsList = new List<Tuple<CheckBox,MonthType>>(); 
+        private readonly List<Tuple<CheckBox,MonthType>> onTheMonthsList = new List<Tuple<CheckBox,MonthType>>(); 
+        private readonly List<Tuple<CheckBox,MonthType>> daysMonthsList = new List<Tuple<CheckBox,MonthType>>(); 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MonthlyActionScheduleEditor"/> class.
@@ -30,7 +28,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             InitializeComponent();
 
             daysDaySelector.PopupController = new PopupController(daysPanel);
-
             onTheMonthSelctor.PopupController = new PopupController(onTheMonthsPanel);
         }
 
@@ -59,7 +56,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             for (int monthIndex = 0; monthIndex < EnumHelper.GetEnumList<MonthType>().Count; monthIndex++)
             {
                 var month = EnumHelper.GetEnumList<MonthType>()[monthIndex];
-
                 int verticlePosition = 23 * monthIndex + 23;
 
                 // Build monthsList with new checkboxes and related enums.
@@ -69,7 +65,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
                 }, month.Value);
 
                 checkboxAndMonthType.Item1.CheckedChanged += CheckChangedMonth;
-
                 monthsList.Add(checkboxAndMonthType);
 
                 // Add checkbox to panel
@@ -87,7 +82,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             Tuple<CheckBox, MonthType> selectedMonth = onTheMonthsList.SingleOrDefault(m => m.Item1 == sender);
             List<Tuple<CheckBox, MonthType>> monthsList = onTheMonthsList;
             
-            if (selectedMonth==null)
+            if (selectedMonth == null)
             {
                 selectedMonth = daysMonthsList.SingleOrDefault(m => m.Item1 == sender);
                 monthsList = daysMonthsList;
@@ -97,8 +92,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             {
                 
             }
-
-            
         }
 
         /// <summary>
@@ -109,14 +102,12 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         private void CheckChangedSelectAllMonths(object sender, EventArgs e)
         {
             List<Tuple<CheckBox, MonthType>> monthsList = daysMonthsList;
-
             if (sender == onTheSelectAllMonths)
             {
                 monthsList = onTheMonthsList;
             }
 
             bool isChecked = ((CheckBox) sender).Checked;
-
             foreach (var months in monthsList)
             {
                 months.Item1.Checked = isChecked;
