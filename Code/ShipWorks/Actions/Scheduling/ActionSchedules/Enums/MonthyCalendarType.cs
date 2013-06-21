@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace ShipWorks.Actions.Scheduling.ActionSchedules.Enums
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum MonthyCalendarType
+    public enum MonthlyCalendarType
     {
         [Description("Date of Month")]
         [XmlEnum("0")]

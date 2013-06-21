@@ -50,7 +50,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// The type of the calendar.
         /// </value>
         [XmlElement("CalendarType")]
-        public MonthyCalendarType CalendarType
+        public MonthlyCalendarType CalendarType
         {
             get;
             set;
