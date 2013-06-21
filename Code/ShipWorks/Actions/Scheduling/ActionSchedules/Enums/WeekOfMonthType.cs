@@ -19,8 +19,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Enums
         [XmlEnum("2")]
         Third = 2,
 
-        [Description("Forth")]
+        [Description("Fourth")]
         [XmlEnum("3")]
-        Forth = 3
+        Fourth = 3
     }
 }

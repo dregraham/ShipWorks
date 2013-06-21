@@ -330,5 +330,22 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 Times.Once()
             );
         }
+
+        [TestMethod]
+        public void CalendarIsDeletedWhenJobIsDeleted()
+        {
+            scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>()))
+                .Returns(new List<ITrigger>());
+
+            var actionSchedule = new Mock<ActionSchedule>().Object;
+
+            string jobName = null;
+            scheduler.Setup(x => x.DeleteJob(It.IsAny<JobKey>()))
+                .Callback<JobKey>(k => { jobName = k.Name; });
+
+            testObject.Unschedule(new ActionEntity { ActionID = 71 });
+
+            scheduler.Verify(x => x.DeleteCalendar(jobName), Times.Once());
+        }
     }
 }

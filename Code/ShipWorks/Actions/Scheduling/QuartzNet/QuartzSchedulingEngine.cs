@@ -173,6 +173,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 }
 
                 quartzScheduler.DeleteJob(jobKey);
+                quartzScheduler.DeleteCalendar(jobKey.Name);
             }
         }
 
