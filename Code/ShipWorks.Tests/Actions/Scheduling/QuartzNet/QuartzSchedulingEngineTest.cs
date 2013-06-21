@@ -31,6 +31,8 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             schedulerFactory.Setup(x => x.GetScheduler()).Returns(scheduler.Object);
 
             scheduleAdapter = new Mock<IActionScheduleAdapter>();
+            scheduleAdapter.Setup(x => x.Adapt(It.IsAny<ActionSchedule>()))
+                .Returns(new QuartzActionSchedule());
 
             testObject = new QuartzSchedulingEngine(schedulerFactory.Object, scheduleAdapter.Object);
         }
@@ -270,7 +272,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [TestMethod]
-        public void ActionScheduleIsAdaptedOntoTrigger()
+        public void AdaptedScheduleBuilderIsAppliedToTrigger()
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
 
@@ -280,11 +282,53 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             quartzSchedule.Setup(x => x.Build()).Returns(trigger);
 
             scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
-                .Returns(quartzSchedule.Object);
+                .Returns(new QuartzActionSchedule { ScheduleBuilder = quartzSchedule.Object });
 
             testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
 
-            scheduler.Verify(x => x.ScheduleJob(It.IsAny<IJobDetail>(), trigger));
+            scheduler.Verify(x => x.ScheduleJob(It.IsAny<IJobDetail>(), trigger), Times.Once());
+        }
+
+        [TestMethod]
+        public void AdaptedCalendarIsAddedToSchedulerWithJobName()
+        {
+            var actionSchedule = new Mock<ActionSchedule>().Object;
+
+            var quartzCalendar = new Mock<ICalendar>().Object;
+
+            scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
+                .Returns(new QuartzActionSchedule { Calendar = quartzCalendar });
+
+            string jobName = null;
+            scheduler.Setup(x => x.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ITrigger>()))
+                .Callback<IJobDetail, ITrigger>((j, t) => { jobName = j.Key.Name; });
+
+            testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
+
+            scheduler.Verify(x => x.AddCalendar(jobName, quartzCalendar, true, true), Times.Once());
+        }
+
+        [TestMethod]
+        public void AdaptedCalendarIsAppliedToTrigger()
+        {
+            var actionSchedule = new Mock<ActionSchedule>().Object;
+
+            scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
+                .Returns(new QuartzActionSchedule { Calendar = new Mock<ICalendar>().Object });
+
+            string calendarName = null;
+            scheduler.Setup(x => x.AddCalendar(It.IsAny<string>(), It.IsAny<ICalendar>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Callback<string, ICalendar, bool, bool>((n, c, b1, b2) => { calendarName = n; });
+
+            testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
+
+            scheduler.Verify(
+                x => x.ScheduleJob(
+                    It.IsAny<IJobDetail>(),
+                    It.Is<ITrigger>(t => t.CalendarName == calendarName)
+                ),
+                Times.Once()
+            );
         }
     }
 }

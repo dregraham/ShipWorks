@@ -14,12 +14,16 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             where TSchedule : ActionSchedule
             where TAdapter : ActionScheduleAdapter<TSchedule>
         {
+            var quartzSchedule = adapter.Adapt(schedule);
+
             var trigger = TriggerBuilder.Create()
                 .StartAt(schedule.StartDateTimeInUtc)
-                .WithSchedule(adapter.Adapt(schedule))
+                .WithSchedule(quartzSchedule.ScheduleBuilder)
                 .Build();
 
-            return TriggerUtils.ComputeFireTimes((IOperableTrigger)trigger, null, maxTimes);
+            return TriggerUtils.ComputeFireTimes(
+                (IOperableTrigger)trigger, quartzSchedule.Calendar, maxTimes
+            );
         }
     }
 }

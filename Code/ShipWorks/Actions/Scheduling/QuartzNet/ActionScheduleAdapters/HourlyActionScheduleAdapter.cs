@@ -11,10 +11,13 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         /// <summary>
         /// Adapts an HourlyActionSchedule to a Quartz schedule builder.
         /// </summary>
-        public override IScheduleBuilder Adapt(HourlyActionSchedule schedule)
+        public override QuartzActionSchedule Adapt(HourlyActionSchedule schedule)
         {
-            return CalendarIntervalScheduleBuilder.Create()
-                .WithIntervalInHours(schedule.FrequencyInHours);
+            return new QuartzActionSchedule {
+                ScheduleBuilder =
+                    CalendarIntervalScheduleBuilder.Create()
+                        .WithIntervalInHours(schedule.FrequencyInHours)
+            };
         }
     }
 }

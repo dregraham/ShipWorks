@@ -68,13 +68,20 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                     .UsingJobData("ActionID", action.ActionID.ToString(CultureInfo.InvariantCulture))
                     .Build();
 
+                var adaptedSchedule = scheduleAdapter.Adapt(schedule);
+
                 var trigger = TriggerBuilder.Create()
                     .WithIdentity(job.Key.Name)
                     .StartAt(schedule.StartDateTimeInUtc)
-                    .WithSchedule(scheduleAdapter.Adapt(schedule))
-                    .Build();
+                    .WithSchedule(adaptedSchedule.ScheduleBuilder);
 
-                quartzScheduler.ScheduleJob(job, trigger);
+                if (null != adaptedSchedule.Calendar)
+                {
+                    quartzScheduler.AddCalendar(job.Key.Name, adaptedSchedule.Calendar, true, true);
+                    trigger = trigger.ModifiedByCalendar(job.Key.Name);
+                }
+
+                quartzScheduler.ScheduleJob(job, trigger.Build());
             }
             finally
             {

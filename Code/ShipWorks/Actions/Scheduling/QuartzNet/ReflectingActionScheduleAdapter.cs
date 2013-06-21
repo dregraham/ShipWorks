@@ -16,7 +16,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         readonly IDictionary<Type, IActionScheduleAdapter> adapterCache = new Dictionary<Type, IActionScheduleAdapter>();
 
 
-        public Quartz.IScheduleBuilder Adapt(ActionSchedule schedule)
+        public QuartzActionSchedule Adapt(ActionSchedule schedule)
         {
             if (null == schedule)
                 throw new ArgumentNullException("schedule");

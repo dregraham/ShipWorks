@@ -4,10 +4,10 @@
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
     /// <summary>
-    /// Adapts a ShipWorks action schedule to a Quartz schedule builder.
+    /// Adapts a ShipWorks action schedule to Quartz.
     /// </summary>
     public interface IActionScheduleAdapter
     {
-        Quartz.IScheduleBuilder Adapt(ActionSchedule schedule);
+        QuartzActionSchedule Adapt(ActionSchedule schedule);
     }
 }

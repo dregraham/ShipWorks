@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var schedule = new WeeklyActionSchedule {
                 StartDateTimeInUtc = DateTime.Parse("6/3/2013Z").ToUniversalTime(),     //Sunday local, Monday UTC
                 FrequencyInWeeks = 1,
-                ExecuteOnDays = { DayOfWeek.Monday, DayOfWeek.Thursday }
+                ExecuteOnDays = { DayOfWeek.Monday, DayOfWeek.Wednesday }
             };
 
             var fireTimes = schedule.ComputeFireTimes(target, 6);
@@ -51,10 +51,23 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             ));
         }
 
-        //[TestMethod]
-        //public void FiresAtSpecifiedFrequency()
-        //{
+        [TestMethod]
+        public void FiresAtSpecifiedFrequency()
+        {
+            var schedule = new WeeklyActionSchedule
+            {
+                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(),
+                FrequencyInWeeks = 3,
+                ExecuteOnDays = { DayOfWeek.Wednesday }
+            };
 
-        //}
+            var fireTimes = schedule.ComputeFireTimes(target, 5);
+
+            var intervals = fireTimes.Skip(1)
+                .Zip(fireTimes, (x, x0) => x - x0)
+                .ToArray();
+
+            Assert.IsTrue(intervals.All(x => x.TotalDays == 7 * schedule.FrequencyInWeeks));
+        }
     }
 }

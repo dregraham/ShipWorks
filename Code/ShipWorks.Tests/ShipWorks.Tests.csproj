@@ -99,6 +99,7 @@
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\Helpers\ActionScheduleAdapterExtensions.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\HourlyActionScheduleAdapterTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\OneTimeActionScheduleAdapterTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\IntervalCalendarTests.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />

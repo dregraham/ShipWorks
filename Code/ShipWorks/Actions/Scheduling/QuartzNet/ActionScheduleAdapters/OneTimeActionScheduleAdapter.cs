@@ -6,9 +6,11 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
     public class OneTimeActionScheduleAdapter : ActionScheduleAdapter<OneTimeActionSchedule>
     {
-        public override IScheduleBuilder Adapt(OneTimeActionSchedule schedule)
+        public override QuartzActionSchedule Adapt(OneTimeActionSchedule schedule)
         {
-            return SimpleScheduleBuilder.Create();
+            return new QuartzActionSchedule {
+                ScheduleBuilder = SimpleScheduleBuilder.Create()
+            };
         }
     }
 }

@@ -1,19 +1,39 @@
 ﻿using Quartz;
+using Quartz.Impl.Calendar;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
+using System;
+using System.Linq;
 
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
     public class WeeklyActionScheduleAdapter : ActionScheduleAdapter<WeeklyActionSchedule>
     {
-        public override IScheduleBuilder Adapt(WeeklyActionSchedule schedule)
+        public override QuartzActionSchedule Adapt(WeeklyActionSchedule schedule)
         {
-            var time = schedule.StartDateTimeInUtc.ToLocalTime().TimeOfDay;
+            return new QuartzActionSchedule
+            {
+                ScheduleBuilder =
+                    CalendarIntervalScheduleBuilder.Create()
+                        .WithIntervalInDays(1),
 
-            return DailyTimeIntervalScheduleBuilder.Create()
-                .OnDaysOfTheWeek(schedule.ExecuteOnDays.ToArray())
-                .StartingDailyAt(new TimeOfDay(time.Hours, time.Minutes, time.Seconds))
-                .WithRepeatCount(0);
+                Calendar =
+                    new IntervalCalendar
+                    {
+                        StartTimeUtc = schedule.StartDateTimeInUtc,
+                        RepeatInterval = schedule.FrequencyInWeeks,
+                        RepeatIntervalUnit = IntervalUnit.Week,
+
+                        CalendarBase =
+                            new WeeklyCalendar
+                            {
+                                DaysExcluded =
+                                    Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>()
+                                        .GroupJoin(schedule.ExecuteOnDays, x => x, x => x, (x, g) => !g.Any())
+                                        .ToArray()
+                            }
+                    }
+            };
         }
     }
 }

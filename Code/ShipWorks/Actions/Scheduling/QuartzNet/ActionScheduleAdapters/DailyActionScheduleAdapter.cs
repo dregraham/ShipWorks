@@ -6,10 +6,13 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
     public class DailyActionScheduleAdapter : ActionScheduleAdapter<DailyActionSchedule>
     {
-        public override IScheduleBuilder Adapt(DailyActionSchedule schedule)
+        public override QuartzActionSchedule Adapt(DailyActionSchedule schedule)
         {
-            return CalendarIntervalScheduleBuilder.Create()
-                .WithIntervalInDays(schedule.FrequencyInDays);
+            return new QuartzActionSchedule {
+                ScheduleBuilder =
+                    CalendarIntervalScheduleBuilder.Create()
+                        .WithIntervalInDays(schedule.FrequencyInDays)
+            };
         }
     }
 }

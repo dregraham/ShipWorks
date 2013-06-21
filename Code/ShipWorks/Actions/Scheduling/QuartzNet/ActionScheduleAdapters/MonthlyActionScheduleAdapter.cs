@@ -6,9 +6,11 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
     public class MonthlyActionScheduleAdapter : ActionScheduleAdapter<MonthlyActionSchedule>
     {
-        public override IScheduleBuilder Adapt(MonthlyActionSchedule schedule)
+        public override QuartzActionSchedule Adapt(MonthlyActionSchedule schedule)
         {
-            return null;
+            return new QuartzActionSchedule {
+                //TODO
+            };
         }
     }
 }
