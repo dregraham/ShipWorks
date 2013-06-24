@@ -8,6 +8,9 @@ using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 {
+    /// <summary>
+    /// A combobox with 31 selectable days
+    /// </summary>
     public class DateOfMonthComboBox : PopupComboBox
     {
         private readonly DateOfMonthComboFormatter dayComboFormatter;
@@ -35,12 +38,18 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             dayComboFormatter = new DateOfMonthComboFormatter();
         }
 
-
-        public Action  DateChanged
+        /// <summary>
+        /// Gets or sets the date changed.
+        /// </summary>
+        /// <value>
+        /// The date changed.
+        /// </value>
+        public Action DateChanged
         {
             get;
             set;
         }
+
         /// <summary>
         /// Gets the day combo formatter.
         /// </summary>
@@ -63,7 +72,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         {
             foreach (var dayHolder in dayList)
             {
-                dayHolder.Item1.Checked = daysToSelect !=null && daysToSelect.Any(d => d == dayHolder.Item2);
+                dayHolder.Item1.Checked = daysToSelect != null && daysToSelect.Any(d => d == dayHolder.Item2);
             }
         }
 
@@ -161,12 +170,16 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             var formatter = new DateOfMonthComboFormatter();
             string text = formatter.FormatDays(GetSelectedDays());
 
-            StringFormat stringFormat = new StringFormat
+            using (StringFormat stringFormat = new StringFormat
             {
                 Trimming = StringTrimming.EllipsisCharacter
-            };
-
-            graphics.DrawString(text, Font, new SolidBrush(ForeColor), bounds, stringFormat);
+            })
+            {
+                using (var brush = new SolidBrush(ForeColor))
+                {
+                    graphics.DrawString(text, Font, brush, bounds, stringFormat);
+                }
+            }
         }
     }
 }

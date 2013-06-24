@@ -44,13 +44,24 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         {
             monthlyActionSchedule = (MonthlyActionSchedule) actionSchedule;
 
+            dateSelected.CheckedChanged -= OnDateSelectedCheckedChanged;
             dateSelected.Checked = (monthlyActionSchedule.CalendarType == MonthlyCalendarType.Date);
+            dateSelected.CheckedChanged += OnDateSelectedCheckedChanged;
+
+
             dateDayOfMonth.SelectDays(monthlyActionSchedule.ExecuteOnDates);
             dateMonth.SelectMonths(monthlyActionSchedule.ExecuteOnDateMonths);
 
             daySelected.Checked = (monthlyActionSchedule.CalendarType == MonthlyCalendarType.Day);
-            dayWeek.SelectedItem = monthlyActionSchedule.ExecuteOnWeek;
+
+            dayWeek.SelectedIndexChanged -= OnDayWeekSelectedIndexChanged;
+            dayWeek.SelectedValue = monthlyActionSchedule.ExecuteOnWeek;
+            dayWeek.SelectedIndexChanged += OnDayWeekSelectedIndexChanged;
+
+            dayDayOfWeek.SelectedIndexChanged -= OnDayDayOfWeekSelectedIndexChanged;
             dayDayOfWeek.SelectedItem = monthlyActionSchedule.ExecuteOnDay;
+            dayDayOfWeek.SelectedIndexChanged += OnDayDayOfWeekSelectedIndexChanged;
+            
             dayMonth.SelectMonths(monthlyActionSchedule.ExecuteOnDayMonths);
 
             dateMonth.MonthChanged = SaveValues;
@@ -73,16 +84,31 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             monthlyActionSchedule.ExecuteOnDayMonths = dayMonth.GetSelectedMonths();
         }
 
+        /// <summary>
+        /// Called when [date selected checked changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnDateSelectedCheckedChanged(object sender, EventArgs e)
         {
             SaveValues();
         }
 
+        /// <summary>
+        /// Called when [day week selected index changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnDayWeekSelectedIndexChanged(object sender, EventArgs e)
         {
             SaveValues();
         }
 
+        /// <summary>
+        /// Called when [day day of week selected index changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnDayDayOfWeekSelectedIndexChanged(object sender, EventArgs e)
         {
             SaveValues();

@@ -10,6 +10,9 @@ using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 {
+    /// <summary>
+    /// MonthComboBox is a combobox that shows a list of selectable months.
+    /// </summary>
     public class MonthComboBox : PopupComboBox
     {
         private readonly List<Tuple<CheckBox, MonthType>> monthsList;
@@ -20,6 +23,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 
         private CheckBox selectAll;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MonthComboBox"/> class.
+        /// </summary>
         public MonthComboBox()
         {
             monthsList = new List<Tuple<CheckBox, MonthType>>();
@@ -34,12 +40,22 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             BindMonths();
         }
 
+        /// <summary>
+        /// Gets or sets the month changed.
+        /// </summary>
+        /// <value>
+        /// The month changed.
+        /// </value>
         public Action MonthChanged
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Selects the months.
+        /// </summary>
+        /// <param name="monthsToSelect">The months to select.</param>
         public void SelectMonths(List<MonthType> monthsToSelect)
         {
             foreach (var monthHolder in monthsList)
@@ -48,6 +64,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             }
         }
 
+        /// <summary>
+        /// Gets the selected months.
+        /// </summary>
         public List<MonthType> GetSelectedMonths()
         {
             return (from monthHolder in monthsList
@@ -55,6 +74,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
                     select monthHolder.Item2).ToList();
         }
 
+        /// <summary>
+        /// Initialize Component
+        /// </summary>
         private void InitializeComponent()
         {
             monthPanel = new Panel();
@@ -165,7 +187,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             ignoreMonthCheckChanged = false;
         }
 
-
+        /// <summary>
+        /// Draw the item that the user has currently selected
+        /// </summary>
         protected override void OnDrawSelectedItem(Graphics graphics, Color foreColor, Rectangle bounds)
         {
             string text = string.Join(", ", GetSelectedMonths());
@@ -174,12 +198,16 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
                 text = "Every Month";
             }
 
-            StringFormat stringFormat = new StringFormat
+            using (StringFormat stringFormat = new StringFormat
             {
                 Trimming = StringTrimming.EllipsisCharacter
-            };
-
-            graphics.DrawString(text, Font, new SolidBrush(ForeColor), bounds, stringFormat);
+            })
+            {
+                using (var brush = new SolidBrush(ForeColor))
+                {
+                    graphics.DrawString(text, Font, brush, bounds, stringFormat);
+                }
+            }
         }
     }
 }

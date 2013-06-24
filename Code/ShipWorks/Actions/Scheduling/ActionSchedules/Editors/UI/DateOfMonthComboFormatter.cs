@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 {
+    /// <summary>
+    /// Formats days, grouping consecutive days (ie 2-4 vs 2,3,4)
+    /// </summary>
     public class DateOfMonthComboFormatter
     {
         private readonly StringBuilder formattedDays = new StringBuilder();
@@ -12,9 +15,14 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 
         private int previousDay;
 
+        /// <summary>
+        /// Formats the days. Turns 3 consecutive days to A-C vs A,B,C
+        /// </summary>
+        /// <param name="selectedDays">The selected days.</param>
+        /// <returns></returns>
         public string FormatDays(List<int> selectedDays)
         {
-            if (selectedDays.Count == 0)
+            if (selectedDays == null || selectedDays.Count == 0)
             {
                 return string.Empty;
             }
@@ -41,6 +49,10 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             return formattedDays.ToString(1, formattedDays.Length - 1).Trim();
         }
 
+        /// <summary>
+        /// Formats the last or non consecutive day.
+        /// </summary>
+        /// <param name="day">The day.</param>
         private void FormatLastOrNonConsecutiveDay(int day)
         {
             // non consecutive day
