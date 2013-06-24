@@ -150,6 +150,9 @@ namespace ShipWorks.Actions
         public static void DispatchScheduledAction(long actionID)
         {
             ActionEntity actionEntity = ActionManager.GetAction(actionID);
+            if (!actionEntity.Enabled)
+                return;
+
             ActionTriggerType actionTriggerType = (ActionTriggerType)actionEntity.TriggerType;
 
             // Get the specific action trigger type and check any specific settings
