@@ -10,6 +10,7 @@ using Quartz.Impl;
 using Quartz;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using Quartz.Spi;
+using log4net;
 
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
@@ -17,10 +18,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
     [TestClass]
     public class QuartzSchedulingEngineTest
     {
-        Mock<Quartz.IScheduler> scheduler;
-        Mock<IActionScheduleAdapter> scheduleAdapter;
-
         QuartzSchedulingEngine testObject;
+
+        private Mock<IScheduler> scheduler;
+        private Mock<IActionScheduleAdapter> scheduleAdapter;
+        private Mock<ILog> log;
 
         [TestInitialize]
         public void Initialize()
@@ -34,7 +36,9 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduleAdapter.Setup(x => x.Adapt(It.IsAny<ActionSchedule>()))
                 .Returns(new QuartzActionSchedule());
 
-            testObject = new QuartzSchedulingEngine(schedulerFactory.Object, scheduleAdapter.Object);
+            log = new Mock<ILog>();
+
+            testObject = new QuartzSchedulingEngine(schedulerFactory.Object, scheduleAdapter.Object, log.Object);
         }
 
 
@@ -67,6 +71,40 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [TestMethod]
+        public void Schedule_LogsPreparationInfoMessage_WhenJobIsExisting_Test()
+        {
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
+
+            // Setup methods used when removing
+            scheduler.Setup(s => s.UnscheduleJob(It.IsAny<TriggerKey>()));
+            scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
+
+            ActionEntity action = new ActionEntity { ActionID = 1, Name = "Unit Test Action" };
+            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
+
+            testObject.Schedule(action, schedule);
+
+            log.Verify(l => l.InfoFormat("The {0} action (ID {1}) is an existing scheduled job. Preparing to update the action by removing it and re-adding it with the updated settings.", action.Name, action.ActionID), Times.Once());
+        }
+
+        [TestMethod]
+        public void Schedule_LogsRemovalInfoMessage_WhenJobIsExisting_Test()
+        {
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
+
+            // Setup methods used when removing
+            scheduler.Setup(s => s.UnscheduleJob(It.IsAny<TriggerKey>()));
+            scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
+
+            ActionEntity action = new ActionEntity { ActionID = 1, Name = "Unit Test Action" };
+            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
+
+            testObject.Schedule(action, schedule);
+
+            log.Verify(l => l.InfoFormat("The {0} scheduled action (ID {1}) has been removed. The job and its triggers and/or calenders for the action have been deleted.", action.Name, action.ActionID), Times.Once());
+        }
+
+        [TestMethod]
         public void Schedule_DoesNotRemoveJob_WhenJobIsNew_Test()
         {
             // Setup to return null to simulate the job does not exist
@@ -78,6 +116,23 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             testObject.Schedule(action, schedule);
 
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Never());
+        }
+
+        [TestMethod]
+        public void Schedule_LogsScheduledInfoMessage_WhenJobIsExisting_Test()
+        {
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
+
+            // Setup methods used when removing
+            scheduler.Setup(s => s.UnscheduleJob(It.IsAny<TriggerKey>()));
+            scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
+
+            ActionEntity action = new ActionEntity { ActionID = 1, Name = "Unit Test Action" };
+            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
+
+            testObject.Schedule(action, schedule);
+
+            log.Verify(l => l.InfoFormat("The {0} action (ID {1}) has been scheduled.", action.Name, action.ActionID), Times.Once());
         }
 
         [TestMethod]
@@ -237,6 +292,23 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             testObject.Unschedule(null);
 
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Never());
+        }
+
+        [TestMethod]
+        public void Unschedule_LogsRemovalInfoMessage_WhenJobIsExisting_Test()
+        {
+            scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
+
+            // Setup methods used when removing
+            scheduler.Setup(s => s.UnscheduleJob(It.IsAny<TriggerKey>()));
+            scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
+
+            ActionEntity action = new ActionEntity { ActionID = 1, Name = "Unit Test Action" };
+            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
+
+            testObject.Unschedule(action);
+
+            log.Verify(l => l.InfoFormat("The {0} scheduled action (ID {1}) has been removed. The job and its triggers and/or calenders for the action have been deleted.", action.Name, action.ActionID), Times.Once());
         }
 
         [TestMethod]

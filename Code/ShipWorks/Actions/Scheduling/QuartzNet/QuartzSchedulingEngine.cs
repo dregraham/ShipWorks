@@ -8,6 +8,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
@@ -18,31 +19,42 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
     /// </summary>
     public class QuartzSchedulingEngine : ISchedulingEngine
     {
-        readonly Quartz.ISchedulerFactory schedulerFactory;
-        readonly IActionScheduleAdapter scheduleAdapter;
+        private readonly ISchedulerFactory schedulerFactory;
+        private readonly IActionScheduleAdapter scheduleAdapter;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
         /// </summary>
         public QuartzSchedulingEngine()
-            : this(new SqlSchedulerFactory(), new ReflectingActionScheduleAdapter()) 
+            : this(new SqlSchedulerFactory(), new ReflectingActionScheduleAdapter(), LogManager.GetLogger(typeof(QuartzSchedulingEngine))) 
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
+        /// Initializes a new instance of the <see cref="QuartzSchedulingEngine" /> class.
         /// </summary>
         /// <param name="schedulerFactory">The scheduler factory.</param>
         /// <param name="scheduleAdapter">The action schedule adapter.</param>
-        /// <exception cref="System.ArgumentNullException">schedulerFactory</exception>
-        public QuartzSchedulingEngine(Quartz.ISchedulerFactory schedulerFactory, IActionScheduleAdapter scheduleAdapter)
+        /// <param name="log">The log.</param>
+        /// <exception cref="System.ArgumentNullException">schedulerFactory or scheduleAdapter or log</exception>
+        public QuartzSchedulingEngine(ISchedulerFactory schedulerFactory, IActionScheduleAdapter scheduleAdapter, ILog log)
         {
             if (null == schedulerFactory)
+            {
                 throw new ArgumentNullException("schedulerFactory");
+            }
             if (null == scheduleAdapter)
+            {
                 throw new ArgumentNullException("scheduleAdapter");
+            }
+            if (log == null)
+            {
+                throw new ArgumentNullException("log");
+            }
 
             this.schedulerFactory = schedulerFactory;
             this.scheduleAdapter = scheduleAdapter;
+            this.log = log;
         }
 
         /// <summary>
@@ -60,6 +72,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 {
                     // Simplest way to update a job in Quartz is to delete it along with all of its triggers
                     // (http://stackoverflow.com/questions/6728012/quartz-net-update-delete-jobs-triggers)
+                    log.InfoFormat("The {0} action (ID {1}) is an existing scheduled job. Preparing to update the action by removing it and re-adding it with the updated settings.", action.Name, action.ActionID);
                     RemoveJob(action, quartzScheduler);
                 }
 
@@ -82,6 +95,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 }
 
                 quartzScheduler.ScheduleJob(job, trigger.Build());
+                log.InfoFormat("The {0} action (ID {1}) has been scheduled.", action.Name, action.ActionID);
             }
             finally
             {
@@ -174,6 +188,8 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
                 quartzScheduler.DeleteJob(jobKey);
                 quartzScheduler.DeleteCalendar(jobKey.Name);
+
+                log.InfoFormat("The {0} scheduled action (ID {1}) has been removed. The job and its triggers and/or calenders for the action have been deleted.", action.Name, action.ActionID);
             }
         }
 
