@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
+using ShipWorks.Actions.Scheduling;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
@@ -79,6 +80,21 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         public void CreateEditor_ReturnsWeeklyActionScheduleEditor_Test()
         {
             Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(WeeklyActionScheduleEditor));
+        }
+
+        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        public void Validate_AtLeastOneDayIsRequired()
+        {
+            testObject.FrequencyInWeeks = 1;
+            try
+            {
+                testObject.Validate();
+            }
+            catch (SchedulingException ex)
+            {
+                Assert.AreEqual("At least one day of the week must be scheduled.", ex.Message);
+                throw;
+            }
         }
     }
 }

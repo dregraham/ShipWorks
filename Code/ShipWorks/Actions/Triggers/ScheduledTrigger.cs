@@ -12,6 +12,7 @@ using System.Linq;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using ShipWorks.Actions.Scheduling;
 
 namespace ShipWorks.Actions.Triggers
 {
@@ -155,6 +156,17 @@ namespace ShipWorks.Actions.Triggers
             string xml = SerializationUtility.SerializeToXml(Schedule, true);
 
             xmlWriter.WriteRaw(xml);
+        }
+
+        /// <summary>
+        /// Validates the schedule.
+        /// </summary>
+        public override void Validate()
+        {
+            if (null == Schedule)
+                throw new SchedulingException("No schedule has been set for this trigger.");
+
+            Schedule.Validate();
         }
     }
 }

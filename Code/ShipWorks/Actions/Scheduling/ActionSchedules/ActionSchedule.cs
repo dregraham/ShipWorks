@@ -51,5 +51,11 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// Creates and returns an ActionScheduleEditor for the specific ActionSchedule
         /// </summary>
         public abstract ActionScheduleEditor CreateEditor();
+
+
+        /// <summary>
+        /// Validates the schedule.  An exception is thrown to indicate validation failure.
+        /// </summary>
+        public virtual void Validate() { }
     }
 }

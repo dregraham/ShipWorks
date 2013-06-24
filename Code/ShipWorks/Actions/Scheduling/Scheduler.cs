@@ -49,6 +49,8 @@ namespace ShipWorks.Actions.Scheduling
                 }
             }
 
+            schedule.Validate();
+
             try
             {
                 // Delegate to the scheduling engine to take care of the details of scheduling the action

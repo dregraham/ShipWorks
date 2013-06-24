@@ -176,5 +176,22 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
             schedulingEngine.Verify(x => x.RunAsync(token), Times.Once());
         }
+
+        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        public void ScheduleAction_ValidatesSchedule()
+        {
+            var schedule = new Mock<ActionSchedule>();
+            schedule.Setup(x => x.Validate()).Throws<SchedulingException>();
+
+            try
+            {
+                testObject.ScheduleAction(new ActionEntity(), schedule.Object);
+            }
+            catch
+            {
+                schedulingEngine.Verify(x => x.Schedule(It.IsAny<ActionEntity>(), It.IsAny<ActionSchedule>()), Times.Never());
+                throw;
+            }
+        }
     }
 }

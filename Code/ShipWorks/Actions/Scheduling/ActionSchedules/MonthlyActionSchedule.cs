@@ -79,5 +79,30 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// <value>The execute on day months.</value>
         [XmlElement("ExecuteOnDayMonths")]
         public List<MonthType> ExecuteOnDayMonths { get; set; }
+
+
+        /// <summary>
+        /// Ensures the monthly schedule is valid.
+        /// </summary>
+        public override void Validate()
+        {
+            base.Validate();
+
+            if (CalendarType == MonthlyCalendarType.Date)
+            {
+                if (null == ExecuteOnDates || !ExecuteOnDates.Any())
+                    throw new SchedulingException("At least one day must be scheduled.");
+
+                if (null == ExecuteOnDateMonths || !ExecuteOnDateMonths.Any())
+                    throw new SchedulingException("At least one month must be scheduled.");
+            }
+            else if (CalendarType == MonthlyCalendarType.Day)
+            {
+                if (null == ExecuteOnDayMonths || !ExecuteOnDayMonths.Any())
+                    throw new SchedulingException("At least one month must be scheduled.");
+            }
+            else
+                throw new SchedulingException("Calendar type is invalid.");
+        }
     }
 }

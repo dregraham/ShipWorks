@@ -425,6 +425,17 @@ namespace ShipWorks.Actions
                 return;
             }
 
+            try
+            {
+                trigger.Validate();
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+                ActiveControl = panelTrigger;
+                return;
+            }
+
             Cursor.Current = Cursors.WaitCursor;
 
             try
