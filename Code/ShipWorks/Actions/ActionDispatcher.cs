@@ -149,6 +149,7 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchScheduledAction(long actionID)
         {
+            ActionManager.CheckForChangesNeeded();
             ActionEntity actionEntity = ActionManager.GetAction(actionID);
             if (!actionEntity.Enabled)
                 return;
