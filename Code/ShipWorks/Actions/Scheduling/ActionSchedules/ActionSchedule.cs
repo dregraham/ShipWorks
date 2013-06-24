@@ -17,9 +17,11 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         /// </summary>
         protected ActionSchedule()
         {
-            DateTime now = DateTime.UtcNow;
+            DateTime utcNow = DateTime.UtcNow;
 
-            StartDateTimeInUtc = now.AddMinutes(60 - now.Minute);
+            // Set the start date to the top of the next hour by default
+            StartDateTimeInUtc = utcNow.AddMinutes(60 - utcNow.Minute);
+            StartDateTimeInUtc = StartDateTimeInUtc.AddSeconds(-StartDateTimeInUtc.Second);
         }
 
         /// <summary>

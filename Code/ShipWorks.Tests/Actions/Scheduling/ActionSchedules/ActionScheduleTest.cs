@@ -1,31 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Actions.Scheduling.ActionSchedules;
+using ShipWorks.Tests.Actions.Scheduling.ActionSchedules.Fakes;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
     [TestClass]
-    public class OneTimeActionScheduleTest
+    public class ActionScheduleTest
     {
+        private readonly FakeActionScheduler testObject;
 
-        OneTimeActionSchedule testObject;
-
-        public OneTimeActionScheduleTest()
+        public ActionScheduleTest()
         {
-            testObject = new OneTimeActionSchedule();
+            testObject = new FakeActionScheduler();
         }
-
-        [TestMethod]
-        public void StartDateTimeInUtc_IsTopOfTheHour_Test()
-        {
-            DateTime utcNow = DateTime.UtcNow;
-
-            DateTime topOfHour = utcNow.AddMinutes(60 - utcNow.Minute);
-
-            // Make sure the time is between before the call and after the call.
-            Assert.AreEqual(topOfHour.Hour, testObject.StartDateTimeInUtc.Hour);
-        }
-
+        
         [TestMethod]
         public void StartDateTimeInUtc_HourIsIncremented_Test()
         {

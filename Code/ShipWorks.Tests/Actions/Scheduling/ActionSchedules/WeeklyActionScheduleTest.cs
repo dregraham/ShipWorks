@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         public WeeklyActionScheduleTest()
         {
             testObject = new WeeklyActionSchedule();
-        }
+        }        
 
         [TestMethod]
         public void ScheduleType_ReturnsWeekly_Test()
