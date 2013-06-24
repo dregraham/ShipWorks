@@ -34,7 +34,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             BindMonths();
         }
 
-        public Action<List<MonthType>>  MonthChanged
+        public Action MonthChanged
         {
             get;
             set;
@@ -44,7 +44,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         {
             foreach (var monthHolder in monthsList)
             {
-                monthHolder.Item1.Checked = monthsToSelect.Any(m => m == monthHolder.Item2);
+                monthHolder.Item1.Checked = monthsToSelect != null && monthsToSelect.Any(m => m == monthHolder.Item2);
             }
         }
 
@@ -136,7 +136,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 
                 if (MonthChanged != null)
                 {
-                    MonthChanged(GetSelectedMonths());
+                    MonthChanged();
                 }
             }
         }
@@ -159,7 +159,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
 
             if (MonthChanged != null)
             {
-                MonthChanged(GetSelectedMonths());
+                MonthChanged();
             }
 
             ignoreMonthCheckChanged = false;

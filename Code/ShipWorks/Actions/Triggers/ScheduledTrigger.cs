@@ -121,6 +121,9 @@ namespace ShipWorks.Actions.Triggers
                     break;
 
                 case ActionScheduleType.Monthly:
+                    xml = string.Join("", settingsXDoc.Descendants("MonthlyActionSchedule").First()).Trim();
+                    Schedule = SerializationUtility.DeserializeFromXml<MonthlyActionSchedule>(xml);
+                    break;
                 default:
                     throw new ActionScheduleException(string.Format("{0} is an unknown schedule type and can't be deserialized in ScheduledTrigger.cs", EnumHelper.GetDescription(actionScheduleType)));
             }

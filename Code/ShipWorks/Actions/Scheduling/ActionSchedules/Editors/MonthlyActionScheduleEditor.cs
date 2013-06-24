@@ -17,8 +17,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
     /// </summary>
     public partial class MonthlyActionScheduleEditor : ActionScheduleEditor
     {
-        private readonly List<Tuple<CheckBox,MonthType>> onTheMonthsList = new List<Tuple<CheckBox,MonthType>>(); 
-        private readonly List<Tuple<CheckBox,MonthType>> daysMonthsList = new List<Tuple<CheckBox,MonthType>>(); 
+        private MonthlyActionSchedule monthlyActionSchedule;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MonthlyActionScheduleEditor"/> class.
@@ -26,6 +25,15 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         public MonthlyActionScheduleEditor()
         {
             InitializeComponent();
+
+            dayWeek.SelectedIndexChanged -= OnDayWeekSelectedIndexChanged;
+            EnumHelper.BindComboBox<WeekOfMonthType>(dayWeek);
+            dayWeek.SelectedIndexChanged += OnDayWeekSelectedIndexChanged;
+
+            dayDayOfWeek.SelectedIndexChanged -= OnDayDayOfWeekSelectedIndexChanged;
+            dayDayOfWeek.DataSource = Enum.GetValues(typeof(DayOfWeek));
+            dayDayOfWeek.SelectedIndexChanged += OnDayDayOfWeekSelectedIndexChanged;
+
         }
 
         /// <summary>
@@ -34,58 +42,50 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         /// <param name="actionSchedule">The ActionSchedule from which to populate the editor.</param>
         public override void LoadActionSchedule(ActionSchedule actionSchedule)
         {
-            EnumHelper.BindComboBox<WeekOfMonthType>(dayWeek);
+            monthlyActionSchedule = (MonthlyActionSchedule) actionSchedule;
 
-            dayDayOfWeek.DataSource = Enum.GetValues(typeof(DayOfWeek));
+            dateSelected.Checked = (monthlyActionSchedule.CalendarType == MonthlyCalendarType.Date);
+            dateDayOfMonth.SelectDays(monthlyActionSchedule.ExecuteOnDates);
+            dateMonth.SelectMonths(monthlyActionSchedule.ExecuteOnDateMonths);
+
+            daySelected.Checked = (monthlyActionSchedule.CalendarType == MonthlyCalendarType.Day);
+            dayWeek.SelectedItem = monthlyActionSchedule.ExecuteOnWeek;
+            dayDayOfWeek.SelectedItem = monthlyActionSchedule.ExecuteOnDay;
+            dayMonth.SelectMonths(monthlyActionSchedule.ExecuteOnDayMonths);
+
+            dateMonth.MonthChanged = SaveValues;
+            dayMonth.MonthChanged = SaveValues;
+            dateDayOfMonth.DateChanged = SaveValues;
         }
 
         /// <summary>
-        /// Binds the months.
+        /// Saves the values to monthlyActionSchedule
         /// </summary>
-        /// <param name="monthsList">The months list.</param>
-        /// <param name="monthsPanel">The months panel.</param>
-        private void BindMonths(List<Tuple<CheckBox,MonthType>> monthsList, Panel monthsPanel)
+        private void SaveValues()
         {
-            // Loop through all the months in MonthTypeEnum.
-            for (int monthIndex = 0; monthIndex < EnumHelper.GetEnumList<MonthType>().Count; monthIndex++)
-            {
-                var month = EnumHelper.GetEnumList<MonthType>()[monthIndex];
-                int verticlePosition = 23 * monthIndex + 23;
+            monthlyActionSchedule.CalendarType = dateSelected.Checked ? MonthlyCalendarType.Date : MonthlyCalendarType.Day;
 
-                // Build monthsList with new checkboxes and related enums.
-                var checkboxAndMonthType = new Tuple<CheckBox, MonthType>(new CheckBox()
-                {
-                    Text = month.Key, Location = new Point(3, verticlePosition)
-                }, month.Value);
+            monthlyActionSchedule.ExecuteOnDates = dateDayOfMonth.GetSelectedDays();
+            monthlyActionSchedule.ExecuteOnDateMonths = dateMonth.GetSelectedMonths();
 
-                checkboxAndMonthType.Item1.CheckedChanged += CheckChangedMonth;
-                monthsList.Add(checkboxAndMonthType);
-
-                // Add checkbox to panel
-                monthsPanel.Controls.Add(checkboxAndMonthType.Item1);
-            }
+            monthlyActionSchedule.ExecuteOnWeek = ((EnumEntry<WeekOfMonthType>) dayWeek.SelectedItem).Value;
+            monthlyActionSchedule.ExecuteOnDay = (DayOfWeek) dayDayOfWeek.SelectedItem;
+            monthlyActionSchedule.ExecuteOnDayMonths = dayMonth.GetSelectedMonths();
         }
 
-        /// <summary>
-        /// Check changed for month checkbox
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        void CheckChangedMonth(object sender, EventArgs e)
+        private void OnDateSelectedCheckedChanged(object sender, EventArgs e)
         {
-            Tuple<CheckBox, MonthType> selectedMonth = onTheMonthsList.SingleOrDefault(m => m.Item1 == sender);
-            List<Tuple<CheckBox, MonthType>> monthsList = onTheMonthsList;
-            
-            if (selectedMonth == null)
-            {
-                selectedMonth = daysMonthsList.SingleOrDefault(m => m.Item1 == sender);
-                monthsList = daysMonthsList;
-            }
+            SaveValues();
+        }
 
-            if (VScroll)
-            {
-                
-            }
+        private void OnDayWeekSelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveValues();
+        }
+
+        private void OnDayDayOfWeekSelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveValues();
         }
     }
 }

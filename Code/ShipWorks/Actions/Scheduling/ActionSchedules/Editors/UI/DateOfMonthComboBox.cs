@@ -36,7 +36,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         }
 
 
-        public Action<List<int>>  DateChanged
+        public Action  DateChanged
         {
             get;
             set;
@@ -63,7 +63,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         {
             foreach (var dayHolder in dayList)
             {
-                dayHolder.Item1.Checked = daysToSelect.Any(d => d == dayHolder.Item2);
+                dayHolder.Item1.Checked = daysToSelect !=null && daysToSelect.Any(d => d == dayHolder.Item2);
             }
         }
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         {
             if (DateChanged != null)
             {
-                DateChanged(GetSelectedDays());
+                DateChanged();
             }
         }
 

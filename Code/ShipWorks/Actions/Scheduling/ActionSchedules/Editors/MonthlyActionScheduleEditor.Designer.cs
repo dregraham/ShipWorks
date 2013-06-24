@@ -53,6 +53,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             this.dateSelected.TabIndex = 2;
             this.dateSelected.TabStop = true;
             this.dateSelected.UseVisualStyleBackColor = true;
+            this.dateSelected.CheckedChanged += new System.EventHandler(this.OnDateSelectedCheckedChanged);
             // 
             // dateDaysLabel
             // 
@@ -98,6 +99,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             this.dayWeek.Name = "dayWeek";
             this.dayWeek.Size = new System.Drawing.Size(94, 21);
             this.dayWeek.TabIndex = 9;
+            this.dayWeek.SelectedIndexChanged += new System.EventHandler(this.OnDayWeekSelectedIndexChanged);
             // 
             // dayDayOfWeek
             // 
@@ -107,6 +109,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             this.dayDayOfWeek.Name = "dayDayOfWeek";
             this.dayDayOfWeek.Size = new System.Drawing.Size(83, 21);
             this.dayDayOfWeek.TabIndex = 10;
+            this.dayDayOfWeek.SelectedIndexChanged += new System.EventHandler(this.OnDayDayOfWeekSelectedIndexChanged);
             // 
             // label1
             // 
