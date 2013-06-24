@@ -113,6 +113,7 @@
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
+    <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
