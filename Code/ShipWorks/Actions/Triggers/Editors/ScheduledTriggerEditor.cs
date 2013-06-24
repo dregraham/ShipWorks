@@ -122,7 +122,9 @@ namespace ShipWorks.Actions.Triggers.Editors
             ActionScheduleType actionScheduleType = (ActionScheduleType) ((ToolStripMenuItem) sender).Tag;
             if (trigger.Schedule.ScheduleType != actionScheduleType)
             {
+                var oldSchedule = trigger.Schedule;
                 trigger.Schedule = ActionScheduleFactory.CreateActionSchedule(actionScheduleType);
+                trigger.Schedule.StartDateTimeInUtc = oldSchedule.StartDateTimeInUtc;
                 SelectInputSource(actionScheduleType);
             }
         }
