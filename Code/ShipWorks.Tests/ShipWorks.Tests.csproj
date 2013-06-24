@@ -88,6 +88,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Scheduling\ActionSchedules\DayComboFormatterTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Fakes\FakeActionScheduler.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionScheduleTest.cs" />

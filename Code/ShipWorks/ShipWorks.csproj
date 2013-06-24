@@ -266,6 +266,13 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\DateOfMonthComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\DateOfMonthComboFormatter.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\MonthComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\ActionScheduleType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\MonthyCalendarType.cs" />

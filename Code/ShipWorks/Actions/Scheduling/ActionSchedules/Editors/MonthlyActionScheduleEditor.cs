@@ -26,9 +26,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         public MonthlyActionScheduleEditor()
         {
             InitializeComponent();
-
-            daysDaySelector.PopupController = new PopupController(daysPanel);
-            onTheMonthSelctor.PopupController = new PopupController(onTheMonthsPanel);
         }
 
         /// <summary>
@@ -37,12 +34,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         /// <param name="actionSchedule">The ActionSchedule from which to populate the editor.</param>
         public override void LoadActionSchedule(ActionSchedule actionSchedule)
         {
-            EnumHelper.BindComboBox<WeekOfMonthType>(onTheWeekOfMonth);
+            EnumHelper.BindComboBox<WeekOfMonthType>(dayWeek);
 
-            onTheDaySelector.DataSource = Enum.GetValues(typeof(DayOfWeek));
-
-            BindMonths(onTheMonthsList, onTheMonthsPanel);
-            
+            dayDayOfWeek.DataSource = Enum.GetValues(typeof(DayOfWeek));
         }
 
         /// <summary>
@@ -91,26 +85,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             if (VScroll)
             {
                 
-            }
-        }
-
-        /// <summary>
-        /// Checks changed for select all months.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private void CheckChangedSelectAllMonths(object sender, EventArgs e)
-        {
-            List<Tuple<CheckBox, MonthType>> monthsList = daysMonthsList;
-            if (sender == onTheSelectAllMonths)
-            {
-                monthsList = onTheMonthsList;
-            }
-
-            bool isChecked = ((CheckBox) sender).Checked;
-            foreach (var months in monthsList)
-            {
-                months.Item1.Checked = isChecked;
             }
         }
     }
