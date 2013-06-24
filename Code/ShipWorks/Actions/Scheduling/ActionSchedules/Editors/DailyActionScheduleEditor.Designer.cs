@@ -51,7 +51,7 @@
             this.unitsLabel.Name = "unitsLabel";
             this.unitsLabel.Size = new System.Drawing.Size(30, 13);
             this.unitsLabel.TabIndex = 2;
-            this.unitsLabel.Text = "days";
+            this.unitsLabel.Text = "day(s)";
             this.unitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // days
