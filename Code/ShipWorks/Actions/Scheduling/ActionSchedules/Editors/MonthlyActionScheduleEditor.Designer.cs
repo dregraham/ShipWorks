@@ -129,7 +129,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             this.dateMonth.FormattingEnabled = true;
             this.dateMonth.IntegralHeight = false;
             this.dateMonth.Location = new System.Drawing.Point(215, 15);
-            this.dateMonth.MonthChanged = null;
             this.dateMonth.Name = "dateMonth";
             this.dateMonth.Size = new System.Drawing.Size(162, 21);
             this.dateMonth.TabIndex = 13;
@@ -142,14 +141,12 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             this.dayMonth.FormattingEnabled = true;
             this.dayMonth.IntegralHeight = false;
             this.dayMonth.Location = new System.Drawing.Point(277, 50);
-            this.dayMonth.MonthChanged = null;
             this.dayMonth.Name = "dayMonth";
             this.dayMonth.Size = new System.Drawing.Size(162, 21);
             this.dayMonth.TabIndex = 14;
             // 
             // dateDayOfMonth
             // 
-            this.dateDayOfMonth.DateChanged = null;
             this.dateDayOfMonth.DropDownHeight = 116;
             this.dateDayOfMonth.DropDownMinimumHeight = 116;
             this.dateDayOfMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
