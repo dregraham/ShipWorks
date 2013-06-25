@@ -33,7 +33,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             dayDayOfWeek.SelectedIndexChanged -= OnDayDayOfWeekSelectedIndexChanged;
             dayDayOfWeek.DataSource = Enum.GetValues(typeof(DayOfWeek));
             dayDayOfWeek.SelectedIndexChanged += OnDayDayOfWeekSelectedIndexChanged;
-
         }
 
         /// <summary>
@@ -47,7 +46,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             dateSelected.CheckedChanged -= OnDateSelectedCheckedChanged;
             dateSelected.Checked = (monthlyActionSchedule.CalendarType == MonthlyCalendarType.Date);
             dateSelected.CheckedChanged += OnDateSelectedCheckedChanged;
-
 
             dateDayOfMonth.SelectDays(monthlyActionSchedule.ExecuteOnDates);
             dateMonth.SelectMonths(monthlyActionSchedule.ExecuteOnDateMonths);
@@ -67,6 +65,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
             dateMonth.MonthChanged = SaveValues;
             dayMonth.MonthChanged = SaveValues;
             dateDayOfMonth.DateChanged = SaveValues;
+
+            SetCalendarTypeControlEnabledState(monthlyActionSchedule.CalendarType);
         }
 
         /// <summary>
@@ -92,6 +92,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         private void OnDateSelectedCheckedChanged(object sender, EventArgs e)
         {
             SaveValues();
+
+            SetCalendarTypeControlEnabledState(MonthlyCalendarType.Date);
         }
 
         /// <summary>
@@ -112,6 +114,28 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
         private void OnDayDayOfWeekSelectedIndexChanged(object sender, EventArgs e)
         {
             SaveValues();
+        }
+
+        /// <summary>
+        /// Called when day selected checked changed.
+        /// </summary>
+        private void OnDaySelectedCheckedChanged(object sender, EventArgs e)
+        {
+            SetCalendarTypeControlEnabledState(MonthlyCalendarType.Day);
+        }
+
+        /// <summary>
+        /// Enable/disable the calender type controls based on current selection.
+        /// </summary>
+        /// <param name="monthlyCalendarType">The current calendar type.</param>
+        private void SetCalendarTypeControlEnabledState(MonthlyCalendarType monthlyCalendarType)
+        {
+            dateDayOfMonth.Enabled = monthlyCalendarType == MonthlyCalendarType.Date;
+            dateMonth.Enabled = monthlyCalendarType == MonthlyCalendarType.Date;
+
+            dayWeek.Enabled = monthlyCalendarType == MonthlyCalendarType.Day;
+            dayDayOfWeek.Enabled = monthlyCalendarType == MonthlyCalendarType.Day;
+            dayMonth.Enabled = monthlyCalendarType == MonthlyCalendarType.Day;
         }
     }
 }
