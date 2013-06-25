@@ -36,7 +36,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Actions.Scheduling
         /// </summary>
         public virtual void JobToBeExecuted(IJobExecutionContext context)
         {
-            throw new NotImplementedException("JobToBeExecuted has not been implemented.");
         }
 
         /// <summary>
@@ -44,7 +43,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Actions.Scheduling
         /// </summary>
         public virtual void JobExecutionVetoed(IJobExecutionContext context)
         {
-            throw new NotImplementedException("JobExecutionVetoed has not been implemented.");
         }
 
         /// <summary>
