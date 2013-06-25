@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Installer\ShipWorks.iss = Installer\ShipWorks.iss
 		LLBLGen\ShipWorks.lgp = LLBLGen\ShipWorks.lgp
 		Build\shipworks.proj = Build\shipworks.proj
-		ShipWorks.testsettings = ShipWorks.testsettings
-		ShipWorks.vsmdi = ShipWorks.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks", "Code\ShipWorks\ShipWorks.csproj", "{02653371-C0DC-4D70-949D-60D37C69F781}"
@@ -37,9 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Tests.Integration.MSTest", "Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj", "{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = ShipWorks.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (x86)|Any CPU = Debug (x86)|Any CPU
 		Debug (x86)|Mixed Platforms = Debug (x86)|Mixed Platforms
