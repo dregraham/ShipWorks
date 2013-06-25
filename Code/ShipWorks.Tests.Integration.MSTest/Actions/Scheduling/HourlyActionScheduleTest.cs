@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                     count++;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Some exception happened, cancel processing and then throw
                 cancellationTokenSource.Cancel(true);
@@ -291,7 +291,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // An exception occurred, so cancel processing and throw.
                 cancellationTokenSource.Cancel(true);
