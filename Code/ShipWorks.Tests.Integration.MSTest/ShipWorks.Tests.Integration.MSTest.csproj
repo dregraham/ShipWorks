@@ -50,6 +50,10 @@
     <Reference Include="Moq">
       <HintPath>..\..\Components\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -66,6 +70,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Scheduling\ActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCAGroundDomesticInternational.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExPrototypeFixture.cs" />
@@ -76,12 +82,15 @@
     <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsFixture.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntegrationTestBase.cs" />
+    <Compile Include="Actions\Scheduling\HourlyActionScheduleTest.cs" />
+    <Compile Include="ShipWorksInitializer.cs" />
     <Compile Include="Utilities\InterapptiveOnlyUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\iParcel\iParcelFixture.cs" />
     <Compile Include="Utilities\ShipWorksDataMethods.cs" />
     <Compile Include="Fixtures\ShipWorksFixtureBase.cs" />
     <Compile Include="IntegrationTests.cs" />
+    <Compile Include="Utilities\SystemTimeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

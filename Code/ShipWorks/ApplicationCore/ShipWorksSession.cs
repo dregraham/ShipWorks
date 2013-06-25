@@ -116,6 +116,34 @@ namespace ShipWorks.ApplicationCore
                 }
             }
 
+            // This is for integration tests on 64 bit machines.  Try to open the Registry64 view.  If it throws,
+            // Just let the code flow to the InstallationException below.
+            try
+            {
+                using (RegistryKey hive = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                {
+                    using (RegistryKey key = hive.OpenSubKey(@"Software\Interapptive\ShipWorks"))
+                    {
+                        if (key != null)
+                        {
+                            string value = key.GetValue("ComputerID") as string;
+
+                            if (value != null)
+                            {
+                                Guid guid;
+                                if (GuidHelper.TryParse(value, out guid))
+                                {
+                                    return guid;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
             throw new InstallationException(
                 "ShipWorks could not load the ComputerID.\n\n" +
                 "To fix this problem:\n" +
