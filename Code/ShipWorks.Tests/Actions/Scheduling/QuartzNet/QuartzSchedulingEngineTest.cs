@@ -11,6 +11,7 @@ using Quartz;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using Quartz.Spi;
 using log4net;
+using ShipWorks.Actions.Scheduling;
 
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
@@ -20,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
     {
         QuartzSchedulingEngine testObject;
 
-        private Mock<IScheduler> scheduler;
+        private Mock<Quartz.IScheduler> scheduler;
         private Mock<IActionScheduleAdapter> scheduleAdapter;
         private Mock<ILog> log;
 
@@ -348,17 +349,19 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
 
-            var trigger = new Mock<IMutableTrigger>().Object;
+            var trigger = new Mock<IOperableTrigger>();
+            trigger.Setup(x => x.Clone()).Returns(trigger.Object);
+            trigger.Setup(x => x.GetNextFireTimeUtc()).Returns(DateTimeOffset.UtcNow);
 
             var quartzSchedule = new Mock<IScheduleBuilder>();
-            quartzSchedule.Setup(x => x.Build()).Returns(trigger);
+            quartzSchedule.Setup(x => x.Build()).Returns(trigger.Object);
 
             scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
                 .Returns(new QuartzActionSchedule { ScheduleBuilder = quartzSchedule.Object });
 
             testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
 
-            scheduler.Verify(x => x.ScheduleJob(It.IsAny<IJobDetail>(), trigger), Times.Once());
+            scheduler.Verify(x => x.ScheduleJob(It.IsAny<IJobDetail>(), trigger.Object), Times.Once());
         }
 
         [TestMethod]
@@ -369,7 +372,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             var quartzCalendar = new Mock<ICalendar>().Object;
 
             scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
-                .Returns(new QuartzActionSchedule { Calendar = quartzCalendar });
+                .Returns(new QuartzActionSchedule {
+                    ScheduleBuilder = SimpleScheduleBuilder.RepeatHourlyForever(),
+                    Calendar = quartzCalendar
+                });
 
             string jobName = null;
             scheduler.Setup(x => x.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ITrigger>()))
@@ -386,7 +392,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             var actionSchedule = new Mock<ActionSchedule>().Object;
 
             scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
-                .Returns(new QuartzActionSchedule { Calendar = new Mock<ICalendar>().Object });
+                .Returns(new QuartzActionSchedule {
+                    ScheduleBuilder = SimpleScheduleBuilder.RepeatHourlyForever(),
+                    Calendar = new Mock<ICalendar>().Object
+                });
 
             string calendarName = null;
             scheduler.Setup(x => x.AddCalendar(It.IsAny<string>(), It.IsAny<ICalendar>(), It.IsAny<bool>(), It.IsAny<bool>()))
@@ -418,6 +427,58 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             testObject.Unschedule(new ActionEntity { ActionID = 71 });
 
             scheduler.Verify(x => x.DeleteCalendar(jobName), Times.Once());
+        }
+
+        [TestMethod]
+        public void CalendarIsNotOrphanedIfJobSchedulingFails()
+        {
+            var actionSchedule = new Mock<ActionSchedule>().Object;
+
+            scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
+                .Returns(new QuartzActionSchedule {
+                    ScheduleBuilder = SimpleScheduleBuilder.RepeatHourlyForever(),
+                    Calendar = new Mock<ICalendar>().Object
+                });
+
+            string calendarName = null;
+            scheduler.Setup(x => x.AddCalendar(It.IsAny<string>(), It.IsAny<ICalendar>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Callback<string, ICalendar, bool, bool>((n, c, b1, b2) => { calendarName = n; });
+
+            scheduler.Setup(x => x.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ITrigger>()))
+                .Throws<SchedulerException>();
+
+            try
+            {
+                testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
+            }
+            catch(SchedulerException) { }
+
+            scheduler.Verify(x => x.DeleteCalendar(calendarName), Times.Once());
+        }
+
+        [TestMethod]
+        public void ExceptionIsThrownWhenTriggerWillNeverFire()
+        {
+            var actionSchedule = new Mock<ActionSchedule>().Object;
+
+            var trigger = new Mock<IOperableTrigger>();
+            trigger.Setup(x => x.Clone()).Returns(trigger.Object);
+
+            var quartzSchedule = new Mock<IScheduleBuilder>();
+            quartzSchedule.Setup(x => x.Build()).Returns(trigger.Object);
+
+            scheduleAdapter.Setup(x => x.Adapt(actionSchedule))
+                .Returns(new QuartzActionSchedule { ScheduleBuilder = quartzSchedule.Object });
+
+            try
+            {
+                testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
+                Assert.Fail("Did not throw expected exception.");
+            }
+            catch (SchedulingException ex)
+            {
+                Assert.AreEqual("Based on the configured schedule, the action will never execute.", ex.Message);
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using Quartz.Spi;
+using System.Linq;
 
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
@@ -83,18 +85,32 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
                 var adaptedSchedule = scheduleAdapter.Adapt(schedule);
 
-                var trigger = TriggerBuilder.Create()
+                var trigger = (IOperableTrigger)TriggerBuilder.Create()
                     .WithIdentity(job.Key.Name)
                     .StartAt(schedule.StartDateTimeInUtc)
-                    .WithSchedule(adaptedSchedule.ScheduleBuilder);
+                    .WithSchedule(adaptedSchedule.ScheduleBuilder)
+                    .Build();
+
+                if (!TriggerUtils.ComputeFireTimes(trigger, adaptedSchedule.Calendar, 1).Any())
+                    throw new SchedulingException("Based on the configured schedule, the action will never execute.");
 
                 if (null != adaptedSchedule.Calendar)
                 {
-                    quartzScheduler.AddCalendar(job.Key.Name, adaptedSchedule.Calendar, true, true);
-                    trigger = trigger.ModifiedByCalendar(job.Key.Name);
+                    trigger.CalendarName = job.Key.Name;
+                    quartzScheduler.AddCalendar(trigger.CalendarName, adaptedSchedule.Calendar, true, true);
                 }
 
-                quartzScheduler.ScheduleJob(job, trigger.Build());
+                try
+                {
+                    quartzScheduler.ScheduleJob(job, trigger);
+                }
+                catch
+                {
+                    if (null != trigger.CalendarName)
+                        quartzScheduler.DeleteCalendar(trigger.CalendarName);
+                    throw;
+                }
+
                 log.InfoFormat("The {0} action (ID {1}) has been scheduled.", action.Name, action.ActionID);
             }
             finally
