@@ -10,7 +10,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore.MessagesBoxes;
+using ShipWorks.ApplicationCore.MessageBoxes;
 
 namespace ShipWorks.Templates.Management
 {

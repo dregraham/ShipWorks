@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ShipWorks.ApplicationCore.MessagesBoxes
+namespace ShipWorks.ApplicationCore.MessageBoxes
 {
     /// <summary>
     /// Window shown when closing an editor and there are unsaved changes

@@ -21,7 +21,7 @@ using ShipWorks.Data.Grid.Columns;
 using Interapptive.Shared.Utility;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.MessagesBoxes;
+using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Filters.Grid;
 
 namespace ShipWorks.Filters.Management
