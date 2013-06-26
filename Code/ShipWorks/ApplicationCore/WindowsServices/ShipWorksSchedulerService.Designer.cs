@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            // 
-            // ShipWorksScheduler
-            // 
-            this.ServiceName = "ShipWorksScheduler";
 
         }
 

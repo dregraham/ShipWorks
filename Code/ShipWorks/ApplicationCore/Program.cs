@@ -183,25 +183,17 @@ namespace ShipWorks
                 return;
             }
 
-            log.InfoFormat("Starting the '{0}' service.", serviceName);
-
-            var serviceTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
-                .ToArray();
-
-            var service = serviceTypes
-                .Select(Activator.CreateInstance)
-                .Cast<ShipWorksServiceBase>()
-                .SingleOrDefault(s => s.BaseServiceName == serviceName);
-
-            if (null == service)
+            ShipWorksServiceType serviceType;
+            if(!Enum.TryParse<ShipWorksServiceType>(serviceName, out serviceType))
             {
                 log.ErrorFormat("'{0}' is not a valid service name.", serviceName);
                 Environment.ExitCode = -1;
                 return;
             }
 
-            ServiceBase.Run(service);
+            log.InfoFormat("Starting the '{0}' service.", serviceName);
+
+            ServiceBase.Run(ShipWorksServiceManager.GetService(serviceType));
         }
 
         /// <summary>

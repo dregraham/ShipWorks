@@ -469,6 +469,7 @@
     <Compile Include="ApplicationCore\WindowsServices\ServiceStatusDialog.Designer.cs">
       <DependentUpon>ServiceStatusDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceType.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
