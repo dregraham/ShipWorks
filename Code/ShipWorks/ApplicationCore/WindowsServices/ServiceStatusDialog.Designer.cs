@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    partial class ShipWorksStatusDialog
+    partial class ServiceStatusDialog
     {
         /// <summary>
         /// Required designer variable.

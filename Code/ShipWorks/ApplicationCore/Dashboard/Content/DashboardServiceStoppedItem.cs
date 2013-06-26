@@ -8,13 +8,13 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
     public class DashboardServiceStoppedItem : DashboardItem
     {
-        private readonly ShipWorksStatusDialog statusDialog;
+        private readonly ServiceStatusDialog statusDialog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardServiceStoppedItem"/> class.
         /// </summary>
         /// <param name="statusDialog">The status dialog.</param>
-        public DashboardServiceStoppedItem(ShipWorksStatusDialog statusDialog)
+        public DashboardServiceStoppedItem(ServiceStatusDialog statusDialog)
         {
             this.statusDialog = statusDialog;
         }

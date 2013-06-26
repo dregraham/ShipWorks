@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    public partial class ShipWorksStatusDialog : Form
+    public partial class ServiceStatusDialog : Form
     {
-        public ShipWorksStatusDialog()
+        public ServiceStatusDialog()
         {
             InitializeComponent();
         }
