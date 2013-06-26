@@ -387,6 +387,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
@@ -461,6 +462,12 @@
     </Compile>
     <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksServiceInstaller.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceException.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksStatusDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksStatusDialog.Designer.cs">
+      <DependentUpon>ShipWorksStatusDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
@@ -5293,6 +5300,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.resx">
       <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksStatusDialog.resx">
+      <DependentUpon>ShipWorksStatusDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\CreateSchema.sql">
       <SubType>
