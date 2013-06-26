@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using Interapptive.Shared.Utility;
+using Microsoft.Win32;
+using System.Collections;
 using System.ComponentModel;
 using System.ServiceProcess;
-using Microsoft.Win32;
 
 
 namespace ShipWorks.ApplicationCore.WindowsServices.Installers
@@ -9,14 +10,34 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
     [System.ComponentModel.DesignerCategory("")]
     class ShipWorksServiceInstaller : ServiceInstaller
     {
+        [Description("The ShipWorks service type that this service implements.")]
+        public ShipWorksServiceType ServiceType { get; set; }
+
         [Browsable(false)]
         public string BaseServiceName { get; private set; }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        new public string ServiceName
+        {
+            get { return base.ServiceName; }
+            private set { base.ServiceName = value; }
+        }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        new public string DisplayName
+        {
+            get { return base.DisplayName; }
+            private set { base.DisplayName = value; }
+        }
+
+
         void InitializeInstance()
         {
-            BaseServiceName = ServiceName;
-            ServiceName += "$" + ShipWorksSession.InstanceID.ToString("N");
-            DisplayName += " " + ShipWorksSession.InstanceID.ToString("B").ToUpper();
+            BaseServiceName = "ShipWorks" + ServiceType;
+            ServiceName = BaseServiceName + "$" + ShipWorksSession.InstanceID.ToString("N");
+            DisplayName = EnumHelper.GetDescription(ServiceType) + " " + ShipWorksSession.InstanceID.ToString("B").ToUpper();
         }
 
 
@@ -41,7 +62,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
                 @"System\CurrentControlSet\Services\" + ServiceName, true
             );
 
-            serviceKey.SetValue("ImagePath", (string)serviceKey.GetValue("ImagePath") + " /service=" + BaseServiceName);
+            serviceKey.SetValue("ImagePath", (string)serviceKey.GetValue("ImagePath") + " /service=" + ServiceType);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ShipWorksServiceType
     {
-        [Description("Scheduler")]
+        [Description("ShipWorks Scheduler")]
         Scheduler
     }
 }

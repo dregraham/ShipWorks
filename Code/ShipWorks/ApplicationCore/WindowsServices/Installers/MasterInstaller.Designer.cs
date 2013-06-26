@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller;
-            ShipWorks.ApplicationCore.WindowsServices.Installers.ShipWorksServiceInstaller shipWorksSchedulerInstaller;
+            ShipWorks.ApplicationCore.WindowsServices.Installers.ShipWorksServiceInstaller schedulerInstaller;
             serviceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
-            shipWorksSchedulerInstaller = new ShipWorks.ApplicationCore.WindowsServices.Installers.ShipWorksServiceInstaller();
+            schedulerInstaller = new ShipWorks.ApplicationCore.WindowsServices.Installers.ShipWorksServiceInstaller();
             // 
             // serviceProcessInstaller
             // 
@@ -39,18 +39,17 @@
             serviceProcessInstaller.Password = null;
             serviceProcessInstaller.Username = null;
             // 
-            // shipWorksSchedulerInstaller
+            // schedulerInstaller
             // 
-            shipWorksSchedulerInstaller.Description = "Processes ShipWorks scheduled actions.";
-            shipWorksSchedulerInstaller.DisplayName = "ShipWorks Scheduler";
-            shipWorksSchedulerInstaller.ServiceName = "ShipWorksScheduler";
-            shipWorksSchedulerInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            schedulerInstaller.Description = "Processes ShipWorks scheduled actions.";
+            schedulerInstaller.ServiceType = ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceType.Scheduler;
+            schedulerInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
-            // AssemblyInstaller
+            // MasterInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             serviceProcessInstaller,
-            shipWorksSchedulerInstaller});
+            schedulerInstaller});
 
         }
 
