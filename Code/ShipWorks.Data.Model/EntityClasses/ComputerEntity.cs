@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		private EntityCollection<SchedulerEntity> _schedulers;
 
 
 
@@ -68,6 +69,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			/// <summary>Member name Schedulers</summary>
+			public static readonly string Schedulers = "Schedulers";
 
 
 
@@ -139,6 +142,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				_schedulers = (EntityCollection<SchedulerEntity>)info.GetValue("_schedulers", typeof(EntityCollection<SchedulerEntity>));
 
 
 
@@ -190,6 +194,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "Schedulers":
+					this.Schedulers.Add((SchedulerEntity)entity);
+					break;
 
 
 
@@ -225,6 +232,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "Schedulers":
+					toReturn.Add(ComputerEntity.Relations.SchedulerEntityUsingComputerID);
+					break;
 
 
 
@@ -274,6 +284,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "Schedulers":
+					this.Schedulers.Add((SchedulerEntity)relatedEntity);
+					break;
 
 
 
@@ -297,6 +310,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "Schedulers":
+					base.PerformRelatedEntityRemoval(this.Schedulers, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 
 
 
@@ -335,6 +351,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			toReturn.Add(this.Schedulers);
 
 
 
@@ -356,6 +373,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				info.AddValue("_schedulers", ((_schedulers!=null) && (_schedulers.Count>0) && !this.MarkedForDeletion)?_schedulers:null);
 
 
 
@@ -414,6 +432,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'Scheduler' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoSchedulers()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(SchedulerFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
+			return bucket;
+		}
+
 
 
 
@@ -455,6 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			collectionsQueue.Enqueue(this._schedulers);
 
 
 
@@ -474,6 +503,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			this._schedulers = (EntityCollection<SchedulerEntity>) collectionsQueue.Dequeue();
 
 
 
@@ -492,6 +522,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			if (this._schedulers != null)
+			{
+				return true;
+			}
 
 
 
@@ -513,6 +547,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<SchedulerEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SchedulerEntityFactory))) : null);
 
 
 
@@ -535,6 +570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			toReturn.Add("Schedulers", _schedulers);
 
 
 
@@ -554,6 +590,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			if(_schedulers!=null)
+			{
+				_schedulers.ActiveContext = base.ActiveContext;
+			}
 
 
 
@@ -574,6 +614,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			_schedulers = null;
 
 
 
@@ -648,6 +689,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Scheduler' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathSchedulers
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<SchedulerEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SchedulerEntityFactory))),
+					(IEntityRelation)GetRelationsForField("Schedulers")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.SchedulerEntity, 0, null, null, null, null, "Schedulers", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
 
 
 
@@ -727,6 +779,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'SchedulerEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(SchedulerEntity))]
+		public virtual EntityCollection<SchedulerEntity> Schedulers
+		{
+			get
+			{
+				if(_schedulers==null)
+				{
+					_schedulers = new EntityCollection<SchedulerEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SchedulerEntityFactory)));
+					_schedulers.SetContainingEntityInfo(this, "Computer");
+				}
+				return _schedulers;
+			}
+		}
 
 
 

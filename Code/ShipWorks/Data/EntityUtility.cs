@@ -83,6 +83,7 @@ namespace ShipWorks.Data
             entitySeedValues[EntityType.EndiciaAccountEntity] = 66;
             entitySeedValues[EntityType.EquaShipAccountEntity] = 67;
             entitySeedValues[EntityType.ScanFormBatchEntity] = 95;
+            entitySeedValues[EntityType.SchedulerEntity] = 96;
         }
 
         /// <summary>

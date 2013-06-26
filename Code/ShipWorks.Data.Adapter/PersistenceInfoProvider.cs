@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((157 + 0));
+			base.InitClass((158 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -162,6 +162,7 @@ namespace ShipWorks.Data.Adapter
 			InitProStoresStoreEntityMappings();
 			InitResourceEntityMappings();
 			InitScanFormBatchEntityMappings();
+			InitSchedulerEntityMappings();
 			InitSearchEntityMappings();
 			InitSearsOrderEntityMappings();
 			InitSearsOrderItemEntityMappings();
@@ -1996,6 +1997,18 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ScanFormBatchEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 2 );
 			base.AddElementFieldMapping( "ScanFormBatchEntity", "ShipmentCount", "ShipmentCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
 		}
+		/// <summary>Inits SchedulerEntity's mappings</summary>
+		private void InitSchedulerEntityMappings()
+		{
+			base.AddElementMapping( "SchedulerEntity", "ShipWorksLocal", @"dbo", "Scheduler", 7 );
+			base.AddElementFieldMapping( "SchedulerEntity", "SchedulerID", "SchedulerID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "SchedulerEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "SchedulerEntity", "LastStartDateTime", "LastStartDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 2 );
+			base.AddElementFieldMapping( "SchedulerEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 3 );
+			base.AddElementFieldMapping( "SchedulerEntity", "LastCheckInDateTime", "LastCheckInDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
+			base.AddElementFieldMapping( "SchedulerEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "SchedulerEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 6 );
+		}
 		/// <summary>Inits SearchEntity's mappings</summary>
 		private void InitSearchEntityMappings()
 		{
@@ -2024,7 +2037,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementMapping( "SearsOrderItemEntity", "ShipWorksLocal", @"dbo", "SearsOrderItem", 6 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "LineNumber", "LineNumber", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
-			base.AddElementFieldMapping( "SearsOrderItemEntity", "ItemID", "ItemID", false, (int)SqlDbType.VarChar, 20, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "SearsOrderItemEntity", "ItemID", "ItemID", false, (int)SqlDbType.VarChar, 300, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "Commission", "Commission", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 3 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "Shipping", "Shipping", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 4 );
 			base.AddElementFieldMapping( "SearsOrderItemEntity", "OnlineStatus", "OnlineStatus", false, (int)SqlDbType.VarChar, 20, 0, 0, false, "", null, typeof(System.String), 5 );

@@ -350,6 +350,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ScanFormBatchEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ScanFormBatchEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.SchedulerEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "SchedulerEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.SearchEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "SearchEntity");
 					break;

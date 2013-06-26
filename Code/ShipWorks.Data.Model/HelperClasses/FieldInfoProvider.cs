@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (157 + 0));
+			base.InitClass( (158 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -163,6 +163,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProStoresStoreEntityInfos();
 			InitResourceEntityInfos();
 			InitScanFormBatchEntityInfos();
+			InitSchedulerEntityInfos();
 			InitSearchEntityInfos();
 			InitSearsOrderEntityInfos();
 			InitSearsOrderItemEntityInfos();
@@ -1891,6 +1892,17 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ScanFormBatchEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ScanFormBatchFieldIndex.CreatedDate, 0, 0, 0);
 			base.AddElementFieldInfo("ScanFormBatchEntity", "ShipmentCount", typeof(System.Int32), false, false, false, false,  (int)ScanFormBatchFieldIndex.ShipmentCount, 0, 0, 10);
 		}
+		/// <summary>Inits SchedulerEntity's FieldInfo objects</summary>
+		private void InitSchedulerEntityInfos()
+		{
+			base.AddElementFieldInfo("SchedulerEntity", "SchedulerID", typeof(System.Int64), true, false, true, false,  (int)SchedulerFieldIndex.SchedulerID, 0, 0, 19);
+			base.AddElementFieldInfo("SchedulerEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)SchedulerFieldIndex.ComputerID, 0, 0, 19);
+			base.AddElementFieldInfo("SchedulerEntity", "LastStartDateTime", typeof(System.DateTime), false, false, false, false,  (int)SchedulerFieldIndex.LastStartDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("SchedulerEntity", "LastStopDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)SchedulerFieldIndex.LastStopDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("SchedulerEntity", "LastCheckInDateTime", typeof(System.DateTime), false, false, false, false,  (int)SchedulerFieldIndex.LastCheckInDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("SchedulerEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)SchedulerFieldIndex.ServiceFullName, 256, 0, 0);
+			base.AddElementFieldInfo("SchedulerEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)SchedulerFieldIndex.ServiceDisplayName, 256, 0, 0);
+		}
 		/// <summary>Inits SearchEntity's FieldInfo objects</summary>
 		private void InitSearchEntityInfos()
 		{
@@ -1916,7 +1928,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("SearsOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)SearsOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "LineNumber", typeof(System.Int32), false, false, false, false,  (int)SearsOrderItemFieldIndex.LineNumber, 0, 0, 10);
-			base.AddElementFieldInfo("SearsOrderItemEntity", "ItemID", typeof(System.String), false, false, false, false,  (int)SearsOrderItemFieldIndex.ItemID, 20, 0, 0);
+			base.AddElementFieldInfo("SearsOrderItemEntity", "ItemID", typeof(System.String), false, false, false, false,  (int)SearsOrderItemFieldIndex.ItemID, 300, 0, 0);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "Commission", typeof(System.Decimal), false, false, false, false,  (int)SearsOrderItemFieldIndex.Commission, 0, 4, 19);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "Shipping", typeof(System.Decimal), false, false, false, false,  (int)SearsOrderItemFieldIndex.Shipping, 0, 4, 19);
 			base.AddElementFieldInfo("SearsOrderItemEntity", "OnlineStatus", typeof(System.String), false, false, false, false,  (int)SearsOrderItemFieldIndex.OnlineStatus, 20, 0, 0);

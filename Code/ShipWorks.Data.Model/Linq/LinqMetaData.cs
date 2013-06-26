@@ -379,6 +379,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ScanFormBatchEntity:
 					toReturn = this.ScanFormBatch;
 					break;
+				case ShipWorks.Data.Model.EntityType.SchedulerEntity:
+					toReturn = this.Scheduler;
+					break;
 				case ShipWorks.Data.Model.EntityType.SearchEntity:
 					toReturn = this.Search;
 					break;
@@ -1173,6 +1176,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ScanFormBatchEntity> ScanFormBatch
 		{
 			get { return new DataSource2<ScanFormBatchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting SchedulerEntity instances in the database.</summary>
+		public DataSource2<SchedulerEntity> Scheduler
+		{
+			get { return new DataSource2<SchedulerEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting SearchEntity instances in the database.</summary>
