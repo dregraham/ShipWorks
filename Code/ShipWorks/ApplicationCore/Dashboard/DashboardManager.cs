@@ -470,6 +470,48 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForServerMessageChanges();
             CheckForEmailChanges();
             CheckForActionChanges();
+            CheckForWindowsServiceStoppedChanges();
+        }
+
+        /// <summary>
+        /// Check for any changes in the database for windows service stopped messages
+        /// </summary>
+        private static void CheckForWindowsServiceStoppedChanges()
+        {
+            // Check the database for any changes
+            List<WindowsServiceEntity> stoppedWindowsServices = SchedulerServiceMessageManager.StoppedWindowsServices;
+            List<DashboardServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardServiceStoppedItem>().ToList<DashboardServiceStoppedItem>();
+
+            // If the message is already there we don't have to do anything
+            if (!existingDashboardItems.Any() && stoppedWindowsServices.Count > 0)
+            {
+                DashboardServiceStoppedItem item = new DashboardServiceStoppedItem(stoppedWindowsServices);
+                AddDashboardItem(item);
+            }
+            else if (existingDashboardItems.Any() && stoppedWindowsServices.Count == 0)
+            {
+                // The stopped services are now running, so remove the stopped dashboard item.
+                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
+                
+                existingDashboardItems.ForEach(edi => RemoveDashboardItem(edi));
+
+                //// It's no longer active, so we've got to get rid of it.
+                //RemoveDashboardItem(item);
+            }
+            else if (stoppedWindowsServices.Count > 0)
+            {
+                // There are existing service dashboard items AND the number of stopped services has changed, so remove
+                // the current dashboard item and add the new one.
+                existingDashboardItems.ForEach(edi => RemoveDashboardItem(edi));
+
+                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
+
+                //// It's no longer active, so we've got to get rid of it.
+                //RemoveDashboardItem(item);
+
+                DashboardServiceStoppedItem item = new DashboardServiceStoppedItem(stoppedWindowsServices);
+                AddDashboardItem(item);
+            }
         }
 
         /// <summary>

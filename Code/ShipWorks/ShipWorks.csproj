@@ -391,6 +391,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\SchedulerMessageManager.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\SchedulerServiceMessageManager.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
       <SubType>Form</SubType>
     </Compile>
