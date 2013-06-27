@@ -342,6 +342,7 @@
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="WindowsServices\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="WindowsServices\ShipWorksSchedulerServiceTests.cs" />
+    <Compile Include="WindowsServices\WindowsServiceEntityExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />
