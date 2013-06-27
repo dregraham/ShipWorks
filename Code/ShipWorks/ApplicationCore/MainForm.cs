@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
+using ShipWorks.ApplicationCore.WindowsServices;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
@@ -292,6 +293,9 @@ namespace ShipWorks
             {
                 return;
             }
+
+            // Initialize any ShipWorks Windows services
+            WindowsServiceManager.InitializeForCurrentUser();
 
             // Initiate the logon sequence
             InitiateLogon();

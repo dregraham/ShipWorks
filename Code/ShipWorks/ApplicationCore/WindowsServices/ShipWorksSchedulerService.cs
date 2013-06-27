@@ -95,6 +95,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             // Required for printing
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
+
+            // Initialize any ShipWorks Windows services
+            WindowsServiceManager.InitializeForCurrentUser();
         }
 
         protected override void OnStop()

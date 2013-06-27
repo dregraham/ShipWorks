@@ -76,8 +76,25 @@ namespace ShipWorks.Users
                         InternalCheckForChanges();
                     }
 
-                    return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+                    List<ComputerEntity> computers = EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+
+                    // Load the computers' WindowsServiceEntities.
+                    computers.ForEach(c => EnsureWindowsServicesLoaded(c));
+
+                    return computers;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Ensure the WindowsServices for the copmuter exists
+        /// </summary>
+        public static void EnsureWindowsServicesLoaded(ComputerEntity computer)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                computer.WindowsServices.Clear();
+                computer.WindowsServices.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.WindowsServiceEntity).Cast<WindowsServiceEntity>());
             }
         }
 

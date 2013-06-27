@@ -32,6 +32,8 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         public static void InitializeForCurrentUser()
         {
+            ComputerManager.InitializeForCurrentUser();
+
             tableSynchronizer = new TableSynchronizer<WindowsServiceEntity>();
             InternalCheckForChanges();
 
@@ -71,11 +73,28 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         private static void AddMissingComputers()
         {
+            int numberOfServiceTypes = Enum.GetNames(typeof(ShipWorksServiceType)).Length;
 
-            //foreach (ComputerEntity computer in ComputerManager.Computers)
-            //{
-
-            //}
+            // Find computers that are missing WindowsService entries
+            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.WindowsServices == null || c.WindowsServices.Count != numberOfServiceTypes))
+            {
+                // For each ShipWorksServiceType, if the computer does have an entry for it, add it.
+                foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
+                {
+                    if (computer.WindowsServices == null || 
+                        computer.WindowsServices.Count == 0 || 
+                        computer.WindowsServices.All(ws => ws.ServiceType != (int)serviceType))
+                    {
+                        WindowsServiceEntity windowsService = new WindowsServiceEntity();
+                        windowsService.ServiceType = (int) serviceType;
+                        windowsService.ServiceFullName = string.Empty;
+                        windowsService.ServiceDisplayName = string.Empty;
+                        windowsService.ComputerID = computer.ComputerID;
+                        
+                        SaveWindowsService(windowsService);
+                    }
+                }
+            }
         }
 
         /// <summary>
