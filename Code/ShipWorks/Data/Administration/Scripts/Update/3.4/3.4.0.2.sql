@@ -4,7 +4,7 @@ SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDE
 GO
 CREATE TABLE [dbo].[WindowsService]
 (
-	[WindowsServiceID] [bigint] NOT NULL IDENTITY(1096, 1),
+	[WindowsServiceID] [bigint] NOT NULL IDENTITY(1096, 1000),
 	[ComputerID] [bigint] NOT NULL,
 	[ServiceType] [int] NOT NULL,
 	[LastStartDateTime] [datetime] NULL,
