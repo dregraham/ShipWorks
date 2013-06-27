@@ -6546,31 +6546,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Scheduler.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum SchedulerFieldIndex:int
-	{
-		///<summary>SchedulerID. </summary>
-		SchedulerID,
-		///<summary>ComputerID. </summary>
-		ComputerID,
-		///<summary>LastStartDateTime. </summary>
-		LastStartDateTime,
-		///<summary>LastStopDateTime. </summary>
-		LastStopDateTime,
-		///<summary>LastCheckInDateTime. </summary>
-		LastCheckInDateTime,
-		///<summary>ServiceFullName. </summary>
-		ServiceFullName,
-		///<summary>ServiceDisplayName. </summary>
-		ServiceDisplayName,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Search.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -8700,6 +8675,33 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WindowsService.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum WindowsServiceFieldIndex:int
+	{
+		///<summary>WindowsServiceID. </summary>
+		WindowsServiceID,
+		///<summary>ComputerID. </summary>
+		ComputerID,
+		///<summary>ServiceType. </summary>
+		ServiceType,
+		///<summary>LastStartDateTime. </summary>
+		LastStartDateTime,
+		///<summary>LastStopDateTime. </summary>
+		LastStopDateTime,
+		///<summary>LastCheckInDateTime. </summary>
+		LastCheckInDateTime,
+		///<summary>ServiceFullName. </summary>
+		ServiceFullName,
+		///<summary>ServiceDisplayName. </summary>
+		ServiceDisplayName,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipGoods.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9490,8 +9492,6 @@ namespace ShipWorks.Data.Model
 		ResourceEntity,
 		///<summary>ScanFormBatch</summary>
 		ScanFormBatchEntity,
-		///<summary>Scheduler</summary>
-		SchedulerEntity,
 		///<summary>Search</summary>
 		SearchEntity,
 		///<summary>SearsOrder</summary>
@@ -9578,6 +9578,8 @@ namespace ShipWorks.Data.Model
 		VersionSignoffEntity,
 		///<summary>VolusionStore</summary>
 		VolusionStoreEntity,
+		///<summary>WindowsService</summary>
+		WindowsServiceEntity,
 		///<summary>WorldShipGoods</summary>
 		WorldShipGoodsEntity,
 		///<summary>WorldShipPackage</summary>

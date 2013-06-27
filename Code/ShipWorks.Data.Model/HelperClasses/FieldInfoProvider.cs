@@ -163,7 +163,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProStoresStoreEntityInfos();
 			InitResourceEntityInfos();
 			InitScanFormBatchEntityInfos();
-			InitSchedulerEntityInfos();
 			InitSearchEntityInfos();
 			InitSearsOrderEntityInfos();
 			InitSearsOrderItemEntityInfos();
@@ -207,6 +206,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitUserSettingsEntityInfos();
 			InitVersionSignoffEntityInfos();
 			InitVolusionStoreEntityInfos();
+			InitWindowsServiceEntityInfos();
 			InitWorldShipGoodsEntityInfos();
 			InitWorldShipPackageEntityInfos();
 			InitWorldShipProcessedEntityInfos();
@@ -1892,17 +1892,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ScanFormBatchEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ScanFormBatchFieldIndex.CreatedDate, 0, 0, 0);
 			base.AddElementFieldInfo("ScanFormBatchEntity", "ShipmentCount", typeof(System.Int32), false, false, false, false,  (int)ScanFormBatchFieldIndex.ShipmentCount, 0, 0, 10);
 		}
-		/// <summary>Inits SchedulerEntity's FieldInfo objects</summary>
-		private void InitSchedulerEntityInfos()
-		{
-			base.AddElementFieldInfo("SchedulerEntity", "SchedulerID", typeof(System.Int64), true, false, true, false,  (int)SchedulerFieldIndex.SchedulerID, 0, 0, 19);
-			base.AddElementFieldInfo("SchedulerEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)SchedulerFieldIndex.ComputerID, 0, 0, 19);
-			base.AddElementFieldInfo("SchedulerEntity", "LastStartDateTime", typeof(System.DateTime), false, false, false, false,  (int)SchedulerFieldIndex.LastStartDateTime, 0, 0, 0);
-			base.AddElementFieldInfo("SchedulerEntity", "LastStopDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)SchedulerFieldIndex.LastStopDateTime, 0, 0, 0);
-			base.AddElementFieldInfo("SchedulerEntity", "LastCheckInDateTime", typeof(System.DateTime), false, false, false, false,  (int)SchedulerFieldIndex.LastCheckInDateTime, 0, 0, 0);
-			base.AddElementFieldInfo("SchedulerEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)SchedulerFieldIndex.ServiceFullName, 256, 0, 0);
-			base.AddElementFieldInfo("SchedulerEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)SchedulerFieldIndex.ServiceDisplayName, 256, 0, 0);
-		}
 		/// <summary>Inits SearchEntity's FieldInfo objects</summary>
 		private void InitSearchEntityInfos()
 		{
@@ -2589,6 +2578,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("VolusionStoreEntity", "ShipmentMethods", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ShipmentMethods, 2147483647, 0, 0);
 			base.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZone", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZone, 30, 0, 0);
 			base.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZoneDST", typeof(System.Boolean), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZoneDST, 0, 0, 0);
+		}
+		/// <summary>Inits WindowsServiceEntity's FieldInfo objects</summary>
+		private void InitWindowsServiceEntityInfos()
+		{
+			base.AddElementFieldInfo("WindowsServiceEntity", "WindowsServiceID", typeof(System.Int64), true, false, true, false,  (int)WindowsServiceFieldIndex.WindowsServiceID, 0, 0, 19);
+			base.AddElementFieldInfo("WindowsServiceEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)WindowsServiceFieldIndex.ComputerID, 0, 0, 19);
+			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceType", typeof(System.Int32), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceType, 0, 0, 10);
+			base.AddElementFieldInfo("WindowsServiceEntity", "LastStartDateTime", typeof(System.DateTime), false, false, false, false,  (int)WindowsServiceFieldIndex.LastStartDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "LastStopDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)WindowsServiceFieldIndex.LastStopDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "LastCheckInDateTime", typeof(System.DateTime), false, false, false, false,  (int)WindowsServiceFieldIndex.LastCheckInDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceFullName, 256, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceDisplayName, 256, 0, 0);
 		}
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>
 		private void InitWorldShipGoodsEntityInfos()

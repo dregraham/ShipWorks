@@ -13959,46 +13959,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity SchedulerEntity</summary>
-	public partial class SchedulerFields
-	{
-		/// <summary>Creates a new SchedulerEntity.SchedulerID field instance</summary>
-		public static EntityField2 SchedulerID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.SchedulerID);}
-		}
-		/// <summary>Creates a new SchedulerEntity.ComputerID field instance</summary>
-		public static EntityField2 ComputerID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.ComputerID);}
-		}
-		/// <summary>Creates a new SchedulerEntity.LastStartDateTime field instance</summary>
-		public static EntityField2 LastStartDateTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.LastStartDateTime);}
-		}
-		/// <summary>Creates a new SchedulerEntity.LastStopDateTime field instance</summary>
-		public static EntityField2 LastStopDateTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.LastStopDateTime);}
-		}
-		/// <summary>Creates a new SchedulerEntity.LastCheckInDateTime field instance</summary>
-		public static EntityField2 LastCheckInDateTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.LastCheckInDateTime);}
-		}
-		/// <summary>Creates a new SchedulerEntity.ServiceFullName field instance</summary>
-		public static EntityField2 ServiceFullName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.ServiceFullName);}
-		}
-		/// <summary>Creates a new SchedulerEntity.ServiceDisplayName field instance</summary>
-		public static EntityField2 ServiceDisplayName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(SchedulerFieldIndex.ServiceDisplayName);}
-		}
-	}
-
 	/// <summary>Field Creation Class for entity SearchEntity</summary>
 	public partial class SearchFields
 	{
@@ -18351,6 +18311,51 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ServerTimeZoneDST
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ServerTimeZoneDST);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity WindowsServiceEntity</summary>
+	public partial class WindowsServiceFields
+	{
+		/// <summary>Creates a new WindowsServiceEntity.WindowsServiceID field instance</summary>
+		public static EntityField2 WindowsServiceID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.WindowsServiceID);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.ComputerID field instance</summary>
+		public static EntityField2 ComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ComputerID);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.ServiceType field instance</summary>
+		public static EntityField2 ServiceType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceType);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.LastStartDateTime field instance</summary>
+		public static EntityField2 LastStartDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.LastStartDateTime);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.LastStopDateTime field instance</summary>
+		public static EntityField2 LastStopDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.LastStopDateTime);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.LastCheckInDateTime field instance</summary>
+		public static EntityField2 LastCheckInDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.LastCheckInDateTime);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.ServiceFullName field instance</summary>
+		public static EntityField2 ServiceFullName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceFullName);}
+		}
+		/// <summary>Creates a new WindowsServiceEntity.ServiceDisplayName field instance</summary>
+		public static EntityField2 ServiceDisplayName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceDisplayName);}
 		}
 	}
 

@@ -41,10 +41,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		private EntityCollection<SchedulerEntity> _schedulers;
 
 
 
+		private EntityCollection<WindowsServiceEntity> _windowsServices;
 
 
 
@@ -69,11 +69,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			/// <summary>Member name Schedulers</summary>
-			public static readonly string Schedulers = "Schedulers";
 
 
 
+			/// <summary>Member name WindowsServices</summary>
+			public static readonly string WindowsServices = "WindowsServices";
 
 
 
@@ -142,10 +142,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				_schedulers = (EntityCollection<SchedulerEntity>)info.GetValue("_schedulers", typeof(EntityCollection<SchedulerEntity>));
 
 
 
+				_windowsServices = (EntityCollection<WindowsServiceEntity>)info.GetValue("_windowsServices", typeof(EntityCollection<WindowsServiceEntity>));
 
 
 
@@ -194,12 +194,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "Schedulers":
-					this.Schedulers.Add((SchedulerEntity)entity);
+
+
+
+				case "WindowsServices":
+					this.WindowsServices.Add((WindowsServiceEntity)entity);
 					break;
-
-
-
 
 
 
@@ -232,12 +232,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "Schedulers":
-					toReturn.Add(ComputerEntity.Relations.SchedulerEntityUsingComputerID);
+
+
+
+				case "WindowsServices":
+					toReturn.Add(ComputerEntity.Relations.WindowsServiceEntityUsingComputerID);
 					break;
-
-
-
 
 
 
@@ -284,12 +284,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "Schedulers":
-					this.Schedulers.Add((SchedulerEntity)relatedEntity);
+
+
+
+				case "WindowsServices":
+					this.WindowsServices.Add((WindowsServiceEntity)relatedEntity);
 					break;
-
-
-
 
 				default:
 					break;
@@ -310,12 +310,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "Schedulers":
-					base.PerformRelatedEntityRemoval(this.Schedulers, relatedEntity, signalRelatedEntityManyToOne);
+
+
+
+				case "WindowsServices":
+					base.PerformRelatedEntityRemoval(this.WindowsServices, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-
-
-
 
 				default:
 					break;
@@ -351,10 +351,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			toReturn.Add(this.Schedulers);
 
 
 
+			toReturn.Add(this.WindowsServices);
 
 			return toReturn;
 		}
@@ -373,10 +373,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				info.AddValue("_schedulers", ((_schedulers!=null) && (_schedulers.Count>0) && !this.MarkedForDeletion)?_schedulers:null);
 
 
 
+				info.AddValue("_windowsServices", ((_windowsServices!=null) && (_windowsServices.Count>0) && !this.MarkedForDeletion)?_windowsServices:null);
 
 
 
@@ -432,18 +432,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'Scheduler' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// the related entities of type 'WindowsService' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoSchedulers()
+		public virtual IRelationPredicateBucket GetRelationInfoWindowsServices()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(SchedulerFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(WindowsServiceFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
 			return bucket;
 		}
-
-
-
 
 
 
@@ -483,10 +483,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			collectionsQueue.Enqueue(this._schedulers);
 
 
 
+			collectionsQueue.Enqueue(this._windowsServices);
 
 
 
@@ -503,10 +503,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			this._schedulers = (EntityCollection<SchedulerEntity>) collectionsQueue.Dequeue();
 
 
 
+			this._windowsServices = (EntityCollection<WindowsServiceEntity>) collectionsQueue.Dequeue();
 
 
 
@@ -522,13 +522,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if (this._schedulers != null)
+
+
+
+			if (this._windowsServices != null)
 			{
 				return true;
 			}
-
-
-
 
 
 
@@ -547,10 +547,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<SchedulerEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SchedulerEntityFactory))) : null);
 
 
 
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<WindowsServiceEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WindowsServiceEntityFactory))) : null);
 
 
 
@@ -570,10 +570,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			toReturn.Add("Schedulers", _schedulers);
 
 
 
+			toReturn.Add("WindowsServices", _windowsServices);
 
 
 
@@ -590,13 +590,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if(_schedulers!=null)
+
+
+
+			if(_windowsServices!=null)
 			{
-				_schedulers.ActiveContext = base.ActiveContext;
+				_windowsServices.ActiveContext = base.ActiveContext;
 			}
-
-
-
 
 
 
@@ -614,10 +614,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_schedulers = null;
 
 
 
+			_windowsServices = null;
 
 
 
@@ -689,15 +689,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Scheduler' 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WindowsService' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathSchedulers
+		public static IPrefetchPathElement2 PrefetchPathWindowsServices
 		{
 			get
 			{
-				return new PrefetchPathElement2( new EntityCollection<SchedulerEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SchedulerEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Schedulers")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.SchedulerEntity, 0, null, null, null, null, "Schedulers", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+				return new PrefetchPathElement2( new EntityCollection<WindowsServiceEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WindowsServiceEntityFactory))),
+					(IEntityRelation)GetRelationsForField("WindowsServices")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.WindowsServiceEntity, 0, null, null, null, null, "WindowsServices", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
 			}
 		}
 
@@ -780,24 +780,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'SchedulerEntity' which are related to this entity via a relation of type '1:n'.
+
+
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'WindowsServiceEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
-		[TypeContainedAttribute(typeof(SchedulerEntity))]
-		public virtual EntityCollection<SchedulerEntity> Schedulers
+		[TypeContainedAttribute(typeof(WindowsServiceEntity))]
+		public virtual EntityCollection<WindowsServiceEntity> WindowsServices
 		{
 			get
 			{
-				if(_schedulers==null)
+				if(_windowsServices==null)
 				{
-					_schedulers = new EntityCollection<SchedulerEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SchedulerEntityFactory)));
-					_schedulers.SetContainingEntityInfo(this, "Computer");
+					_windowsServices = new EntityCollection<WindowsServiceEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WindowsServiceEntityFactory)));
+					_windowsServices.SetContainingEntityInfo(this, "Computer");
 				}
-				return _schedulers;
+				return _windowsServices;
 			}
 		}
-
-
-
 
 
 

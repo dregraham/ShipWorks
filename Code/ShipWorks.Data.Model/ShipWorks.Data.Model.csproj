@@ -1136,10 +1136,10 @@
     <Compile Include=".\EntityClasses\ScanFormBatchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityClasses\SchedulerEntity.cs">
+    <Compile Include=".\EntityClasses\WindowsServiceEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\RelationClasses\SchedulerRelations.cs">
+    <Compile Include=".\RelationClasses\WindowsServiceRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

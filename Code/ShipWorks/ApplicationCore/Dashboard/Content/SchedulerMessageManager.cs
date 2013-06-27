@@ -19,11 +19,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// whether there are any scheduled actions the machine could potentially execute. Any service that 
         /// hasn't checked in within 10 minutes is considered stopped.
         /// </summary>
-        public List<SchedulerEntity> StoppedSchedulingServices
+        public List<WindowsServiceEntity> StoppedSchedulingServices
         {
             get
             {
-                return new List<SchedulerEntity>();
+                return new List<WindowsServiceEntity>();
             }
         }
     }

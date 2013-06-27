@@ -162,7 +162,6 @@ namespace ShipWorks.Data.Adapter
 			InitProStoresStoreEntityMappings();
 			InitResourceEntityMappings();
 			InitScanFormBatchEntityMappings();
-			InitSchedulerEntityMappings();
 			InitSearchEntityMappings();
 			InitSearsOrderEntityMappings();
 			InitSearsOrderItemEntityMappings();
@@ -206,6 +205,7 @@ namespace ShipWorks.Data.Adapter
 			InitUserSettingsEntityMappings();
 			InitVersionSignoffEntityMappings();
 			InitVolusionStoreEntityMappings();
+			InitWindowsServiceEntityMappings();
 			InitWorldShipGoodsEntityMappings();
 			InitWorldShipPackageEntityMappings();
 			InitWorldShipProcessedEntityMappings();
@@ -1997,18 +1997,6 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ScanFormBatchEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 2 );
 			base.AddElementFieldMapping( "ScanFormBatchEntity", "ShipmentCount", "ShipmentCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
 		}
-		/// <summary>Inits SchedulerEntity's mappings</summary>
-		private void InitSchedulerEntityMappings()
-		{
-			base.AddElementMapping( "SchedulerEntity", "ShipWorksLocal", @"dbo", "Scheduler", 7 );
-			base.AddElementFieldMapping( "SchedulerEntity", "SchedulerID", "SchedulerID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "SchedulerEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
-			base.AddElementFieldMapping( "SchedulerEntity", "LastStartDateTime", "LastStartDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 2 );
-			base.AddElementFieldMapping( "SchedulerEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 3 );
-			base.AddElementFieldMapping( "SchedulerEntity", "LastCheckInDateTime", "LastCheckInDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
-			base.AddElementFieldMapping( "SchedulerEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "SchedulerEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 6 );
-		}
 		/// <summary>Inits SearchEntity's mappings</summary>
 		private void InitSearchEntityMappings()
 		{
@@ -2738,6 +2726,19 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ShipmentMethods", "ShipmentMethods", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 6 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZone", "ServerTimeZone", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZoneDST", "ServerTimeZoneDST", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
+		}
+		/// <summary>Inits WindowsServiceEntity's mappings</summary>
+		private void InitWindowsServiceEntityMappings()
+		{
+			base.AddElementMapping( "WindowsServiceEntity", "ShipWorksLocal", @"dbo", "WindowsService", 8 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "WindowsServiceID", "WindowsServiceID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStartDateTime", "LastStartDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 3 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastCheckInDateTime", "LastCheckInDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 6 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 7 );
 		}
 		/// <summary>Inits WorldShipGoodsEntity's mappings</summary>
 		private void InitWorldShipGoodsEntityMappings()

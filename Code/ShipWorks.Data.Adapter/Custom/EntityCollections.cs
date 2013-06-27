@@ -8955,12 +8955,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of SchedulerEntity
+	/// Strongly typed collection of WindowsServiceEntity
 	/// </summary>
-	public class SchedulerCollection : EntityCollection<SchedulerEntity>
+	public class WindowsServiceCollection : EntityCollection<WindowsServiceEntity>
 	{
         /// <summary>
-        /// Gets the count of all SchedulerEntity rows
+        /// Gets the count of all WindowsServiceEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -8968,7 +8968,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all SchedulerEntity rows filtered by the given predicate
+        /// Gets the count of all WindowsServiceEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -8979,13 +8979,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new SchedulerEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new WindowsServiceEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static SchedulerCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static WindowsServiceCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -8993,9 +8993,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static SchedulerCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static WindowsServiceCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            SchedulerCollection collection = new SchedulerCollection();
+            WindowsServiceCollection collection = new WindowsServiceCollection();
 
             RelationPredicateBucket bucket = null;
 

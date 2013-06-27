@@ -11,15 +11,15 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
     public class DashboardServiceStoppedItem : DashboardItem
     {
-        private readonly List<SchedulerEntity> schedulerEntities;
+        private readonly List<WindowsServiceEntity> schedulerEntities;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardServiceStoppedItem" /> class.
         /// </summary>
         /// <param name="schedulers">The schedulers that are not running.</param>
-        public DashboardServiceStoppedItem(IEnumerable<SchedulerEntity> schedulers)
+        public DashboardServiceStoppedItem(IEnumerable<WindowsServiceEntity> schedulers)
         {
-            schedulerEntities = new List<SchedulerEntity>(schedulers);
+            schedulerEntities = new List<WindowsServiceEntity>(schedulers);
         }
 
         /// <summary>
