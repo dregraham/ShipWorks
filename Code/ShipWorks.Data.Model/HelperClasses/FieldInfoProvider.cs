@@ -2585,9 +2585,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WindowsServiceEntity", "WindowsServiceID", typeof(System.Int64), true, false, true, false,  (int)WindowsServiceFieldIndex.WindowsServiceID, 0, 0, 19);
 			base.AddElementFieldInfo("WindowsServiceEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)WindowsServiceFieldIndex.ComputerID, 0, 0, 19);
 			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceType", typeof(System.Int32), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceType, 0, 0, 10);
-			base.AddElementFieldInfo("WindowsServiceEntity", "LastStartDateTime", typeof(System.DateTime), false, false, false, false,  (int)WindowsServiceFieldIndex.LastStartDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "LastStartDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)WindowsServiceFieldIndex.LastStartDateTime, 0, 0, 0);
 			base.AddElementFieldInfo("WindowsServiceEntity", "LastStopDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)WindowsServiceFieldIndex.LastStopDateTime, 0, 0, 0);
-			base.AddElementFieldInfo("WindowsServiceEntity", "LastCheckInDateTime", typeof(System.DateTime), false, false, false, false,  (int)WindowsServiceFieldIndex.LastCheckInDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "LastCheckInDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)WindowsServiceFieldIndex.LastCheckInDateTime, 0, 0, 0);
 			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceFullName, 256, 0, 0);
 			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceDisplayName, 256, 0, 0);
 		}

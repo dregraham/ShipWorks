@@ -2734,9 +2734,9 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "WindowsServiceEntity", "WindowsServiceID", "WindowsServiceID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "WindowsServiceEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStartDateTime", "LastStartDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 3 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStartDateTime", "LastStartDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 3 );
 			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastCheckInDateTime", "LastCheckInDateTime", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastCheckInDateTime", "LastCheckInDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
 			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 6 );
 			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 7 );
 		}

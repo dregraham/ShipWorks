@@ -631,10 +631,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "WindowsService"."LastStartDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.DateTime LastStartDateTime
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> LastStartDateTime
 		{
-			get { return (System.DateTime)GetValue((int)WindowsServiceFieldIndex.LastStartDateTime, true); }
+			get { return (Nullable<System.DateTime>)GetValue((int)WindowsServiceFieldIndex.LastStartDateTime, false); }
 			set	{ SetValue((int)WindowsServiceFieldIndex.LastStartDateTime, value); }
 		}
 
@@ -653,10 +653,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "WindowsService"."LastCheckInDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.DateTime LastCheckInDateTime
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> LastCheckInDateTime
 		{
-			get { return (System.DateTime)GetValue((int)WindowsServiceFieldIndex.LastCheckInDateTime, true); }
+			get { return (Nullable<System.DateTime>)GetValue((int)WindowsServiceFieldIndex.LastCheckInDateTime, false); }
 			set	{ SetValue((int)WindowsServiceFieldIndex.LastCheckInDateTime, value); }
 		}
 
