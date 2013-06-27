@@ -16,5 +16,7 @@ CREATE TABLE [dbo].[WindowsService]
 GO
 ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [PK_Scheduler] PRIMARY KEY CLUSTERED  ([WindowsServiceID])
 GO
+ALTER TABLE [dbo].[WindowsService] ENABLE CHANGE_TRACKING
+GO
 ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [FK_Scheduler_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
 GO
