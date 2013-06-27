@@ -20,10 +20,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         {
             get
             {
+                // Default to no stopped services.
                 List<WindowsServiceEntity> stoppedWindowsServices = new List<WindowsServiceEntity>();
 
                 // Check if there are any scheduled actions available for any of the services to run
-                IEnumerable<ActionEntity> scheduledActions = ActionManager.Actions.Where(a => a.TriggerType == (int)ActionTriggerType.Scheduled);
+                IEnumerable<ActionEntity> scheduledActions = ActionManager.Actions.Where(a => a.TriggerType == (int)ActionTriggerType.Scheduled && a.Enabled);
 
                 // If there are scheduled actions, check to see if any are running.
                 // NOTE: When we implement specifying actions to run on specific machines, we'll need to add that to the filter here.
