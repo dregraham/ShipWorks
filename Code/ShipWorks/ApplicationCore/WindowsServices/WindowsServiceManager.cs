@@ -12,6 +12,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Users;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
@@ -33,6 +34,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         {
             tableSynchronizer = new TableSynchronizer<WindowsServiceEntity>();
             InternalCheckForChanges();
+
+            // Add any missing computers 
+            AddMissingComputers();
         }
 
         /// <summary>
@@ -60,6 +64,18 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
                 needCheckForChanges = false;
             }
+        }
+
+        /// <summary>
+        /// Adds any computers to the WindowsService table if they are missing from it.
+        /// </summary>
+        private static void AddMissingComputers()
+        {
+
+            //foreach (ComputerEntity computer in ComputerManager.Computers)
+            //{
+
+            //}
         }
 
         /// <summary>
