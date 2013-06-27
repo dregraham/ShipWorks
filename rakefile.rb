@@ -23,7 +23,8 @@ namespace :build do
 	msbuild :clean do |msb|
 		print "Cleaning solution...\r\n\r\n"
 		msb.targets :Clean
-		msb.solution = "#{@solutionFile}"
+		msb.solution = "#{@solutionFile}"		
+		msb.parameters = "/m"
 	end
 
 	desc "Build ShipWorks in the Debug configuration"
@@ -33,6 +34,7 @@ namespace :build do
 		msb.properties :configuration => :Debug
 		msb.targets :Build
 		msb.solution = "#{@solutionFile}"
+		msb.parameters = "/m"
 	end
 
 
@@ -42,7 +44,8 @@ namespace :build do
 
 		msb.properties :configuration => :Release
 		msb.targets :Clean, :Build
-		msb.solution = "#{@solutionFile}"
+		msb.solution = "#{@solutionFile}"		
+		msb.parameters = "/m"
 	end
 end
 
@@ -69,7 +72,7 @@ namespace :test do
 		File.delete("TestResults/units-results.trx") if File.exist?("TestResults/units-results.trx")
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
+		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
 		mstest.parameters "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
 	end	
 end
