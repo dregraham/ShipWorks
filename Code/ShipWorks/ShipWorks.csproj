@@ -503,6 +503,7 @@
     <Compile Include="Data\Connection\SingleUserModeException.cs" />
     <Compile Include="Data\Controls\PersonException.cs" />
     <Compile Include="Data\Connection\SqlSessionPermissionSet.cs" />
+    <Compile Include="Data\Grid\Columns\Definitions\ServiceStatusColumnDefinitionFactory.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridBooleanDisplayType.cs" />
     <Compile Include="Data\Grid\Paging\EntityCacheEntityProvider.cs" />
     <Compile Include="Data\Grid\Paging\DataProviderEntityProvider.cs" />

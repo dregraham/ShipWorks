@@ -62,6 +62,9 @@ namespace ShipWorks.Data.Grid.Columns
         Audit,
 
         [Description("Audit Changes")]
-        AuditChanges
+        AuditChanges,
+
+        [Description("Service Status")]
+        ServiceStatus
     }
 }

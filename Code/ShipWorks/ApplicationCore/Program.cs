@@ -327,7 +327,7 @@ namespace ShipWorks
             EditionManager.Initialize();
 
             // Initialize any ShipWorks Windows services
-            WindowsServiceManager.InitializeForCurrentUser();
+            //WindowsServiceManager.InitializeForCurrentUser();
         }
 
         /// <summary>

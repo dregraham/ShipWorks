@@ -52,6 +52,7 @@ namespace ShipWorks.Data
         /// </summary>
         static EntityUtility()
         {
+            entitySeedValues[EntityType.ComputerEntity] = 1;
             entitySeedValues[EntityType.UserEntity] = 2;
             entitySeedValues[EntityType.AuditChangeEntity] = 3;
             entitySeedValues[EntityType.StoreEntity] = 5;
