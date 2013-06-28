@@ -23,15 +23,15 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         Stopped,
 
         /// <summary>
-        /// The service is running.
-        /// </summary>
-        [Description("Running")]
-        Running,
-
-        /// <summary>
         /// The service has stopped checking in.  It may have crashed.
         /// </summary>
         [Description("Not Responding")]
-        NotResponding
+        NotResponding,
+
+        /// <summary>
+        /// The service is running.
+        /// </summary>
+        [Description("Running")]
+        Running
     }
 }

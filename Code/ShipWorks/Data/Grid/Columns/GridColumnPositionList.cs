@@ -350,7 +350,10 @@ namespace ShipWorks.Data.Grid.Columns
                     }
 
                     // Its possible the display value provider is a FunctionValueProvider.  If the sort value provider is a field value provider, use that
-                    if (EntityUtility.IsSameField(position.Definition.SortProvider.SortField, field))
+                    if (
+                        null != position.Definition.SortProvider &&
+                        EntityUtility.IsSameField(position.Definition.SortProvider.SortField, field)
+                    )
                     {
                         return position;
                     }

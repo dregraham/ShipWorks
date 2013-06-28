@@ -91,7 +91,9 @@ namespace ShipWorks.Data.Grid.Columns
                 row.Checked = layoutColumn.Visible;
 
                 sandGrid.Rows.Add(row);
-                sortColumnList.Add(new DictionaryEntry(layoutColumn.Definition.HeaderText, layoutColumn.Definition.ColumnGuid));
+
+                if (null != layoutColumn.Definition.SortProvider)
+                    sortColumnList.Add(new DictionaryEntry(layoutColumn.Definition.HeaderText, layoutColumn.Definition.ColumnGuid));
             }
 
             // Don't listen to sort changee while we reload

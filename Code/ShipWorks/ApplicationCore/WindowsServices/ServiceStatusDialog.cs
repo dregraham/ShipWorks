@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
 
-            ThemedBorderProvider themeBorder = new ThemedBorderProvider(panelGridArea);
+            new ThemedBorderProvider(panelGridArea);
             panelTools.StateNormal.Draw = ThemeInformation.VisualStylesEnabled ? InheritBool.True : InheritBool.False;
         }
 
@@ -63,7 +63,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         void InitializeDefaultGridLayout(GridColumnLayout layout)
         {
-            layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[ComputerFields.Name].ColumnGuid;
+            layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[WindowsServiceFields.ComputerID].ColumnGuid;
             layout.DefaultSortOrder = ListSortDirection.Ascending;
         }
 
