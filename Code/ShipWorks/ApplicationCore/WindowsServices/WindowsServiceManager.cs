@@ -28,17 +28,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Returns the TimeSpan for amount a time allowed before a service is considered "not running"
-        /// </summary>
-        public static TimeSpan NotRunningTimeSpan
-        {
-            get
-            {
-                return new TimeSpan(0, 0, 10, 0);
-            }
-        }
-
-        /// <summary>
         /// Initialize when a user logs in
         /// </summary>
         public static void InitializeForCurrentUser()

@@ -33,10 +33,8 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
                     // Force a db check since the service is running in another process and our local cache will not be updated.
                     WindowsServiceManager.CheckForChangesNeeded();
 
-                    // Find scheduler services that are older than 10 minutes.
-                    stoppedWindowsServices = WindowsServiceManager.WindowsServices.Where(ws => ws.ServiceType == (int)ShipWorksServiceType.Scheduler &&
-                                                                                              (!ws.LastCheckInDateTime.HasValue ||
-                                                                                                ws.LastCheckInDateTime.Value.AddMinutes(WindowsServiceManager.NotRunningTimeSpan.TotalMinutes) <= DateTime.UtcNow)).ToList();
+                    // Find scheduler services that are not running.
+                    stoppedWindowsServices = WindowsServiceManager.WindowsServices.Where(ws => ws.ServiceType == (int)ShipWorksServiceType.Scheduler && ws.GetStatus() != ServiceStatus.Running).ToList();
                 }
 
                 return stoppedWindowsServices;
