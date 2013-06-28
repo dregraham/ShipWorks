@@ -52,9 +52,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Tests
         }
 
         [TestMethod]
-        public void StatusIsNotRespondingWhenCheckInTimeIs10MinutesOld()
+        public void StatusIsNotRespondingWhenCheckInTimeIsBeyondThreshold()
         {
-            target.LastCheckInDateTime = DateTime.UtcNow.AddMinutes(-10);
+            target.LastCheckInDateTime = DateTime.UtcNow.Add(-WindowsServiceManager.NotRunningTimeSpan);
             target.LastStartDateTime = target.LastCheckInDateTime.Value.AddHours(-1);
 
             Assert.AreEqual(ServiceStatus.NotResponding, target.GetStatus());

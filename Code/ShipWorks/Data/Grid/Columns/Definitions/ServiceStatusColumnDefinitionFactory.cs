@@ -58,19 +58,19 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         }
 
 
-        /// <summary>
-        /// Mirrors the logic in <see cref="WindowsServiceEntityExtensions.GetStatus"/>.
-        /// </summary>
+        ///// <summary>
+        ///// Mirrors the logic in <see cref="WindowsServiceEntityExtensions.GetStatus"/>.
+        ///// </summary>
         //static EntityField2 CreateStatusSortField()
         //{
-        //    var expression = new StringBuilder()
+        //    var expression = new System.Text.StringBuilder()
         //        .Append(" CASE WHEN LastStartDateTime IS NULL THEN ")
-        //            .Append((int)ServiceStatus.NeverRun)
+        //            .Append((int)ServiceStatus.NeverStarted)
         //        .Append(" ELSE ")
         //            .Append(" CASE WHEN LastStopDateTime > LastStartDateTime THEN ")
         //                .Append((int)ServiceStatus.Stopped)
         //            .Append(" ELSE ")
-        //                .Append(" CASE WHEN LastCheckInDateTime IS NULL OR DATEDIFF(MINUTE, LastCheckInDateTime, GETUTCDATE()) > 10 THEN ")
+        //                .AppendFormat(" CASE WHEN LastCheckInDateTime IS NULL OR DATEDIFF(SECOND, LastCheckInDateTime, GETUTCDATE()) > {0:0} THEN ", WindowsServiceManager.NotRunningTimeSpan.TotalSeconds)
         //                    .Append((int)ServiceStatus.NotResponding)
         //                .Append(" ELSE ")
         //                    .Append((int)ServiceStatus.Running)

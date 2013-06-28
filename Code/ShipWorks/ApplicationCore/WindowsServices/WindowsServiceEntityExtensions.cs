@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             if (
                 !instance.LastCheckInDateTime.HasValue ||
-                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.AddMinutes(-10)
+                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-WindowsServiceManager.NotRunningTimeSpan)
             )
                 return ServiceStatus.NotResponding;
 

@@ -11,7 +11,7 @@ using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    [DesignerCategory("")]
+    [System.ComponentModel.DesignerCategory("")]
     public class ShipWorksServiceBase : ServiceBase
     {
         private Timer windowsServiceCheckInTimer;
@@ -77,23 +77,18 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             WindowsServiceManager.SaveWindowsService(CurrentWindowsServiceEntity);
 
-            // Start a thread to check in every WindowsServiceManager.CheckInTimeSpan
-            Task.Factory.StartNew(ServiceCheckInWorker);
+            // Start the timer to check in every WindowsServiceManager.CheckInTimeSpan
+            StartCheckInTimer();
         }
 
         /// <summary>
-        /// Worker thread for checking in the service
+        /// Configures the check-in timer for the service.
         /// </summary>
-        private void ServiceCheckInWorker()
+        private void StartCheckInTimer()
         {
-            if (CurrentWindowsServiceEntity == null)
-            {
-                throw new ArgumentNullException(string.Format("{0} was unable to find a ShipWorks WindowsServiceEntity.", ServiceName));
-            }
-
-            windowsServiceCheckInTimer.Enabled = true;
             windowsServiceCheckInTimer.Interval = WindowsServiceManager.CheckInTimeSpan.TotalMilliseconds;
             windowsServiceCheckInTimer.Elapsed += OnWindowsServiceCheckInTimerElapsed;
+            windowsServiceCheckInTimer.Enabled = true;
         }
 
         /// <summary>
