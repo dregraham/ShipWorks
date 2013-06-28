@@ -21,7 +21,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Tests
         }
 
         [TestMethod]
-        [Ignore]
         public void CanBeStopped()
         {
             // This test is no longer working due to not able to get a SW InstanceID...
