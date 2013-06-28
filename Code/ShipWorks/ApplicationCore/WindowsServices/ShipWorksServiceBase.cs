@@ -65,7 +65,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args)
         {
-            Debugger.Launch();
             // Update the WindowsServiceEntity start and check in times.
             CurrentWindowsServiceEntity.LastStartDateTime = DateTime.UtcNow;
             CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStartDateTime;
