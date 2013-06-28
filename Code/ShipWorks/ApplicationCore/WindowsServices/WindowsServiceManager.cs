@@ -27,6 +27,31 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         static TableSynchronizer<WindowsServiceEntity> tableSynchronizer;
         static bool needCheckForChanges = false;
 
+        const string ormConcurrencyExceptionMessage = "Another user has recently made changes.\n\n" +
+                              "Your changes cannot be saved since they would overwrite the other changes.";
+
+        /// <summary>
+        /// Returns the TimeSpan for amount a time allowed before a service is considered "not running"
+        /// </summary>
+        public static TimeSpan NotRunningTimeSpan
+        {
+            get
+            {
+                return new TimeSpan(0, 0, 10, 0);
+            }
+        }
+
+        /// <summary>
+        /// Returns the TimeSpan for how often a service should check in.
+        /// </summary>
+        public static TimeSpan CheckInTimeSpan
+        {
+            get
+            {
+                return new TimeSpan(0, 0, 1, 0);
+            }
+        }
+
         /// <summary>
         /// Initialize when a user logs in
         /// </summary>
@@ -85,12 +110,14 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                         computer.WindowsServices.Count == 0 || 
                         computer.WindowsServices.All(ws => ws.ServiceType != (int)serviceType))
                     {
-                        WindowsServiceEntity windowsService = new WindowsServiceEntity();
-                        windowsService.ServiceType = (int) serviceType;
-                        windowsService.ServiceFullName = string.Empty;
-                        windowsService.ServiceDisplayName = string.Empty;
-                        windowsService.ComputerID = computer.ComputerID;
-                        
+                        WindowsServiceEntity windowsService = new WindowsServiceEntity
+                            {
+                                ServiceType = (int) serviceType,
+                                ServiceFullName = string.Empty,
+                                ServiceDisplayName = string.Empty,
+                                ComputerID = computer.ComputerID
+                            };
+
                         SaveWindowsService(windowsService);
                     }
                 }
@@ -125,6 +152,14 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
+        /// Get the WindowsServiceEntity with the given Computer ID and ShipWorksServiceType, or null of no such action exists.
+        /// </summary>
+        public static WindowsServiceEntity GetWindowsService(long computerID, ShipWorksServiceType shipWorksServiceType)
+        {
+            return WindowsServices.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)shipWorksServiceType);
+        }
+
+        /// <summary>
         /// Delete the given WindowsServiceEntity
         /// </summary>
         public static void DeleteWindowsService(WindowsServiceEntity windowsService)
@@ -151,11 +186,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             }
             catch (ORMConcurrencyException ex)
             {
-                string errorMessage = "Another user has recently made changes.\n\n" +
-                                      "Your changes cannot be saved since they would overwrite the other changes.";
-                log.Error(errorMessage, ex);
+                log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new WindowsServiceConcurrencyException(errorMessage, ex);
+                throw new WindowsServiceConcurrencyException(ormConcurrencyExceptionMessage, ex);
             }
         }
 
@@ -176,11 +209,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             }
             catch (ORMConcurrencyException ex)
             {
-                string errorMessage = "Another user has recently made changes.\n\n" +
-                                      "Your changes cannot be saved since they would overwrite the other changes.";
-                log.Error(errorMessage, ex);
+                log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new WindowsServiceConcurrencyException(errorMessage, ex);
+                throw new WindowsServiceConcurrencyException(ormConcurrencyExceptionMessage, ex);
             }
         }
 

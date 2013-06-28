@@ -314,6 +314,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			base.GetObjectData(info, context);
 		}
 
+		/// <summary> Method which will construct a filter (predicate expression) for the unique constraint defined on the fields:
+		/// ComputerID , ServiceType .</summary>
+		/// <returns>true if succeeded and the contents is read, false otherwise</returns>
+		public IPredicateExpression ConstructFilterForUCComputerIDServiceType()
+		{
+			IPredicateExpression filter = new PredicateExpression();
+			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)WindowsServiceFieldIndex.ComputerID], null, ComparisonOperator.Equal));
+			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)WindowsServiceFieldIndex.ServiceType], null, ComparisonOperator.Equal)); 
+			return filter;
+		}
+
 		/// <summary>Returns true if the original value for the field with the fieldIndex passed in, read from the persistent storage was NULL, false otherwise.
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
@@ -486,6 +497,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ServiceDisplayName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -680,6 +694,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WindowsServiceFieldIndex.ServiceDisplayName, true); }
 			set	{ SetValue((int)WindowsServiceFieldIndex.ServiceDisplayName, value); }
+		}
+
+		/// <summary> The RowVersion property of the Entity WindowsService<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WindowsService"."RowVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte[] RowVersion
+		{
+			get { return (System.Byte[])GetValue((int)WindowsServiceFieldIndex.RowVersion, true); }
+
 		}
 
 

@@ -458,7 +458,9 @@
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceEntityExtensions.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceManager.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ServiceManager.cs" />
-    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.cs">
       <SubType>Component</SubType>
     </Compile>

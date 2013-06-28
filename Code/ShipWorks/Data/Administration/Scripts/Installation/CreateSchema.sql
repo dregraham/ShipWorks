@@ -5476,7 +5476,6 @@ GO
 ALTER TABLE [dbo].[Scheduling_SIMPROP_TRIGGERS] ADD CONSTRAINT [FK_Scheduling_SIMPROP_TRIGGERS_Scheduling_TRIGGERS] FOREIGN KEY ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) REFERENCES [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) ON DELETE CASCADE
 GO
 
-
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -5484,6 +5483,7 @@ GO
 CREATE TABLE [dbo].[WindowsService]
 (
 	[WindowsServiceID] [bigint] NOT NULL IDENTITY(1096, 1000),
+	[RowVersion] [timestamp] NOT NULL,
 	[ComputerID] [bigint] NOT NULL,
 	[ServiceType] [int] NOT NULL,
 	[LastStartDateTime] [datetime] NULL,
@@ -5495,8 +5495,9 @@ CREATE TABLE [dbo].[WindowsService]
 GO
 ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [PK_Scheduler] PRIMARY KEY CLUSTERED  ([WindowsServiceID])
 GO
+ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [IX_WindowsService] UNIQUE NONCLUSTERED  ([ComputerID], [ServiceType])
+GO
 ALTER TABLE [dbo].[WindowsService] ENABLE CHANGE_TRACKING
 GO
 ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [FK_Scheduler_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
 GO
-

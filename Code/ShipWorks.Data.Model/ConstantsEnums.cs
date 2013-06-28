@@ -8696,6 +8696,8 @@ namespace ShipWorks.Data.Model
 		ServiceFullName,
 		///<summary>ServiceDisplayName. </summary>
 		ServiceDisplayName,
+		///<summary>RowVersion. </summary>
+		RowVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}

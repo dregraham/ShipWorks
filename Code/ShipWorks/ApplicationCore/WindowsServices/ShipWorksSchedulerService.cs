@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Interapptive.Shared.UI;
 using ShipWorks.Actions.Scheduling;
 using System.Threading;
@@ -10,34 +8,39 @@ using ShipWorks.Data.Connection;
 using System.Timers;
 using ShipWorks.Actions;
 using ShipWorks.Data.Utility;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Stores;
-using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using Timer = System.Timers.Timer;
+using System.ComponentModel;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    [System.ComponentModel.DesignerCategory("Component")]
+    /// <summary>
+    /// Implementation for the ShipWorks Scheduler, so that the UI does not need to be running to process actions
+    /// on a scheduled bases.  Also hosts the Scheduler process for dispatching Jobs. 
+    /// </summary>
+    [DesignerCategory("Component")]
     public partial class ShipWorksSchedulerService : ShipWorksServiceBase
     {
         IScheduler scheduler;
         CancellationTokenSource canceller;
 
-        Timer timer = new Timer();
+        readonly Timer timer = new Timer();
         TimestampTracker timestampTracker;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ShipWorksSchedulerService()
         {
             InitializeComponent();
             InitializeInstance();
+            InitializeForApplication();
         }
 
-
+        /// <summary>
+        /// IScheduler for this ShipWorksSchedulerService instance.
+        /// </summary>
         public IScheduler Scheduler
         {
             get
@@ -50,7 +53,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             }
         }
 
-
         /// <summary>
         /// When implemented in a derived class, executes when a Start command is sent to the service by the Service Control 
         /// Manager (SCM) or when the operating system starts (for a service that starts automatically). Specifies actions to 
@@ -59,7 +61,8 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args)
         {
-            InitializeForApplication();
+            // Ask the base to process any OnStart needs.
+            base.OnStart(args);
 
             timestampTracker = new TimestampTracker();
 
@@ -85,11 +88,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             UserSession.InitializeForCurrentDatabase();
 
-            //if (!UserSession.Logon("shipworks", "shipworks", true))
-            //{
-            //    throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
-            //}
-
             UserManager.InitializeForCurrentUser();
             UserSession.InitializeForCurrentUser();
 
@@ -100,8 +98,14 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             WindowsServiceManager.InitializeForCurrentUser();
         }
 
+        /// <summary>
+        /// Process any OnStop needs for the service.
+        /// </summary>
         protected override void OnStop()
         {
+            // Ask the base to process any OnStop needs.
+            base.OnStop();
+
             timer.Stop();
             timer.Close();
             timer.Dispose();

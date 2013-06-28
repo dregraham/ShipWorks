@@ -5,6 +5,7 @@ GO
 CREATE TABLE [dbo].[WindowsService]
 (
 	[WindowsServiceID] [bigint] NOT NULL IDENTITY(1096, 1000),
+	[RowVersion] [timestamp] NOT NULL,
 	[ComputerID] [bigint] NOT NULL,
 	[ServiceType] [int] NOT NULL,
 	[LastStartDateTime] [datetime] NULL,
@@ -15,6 +16,8 @@ CREATE TABLE [dbo].[WindowsService]
 )
 GO
 ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [PK_Scheduler] PRIMARY KEY CLUSTERED  ([WindowsServiceID])
+GO
+ALTER TABLE [dbo].[WindowsService] ADD CONSTRAINT [IX_WindowsService] UNIQUE NONCLUSTERED  ([ComputerID], [ServiceType])
 GO
 ALTER TABLE [dbo].[WindowsService] ENABLE CHANGE_TRACKING
 GO

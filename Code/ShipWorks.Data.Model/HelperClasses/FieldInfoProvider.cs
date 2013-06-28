@@ -2590,6 +2590,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WindowsServiceEntity", "LastCheckInDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)WindowsServiceFieldIndex.LastCheckInDateTime, 0, 0, 0);
 			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceFullName, 256, 0, 0);
 			base.AddElementFieldInfo("WindowsServiceEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)WindowsServiceFieldIndex.ServiceDisplayName, 256, 0, 0);
+			base.AddElementFieldInfo("WindowsServiceEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)WindowsServiceFieldIndex.RowVersion, 0, 0, 0);
 		}
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>
 		private void InitWorldShipGoodsEntityInfos()

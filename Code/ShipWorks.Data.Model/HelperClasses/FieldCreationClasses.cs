@@ -18357,6 +18357,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceDisplayName);}
 		}
+		/// <summary>Creates a new WindowsServiceEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.RowVersion);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WorldShipGoodsEntity</summary>

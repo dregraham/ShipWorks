@@ -51,6 +51,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         static List<Type> itemTypeSortOrder = new List<Type>
             {
                 typeof(DashboardActionErrorItem),
+                typeof(DashboardServiceStoppedItem),
                 typeof(DashboardEmailItem),
                 typeof(DashboardStoreItem),
                 typeof(DashboardMessageItem),
@@ -451,8 +452,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
             catch (ServerMessageFeedException ex)
             {
-                Debug.Fail(ex.Message, ex.ToString());
                 log.Error("Failed to read server message feed.", ex);
+                Debug.Fail(ex.Message, ex.ToString());
             }
         }
 
@@ -493,7 +494,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 // The stopped services are now running, so remove the stopped dashboard item.
                 //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
                 
-                existingDashboardItems.ForEach(edi => RemoveDashboardItem(edi));
+                existingDashboardItems.ForEach(RemoveDashboardItem);
 
                 //// It's no longer active, so we've got to get rid of it.
                 //RemoveDashboardItem(item);
@@ -502,7 +503,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             {
                 // There are existing service dashboard items AND the number of stopped services has changed, so remove
                 // the current dashboard item and add the new one.
-                existingDashboardItems.ForEach(edi => RemoveDashboardItem(edi));
+                existingDashboardItems.ForEach(RemoveDashboardItem);
 
                 //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
 
