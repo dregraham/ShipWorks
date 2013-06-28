@@ -1,11 +1,12 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.WindowsServices;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.SortProviders;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using System.Text;
 
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
@@ -27,13 +28,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     "Computer", @"\\ShippingPC",
                     new GridColumnFieldValueProvider(WindowsServiceFields.ComputerID),
                     new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, WindowsServiceFields.ComputerID, JoinHint.Right))
-                    { DefaultWidth = 125 },
+                    { DefaultWidth = 140 },
 
                 new GridColumnDefinition("{367F6C99-2563-4DA4-B307-7F8C8892937A}", true,
                     new GridEnumDisplayType<ShipWorksServiceType>(EnumSortMethod.Value),
                     "Service Type", "Sample Service",
                     WindowsServiceFields.ServiceType)
-                    { DefaultWidth = 160 },
+                    { DefaultWidth = 140 },
 
                 new GridColumnDefinition("{F1979994-BB60-45D6-B2C1-18966AB15B65}", true,
                     new GridEnumDisplayType<ServiceStatus>(EnumSortMethod.Value),
@@ -43,8 +44,14 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     { DefaultWidth = 125 },
 
                 new GridColumnDefinition("{D5FCAF56-6931-4AA3-AD2D-3CCFB1D66098}", true, 
-                    new GridDateDisplayType { }, "Last Check-in", Interapptive.Shared.Utility.DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
-                    WindowsServiceFields.LastCheckInDateTime)
+                    new GridDateDisplayType { UseDescriptiveDates = true },
+                    "Last Started", DateTimeUtility.ParseEnUS("03/04/2012 1:30 PM").ToUniversalTime(),
+                    WindowsServiceFields.LastStartDateTime),
+
+                new GridColumnDefinition("{50003D6C-4082-4E52-9E23-F72E2CFBA924}", true, 
+                    new GridDateDisplayType { UseDescriptiveDates = true }.Decorate(new GridServiceStopTimeDecorator()),
+                    "Last Stopped", DateTimeUtility.ParseEnUS("03/16/2012 7:41 PM").ToUniversalTime(),
+                    WindowsServiceFields.LastStopDateTime)
             };
 
             return definitions;

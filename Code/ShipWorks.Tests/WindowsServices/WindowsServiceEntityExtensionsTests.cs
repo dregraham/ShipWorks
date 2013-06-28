@@ -18,9 +18,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Tests
 
 
         [TestMethod]
-        public void StatusIsNeverRunWhenStartTimeIsNull()
+        public void StatusIsNeverStartedWhenStartTimeIsNull()
         {
-            Assert.AreEqual(ServiceStatus.NeverRun, target.GetStatus());
+            Assert.AreEqual(ServiceStatus.NeverStarted, target.GetStatus());
         }
 
         [TestMethod]

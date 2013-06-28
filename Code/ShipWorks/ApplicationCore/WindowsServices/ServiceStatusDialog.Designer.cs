@@ -45,7 +45,7 @@
             // 
             closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            closeButton.Location = new System.Drawing.Point(464, 316);
+            closeButton.Location = new System.Drawing.Point(590, 308);
             closeButton.Name = "closeButton";
             closeButton.Size = new System.Drawing.Size(75, 23);
             closeButton.TabIndex = 6;
@@ -64,7 +64,7 @@
             this.panelGridArea.Controls.Add(this.panelTools);
             this.panelGridArea.Location = new System.Drawing.Point(12, 12);
             this.panelGridArea.Name = "panelGridArea";
-            this.panelGridArea.Size = new System.Drawing.Size(527, 292);
+            this.panelGridArea.Size = new System.Drawing.Size(653, 284);
             this.panelGridArea.TabIndex = 7;
             // 
             // entityGrid
@@ -81,7 +81,7 @@
             this.entityGrid.Renderer = windowsXPRenderer1;
             this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.entityGrid.ShadeAlternateRows = true;
-            this.entityGrid.Size = new System.Drawing.Size(523, 261);
+            this.entityGrid.Size = new System.Drawing.Size(649, 253);
             this.entityGrid.StretchPrimaryGrid = false;
             this.entityGrid.TabIndex = 0;
             // 
@@ -89,9 +89,9 @@
             // 
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 261);
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 253);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(523, 1);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(649, 1);
             this.kryptonBorderEdge.TabIndex = 2;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -99,10 +99,10 @@
             // 
             this.panelTools.Controls.Add(this.labelGridSettings);
             this.panelTools.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelTools.Location = new System.Drawing.Point(0, 262);
+            this.panelTools.Location = new System.Drawing.Point(0, 254);
             this.panelTools.Name = "panelTools";
             this.panelTools.PanelBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderColumnSheet;
-            this.panelTools.Size = new System.Drawing.Size(523, 26);
+            this.panelTools.Size = new System.Drawing.Size(649, 26);
             this.panelTools.TabIndex = 1;
             // 
             // labelGridSettings
@@ -113,7 +113,7 @@
             this.labelGridSettings.Cursor = System.Windows.Forms.Cursors.Hand;
             this.labelGridSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelGridSettings.ForeColor = System.Drawing.Color.Blue;
-            this.labelGridSettings.Location = new System.Drawing.Point(450, 6);
+            this.labelGridSettings.Location = new System.Drawing.Point(576, 6);
             this.labelGridSettings.Name = "labelGridSettings";
             this.labelGridSettings.Size = new System.Drawing.Size(68, 13);
             this.labelGridSettings.TabIndex = 0;
@@ -125,7 +125,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = closeButton;
-            this.ClientSize = new System.Drawing.Size(551, 351);
+            this.ClientSize = new System.Drawing.Size(677, 343);
             this.Controls.Add(this.panelGridArea);
             this.Controls.Add(closeButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);

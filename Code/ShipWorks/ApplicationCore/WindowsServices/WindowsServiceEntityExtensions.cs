@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                 throw new ArgumentNullException("instance");
 
             if (!instance.LastStartDateTime.HasValue)
-                return ServiceStatus.NeverRun;
+                return ServiceStatus.NeverStarted;
 
             if (
                 instance.LastStopDateTime.HasValue &&
