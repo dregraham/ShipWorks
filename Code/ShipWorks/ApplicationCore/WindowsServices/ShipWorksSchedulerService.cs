@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     /// Implementation for the ShipWorks Scheduler, so that the UI does not need to be running to process actions
     /// on a scheduled bases.  Also hosts the Scheduler process for dispatching Jobs. 
     /// </summary>
-    [DesignerCategory("Component")]
+    [System.ComponentModel.DesignerCategory("Component")]
     public partial class ShipWorksSchedulerService : ShipWorksServiceBase
     {
         IScheduler scheduler;
@@ -35,7 +35,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         {
             InitializeComponent();
             InitializeInstance();
-            InitializeForApplication();
         }
 
         /// <summary>
@@ -73,29 +72,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             canceller = new CancellationTokenSource();
 
             Scheduler.RunAsync(canceller.Token);
-        }
-
-        /// <summary>
-        /// Initializes for application.
-        /// </summary>
-        private static void InitializeForApplication()
-        {
-            SqlSession.Initialize();
-            LogSession.Initialize();
-            
-            DataProvider.InitializeForApplication();
-            AuditProcessor.InitializeForApplication();
-
-            UserSession.InitializeForCurrentDatabase();
-
-            UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentUser();
-
-            // Required for printing
-            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
-
-            // Initialize any ShipWorks Windows services
-            WindowsServiceManager.InitializeForCurrentUser();
         }
 
         /// <summary>

@@ -1,13 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
@@ -58,6 +64,29 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
+        /// Initializes for application.
+        /// </summary>
+        private static void InitializeForApplication()
+        {
+            SqlSession.Initialize();
+            LogSession.Initialize();
+
+            DataProvider.InitializeForApplication();
+            AuditProcessor.InitializeForApplication();
+
+            UserSession.InitializeForCurrentDatabase();
+
+            UserManager.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentUser();
+
+            // Required for printing
+            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
+
+            // Initialize any ShipWorks Windows services
+            WindowsServiceManager.InitializeForCurrentUser();
+        }
+
+        /// <summary>
         /// When implemented in a derived class, executes when a Start command is sent to the service by the Service Control 
         /// Manager (SCM) or when the operating system starts (for a service that starts automatically). Specifies actions to 
         /// take when the service starts.
@@ -65,6 +94,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args)
         {
+            // Setup the service for ShipWorks access.
+            InitializeForApplication();
+
             // Update the WindowsServiceEntity start and check in times.
             CurrentWindowsServiceEntity.LastStartDateTime = DateTime.UtcNow;
             CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStartDateTime;
