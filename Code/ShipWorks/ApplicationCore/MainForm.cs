@@ -294,9 +294,6 @@ namespace ShipWorks
                 return;
             }
 
-            // Initialize any ShipWorks Windows services
-            WindowsServiceManager.InitializeForCurrentUser();
-
             // Initiate the logon sequence
             InitiateLogon();
         }

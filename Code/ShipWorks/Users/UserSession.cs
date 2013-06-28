@@ -45,6 +45,7 @@ using ShipWorks.FileTransfer;
 using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.ApplicationCore.WindowsServices;
 
 namespace ShipWorks.Users
 {
@@ -121,6 +122,8 @@ namespace ShipWorks.Users
         public static void InitializeForCurrentUser()
         {
             ComputerManager.InitializeForCurrentUser();
+            WindowsServiceManager.InitializeForCurrentUser();
+
             ObjectLabelManager.InitializeForCurrentUser();
 
             if (UserSession.IsLoggedOn)

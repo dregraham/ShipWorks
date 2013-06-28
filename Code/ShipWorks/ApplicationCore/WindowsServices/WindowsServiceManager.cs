@@ -59,11 +59,11 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         {
             ComputerManager.InitializeForCurrentUser();
 
-            tableSynchronizer = new TableSynchronizer<WindowsServiceEntity>();
-            InternalCheckForChanges();
-
             // Add any missing computers 
             AddMissingComputers();
+
+            tableSynchronizer = new TableSynchronizer<WindowsServiceEntity>();
+            InternalCheckForChanges();
         }
 
         /// <summary>
