@@ -263,6 +263,8 @@ namespace ShipWorks.Actions
                     // The action isn't a scheduled one, so save.
                     adapter.SaveAndRefetch(action);
                 }
+
+                CheckForChangesNeeded();
             }
             catch (ORMConcurrencyException ex)
             {
