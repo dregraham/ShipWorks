@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.WindowsServices;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -21,6 +23,10 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
+            GridHyperlinkDecorator statusDecorator = new GridHyperlinkDecorator();
+            statusDecorator.LinkClicked += OnLinkClicked;
+            statusDecorator.QueryEnabled += EnableStatusHyperlink;
+
             var definitions = new GridColumnDefinitionCollection
             {
                 new GridColumnDefinition("{7BE7DBCE-3500-4B01-8594-471035C001AD}", true,
@@ -37,7 +43,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     { DefaultWidth = 140 },
 
                 new GridColumnDefinition("{F1979994-BB60-45D6-B2C1-18966AB15B65}", true,
-                    new GridEnumDisplayType<ServiceStatus>(EnumSortMethod.Value),
+                    new GridEnumDisplayType<ServiceStatus>(EnumSortMethod.Value).Decorate(statusDecorator),
                     "Status", "(icon)",
                     new GridColumnFunctionValueProvider(x => ((WindowsServiceEntity)x).GetStatus()),
                     null) //new GridColumnSortProvider(CreateStatusSortField()))
@@ -57,6 +63,39 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             return definitions;
         }
 
+        /// <summary>
+        /// Enables the hyperlink for any rows that do not have a ServiceStatus of Running.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="GridHyperlinkQueryEnabledEventArgs"/> instance containing the event data.</param>
+        private static void EnableStatusHyperlink(object sender, GridHyperlinkQueryEnabledEventArgs e)
+        {
+            GridHyperlinkDecorator hyperlinkDecorator = sender as GridHyperlinkDecorator;
+            if (hyperlinkDecorator != null)
+            {
+                if (e.Value is ServiceStatus)
+                {
+                    e.Enabled = (ServiceStatus)e.Value != ServiceStatus.Running;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when [link clicked].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="GridHyperlinkClickEventArgs"/> instance containing the event data.</param>
+        private static void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
+        {
+            WindowsServiceEntity serviceEntity = e.Row.Entity as WindowsServiceEntity;
+            if (serviceEntity != null && serviceEntity.GetStatus() != ServiceStatus.Running)
+            {
+                using (ServiceStartHelpDlg dlg = new ServiceStartHelpDlg())
+                {
+                    dlg.ShowDialog(e.Row.Grid.SandGrid.TopLevelControl);
+                }
+            }
+        }
 
         ///// <summary>
         ///// Mirrors the logic in <see cref="WindowsServiceEntityExtensions.GetStatus"/>.

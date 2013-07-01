@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             entityProvider = new EntityCacheEntityProvider(EntityType.WindowsServiceEntity, prefetch);
             entityProvider.EntityChangesDetected += new EntityCacheChangeMonitoredChangedEventHandler(OnEntityProviderChangeDetected);
-
+            
             //Prepare for paging
             entityGrid.InitializeGrid();
 

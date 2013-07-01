@@ -462,6 +462,12 @@
       <DependentUpon>MasterInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\WindowsServices\Installers\ShipWorksCommandInstaller.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ServiceStartHelpDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\WindowsServices\ServiceStartHelpDlg.Designer.cs">
+      <DependentUpon>ServiceStartHelpDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\WindowsServices\ServiceStatus.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceConcurrencyException.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceEntityExtensions.cs" />
@@ -5315,6 +5321,9 @@
     <EmbeddedResource Include="ApplicationCore\WindowsServices\Installers\MasterInstaller.resx">
       <DependentUpon>MasterInstaller.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\ServiceStartHelpDlg.resx">
+      <DependentUpon>ServiceStartHelpDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.resx">
       <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
     </EmbeddedResource>
@@ -9663,6 +9672,7 @@
     </EmbeddedResource>
     <None Include="Resources\shoppingcart_full.png" />
     <None Include="Resources\star_green.png" />
+    <None Include="Resources\start_shipworks_service.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
