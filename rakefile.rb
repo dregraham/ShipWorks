@@ -1,16 +1,18 @@
 require 'albacore'
 
 
-# Location of MSBuild and MSTest on this computer
-@msBuildPath = "#{ENV['SystemRoot']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
-@msTestPath = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
+Albacore.configure do |config|
+	config.msbuild do |msbuild|
+		msbuild.use :net40
+		msbuild.parameters = "/m"
+		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+	end
 
+	config.mstest do |mstest|
+		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
+	end
+end
 
-# Assumes rake will be executed from the directory containing the rakefile and solution file
-@workingDirectory = pwd
-@solutionFile = "#{@workingDirectory}\\ShipWorks.sln"
-
-@testMetadataFile = "#{@workingDirectory}\\ShipWorks.vsmdi"
 
 desc "Cleans and builds the solution with the debug config"
 task :rebuild => ["build:clean", "build:debug"]
@@ -23,8 +25,6 @@ namespace :build do
 	msbuild :clean do |msb|
 		print "Cleaning solution...\r\n\r\n"
 		msb.targets :Clean
-		msb.solution = "#{@solutionFile}"		
-		msb.parameters = "/m"
 	end
 
 	desc "Build ShipWorks in the Debug configuration"
@@ -33,8 +33,6 @@ namespace :build do
 
 		msb.properties :configuration => :Debug
 		msb.targets :Build
-		msb.solution = "#{@solutionFile}"
-		msb.parameters = "/m"
 	end
 
 
@@ -44,8 +42,6 @@ namespace :build do
 
 		msb.properties :configuration => :Release
 		msb.targets :Clean, :Build
-		msb.solution = "#{@solutionFile}"		
-		msb.parameters = "/m"
 	end
 end
 
@@ -72,7 +68,6 @@ namespace :test do
 		File.delete("TestResults/units-results.trx") if File.exist?("TestResults/units-results.trx")
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
+		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
 	end	
 end
