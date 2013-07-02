@@ -210,6 +210,7 @@
     <Compile Include="Templates\TemplateUserSettingsTrigger.cs" />
     <Compile Include="Users\GetComputerID.cs" />
     <Compile Include="Users\GetUserID.cs" />
+    <Compile Include="Actions\ActionDeleteTrigger.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
