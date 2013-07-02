@@ -271,6 +271,7 @@
     <Compile Include="Actions\ActionStepContext.cs" />
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
     <Compile Include="Actions\ComputerLimitationType.cs" />
+    <Compile Include="Actions\ComputerActionPolicy.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
