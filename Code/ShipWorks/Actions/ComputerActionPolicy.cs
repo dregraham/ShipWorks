@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +16,7 @@ namespace ShipWorks.Actions
         /// <param name="action">The action.</param>
         public ComputerActionPolicy(ActionEntity action)
         {
+            // TODO: use the list of computer IDs to populate the list of allowed computers via the ReadCsv method
             allowedComputers = new List<ComputerEntity>();
         }
 
