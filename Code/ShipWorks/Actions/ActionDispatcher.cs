@@ -198,9 +198,12 @@ namespace ShipWorks.Actions
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
 
             // If it's limited to only running on this computer set the ID
-            if (action.ComputerLimited)
+            if (action.ComputerLimitedType == (int) ComputerLimitationType.TriggeringComputer)
             {
-                entity.RunComputerID = UserSession.Computer.ComputerID;
+                entity.ComputerLimitedList = new[]
+                {
+                    UserSession.Computer.ComputerID
+                };
             }
 
             // Set the initial status and the first step

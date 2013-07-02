@@ -109,7 +109,7 @@ namespace ShipWorks.Actions
 
             // Load the various settings
             enabled.Checked = action.Enabled;
-            runOnOtherComputers.Checked = !action.ComputerLimited;
+            runOnOtherComputers.Checked = (action.ComputerLimitedType == (int) ComputerLimitationType.None);
             storeLimited.Checked = action.StoreLimited;
             panelStores.Enabled = action.StoreLimited;
 
@@ -518,7 +518,7 @@ namespace ShipWorks.Actions
                     action.TriggerType = (int) triggerCombo.SelectedValue;
                     action.TaskSummary = ActionManager.GetTaskSummary(tasksToSave);
                     action.Enabled = enabled.Checked;
-                    action.ComputerLimited = !runOnOtherComputers.Checked;
+                    action.ComputerLimitedType = (int) (runOnOtherComputers.Checked ? ComputerLimitationType.None : ComputerLimitationType.TriggeringComputer);
                     action.StoreLimited = storeLimited.Checked;
                     action.StoreLimitedList = GenerateStoreLimitedListFromUI();
 

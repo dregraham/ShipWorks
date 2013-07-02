@@ -478,6 +478,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("WindowsServiceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ComputerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -497,9 +500,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ServiceDisplayName", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -619,6 +619,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WindowsServiceFieldIndex.WindowsServiceID, value); }
 		}
 
+		/// <summary> The RowVersion property of the Entity WindowsService<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WindowsService"."RowVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte[] RowVersion
+		{
+			get { return (System.Byte[])GetValue((int)WindowsServiceFieldIndex.RowVersion, true); }
+
+		}
+
 		/// <summary> The ComputerID property of the Entity WindowsService<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "WindowsService"."ComputerID"<br/>
@@ -694,17 +705,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WindowsServiceFieldIndex.ServiceDisplayName, true); }
 			set	{ SetValue((int)WindowsServiceFieldIndex.ServiceDisplayName, value); }
-		}
-
-		/// <summary> The RowVersion property of the Entity WindowsService<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."RowVersion"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Byte[] RowVersion
-		{
-			get { return (System.Byte[])GetValue((int)WindowsServiceFieldIndex.RowVersion, true); }
-
 		}
 
 

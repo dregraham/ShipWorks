@@ -221,18 +221,19 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ActionEntity's mappings</summary>
 		private void InitActionEntityMappings()
 		{
-			base.AddElementMapping( "ActionEntity", "ShipWorksLocal", @"dbo", "Action", 11 );
+			base.AddElementMapping( "ActionEntity", "ShipWorksLocal", @"dbo", "Action", 12 );
 			base.AddElementFieldMapping( "ActionEntity", "ActionID", "ActionID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ActionEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ActionEntity", "Name", "Name", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "ActionEntity", "Enabled", "Enabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
-			base.AddElementFieldMapping( "ActionEntity", "ComputerLimited", "ComputerLimited", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 4 );
-			base.AddElementFieldMapping( "ActionEntity", "StoreLimited", "StoreLimited", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
-			base.AddElementFieldMapping( "ActionEntity", "InternalStoreLimitedList", "StoreLimitedList", false, (int)SqlDbType.NVarChar, 150, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "ActionEntity", "TriggerType", "TriggerType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 7 );
-			base.AddElementFieldMapping( "ActionEntity", "TriggerSettings", "TriggerSettings", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "ActionEntity", "TaskSummary", "TaskSummary", false, (int)SqlDbType.NVarChar, 150, 0, 0, false, "", null, typeof(System.String), 9 );
-			base.AddElementFieldMapping( "ActionEntity", "InternalOwner", "InternalOwner", true, (int)SqlDbType.VarChar, 50, 0, 0, false, "", null, typeof(System.String), 10 );
+			base.AddElementFieldMapping( "ActionEntity", "ComputerLimitedType", "ComputerLimitedType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
+			base.AddElementFieldMapping( "ActionEntity", "InternalComputerLimitedList", "ComputerLimitedList", false, (int)SqlDbType.VarChar, 150, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "ActionEntity", "StoreLimited", "StoreLimited", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
+			base.AddElementFieldMapping( "ActionEntity", "InternalStoreLimitedList", "StoreLimitedList", false, (int)SqlDbType.NVarChar, 150, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "ActionEntity", "TriggerType", "TriggerType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 8 );
+			base.AddElementFieldMapping( "ActionEntity", "TriggerSettings", "TriggerSettings", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "ActionEntity", "TaskSummary", "TaskSummary", false, (int)SqlDbType.NVarChar, 150, 0, 0, false, "", null, typeof(System.String), 10 );
+			base.AddElementFieldMapping( "ActionEntity", "InternalOwner", "InternalOwner", true, (int)SqlDbType.VarChar, 50, 0, 0, false, "", null, typeof(System.String), 11 );
 		}
 		/// <summary>Inits ActionFilterTriggerEntity's mappings</summary>
 		private void InitActionFilterTriggerEntityMappings()
@@ -255,7 +256,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ActionQueueEntity", "QueueVersion", "QueueVersion", false, (int)SqlDbType.Binary, 8, 0, 0, false, "", null, typeof(System.Byte[]), 5 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "TriggerDate", "TriggerDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "TriggerComputerID", "TriggerComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "RunComputerID", "RunComputerID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "InternalComputerLimitedList", "ComputerLimitedList", false, (int)SqlDbType.VarChar, 150, 0, 0, false, "", null, typeof(System.String), 8 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ObjectID", "ObjectID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 9 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "Status", "Status", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "NextStep", "NextStep", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
@@ -2732,14 +2733,14 @@ namespace ShipWorks.Data.Adapter
 		{
 			base.AddElementMapping( "WindowsServiceEntity", "ShipWorksLocal", @"dbo", "WindowsService", 9 );
 			base.AddElementFieldMapping( "WindowsServiceEntity", "WindowsServiceID", "WindowsServiceID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStartDateTime", "LastStartDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 3 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastCheckInDateTime", "LastCheckInDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 8 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStartDateTime", "LastStartDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "LastCheckInDateTime", "LastCheckInDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 8 );
 		}
 		/// <summary>Inits WorldShipGoodsEntity's mappings</summary>
 		private void InitWorldShipGoodsEntityMappings()

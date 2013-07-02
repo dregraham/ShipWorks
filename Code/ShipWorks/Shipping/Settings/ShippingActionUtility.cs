@@ -163,7 +163,7 @@ namespace ShipWorks.Shipping.Settings
                     action.Name = string.Format("{0} ({1})", baseName, ShipmentTypeManager.GetType(code).ShipmentTypeName);
                     action.Enabled = enabled;
                     action.InternalOwner = identifier;
-                    action.ComputerLimited = computerLimited;
+                    action.ComputerLimitedType = (int) (computerLimited ? ComputerLimitationType.TriggeringComputer : ComputerLimitationType.None);
                     action.StoreLimited = false;
                     action.StoreLimitedList = new long[0];
 

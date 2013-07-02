@@ -600,7 +600,7 @@ namespace ShipWorks.Stores.Management
                     ActionEntity action = new ActionEntity();
                     action.Name = "Online Update";
                     action.Enabled = true;
-                    action.ComputerLimited = true;
+                    action.ComputerLimitedType = (int) ComputerLimitationType.TriggeringComputer;
                     action.StoreLimited = true;
                     action.StoreLimitedList = new long[] { store.StoreID };
 

@@ -501,7 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("TriggerComputerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("RunComputerID", fieldHashtable);
+			_fieldsCustomProperties.Add("InternalComputerLimitedList", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ObjectID", fieldHashtable);
@@ -683,15 +683,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ActionQueueFieldIndex.TriggerComputerID, value); }
 		}
 
-		/// <summary> The RunComputerID property of the Entity ActionQueue<br/><br/>
+		/// <summary> The InternalComputerLimitedList property of the Entity ActionQueue<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ActionQueue"."RunComputerID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> RunComputerID
+		/// <remarks>Mapped on  table field: "ActionQueue"."ComputerLimitedList"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String InternalComputerLimitedList
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)ActionQueueFieldIndex.RunComputerID, false); }
-			set	{ SetValue((int)ActionQueueFieldIndex.RunComputerID, value); }
+			get { return (System.String)GetValue((int)ActionQueueFieldIndex.InternalComputerLimitedList, true); }
+			set	{ SetValue((int)ActionQueueFieldIndex.InternalComputerLimitedList, value); }
 		}
 
 		/// <summary> The ObjectID property of the Entity ActionQueue<br/><br/>

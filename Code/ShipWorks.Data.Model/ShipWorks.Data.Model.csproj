@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Custom\ActiveTableInheritanceManager.cs" />
     <Compile Include="Custom\EntityClasses\ActionEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
     <Compile Include="Custom\EntityClasses\CommonEntityBase.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
@@ -1146,7 +1147,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -1183,5 +1183,5 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

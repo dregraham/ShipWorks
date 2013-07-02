@@ -462,7 +462,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Enabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ComputerLimited", fieldHashtable);
+			_fieldsCustomProperties.Add("ComputerLimitedType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InternalComputerLimitedList", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("StoreLimited", fieldHashtable);
@@ -590,15 +593,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ActionFieldIndex.Enabled, value); }
 		}
 
-		/// <summary> The ComputerLimited property of the Entity Action<br/><br/>
+		/// <summary> The ComputerLimitedType property of the Entity Action<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "Action"."ComputerLimited"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "Action"."ComputerLimitedType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ComputerLimited
+		public virtual System.Int32 ComputerLimitedType
 		{
-			get { return (System.Boolean)GetValue((int)ActionFieldIndex.ComputerLimited, true); }
-			set	{ SetValue((int)ActionFieldIndex.ComputerLimited, value); }
+			get { return (System.Int32)GetValue((int)ActionFieldIndex.ComputerLimitedType, true); }
+			set	{ SetValue((int)ActionFieldIndex.ComputerLimitedType, value); }
+		}
+
+		/// <summary> The InternalComputerLimitedList property of the Entity Action<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Action"."ComputerLimitedList"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String InternalComputerLimitedList
+		{
+			get { return (System.String)GetValue((int)ActionFieldIndex.InternalComputerLimitedList, true); }
+			set	{ SetValue((int)ActionFieldIndex.InternalComputerLimitedList, value); }
 		}
 
 		/// <summary> The StoreLimited property of the Entity Action<br/><br/>

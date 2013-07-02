@@ -37,10 +37,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.Enabled);}
 		}
-		/// <summary>Creates a new ActionEntity.ComputerLimited field instance</summary>
-		public static EntityField2 ComputerLimited
+		/// <summary>Creates a new ActionEntity.ComputerLimitedType field instance</summary>
+		public static EntityField2 ComputerLimitedType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.ComputerLimited);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.ComputerLimitedType);}
+		}
+		/// <summary>Creates a new ActionEntity.InternalComputerLimitedList field instance</summary>
+		public static EntityField2 InternalComputerLimitedList
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.InternalComputerLimitedList);}
 		}
 		/// <summary>Creates a new ActionEntity.StoreLimited field instance</summary>
 		public static EntityField2 StoreLimited
@@ -142,10 +147,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.TriggerComputerID);}
 		}
-		/// <summary>Creates a new ActionQueueEntity.RunComputerID field instance</summary>
-		public static EntityField2 RunComputerID
+		/// <summary>Creates a new ActionQueueEntity.InternalComputerLimitedList field instance</summary>
+		public static EntityField2 InternalComputerLimitedList
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.RunComputerID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.InternalComputerLimitedList);}
 		}
 		/// <summary>Creates a new ActionQueueEntity.ObjectID field instance</summary>
 		public static EntityField2 ObjectID
@@ -18322,6 +18327,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.WindowsServiceID);}
 		}
+		/// <summary>Creates a new WindowsServiceEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.RowVersion);}
+		}
 		/// <summary>Creates a new WindowsServiceEntity.ComputerID field instance</summary>
 		public static EntityField2 ComputerID
 		{
@@ -18356,11 +18366,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ServiceDisplayName
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceDisplayName);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.RowVersion field instance</summary>
-		public static EntityField2 RowVersion
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.RowVersion);}
 		}
 	}
 

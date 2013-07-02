@@ -33,8 +33,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{A34E560E-DDC6-44c6-A532-A262C9CB9D3E}", true,
                         new GridComputerDisplayType(), "Computer", @"\\ShippingPC",
-                        new GridColumnFieldValueProvider(ActionQueueFields.RunComputerID),
-                        new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ActionQueueFields.RunComputerID, JoinHint.Right)), 
+                        new GridColumnFieldValueProvider(ActionQueueFields.InternalComputerLimitedList),
+                        new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ActionQueueFields.InternalComputerLimitedList, JoinHint.Right)), 
 
                     new GridColumnDefinition("{10668EBE-8755-47A0-94E7-06E4DB466766}",
                         new GridComputerDisplayType(), "Triggered On", @"\\ShippingPC",

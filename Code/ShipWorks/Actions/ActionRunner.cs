@@ -163,7 +163,7 @@ namespace ShipWorks.Actions
             {
 
                 // If its for a different computer we can't do it
-                if (queue.RunComputerID != null && queue.RunComputerID != UserSession.Computer.ComputerID)
+                if (queue.ComputerLimitedList != null && !queue.ComputerLimitedList.Any(x => x == UserSession.Computer.ComputerID))
                 {
                     result = ActionRunnerResult.WrongComputer;
                     return null;

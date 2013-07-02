@@ -153,7 +153,7 @@ namespace ShipWorks.Actions.Triggers
                     filterTrigger.ActionID = action.ActionID;
                     filterTrigger.FilterNodeID = filterNodeID;
                     filterTrigger.Direction = (int) Direction;
-                    filterTrigger.ComputerLimited = action.ComputerLimited;
+                    filterTrigger.ComputerLimited = action.ComputerLimitedType != (int) ComputerLimitationType.None;
 
                     adapter.SaveEntity(filterTrigger);
                 }

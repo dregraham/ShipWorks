@@ -27,8 +27,10 @@ namespace ShipWorks.Data.Model
 		Name,
 		///<summary>Enabled. </summary>
 		Enabled,
-		///<summary>ComputerLimited. </summary>
-		ComputerLimited,
+		///<summary>ComputerLimitedType. </summary>
+		ComputerLimitedType,
+		///<summary>InternalComputerLimitedList. </summary>
+		InternalComputerLimitedList,
 		///<summary>StoreLimited. </summary>
 		StoreLimited,
 		///<summary>InternalStoreLimitedList. </summary>
@@ -87,8 +89,8 @@ namespace ShipWorks.Data.Model
 		TriggerDate,
 		///<summary>TriggerComputerID. </summary>
 		TriggerComputerID,
-		///<summary>RunComputerID. </summary>
-		RunComputerID,
+		///<summary>InternalComputerLimitedList. </summary>
+		InternalComputerLimitedList,
 		///<summary>ObjectID. </summary>
 		ObjectID,
 		///<summary>Status. </summary>
@@ -8682,6 +8684,8 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>WindowsServiceID. </summary>
 		WindowsServiceID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
 		///<summary>ComputerID. </summary>
 		ComputerID,
 		///<summary>ServiceType. </summary>
@@ -8696,8 +8700,6 @@ namespace ShipWorks.Data.Model
 		ServiceFullName,
 		///<summary>ServiceDisplayName. </summary>
 		ServiceDisplayName,
-		///<summary>RowVersion. </summary>
-		RowVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
