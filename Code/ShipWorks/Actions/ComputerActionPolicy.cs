@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
@@ -46,8 +47,8 @@ namespace ShipWorks.Actions
         {
             List<ComputerEntity> computerEntities = new List<ComputerEntity>();
 
-            string[] computerIDs = allowedComputersCsv.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string computerID in computerIDs)
+            string[] computerIds = allowedComputersCsv.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string computerID in computerIds)
             {
                 computerEntities.Add(new ComputerEntity(long.Parse(computerID)));
             }
@@ -58,22 +59,11 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Writes the computer IDs of the allowed computers to a comma separated list.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string containing a comma separated list of computer IDs.</returns>
         public string ToCsv()
         {
-            StringBuilder csv = new StringBuilder();
-
-            foreach (ComputerEntity computer in allowedComputers)
-            {
-                if (csv.Length > 0)
-                {
-                    csv.Append(", ");
-                }
-
-                csv.Append(computer.ComputerID);
-            }
-
-            return csv.ToString();
+            string[] computerIds = allowedComputers.Select(c => c.ComputerID.ToString(CultureInfo.InvariantCulture)).ToArray();
+            return string.Join(", ", computerIds);
         }
 
         /// <summary>
