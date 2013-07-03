@@ -107,11 +107,16 @@ namespace ShipWorks.Actions
 
             UpdateTaskBubbles();
 
-            // Load the various settings
+            // Load the basic settings
             enabled.Checked = action.Enabled;
-            runOnOtherComputers.Checked = (action.ComputerLimitedType == (int) ComputerLimitationType.None);
             storeLimited.Checked = action.StoreLimited;
             panelStores.Enabled = action.StoreLimited;
+
+            //Load the computer limited settings
+            runOnOtherComputers.Checked = action.ComputerLimitedType != (int)ComputerLimitationType.TriggeringComputer;
+            runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
+            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
+            runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
 
             // Check all the boxes for the stores its limited to
             foreach (long storeID in action.StoreLimitedList)
@@ -191,9 +196,17 @@ namespace ShipWorks.Actions
 
             CreateTriggerEditor();
 
-            //Scheduled actions must be allowed to run on other computers; all other triggers do not by default.
-            runOnOtherComputers.Checked = triggerType == ActionTriggerType.Scheduled;
-            runOnOtherComputers.Enabled = !runOnOtherComputers.Checked;
+            //Scheduled actions must be allowed to run on other computers
+            if(triggerType == ActionTriggerType.Scheduled)
+            {
+                runOnOtherComputers.Checked = true;
+                runOnOtherComputers.Enabled = false;
+            }
+            else
+            {
+                runOnOtherComputers.Checked = action.ComputerLimitedType != (int)ComputerLimitationType.TriggeringComputer;
+                runOnOtherComputers.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -518,9 +531,25 @@ namespace ShipWorks.Actions
                     action.TriggerType = (int) triggerCombo.SelectedValue;
                     action.TaskSummary = ActionManager.GetTaskSummary(tasksToSave);
                     action.Enabled = enabled.Checked;
-                    action.ComputerLimitedType = (int) (runOnOtherComputers.Checked ? ComputerLimitationType.None : ComputerLimitationType.TriggeringComputer);
                     action.StoreLimited = storeLimited.Checked;
                     action.StoreLimitedList = GenerateStoreLimitedListFromUI();
+
+                    //Save the computer limited settings
+                    if (!runOnOtherComputers.Checked)
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitationType.TriggeringComputer;
+                        action.ComputerLimitedList = new long[0];
+                    }
+                    else if (runOnAnyComputer.Checked)
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitationType.None;
+                        action.ComputerLimitedList = new long[0];
+                    }
+                    else
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitationType.NamedList;
+                        action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
+                    }
 
                     // If we changed triggers, we need to notify the original that it is being deleted
                     if (trigger != originalTrigger)
@@ -687,7 +716,7 @@ namespace ShipWorks.Actions
         {
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
-            if (runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
+            if (runOnSpecificComputersList.Visible && runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
                 runOnSpecificComputersList.ShowPopup();
         }
     }
