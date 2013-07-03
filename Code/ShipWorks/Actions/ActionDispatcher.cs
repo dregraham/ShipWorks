@@ -210,7 +210,7 @@ namespace ShipWorks.Actions
             entity.Status = (int) ActionQueueStatus.Dispatched;
             entity.NextStep = 0;
 
-            adapter.SaveEntity(entity);
+            adapter.SaveEntity(entity)
 
             // Ensure the action processor is working
             ActionProcessor.StartProcessing();
