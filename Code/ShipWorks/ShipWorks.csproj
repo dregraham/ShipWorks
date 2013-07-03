@@ -394,6 +394,9 @@
     <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.Designer.cs">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\UI\ComputersComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItem.cs" />

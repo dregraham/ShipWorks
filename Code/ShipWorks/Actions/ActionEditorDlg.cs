@@ -109,7 +109,7 @@ namespace ShipWorks.Actions
 
             // Load the various settings
             enabled.Checked = action.Enabled;
-            runOnAnyComputer.Checked = !action.ComputerLimited;
+            runOnOtherComputers.Checked = !action.ComputerLimited;
             storeLimited.Checked = action.StoreLimited;
             panelStores.Enabled = action.StoreLimited;
 
@@ -190,6 +190,10 @@ namespace ShipWorks.Actions
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
             CreateTriggerEditor();
+
+            //Scheduled actions must be allowed to run on other computers; all other triggers do not by default.
+            runOnOtherComputers.Checked = triggerType == ActionTriggerType.Scheduled;
+            runOnOtherComputers.Enabled = !runOnOtherComputers.Checked;
         }
 
         /// <summary>
@@ -514,7 +518,7 @@ namespace ShipWorks.Actions
                     action.TriggerType = (int) triggerCombo.SelectedValue;
                     action.TaskSummary = ActionManager.GetTaskSummary(tasksToSave);
                     action.Enabled = enabled.Checked;
-                    action.ComputerLimited = !runOnAnyComputer.Checked;
+                    action.ComputerLimited = !runOnOtherComputers.Checked;
                     action.StoreLimited = storeLimited.Checked;
                     action.StoreLimitedList = GenerateStoreLimitedListFromUI();
 
@@ -671,6 +675,20 @@ namespace ShipWorks.Actions
             {
                 action.RollbackChanges();
             }
+        }
+
+
+        void OnRunOnOtherComputersChecked(object sender, EventArgs e)
+        {
+            computersPanel.Enabled = runOnOtherComputers.Checked;
+        }
+
+        void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
+        {
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+
+            if (runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.SelectedComputers.Any())
+                runOnSpecificComputersList.ShowPopup();
         }
     }
 }

@@ -43,24 +43,29 @@
             this.labelTasksHeader = new System.Windows.Forms.Label();
             this.labelTriggerHeader = new System.Windows.Forms.Label();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
-            this.runOnAnyComputer = new System.Windows.Forms.CheckBox();
+            this.computersPanel = new System.Windows.Forms.Panel();
+            this.runOnSpecificComputersList = new ShipWorks.Actions.UI.ComputersComboBox();
+            this.runOnSpecificComputers = new System.Windows.Forms.RadioButton();
+            this.runOnAnyComputer = new System.Windows.Forms.RadioButton();
+            this.runOnOtherComputers = new System.Windows.Forms.CheckBox();
             this.panelStores = new System.Windows.Forms.Panel();
             this.checkBoxSample1 = new System.Windows.Forms.CheckBox();
             this.checkBoxSample2 = new System.Windows.Forms.CheckBox();
             this.storeLimited = new System.Windows.Forms.CheckBox();
             this.enabled = new System.Windows.Forms.CheckBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize) (this.imageUser)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageUser)).BeginInit();
             this.optionControl.SuspendLayout();
             this.optionPageAction.SuspendLayout();
             this.optionPageSettings.SuspendLayout();
+            this.computersPanel.SuspendLayout();
             this.panelStores.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ok.Location = new System.Drawing.Point(496, 492);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
@@ -71,7 +76,7 @@
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(577, 492);
             this.cancel.Name = "cancel";
@@ -109,9 +114,9 @@
             // 
             // optionControl
             // 
-            this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.optionControl.Controls.Add(this.optionPageAction);
             this.optionControl.Controls.Add(this.optionPageSettings);
             this.optionControl.Location = new System.Drawing.Point(12, 55);
@@ -152,8 +157,8 @@
             // 
             // panelTrigger
             // 
-            this.panelTrigger.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelTrigger.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTrigger.Location = new System.Drawing.Point(35, 52);
             this.panelTrigger.Name = "panelTrigger";
             this.panelTrigger.Size = new System.Drawing.Size(496, 65);
@@ -172,9 +177,9 @@
             // 
             // panelTasks
             // 
-            this.panelTasks.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTasks.AutoScroll = true;
             this.panelTasks.Location = new System.Drawing.Point(8, 134);
             this.panelTasks.Name = "panelTasks";
@@ -184,7 +189,7 @@
             // labelTasksHeader
             // 
             this.labelTasksHeader.AutoSize = true;
-            this.labelTasksHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelTasksHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTasksHeader.Location = new System.Drawing.Point(4, 120);
             this.labelTasksHeader.Name = "labelTasksHeader";
             this.labelTasksHeader.Size = new System.Drawing.Size(101, 13);
@@ -194,7 +199,7 @@
             // labelTriggerHeader
             // 
             this.labelTriggerHeader.AutoSize = true;
-            this.labelTriggerHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelTriggerHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTriggerHeader.Location = new System.Drawing.Point(5, 7);
             this.labelTriggerHeader.Name = "labelTriggerHeader";
             this.labelTriggerHeader.Size = new System.Drawing.Size(157, 13);
@@ -205,7 +210,8 @@
             // 
             this.optionPageSettings.BackColor = System.Drawing.Color.White;
             this.optionPageSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.optionPageSettings.Controls.Add(this.runOnAnyComputer);
+            this.optionPageSettings.Controls.Add(this.computersPanel);
+            this.optionPageSettings.Controls.Add(this.runOnOtherComputers);
             this.optionPageSettings.Controls.Add(this.panelStores);
             this.optionPageSettings.Controls.Add(this.storeLimited);
             this.optionPageSettings.Controls.Add(this.enabled);
@@ -216,23 +222,69 @@
             this.optionPageSettings.TabIndex = 4;
             this.optionPageSettings.Text = "Settings";
             // 
+            // computersPanel
+            // 
+            this.computersPanel.Controls.Add(this.runOnSpecificComputersList);
+            this.computersPanel.Controls.Add(this.runOnSpecificComputers);
+            this.computersPanel.Controls.Add(this.runOnAnyComputer);
+            this.computersPanel.Enabled = false;
+            this.computersPanel.Location = new System.Drawing.Point(24, 48);
+            this.computersPanel.Name = "computersPanel";
+            this.computersPanel.Size = new System.Drawing.Size(488, 45);
+            this.computersPanel.TabIndex = 4;
+            // 
+            // runOnSpecificComputersList
+            // 
+            this.runOnSpecificComputersList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.runOnSpecificComputersList.Enabled = false;
+            this.runOnSpecificComputersList.FormattingEnabled = true;
+            this.runOnSpecificComputersList.IntegralHeight = false;
+            this.runOnSpecificComputersList.Location = new System.Drawing.Point(143, 23);
+            this.runOnSpecificComputersList.Name = "runOnSpecificComputersList";
+            this.runOnSpecificComputersList.Size = new System.Drawing.Size(250, 21);
+            this.runOnSpecificComputersList.TabIndex = 7;
+            // 
+            // runOnSpecificComputers
+            // 
+            this.runOnSpecificComputers.AutoSize = true;
+            this.runOnSpecificComputers.Location = new System.Drawing.Point(3, 24);
+            this.runOnSpecificComputers.Name = "runOnSpecificComputers";
+            this.runOnSpecificComputers.Size = new System.Drawing.Size(134, 17);
+            this.runOnSpecificComputers.TabIndex = 6;
+            this.runOnSpecificComputers.Text = "On specific computers:";
+            this.runOnSpecificComputers.UseVisualStyleBackColor = true;
+            this.runOnSpecificComputers.CheckedChanged += new System.EventHandler(this.OnRunOnSpecificComputersChecked);
+            // 
             // runOnAnyComputer
             // 
             this.runOnAnyComputer.AutoSize = true;
-            this.runOnAnyComputer.Location = new System.Drawing.Point(6, 29);
+            this.runOnAnyComputer.Checked = true;
+            this.runOnAnyComputer.Location = new System.Drawing.Point(3, 2);
             this.runOnAnyComputer.Name = "runOnAnyComputer";
-            this.runOnAnyComputer.Size = new System.Drawing.Size(387, 17);
-            this.runOnAnyComputer.TabIndex = 4;
-            this.runOnAnyComputer.Text = "Allow tasks to run on computers other than the one that triggers the action";
+            this.runOnAnyComputer.Size = new System.Drawing.Size(108, 17);
+            this.runOnAnyComputer.TabIndex = 5;
+            this.runOnAnyComputer.TabStop = true;
+            this.runOnAnyComputer.Text = "On any computer";
             this.runOnAnyComputer.UseVisualStyleBackColor = true;
+            // 
+            // runOnOtherComputers
+            // 
+            this.runOnOtherComputers.AutoSize = true;
+            this.runOnOtherComputers.Location = new System.Drawing.Point(6, 29);
+            this.runOnOtherComputers.Name = "runOnOtherComputers";
+            this.runOnOtherComputers.Size = new System.Drawing.Size(391, 17);
+            this.runOnOtherComputers.TabIndex = 4;
+            this.runOnOtherComputers.Text = "Allow tasks to run on computers other than the one that triggers the action:";
+            this.runOnOtherComputers.UseVisualStyleBackColor = true;
+            this.runOnOtherComputers.CheckedChanged += new System.EventHandler(this.OnRunOnOtherComputersChecked);
             // 
             // panelStores
             // 
             this.panelStores.Controls.Add(this.checkBoxSample1);
             this.panelStores.Controls.Add(this.checkBoxSample2);
-            this.panelStores.Location = new System.Drawing.Point(24, 72);
+            this.panelStores.Location = new System.Drawing.Point(24, 123);
             this.panelStores.Name = "panelStores";
-            this.panelStores.Size = new System.Drawing.Size(352, 45);
+            this.panelStores.Size = new System.Drawing.Size(488, 45);
             this.panelStores.TabIndex = 3;
             // 
             // checkBoxSample1
@@ -258,7 +310,7 @@
             // storeLimited
             // 
             this.storeLimited.AutoSize = true;
-            this.storeLimited.Location = new System.Drawing.Point(6, 52);
+            this.storeLimited.Location = new System.Drawing.Point(6, 103);
             this.storeLimited.Name = "storeLimited";
             this.storeLimited.Size = new System.Drawing.Size(202, 17);
             this.storeLimited.TabIndex = 2;
@@ -289,7 +341,7 @@
             this.Controls.Add(this.imageUser);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(680, 446);
@@ -299,18 +351,20 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Action Editor";
-            this.Load += new System.EventHandler(this.OnLoad);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
+            this.Load += new System.EventHandler(this.OnLoad);
             this.Resize += new System.EventHandler(this.OnResize);
-            ((System.ComponentModel.ISupportInitialize) (this.imageUser)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageUser)).EndInit();
             this.optionControl.ResumeLayout(false);
             this.optionPageAction.ResumeLayout(false);
             this.optionPageAction.PerformLayout();
             this.optionPageSettings.ResumeLayout(false);
             this.optionPageSettings.PerformLayout();
+            this.computersPanel.ResumeLayout(false);
+            this.computersPanel.PerformLayout();
             this.panelStores.ResumeLayout(false);
             this.panelStores.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,12 +386,16 @@
         private System.Windows.Forms.CheckBox checkBoxSample2;
         private System.Windows.Forms.CheckBox storeLimited;
         private System.Windows.Forms.ComboBox triggerCombo;
-        private System.Windows.Forms.CheckBox runOnAnyComputer;
+        private System.Windows.Forms.CheckBox runOnOtherComputers;
         private System.Windows.Forms.Label labelTriggerHeader;
         private System.Windows.Forms.Panel panelTasks;
         private System.Windows.Forms.Label labelTasksHeader;
         private System.Windows.Forms.Panel panelTrigger;
         private ShipWorks.UI.Controls.DropDownButton addTask;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
+        private System.Windows.Forms.Panel computersPanel;
+        private System.Windows.Forms.RadioButton runOnAnyComputer;
+        private System.Windows.Forms.RadioButton runOnSpecificComputers;
+        private UI.ComputersComboBox runOnSpecificComputersList;
     }
 }
