@@ -17,17 +17,12 @@ namespace ShipWorks.Actions
         /// <param name="action">The action.</param>
         public ComputerActionPolicy(ActionEntity action)
         {
-            // TODO: use the list of computer IDs to populate the list of allowed computers via the ReadCsv method
-            allowedComputers = new List<ComputerEntity>();
-        }
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
-        /// </summary>
-        /// <param name="allowedComputersCsv">The allowed computers CSV.</param>
-        public ComputerActionPolicy(string allowedComputersCsv)
-        {
-            allowedComputers = ReadCsv(allowedComputersCsv);
+            allowedComputers = ReadCsv(action.InternalComputerLimitedList);            
         }
 
         /// <summary>
@@ -40,9 +35,10 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Reads the a comma separated list of computer IDs and 
+        /// Turns a list of comma separated list of computer IDs into a List of ComputerEntity objects.
         /// </summary>
         /// <param name="allowedComputersCsv">The allowed computers CSV.</param>
+        /// <returns>A List of ComputerEntity objects.</returns>
         private List<ComputerEntity> ReadCsv(string allowedComputersCsv)
         {
             List<ComputerEntity> computerEntities = new List<ComputerEntity>();

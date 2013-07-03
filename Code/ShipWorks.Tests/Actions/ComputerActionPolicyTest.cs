@@ -77,21 +77,29 @@ namespace ShipWorks.Tests.Actions
         }
 
         [TestMethod]
-        public void Constructor_LoadsComputersFromCsv_WithSingleComputerId_Test()
+        public void Constructor_LoadsComputersFromActionEntityInternalComputerLimitedList_WithSingleComputerId_Test()
         {
-            testObject = new ComputerActionPolicy("1001");
+            ActionEntity actionEntity = new ActionEntity();
+            actionEntity.InternalComputerLimitedList = "1001";
+
+            testObject = new ComputerActionPolicy(actionEntity);
 
             Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(1001)));
         }
 
         [TestMethod]
-        public void Constructor_LoadsComputersFromCsv_WithMultipleComputerIds_Test()
+        public void Constructor_LoadsComputersFromActionEntityInternalComputerLimitedList_WithMutlipleComputerIds_Test()
         {
-            testObject = new ComputerActionPolicy("1001, 2001, 3001");
+            ActionEntity actionEntity = new ActionEntity();
+            actionEntity.InternalComputerLimitedList = "1001, 2001, 3001, 4001, 5001";
 
-            Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(2001)));
+            testObject = new ComputerActionPolicy(actionEntity);
+
+            for (int i = 0; i < 5; i++)
+            {
+                long computerId = 1001 + 1000 * i;
+                Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(computerId)));
+            }
         }
-
-
     }
 }

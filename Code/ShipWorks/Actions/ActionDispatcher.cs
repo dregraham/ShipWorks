@@ -11,6 +11,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Users;
 using ShipWorks.Shipping;
 using log4net;
+using System.Globalization;
 
 namespace ShipWorks.Actions
 {
@@ -196,14 +197,17 @@ namespace ShipWorks.Actions
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
-
-            // If it's limited to only running on this computer set the ID
+            
             if (action.ComputerLimitedType == (int) ComputerLimitationType.TriggeringComputer)
             {
-                entity.ComputerLimitedList = new[]
-                {
-                    UserSession.Computer.ComputerID
-                };
+                // It's limited to only running on this computer, so use this computer ID as
+                // the only computer that can execute the action
+                entity.InternalComputerLimitedList = UserSession.Computer.ComputerID.ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                // Just copy over the list of computers that are able to execute the action
+                entity.InternalComputerLimitedList = action.InternalComputerLimitedList;
             }
 
             // Set the initial status and the first step
