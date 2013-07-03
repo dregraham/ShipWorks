@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Actions
         {
             testObject = new ComputerActionPolicy("1001, 2001, 3001");
 
-            Assert.IsFalse(testObject.IsComputerAllowed(new ComputerEntity(2001)));
+            Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(2001)));
         }
 
 
