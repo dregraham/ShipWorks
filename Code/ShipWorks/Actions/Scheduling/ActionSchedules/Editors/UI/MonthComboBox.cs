@@ -198,11 +198,10 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
                 text = "Every Month";
             }
 
-            using (StringFormat stringFormat = new StringFormat
+            using (StringFormat stringFormat = new StringFormat())
             {
-                Trimming = StringTrimming.EllipsisCharacter
-            })
-            {
+                stringFormat.Trimming = StringTrimming.EllipsisCharacter;
+
                 using (var brush = new SolidBrush(ForeColor))
                 {
                     graphics.DrawString(text, Font, brush, bounds, stringFormat);

@@ -170,11 +170,10 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             var formatter = new DateOfMonthComboFormatter();
             string text = formatter.FormatDays(GetSelectedDays());
 
-            using (StringFormat stringFormat = new StringFormat
+            using (var stringFormat = new StringFormat())
             {
-                Trimming = StringTrimming.EllipsisCharacter
-            })
-            {
+                stringFormat.Trimming = StringTrimming.EllipsisCharacter;
+
                 using (var brush = new SolidBrush(ForeColor))
                 {
                     graphics.DrawString(text, Font, brush, bounds, stringFormat);

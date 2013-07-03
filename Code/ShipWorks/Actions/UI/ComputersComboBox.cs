@@ -133,6 +133,7 @@ namespace ShipWorks.Actions.UI
             using (var stringFormat = new StringFormat())
             {
                 stringFormat.Trimming = StringTrimming.EllipsisCharacter;
+
                 using (var brush = new SolidBrush(ForeColor))
                 {
                     graphics.DrawString(text, Font, brush, bounds, stringFormat);
