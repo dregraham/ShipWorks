@@ -352,8 +352,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 // MI Expedited & International MI does not support endorsements
                 if (upsServiceType == UpsServiceType.UpsMailInnovationsIntEconomy ||
-                    upsServiceType == UpsServiceType.UpsMailInnovationsIntPriority ||
-                    upsServiceType == UpsServiceType.UpsMailInnovationsExpedited)
+                    upsServiceType == UpsServiceType.UpsMailInnovationsIntPriority)
                 {
                     return string.Empty;
                 }
