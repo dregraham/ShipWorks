@@ -12115,3 +12115,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "ShipWorks.Actions.ComputerActionPolicy.#ReadCsv(System.String)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.Actions.UI.ComputersComboBox.#BindComputers()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Actions.UI.ComputersComboBox.#OnDrawSelectedItem(System.Drawing.Graphics,System.Drawing.Color,System.Drawing.Rectangle)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "ShipWorks.Actions.UI.ComputersComboBox.#GetSelectedComputers()")]
