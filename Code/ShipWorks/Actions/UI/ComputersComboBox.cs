@@ -73,18 +73,59 @@ namespace ShipWorks.Actions.UI
 
 
         /// <summary>
-        /// Gets the selected computers.
+        /// Gets or sets the selected computers.
         /// </summary>
         public IList<ComputerEntity> SelectedComputers
         {
             get
             {
-                return checkBoxPanel
-                    .Controls.Cast<CheckBox>()
-                    .Where(x => x.Checked)
-                    .Select(x => x.Tag).Cast<ComputerEntity>()
-                    .ToList();
+                return GetSelectedItems().Cast<ComputerEntity>().ToList();
             }
+            set
+            {
+                SetSelectedItems(x => (ComputerEntity)x, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected computer IDs.
+        /// </summary>
+        public IList<long> SelectedComputerIDs
+        {
+            get
+            {
+                return GetSelectedItems().Cast<ComputerEntity>().Select(x => x.ComputerID).ToList();
+            }
+            set
+            {
+                SetSelectedItems(x => ((ComputerEntity)x).ComputerID, value);
+            }
+        }
+
+
+        IEnumerable<CheckBox> CheckBoxes
+        {
+            get { return checkBoxPanel.Controls.Cast<CheckBox>(); }
+        }
+
+        IEnumerable<CheckBox> SelectedCheckBoxes
+        {
+            get { return CheckBoxes.Where(x => x.Checked); }
+        }
+
+
+        IEnumerable<object> GetSelectedItems()
+        {
+            return SelectedCheckBoxes.Select(x => x.Tag);
+        }
+
+        void SetSelectedItems<TKey>(Func<object, TKey> keySelector, IEnumerable<TKey> keys)
+        {
+            var matches = CheckBoxes
+                .GroupJoin(keys, x => keySelector(x.Tag), x => x, (x, k) => new { CheckBox = x, Matched = k.Any() });
+
+            foreach (var item in matches)
+                item.CheckBox.Checked = item.Matched;
         }
 
 
@@ -93,7 +134,7 @@ namespace ShipWorks.Actions.UI
         /// </summary>
         protected override void OnDrawSelectedItem(Graphics graphics, Color foreColor, Rectangle bounds)
         {
-            string text = string.Join(", ", SelectedComputers.Select(x => x.Name));
+            string text = string.Join(", ", SelectedCheckBoxes.Select(x => x.Text));
 
             using (var stringFormat = new StringFormat())
             {

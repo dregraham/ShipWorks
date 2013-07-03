@@ -79,7 +79,7 @@ namespace ShipWorks.Users
                     List<ComputerEntity> computers = EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
 
                     // Load the computers' WindowsServiceEntities.
-                    computers.ForEach(c => EnsureWindowsServicesLoaded(c));
+                    computers.ForEach(EnsureWindowsServicesLoaded);
 
                     return computers;
                 }
