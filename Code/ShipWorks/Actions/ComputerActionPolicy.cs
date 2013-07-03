@@ -28,6 +28,15 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
         /// </summary>
+        /// <param name="allowedComputersCsv">The allowed computers CSV.</param>
+        public ComputerActionPolicy(string allowedComputersCsv)
+        {
+            allowedComputers = ReadCsv(allowedComputersCsv);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
+        /// </summary>
         /// <param name="computers">The computers.</param>
         public ComputerActionPolicy(IEnumerable<ComputerEntity> computers)
         {
