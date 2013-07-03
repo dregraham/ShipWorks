@@ -33,7 +33,7 @@ CREATE TABLE [dbo].[ActionQueue]
 [QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
 [TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
 [TriggerComputerID] [bigint] NOT NULL,
-[RunComputerID] [bigint] NULL,
+[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ObjectID] [bigint] NULL,
 [Status] [int] NOT NULL,
 [NextStep] [int] NOT NULL,
@@ -235,7 +235,8 @@ CREATE TABLE [dbo].[Action]
 [RowVersion] [timestamp] NOT NULL,
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Enabled] [bit] NOT NULL,
-[ComputerLimited] [bit] NOT NULL,
+[ComputerLimitedType] [int] NOT NULL,
+[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [StoreLimited] [bit] NOT NULL,
 [StoreLimitedList] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TriggerType] [int] NOT NULL,
@@ -2583,7 +2584,7 @@ CREATE TABLE [dbo].[SearsOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [LineNumber] [int] NOT NULL,
-[ItemID] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ItemID] [varchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Commission] [money] NOT NULL,
 [Shipping] [money] NOT NULL,
 [OnlineStatus] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
