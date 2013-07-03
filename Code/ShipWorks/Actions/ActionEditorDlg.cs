@@ -687,7 +687,7 @@ namespace ShipWorks.Actions
         {
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
-            if (runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.SelectedComputers.Any())
+            if (runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
                 runOnSpecificComputersList.ShowPopup();
         }
     }

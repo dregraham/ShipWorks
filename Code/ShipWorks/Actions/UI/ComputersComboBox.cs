@@ -73,33 +73,27 @@ namespace ShipWorks.Actions.UI
 
 
         /// <summary>
-        /// Gets or sets the selected computers.
+        /// Gets the selected computers.
         /// </summary>
-        public IList<ComputerEntity> SelectedComputers
+        public IList<ComputerEntity> GetSelectedComputers()
         {
-            get
-            {
-                return GetSelectedItems().Cast<ComputerEntity>().ToList();
-            }
-            set
-            {
-                SetSelectedItems(x => (ComputerEntity)x, value);
-            }
+            return GetSelectedItems().Cast<ComputerEntity>().ToList();
         }
 
         /// <summary>
-        /// Gets or sets the selected computer IDs.
+        /// Sets the selected computers.
         /// </summary>
-        public IList<long> SelectedComputerIDs
+        public void SetSelectedComputers(IEnumerable<ComputerEntity> computers)
         {
-            get
-            {
-                return GetSelectedItems().Cast<ComputerEntity>().Select(x => x.ComputerID).ToList();
-            }
-            set
-            {
-                SetSelectedItems(x => ((ComputerEntity)x).ComputerID, value);
-            }
+            SetSelectedItems(x => (ComputerEntity)x, computers);
+        }
+
+        /// <summary>
+        /// Sets the selected computers by ID.
+        /// </summary>
+        public void SetSelectedComputers(IEnumerable<long> computerIDs)
+        {
+            SetSelectedItems(x => ((ComputerEntity)x).ComputerID, computerIDs);
         }
 
 
