@@ -241,7 +241,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionFilterTriggerEntity", "ActionID", typeof(System.Int64), true, true, false, false,  (int)ActionFilterTriggerFieldIndex.ActionID, 0, 0, 19);
 			base.AddElementFieldInfo("ActionFilterTriggerEntity", "FilterNodeID", typeof(System.Int64), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.FilterNodeID, 0, 0, 19);
 			base.AddElementFieldInfo("ActionFilterTriggerEntity", "Direction", typeof(System.Int32), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.Direction, 0, 0, 10);
-			base.AddElementFieldInfo("ActionFilterTriggerEntity", "ComputerLimited", typeof(System.Boolean), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.ComputerLimited, 0, 0, 0);
+			base.AddElementFieldInfo("ActionFilterTriggerEntity", "ComputerLimitedType", typeof(System.Int32), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.ComputerLimitedType, 0, 0, 10);
+			base.AddElementFieldInfo("ActionFilterTriggerEntity", "InternalComputerLimitedList", typeof(System.String), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.InternalComputerLimitedList, 150, 0, 0);
 		}
 		/// <summary>Inits ActionQueueEntity's FieldInfo objects</summary>
 		private void InitActionQueueEntityInfos()

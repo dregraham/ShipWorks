@@ -47,7 +47,7 @@ ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUS
 GO
 PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [RunComputerID], [Status])
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
 GO
 PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
 GO
@@ -260,7 +260,9 @@ CREATE TABLE [dbo].[ActionFilterTrigger]
 [ActionID] [bigint] NOT NULL,
 [FilterNodeID] [bigint] NOT NULL,
 [Direction] [int] NOT NULL,
-[ComputerLimited] [bit] NOT NULL
+[ComputerLimited] [bit] NOT NULL,
+[ComputerLimitedType] [int] NOT NULL,
+[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ActionFilterTrigger] on [dbo].[ActionFilterTrigger]'

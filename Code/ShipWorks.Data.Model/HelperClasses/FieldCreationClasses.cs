@@ -97,10 +97,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.Direction);}
 		}
-		/// <summary>Creates a new ActionFilterTriggerEntity.ComputerLimited field instance</summary>
-		public static EntityField2 ComputerLimited
+		/// <summary>Creates a new ActionFilterTriggerEntity.ComputerLimitedType field instance</summary>
+		public static EntityField2 ComputerLimitedType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.ComputerLimited);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.ComputerLimitedType);}
+		}
+		/// <summary>Creates a new ActionFilterTriggerEntity.InternalComputerLimitedList field instance</summary>
+		public static EntityField2 InternalComputerLimitedList
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.InternalComputerLimitedList);}
 		}
 	}
 

@@ -238,11 +238,12 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ActionFilterTriggerEntity's mappings</summary>
 		private void InitActionFilterTriggerEntityMappings()
 		{
-			base.AddElementMapping( "ActionFilterTriggerEntity", "ShipWorksLocal", @"dbo", "ActionFilterTrigger", 4 );
+			base.AddElementMapping( "ActionFilterTriggerEntity", "ShipWorksLocal", @"dbo", "ActionFilterTrigger", 5 );
 			base.AddElementFieldMapping( "ActionFilterTriggerEntity", "ActionID", "ActionID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ActionFilterTriggerEntity", "FilterNodeID", "FilterNodeID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "ActionFilterTriggerEntity", "Direction", "Direction", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
-			base.AddElementFieldMapping( "ActionFilterTriggerEntity", "ComputerLimited", "ComputerLimited", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
+			base.AddElementFieldMapping( "ActionFilterTriggerEntity", "ComputerLimitedType", "ComputerLimitedType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
+			base.AddElementFieldMapping( "ActionFilterTriggerEntity", "InternalComputerLimitedList", "ComputerLimitedList", false, (int)SqlDbType.VarChar, 150, 0, 0, false, "", null, typeof(System.String), 4 );
 		}
 		/// <summary>Inits ActionQueueEntity's mappings</summary>
 		private void InitActionQueueEntityMappings()

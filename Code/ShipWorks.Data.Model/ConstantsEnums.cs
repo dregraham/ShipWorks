@@ -60,8 +60,10 @@ namespace ShipWorks.Data.Model
 		FilterNodeID,
 		///<summary>Direction. </summary>
 		Direction,
-		///<summary>ComputerLimited. </summary>
-		ComputerLimited,
+		///<summary>ComputerLimitedType. </summary>
+		ComputerLimitedType,
+		///<summary>InternalComputerLimitedList. </summary>
+		InternalComputerLimitedList,
 		/// <summary></summary>
 		AmountOfFields
 	}

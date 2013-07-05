@@ -6183,6 +6183,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\SqlServerSetup\DotNet35DownloadPage.resx">
       <DependentUpon>DotNet35DownloadPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -9594,10 +9595,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.2.sql" />
-    <Content Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
+    <Content Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

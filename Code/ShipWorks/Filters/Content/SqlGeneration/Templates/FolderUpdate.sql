@@ -45,8 +45,8 @@ DELETE FilterNodeContentDetail
 
 SET @deleteCount = @@rowCount;
    
-INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, RunComputerID, ObjectID, Status, NextStep)
-   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimited WHEN 0 THEN NULL ELSE TopComputer.ComputerID END, r.ObjectID, 0, 0
+INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
+   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimitedType WHEN 0 THEN '' When 1 Then TopComputer.ComputerID ELSE t.ComputerLimitedList END, r.ObjectID, 0, 0
    FROM ActionFilterTrigger t, #Removed r CROSS APPLY (SELECT MAX(ComputerID) as ComputerID FROM #DirtyObjects WHERE r.ObjectID = ObjectID) AS TopComputer
    WHERE t.FilterNodeID = @filterNodeID AND
          t.Direction = 0
@@ -60,8 +60,8 @@ INSERT INTO FilterNodeContentDetail (FilterNodeContentID, ObjectID)
 
 SET @insertCount = @@rowcount
 
-INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, RunComputerID, ObjectID, Status, NextStep)
-   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimited WHEN 0 THEN NULL ELSE TopComputer.ComputerID END, a.ObjectID, 0, 0
+INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
+   SELECT t.ActionID, '', TopComputer.ComputerID, CASE t.ComputerLimitedType WHEN 0 THEN '' When 1 Then TopComputer.ComputerID ELSE t.ComputerLimitedList END, a.ObjectID, 0, 0
    FROM ActionFilterTrigger t, #Added a CROSS APPLY (SELECT MAX(ComputerID) as ComputerID  FROM #DirtyObjects WHERE a.ObjectID = ObjectID) AS TopComputer
    WHERE t.FilterNodeID = @filterNodeID AND
          t.Direction = 1

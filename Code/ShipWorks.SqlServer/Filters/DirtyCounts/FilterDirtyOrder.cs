@@ -29,8 +29,8 @@ public partial class Triggers
             {
                 SqlCommand actionCmd = con.CreateCommand();
                 actionCmd.CommandText = @"
-                    INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, RunComputerID, ObjectID, Status, NextStep)
-                       SELECT t.ActionID, '', @computerID, CASE t.ComputerLimited WHEN 0 THEN NULL ELSE @computerID END, d.OrderID, 0, 0
+                    INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
+                       SELECT t.ActionID, '', @computerID, CASE t.ComputerLimitedType WHEN 0 THEN '' WHEN 1 THEN @computerID ELSE t.ComputerLimitedList END, d.OrderID, 0, 0
                        FROM ActionFilterTrigger t, deleted d
                        WHERE t.FilterNodeID = @filterNodeID AND
                              t.Direction = 0";
@@ -42,8 +42,8 @@ public partial class Triggers
             {
                 SqlCommand actionCmd = con.CreateCommand();
                 actionCmd.CommandText = @"
-                    INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, RunComputerID, ObjectID, Status, NextStep)
-                       SELECT t.ActionID, '', @computerID, CASE t.ComputerLimited WHEN 0 THEN NULL ELSE @computerID END, i.OrderID, 0, 0
+                    INSERT INTO ActionQueue(ActionID, ActionName, TriggerComputerID, ComputerLimitedList, ObjectID, Status, NextStep)
+                       SELECT t.ActionID, '', @computerID,  CASE t.ComputerLimitedType WHEN 0 THEN '' WHEN 1 THEN @computerID ELSE t.ComputerLimitedList END, i.OrderID, 0, 0
                        FROM ActionFilterTrigger t, inserted i
                        WHERE t.FilterNodeID = @filterNodeID AND
                              t.Direction = 1";
