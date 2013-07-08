@@ -32,7 +32,7 @@
             System.Windows.Forms.Label labelHeader1;
             System.Windows.Forms.Label labelHeader2;
             System.Windows.Forms.Label labelHeader3;
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer3 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.panelGridArea = new System.Windows.Forms.Panel();
             this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
@@ -61,6 +61,7 @@
             // labelHeader1
             // 
             labelHeader1.AutoSize = true;
+            labelHeader1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             labelHeader1.Location = new System.Drawing.Point(12, 14);
             labelHeader1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             labelHeader1.Name = "labelHeader1";
@@ -70,24 +71,25 @@
             // 
             // labelHeader2
             // 
+            labelHeader2.AutoSize = true;
             labelHeader2.BackColor = System.Drawing.Color.Pink;
             labelHeader2.Location = new System.Drawing.Point(219, 14);
             labelHeader2.Margin = new System.Windows.Forms.Padding(0);
             labelHeader2.Name = "labelHeader2";
-            labelHeader2.Size = new System.Drawing.Size(63, 13);
+            labelHeader2.Size = new System.Drawing.Size(59, 13);
             labelHeader2.TabIndex = 9;
-            labelHeader2.Text = "highlighted.";
-            labelHeader2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            labelHeader2.Text = "highlighted";
             // 
             // labelHeader3
             // 
             labelHeader3.AutoSize = true;
-            labelHeader3.Location = new System.Drawing.Point(280, 14);
+            labelHeader3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            labelHeader3.Location = new System.Drawing.Point(275, 14);
             labelHeader3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             labelHeader3.Name = "labelHeader3";
-            labelHeader3.Size = new System.Drawing.Size(306, 13);
+            labelHeader3.Size = new System.Drawing.Size(316, 13);
             labelHeader3.TabIndex = 10;
-            labelHeader3.Text = "These services must be started for ShipWorks to run properly.";
+            labelHeader3.Text = ".  These services must be started for ShipWorks to run properly.";
             // 
             // panelGridArea
             // 
@@ -115,7 +117,7 @@
             this.entityGrid.Location = new System.Drawing.Point(0, 0);
             this.entityGrid.Name = "entityGrid";
             this.entityGrid.NullRepresentation = "";
-            this.entityGrid.Renderer = windowsXPRenderer3;
+            this.entityGrid.Renderer = windowsXPRenderer1;
             this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.entityGrid.ShadeAlternateRows = true;
             this.entityGrid.Size = new System.Drawing.Size(654, 259);
@@ -163,8 +165,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = closeButton;
             this.ClientSize = new System.Drawing.Size(682, 379);
-            this.Controls.Add(labelHeader2);
             this.Controls.Add(labelHeader3);
+            this.Controls.Add(labelHeader2);
             this.Controls.Add(labelHeader1);
             this.Controls.Add(this.panelGridArea);
             this.Controls.Add(closeButton);
