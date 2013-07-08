@@ -549,6 +549,12 @@ namespace ShipWorks.Actions
                     {
                         action.ComputerLimitedType = (int)ComputerLimitationType.NamedList;
                         action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
+
+                        if (!action.ComputerLimitedList.Any())
+                        {
+                            MessageHelper.ShowError(this, "At least one computer must be selected when choosing to run actions on specific computers.");
+                            return;
+                        }
                     }
 
                     // If we changed triggers, we need to notify the original that it is being deleted

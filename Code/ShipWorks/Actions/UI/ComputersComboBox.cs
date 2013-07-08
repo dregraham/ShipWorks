@@ -115,11 +115,11 @@ namespace ShipWorks.Actions.UI
 
         void SetSelectedItems<TKey>(Func<object, TKey> keySelector, IEnumerable<TKey> keys)
         {
-            var matches = CheckBoxes
-                .GroupJoin(keys, x => keySelector(x.Tag), x => x, (x, k) => new { CheckBox = x, Matched = k.Any() });
-
+            var matches = CheckBoxes.GroupJoin(keys, x => keySelector(x.Tag), x => x, (x, k) => new { CheckBox = x, Matched = k.Any() });
             foreach (var item in matches)
+            {
                 item.CheckBox.Checked = item.Matched;
+            }
         }
 
 
@@ -129,11 +129,9 @@ namespace ShipWorks.Actions.UI
         protected override void OnDrawSelectedItem(Graphics graphics, Color foreColor, Rectangle bounds)
         {
             string text = string.Join(", ", SelectedCheckBoxes.Select(x => x.Text));
-
             using (var stringFormat = new StringFormat())
             {
                 stringFormat.Trimming = StringTrimming.EllipsisCharacter;
-
                 using (var brush = new SolidBrush(ForeColor))
                 {
                     graphics.DrawString(text, Font, brush, bounds, stringFormat);
