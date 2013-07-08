@@ -206,6 +206,7 @@ namespace ShipWorks.Actions
             action.Name = "New Action";
             action.Enabled = true;
             action.ComputerLimitedType = (int) ComputerLimitationType.TriggeringComputer;
+            action.ComputerLimitedList = null;
             action.StoreLimited = false;
             action.StoreLimitedList = new long[0];
             action.TriggerType = (int) ActionTriggerType.OrderDownloaded;

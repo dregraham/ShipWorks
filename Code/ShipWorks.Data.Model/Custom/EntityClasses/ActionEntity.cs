@@ -37,7 +37,11 @@ namespace ShipWorks.Data.Model.EntityClasses
             }
             set
             {
-                InternalComputerLimitedList = ArrayUtility.FormatCommaSeparatedList(value);
+                InternalComputerLimitedList = "";
+                if (value != null)
+                {
+                    InternalComputerLimitedList = ArrayUtility.FormatCommaSeparatedList(value);
+                }
             }
         }
 

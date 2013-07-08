@@ -121,7 +121,7 @@ namespace ShipWorks.Actions
             // Check all the boxes for the stores its limited to
             foreach (long storeID in action.StoreLimitedList)
             {
-                CheckBox storeBox = panelStores.Controls.OfType<CheckBox>().Where(c => (long)c.Tag == storeID).SingleOrDefault();
+                CheckBox storeBox = panelStores.Controls.OfType<CheckBox>().SingleOrDefault(c => (long)c.Tag == storeID);
                 if (storeBox != null)
                 {
                     storeBox.Checked = true;

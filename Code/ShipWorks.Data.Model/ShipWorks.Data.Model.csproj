@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Custom\ActiveTableInheritanceManager.cs" />
     <Compile Include="Custom\EntityClasses\ActionEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ActionFilterTriggerEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
     <Compile Include="Custom\EntityClasses\CommonEntityBase.cs" />
