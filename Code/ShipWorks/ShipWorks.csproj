@@ -474,6 +474,7 @@
     <Compile Include="ApplicationCore\WindowsServices\ServiceStatus.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceConcurrencyException.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceEntityExtensions.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\WindowsServiceGridRow.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceManager.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ServiceManager.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />

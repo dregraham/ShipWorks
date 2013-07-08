@@ -1,6 +1,8 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
+using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Data.Caching;
 using ShipWorks.Data.Grid.Columns;
@@ -39,7 +41,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         {
             base.OnLoad(e);
 
-            //entityGrid.PrimaryGrid.NewRowType = typeof(ShipWorks.Actions.WindowsServiceGridRow);
+            entityGrid.PrimaryGrid.NewRowType = typeof(WindowsServiceGridRow);
 
             //Service status includes computer info too
             PrefetchPath2 prefetch = new PrefetchPath2(EntityType.WindowsServiceEntity);
@@ -56,6 +58,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             entityGrid.SaveColumnsOnClose(this);
 
             entityGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
+            entityGrid.RowHighlightType = RowHighlightType.None;
 
             //Open the data
             entityGrid.OpenGateway(new QueryableEntityGateway(entityProvider, new RelationPredicateBucket()));

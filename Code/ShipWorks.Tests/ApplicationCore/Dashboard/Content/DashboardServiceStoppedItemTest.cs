@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.AreEqual("There are 3 ShipWorks scheduling services not running.", testObject.DashboardBar.SecondaryText);
+            Assert.AreEqual("There are 3 required ShipWorks scheduling services not running.", testObject.DashboardBar.SecondaryText);
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.AreEqual("There is 1 ShipWorks scheduling service not running.", testObject.DashboardBar.SecondaryText);
+            Assert.AreEqual("There is 1 required ShipWorks scheduling service not running.", testObject.DashboardBar.SecondaryText);
         }
 
         [TestMethod]

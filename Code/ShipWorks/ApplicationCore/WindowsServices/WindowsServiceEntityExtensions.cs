@@ -1,11 +1,19 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Actions;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data.Model.EntityClasses;
 using System;
+using System.Linq;
 
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
     public static class WindowsServiceEntityExtensions
     {
+        /// <summary>
+        /// Gets the run status of service.
+        /// </summary>
+        /// <param name="instance">The service instance.</param>
+        /// <returns>The service status.</returns>
         public static ServiceStatus GetStatus(this WindowsServiceEntity instance)
         {
             if (null == instance)
@@ -27,6 +35,34 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                 return ServiceStatus.NotResponding;
 
             return ServiceStatus.Running;
+        }
+
+        /// <summary>
+        /// Determines whether the service is required to be running.  This may be based on the current
+        /// system state and thus can change based on external factors, so do not cache the result.
+        /// </summary>
+        /// <param name="instance">The service instance.</param>
+        /// <returns>true if the service is required; otherwise false.</returns>
+        public static bool IsRequiredToRun(this WindowsServiceEntity instance)
+        {
+            if (null == instance)
+                throw new ArgumentNullException("instance");
+
+            if (instance.ServiceType == (int)ShipWorksServiceType.Scheduler)
+            {
+                var eligibleActions = ActionManager.Actions
+                    .Where(a =>
+                        a.TriggerType == (int)ActionTriggerType.Scheduled &&
+                        a.Enabled && (
+                            a.ComputerLimitedType == (int)ComputerLimitationType.None ||
+                            a.ComputerLimitedList.Contains(instance.ComputerID)
+                        )
+                    );
+
+                return eligibleActions.Any();
+            }
+
+            return false;
         }
     }
 }

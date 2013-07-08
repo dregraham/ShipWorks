@@ -36,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DashboardBar.PrimaryText = "Schedulers";
 
             bool usePlural = schedulerEntities.Count > 1;
-            DashboardBar.SecondaryText = string.Format("There {0} {1} ShipWorks scheduling service{2} not running.", usePlural ? "are" : "is", schedulerEntities.Count, usePlural ? "s" : string.Empty);
+            DashboardBar.SecondaryText = string.Format("There {0} {1} required ShipWorks scheduling service{2} not running.", usePlural ? "are" : "is", schedulerEntities.Count, usePlural ? "s" : string.Empty);
 
             List<DashboardAction> dashboardActions = new List<DashboardAction> { new DashboardActionMethod("[link]More info[/link]", OnMoreInfo) };
             DashboardBar.ApplyActions(dashboardActions);
