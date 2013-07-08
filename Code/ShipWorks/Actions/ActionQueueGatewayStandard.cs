@@ -50,12 +50,11 @@ namespace ShipWorks.Actions
                     while (reader.Read())
                     {
                         // reader.GetString(1) returns InternalComputerLimitedList
-                        //var computerActionPolicy = new ComputerActionPolicy(reader.GetString(1));
-
-                        //if (computerActionPolicy.IsComputerAllowed(UserSession.Computer))
-                        //{
+                        ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(reader.GetString(1));
+                        if (computerActionPolicy.IsComputerAllowed(UserSession.Computer))
+                        {
                             keys.Add(reader.GetInt64(0));
-                        //}
+                        }
                     }
 
                     return keys;
