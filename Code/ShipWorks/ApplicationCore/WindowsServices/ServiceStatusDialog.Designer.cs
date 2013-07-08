@@ -32,12 +32,12 @@
             System.Windows.Forms.Label labelHeader1;
             System.Windows.Forms.Label labelHeader2;
             System.Windows.Forms.Label labelHeader3;
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer3 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.panelGridArea = new System.Windows.Forms.Panel();
+            this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.panelTools = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.labelGridSettings = new System.Windows.Forms.Label();
-            this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
             closeButton = new System.Windows.Forms.Button();
             labelHeader1 = new System.Windows.Forms.Label();
             labelHeader2 = new System.Windows.Forms.Label();
@@ -58,6 +58,37 @@
             closeButton.Text = "Close";
             closeButton.UseVisualStyleBackColor = true;
             // 
+            // labelHeader1
+            // 
+            labelHeader1.AutoSize = true;
+            labelHeader1.Location = new System.Drawing.Point(12, 14);
+            labelHeader1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            labelHeader1.Name = "labelHeader1";
+            labelHeader1.Size = new System.Drawing.Size(211, 13);
+            labelHeader1.TabIndex = 8;
+            labelHeader1.Text = "Required services that are not running are";
+            // 
+            // labelHeader2
+            // 
+            labelHeader2.BackColor = System.Drawing.Color.Pink;
+            labelHeader2.Location = new System.Drawing.Point(219, 14);
+            labelHeader2.Margin = new System.Windows.Forms.Padding(0);
+            labelHeader2.Name = "labelHeader2";
+            labelHeader2.Size = new System.Drawing.Size(63, 13);
+            labelHeader2.TabIndex = 9;
+            labelHeader2.Text = "highlighted.";
+            labelHeader2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelHeader3
+            // 
+            labelHeader3.AutoSize = true;
+            labelHeader3.Location = new System.Drawing.Point(280, 14);
+            labelHeader3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            labelHeader3.Name = "labelHeader3";
+            labelHeader3.Size = new System.Drawing.Size(306, 13);
+            labelHeader3.TabIndex = 10;
+            labelHeader3.Text = "These services must be started for ShipWorks to run properly.";
+            // 
             // panelGridArea
             // 
             this.panelGridArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -72,6 +103,24 @@
             this.panelGridArea.Name = "panelGridArea";
             this.panelGridArea.Size = new System.Drawing.Size(658, 290);
             this.panelGridArea.TabIndex = 7;
+            // 
+            // entityGrid
+            // 
+            this.entityGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.entityGrid.DetailViewSettings = null;
+            this.entityGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.entityGrid.EnableSearching = false;
+            this.entityGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
+            this.entityGrid.LiveResize = false;
+            this.entityGrid.Location = new System.Drawing.Point(0, 0);
+            this.entityGrid.Name = "entityGrid";
+            this.entityGrid.NullRepresentation = "";
+            this.entityGrid.Renderer = windowsXPRenderer3;
+            this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
+            this.entityGrid.ShadeAlternateRows = true;
+            this.entityGrid.Size = new System.Drawing.Size(654, 259);
+            this.entityGrid.StretchPrimaryGrid = false;
+            this.entityGrid.TabIndex = 0;
             // 
             // kryptonBorderEdge
             // 
@@ -107,55 +156,6 @@
             this.labelGridSettings.TabIndex = 0;
             this.labelGridSettings.Text = "Grid Settings";
             this.labelGridSettings.Click += new System.EventHandler(this.OnEditGridSettings);
-            // 
-            // labelHeader1
-            // 
-            labelHeader1.AutoSize = true;
-            labelHeader1.Location = new System.Drawing.Point(12, 14);
-            labelHeader1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            labelHeader1.Name = "labelHeader1";
-            labelHeader1.Size = new System.Drawing.Size(211, 13);
-            labelHeader1.TabIndex = 8;
-            labelHeader1.Text = "Required services that are not running are";
-            // 
-            // labelHeader2
-            // 
-            labelHeader2.AutoSize = true;
-            labelHeader2.BackColor = System.Drawing.Color.Pink;
-            labelHeader2.Location = new System.Drawing.Point(223, 14);
-            labelHeader2.Margin = new System.Windows.Forms.Padding(0);
-            labelHeader2.Name = "labelHeader2";
-            labelHeader2.Size = new System.Drawing.Size(59, 13);
-            labelHeader2.TabIndex = 9;
-            labelHeader2.Text = "highlighted";
-            // 
-            // labelHeader3
-            // 
-            labelHeader3.AutoSize = true;
-            labelHeader3.Location = new System.Drawing.Point(282, 14);
-            labelHeader3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            labelHeader3.Name = "labelHeader3";
-            labelHeader3.Size = new System.Drawing.Size(316, 13);
-            labelHeader3.TabIndex = 10;
-            labelHeader3.Text = ".  These services must be started for ShipWorks to run properly.";
-            // 
-            // entityGrid
-            // 
-            this.entityGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.entityGrid.DetailViewSettings = null;
-            this.entityGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.entityGrid.EnableSearching = false;
-            this.entityGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
-            this.entityGrid.LiveResize = false;
-            this.entityGrid.Location = new System.Drawing.Point(0, 0);
-            this.entityGrid.Name = "entityGrid";
-            this.entityGrid.NullRepresentation = "";
-            this.entityGrid.Renderer = windowsXPRenderer1;
-            this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
-            this.entityGrid.ShadeAlternateRows = true;
-            this.entityGrid.Size = new System.Drawing.Size(654, 259);
-            this.entityGrid.StretchPrimaryGrid = false;
-            this.entityGrid.TabIndex = 0;
             // 
             // ServiceStatusDialog
             // 
