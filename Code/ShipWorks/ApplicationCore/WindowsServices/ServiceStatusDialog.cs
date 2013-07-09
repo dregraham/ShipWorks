@@ -78,6 +78,8 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         void OnEntityProviderChangeDetected(object sender, EntityCacheChangeMonitoredChangedEventArgs e)
         {
+            WindowsServiceManager.CheckForChangesNeeded();
+
             if (e.Inserted.Count + e.Deleted.Count > 0)
             {
                 entityGrid.ReloadGridRows();

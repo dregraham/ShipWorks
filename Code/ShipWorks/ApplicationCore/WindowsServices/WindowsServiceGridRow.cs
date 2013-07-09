@@ -1,10 +1,8 @@
 ﻿using Divelements.SandGrid.Rendering;
+using ShipWorks.ApplicationCore.WindowsServices;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Drawing;
-using ShipWorks.ApplicationCore.WindowsServices;
-using ShipWorks.Actions.Triggers;
-using System.Linq;
 
 namespace ShipWorks.Actions
 {

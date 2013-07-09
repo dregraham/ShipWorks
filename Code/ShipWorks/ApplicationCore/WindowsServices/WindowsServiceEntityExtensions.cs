@@ -50,16 +50,20 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
             if (instance.ServiceType == (int)ShipWorksServiceType.Scheduler)
             {
-                var eligibleActions = ActionManager.Actions
+                bool noOtherSchedulersAreRunning = WindowsServiceManager.WindowsServices
+                    .Where(s => s.ServiceType == (int)ShipWorksServiceType.Scheduler && !s.Equals(instance))
+                    .All(s => s.GetStatus() != ServiceStatus.Running);
+
+                var unrunnableActions = ActionManager.Actions
                     .Where(a =>
                         a.TriggerType == (int)ActionTriggerType.Scheduled &&
                         a.Enabled && (
-                            a.ComputerLimitedType == (int)ComputerLimitationType.None ||
-                            a.ComputerLimitedList.Contains(instance.ComputerID)
+                            (a.ComputerLimitedType == (int)ComputerLimitationType.None && noOtherSchedulersAreRunning) ||
+                            (a.ComputerLimitedType == (int)ComputerLimitationType.NamedList && a.ComputerLimitedList.Contains(instance.ComputerID))
                         )
                     );
 
-                return eligibleActions.Any();
+                return unrunnableActions.Any();
             }
 
             return false;
