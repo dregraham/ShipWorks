@@ -120,6 +120,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
             action.TaskSummary = "";
 
             action.ComputerLimitedType = (int) ComputerLimitationType.TriggeringComputer;
+            action.InternalComputerLimitedList = string.Empty;
 
             action.StoreLimited = true;
             action.StoreLimitedList = new long[] { store.StoreID };

@@ -436,7 +436,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
-            InternalComputerLimitedList = "";
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			OnInitClassMembersComplete();
 		}
