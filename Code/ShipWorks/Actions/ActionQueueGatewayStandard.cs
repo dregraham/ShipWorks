@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users;
 
@@ -32,9 +33,10 @@ namespace ShipWorks.Actions
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                ResultsetFields resultFields = new ResultsetFields(2);
-                resultFields.DefineField(ActionQueueFields.ActionQueueID, 0, "ActionQueueID", "");
-                resultFields.DefineField(ActionQueueFields.InternalComputerLimitedList, 1, "InternalComputerLimitedList", "");
+                ResultsetFields resultFields = new ResultsetFields(3);
+                resultFields.DefineField(ActionQueueFields.ActionID, 0, "ActionID", "");
+                resultFields.DefineField(ActionQueueFields.ActionQueueID, 1, "ActionQueueID", "");
+                resultFields.DefineField(ActionQueueFields.InternalComputerLimitedList, 2, "InternalComputerLimitedList", "");
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
                     (ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType) &
@@ -49,11 +51,16 @@ namespace ShipWorks.Actions
 
                     while (reader.Read())
                     {
-                        // reader.GetString(1) returns InternalComputerLimitedList
-                        ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(reader.GetString(1));
+                        long actionID = reader.GetInt64(0);
+                        string internalComputerLimitedList = reader.GetString(2);
+
+                        ActionEntity actionEntity = ActionManager.GetAction(actionID);
+
+                        ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy((ComputerLimitationType)actionEntity.ComputerLimitedType, internalComputerLimitedList);
                         if (computerActionPolicy.IsComputerAllowed(UserSession.Computer))
                         {
-                            keys.Add(reader.GetInt64(0));
+                            // Add the ActionQueueID
+                            keys.Add(reader.GetInt64(1));
                         }
                     }
 

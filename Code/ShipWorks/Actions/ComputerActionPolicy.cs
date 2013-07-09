@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Actions
@@ -10,37 +11,15 @@ namespace ShipWorks.Actions
     public class ComputerActionPolicy
     {
         private readonly List<ComputerEntity> allowedComputers;
+        private readonly ComputerLimitationType actionComputerLimitationType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
         /// </summary>
-        /// <param name="action">The action.</param>
-        public ComputerActionPolicy(ActionEntity action)
+        public ComputerActionPolicy(ComputerLimitationType computerLimitationType, string internalComputerLimitedList) //, long triggeringComputerID)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
-
-            allowedComputers = ReadCsv(action.InternalComputerLimitedList);            
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
-        /// </summary>
-        /// <param name="allowedComputersCsv">The allowed computers CSV.</param>
-        public ComputerActionPolicy(string allowedComputersCsv)
-        {
-            allowedComputers = ReadCsv(allowedComputersCsv);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
-        /// </summary>
-        /// <param name="computers">The computers.</param>
-        public ComputerActionPolicy(IEnumerable<ComputerEntity> computers)
-        {
-            allowedComputers = new List<ComputerEntity>(computers);
+            allowedComputers = ReadCsv(internalComputerLimitedList);
+            actionComputerLimitationType = (ComputerLimitationType)computerLimitationType;
         }
 
         /// <summary>
@@ -80,7 +59,16 @@ namespace ShipWorks.Actions
         /// </returns>
         public bool IsComputerAllowed(ComputerEntity computer)
         {
-            return allowedComputers.Any(c => c.ComputerID == computer.ComputerID);
+            switch (actionComputerLimitationType)
+            {
+                case ComputerLimitationType.None:
+                    return true;
+                case ComputerLimitationType.TriggeringComputer:
+                case ComputerLimitationType.NamedList:
+                    return allowedComputers.Any(c => c.ComputerID == computer.ComputerID);
+                default:
+                    throw new ArgumentOutOfRangeException(string.Format("{0} is an unknown ComputerLimitationType.", EnumHelper.GetDescription(actionComputerLimitationType)));
+            }
         }
     }
 }
