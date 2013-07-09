@@ -154,8 +154,8 @@ GO
 IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
 GO
 INSERT INTO [dbo].[tmp_rg_xx_ActionQueue]
-		([ActionQueueID], [ActionID], [ActionName], [ActionVersion], [QueueVersion], [TriggerDate], [TriggerComputerID], [ComputerLimitedList],                 [ObjectID], [Status], [NextStep], [ContextLock], [ActionQueueType]) 
-SELECT	 [ActionQueueID], [ActionID], [ActionName], [ActionVersion], [QueueVersion], [TriggerDate], [TriggerComputerID], Cast([RunComputerID] as varchar(150)), ObjectID,   [Status], [NextStep], [ContextLock], [ActionQueueType] FROM [dbo].[ActionQueue]
+		([ActionQueueID], [ActionID], [ActionName], [ActionVersion], [QueueVersion], [TriggerDate], [TriggerComputerID], [ComputerLimitedList],                             [ObjectID], [Status], [NextStep], [ContextLock], [ActionQueueType]) 
+SELECT	 [ActionQueueID], [ActionID], [ActionName], [ActionVersion], [QueueVersion], [TriggerDate], [TriggerComputerID], isnull(cast([RunComputerID] as varchar(150)), ''), [ObjectID], [Status], [NextStep], [ContextLock], [ActionQueueType] FROM [dbo].[ActionQueue]
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
