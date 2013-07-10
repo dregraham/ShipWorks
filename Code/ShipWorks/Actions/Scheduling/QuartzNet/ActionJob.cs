@@ -33,7 +33,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// </summary>
         public void Execute(IJobExecutionContext context)
         {
-            log.InfoFormat("ActionJob: {0} Running at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
+            log.InfoFormat("ActionJob: {0} Starting at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
 
             long actionId = 0;
 
@@ -47,7 +47,9 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 return;
             }
 
-            ActionDispatcher.DispatchScheduledAction(actionId);   
+            ActionDispatcher.DispatchScheduledAction(actionId);
+
+            log.InfoFormat("ActionJob: {0} Ending at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
         }
     }
 }
