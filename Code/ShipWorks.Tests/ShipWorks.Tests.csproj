@@ -21,7 +21,7 @@
     <SccAuxPath>
     </SccAuxPath>
     <SccProvider>
-    </SccProvider>    
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -430,7 +430,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Stores\eBay\Artifacts\SecureTokenFileWithoutUserId.tkn">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

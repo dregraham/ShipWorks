@@ -43,7 +43,7 @@
     <SccAuxPath>
     </SccAuxPath>
     <SccProvider>
-    </SccProvider>    
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -357,7 +357,6 @@
     <Compile Include="Win32\WindowsUtility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
