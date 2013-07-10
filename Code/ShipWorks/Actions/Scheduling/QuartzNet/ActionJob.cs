@@ -35,7 +35,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         {
             try
             {
-                log.InfoFormat("ActionJob: {0} Starting at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
+                log.InfoFormat("ActionJob: {0} Starting.", context.JobDetail.Key);
 
                 long actionId = 0;
 
@@ -51,11 +51,11 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
                 ActionDispatcher.DispatchScheduledAction(actionId);
 
-                log.InfoFormat("ActionJob: {0} Ending at {1}", context.JobDetail.Key, DateTime.Now.ToString("r"));
+                log.InfoFormat("ActionJob: {0} Ended.", context.JobDetail.Key);
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("ActionJob: {0} threw the following error. {1}", context.JobDetail.Key, ex.Message);
+                log.ErrorFormat("ActionJob: {0} threw the following error: {1}", context.JobDetail.Key, ex.Message);
                 throw;
             }
         }
