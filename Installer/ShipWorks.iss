@@ -57,7 +57,7 @@ VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2012
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2013
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 
@@ -115,6 +115,9 @@ Source: {#AppArtifacts}\SpreadsheetGear.dll; DestDir: {app}; Flags: overwriterea
 Source: {#AppArtifacts}\Newtonsoft.Json.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\RestSharp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Web.Services3.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Quartz.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Common.Logging.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Common.Logging.Log4Net1210.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 

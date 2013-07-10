@@ -212,15 +212,12 @@
 
   </Target>
 
-	<!-- Copy all the files to the Latest directory -->
-	<Target Name="CopyToLatest" >
+  <!-- Copy all the files to the Latest directory -->
+  <Target Name="CopyToLatest" >
     
     <!-- Copy the native files -->
     <Copy SourceFiles="..\Code\ShipWorks.Native\x64\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
     <Copy SourceFiles="..\Code\ShipWorks.Native\Win32\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
-    
-    <!-- Copy the log4net file.  It's gac'd, and set to copylocal = false -->
-    <Copy SourceFiles="..\Components\log4net.dll" DestinationFolder="$(AppDirectory)\" />
     
   </Target>
 
