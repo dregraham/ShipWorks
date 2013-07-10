@@ -148,6 +148,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Creates an ActionQueue entry for a scheduled Action whose time has come.
         /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static void DispatchScheduledAction(long actionID)
         {
             ActionManager.CheckForChangesNeeded();

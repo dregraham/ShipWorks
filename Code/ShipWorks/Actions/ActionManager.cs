@@ -95,7 +95,7 @@ namespace ShipWorks.Actions
         /// </summary>
         public static ActionEntity GetAction(long actionID)
         {
-            return Actions.Where(a => a.ActionID == actionID).SingleOrDefault();
+            return Actions.SingleOrDefault(a => a.ActionID == actionID);
         }
 
         /// <summary>
