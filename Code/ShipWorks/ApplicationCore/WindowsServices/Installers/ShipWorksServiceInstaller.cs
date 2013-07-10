@@ -32,8 +32,10 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
             private set { base.DisplayName = value; }
         }
 
-
-        void InitializeInstance()
+        /// <summary>
+        /// Initializes the instance.
+        /// </summary>
+        private void InitializeInstance()
         {
             BaseServiceName = "ShipWorks" + ServiceType;
             ServiceName = BaseServiceName + "$" + ShipWorksSession.InstanceID.ToString("N");
