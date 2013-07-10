@@ -137,7 +137,7 @@ Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueNam
 [Run]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Descriptoin: Install as Service Parameters: "/cmd:installserviceinteractive"
+Filename: {app}\ShipWorks.exe; Descriptoin: Install as Service Parameters: "/cmd:installservice"
 
 [Dirs]
 Name: {app}
