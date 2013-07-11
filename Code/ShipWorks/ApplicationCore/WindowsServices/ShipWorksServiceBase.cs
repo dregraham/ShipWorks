@@ -1,27 +1,28 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-using System.Timers;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.Dashboard;
+﻿using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
+using System;
+using System.ComponentModel;
+using System.ServiceProcess;
+using System.Timers;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
-    [System.ComponentModel.DesignerCategory("")]
-    public class ShipWorksServiceBase : ServiceBase
+    public partial class ShipWorksServiceBase : ServiceBase
     {
-        private Timer windowsServiceCheckInTimer;
+        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceBase));
+
         private WindowsServiceEntity windowsServiceEntity;
+
+        public ShipWorksServiceBase()
+        {
+            InitializeComponent();
+        }
 
         [Description("The ShipWorks service type that this service implements.")]
         public ShipWorksServiceType ServiceType { get; set; }
@@ -54,33 +55,12 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
-        /// Set properties for this service.
+        /// Sets instance-specific properties for this service; must be called after InitializeComponent in a derived service class.
         /// </summary>
         protected void InitializeInstance()
         {
             BaseServiceName = "ShipWorks" + ServiceType;
             ServiceName = BaseServiceName + "$" + ShipWorksSession.InstanceID.ToString("N");
-            windowsServiceCheckInTimer = new Timer();
-        }
-
-        /// <summary>
-        /// Initializes for application.
-        /// </summary>
-        private static void InitializeForApplication()
-        {
-            SqlSession.Initialize();
-            LogSession.Initialize();
-
-            DataProvider.InitializeForApplication();
-            AuditProcessor.InitializeForApplication();
-
-            UserSession.InitializeForCurrentDatabase();
-
-            UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentUser();
-
-            // Required for printing
-            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
         }
 
         /// <summary>
@@ -89,7 +69,41 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// take when the service starts.
         /// </summary>
         /// <param name="args">Data passed by the start command.</param>
-        protected override void OnStart(string[] args)
+        protected sealed override void OnStart(string[] args)
+        {
+            TryStart();
+        }
+
+        /// <summary>
+        /// Tries to connect to the database and start up the service core.
+        /// </summary>
+        void TryStart()
+        {
+            try
+            {
+                SqlSession.Initialize();
+                if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
+                    throw new Exception("Schema is not the correct version.");
+            }
+            catch(Exception ex)
+            {
+                log.Error("Could not establish a valid SqlSession.", ex);
+                tryStartTimer.Start();
+                return;
+            }
+
+            OnStartCore();
+        }
+
+        void OnTryStartTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            TryStart();
+        }
+
+        /// <summary>
+        /// Performs core startup once a SqlSession has been established.
+        /// </summary>
+        protected virtual void OnStartCore()
         {
             // Setup the service for ShipWorks access.
             InitializeForApplication();
@@ -107,23 +121,24 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             WindowsServiceManager.SaveWindowsService(CurrentWindowsServiceEntity);
 
             // Start the timer to check in every WindowsServiceManager.CheckInTimeSpan
-            StartCheckInTimer();
+            checkInTimer.Interval = WindowsServiceManager.CheckInTimeSpan.TotalMilliseconds;
+            checkInTimer.Start();
         }
 
-        /// <summary>
-        /// Configures the check-in timer for the service.
-        /// </summary>
-        private void StartCheckInTimer()
+        void InitializeForApplication()
         {
-            windowsServiceCheckInTimer.Interval = WindowsServiceManager.CheckInTimeSpan.TotalMilliseconds;
-            windowsServiceCheckInTimer.Elapsed += OnWindowsServiceCheckInTimerElapsed;
-            windowsServiceCheckInTimer.Enabled = true;
+            LogSession.Initialize();
+
+            DataProvider.InitializeForApplication();
+            AuditProcessor.InitializeForApplication();
+
+            UserSession.InitializeForCurrentDatabase();
+
+            UserManager.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentUser();
         }
 
-        /// <summary>
-        /// Timer elapsted event handler to do the actual work of updating the server check in time.
-        /// </summary>
-        private void OnWindowsServiceCheckInTimerElapsed(object sender, ElapsedEventArgs e)
+        void OnCheckInTimerElapsed(object sender, ElapsedEventArgs e)
         {
             WindowsServiceManager.CheckIn(CurrentWindowsServiceEntity);
         }
@@ -133,9 +148,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         protected override void OnStop()
         {
-            windowsServiceCheckInTimer.Stop();
-            windowsServiceCheckInTimer.Close();
-            windowsServiceCheckInTimer.Dispose();
+            checkInTimer.Stop();
 
             // Update the WindowsServiceEntity stop and check in times.
             CurrentWindowsServiceEntity.LastStopDateTime = DateTime.UtcNow;

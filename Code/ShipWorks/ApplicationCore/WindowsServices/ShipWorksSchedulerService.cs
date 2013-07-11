@@ -1,17 +1,11 @@
-﻿using System.IO;
-using Interapptive.Shared.UI;
-using ShipWorks.Actions.Scheduling;
-using System.Threading;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using System.Timers;
+﻿using Interapptive.Shared.UI;
 using ShipWorks.Actions;
+using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Utility;
-using ShipWorks.Users;
-using ShipWorks.Users.Audit;
+using System.IO;
+using System.Threading;
+using System.Timers;
 using Timer = System.Timers.Timer;
-using System.ComponentModel;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
 {
@@ -53,15 +47,14 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
-        /// When implemented in a derived class, executes when a Start command is sent to the service by the Service Control 
-        /// Manager (SCM) or when the operating system starts (for a service that starts automatically). Specifies actions to 
-        /// take when the service starts.
+        /// Starts up the scheduler and the action processor timer.
         /// </summary>
-        /// <param name="args">Data passed by the start command.</param>
-        protected override void OnStart(string[] args)
+        protected override void OnStartCore()
         {
-            // Ask the base to process any OnStart needs.
-            base.OnStart(args);
+            base.OnStartCore();
+
+            // Required for printing
+            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
 
             timestampTracker = new TimestampTracker();
 
@@ -75,11 +68,10 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
-        /// Process any OnStop needs for the service.
+        /// Stops the scheduler and the action processor timer.
         /// </summary>
         protected override void OnStop()
         {
-            // Ask the base to process any OnStop needs.
             base.OnStop();
 
             timer.Stop();

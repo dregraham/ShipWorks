@@ -474,12 +474,17 @@
       <DependentUpon>ServiceStartHelpDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\WindowsServices\ServiceStatus.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.Designer.cs">
+      <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceConcurrencyException.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceEntityExtensions.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceGridRow.cs" />
     <Compile Include="ApplicationCore\WindowsServices\WindowsServiceManager.cs" />
     <Compile Include="ApplicationCore\WindowsServices\ServiceManager.cs" />
-    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs" />
+    <Compile Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ApplicationCore\WindowsServices\ShipWorksSchedulerService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -5336,6 +5341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\WindowsServices\ServiceStatusDialog.resx">
       <DependentUpon>ServiceStatusDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\WindowsServices\ShipWorksServiceBase.resx">
+      <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\CreateSchema.sql">
       <SubType>
