@@ -75,24 +75,47 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
-        /// Tries to connect to the database and start up the service core.
+        /// Tries to connect to the database, if successful, starts up the service core.
         /// </summary>
         void TryStart()
         {
-            try
+            if (!TryConnect())
             {
-                SqlSession.Initialize();
-                if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
-                    throw new Exception("Schema is not the correct version.");
-            }
-            catch(Exception ex)
-            {
-                log.Error("Could not establish a valid SqlSession.", ex);
                 tryStartTimer.Start();
                 return;
             }
 
             OnStartCore();
+        }
+
+        /// <summary>
+        /// Tries to connect to the database.
+        /// </summary>
+        bool TryConnect()
+        {
+            try
+            {
+                SqlSession.Initialize();
+
+                if (!SqlSession.IsConfigured)
+                {
+                    log.Warn("SqlSession is not configured.");
+                    return false;
+                }
+
+                if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
+                {
+                    log.Warn("Schema is not the correct version.");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error establishing SqlSession.", ex);
+                return false;
+            }
         }
 
         void OnTryStartTimerElapsed(object sender, ElapsedEventArgs e)
