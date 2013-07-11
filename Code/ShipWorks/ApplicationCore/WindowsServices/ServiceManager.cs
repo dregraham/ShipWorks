@@ -68,6 +68,28 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
+        /// Stops the service.
+        /// </summary>
+        public void StopService()
+        {
+            try
+            {
+                using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
+                {
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
+
+                    service.Stop();
+                    service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Can't stop service " + shipWorksService.ServiceName, ex);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Determines whether [is service installed].
         /// </summary>
         /// <returns>
