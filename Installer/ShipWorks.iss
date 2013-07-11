@@ -142,6 +142,9 @@ Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: 
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:installservice"; Description: Install as Service
 
+[UninstallRun]
+Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservice"; Description: Uninstall as Service; RunOnceId: "UninstallService"
+
 [Dirs]
 Name: {app}
 Name: {commonappdata}\Interapptive; Permissions: everyone-modify
