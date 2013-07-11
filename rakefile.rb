@@ -43,6 +43,14 @@ namespace :build do
 		msb.properties :configuration => :Release
 		msb.targets :Clean, :Build
 	end
+
+	desc "Build ShipWorks and generate an MSI for internal testing"
+	msbuild :internal_installer do |msb|
+		print "Building internal release installer...\r\n\r\n"
+		msb.solution = "./Build/shipworks.proj"
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:CCNetLabel=0.0.0.0 /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt"
+		msb.properties :configuration => :Release
+	end
 end
 
 ########################################################################
