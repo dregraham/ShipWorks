@@ -125,7 +125,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             checkInTimer.Start();
         }
 
-        void InitializeForApplication()
+        static void InitializeForApplication()
         {
             LogSession.Initialize();
 
