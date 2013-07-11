@@ -12120,3 +12120,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Actions.WindowsServiceGridRow.#DrawRowBackground(Divelements.SandGrid.Rendering.RenderingContext)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceBase.#TryStart()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceBase.#TryStart()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceBase.#TryConnect()")]

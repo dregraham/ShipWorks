@@ -91,7 +91,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// <summary>
         /// Tries to connect to the database.
         /// </summary>
-        bool TryConnect()
+        static bool TryConnect()
         {
             try
             {
