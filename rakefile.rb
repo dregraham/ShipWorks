@@ -47,9 +47,20 @@ namespace :build do
 	desc "Build ShipWorks and generate an MSI for internal testing"
 	msbuild :internal_installer do |msb|
 		print "Building internal release installer...\r\n\r\n"
+
+		# Use the MSBuild project when building the installer
 		msb.solution = "./Build/shipworks.proj"
-		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:CCNetLabel=0.0.0.0 /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt"
 		msb.properties :configuration => :Release
+
+		# Grab the revision number to use for this build
+		revisionFile = File.open("C:\\Temp\\NextRevision.txt")
+		revisionNumber = revisionFile.readline
+		revisionFile.close
+
+		# Use the revisionNumber extracted from the file and pass the revision filename
+		# so the build will increment the version in preperation for the next run
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt /p:CCNetLabel=0.0.0." + revisionNumber
+		
 	end
 end
 
