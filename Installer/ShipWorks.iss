@@ -143,7 +143,7 @@ Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait post
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:installservice"; Description: Install as Service
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservice"; Description: Uninstall as Service; RunOnceId: "UninstallService"
+Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservice"; RunOnceId: "UninstallService"
 
 [Dirs]
 Name: {app}
