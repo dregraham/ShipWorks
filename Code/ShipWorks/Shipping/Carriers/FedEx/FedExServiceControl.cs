@@ -245,8 +245,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // If they are all of the same service class, we can load the service classes
             if (allDomestic || allInternational || allCanada)
             {
-                service.DataSource = FedExUtility.GetValidServiceTypes(LoadedShipments)
-                    .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
+                // The service types need to to be loaded based on the overridden shipment data to account
+                // for various shipping programs/rules offered by stores (i.e. eBay GSP)
+                List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
+                LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
+
+                service.DataSource = FedExUtility.GetValidServiceTypes(overriddenShipments)
+                       .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
             }
             else
             {
