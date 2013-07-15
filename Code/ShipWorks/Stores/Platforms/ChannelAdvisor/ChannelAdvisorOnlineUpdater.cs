@@ -278,6 +278,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         case UpsServiceType.UpsMailInnovationsIntEconomy:
                         case UpsServiceType.UpsMailInnovationsIntPriority:
                             return "MI";
+                        case UpsServiceType.WorldwideSaver:
+                            return "UPSWorldwideSaver";
+                        case UpsServiceType.UpsExpress:
+                            return "UPSExpress";
+                        case UpsServiceType.UpsExpressEarlyAm:
+                            return "UPSExpressEarlyAm";
+                        case UpsServiceType.UpsExpressSaver:
+                            return "UPSExpressSaver";
+                        case UpsServiceType.UpsExpedited:
+                            return "UPSExpedited";
+                        case UpsServiceType.Ups3DaySelectFromCanada:
+                            return "UPS3DaySelectFromCanada";
+                        case UpsServiceType.UpsCaWorldWideExpressSaver:
+                            return "UPSCaWorldWideExpressSaver";
+                        case UpsServiceType.UpsCaWorldWideExpressPlus:
+                            return "UPSCaWorldWideExpressPlus";
+                        case UpsServiceType.UpsCaWorldWideExpress:
+                            return "UPSCaWorldWideExpress";
+                        case UpsServiceType.Ups2nDayAirIntra:
+                            return "UPS2nDayAirIntra";
                     }
 
                     break;
