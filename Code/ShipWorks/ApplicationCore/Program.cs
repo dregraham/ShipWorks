@@ -179,7 +179,9 @@ namespace ShipWorks
                     }
                 }
                 else
+                {
                     HandleUnhandledException(ex, false);
+                }
             }
             catch (Exception ex)
             {
@@ -204,7 +206,7 @@ namespace ShipWorks
 
             optionSet.Parse(options);
 
-            if (null == serviceName)
+            if (serviceName == null)
             {
                 log.Error("Service name was not specified.");
                 Environment.ExitCode = -1;
