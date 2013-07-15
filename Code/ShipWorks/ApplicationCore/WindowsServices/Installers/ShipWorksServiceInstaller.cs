@@ -14,9 +14,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
         public ShipWorksServiceType ServiceType { get; set; }
 
         [Browsable(false)]
-        public string BaseServiceName { get; private set; }
-
-        [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public string ServiceName
         {
@@ -37,8 +34,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
         /// </summary>
         private void InitializeInstance()
         {
-            BaseServiceName = "ShipWorks" + ServiceType;
-            ServiceName = BaseServiceName + "$" + ShipWorksSession.InstanceID.ToString("N");
+            ServiceName = ShipWorksServiceBase.GetServiceName(ServiceType);
             DisplayName = EnumHelper.GetDescription(ServiceType) + " " + ShipWorksSession.InstanceID.ToString("B").ToUpper();
         }
 

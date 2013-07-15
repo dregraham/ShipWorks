@@ -8,7 +8,10 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
+using System.Threading;
 using System.Timers;
 
 namespace ShipWorks.ApplicationCore.WindowsServices
@@ -16,6 +19,115 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     public partial class ShipWorksServiceBase : ServiceBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceBase));
+        static readonly Type[] serviceTypes;
+
+        static ShipWorksServiceBase()
+        {
+            serviceTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Gets a service instance for a ShipWorks service type.
+        /// </summary>
+        public static ShipWorksServiceBase GetService(ShipWorksServiceType serviceType)
+        {
+            return serviceTypes
+                .Select(Activator.CreateInstance)
+                .Cast<ShipWorksServiceBase>()
+                .Single(s => s.ServiceType == serviceType);
+        }
+
+        /// <summary>
+        /// Gets the instance-specific service name for a ShipWorks service type.
+        /// </summary>
+        public static string GetServiceName(ShipWorksServiceType serviceType)
+        {
+            return GetServiceName(serviceType, ShipWorksSession.InstanceID);
+        }
+
+        /// <summary>
+        /// Gets the instance-specific service name for a ShipWorks service type.
+        /// </summary>
+        public static string GetServiceName(ShipWorksServiceType serviceType, Guid instanceID)
+        {
+            return "ShipWorks" + serviceType + "$" + instanceID.ToString("N");
+        }
+
+        /// <summary>
+        /// Self-hosts a ShipWorks service object as an instance-specific background process instead of via the SCM.
+        /// This is a blocking call for the lifetime of the running service, unless the service is
+        /// already running in the background, in which case this method returns immediately.
+        /// </summary>
+        /// <returns>true if the service ran to completion in the background; false if the service was already running.</returns>
+        public static bool RunInBackground(ShipWorksServiceBase service)
+        {
+            if (null == service)
+                throw new ArgumentNullException("service");
+
+            bool createdNew;
+            using (var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, service.ServiceName, out createdNew))
+            {
+                if (!createdNew)
+                {
+                    log.WarnFormat("Ignoring duplicate request to run service '{0}' in the background.", service.ServiceName);
+                    return false;
+                }
+
+                service.OnStart(null);
+                stopSignal.WaitOne();
+            }
+
+            service.OnStop();
+            return true;
+        }
+
+        /// <summary>
+        /// Signals an instance-specific ShipWorks background service process that it should shut down.
+        /// </summary>
+        /// <returns>true if the service was not running, or was running and signaled; false if the signal fails.</returns>
+        public static bool StopInBackground(ShipWorksServiceType serviceType)
+        {
+            return StopInBackground(serviceType, ShipWorksSession.InstanceID);
+        }
+
+        /// <summary>
+        /// Signals an instance-specific ShipWorks background service process that it should shut down.
+        /// </summary>
+        /// <returns>true if the service was not running, or was running and signaled; false if the signal fails.</returns>
+        public static bool StopInBackground(ShipWorksServiceType serviceType, Guid instanceID)
+        {
+            var serviceName = GetServiceName(serviceType, instanceID);
+
+            bool createdNew;
+            using (var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, serviceName, out createdNew))
+            {
+                return createdNew || stopSignal.Set();
+            }
+        }
+
+        /// <summary>
+        /// Signals all running instance-specific ShipWorks background processes to shut down.
+        /// </summary>
+        /// <returns>true if the all services were not running, or were running and signaled; false if any signal fails.</returns>
+        public static bool StopAllInBackground()
+        {
+            return StopAllInBackground(ShipWorksSession.InstanceID);
+        }
+
+        /// <summary>
+        /// Signals all running instance-specific ShipWorks background processes to shut down.
+        /// </summary>
+        /// <returns>true if the all services were not running, or were running and signaled; false if any signal fails.</returns>
+        public static bool StopAllInBackground(Guid instanceID)
+        {
+            return Enum.GetValues(typeof(ShipWorksServiceType))
+                .Cast<ShipWorksServiceType>()
+                .Select(serviceType => StopInBackground(serviceType, instanceID))
+                .Aggregate((all, stopped) => all && stopped);
+        }
+
 
         private WindowsServiceEntity windowsServiceEntity;
 
@@ -26,9 +138,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         [Description("The ShipWorks service type that this service implements.")]
         public ShipWorksServiceType ServiceType { get; set; }
-
-        [Browsable(false)]
-        public string BaseServiceName { get; private set; }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -59,8 +168,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// </summary>
         protected void InitializeInstance()
         {
-            BaseServiceName = "ShipWorks" + ServiceType;
-            ServiceName = BaseServiceName + "$" + ShipWorksSession.InstanceID.ToString("N");
+            ServiceName = GetServiceName(ServiceType);
         }
 
         /// <summary>

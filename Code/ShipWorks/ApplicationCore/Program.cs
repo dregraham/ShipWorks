@@ -219,7 +219,7 @@ namespace ShipWorks
 
             log.InfoFormat("Starting the '{0}' service.", serviceName);
 
-            ServiceBase.Run(ShipWorksServiceManager.GetService(serviceType));
+            ServiceBase.Run(ShipWorksServiceBase.GetService(serviceType));
         }
 
         /// <summary>

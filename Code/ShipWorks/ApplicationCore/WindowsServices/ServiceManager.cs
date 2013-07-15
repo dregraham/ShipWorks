@@ -14,25 +14,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceManager));
 
-
-        /// <summary>
-        /// Gets a service instance for a ShipWorks service type.
-        /// </summary>
-        /// <param name="serviceType"></param>
-        /// <returns></returns>
-        public static ShipWorksServiceBase GetService(ShipWorksServiceType serviceType)
-        {
-            var serviceTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
-                .ToArray();
-
-            return serviceTypes
-                .Select(Activator.CreateInstance)
-                .Cast<ShipWorksServiceBase>()
-                .Single(s => s.ServiceType == serviceType);
-        }
-
-
         private readonly ShipWorksServiceBase shipWorksService;
 
         /// <summary>
