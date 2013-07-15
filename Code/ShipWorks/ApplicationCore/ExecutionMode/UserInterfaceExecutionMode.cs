@@ -21,6 +21,7 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Management;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls;
+using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -30,6 +31,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     public class UserInterfaceExecutionMode : IExecutionMode
     {
         private readonly ILog log;
+        private readonly IExecutionModeInitializer initializer;
+
         private bool isTerminating;
 
         /// <summary>
@@ -37,18 +40,20 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         /// <param name="mainForm">The main form.</param>
         public UserInterfaceExecutionMode()
-            : this(LogManager.GetLogger(typeof (UserInterfaceExecutionMode)))
+            : this(new UserInterfaceExecutionModeInitializer(), LogManager.GetLogger(typeof (UserInterfaceExecutionMode)))
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
-        /// <param name="mainForm">The main form.</param>
+        /// <param name="initializer">The initializer.</param>
         /// <param name="log">The log.</param>
-        public UserInterfaceExecutionMode(ILog log)
+        public UserInterfaceExecutionMode(IExecutionModeInitializer initializer, ILog log)
         {
             isTerminating = false;
+
             this.log = log;
+            this.initializer = initializer;
         }
 
         /// <summary>
@@ -67,8 +72,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         public void Execute()
         {
-            // Order is important here due to license dependencies of third party components 
-            // and other ShipWorks initialization processes.
             SingleInstance.Register(ShipWorksSession.InstanceID);
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
@@ -81,59 +84,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 }
             }
 
-            // Now we are ready to show the splash
+            // Show the splash screen to give the user some visual feedback that ShipWorks is running
+            // while initialization is being performed
             SplashScreen.ShowSplash();
-
-            // Check for illegal cross thread calls in any mode - not just when the debugger is attached, which is the default
-            Control.CheckForIllegalCrossThreadCalls = true;
-
-            // For Divilements licensing
-            Divelements.SandGrid.SandGridBase.ActivateProduct("120|iTixOUJcBvFZeCMW0Zqf8dEUqM0=");
-            Divelements.SandRibbon.Ribbon.ActivateProduct("120|wmbyvY12rhj+YHC5nTIyBO33bjE=");
-            TD.SandDock.SandDockManager.ActivateProduct("120|cez0Ci0UI1owSCvXUNrMCcZQWik=");
-
-            // Common initialization
-            CommonInitialization();
-
-            // Initialize window state
-            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
-            CollapsibleGroupControl.Initialize(Path.Combine(DataPath.WindowsUserSettings, "collapsiblegroups.xml"));
-
-            // For syntax editor
-            SemanticParserService.Start();
-
-            // Register some idle cleanup work.
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedFilterCounts", FilterContentManager.DeleteAbandonedFilterCounts, "doing maintenance", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedQuickFilters", QuickFilterHelper.DeleteAbandonedFilters, "doing maintenance", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedResources", DataResourceManager.DeleteAbandonedResourceData, "cleaning up resources", TimeSpan.FromHours(2));
+            initializer.Initialize();
 
             Program.MainForm.Load += new EventHandler(OnMainFormLoaded);
 
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(Program.MainForm);
-        }
-
-        /// <summary>
-        /// Do initialization common to command line or UI.  It's here instead of upfront so that if its UI the splash can already be shown.
-        /// </summary>
-        private static void CommonInitialization()
-        {            
-            MyComputer.LogEnvironmentProperties();
-
-            // Looking for all types in this assembly that have the LLBLGen DependcyInjection attribute
-            DependencyInjectionDiscoveryInformation.ConfigInformation = new DependencyInjectionConfigInformation();
-            DependencyInjectionDiscoveryInformation.ConfigInformation.AddAssembly(Assembly.GetExecutingAssembly());
-
-            // SSL certificate policy
-            ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-
-            // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due
-            // to people's machines just not being able to handle the load, and 30 seconds just wasn't enough.
-            SqlCommandProvider.DefaultTimeout = TimeSpan.FromSeconds(Debugger.IsAttached ? 300 : 120);
-
-            // Do initial edition initialization
-            EditionManager.Initialize();
         }
 
         /// <summary>
@@ -143,9 +102,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             Program.MainForm.Activate();
             SplashScreen.CloseSplash();
-
-            // Start idle processing
-            IdleWatcher.Initialize();
 
             log.InfoFormat("Application activated.");
         }

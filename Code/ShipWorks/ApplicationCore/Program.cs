@@ -141,9 +141,11 @@ namespace ShipWorks
                 }
                 else
                 {
+
+                    executionMode = factory.Create();
+
                     try
                     {
-                        executionMode = factory.Create();
                         executionMode.Execute();
                     }
                     catch (MultipleExecutionModeInstancesException exception)
