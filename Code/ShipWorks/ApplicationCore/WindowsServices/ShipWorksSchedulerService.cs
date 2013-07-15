@@ -70,9 +70,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         /// <summary>
         /// Stops the scheduler and the action processor timer.
         /// </summary>
-        protected override void OnStop()
+        protected override void OnStopCore()
         {
-            base.OnStop();
+            base.OnStopCore();
 
             timer.Stop();
             timer.Close();

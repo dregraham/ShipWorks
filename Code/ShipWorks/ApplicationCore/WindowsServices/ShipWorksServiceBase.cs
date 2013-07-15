@@ -151,6 +151,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         public ShipWorksServiceBase()
         {
             InitializeComponent();
+            checkInTimer.Interval = WindowsServiceManager.CheckInTimeSpan.TotalMilliseconds;
         }
 
         [Description("The ShipWorks service type that this service implements.")]
@@ -189,18 +190,15 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
-        /// When implemented in a derived class, executes when a Start command is sent to the service by the Service Control 
-        /// Manager (SCM) or when the operating system starts (for a service that starts automatically). Specifies actions to 
-        /// take when the service starts.
+        /// Begins trying to connect to the database.
         /// </summary>
-        /// <param name="args">Data passed by the start command.</param>
         protected sealed override void OnStart(string[] args)
         {
             TryStart();
         }
 
         /// <summary>
-        /// Tries to connect to the database, if successful, starts up the service core.
+        /// Tries to connect to the database, and if successful, starts up the service core.
         /// </summary>
         void TryStart()
         {
@@ -211,6 +209,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             }
 
             OnStartCore();
+            checkInTimer.Start();
         }
 
         /// <summary>
@@ -266,10 +265,6 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                 manager.IsServiceInstalled() ? manager.GetServiceDisplayName() : GetDisplayName(ServiceType);
 
             WindowsServiceManager.SaveWindowsService(CurrentWindowsServiceEntity);
-
-            // Start the timer to check in every WindowsServiceManager.CheckInTimeSpan
-            checkInTimer.Interval = WindowsServiceManager.CheckInTimeSpan.TotalMilliseconds;
-            checkInTimer.Start();
         }
 
         static void InitializeForApplication()
@@ -291,12 +286,24 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
-        /// Executes when a Stop command is sent to the service by the Service Control Manager (SCM). Specifies actions to take when a service stops running.
+        /// Stops the service core, if it was started.
         /// </summary>
-        protected override void OnStop()
+        protected sealed override void OnStop()
         {
-            checkInTimer.Stop();
+            tryStartTimer.Stop();
 
+            if (checkInTimer.Enabled)
+            {
+                checkInTimer.Stop();
+                OnStopCore();
+            }
+        }
+
+        /// <summary>
+        /// Performs core shutdown.  Only called if OnStartCore was called.
+        /// </summary>
+        protected virtual void OnStopCore()
+        {
             // Update the WindowsServiceEntity stop and check in times.
             CurrentWindowsServiceEntity.LastStopDateTime = DateTime.UtcNow;
             CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStopDateTime;
