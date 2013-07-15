@@ -19,21 +19,21 @@ namespace ShipWorks.ApplicationCore.WindowsServices
     public partial class ShipWorksServiceBase : ServiceBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceBase));
-        static readonly Type[] serviceTypes;
-
-        static ShipWorksServiceBase()
-        {
-            serviceTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
-                .ToArray();
-        }
+        static Type[] serviceTypesCache;
 
         /// <summary>
         /// Gets a service instance for a ShipWorks service type.
         /// </summary>
         public static ShipWorksServiceBase GetService(ShipWorksServiceType serviceType)
         {
-            return serviceTypes
+            if (serviceTypesCache == null)
+            {
+                serviceTypesCache = Assembly.GetExecutingAssembly().GetTypes()
+                    .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
+                    .ToArray();
+            }
+
+            return serviceTypesCache
                 .Select(Activator.CreateInstance)
                 .Cast<ShipWorksServiceBase>()
                 .Single(s => s.ServiceType == serviceType);
