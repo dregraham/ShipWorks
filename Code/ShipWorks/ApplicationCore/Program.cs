@@ -49,6 +49,8 @@ namespace ShipWorks
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
+        private static IExecutionMode executionMode;
+
         /// <summary>
         /// Single instance of the running application
         /// </summary>
@@ -141,7 +143,7 @@ namespace ShipWorks
                 {
                     try
                     {
-                        IExecutionMode executionMode = factory.Create();
+                        executionMode = factory.Create();
                         executionMode.Execute();
                     }
                     catch (MultipleExecutionModeInstancesException exception)
@@ -406,6 +408,7 @@ namespace ShipWorks
         /// </summary>
         private static void HandleUnhandledException(Exception ex, bool guiThread)
         {
+            // TODO: Delegate this to the execution mode after all execution modes have been implemented: executionMode.HandleException(ex);
             if (isTerminating)
             {
                 log.Error("Exception recieved while already terminating.", ex);

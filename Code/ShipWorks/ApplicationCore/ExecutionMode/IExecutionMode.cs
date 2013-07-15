@@ -9,7 +9,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     public interface IExecutionMode
     {
         /// <summary>
-        /// Determines whether the exection mode supports interacting with the user.
+        /// Determines whether the execution mode supports interacting with the user.
         /// </summary>
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.

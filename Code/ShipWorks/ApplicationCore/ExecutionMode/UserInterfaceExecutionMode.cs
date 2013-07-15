@@ -13,7 +13,10 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
+using ShipWorks.Users;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
@@ -31,7 +34,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         private readonly ILog log;
         private readonly MainForm mainForm;
-
+        private bool isTerminating;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode"/> class.
@@ -48,6 +51,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <param name="log">The log.</param>
         public UserInterfaceExecutionMode(MainForm mainForm, ILog log)
         {
+            isTerminating = false;
+
             this.mainForm = mainForm;
             this.log = log;
         }
@@ -99,9 +104,64 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             log.InfoFormat("Application activated.");
         }
 
+        /// <summary>
+        /// Intended to be used as an opportunity to handle any unhandled exceptions that bubble up from
+        /// the stack. This would be where things like showing a crash report dialog, would take place
+        /// just before the app terminates.
+        /// </summary>
+        /// <param name="exception">The exception that has bubbled up the entire stack.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
         public void HandleException(Exception exception)
         {
-            throw new NotImplementedException();
+            if (isTerminating)
+            {
+                log.Error("Exception recieved while already terminating.", exception);
+                return;
+            }
+
+            isTerminating = true;
+
+            string userEmail = string.Empty;
+            if (UserSession.IsLoggedOn)
+            {
+                userEmail = UserSession.User.Email;
+
+                UserSession.Logoff(false);
+            }
+
+            UserSession.Reset();
+
+            if (ConnectionMonitor.HandleTerminatedConnection(exception))
+            {
+                log.Info("Terminating due to unrecoverable connection.", exception);
+            }
+            else
+            {
+                log.Fatal("Application Crashed", exception);
+
+                // If the splash is shown, the crash window will close it.
+                using (CrashWindow dlg = new CrashWindow(exception, true, userEmail))
+                {
+                    // Need to not set a parent here, in case we are on another thread.  Causes
+                    // potential Invoke deadlock.
+                    dlg.ShowDialog();
+                }
+
+            }
+            try
+            {
+                // This forces windows to close.  If they try to save state or do other stupid things
+                // while closing then they will throw an exception.
+                Application.Exit();
+            }
+            catch (Exception termEx)
+            {
+                log.Error("Termination error", termEx);
+            }
+
+            // Application.Exit does not gaurnteed that the windows close.  It only tries.  If an exception
+            // gets thrown, or they set e.Cancel = true, they won't have closed.
+            Application.ExitThread();
         }
     }
 }
