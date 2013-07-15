@@ -35,7 +35,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
         private void InitializeInstance()
         {
             ServiceName = ShipWorksServiceBase.GetServiceName(ServiceType);
-            DisplayName = EnumHelper.GetDescription(ServiceType) + " " + ShipWorksSession.InstanceID.ToString("B").ToUpper();
+            DisplayName = ShipWorksServiceBase.GetDisplayName(ServiceType);
         }
 
 

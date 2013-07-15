@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
@@ -53,6 +54,22 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         public static string GetServiceName(ShipWorksServiceType serviceType, Guid instanceID)
         {
             return "ShipWorks" + serviceType + "$" + instanceID.ToString("N");
+        }
+
+        /// <summary>
+        /// Gets the instance-specific display name for a ShipWorks service type.
+        /// </summary>
+        public static string GetDisplayName(ShipWorksServiceType serviceType)
+        {
+            return GetDisplayName(serviceType, ShipWorksSession.InstanceID);
+        }
+
+        /// <summary>
+        /// Gets the instance-specific display name for a ShipWorks service type.
+        /// </summary>
+        public static string GetDisplayName(ShipWorksServiceType serviceType, Guid instanceID)
+        {
+            return EnumHelper.GetDescription(serviceType) + " " + instanceID.ToString("B").ToUpper();
         }
 
         /// <summary>
@@ -244,10 +261,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStartDateTime;
             CurrentWindowsServiceEntity.ServiceFullName = ServiceName;
 
-            using (ServiceController serviceController = new ServiceController(ServiceName))
-            {
-                CurrentWindowsServiceEntity.ServiceDisplayName = serviceController.DisplayName;
-            }
+            var manager = new ShipWorksServiceManager(this);
+            CurrentWindowsServiceEntity.ServiceDisplayName =
+                manager.IsServiceInstalled() ? manager.GetServiceDisplayName() : GetDisplayName(ServiceType);
 
             WindowsServiceManager.SaveWindowsService(CurrentWindowsServiceEntity);
 

@@ -120,6 +120,17 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
+        /// Gets the service display name.
+        /// </summary>
+        public string GetServiceDisplayName()
+        {
+            using (var service = new ServiceController(shipWorksService.ServiceName))
+            {
+                return service.DisplayName;
+            }
+        }
+
+        /// <summary>
         /// Prompts user for new credentials and updates the service with new credentials.
         /// </summary>
         public void ChangeCredentials()

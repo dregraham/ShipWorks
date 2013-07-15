@@ -131,9 +131,9 @@ namespace ShipWorks
                 ExecutionModeFactory factory = new ExecutionModeFactory(commandLine);
 
                 // TODO: Remove the RunService and RunCommand blocks above as execution modes and factory is ready
-                if (!Environment.UserInteractive)
+                if (commandLine.IsServiceSpecified)
                 {
-                    RunService(commandLine.ProgramOptions);
+                    RunService(commandLine.ServiceName, commandLine.ServiceOptions);
                 }
                 else if (commandLine.IsCommandSpecified)
                 {
@@ -194,38 +194,56 @@ namespace ShipWorks
         /// <summary>
         /// Runs ShipWorks as a service
         /// </summary>
-        private static void RunService(List<string> options)
+        private static void RunService(string name, List<string> options)
         {
+            if (null == name)
+                throw new ArgumentNullException("name");
+
             log.Info("Running as a service.");
 
             CommonInitialization();
 
-            string serviceName = null;
-
-            var optionSet = new OptionSet {
-                { "service=", v =>  serviceName = v  }
-            };
-
-            optionSet.Parse(options);
-
-            if (serviceName == null)
-            {
-                log.Error("Service name was not specified.");
-                Environment.ExitCode = -1;
-                return;
-            }
-
             ShipWorksServiceType serviceType;
-            if(!Enum.TryParse<ShipWorksServiceType>(serviceName, out serviceType))
+            if(!Enum.TryParse<ShipWorksServiceType>(name, out serviceType))
             {
-                log.ErrorFormat("'{0}' is not a valid service name.", serviceName);
+                log.ErrorFormat("'{0}' is not a valid service name.", name);
                 Environment.ExitCode = -1;
                 return;
             }
 
-            log.InfoFormat("Starting the '{0}' service.", serviceName);
+            var service = ShipWorksServiceBase.GetService(serviceType);
+            var manager = new ShipWorksServiceManager(service);
 
-            ServiceBase.Run(ShipWorksServiceBase.GetService(serviceType));
+            if (options.Contains("/stop"))
+            {
+                if (manager.IsServiceInstalled())
+                {
+                    log.InfoFormat("Stopping the '{0}' Windows service.", name);
+                    if (manager.GetServiceStatus() == ServiceControllerStatus.Running)
+                        manager.StopService();
+                }
+                else
+                {
+                    log.InfoFormat("Stopping the '{0}' background service.", name);
+                    ShipWorksServiceBase.StopInBackground(serviceType);
+                }
+            }
+            else
+            {
+                if (manager.IsServiceInstalled())
+                {
+                    log.InfoFormat("Running the '{0}' Windows service.", name);
+                    if(!Environment.UserInteractive)
+                        ShipWorksServiceBase.Run(service);
+                    else if (manager.GetServiceStatus() == ServiceControllerStatus.Stopped)
+                        manager.StartService();
+                }
+                else
+                {
+                    log.InfoFormat("Running the '{0}' background service.", name);
+                    ShipWorksServiceBase.RunInBackground(service);
+                }
+            }
         }
 
         /// <summary>
