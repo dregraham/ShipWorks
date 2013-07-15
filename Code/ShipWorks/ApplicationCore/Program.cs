@@ -30,6 +30,7 @@ using ShipWorks.UI;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks
 {
@@ -53,7 +54,18 @@ namespace ShipWorks
         /// </summary>
         public static MainForm MainForm
         {
-            get { return mainForm; }
+            get
+            {
+                if (mainForm == null)
+                {
+                    // Updated to lazy load the main form to work with the execution mode factory
+                    // due to the order that third party license activation/dependencies and other
+                    // ShipWorks initialization processes need to be executed in
+                    mainForm = new MainForm();
+                }
+                
+                return mainForm;
+            }
         }
 
         /// <summary>
@@ -113,6 +125,10 @@ namespace ShipWorks
                     return;
                 }
 
+                
+                ExecutionModeFactory factory = new ExecutionModeFactory(commandLine);
+
+                // TODO: Remove the RunService and RunCommand blocks above as execution modes and factory is ready
                 if (!Environment.UserInteractive)
                 {
                     RunService(commandLine.ProgramOptions);
@@ -123,7 +139,17 @@ namespace ShipWorks
                 }
                 else
                 {
-                    RunUI();
+                    try
+                    {
+                        IExecutionMode executionMode = factory.Create();
+                        executionMode.Execute();
+                    }
+                    catch (MultipleExecutionModeInstancesException exception)
+                    {
+                        // We just want to log and eat this exception since it is only being thrown if multiple instances
+                        // of the ShipWorks UI are opened.
+                        log.Warn(exception);
+                    }
                 }
 
                 // Log total connections made
@@ -239,69 +265,6 @@ namespace ShipWorks
 
                 Environment.ExitCode = -1;
             }
-        }
-
-        /// <summary>
-        /// Entry point for GUI activity.
-        /// </summary>
-        private static void RunUI()
-        {
-            SingleInstance.Register(ShipWorksSession.InstanceID);
-
-            if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
-            {
-                // If the application is already running, open it now and exit.
-                if (SingleInstance.ActivateRunningInstance())
-                {
-                    return;
-                }
-            }
-
-            // Now we are ready to show the splash
-            SplashScreen.ShowSplash();
-
-            // Check for illegal cross thread calls in any mode - not just when the debugger is attached, which is the default
-            Control.CheckForIllegalCrossThreadCalls = true;
-
-            // Common initialization
-            CommonInitialization();
-
-            // Initialize window state
-            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
-            CollapsibleGroupControl.Initialize(Path.Combine(DataPath.WindowsUserSettings, "collapsiblegroups.xml"));
-
-            // For Divilements licensing
-            Divelements.SandGrid.SandGrid.ActivateProduct("120|iTixOUJcBvFZeCMW0Zqf8dEUqM0=");
-            Divelements.SandRibbon.Ribbon.ActivateProduct("120|wmbyvY12rhj+YHC5nTIyBO33bjE=");
-            TD.SandDock.SandDockManager.ActivateProduct("120|cez0Ci0UI1owSCvXUNrMCcZQWik=");
-
-            // For syntax editor
-            SemanticParserService.Start();
-
-            // Register some idle cleanup work.
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedFilterCounts", FilterContentManager.DeleteAbandonedFilterCounts, "doing maintenance", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedQuickFilters", QuickFilterHelper.DeleteAbandonedFilters, "doing maintenance", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedResources", DataResourceManager.DeleteAbandonedResourceData, "cleaning up resources", TimeSpan.FromHours(2));
-
-            mainForm = new MainForm();
-            mainForm.Load += new EventHandler(OnMainFormLoaded);
-
-            SplashScreen.Status = "Loading ShipWorks...";
-            Application.Run(mainForm);
-        }
-
-        /// <summary>
-        /// When the main form has loaded we wait for the splash minimum time to be up.
-        /// </summary>
-        private static void OnMainFormLoaded(object sender, EventArgs e)
-        {
-            mainForm.Activate();
-            SplashScreen.CloseSplash();
-
-            // Start idle processing
-            IdleWatcher.Initialize();
-
-            log.InfoFormat("Application activated.");
         }
 
         /// <summary>

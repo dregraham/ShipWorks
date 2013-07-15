@@ -404,7 +404,10 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\SchedulerServiceMessageManager.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\MultipleExecutionModeInstancesException.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactory.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\IExecutionMode.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\UserInterfaceExecutionMode.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -111,7 +111,7 @@ namespace ShipWorks
     /// <summary>
     /// Main window of the application.
     /// </summary>
-    partial class MainForm : RibbonForm
+    public partial class MainForm : RibbonForm
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));

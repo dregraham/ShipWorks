@@ -12121,3 +12121,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceBase.#TryStart()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceBase.#TryStart()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.WindowsServices.ShipWorksServiceBase.#TryConnect()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#", Scope = "member", Target = "ShipWorks.MainForm.#WndProc(System.Windows.Forms.Message&)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "ShipWorks.ApplicationCore.ExecutionMode.ExecutionModeFactory.#CreateUserInterfaceExecutionMode()")]
