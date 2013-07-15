@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             }
             else
             {
-                executionMode = new UserInterfaceExecutionMode();
+                executionMode = new UserInterfaceExecutionMode(commandLine);
             }
 
             return executionMode;

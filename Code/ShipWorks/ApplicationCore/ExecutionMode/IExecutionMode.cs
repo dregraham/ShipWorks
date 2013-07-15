@@ -9,6 +9,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     public interface IExecutionMode
     {
         /// <summary>
+        /// Gets or sets the command line.
+        /// </summary>
+        /// <value>The command line.</value>
+        ShipWorksCommandLine CommandLine { get; }
+
+        /// <summary>
         /// Determines whether the execution mode supports interacting with the user.
         /// </summary>
         /// <returns>

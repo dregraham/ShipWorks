@@ -3,8 +3,9 @@
     public interface IExecutionModeInitializer
     {
         /// <summary>
-        /// Intended for setting up/initializing any dependencies for an execution context.
+        /// Intended for setting up/initializing any dependencies for an execution mode/context.
         /// </summary>
-        void Initialize();
+        /// <param name="executionMode">The execution mode.</param>
+        void Initialize(IExecutionMode executionMode);
     }
 }

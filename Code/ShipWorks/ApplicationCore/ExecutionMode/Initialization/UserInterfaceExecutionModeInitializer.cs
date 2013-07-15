@@ -12,6 +12,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Logging;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
@@ -33,11 +34,13 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
         /// <summary>
         /// Intended for settng up/initializing any dependencies for an execution context.
         /// </summary>
-        public override void Initialize()
+        public override void Initialize(IExecutionMode executionMode)
         {
             // Order is important here due to license dependencies of third party components 
             // and other ShipWorks initialization processes.
-            
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+
             // Check for illegal cross thread calls in any mode - not just when the debugger is attached, which is the default
             Control.CheckForIllegalCrossThreadCalls = true;
 
@@ -46,7 +49,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
             Divelements.SandRibbon.Ribbon.ActivateProduct("120|wmbyvY12rhj+YHC5nTIyBO33bjE=");
             TD.SandDock.SandDockManager.ActivateProduct("120|cez0Ci0UI1owSCvXUNrMCcZQWik=");
             
-            PerformCommonInitialization();
+            PerformCommonInitialization(executionMode);
             
             // Initialize window state
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));

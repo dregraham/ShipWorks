@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Configuration.Install;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 
 namespace ShipWorks.ApplicationCore.WindowsServices.Installers
@@ -10,7 +11,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
         public MasterInstaller()
         {
             InitializeComponent();
-            ShipWorksSession.Initialize(ShipWorksCommandLine.Empty);
+            ShipWorksSession.Initialize(new CommandLineExecutionMode(ShipWorksCommandLine.Empty));
         }
     }
 }

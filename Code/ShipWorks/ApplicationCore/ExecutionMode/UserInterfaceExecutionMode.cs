@@ -32,28 +32,40 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         private readonly ILog log;
         private readonly IExecutionModeInitializer initializer;
+        private readonly ShipWorksCommandLine commandLine;
 
         private bool isTerminating;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode"/> class.
+        /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
-        /// <param name="mainForm">The main form.</param>
-        public UserInterfaceExecutionMode()
-            : this(new UserInterfaceExecutionModeInitializer(), LogManager.GetLogger(typeof (UserInterfaceExecutionMode)))
+        /// <param name="commandLine">The command line.</param>
+        public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine)
+            : this(commandLine, new UserInterfaceExecutionModeInitializer(), LogManager.GetLogger(typeof (UserInterfaceExecutionMode)))
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
+        /// <param name="commandLine">The command line.</param>
         /// <param name="initializer">The initializer.</param>
         /// <param name="log">The log.</param>
-        public UserInterfaceExecutionMode(IExecutionModeInitializer initializer, ILog log)
+        public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine, IExecutionModeInitializer initializer, ILog log)
         {
             isTerminating = false;
 
             this.log = log;
             this.initializer = initializer;
+            this.commandLine = commandLine;
+        }
+
+        /// <summary>
+        /// Gets or sets the command line.
+        /// </summary>
+        /// <value>The command line.</value>
+        public ShipWorksCommandLine CommandLine
+        {
+            get { return commandLine; }
         }
 
         /// <summary>
@@ -87,7 +99,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Show the splash screen to give the user some visual feedback that ShipWorks is running
             // while initialization is being performed
             SplashScreen.ShowSplash();
-            initializer.Initialize();
+            initializer.Initialize(this);
 
             Program.MainForm.Load += new EventHandler(OnMainFormLoaded);
 

@@ -9,6 +9,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
@@ -20,17 +21,25 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
     public abstract class ExecutionModeInitializerBase : IExecutionModeInitializer
     {
         /// <summary>
-        /// Intended for settng up/initializing any dependencies for an execution context.
+        /// Intended for settng up/initializing any dependencies for an execution mode/context.
         /// </summary>
-        public abstract void Initialize();
+        /// <param name="executionMode">The execution mode.</param>
+        public abstract void Initialize(IExecutionMode executionMode);
 
         /// <summary>
         /// Performs the initialization that is common to all execution modes. It's in a separate method
         /// so derived classes can choose where to perform the initialization as it makes sense to the 
         /// implementation.
         /// </summary>
-        protected void PerformCommonInitialization()
+        protected void PerformCommonInitialization(IExecutionMode executionMode)
         {
+            // Load the per-install and per machine identifiers
+            ShipWorksSession.Initialize(executionMode);
+
+            // Make sure all our data paths have been created and logging initialized
+            DataPath.Initialize();
+            LogSession.Initialize();
+
             MyComputer.LogEnvironmentProperties();
 
             // Looking for all types in this assembly that have the LLBLGen DependcyInjection attribute

@@ -93,12 +93,6 @@ namespace ShipWorks
         [STAThread]
         static void Main()
         {
-            if (Environment.UserInteractive)
-            {
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.EnableVisualStyles();
-            }
-
             SetupUnhandledExceptionHandling();
 
             try
@@ -108,13 +102,6 @@ namespace ShipWorks
 
                 // Determine any command line actions or options
                 ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(Environment.GetCommandLineArgs());
-
-                // Load the per-install and per machine identifiers
-                ShipWorksSession.Initialize(commandLine);
-
-                // Make sure all our data paths have been created and logging initialized
-                DataPath.Initialize();
-                LogSession.Initialize();
 
                 if (Environment.UserInteractive)
                 {

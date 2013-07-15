@@ -12,6 +12,7 @@ using System.Threading;
 using ThreadTimer = System.Threading.Timer;
 using Interapptive.Shared.Win32;
 using NDesk.Options;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -33,10 +34,23 @@ namespace ShipWorks.ApplicationCore
         // Timer for logging enviroment data
         static ThreadTimer logTimer;
 
+        // The mode in which ShipWorks is being executed (with UI, command line, etc.)
+        static IExecutionMode executionMode;
+
         /// <summary>
         /// Initialize loaded settings and identifiers
         /// </summary>
-        public static void Initialize(ShipWorksCommandLine commandLine)
+        /// <param name="executionMode">The execution mode.</param>
+        public static void Initialize(IExecutionMode executionMode)
+        {
+            ShipWorksSession.executionMode = executionMode;
+            Initialize(executionMode.CommandLine);
+        }
+
+        /// <summary>
+        /// Initialize loaded settings and identifiers
+        /// </summary>
+        private static void Initialize(ShipWorksCommandLine commandLine)
         {
             string instanceID = null;
 
@@ -58,7 +72,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Initialize loaded settings and identifiers, using the specified InstanceID isntead of looking it up from the registry
+        /// Initialize loaded settings and identifiers, using the specified InstanceID instead of looking it up from the registry
         /// </summary>
         public static void Initialize(Guid instanceID)
         {
@@ -68,6 +82,15 @@ namespace ShipWorks.ApplicationCore
             sessionID = Guid.NewGuid();
 
             logTimer = new ThreadTimer(new TimerCallback(OnLogTimer), null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
+        }
+
+        /// <summary>
+        /// Gets the execution mode.
+        /// </summary>
+        /// <value>The execution mode.</value>
+        public static IExecutionMode ExecutionMode
+        {
+            get { return executionMode; }
         }
 
         /// <summary>
