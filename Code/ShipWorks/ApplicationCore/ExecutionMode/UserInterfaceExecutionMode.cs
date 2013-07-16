@@ -26,7 +26,7 @@ using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
     /// <summary>
-    /// An implementation of the IExectionMode interface intended to be used when running ShipWorks with a UI.
+    /// An implementation of the IExecutionMode interface intended to be used when running ShipWorks with a UI.
     /// </summary>
     public class UserInterfaceExecutionMode : IExecutionMode
     {
@@ -67,7 +67,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
         /// <summary>
-        /// Determines whether the exection mode supports interacting with the user.
+        /// Determines whether the execution mode supports interacting with the user.
         /// </summary>
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
@@ -127,7 +127,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             if (isTerminating)
             {
-                log.Error("Exception recieved while already terminating.", exception);
+                log.Error("Exception received while already terminating.", exception);
                 return;
             }
 
@@ -170,7 +170,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 log.Error("Termination error", termEx);
             }
 
-            // Application.Exit does not gaurnteed that the windows close.  It only tries.  If an exception
+            // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
             // gets thrown, or they set e.Cancel = true, they won't have closed.
             Application.ExitThread();
         }

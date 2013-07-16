@@ -14,7 +14,7 @@ using log4net;
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
     /// <summary>
-    /// An implementation of the IExectionMode interface intended to be used when running on the command line.
+    /// An implementation of the IExecutionMode interface intended to be used when running on the command line.
     /// </summary>
     public class CommandLineExecutionMode : IExecutionMode
     {
@@ -62,7 +62,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public bool IsUserInteractive()
         {
             return false;
@@ -123,7 +122,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             if (isTerminating)
             {
-                log.Error("Exception recieved while already terminating.", exception);
+                log.Error("Exception received while already terminating.", exception);
                 return;
             }
 

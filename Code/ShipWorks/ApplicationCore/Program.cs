@@ -114,8 +114,8 @@ namespace ShipWorks
                     return;
                 }
 
-                
                 ExecutionModeFactory factory = new ExecutionModeFactory(commandLine);
+                executionMode = factory.Create();
 
                 // TODO: Remove the RunService and RunCommand blocks above as execution modes and factory is ready
                 if (commandLine.IsServiceSpecified)
@@ -133,10 +133,8 @@ namespace ShipWorks
                         return;
                     }
                 }
-                else
+                else 
                 {
-                    executionMode = factory.Create();
-
                     try
                     {
                         executionMode.Execute();
@@ -191,7 +189,7 @@ namespace ShipWorks
         {
             MyComputer.LogEnvironmentProperties();
 
-            // Looking for all types in this assembly that have the LLBLGen DependcyInjection attribute
+            // Looking for all types in this assembly that have the LLBLGen DependencyInjection attribute
             DependencyInjectionDiscoveryInformation.ConfigInformation = new DependencyInjectionConfigInformation();
             DependencyInjectionDiscoveryInformation.ConfigInformation.AddAssembly(Assembly.GetExecutingAssembly());
 
@@ -323,10 +321,26 @@ namespace ShipWorks
         /// </summary>
         private static void HandleUnhandledException(Exception ex, bool guiThread)
         {
-            // TODO: Delegate this to the execution mode after all execution modes have been implemented: executionMode.HandleException(ex);
+            // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
+            if (executionMode != null)
+            {
+                executionMode.HandleException(ex);
+            }
+            else
+            {
+                DefaultHandleUnhandledException(ex, guiThread);
+            }
+        }
+
+        /// <summary>
+        /// Handles an unhandled exception.
+        /// </summary>
+        private static void DefaultHandleUnhandledException(Exception ex, bool guiThread)
+        {
+            // No executionMode, so default to the original exception handling.
             if (isTerminating)
             {
-                log.Error("Exception recieved while already terminating.", ex);
+                log.Error("Exception received while already terminating.", ex);
                 return;
             }
 
@@ -375,7 +389,7 @@ namespace ShipWorks
                     log.Error("Termination error", termEx);
                 }
 
-                // Application.Exit does not gaurnteed that the windows close.  It only tries.  If an exception
+                // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
                 // gets thrown, or they set e.Cancel = true, they won't have closed.
                 Application.ExitThread();
             }

@@ -15,13 +15,13 @@ using ShipWorks.Editions;
 namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
 {
     /// <summary>
-    /// An abstract class implementing the IExectuionModeInitializer interface. This is intended
+    /// An abstract class implementing the IExecutionModeInitializer interface. This is intended
     /// for encapsulating operations that may be common across execution mode initializers.
     /// </summary>
     public abstract class ExecutionModeInitializerBase : IExecutionModeInitializer
     {
         /// <summary>
-        /// Intended for settng up/initializing any dependencies for an execution mode/context.
+        /// Intended for setting up/initializing any dependencies for an execution mode/context.
         /// </summary>
         /// <param name="executionMode">The execution mode.</param>
         public abstract void Initialize(IExecutionMode executionMode);
@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
 
             MyComputer.LogEnvironmentProperties();
 
-            // Looking for all types in this assembly that have the LLBLGen DependcyInjection attribute
+            // Looking for all types in this assembly that have the LLBLGen DependencyInjection attribute
             DependencyInjectionDiscoveryInformation.ConfigInformation = new DependencyInjectionConfigInformation();
             DependencyInjectionDiscoveryInformation.ConfigInformation.AddAssembly(Assembly.GetExecutingAssembly());
 
