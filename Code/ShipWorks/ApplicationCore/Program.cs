@@ -108,14 +108,7 @@ namespace ShipWorks
 
                 // Load the per-install and per machine identifiers
                 ShipWorksSession.Initialize(commandLine);
-
                 ExecutionMode = new ExecutionModeFactory(commandLine).Create();
-
-                if (Environment.UserInteractive)
-                {
-                    // Setup MessageHelper
-                    MessageHelper.Initialize("ShipWorks");
-                }
 
                 if (!CheckSystemRequirements())
                 {
@@ -173,30 +166,7 @@ namespace ShipWorks
             {
                 HandleUnhandledException(ex, false);
             }
-        }
-
-        /// <summary>
-        /// Do initialization common to command line or UI.  It's here instead of upfront so that if its UI the splash can already be shown.
-        /// </summary>
-        private static void CommonInitialization()
-        {
-            MyComputer.LogEnvironmentProperties();
-
-            // Looking for all types in this assembly that have the LLBLGen DependencyInjection attribute
-            DependencyInjectionDiscoveryInformation.ConfigInformation = new DependencyInjectionConfigInformation();
-            DependencyInjectionDiscoveryInformation.ConfigInformation.AddAssembly(Assembly.GetExecutingAssembly());
-
-            // SSL certificate policy
-            ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-
-            // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due
-            // to people's machines just not being able to handle the load, and 30 seconds just wasn't enough.
-            SqlCommandProvider.DefaultTimeout = TimeSpan.FromSeconds(Debugger.IsAttached ? 300 : 120);
-
-            // Do initial edition initialization
-            EditionManager.Initialize();
-        }
+        }       
 
         /// <summary>
         /// Check that all system requirements for running are met
@@ -207,7 +177,6 @@ namespace ShipWorks
             if (!File.Exists(DataPath.NativeDll))
             {
                 log.Error("ShipWorks.Native.dll could not be found.");
-
                 throw new FileNotFoundException("Could not find ShipWorks.Native.dll.", "ShipWorks.Native.dll");
             }
 
@@ -231,7 +200,6 @@ namespace ShipWorks
             if (MyComputer.MdacVersion < new Version(2, 80))
             {
                 log.Error("MDAC 2.8 is required.");
-
                 if (Environment.UserInteractive)
                 {
                     using (NeedMdac28 dlg = new NeedMdac28())
@@ -247,7 +215,6 @@ namespace ShipWorks
             if (Thread.CurrentThread.CurrentCulture.Name != "en-US")
             {
                 log.Error("en-US culture is required");
-
                 if (Environment.UserInteractive)
                 {
                     using (EnglishCultureRequiredDlg dlg = new EnglishCultureRequiredDlg())
@@ -263,7 +230,6 @@ namespace ShipWorks
             if (StartupController.CheckRebootRequired())
             {
                 log.Info("A reboot is required before running ShipWorks.");
-
                 if (Environment.UserInteractive)
                 {
                     MessageHelper.ShowInformation(null, "Your computer must be restarted before running ShipWorks.");
@@ -315,9 +281,9 @@ namespace ShipWorks
         private static void HandleUnhandledException(Exception ex, bool guiThread)
         {
             // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
-            if (executionMode != null)
+            if (ExecutionMode != null)
             {
-                executionMode.HandleException(ex);
+                ExecutionMode.HandleException(ex);
             }
             else
             {
