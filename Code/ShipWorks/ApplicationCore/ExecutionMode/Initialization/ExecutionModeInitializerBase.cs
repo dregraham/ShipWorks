@@ -24,18 +24,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
         /// Intended for setting up/initializing any dependencies for an execution mode/context.
         /// </summary>
         /// <param name="executionMode">The execution mode.</param>
-        public abstract void Initialize(IExecutionMode executionMode);
+        public abstract void Initialize();
 
         /// <summary>
         /// Performs the initialization that is common to all execution modes. It's in a separate method
         /// so derived classes can choose where to perform the initialization as it makes sense to the 
         /// implementation.
         /// </summary>
-        protected void PerformCommonInitialization(IExecutionMode executionMode)
+        protected void PerformCommonInitialization()
         {
-            // Load the per-install and per machine identifiers
-            ShipWorksSession.Initialize(executionMode);
-
             // Make sure all our data paths have been created and logging initialized
             DataPath.Initialize();
             LogSession.Initialize();

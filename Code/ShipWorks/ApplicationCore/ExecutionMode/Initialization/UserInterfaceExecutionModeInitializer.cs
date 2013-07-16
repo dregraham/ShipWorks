@@ -29,12 +29,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
     /// An implementation of the IExecutionModeInitializer interface intended to be used when
     /// ShipWorks is running with a UI.
     /// </summary>
-    public class UserInterfaceExecutionModeInitializer : ExecutionModeInitializerBase, IExecutionModeInitializer
+    public class UserInterfaceExecutionModeInitializer : ExecutionModeInitializerBase
     {
         /// <summary>
         /// Intended for settng up/initializing any dependencies for an execution context.
         /// </summary>
-        public override void Initialize(IExecutionMode executionMode)
+        public override void Initialize()
         {
             // Order is important here due to license dependencies of third party components 
             // and other ShipWorks initialization processes.
@@ -49,7 +49,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
             Divelements.SandRibbon.Ribbon.ActivateProduct("120|wmbyvY12rhj+YHC5nTIyBO33bjE=");
             TD.SandDock.SandDockManager.ActivateProduct("120|cez0Ci0UI1owSCvXUNrMCcZQWik=");
             
-            PerformCommonInitialization(executionMode);
+            PerformCommonInitialization();
             
             // Initialize window state
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));

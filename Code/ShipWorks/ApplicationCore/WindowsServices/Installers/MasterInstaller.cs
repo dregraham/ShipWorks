@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.WindowsServices.Installers
         public MasterInstaller()
         {
             InitializeComponent();
-            ShipWorksSession.Initialize(new CommandLineExecutionMode(ShipWorksCommandLine.Empty));
+            ShipWorksSession.Initialize(ShipWorksCommandLine.Empty);
         }
     }
 }

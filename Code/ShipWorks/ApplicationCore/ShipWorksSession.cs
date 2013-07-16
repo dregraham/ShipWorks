@@ -34,23 +34,10 @@ namespace ShipWorks.ApplicationCore
         // Timer for logging enviroment data
         static ThreadTimer logTimer;
 
-        // The mode in which ShipWorks is being executed (with UI, command line, etc.)
-        static IExecutionMode executionMode;
-
         /// <summary>
         /// Initialize loaded settings and identifiers
         /// </summary>
-        /// <param name="executionMode">The execution mode.</param>
-        public static void Initialize(IExecutionMode executionMode)
-        {
-            ShipWorksSession.executionMode = executionMode;
-            Initialize(executionMode.CommandLine);
-        }
-
-        /// <summary>
-        /// Initialize loaded settings and identifiers
-        /// </summary>
-        private static void Initialize(ShipWorksCommandLine commandLine)
+        public static void Initialize(ShipWorksCommandLine commandLine)
         {
             string instanceID = null;
 
@@ -82,15 +69,6 @@ namespace ShipWorks.ApplicationCore
             sessionID = Guid.NewGuid();
 
             logTimer = new ThreadTimer(new TimerCallback(OnLogTimer), null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
-        }
-
-        /// <summary>
-        /// Gets the execution mode.
-        /// </summary>
-        /// <value>The execution mode.</value>
-        public static IExecutionMode ExecutionMode
-        {
-            get { return executionMode; }
         }
 
         /// <summary>

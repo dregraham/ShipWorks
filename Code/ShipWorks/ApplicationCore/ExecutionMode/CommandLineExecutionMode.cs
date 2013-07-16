@@ -18,8 +18,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// </summary>
     public class CommandLineExecutionMode : IExecutionMode
     {
-        private readonly ILog log;
-        private readonly ShipWorksCommandLine commandLine;
+        private static readonly ILog log = LogManager.GetLogger(typeof(CommandLineExecutionMode));
+
+        readonly string commandName;
+        readonly List<string> options;
         private readonly IExecutionModeInitializer initializer;
 
         private bool isTerminating;
@@ -27,33 +29,22 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLineExecutionMode"/> class.
         /// </summary>
-        /// <param name="commandLine">The command line.</param>
-        public CommandLineExecutionMode(ShipWorksCommandLine commandLine)
-            : this(commandLine, new CommandLineExecutionModeInitializer(), LogManager.GetLogger(typeof(CommandLineExecutionMode)))
-        { }
+        public CommandLineExecutionMode(string commandName, List<string> options)
+            : this(commandName, options, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLineExecutionMode" /> class.
         /// </summary>
-        /// <param name="commandLine">The command line.</param>
-        /// <param name="initializer">The initializer.</param>
-        /// <param name="log">The log.</param>
-        public CommandLineExecutionMode(ShipWorksCommandLine commandLine, IExecutionModeInitializer initializer, ILog log)
+        public CommandLineExecutionMode(string commandName, List<string> options, IExecutionModeInitializer initializer)
         {
-            this.initializer = initializer;
-            this.commandLine = commandLine;
-            this.log = log;
+            if (null == commandName)
+                throw new ArgumentNullException("commandName");
+
+            this.commandName = commandName;
+            this.options = options ?? new List<string>();
+            this.initializer = initializer ?? new CommandLineExecutionModeInitializer();
 
             isTerminating = false;
-        }
-
-        /// <summary>
-        /// Gets or sets the command line.
-        /// </summary>
-        /// <value>The command line.</value>
-        public ShipWorksCommandLine CommandLine
-        {
-            get { return commandLine; }
         }
 
         /// <summary>
@@ -73,9 +64,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         public void Execute()
         {
-            initializer.Initialize(this);
+            initializer.Initialize();
 
-            log.InfoFormat("Running command '{0}'", CommandLine.CommandName);
+            log.InfoFormat("Running command '{0}'", commandName);
 
             // Instantiate the command line handlers from the assembly
             IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && !type.IsInterface && typeof(ICommandLineCommandHandler).IsAssignableFrom(type));
@@ -87,10 +78,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 throw new InvalidOperationException(string.Format("More than one command line handler with command name '{0}' was found.", duplicate.Key));
             }
 
-            ICommandLineCommandHandler handler = handlers.SingleOrDefault(h => h.CommandName == CommandLine.CommandName);
+            ICommandLineCommandHandler handler = handlers.SingleOrDefault(h => h.CommandName == commandName);
             if (handler == null)
             {
-                string error = string.Format("'{0}' is not a valid command line command.", CommandLine.CommandName);
+                string error = string.Format("'{0}' is not a valid command line command.", commandName);
 
                 log.ErrorFormat(error);
                 Console.Error.WriteLine(error);
@@ -101,7 +92,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             try
             {
-                handler.Execute(commandLine.CommandOptions);
+                handler.Execute(options);
             }
             catch (CommandLineCommandArgumentException ex)
             {

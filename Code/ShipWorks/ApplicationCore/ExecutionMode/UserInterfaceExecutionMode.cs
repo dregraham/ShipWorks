@@ -32,38 +32,24 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UserInterfaceExecutionMode));
         private readonly IExecutionModeInitializer initializer;
-        private readonly ShipWorksCommandLine commandLine;
 
         private bool isTerminating;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
-        /// <param name="commandLine">The command line.</param>
-        public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine)
-            : this(commandLine, new UserInterfaceExecutionModeInitializer())
-        { }
+        public UserInterfaceExecutionMode()
+            : this(null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
-        /// <param name="commandLine">The command line.</param>
         /// <param name="initializer">The initializer.</param>
-        public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine, IExecutionModeInitializer initializer)
+        public UserInterfaceExecutionMode(IExecutionModeInitializer initializer)
         {
             isTerminating = false;
 
-            this.initializer = initializer;
-            this.commandLine = commandLine;
-        }
-
-        /// <summary>
-        /// Gets or sets the command line.
-        /// </summary>
-        /// <value>The command line.</value>
-        public ShipWorksCommandLine CommandLine
-        {
-            get { return commandLine; }
+            this.initializer = initializer ?? new UserInterfaceExecutionModeInitializer();
         }
 
         /// <summary>
@@ -97,7 +83,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Show the splash screen to give the user some visual feedback that ShipWorks is running
             // while initialization is being performed
             SplashScreen.ShowSplash();
-            initializer.Initialize(this);
+            initializer.Initialize();
 
             Program.MainForm.Load += new EventHandler(OnMainFormLoaded);
 

@@ -4,9 +4,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
 {
     public class ServiceExecutionModeInitializer : ExecutionModeInitializerBase
     {
-        public override void Initialize(IExecutionMode executionMode)
+        public override void Initialize()
         {
-            PerformCommonInitialization(executionMode);
+            PerformCommonInitialization();
         }
     }
 }

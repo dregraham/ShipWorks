@@ -49,8 +49,6 @@ namespace ShipWorks
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-        private static IExecutionMode executionMode;
-
         /// <summary>
         /// Single instance of the running application
         /// </summary>
@@ -69,6 +67,11 @@ namespace ShipWorks
                 return mainForm;
             }
         }
+
+        /// <summary>
+        /// Gets the execution mode for this instance.  (with UI, command line, etc.)
+        /// </summary>
+        public static IExecutionMode ExecutionMode { get; private set; }
 
         /// <summary>
         /// Indicates if the application is running with a UI.  If not, then it must be being ran from the command-line without a UI, or the 
@@ -103,6 +106,11 @@ namespace ShipWorks
                 // Determine any command line actions or options
                 ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(Environment.GetCommandLineArgs());
 
+                // Load the per-install and per machine identifiers
+                ShipWorksSession.Initialize(commandLine);
+
+                ExecutionMode = new ExecutionModeFactory(commandLine).Create();
+
                 if (Environment.UserInteractive)
                 {
                     // Setup MessageHelper
@@ -114,37 +122,22 @@ namespace ShipWorks
                     return;
                 }
 
-                ExecutionModeFactory factory = new ExecutionModeFactory(commandLine);
-                executionMode = factory.Create();
-
-                // TODO: Remove the RunService and RunCommand blocks above as execution modes and factory is ready
-                if (commandLine.IsServiceSpecified)
+                try
                 {
-                    executionMode = factory.Create();
-
-                    try
-                    {
-                        executionMode.Execute();
-                    }
-                    catch (ExecutionModeConfigurationException ex)
-                    {
-                        log.Fatal(ex);
-                        Environment.ExitCode = -1;
-                        return;
-                    }
+                    ExecutionMode.Execute();
                 }
-                else 
+                catch (MultipleExecutionModeInstancesException exception)
                 {
-                    try
-                    {
-                        executionMode.Execute();
-                    }
-                    catch (MultipleExecutionModeInstancesException exception)
-                    {
-                        // We just want to log and eat this exception since it is only being thrown if multiple instances
-                        // of the ShipWorks UI are opened.
-                        log.Warn(exception);
-                    }
+                    // We just want to log and eat this exception since it is only being thrown if multiple instances
+                    // of the ShipWorks UI are opened.
+                    log.Warn(exception);
+                }
+                catch (ExecutionModeConfigurationException ex)
+                {
+                    log.Fatal(ex);
+                    Console.Error.WriteLine(ex.Message);
+                    Environment.ExitCode = -1;
+                    return;
                 }
 
                 // Log total connections made

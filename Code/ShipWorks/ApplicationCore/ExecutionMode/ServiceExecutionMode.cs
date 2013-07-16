@@ -31,11 +31,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
 
-        public ShipWorksCommandLine CommandLine
-        {
-            get { return ShipWorksCommandLine.Parse(Environment.GetCommandLineArgs()); }
-        }
-
         public bool IsUserInteractive()
         {
             return false;
@@ -55,7 +50,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             }
             else
             {
-                initializer.Initialize(this);
+                initializer.Initialize();
                 strategy.Run();
             }
         }
