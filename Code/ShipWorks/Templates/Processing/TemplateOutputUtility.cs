@@ -45,7 +45,7 @@ namespace ShipWorks.Templates.Processing
         /// </summary>
         public static HtmlControl CreateUIBoundHtmlControl(Control parent)
         {
-            if (Program.IsUserInteractive && Program.MainForm.InvokeRequired)
+            if (Program.ExecutionMode.IsUserInteractive() && Program.MainForm.InvokeRequired)
             {
                 return (HtmlControl) Program.MainForm.Invoke(new Func<Control, HtmlControl>(CreateUIBoundHtmlControl), parent);
             }

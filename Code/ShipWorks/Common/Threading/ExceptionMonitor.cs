@@ -96,7 +96,7 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         private static bool HandleException(Exception ex, StackTrace invokingThreadTrace)
         {
-            if (!Program.IsUserInteractive)
+            if (!Program.ExecutionMode.IsUserInteractive())
             {
                 return false;
             }
