@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             IExecutionMode executionMode = null;
 
-            if (!Environment.UserInteractive)
+            if (commandLine.IsServiceSpecified)
             {
                 // TODO: Fill in the service execution mode when it is available
                 // executionMode = new ServiceExecutionMode(...);
@@ -37,10 +37,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             }
             else if (commandLine.IsCommandSpecified)
             {
-                // TODO: Fill in the command line execution mode when it is available
-                // executionMode = new CommandLineExecutionMode(...);
-
-                throw new NotImplementedException();
+                executionMode = new CommandLineExecutionMode(commandLine);
             }
             else
             {

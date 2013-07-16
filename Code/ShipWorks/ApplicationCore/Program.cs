@@ -122,13 +122,8 @@ namespace ShipWorks
                 {
                     RunService(commandLine.ServiceName, commandLine.ServiceOptions);
                 }
-                else if (commandLine.IsCommandSpecified)
-                {
-                    RunCommand(commandLine.CommandName, commandLine.CommandOptions);
-                }
                 else
                 {
-
                     executionMode = factory.Create();
 
                     try
@@ -231,52 +226,7 @@ namespace ShipWorks
                     ShipWorksServiceBase.RunInBackground(service);
                 }
             }
-        }
-
-        /// <summary>
-        /// Run the given command with its specified options
-        /// </summary>
-        private static void RunCommand(string command, List<string> options)
-        {
-            log.InfoFormat("Running command '{0}'", command);
-
-            // Common initialization
-            CommonInitialization();
-
-            var types = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && !type.IsInterface && typeof(ICommandLineCommandHandler).IsAssignableFrom(type));
-            var handlers = types.Select(Activator.CreateInstance).Cast<ICommandLineCommandHandler>().ToList();
-
-            var duplicate = handlers.GroupBy(h => h.CommandName).Where(g => g.Count() > 1).FirstOrDefault();
-            if (duplicate != null)
-            {
-                throw new InvalidOperationException(string.Format("More than one command line handler with command name '{0}' was found.", duplicate.Key));
-            }
-
-            ICommandLineCommandHandler handler = handlers.SingleOrDefault(h => h.CommandName == command);
-            if (handler == null)
-            {
-                string error = string.Format("'{0}' is not a valid command line command.", command);
-
-                log.ErrorFormat(error);
-                Console.Error.WriteLine(error);
-
-                Environment.ExitCode = -1;
-
-                return;
-            }
-
-            try
-            {
-                handler.Execute(options);
-            }
-            catch (CommandLineCommandArgumentException ex)
-            {
-                log.Error(ex.Message, ex);
-                Console.Error.WriteLine(ex.Message);
-
-                Environment.ExitCode = -1;
-            }
-        }
+        }        
 
         /// <summary>
         /// Do initialization common to command line or UI.  It's here instead of upfront so that if its UI the splash can already be shown.

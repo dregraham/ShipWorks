@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
+using ShipWorks.Users;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
@@ -15,24 +20,31 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         private readonly ILog log;
         private readonly ShipWorksCommandLine commandLine;
+        private readonly IExecutionModeInitializer initializer;
+
+        private bool isTerminating;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLineExecutionMode"/> class.
         /// </summary>
         /// <param name="commandLine">The command line.</param>
         public CommandLineExecutionMode(ShipWorksCommandLine commandLine)
-            : this(commandLine, LogManager.GetLogger(typeof(CommandLineExecutionMode)))
+            : this(commandLine, new CommandLineExecutionModeInitializer(), LogManager.GetLogger(typeof(CommandLineExecutionMode)))
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandLineExecutionMode"/> class.
+        /// Initializes a new instance of the <see cref="CommandLineExecutionMode" /> class.
         /// </summary>
         /// <param name="commandLine">The command line.</param>
+        /// <param name="initializer">The initializer.</param>
         /// <param name="log">The log.</param>
-        public CommandLineExecutionMode(ShipWorksCommandLine commandLine, ILog log)
+        public CommandLineExecutionMode(ShipWorksCommandLine commandLine, IExecutionModeInitializer initializer, ILog log)
         {
+            this.initializer = initializer;
             this.commandLine = commandLine;
             this.log = log;
+
+            isTerminating = false;
         }
 
         /// <summary>
@@ -43,7 +55,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             get { return commandLine; }
         }
-
 
         /// <summary>
         /// Determines whether the execution mode supports interacting with the user.
@@ -61,10 +72,45 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
         public void Execute()
         {
-            throw new NotImplementedException();
+            initializer.Initialize(this);
+
+            log.InfoFormat("Running command '{0}'", CommandLine.CommandName);
+
+            // Instantiate the command line handlers from the assembly
+            IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && !type.IsInterface && typeof(ICommandLineCommandHandler).IsAssignableFrom(type));
+            List<ICommandLineCommandHandler> handlers = types.Select(Activator.CreateInstance).Cast<ICommandLineCommandHandler>().ToList();
+
+            IGrouping<string, ICommandLineCommandHandler> duplicate = handlers.GroupBy(h => h.CommandName).SingleOrDefault(g => g.Count() > 1);
+            if (duplicate != null)
+            {
+                throw new InvalidOperationException(string.Format("More than one command line handler with command name '{0}' was found.", duplicate.Key));
+            }
+
+            ICommandLineCommandHandler handler = handlers.SingleOrDefault(h => h.CommandName == CommandLine.CommandName);
+            if (handler == null)
+            {
+                string error = string.Format("'{0}' is not a valid command line command.", CommandLine.CommandName);
+
+                log.ErrorFormat(error);
+                Console.Error.WriteLine(error);
+
+                Environment.ExitCode = -1;
+                return;
+            }
+
+            try
+            {
+                handler.Execute(commandLine.CommandOptions);
+            }
+            catch (CommandLineCommandArgumentException ex)
+            {
+                log.Error(ex.Message, ex);
+                Console.Error.WriteLine(ex.Message);
+
+                Environment.ExitCode = -1;
+            }
         }
 
         /// <summary>
@@ -73,10 +119,30 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         public void HandleException(Exception exception)
         {
-            throw new NotImplementedException();
+            if (isTerminating)
+            {
+                log.Error("Exception recieved while already terminating.", exception);
+                return;
+            }
+
+            isTerminating = true;
+
+            if (UserSession.IsLoggedOn)
+            {
+                UserSession.Logoff(false);
+            }
+
+            UserSession.Reset();
+            if (ConnectionMonitor.HandleTerminatedConnection(exception))
+            {
+                log.Info("Terminating due to unrecoverable connection.", exception);
+            }
+            else
+            {
+                log.Fatal("Application Crashed", exception);
+            }
         }
     }
 }
