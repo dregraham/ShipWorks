@@ -26,25 +26,17 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// as a background process, or through the normal UI.</returns>
         public IExecutionMode Create()
         {
-            IExecutionMode executionMode = null;
-
             if (commandLine.IsServiceSpecified)
             {
-                // TODO: Fill in the service execution mode when it is available
-                // executionMode = new ServiceExecutionMode(...);
-
-                throw new NotImplementedException();
+                return new ServiceExecutionMode(commandLine.ServiceName, commandLine.ServiceOptions);
             }
-            else if (commandLine.IsCommandSpecified)
+            
+            if (commandLine.IsCommandSpecified)
             {
-                executionMode = new CommandLineExecutionMode(commandLine);
-            }
-            else
-            {
-                executionMode = new UserInterfaceExecutionMode(commandLine);
+                return new CommandLineExecutionMode(commandLine);
             }
 
-            return executionMode;
+            return new UserInterfaceExecutionMode(commandLine);
         }
     }
 }

@@ -41,6 +41,15 @@ namespace ShipWorks.ApplicationCore.WindowsServices
         }
 
         /// <summary>
+        /// Gets a service instance for a ShipWorks service type name.
+        /// </summary>
+        public static ShipWorksServiceBase GetService(string serviceTypeName)
+        {
+            var serviceType = Enum.Parse(typeof(ShipWorksServiceType), serviceTypeName, true);
+            return GetService((ShipWorksServiceType)serviceType);
+        }
+
+        /// <summary>
         /// Gets the instance-specific service name for a ShipWorks service type.
         /// </summary>
         public static string GetServiceName(ShipWorksServiceType serviceType)

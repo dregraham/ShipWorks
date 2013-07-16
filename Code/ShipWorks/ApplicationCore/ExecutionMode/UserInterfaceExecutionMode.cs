@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// </summary>
     public class UserInterfaceExecutionMode : IExecutionMode
     {
-        private readonly ILog log;
+        private static readonly ILog log = LogManager.GetLogger(typeof(UserInterfaceExecutionMode));
         private readonly IExecutionModeInitializer initializer;
         private readonly ShipWorksCommandLine commandLine;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         /// <param name="commandLine">The command line.</param>
         public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine)
-            : this(commandLine, new UserInterfaceExecutionModeInitializer(), LogManager.GetLogger(typeof (UserInterfaceExecutionMode)))
+            : this(commandLine, new UserInterfaceExecutionModeInitializer())
         { }
 
         /// <summary>
@@ -49,12 +49,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         /// <param name="commandLine">The command line.</param>
         /// <param name="initializer">The initializer.</param>
-        /// <param name="log">The log.</param>
-        public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine, IExecutionModeInitializer initializer, ILog log)
+        public UserInterfaceExecutionMode(ShipWorksCommandLine commandLine, IExecutionModeInitializer initializer)
         {
             isTerminating = false;
 
-            this.log = log;
             this.initializer = initializer;
             this.commandLine = commandLine;
         }

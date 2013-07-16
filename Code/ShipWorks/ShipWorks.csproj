@@ -406,13 +406,21 @@
     <Compile Include="ApplicationCore\Dashboard\Content\SchedulerServiceMessageManager.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\BackgroundServiceExecutionStrategy.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\DefaultServiceExecutionStrategyFactory.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeConfigurationException.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\ExecutionModeInitializerBase.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\IExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\Initialization\ServiceExecutionModeInitializer.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\UserInterfaceExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\IServiceExecutionStrategyFactory.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\MultipleExecutionModeInstancesException.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactory.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\IExecutionMode.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ServiceExecutionMode.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\IServiceExecutionStrategy.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\UserInterfaceExecutionMode.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\WindowsServiceExecutionStrategy.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
       <SubType>Form</SubType>
     </Compile>

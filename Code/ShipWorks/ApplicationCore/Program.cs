@@ -120,7 +120,18 @@ namespace ShipWorks
                 // TODO: Remove the RunService and RunCommand blocks above as execution modes and factory is ready
                 if (commandLine.IsServiceSpecified)
                 {
-                    RunService(commandLine.ServiceName, commandLine.ServiceOptions);
+                    executionMode = factory.Create();
+
+                    try
+                    {
+                        executionMode.Execute();
+                    }
+                    catch (ExecutionModeConfigurationException ex)
+                    {
+                        log.Fatal(ex);
+                        Environment.ExitCode = -1;
+                        return;
+                    }
                 }
                 else
                 {
@@ -172,61 +183,6 @@ namespace ShipWorks
                 HandleUnhandledException(ex, false);
             }
         }
-
-        /// <summary>
-        /// Runs ShipWorks as a service
-        /// </summary>
-        private static void RunService(string name, List<string> options)
-        {
-            if (null == name)
-                throw new ArgumentNullException("name");
-
-            log.Info("Running as a service.");
-
-            CommonInitialization();
-
-            ShipWorksServiceType serviceType;
-            if(!Enum.TryParse<ShipWorksServiceType>(name, out serviceType))
-            {
-                log.ErrorFormat("'{0}' is not a valid service name.", name);
-                Environment.ExitCode = -1;
-                return;
-            }
-
-            var service = ShipWorksServiceBase.GetService(serviceType);
-            var manager = new ShipWorksServiceManager(service);
-
-            if (options.Contains("/stop"))
-            {
-                if (manager.IsServiceInstalled())
-                {
-                    log.InfoFormat("Stopping the '{0}' Windows service.", name);
-                    if (manager.GetServiceStatus() == ServiceControllerStatus.Running)
-                        manager.StopService();
-                }
-                else
-                {
-                    log.InfoFormat("Stopping the '{0}' background service.", name);
-                    ShipWorksServiceBase.StopInBackground(serviceType);
-                }
-            }
-            else
-            {
-                if (manager.IsServiceInstalled())
-                {
-                    log.InfoFormat("Running the '{0}' Windows service.", name);
-                    if(!Environment.UserInteractive)
-                        ShipWorksServiceBase.Run(service);
-                    else if (manager.GetServiceStatus() == ServiceControllerStatus.Stopped)
-                        manager.StartService();
-                }
-                else
-                {
-                    log.InfoFormat("Running the '{0}' background service.", name);
-                    ShipWorksServiceBase.RunInBackground(service);
-                }
-            }
-        }        
 
         /// <summary>
         /// Do initialization common to command line or UI.  It's here instead of upfront so that if its UI the splash can already be shown.

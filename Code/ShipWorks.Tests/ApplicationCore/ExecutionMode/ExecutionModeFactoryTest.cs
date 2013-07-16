@@ -14,23 +14,25 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         private ExecutionModeFactory testObject;
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
         public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithFullSwitch_Test()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/service=serviceName" });
             testObject = new ExecutionModeFactory(commandLine);
 
-            testObject.Create();
+            IExecutionMode executionMode = testObject.Create();
+
+            Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
         public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithAbbreviatedSwitch_Test()
         {            
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/s=serviceName"});
             testObject = new ExecutionModeFactory(commandLine);
 
-            testObject.Create();
+            IExecutionMode executionMode = testObject.Create();
+
+            Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
         }
 
         [TestMethod]
