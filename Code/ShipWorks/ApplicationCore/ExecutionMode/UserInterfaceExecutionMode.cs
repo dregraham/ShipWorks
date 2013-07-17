@@ -60,8 +60,13 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </returns>
         public bool IsUserInteractive
         {
-            get { return true; }
+            get { return MainForm != null && MainForm.IsHandleCreated; }
         }
+
+        /// <summary>
+        /// Single instance of the running application
+        /// </summary>
+        public MainForm MainForm { get; private set; }
 
         /// <summary>
         /// Runs the ShipWorks UI.
@@ -85,10 +90,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             SplashScreen.ShowSplash();
             initializer.Initialize();
 
-            Program.MainForm.Load += new EventHandler(OnMainFormLoaded);
+            // MainForm must be created after initialization to ensure licensing is in place
+            MainForm = new MainForm();
+            MainForm.Load += new EventHandler(OnMainFormLoaded);
 
             SplashScreen.Status = "Loading ShipWorks...";
-            Application.Run(Program.MainForm);
+            Application.Run(MainForm);
         }
 
         /// <summary>
@@ -96,8 +103,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         private void OnMainFormLoaded(object sender, EventArgs e)
         {
-            Program.MainForm.Activate();
+            MainForm.Activate();
             SplashScreen.CloseSplash();
+
+            // Start idle processing
+            IdleWatcher.Initialize();
 
             log.InfoFormat("Application activated.");
         }

@@ -40,8 +40,6 @@ namespace ShipWorks
         // shutdown before the installation can continue.
         static Mutex appMutex;
 
-        // The single main form of the application
-        static MainForm mainForm;
 
         // Indicates if the application is shutting down due to an exception
         static bool isTerminating = false;
@@ -56,15 +54,9 @@ namespace ShipWorks
         {
             get
             {
-                if (mainForm == null)
-                {
-                    // Updated to lazy load the main form to work with the execution mode factory
-                    // due to the order that third party license activation/dependencies and other
-                    // ShipWorks initialization processes need to be executed in
-                    mainForm = new MainForm();
-                }
+                var ui = ExecutionMode as UserInterfaceExecutionMode;
                 
-                return mainForm;
+                return (ui == null) ? null : ui.MainForm;
             }
         }
 
@@ -72,15 +64,6 @@ namespace ShipWorks
         /// Gets the execution mode for this instance.  (with UI, command line, etc.)
         /// </summary>
         public static IExecutionMode ExecutionMode { get; private set; }
-
-        /// <summary>
-        /// Indicates if the application is running with a UI.  If not, then it must be being ran from the command-line without a UI, or the 
-        /// UI is not yet shown.
-        /// </summary>
-        public static bool IsUserInteractive
-        {
-            get { return mainForm != null && mainForm.IsHandleCreated; }
-        }
 
         /// <summary>
         /// Gets the folder path containing the ShipWorks executable.
