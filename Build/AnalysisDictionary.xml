@@ -69,7 +69,7 @@
       <Term>FedEx</Term>
       <Term>AmeriCommerce</Term>
       <Term>EquaShip</Term>
-      <Word>MainForm</Word>
+      <Term>MainForm</Term>
     </DiscreteExceptions>
 		<Deprecated>
 			<Term PreferredAlternate="EnterpriseServices">ComPlus</Term>
