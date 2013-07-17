@@ -13,25 +13,32 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
 
-        readonly string serviceName;
+        readonly Lazy<IServiceHost> host;
         readonly IList<string> options;
-        readonly IServiceExecutionStrategyFactory strategyFactory;
         readonly IExecutionModeInitializer initializer;
 
         public ServiceExecutionMode(string serviceName, IList<string> options)
             : this(serviceName, options, null, null) { }
 
-        public ServiceExecutionMode(string serviceName, IList<string> options, IServiceExecutionStrategyFactory strategyFactory, IExecutionModeInitializer initializer)
+        public ServiceExecutionMode(string serviceName, IList<string> options, IServiceHostFactory hostFactory, IExecutionModeInitializer initializer)
         {
             if (null == serviceName)
                 throw new ArgumentNullException("serviceName");
+            if (null == hostFactory)
+                hostFactory = new DefaultServiceHostFactory();
 
-            this.serviceName = serviceName;
+            this.host = new Lazy<IServiceHost>(() =>
+                hostFactory.GetHostFor(GetServiceForName(serviceName))
+            );
+
             this.options = options ?? new string[0];
-            this.strategyFactory = strategyFactory ?? new DefaultServiceExecutionStrategyFactory();
             this.initializer = initializer ?? new ServiceExecutionModeInitializer();
         }
 
+        IServiceHost Host
+        {
+            get { return host.Value; }
+        }
 
         public bool IsUserInteractive
         {
@@ -42,18 +49,14 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             log.Info("Running as a service.");
 
-            var service = GetServiceForName(serviceName);
-
-            var strategy = strategyFactory.GetStrategyFor(service);
-
             if (options.Contains("/stop"))
             {
-                strategy.Stop();
+                Host.Stop();
             }
             else
             {
                 initializer.Initialize();
-                strategy.Run();
+                Host.Run();
             }
         }
 
@@ -73,6 +76,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             {
                 log.Fatal("Application Crashed", exception);
             }
+
+            Host.OnUnhandledException(exception);
         }
 
 

@@ -6,17 +6,28 @@ using System.ServiceProcess;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
-    public class WindowsServiceExecutionStrategy : IServiceExecutionStrategy
+    /// <summary>
+    /// Hosts a ShipWorks service as a Windows service.
+    /// </summary>
+    public class WindowsServiceHost : IServiceHost
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceExecutionStrategy));
+        static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceHost));
 
         readonly ShipWorksServiceBase service;
 
-        public WindowsServiceExecutionStrategy(ShipWorksServiceBase service)
+        public WindowsServiceHost(ShipWorksServiceBase service)
         {
             if (null == service)
                 throw new ArgumentNullException("service");
             this.service = service;
+        }
+
+        /// <summary>
+        /// Gets the service being hosted.
+        /// </summary>
+        public ShipWorksServiceBase Service
+        {
+            get { return service; }
         }
 
         /// <summary>
@@ -50,5 +61,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             if (manager.GetServiceStatus() == ServiceControllerStatus.Running)
                 manager.StopService();
         }
+
+        /// <summary>
+        /// Does nothing.  The exception is automatically logged to the system event logs
+        /// if AutoLog is enabled for the service.
+        /// </summary>
+        public void OnUnhandledException(Exception exception) { }
     }
 }

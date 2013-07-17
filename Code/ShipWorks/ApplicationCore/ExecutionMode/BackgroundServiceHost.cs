@@ -1,21 +1,33 @@
 ﻿using log4net;
 using ShipWorks.ApplicationCore.WindowsServices;
 using System;
+using System.Threading;
 
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
-    public class BackgroundServiceExecutionStrategy : IServiceExecutionStrategy
+    /// <summary>
+    /// Hosts a ShipWorks service as a background process.
+    /// </summary>
+    public class BackgroundServiceHost : IServiceHost
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BackgroundServiceExecutionStrategy));
+        static readonly ILog log = LogManager.GetLogger(typeof(BackgroundServiceHost));
 
         readonly ShipWorksServiceBase service;
 
-        public BackgroundServiceExecutionStrategy(ShipWorksServiceBase service)
+        public BackgroundServiceHost(ShipWorksServiceBase service)
         {
             if (null == service)
                 throw new ArgumentNullException("service");
             this.service = service;
+        }
+
+        /// <summary>
+        /// Gets the service being hosted.
+        /// </summary>
+        public ShipWorksServiceBase Service
+        {
+            get { return service; }
         }
 
         /// <summary>
@@ -34,6 +46,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             log.InfoFormat("Stopping the '{0}' background service.", service.ServiceName);
             ShipWorksServiceBase.StopInBackground(service.ServiceType);
+        }
+
+        public void OnUnhandledException(Exception exception)
+        {
+            //TODO: phoenix mode
+            log.Fatal("And the phoenix shall rise again... well, once it's implemented.");
         }
     }
 }
