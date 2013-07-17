@@ -55,8 +55,10 @@ namespace ShipWorks
             get
             {
                 var ui = ExecutionMode as UserInterfaceExecutionMode;
-                
-                return (ui == null) ? null : ui.MainForm;
+                if (ui == null)
+                    throw new InvalidOperationException("MainForm is only available in UI execution mode.");
+
+                return ui.MainForm;
             }
         }
 
