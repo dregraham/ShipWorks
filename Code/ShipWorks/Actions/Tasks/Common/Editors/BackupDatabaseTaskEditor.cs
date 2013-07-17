@@ -33,13 +33,17 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            backupPath.Text = task.BackupPath;
+            backupPath.Text = task.BackupDirectory;
 
             textPrefix.Text = task.FilePrefix;
             textPrefix.TextChanged += OnPrefixTextChanged;
 
             numericBackupCount.Value = task.KeepNumberOfBackups;
             numericBackupCount.ValueChanged += OnBackupCountValueChanged;
+
+            checkboxOnlyKeep.Checked = task.CleanOldBackups;
+            checkboxOnlyKeep.CheckedChanged += OnOnlyKeepCheckChanged;
+            numericBackupCount.Enabled = task.CleanOldBackups;
         }
 
         /// <summary>
@@ -51,7 +55,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    backupPath.Text = task.BackupPath = dlg.SelectedPath;
+                    backupPath.Text = task.BackupDirectory = dlg.SelectedPath;
                 }
             }
         }
@@ -70,6 +74,15 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnPrefixTextChanged(object sender, EventArgs e)
         {
             task.FilePrefix = textPrefix.Text;
+        }
+
+        /// <summary>
+        /// The cleanup checkbox has changed
+        /// </summary>
+        private void OnOnlyKeepCheckChanged(object sender, EventArgs e)
+        {
+            task.CleanOldBackups = checkboxOnlyKeep.Checked;
+            numericBackupCount.Enabled = checkboxOnlyKeep.Checked;
         }
     }
 }
