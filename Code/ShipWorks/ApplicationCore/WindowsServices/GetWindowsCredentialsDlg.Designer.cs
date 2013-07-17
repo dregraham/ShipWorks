@@ -44,56 +44,60 @@
             // 
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(260, 55);
+            this.label1.Size = new System.Drawing.Size(266, 33);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please enter the credentials you wish the ShipWorks Scheduler Service to use.";
+            this.label1.Text = "Please enter the Windows credentials you want the ShipWorks Scheduler Service to " +
+    "use.";
             // 
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
-            this.usernameLabel.Location = new System.Drawing.Point(31, 53);
+            this.usernameLabel.Location = new System.Drawing.Point(12, 48);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.Size = new System.Drawing.Size(62, 13);
             this.usernameLabel.TabIndex = 1;
             this.usernameLabel.Text = "User name:";
+            this.usernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // domainLabel
             // 
             this.domainLabel.AutoSize = true;
-            this.domainLabel.Location = new System.Drawing.Point(47, 107);
+            this.domainLabel.Location = new System.Drawing.Point(28, 102);
             this.domainLabel.Name = "domainLabel";
             this.domainLabel.Size = new System.Drawing.Size(46, 13);
-            this.domainLabel.TabIndex = 2;
+            this.domainLabel.TabIndex = 5;
             this.domainLabel.Text = "Domain:";
+            this.domainLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(36, 80);
+            this.passwordLabel.Location = new System.Drawing.Point(17, 75);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(57, 13);
             this.passwordLabel.TabIndex = 3;
             this.passwordLabel.Text = "Password:";
+            this.passwordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // username
             // 
-            this.username.Location = new System.Drawing.Point(99, 50);
+            this.username.Location = new System.Drawing.Point(78, 45);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(173, 21);
-            this.username.TabIndex = 4;
+            this.username.TabIndex = 2;
             // 
             // password
             // 
             this.password.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.password.Location = new System.Drawing.Point(99, 77);
+            this.password.Location = new System.Drawing.Point(78, 72);
             this.password.Name = "password";
             this.password.PasswordChar = '•';
             this.password.Size = new System.Drawing.Size(173, 21);
-            this.password.TabIndex = 5;
+            this.password.TabIndex = 4;
             // 
             // domain
             // 
-            this.domain.Location = new System.Drawing.Point(99, 104);
+            this.domain.Location = new System.Drawing.Point(78, 99);
             this.domain.Name = "domain";
             this.domain.Size = new System.Drawing.Size(173, 21);
             this.domain.TabIndex = 6;
@@ -101,7 +105,7 @@
             // domainNote
             // 
             this.domainNote.AutoSize = true;
-            this.domainNote.Location = new System.Drawing.Point(96, 128);
+            this.domainNote.Location = new System.Drawing.Point(75, 123);
             this.domainNote.Name = "domainNote";
             this.domainNote.Size = new System.Drawing.Size(80, 13);
             this.domainNote.TabIndex = 7;
@@ -109,7 +113,7 @@
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(197, 148);
+            this.ok.Location = new System.Drawing.Point(122, 150);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 8;
@@ -120,7 +124,7 @@
             // cancel
             // 
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(116, 148);
+            this.cancel.Location = new System.Drawing.Point(203, 150);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 9;
@@ -134,7 +138,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(289, 181);
+            this.ClientSize = new System.Drawing.Size(289, 185);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.domainNote);
@@ -146,13 +150,14 @@
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(305, 219);
             this.Name = "GetWindowsCredentialsDlg";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShipWorks Service Credentials";
             this.ResumeLayout(false);
