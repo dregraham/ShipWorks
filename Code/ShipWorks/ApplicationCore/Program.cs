@@ -265,6 +265,15 @@ namespace ShipWorks
         /// </summary>
         private static void HandleUnhandledException(Exception ex, bool guiThread)
         {
+            // No executionMode, so default to the original exception handling.
+            if (isTerminating)
+            {
+                log.Error("Exception received while already terminating.", ex);
+                return;
+            }
+
+            isTerminating = true;
+
             // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
             if (ExecutionMode != null)
             {
@@ -281,15 +290,6 @@ namespace ShipWorks
         /// </summary>
         private static void DefaultHandleUnhandledException(Exception ex, bool guiThread)
         {
-            // No executionMode, so default to the original exception handling.
-            if (isTerminating)
-            {
-                log.Error("Exception received while already terminating.", ex);
-                return;
-            }
-
-            isTerminating = true;
-
             string userEmail = "";
             if (UserSession.IsLoggedOn)
             {

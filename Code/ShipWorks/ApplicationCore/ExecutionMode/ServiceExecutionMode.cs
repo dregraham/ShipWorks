@@ -1,6 +1,8 @@
 ﻿using log4net;
 using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.Data.Connection;
+using ShipWorks.Users;
 using System;
 using System.Collections.Generic;
 
@@ -57,7 +59,20 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
         public void HandleException(Exception exception)
         {
-            throw new NotImplementedException();
+            if (UserSession.IsLoggedOn)
+            {
+                UserSession.Logoff(false);
+            }
+            UserSession.Reset();
+
+            if (ConnectionMonitor.HandleTerminatedConnection(exception))
+            {
+                log.Info("Terminating due to unrecoverable connection.", exception);
+            }
+            else
+            {
+                log.Fatal("Application Crashed", exception);
+            }
         }
 
 

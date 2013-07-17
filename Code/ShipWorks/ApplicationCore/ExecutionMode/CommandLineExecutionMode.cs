@@ -24,8 +24,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         readonly List<string> options;
         private readonly IExecutionModeInitializer initializer;
 
-        private bool isTerminating;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLineExecutionMode"/> class.
         /// </summary>
@@ -43,8 +41,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             this.commandName = commandName;
             this.options = options ?? new List<string>();
             this.initializer = initializer ?? new CommandLineExecutionModeInitializer();
-
-            isTerminating = false;
         }
 
         /// <summary>
@@ -111,20 +107,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
         public void HandleException(Exception exception)
         {
-            if (isTerminating)
-            {
-                log.Error("Exception received while already terminating.", exception);
-                return;
-            }
-
-            isTerminating = true;
-
             if (UserSession.IsLoggedOn)
             {
                 UserSession.Logoff(false);
             }
-
             UserSession.Reset();
+
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
                 log.Info("Terminating due to unrecoverable connection.", exception);

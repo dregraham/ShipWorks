@@ -33,8 +33,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         private static readonly ILog log = LogManager.GetLogger(typeof(UserInterfaceExecutionMode));
         private readonly IExecutionModeInitializer initializer;
 
-        private bool isTerminating;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
@@ -47,8 +45,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <param name="initializer">The initializer.</param>
         public UserInterfaceExecutionMode(IExecutionModeInitializer initializer)
         {
-            isTerminating = false;
-
             this.initializer = initializer ?? new UserInterfaceExecutionModeInitializer();
         }
 
@@ -121,14 +117,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <exception cref="System.NotImplementedException"></exception>
         public void HandleException(Exception exception)
         {
-            if (isTerminating)
-            {
-                log.Error("Exception received while already terminating.", exception);
-                return;
-            }
-
-            isTerminating = true;
-
             string userEmail = string.Empty;
             if (UserSession.IsLoggedOn)
             {
