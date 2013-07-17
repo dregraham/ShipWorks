@@ -53,9 +53,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsUserInteractive()
+        public bool IsUserInteractive
         {
-            return false;
+            get { return false; }
         }
 
         /// <summary>

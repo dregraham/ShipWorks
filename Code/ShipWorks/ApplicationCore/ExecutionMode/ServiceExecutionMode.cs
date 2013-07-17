@@ -31,9 +31,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
 
-        public bool IsUserInteractive()
+        public bool IsUserInteractive
         {
-            return false;
+            get { return false; }
         }
 
         public void Execute()
