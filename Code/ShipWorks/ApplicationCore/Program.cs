@@ -151,6 +151,8 @@ namespace ShipWorks
             {
                 HandleUnhandledException(ex, false);
             }
+
+            Environment.Exit(0);
         }       
 
         /// <summary>

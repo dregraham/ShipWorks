@@ -84,10 +84,11 @@ namespace ShipWorks.ApplicationCore.WindowsServices
 
         /// <summary>
         /// Self-hosts a ShipWorks service object as an instance-specific background process instead of via the SCM.
-        /// This is a blocking call for the lifetime of the running service, unless the service is
-        /// already running in the background, in which case this method returns immediately.
+        /// If the background process is already running, it is signaled to stop and will be superseded by this instance.
+        /// This is a blocking call for the lifetime of the running service.
         /// </summary>
-        /// <returns>true if the service ran to completion in the background; false if the service was already running.</returns>
+        /// <returns>true if the service ran; otherwise, false.</returns>
+        /// <returns>true if the service ran to completion in the background; false if the service was already running and could not be stopped.</returns>
         public static bool RunInBackground(ShipWorksServiceBase service)
         {
             if (null == service)
@@ -101,17 +102,24 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             {
                 if (!createdNew)
                 {
-                    log.WarnFormat("Ignoring duplicate request to run service '{0}' in the background.", service.ServiceName);
-                    return false;
+                    log.Warn("Service is already running in the background; sending stop signal.");
+                    if (!stopSignal.Set())
+                    {
+                        // MSDN gives no indication why or when this could happen...
+                        log.Error("Stop signal failed!");
+                        return false;
+                    }
                 }
 
                 service.OnStart(null);
-                stopSignal.WaitOne();
-            }
 
-            log.Info("Stop signal received; shutting down service.");
-            service.OnStop();
-            return true;
+                stopSignal.Reset();
+                stopSignal.WaitOne();
+                log.Info("Stop signal received; shutting down service.");
+
+                service.OnStop();
+                return true;
+            }
         }
 
         /// <summary>
@@ -134,7 +142,14 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             bool createdNew;
             using (var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, serviceName, out createdNew))
             {
-                return createdNew || stopSignal.Set();
+                if (!createdNew && !stopSignal.Set())
+                {
+                    // MSDN gives no indication why or when this could happen...
+                    log.Error("Stop signal failed!");
+                    return false;
+                }
+
+                return true;
             }
         }
 
