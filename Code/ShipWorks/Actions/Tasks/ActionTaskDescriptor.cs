@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Reflection;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Stores.Platforms;
 using ShipWorks.Stores;
 
@@ -17,7 +18,7 @@ namespace ShipWorks.Actions.Tasks
         Type type;
         string baseName;
         string identifier;
-        bool allowedForScheduledTask;
+        ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
         /// Constructor
@@ -62,7 +63,7 @@ namespace ShipWorks.Actions.Tasks
             ActionTaskAttribute attribute = (ActionTaskAttribute) Attribute.GetCustomAttribute(type, typeof(ActionTaskAttribute));
             this.baseName = attribute.DisplayName;
             this.identifier = attribute.Identifier;
-            this.allowedForScheduledTask = attribute.AllowedForScheduledTask;
+            this.allowedActionTriggerClassifications = attribute.AllowedActionTriggerClassifications;
         }
 
         /// <summary>
@@ -112,13 +113,26 @@ namespace ShipWorks.Actions.Tasks
         /// If this task is allowed to be added to an Action that is of Scheduled type.  For example, "Play a Sound" is not allowed
         /// as the sound will not be heard when run as a service.
         /// </summary>
-        public bool AllowedForScheduledTask
+        public ActionTriggerClassifications TriggerClassifications
         {
             get
             {
-                return allowedForScheduledTask;
+                return allowedActionTriggerClassifications;
             }
-        } 
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="trigger">Trigger that should be tested</param>
+        /// <returns></returns>
+        public bool IsAllowedForTrigger(ActionTrigger trigger)
+        {
+            ActionTriggerClassifications classification = (trigger.TriggerType == ActionTriggerType.Scheduled) ? 
+                ActionTriggerClassifications.Scheduled : 
+                ActionTriggerClassifications.NonScheduled;
+            return (allowedActionTriggerClassifications & classification) != ActionTriggerClassifications.None;
+        }
 
         /// <summary>
         /// Create a new instance of the ActionTask for this type.

@@ -20,7 +20,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for backing up the database
     /// </summary>
-    [ActionTask("Backup the database", "BackupDatabase", true)]
+    [ActionTask("Backup the database", "BackupDatabase", ActionTriggerClassifications.Scheduled)]
     public class BackupDatabaseTask : ActionTask
     {
         // Logger

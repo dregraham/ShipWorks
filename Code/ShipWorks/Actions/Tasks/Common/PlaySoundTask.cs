@@ -17,7 +17,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for playing a sound
     /// </summary>
-    [ActionTask("Play a sound", "PlaySound", false)]
+    [ActionTask("Play a sound", "PlaySound", ActionTriggerClassifications.NonScheduled)]
     public class PlaySoundTask : ActionTask
     {
         long resourceReferenceID = 0;
