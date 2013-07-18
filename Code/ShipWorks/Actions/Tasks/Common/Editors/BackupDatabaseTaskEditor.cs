@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.UI;
@@ -35,12 +36,13 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnLoad(object sender, EventArgs e)
         {
             backupPath.Text = task.BackupDirectory;
-            backupPath.Validating += OnTextValidating;
+            backupPath.Validating += OnRequiredTextValidating;
             backupPath.Validated += OnTextValidated;
 
             textPrefix.Text = task.FilePrefix;
             textPrefix.TextChanged += OnPrefixTextChanged;
-            textPrefix.Validating += OnTextValidating;
+            textPrefix.Validating += OnRequiredTextValidating;
+            textPrefix.Validating += OnTextPrefixValidating;
             textPrefix.Validated += OnTextValidated;
 
             numericBackupCount.Value = task.KeepNumberOfBackups;
@@ -91,14 +93,28 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Validation has been requested for the editor
+        /// Validate that the text box has a value entered
         /// </summary>
-        private void OnTextValidating(object sender, CancelEventArgs e)
+        private void OnRequiredTextValidating(object sender, CancelEventArgs e)
         {
             TextBoxBase textBox = sender as TextBoxBase;
             if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
             {
                 errorProvider.SetError(textBox, "This value is required.");
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// Validate that the file prefix does not use any illegal characters
+        /// </summary>
+        private void OnTextPrefixValidating(object sender, CancelEventArgs e)
+        {
+            TextBoxBase textBox = sender as TextBoxBase;
+            if (textBox != null && textPrefix.Text.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
+            {
+                errorProvider.SetError(textBox, string.Format("Prefix cannot contain the following characters: {0}", 
+                    Path.GetInvalidFileNameChars().Where(x => x > 31).Aggregate("", (x, y) => x + " " + y)));
                 e.Cancel = true;
             }
         }
