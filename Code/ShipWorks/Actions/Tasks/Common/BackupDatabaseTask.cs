@@ -91,9 +91,16 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void Run()
         {
-            ShipWorksBackup backup = new ShipWorksBackup(SqlSession.Current, SuperUser.Instance);
-            backup.CreateBackup(BackupFilePath(DateTime.Now));
-
+            try
+            {
+                ShipWorksBackup backup = new ShipWorksBackup(SqlSession.Current, SuperUser.Instance);
+                backup.CreateBackup(BackupFilePath(DateTime.Now));
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ActionTaskRunException(ex.Message, ex);
+            }
+            
             if (CleanOldBackups)
             {
                 // The regex match greatly reduces the chance of deleting files
