@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelNotice = new System.Windows.Forms.Label();
             this.browse = new System.Windows.Forms.Button();
@@ -40,8 +41,10 @@
             this.lableBackups = new System.Windows.Forms.Label();
             this.checkboxOnlyKeep = new System.Windows.Forms.CheckBox();
             this.labelCleanup = new System.Windows.Forms.Label();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -108,9 +111,19 @@
             // numericBackupCount
             // 
             this.numericBackupCount.Location = new System.Drawing.Point(157, 86);
+            this.numericBackupCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numericBackupCount.Name = "numericBackupCount";
             this.numericBackupCount.Size = new System.Drawing.Size(47, 21);
             this.numericBackupCount.TabIndex = 13;
+            this.numericBackupCount.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // lableBackups
             // 
@@ -140,10 +153,15 @@
             this.labelCleanup.TabIndex = 16;
             this.labelCleanup.Text = "Cleanup:";
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // BackupDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.Controls.Add(this.labelCleanup);
             this.Controls.Add(this.checkboxOnlyKeep);
             this.Controls.Add(this.lableBackups);
@@ -160,6 +178,7 @@
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -179,6 +198,7 @@
         private System.Windows.Forms.Label lableBackups;
         private System.Windows.Forms.CheckBox checkboxOnlyKeep;
         private System.Windows.Forms.Label labelCleanup;
+        private System.Windows.Forms.ErrorProvider errorProvider;
 
     }
 }

@@ -507,6 +507,12 @@ namespace ShipWorks.Actions
                     return;
                 }
 
+                // Don't close the form if any of the bubbles have invalid data
+                if (ActiveBubbles.Any(bubble => !bubble.ValidateChildren()))
+                {
+                    return;
+                }
+
                 if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Scheduled)
                 {
                     try

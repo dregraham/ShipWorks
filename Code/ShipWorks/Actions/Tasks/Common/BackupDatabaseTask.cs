@@ -28,7 +28,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
         private string backupDirectory;
         private string filePrefix;
-        private int keepNumberOfBackups;
+        private int keepNumberOfBackups = 5;
         private bool cleanOldBackups;
         private readonly Regex backupFileNameMatcher = new Regex(@".*\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.swb");
 
@@ -91,6 +91,18 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void Run()
         {
+            if (string.IsNullOrWhiteSpace(BackupDirectory))
+            {
+                log.Warn("Cannot start backup because backup directory was not set.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(FilePrefix))
+            {
+                log.Warn("Cannot start backup because the file prefix was not set.");
+                return;
+            }
+
             try
             {
                 ShipWorksBackup backup = new ShipWorksBackup(SqlSession.Current, SuperUser.Instance);

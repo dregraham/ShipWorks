@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Web.UI;
 using System.Windows.Forms;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
@@ -34,9 +35,13 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnLoad(object sender, EventArgs e)
         {
             backupPath.Text = task.BackupDirectory;
+            backupPath.Validating += OnTextValidating;
+            backupPath.Validated += OnTextValidated;
 
             textPrefix.Text = task.FilePrefix;
             textPrefix.TextChanged += OnPrefixTextChanged;
+            textPrefix.Validating += OnTextValidating;
+            textPrefix.Validated += OnTextValidated;
 
             numericBackupCount.Value = task.KeepNumberOfBackups;
             numericBackupCount.ValueChanged += OnBackupCountValueChanged;
@@ -83,6 +88,31 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             task.CleanOldBackups = checkboxOnlyKeep.Checked;
             numericBackupCount.Enabled = checkboxOnlyKeep.Checked;
+        }
+
+        /// <summary>
+        /// Validation has been requested for the editor
+        /// </summary>
+        private void OnTextValidating(object sender, CancelEventArgs e)
+        {
+            TextBoxBase textBox = sender as TextBoxBase;
+            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                errorProvider.SetError(textBox, "This value is required.");
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// Validation has succeeded, so clear the errors
+        /// </summary>
+        private void OnTextValidated(object sender, EventArgs e)
+        {
+            TextBoxBase textBox = sender as TextBoxBase;
+            if (textBox != null)
+            {
+                errorProvider.SetError(textBox, "");
+            }
         }
     }
 }
