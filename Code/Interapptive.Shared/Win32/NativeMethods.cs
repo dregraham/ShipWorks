@@ -195,6 +195,12 @@ namespace Interapptive.Shared.Win32
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern int GetPrivateProfileString(string section, string key, string defaultValue, StringBuilder returnValue, int size, string filePath);
 
+        [DllImport("kernel32.dll")]
+        public static extern int GetErrorMode();
+
+        [DllImport("kernel32.dll")]
+        public static extern int SetErrorMode(int uMode);
+
         #endregion
 
         #region Constants
@@ -661,6 +667,11 @@ namespace Interapptive.Shared.Win32
         public const int WS_EX_APPWINDOW = 0x00040000;
         public const int WS_EX_OVERLAPPEDWINDOW = (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE);
         public const int WS_EX_PALETTEWINDOW = (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST);
+
+        public const int SEM_FAILCRITICALERRORS = 0x0001;
+        public const int SEM_NOALIGNMENTFAULTEXCEPT = 0x0004;
+        public const int SEM_NOGPFAULTERRORBOX = 0x0002;
+        public const int SEM_NOOPENFILEERRORBOX = 0x8000;
 
         #endregion
 

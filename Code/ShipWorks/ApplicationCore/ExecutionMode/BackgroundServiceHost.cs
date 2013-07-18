@@ -1,6 +1,8 @@
 ﻿using log4net;
 using ShipWorks.ApplicationCore.WindowsServices;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 
@@ -48,10 +50,28 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             ShipWorksServiceBase.StopInBackground(service.ServiceType);
         }
 
+        /// <summary>
+        /// Restarts the background process ("phoenix mode").
+        /// </summary>
         public void OnUnhandledException(Exception exception)
         {
-            //TODO: phoenix mode
-            log.Fatal("And the phoenix shall rise again... well, once it's implemented.");
+            log.InfoFormat("Attempting to restart the '{0}' background service.", service.ServiceName);
+
+            try
+            {
+                var commandArgs = Environment.GetCommandLineArgs();
+
+                var restartInfo = new ProcessStartInfo {
+                    FileName = commandArgs[0],
+                    Arguments = string.Join(" ", commandArgs.Skip(1))
+                };
+
+                Process.Start(restartInfo);
+            }
+            catch (Exception ex)
+            {
+                log.Error(string.Format("Failed to restart the '{0}' background service.", service.ServiceName), ex);
+            }
         }
     }
 }

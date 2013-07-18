@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -100,6 +101,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                     log.WarnFormat("Ignoring duplicate request to run service '{0}' in the background.", service.ServiceName);
                     return false;
                 }
+
+                // Suppress the nappy-headed Windows error reporting dialog
+                NativeMethods.SetErrorMode(NativeMethods.SEM_NOGPFAULTERRORBOX);
 
                 service.OnStart(null);
                 stopSignal.WaitOne();
