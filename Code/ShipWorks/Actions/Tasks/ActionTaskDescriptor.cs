@@ -49,7 +49,8 @@ namespace ShipWorks.Actions.Tasks
 
             bool validNamespace =
                 type.Namespace.StartsWith("ShipWorks.Actions.Tasks.Common") ||
-                type.Namespace.EndsWith("CoreExtensions.Actions");
+                type.Namespace.EndsWith("CoreExtensions.Actions") || 
+                type.Namespace.StartsWith("ShipWorks.Tests.Actions");
 
             Debug.Assert(validNamespace,
                 @"When obfuscated, only types in the above namespace formats will work.  This is due to the xr option we use with demeanor.  If a type truly
@@ -124,11 +125,11 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Is the task allowed to be run using the specified trigger type?
         /// </summary>
-        /// <param name="trigger">Trigger that should be tested</param>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
         /// <returns></returns>
-        public bool IsAllowedForTrigger(ActionTrigger trigger)
+        public bool IsAllowedForTrigger(ActionTriggerType triggerType)
         {
-            ActionTriggerClassifications classification = (trigger.TriggerType == ActionTriggerType.Scheduled) ? 
+            ActionTriggerClassifications classification = (triggerType == ActionTriggerType.Scheduled) ? 
                 ActionTriggerClassifications.Scheduled : 
                 ActionTriggerClassifications.NonScheduled;
             return (allowedActionTriggerClassifications & classification) != ActionTriggerClassifications.None;
