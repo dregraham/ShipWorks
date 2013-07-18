@@ -93,6 +93,9 @@ namespace ShipWorks.ApplicationCore.WindowsServices
             if (null == service)
                 throw new ArgumentNullException("service");
 
+            // Suppress the nappy-headed Windows error dialogs
+            NativeMethods.SetErrorMode(NativeMethods.SEM_FAILCRITICALERRORS | NativeMethods.SEM_NOGPFAULTERRORBOX);
+
             bool createdNew;
             using (var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, service.ServiceName, out createdNew))
             {
@@ -102,13 +105,11 @@ namespace ShipWorks.ApplicationCore.WindowsServices
                     return false;
                 }
 
-                // Suppress the nappy-headed Windows error reporting dialog
-                NativeMethods.SetErrorMode(NativeMethods.SEM_NOGPFAULTERRORBOX);
-
                 service.OnStart(null);
                 stopSignal.WaitOne();
             }
 
+            log.Info("Stop signal received; shutting down service.");
             service.OnStop();
             return true;
         }

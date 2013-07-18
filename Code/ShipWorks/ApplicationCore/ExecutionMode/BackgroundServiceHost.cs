@@ -67,10 +67,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 };
 
                 Process.Start(restartInfo);
+                log.Info("Restart succeeded");
             }
             catch (Exception ex)
             {
-                log.Error(string.Format("Failed to restart the '{0}' background service.", service.ServiceName), ex);
+                log.Error("Restart failed.", ex);
             }
         }
     }
