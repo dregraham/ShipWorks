@@ -56,7 +56,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         public void OnUnhandledException(Exception exception)
         {
             log.InfoFormat("Attempting to restart the '{0}' background service.", service.ServiceName);
-
             try
             {
                 var commandArgs = Environment.GetCommandLineArgs();
@@ -67,7 +66,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 };
 
                 Process.Start(restartInfo);
-                log.Info("Restart succeeded");
+                log.Info("Restart succeeded.");
+                Environment.Exit(-1);
             }
             catch (Exception ex)
             {
