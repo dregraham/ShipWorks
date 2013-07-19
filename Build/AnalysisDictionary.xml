@@ -57,6 +57,7 @@
       <Word>nafta</Word>
       <Word>ups</Word>
       <Word>username</Word>
+      <Word>MainForm</Word>
 		</Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
@@ -68,6 +69,7 @@
       <Term>FedEx</Term>
       <Term>AmeriCommerce</Term>
       <Term>EquaShip</Term>
+      <Term>MainForm</Term>
     </DiscreteExceptions>
 		<Deprecated>
 			<Term PreferredAlternate="EnterpriseServices">ComPlus</Term>

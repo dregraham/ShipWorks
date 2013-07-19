@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.WindowsServices;
+﻿using ShipWorks.ApplicationCore.Services.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {

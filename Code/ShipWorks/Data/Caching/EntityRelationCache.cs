@@ -130,7 +130,7 @@ namespace ShipWorks.Data.Caching
             if (needsFetched.Count > 0)
             {
                 // If we are on the UI thread, don't wait if we can't get the lock. On the background thread, always wait.
-                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUserInteractive() && Program.MainForm.InvokeRequired) ? -1 : 0);
+                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUserInteractive && Program.MainForm.InvokeRequired) ? -1 : 0);
 
                 try
                 {

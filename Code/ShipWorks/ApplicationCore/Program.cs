@@ -29,7 +29,7 @@ using ShipWorks.Filters.Management;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks
@@ -40,8 +40,6 @@ namespace ShipWorks
         // shutdown before the installation can continue.
         static Mutex appMutex;
 
-        // The single main form of the application
-        static MainForm mainForm;
 
         // Indicates if the application is shutting down due to an exception
         static bool isTerminating = false;
@@ -56,15 +54,11 @@ namespace ShipWorks
         {
             get
             {
-                if (mainForm == null)
-                {
-                    // Updated to lazy load the main form to work with the execution mode factory
-                    // due to the order that third party license activation/dependencies and other
-                    // ShipWorks initialization processes need to be executed in
-                    mainForm = new MainForm();
-                }
-                
-                return mainForm;
+                var ui = ExecutionMode as UserInterfaceExecutionMode;
+                if (ui == null)
+                    throw new InvalidOperationException("MainForm is only available in UI execution mode.");
+
+                return ui.MainForm;
             }
         }
 
@@ -72,15 +66,6 @@ namespace ShipWorks
         /// Gets the execution mode for this instance.  (with UI, command line, etc.)
         /// </summary>
         public static IExecutionMode ExecutionMode { get; private set; }
-
-        /// <summary>
-        /// Indicates if the application is running with a UI.  If not, then it must be being ran from the command-line without a UI, or the 
-        /// UI is not yet shown.
-        /// </summary>
-        public static bool IsUserInteractive
-        {
-            get { return mainForm != null && mainForm.IsHandleCreated; }
-        }
 
         /// <summary>
         /// Gets the folder path containing the ShipWorks executable.
@@ -166,6 +151,8 @@ namespace ShipWorks
             {
                 HandleUnhandledException(ex, false);
             }
+
+            Environment.Exit(0);
         }       
 
         /// <summary>
@@ -280,6 +267,15 @@ namespace ShipWorks
         /// </summary>
         private static void HandleUnhandledException(Exception ex, bool guiThread)
         {
+            // No executionMode, so default to the original exception handling.
+            if (isTerminating)
+            {
+                log.Error("Exception received while already terminating.", ex);
+                return;
+            }
+
+            isTerminating = true;
+
             // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
             if (ExecutionMode != null)
             {
@@ -296,15 +292,6 @@ namespace ShipWorks
         /// </summary>
         private static void DefaultHandleUnhandledException(Exception ex, bool guiThread)
         {
-            // No executionMode, so default to the original exception handling.
-            if (isTerminating)
-            {
-                log.Error("Exception received while already terminating.", ex);
-                return;
-            }
-
-            isTerminating = true;
-
             string userEmail = "";
             if (UserSession.IsLoggedOn)
             {

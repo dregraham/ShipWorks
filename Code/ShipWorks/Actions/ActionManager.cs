@@ -307,7 +307,7 @@ namespace ShipWorks.Actions
             {
                 ActionQueueType actionQueueType = ActionQueueType.Scheduled;
 
-                if (Program.ExecutionMode.IsUserInteractive())
+                if (Program.ExecutionMode.IsUserInteractive)
                 {
                     actionQueueType = ActionQueueType.UserInterface;
                 }

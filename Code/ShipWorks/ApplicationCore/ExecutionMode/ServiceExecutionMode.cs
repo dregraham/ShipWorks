@@ -1,6 +1,9 @@
 ﻿using log4net;
 using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
+using ShipWorks.ApplicationCore.Services.Hosting;
+using ShipWorks.Data.Connection;
+using ShipWorks.Users;
 using System;
 using System.Collections.Generic;
 
@@ -11,53 +14,71 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
 
-        readonly string serviceName;
+        readonly Lazy<IServiceHost> host;
         readonly IList<string> options;
-        readonly IServiceExecutionStrategyFactory strategyFactory;
         readonly IExecutionModeInitializer initializer;
 
         public ServiceExecutionMode(string serviceName, IList<string> options)
             : this(serviceName, options, null, null) { }
 
-        public ServiceExecutionMode(string serviceName, IList<string> options, IServiceExecutionStrategyFactory strategyFactory, IExecutionModeInitializer initializer)
+        public ServiceExecutionMode(string serviceName, IList<string> options, IServiceHostFactory hostFactory, IExecutionModeInitializer initializer)
         {
             if (null == serviceName)
                 throw new ArgumentNullException("serviceName");
+            if (null == hostFactory)
+                hostFactory = new DefaultServiceHostFactory();
 
-            this.serviceName = serviceName;
+            this.host = new Lazy<IServiceHost>(() =>
+                hostFactory.GetHostFor(GetServiceForName(serviceName))
+            );
+
             this.options = options ?? new string[0];
-            this.strategyFactory = strategyFactory ?? new DefaultServiceExecutionStrategyFactory();
             this.initializer = initializer ?? new ServiceExecutionModeInitializer();
         }
 
-
-        public bool IsUserInteractive()
+        IServiceHost Host
         {
-            return false;
+            get { return host.Value; }
+        }
+
+        public bool IsUserInteractive
+        {
+            get { return false; }
         }
 
         public void Execute()
         {
             log.Info("Running as a service.");
 
-            var service = GetServiceForName(serviceName);
-
-            var strategy = strategyFactory.GetStrategyFor(service);
-
             if (options.Contains("/stop"))
             {
-                strategy.Stop();
+                Host.Stop();
             }
             else
             {
                 initializer.Initialize();
-                strategy.Run();
+                Host.Run();
             }
         }
 
         public void HandleException(Exception exception)
         {
-            throw new NotImplementedException();
+            if (UserSession.IsLoggedOn)
+            {
+                UserSession.Logoff(false);
+            }
+            UserSession.Reset();
+
+            if (ConnectionMonitor.HandleTerminatedConnection(exception))
+            {
+                log.Info("Terminating due to unrecoverable connection.", exception);
+            }
+            else
+            {
+                log.Fatal("Application Crashed", exception);
+            }
+
+            Host.OnUnhandledException(exception);
         }
 
 

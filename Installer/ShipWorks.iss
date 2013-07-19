@@ -140,7 +140,6 @@ Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueNam
 [Run]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:installservice"; Description: Install as Service
 
 [UninstallRun]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservice"; RunOnceId: "UninstallService"
@@ -247,6 +246,7 @@ var
 	TargetExe: string;
 	VersionFound: string;
 	SchemaFound: Integer;
+	ServiceStarted: Integer;
 begin
 
 	Result := True;
@@ -294,6 +294,11 @@ begin
 
 				end;
 
+			end;
+
+			if Result
+			then begin
+				Exec(ExpandConstant(TargetExe), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, ServiceStarted)
 			end;
 
 		end;
