@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 
-namespace ShipWorks.ApplicationCore.Services
+namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     /// <summary>
     /// Prompts user for username and password.

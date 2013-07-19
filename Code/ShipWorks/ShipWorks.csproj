@@ -462,7 +462,7 @@
     <Compile Include="ApplicationCore\Help\ShipWorksAboutDlg.Designer.cs">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Services\AddUserRight.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\AddUserRight.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -470,11 +470,11 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Services\ChangeServicePassword.cs" />
-    <Compile Include="ApplicationCore\Services\GetWindowsCredentialsDlg.cs">
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\ChangeServiceCredentials.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Services\GetWindowsCredentialsDlg.Designer.cs">
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.Designer.cs">
       <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\Installers\MasterInstaller.cs">
@@ -5345,7 +5345,7 @@
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Services\GetWindowsCredentialsDlg.resx">
+    <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.resx">
       <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\Installers\MasterInstaller.resx">
@@ -11473,7 +11473,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

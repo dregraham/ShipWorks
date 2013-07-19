@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace ShipWorks.ApplicationCore.Services
+namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     /// <summary>
     /// The Local Security Authority (LSA) Utility

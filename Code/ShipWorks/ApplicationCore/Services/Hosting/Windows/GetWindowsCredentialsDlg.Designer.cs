@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.ApplicationCore.Services
+﻿namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     partial class GetWindowsCredentialsDlg
     {
