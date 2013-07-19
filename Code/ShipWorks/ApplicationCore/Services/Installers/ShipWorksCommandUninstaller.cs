@@ -3,6 +3,7 @@ using System.Configuration.Install;
 using System.Reflection;
 using System.ServiceProcess;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Services.Hosting.Windows;
 
 namespace ShipWorks.ApplicationCore.Services.Installers
 {
@@ -28,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Services.Installers
         {
             using (ShipWorksSchedulerService schedulerService = new ShipWorksSchedulerService())
             {
-                ShipWorksServiceManager serviceManager = new ShipWorksServiceManager(schedulerService);
+                WindowsServiceController serviceManager = new WindowsServiceController(schedulerService);
                 if (serviceManager.IsServiceInstalled())
                 {
                     if (serviceManager.GetServiceStatus() != ServiceControllerStatus.Stopped)

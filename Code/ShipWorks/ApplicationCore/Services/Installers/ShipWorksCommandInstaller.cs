@@ -3,6 +3,7 @@ using System.Configuration.Install;
 using System.Reflection;
 using System.ServiceProcess;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Services.Hosting.Windows;
 
 namespace ShipWorks.ApplicationCore.Services.Installers
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Services.Installers
         {
             using (var shipWorksSchedulerService = new ShipWorksSchedulerService())
             {
-                var serviceManager = new ShipWorksServiceManager(shipWorksSchedulerService);
+                var serviceManager = new WindowsServiceController(shipWorksSchedulerService);
 
                 InstallService(serviceManager);
 
@@ -47,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Services.Installers
         /// Installs the service and updates appropraite credentials.
         /// </summary>
         /// <param name="serviceManager">The service manager.</param>
-        private static void InstallService(ShipWorksServiceManager serviceManager)
+        private static void InstallService(WindowsServiceController serviceManager)
         {
             if (!serviceManager.IsServiceInstalled())
             {

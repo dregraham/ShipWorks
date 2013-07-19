@@ -4,16 +4,16 @@ using System.ServiceProcess;
 using System.Windows.Forms;
 using log4net;
 
-namespace ShipWorks.ApplicationCore.Services
+namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     /// <summary>
-    /// Manages the starting and stopping of a ShipWorks service.
+    /// Manages the starting and stopping of a Windows service.
     /// </summary>
-    public class ShipWorksServiceManager
+    public class WindowsServiceController
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceController));
 
-        private readonly ShipWorksServiceBase shipWorksService;
+        private readonly ServiceBase service;
 
         private const int timeoutMilliseconds = 30000;
 
@@ -21,9 +21,9 @@ namespace ShipWorks.ApplicationCore.Services
         /// Initializes a new instance of the <see cref="ShipWorksServiceManager" /> class.
         /// </summary>
         /// <param name="shipWorksService">The service to manage.</param>
-        public ShipWorksServiceManager(ShipWorksServiceBase shipWorksService)
+        public WindowsServiceController(ServiceBase service)
         {
-            this.shipWorksService = shipWorksService;
+            this.service = service;
         }
 
         /// <summary>
@@ -33,17 +33,17 @@ namespace ShipWorks.ApplicationCore.Services
         {
             try
             {
-                using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
+                using (ServiceController controller = new ServiceController(service.ServiceName))
                 {
                     TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
-                    service.Start();
-                    service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    controller.Start();
+                    controller.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 }
             }
             catch (Exception ex)
             {
-                log.Error("Can't start service " + shipWorksService.ServiceName, ex);
+                log.Error("Can't start service " + service.ServiceName, ex);
 
                 throw;
             }
@@ -56,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             try
             {
-                using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
+                using (ServiceController controller = new ServiceController(service.ServiceName))
                 {
                     int beforeStopService = Environment.TickCount;
                     TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
@@ -64,21 +64,21 @@ namespace ShipWorks.ApplicationCore.Services
                     ServiceControllerStatus serviceControllerStatus = GetServiceStatus();
                     if (serviceControllerStatus != ServiceControllerStatus.Stopped && serviceControllerStatus != ServiceControllerStatus.StopPending)
                     {
-                        service.Stop();
-                        service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);    
+                        controller.Stop();
+                        controller.WaitForStatus(ServiceControllerStatus.Stopped, timeout);    
                     }
 
                     // count the rest of the timeout
                     int afterStopService = Environment.TickCount;
                     timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds - (afterStopService - beforeStopService));
 
-                    service.Start();
-                    service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    controller.Start();
+                    controller.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 }
             }
             catch (Exception ex)
             {
-                log.Error("Can't restart service " + shipWorksService.ServiceName, ex);
+                log.Error("Can't restart service " + service.ServiceName, ex);
 
                 throw;
             }
@@ -91,17 +91,17 @@ namespace ShipWorks.ApplicationCore.Services
         {
             try
             {
-                using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
+                using (ServiceController controller = new ServiceController(service.ServiceName))
                 {
                     TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
 
-                    service.Stop();
-                    service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    controller.Stop();
+                    controller.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
                 }
             }
             catch (Exception ex)
             {
-                log.Error("Can't stop service " + shipWorksService.ServiceName, ex);
+                log.Error("Can't stop service " + service.ServiceName, ex);
                 throw;
             }
         }
@@ -121,12 +121,12 @@ namespace ShipWorks.ApplicationCore.Services
             bool serviceExists = false;
             try
             {
-                using (var serviceController = new ServiceController(shipWorksService.ServiceName))
+                using (var controller = new ServiceController(service.ServiceName))
                 {
                     try
                     {
                         // This variable isn't used. The only reason it is here is to see if .Status raises an exception.
-                        ServiceControllerStatus serviceControllerStatus = serviceController.Status;
+                        ServiceControllerStatus serviceControllerStatus = controller.Status;
 
                         serviceExists = true;
                     }
@@ -148,9 +148,9 @@ namespace ShipWorks.ApplicationCore.Services
         /// <returns>Status of the service.</returns>
         public ServiceControllerStatus GetServiceStatus()
         {
-            using (var service = new ServiceController(shipWorksService.ServiceName))
+            using (var controller = new ServiceController(service.ServiceName))
             {
-                return service.Status;
+                return controller.Status;
             }
         }
 
@@ -159,9 +159,9 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public string GetServiceDisplayName()
         {
-            using (var service = new ServiceController(shipWorksService.ServiceName))
+            using (var controller = new ServiceController(service.ServiceName))
             {
-                return service.DisplayName;
+                return controller.DisplayName;
             }
         }
 
@@ -178,7 +178,7 @@ namespace ShipWorks.ApplicationCore.Services
                 {
                     AddUserRight.SetRight(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, "SeServiceLogonRight");
 
-                    ChangeServiceCredentials.ServicePasswordChange(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, getWindowsCredentialsDlg.Password, shipWorksService.ServiceName);
+                    ChangeServiceCredentials.ServicePasswordChange(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, getWindowsCredentialsDlg.Password, service.ServiceName);
 
                     RestartService();
                 }

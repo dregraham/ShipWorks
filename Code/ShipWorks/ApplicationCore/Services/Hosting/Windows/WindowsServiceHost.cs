@@ -36,11 +36,11 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             if (Environment.UserInteractive)
             {
-                var manager = new ShipWorksServiceManager(service);
+                var controller = new WindowsServiceController(service);
 
                 log.InfoFormat("Starting the '{0}' Windows service via the service manager.", service.ServiceName);
-                if (manager.GetServiceStatus() == ServiceControllerStatus.Stopped)
-                    manager.StartService();
+                if (controller.GetServiceStatus() == ServiceControllerStatus.Stopped)
+                    controller.StartService();
             }
             else
             {
@@ -54,11 +54,11 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// </summary>
         public void Stop()
         {
-            var manager = new ShipWorksServiceManager(service);
+            var controller = new WindowsServiceController(service);
 
             log.InfoFormat("Stopping the '{0}' Windows service via the service manager.", service.ServiceName);
-            if (manager.GetServiceStatus() == ServiceControllerStatus.Running)
-                manager.StopService();
+            if (controller.GetServiceStatus() == ServiceControllerStatus.Running)
+                controller.StopService();
         }
 
         /// <summary>

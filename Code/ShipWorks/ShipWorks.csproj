@@ -499,7 +499,7 @@
     <Compile Include="ApplicationCore\Services\WindowsServiceEntityExtensions.cs" />
     <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
     <Compile Include="ApplicationCore\Services\WindowsServiceManager.cs" />
-    <Compile Include="ApplicationCore\Services\ServiceManager.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceController.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceBase.cs">
       <SubType>Component</SubType>
     </Compile>

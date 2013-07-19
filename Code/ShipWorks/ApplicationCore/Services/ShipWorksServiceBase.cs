@@ -2,6 +2,7 @@
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.Services.Hosting.Windows;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -289,7 +290,7 @@ namespace ShipWorks.ApplicationCore.Services
             CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStartDateTime;
             CurrentWindowsServiceEntity.ServiceFullName = ServiceName;
 
-            var manager = new ShipWorksServiceManager(this);
+            var manager = new WindowsServiceController(this);       //TODO: refactor to remove host-specific knowledge
             CurrentWindowsServiceEntity.ServiceDisplayName =
                 manager.IsServiceInstalled() ? manager.GetServiceDisplayName() : GetDisplayName(ServiceType);
 

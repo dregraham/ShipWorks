@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ShipWorks.ApplicationCore.Services.Hosting.Background;
+using ShipWorks.ApplicationCore.Services.Hosting.Windows;
+using System;
 
 
 namespace ShipWorks.ApplicationCore.Services.Hosting
@@ -14,10 +16,10 @@ namespace ShipWorks.ApplicationCore.Services.Hosting
             if (null == service)
                 throw new ArgumentNullException("service");
 
-            if (new ShipWorksServiceManager(service).IsServiceInstalled())
-                return new Windows.WindowsServiceHost(service);
+            if (new WindowsServiceController(service).IsServiceInstalled())
+                return new WindowsServiceHost(service);
 
-            return new Background.BackgroundServiceHost(service);
+            return new BackgroundServiceHost(service);
         }
     }
 }
