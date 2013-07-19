@@ -6,6 +6,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Data.Connection;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Triggers;
@@ -30,6 +33,7 @@ namespace ShipWorks.Actions.Tasks
 
         IEnumerable<ActionTaskBubble> allBubbles;
 
+        public event ActionTaskChangingEventHandler ActionTaskChanging;
         public event EventHandler BubbleChanged;
         public event EventHandler MoveUp;
         public event EventHandler MoveDown;
@@ -144,6 +148,24 @@ namespace ShipWorks.Actions.Tasks
         }
 
         /// <summary>
+        /// Raise the action task changing event args, which lets the parent know that the selected task has changed
+        /// </summary>
+        /// <param name="previousTask">The task that was selcted before it was changed</param>
+        /// <param name="newTask">The task that is currently selected</param>
+        /// <returns></returns>
+        private bool RaiseActionTaskChanging(ActionTask previousTask, ActionTask newTask)
+        {
+            if (ActionTaskChanging != null)
+            {
+                ActionTaskChangingEventArgs args = new ActionTaskChangingEventArgs(previousTask, newTask);
+                ActionTaskChanging(this, args);
+                return args.Cancel;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Update the layout and positioning of everything based settings and trigger
         /// </summary>
         private void UpdateControlLayout()
@@ -173,6 +195,14 @@ namespace ShipWorks.Actions.Tasks
             {
                 task = binding.CreateInstance();
                 taskHistoryMap[binding] = task;
+            }
+
+            // Raise the task changing event
+            if (RaiseActionTaskChanging(oldTask, task))
+            {
+                // Reset the selected task if any event handlers canceled the change
+                taskTypes.SelectedMenuObject = ActionTaskManager.GetBinding(oldTask);
+                return;
             }
 
             // Copy over the flow settings of the old one, so it looks seemless

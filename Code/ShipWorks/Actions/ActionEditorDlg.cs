@@ -339,6 +339,12 @@ namespace ShipWorks.Actions
         /// </summary>
         private void AddTaskBubble(ActionTask task)
         {
+            // Cancel adding the task if it cannot currently be selected
+            if (!EnsureTaskCanBeSelected(task))
+            {
+                return;
+            }
+
             // Create the bubble that will hold it
             ActionTaskBubble bubble = new ActionTaskBubble(task, ActiveBubbles);
             bubble.Width = panelTasks.DisplayRectangle.Width;
@@ -355,6 +361,16 @@ namespace ShipWorks.Actions
             bubble.MoveUp += new EventHandler(OnBubbleMoveUp);
             bubble.MoveDown += new EventHandler(OnBubbleMoveDown);
             bubble.Delete += new EventHandler(OnBubbleDelete);
+            bubble.ActionTaskChanging += OnBubbleTaskChanging;
+        }
+
+        /// <summary>
+        /// The selected task for the bubble has changed
+        /// </summary>
+        private void OnBubbleTaskChanging(object sender, ActionTaskChangingEventArgs e)
+        {
+            // Cancel the task change if the selected task cannot be selected
+            e.Cancel = !EnsureTaskCanBeSelected(e.NewTask);
         }
 
         /// <summary>
@@ -428,6 +444,25 @@ namespace ShipWorks.Actions
                     task.Entity.SetNewFieldValue(flowField.FieldIndex, (int) ActionTaskFlowOption.NextStep);
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks whether the the specified task can be selected 
+        /// </summary>
+        /// <param name="task">The task that should be checked</param>
+        /// <returns></returns>
+        private bool EnsureTaskCanBeSelected(ActionTask task)
+        {
+            if (task is BackupDatabaseTask && !SqlSession.Current.IsLocalServer())
+            {
+                MessageHelper.ShowError(this,
+                    string.Format(
+                        "The task '{0}' can only be configured from a computer running the database.",
+                        ActionTaskManager.GetDescriptor(task.GetType()).BaseName));
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
