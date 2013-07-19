@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Services
 
             if (
                 !instance.LastCheckInDateTime.HasValue ||
-                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-WindowsServiceManager.NotRunningTimeSpan)
+                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan)
             )
                 return ServiceStatus.NotResponding;
 
@@ -50,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Services
 
             if (instance.ServiceType == (int)ShipWorksServiceType.Scheduler)
             {
-                bool noOtherSchedulersAreRunning = WindowsServiceManager.WindowsServices
+                bool noOtherSchedulersAreRunning = ServiceStatusManager.ServicesStatuses
                     .Where(s => s.ServiceType == (int)ShipWorksServiceType.Scheduler && !s.Equals(instance))
                     .All(s => s.GetStatus() != ServiceStatus.Running);
 

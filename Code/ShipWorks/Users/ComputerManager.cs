@@ -78,8 +78,8 @@ namespace ShipWorks.Users
 
                     List<ComputerEntity> computers = EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
 
-                    // Load the computers' WindowsServiceEntities.
-                    computers.ForEach(EnsureWindowsServicesLoaded);
+                    // Load the computers' ServiceStatusEntities.
+                    computers.ForEach(EnsureServiceStatusesLoaded);
 
                     return computers;
                 }
@@ -87,9 +87,9 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Ensure the WindowsServices for the copmuter exists
+        /// Ensures the ServiceStatuses for the computer exist.
         /// </summary>
-        public static void EnsureWindowsServicesLoaded(ComputerEntity computer)
+        public static void EnsureServiceStatusesLoaded(ComputerEntity computer)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {

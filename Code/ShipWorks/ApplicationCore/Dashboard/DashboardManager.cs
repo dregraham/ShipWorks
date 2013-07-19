@@ -51,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         static List<Type> itemTypeSortOrder = new List<Type>
             {
                 typeof(DashboardActionErrorItem),
-                typeof(DashboardServiceStoppedItem),
+                typeof(DashboardSchedulerServiceStoppedItem),
                 typeof(DashboardEmailItem),
                 typeof(DashboardStoreItem),
                 typeof(DashboardMessageItem),
@@ -471,25 +471,25 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForServerMessageChanges();
             CheckForEmailChanges();
             CheckForActionChanges();
-            CheckForWindowsServiceStoppedChanges();
+            CheckForSchedulerServiceStoppedChanges();
         }
 
         /// <summary>
-        /// Check for any changes in the database for windows service stopped messages
+        /// Check for any changes in the database for scheduler service stopped messages
         /// </summary>
-        private static void CheckForWindowsServiceStoppedChanges()
+        private static void CheckForSchedulerServiceStoppedChanges()
         {
             // Check the database for any changes
-            List<ServiceStatusEntity> stoppedWindowsServices = SchedulerServiceMessageManager.StoppedWindowsServices;
-            List<DashboardServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardServiceStoppedItem>().ToList<DashboardServiceStoppedItem>();
+            List<ServiceStatusEntity> stoppedSchedulerServices = SchedulerServiceMessageManager.StoppedServices;
+            List<DashboardSchedulerServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardSchedulerServiceStoppedItem>().ToList<DashboardSchedulerServiceStoppedItem>();
 
             // If the message is already there we don't have to do anything
-            if (!existingDashboardItems.Any() && stoppedWindowsServices.Count > 0)
+            if (!existingDashboardItems.Any() && stoppedSchedulerServices.Count > 0)
             {
-                DashboardServiceStoppedItem item = new DashboardServiceStoppedItem(stoppedWindowsServices);
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
                 AddDashboardItem(item);
             }
-            else if (existingDashboardItems.Any() && stoppedWindowsServices.Count == 0)
+            else if (existingDashboardItems.Any() && stoppedSchedulerServices.Count == 0)
             {
                 // The stopped services are now running, so remove the stopped dashboard item.
                 //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
@@ -499,7 +499,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 //// It's no longer active, so we've got to get rid of it.
                 //RemoveDashboardItem(item);
             }
-            else if (stoppedWindowsServices.Count > 0)
+            else if (stoppedSchedulerServices.Count > 0)
             {
                 // There are existing service dashboard items AND the number of stopped services has changed, so remove
                 // the current dashboard item and add the new one.
@@ -510,7 +510,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 //// It's no longer active, so we've got to get rid of it.
                 //RemoveDashboardItem(item);
 
-                DashboardServiceStoppedItem item = new DashboardServiceStoppedItem(stoppedWindowsServices);
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
                 AddDashboardItem(item);
             }
         }

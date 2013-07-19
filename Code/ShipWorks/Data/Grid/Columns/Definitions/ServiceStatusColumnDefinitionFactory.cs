@@ -110,7 +110,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         //            .Append(" CASE WHEN LastStopDateTime > LastStartDateTime THEN ")
         //                .Append((int)ServiceStatus.Stopped)
         //            .Append(" ELSE ")
-        //                .AppendFormat(" CASE WHEN LastCheckInDateTime IS NULL OR DATEDIFF(SECOND, LastCheckInDateTime, GETUTCDATE()) > {0:0} THEN ", WindowsServiceManager.NotRunningTimeSpan.TotalSeconds)
+        //                .AppendFormat(" CASE WHEN LastCheckInDateTime IS NULL OR DATEDIFF(SECOND, LastCheckInDateTime, GETUTCDATE()) > {0:0} THEN ", ServicesStatusManager.NotRunningTimeSpan.TotalSeconds)
         //                    .Append((int)ServiceStatus.NotResponding)
         //                .Append(" ELSE ")
         //                    .Append((int)ServiceStatus.Running)

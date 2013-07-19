@@ -1,11 +1,7 @@
-﻿using System;
+﻿using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Actions;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.ApplicationCore.Services;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
@@ -16,15 +12,15 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// whether there are any scheduled actions the machine could potentially execute. Any service that 
         /// hasn't checked in within configured timespan is considered stopped.
         /// </summary>
-        public static List<ServiceStatusEntity> StoppedWindowsServices
+        public static List<ServiceStatusEntity> StoppedServices
         {
             get
             {
                 // Force a db check since the service is running in another process and our local cache will not be updated.
-                WindowsServiceManager.CheckForChangesNeeded();
+                ServiceStatusManager.CheckForChangesNeeded();
 
                 // Find required scheduler services that are not running.
-                return WindowsServiceManager.WindowsServices
+                return ServiceStatusManager.ServicesStatuses
                     .Where(ws =>
                         ws.ServiceType == (int)ShipWorksServiceType.Scheduler &&
                         ws.GetStatus() != ServiceStatus.Running &&

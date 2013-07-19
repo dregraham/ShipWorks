@@ -54,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
         [TestMethod]
         public void StatusIsNotRespondingWhenCheckInTimeIsBeyondThreshold()
         {
-            target.LastCheckInDateTime = DateTime.UtcNow.Add(-WindowsServiceManager.NotRunningTimeSpan);
+            target.LastCheckInDateTime = DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan);
             target.LastStartDateTime = target.LastCheckInDateTime.Value.AddHours(-1);
 
             Assert.AreEqual(ServiceStatus.NotResponding, target.GetStatus());

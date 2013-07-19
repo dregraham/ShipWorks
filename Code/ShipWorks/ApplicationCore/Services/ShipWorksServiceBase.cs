@@ -176,12 +176,12 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
 
-        private ServiceStatusEntity ServiceStatusEntity;
+        private ServiceStatusEntity serviceStatusEntity;
 
         public ShipWorksServiceBase()
         {
             InitializeComponent();
-            checkInTimer.Interval = WindowsServiceManager.CheckInTimeSpan.TotalMilliseconds;
+            checkInTimer.Interval = ServiceStatusManager.CheckInTimeSpan.TotalMilliseconds;
         }
 
         [Description("The ShipWorks service type that this service implements.")]
@@ -202,12 +202,12 @@ namespace ShipWorks.ApplicationCore.Services
         {
             get
             {
-                if (ServiceStatusEntity == null)
+                if (serviceStatusEntity == null)
                 {
-                    ServiceStatusEntity = WindowsServiceManager.GetWindowsService(UserSession.Computer.ComputerID, ServiceType);
+                    serviceStatusEntity = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ServiceType);
                 }
 
-                return ServiceStatusEntity;
+                return serviceStatusEntity;
             }
         }
 
@@ -294,7 +294,7 @@ namespace ShipWorks.ApplicationCore.Services
             CurrentServiceStatusEntity.ServiceDisplayName =
                 manager.IsServiceInstalled() ? manager.GetServiceDisplayName() : GetDisplayName(ServiceType);
 
-            WindowsServiceManager.SaveWindowsService(CurrentServiceStatusEntity);
+            ServiceStatusManager.SaveServiceStatus(CurrentServiceStatusEntity);
         }
 
         static void InitializeForApplication()
@@ -312,7 +312,7 @@ namespace ShipWorks.ApplicationCore.Services
 
         void OnCheckInTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            WindowsServiceManager.CheckIn(CurrentServiceStatusEntity);
+            ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
         }
 
         /// <summary>
@@ -337,7 +337,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Update the ServiceStatusEntity stop and check in times.
             CurrentServiceStatusEntity.LastStopDateTime = DateTime.UtcNow;
             CurrentServiceStatusEntity.LastCheckInDateTime = CurrentServiceStatusEntity.LastStopDateTime;
-            WindowsServiceManager.SaveWindowsService(CurrentServiceStatusEntity);
+            ServiceStatusManager.SaveServiceStatus(CurrentServiceStatusEntity);
         }
     }
 }

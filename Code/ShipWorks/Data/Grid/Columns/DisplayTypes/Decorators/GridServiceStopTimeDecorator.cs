@@ -5,7 +5,7 @@ using System.Drawing;
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
 {
     /// <summary>
-    /// Decorates a windows service last stopped time.
+    /// Decorates a service last stopped time.
     /// </summary>
     public class GridServiceStopTimeDecorator : GridColumnDisplayDecorator
     {

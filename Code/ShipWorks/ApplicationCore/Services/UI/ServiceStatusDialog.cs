@@ -78,7 +78,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
         void OnEntityProviderChangeDetected(object sender, EntityCacheChangeMonitoredChangedEventArgs e)
         {
-            WindowsServiceManager.CheckForChangesNeeded();
+            ServiceStatusManager.CheckForChangesNeeded();
 
             if (e.Inserted.Count + e.Deleted.Count > 0)
             {

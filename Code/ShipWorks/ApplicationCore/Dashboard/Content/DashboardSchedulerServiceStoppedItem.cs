@@ -6,15 +6,15 @@ using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
-    public class DashboardServiceStoppedItem : DashboardItem
+    public class DashboardSchedulerServiceStoppedItem : DashboardItem
     {
         private readonly List<ServiceStatusEntity> schedulerEntities;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DashboardServiceStoppedItem" /> class.
+        /// Initializes a new instance of the <see cref="DashboardSchedulerServiceStoppedItem" /> class.
         /// </summary>
         /// <param name="schedulers">The schedulers that are not running.</param>
-        public DashboardServiceStoppedItem(IEnumerable<ServiceStatusEntity> schedulers)
+        public DashboardSchedulerServiceStoppedItem(IEnumerable<ServiceStatusEntity> schedulers)
         {
             schedulerEntities = new List<ServiceStatusEntity>(schedulers);
         }
