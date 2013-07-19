@@ -1,7 +1,6 @@
-﻿using ShipWorks.ApplicationCore.Services;
+﻿
 
-
-namespace ShipWorks.ApplicationCore.ExecutionMode
+namespace ShipWorks.ApplicationCore.Services.Hosting
 {
     public interface IServiceHostFactory
     {

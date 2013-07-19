@@ -1,10 +1,9 @@
 ﻿using log4net;
-using ShipWorks.ApplicationCore.Services;
 using System;
 using System.ServiceProcess;
 
 
-namespace ShipWorks.ApplicationCore.ExecutionMode
+namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     /// <summary>
     /// Hosts a ShipWorks service as a Windows service.

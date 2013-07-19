@@ -1,8 +1,7 @@
-﻿using ShipWorks.ApplicationCore.Services;
-using System;
+﻿using System;
 
 
-namespace ShipWorks.ApplicationCore.ExecutionMode
+namespace ShipWorks.ApplicationCore.Services.Hosting
 {
     /// <summary>
     /// Hosts a ShipWorks service.

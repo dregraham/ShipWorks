@@ -1,12 +1,11 @@
 ﻿using log4net;
-using ShipWorks.ApplicationCore.Services;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
 
-namespace ShipWorks.ApplicationCore.ExecutionMode
+namespace ShipWorks.ApplicationCore.Services.Hosting.Background
 {
     /// <summary>
     /// Hosts a ShipWorks service as a background process.

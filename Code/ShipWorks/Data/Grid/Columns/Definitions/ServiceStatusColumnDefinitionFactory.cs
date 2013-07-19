@@ -3,6 +3,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Services;
+using ShipWorks.ApplicationCore.Services.UI;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.SortProviders;

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ShipWorks.ApplicationCore.Services
+namespace ShipWorks.ApplicationCore.Services.UI
 {
     public partial class ServiceStartHelpDlg : Form
     {

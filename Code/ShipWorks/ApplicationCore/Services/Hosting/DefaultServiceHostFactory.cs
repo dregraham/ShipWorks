@@ -1,8 +1,7 @@
-﻿using ShipWorks.ApplicationCore.Services;
-using System;
+﻿using System;
 
 
-namespace ShipWorks.ApplicationCore.ExecutionMode
+namespace ShipWorks.ApplicationCore.Services.Hosting
 {
     /// <summary>
     /// The default host factory, which chooses the <see cref="WindowsServiceHost"/>
@@ -16,9 +15,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 throw new ArgumentNullException("service");
 
             if (new ShipWorksServiceManager(service).IsServiceInstalled())
-                return new WindowsServiceHost(service);
+                return new Windows.WindowsServiceHost(service);
 
-            return new BackgroundServiceHost(service);
+            return new Background.BackgroundServiceHost(service);
         }
     }
 }

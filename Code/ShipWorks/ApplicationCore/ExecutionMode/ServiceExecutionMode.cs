@@ -1,6 +1,7 @@
 ﻿using log4net;
 using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 using ShipWorks.ApplicationCore.Services;
+using ShipWorks.ApplicationCore.Services.Hosting;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
 using System;
