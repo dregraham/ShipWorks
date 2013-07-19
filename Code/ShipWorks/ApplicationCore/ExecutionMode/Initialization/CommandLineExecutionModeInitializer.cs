@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
 {
@@ -13,6 +14,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
         /// <param name="executionMode">The execution mode.</param>
         public override void Initialize()
         {
+            // Setup MessageHelper
+            MessageHelper.Initialize("ShipWorks");
+
             PerformCommonInitialization();
         }
     }

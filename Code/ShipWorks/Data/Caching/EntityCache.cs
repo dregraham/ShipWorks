@@ -98,7 +98,7 @@ namespace ShipWorks.Data.Caching
 
             if (entity == null && fetchIfMissing)
             {
-                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUserInteractive() && Program.MainForm.InvokeRequired) ? -1 : 0);
+                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUserInteractive && Program.MainForm.InvokeRequired) ? -1 : 0);
 
                 try
                 {
@@ -162,7 +162,7 @@ namespace ShipWorks.Data.Caching
 
             if (needsFetched.Count > 0)
             {
-                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUserInteractive() && Program.MainForm.InvokeRequired) ? -1 : 0);
+                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUserInteractive && Program.MainForm.InvokeRequired) ? -1 : 0);
 
                 try
                 {

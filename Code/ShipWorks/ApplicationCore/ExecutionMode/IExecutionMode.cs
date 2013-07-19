@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
         /// </returns>
-        bool IsUserInteractive();
+        bool IsUserInteractive { get; }
 
         /// <summary>
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run, 

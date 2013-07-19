@@ -347,9 +347,9 @@
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
-    <Compile Include="WindowsServices\Fakes\FakeShipWorksSchedulerService.cs" />
-    <Compile Include="WindowsServices\ShipWorksSchedulerServiceTests.cs" />
-    <Compile Include="WindowsServices\WindowsServiceEntityExtensionsTests.cs" />
+    <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
+    <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
+    <Compile Include="ApplicationCore\Services\WindowsServiceEntityExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

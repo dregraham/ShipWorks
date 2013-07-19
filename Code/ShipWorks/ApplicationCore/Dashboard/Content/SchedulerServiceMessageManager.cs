@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Triggers;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content

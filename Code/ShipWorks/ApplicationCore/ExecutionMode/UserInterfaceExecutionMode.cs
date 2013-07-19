@@ -33,8 +33,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         private static readonly ILog log = LogManager.GetLogger(typeof(UserInterfaceExecutionMode));
         private readonly IExecutionModeInitializer initializer;
 
-        private bool isTerminating;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
         /// </summary>
@@ -47,8 +45,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <param name="initializer">The initializer.</param>
         public UserInterfaceExecutionMode(IExecutionModeInitializer initializer)
         {
-            isTerminating = false;
-
             this.initializer = initializer ?? new UserInterfaceExecutionModeInitializer();
         }
 
@@ -58,10 +54,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsUserInteractive()
+        public bool IsUserInteractive
         {
-            return true;
+            get { return MainForm != null && MainForm.IsHandleCreated; }
         }
+
+        /// <summary>
+        /// Single instance of the running application
+        /// </summary>
+        public MainForm MainForm { get; private set; }
 
         /// <summary>
         /// Runs the ShipWorks UI.
@@ -85,10 +86,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             SplashScreen.ShowSplash();
             initializer.Initialize();
 
-            Program.MainForm.Load += new EventHandler(OnMainFormLoaded);
+            // MainForm must be created after initialization to ensure licensing is in place
+            MainForm = new MainForm();
+            MainForm.Load += new EventHandler(OnMainFormLoaded);
 
             SplashScreen.Status = "Loading ShipWorks...";
-            Application.Run(Program.MainForm);
+            Application.Run(MainForm);
         }
 
         /// <summary>
@@ -96,8 +99,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         private void OnMainFormLoaded(object sender, EventArgs e)
         {
-            Program.MainForm.Activate();
+            MainForm.Activate();
             SplashScreen.CloseSplash();
+
+            // Start idle processing
+            IdleWatcher.Initialize();
 
             log.InfoFormat("Application activated.");
         }
@@ -111,14 +117,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <exception cref="System.NotImplementedException"></exception>
         public void HandleException(Exception exception)
         {
-            if (isTerminating)
-            {
-                log.Error("Exception received while already terminating.", exception);
-                return;
-            }
-
-            isTerminating = true;
-
             string userEmail = string.Empty;
             if (UserSession.IsLoggedOn)
             {

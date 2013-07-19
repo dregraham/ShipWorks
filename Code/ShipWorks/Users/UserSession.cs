@@ -45,7 +45,7 @@ using ShipWorks.FileTransfer;
 using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 
 namespace ShipWorks.Users
 {
