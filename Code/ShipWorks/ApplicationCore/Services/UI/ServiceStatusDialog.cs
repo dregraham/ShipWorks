@@ -17,7 +17,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 
-namespace ShipWorks.ApplicationCore.Services
+namespace ShipWorks.ApplicationCore.Services.UI
 {
     public partial class ServiceStatusDialog : Form
     {
@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             base.OnLoad(e);
 
-            entityGrid.PrimaryGrid.NewRowType = typeof(WindowsServiceGridRow);
+            entityGrid.PrimaryGrid.NewRowType = typeof(ServiceGridRow);
 
             //Service status includes computer info too
             PrefetchPath2 prefetch = new PrefetchPath2(EntityType.WindowsServiceEntity);

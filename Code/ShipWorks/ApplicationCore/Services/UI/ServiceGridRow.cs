@@ -4,12 +4,12 @@ using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Drawing;
 
-namespace ShipWorks.Actions
+namespace ShipWorks.ApplicationCore.Services.UI
 {
     /// <summary>
-    /// Customized grid row for displaying Windows services.
+    /// Customized grid row for displaying services.
     /// </summary>
-    public class WindowsServiceGridRow : PagedEntityGrid.PagedEntityGridRow
+    public class ServiceGridRow : PagedEntityGrid.PagedEntityGridRow
     {
         /// <summary>
         /// Draws an error highlight if the service is stopped and there are eligible actions targeting the machine.

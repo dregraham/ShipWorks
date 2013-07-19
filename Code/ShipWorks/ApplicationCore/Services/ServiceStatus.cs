@@ -6,7 +6,7 @@ using System.Reflection;
 namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
-    /// Describes the status of a ShipWorks Windows service as inferred from check-in information.
+    /// Describes the status of a ShipWorks service as inferred from check-in information.
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ServiceStatus
