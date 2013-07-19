@@ -16,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// whether there are any scheduled actions the machine could potentially execute. Any service that 
         /// hasn't checked in within configured timespan is considered stopped.
         /// </summary>
-        public static List<WindowsServiceEntity> StoppedWindowsServices
+        public static List<ServiceStatusEntity> StoppedWindowsServices
         {
             get
             {

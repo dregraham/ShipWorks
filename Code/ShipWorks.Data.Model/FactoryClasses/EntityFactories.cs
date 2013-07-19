@@ -4682,6 +4682,45 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
+	/// <summary>Factory to create new, empty ServiceStatusEntity objects.</summary>
+	[Serializable]
+	public partial class ServiceStatusEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public ServiceStatusEntityFactory() : base("ServiceStatusEntity", ShipWorks.Data.Model.EntityType.ServiceStatusEntity) { }
+
+		/// <summary>Creates a new, empty ServiceStatusEntity object.</summary>
+		/// <returns>A new, empty ServiceStatusEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new ServiceStatusEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewServiceStatus
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new ServiceStatusEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ServiceStatusEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewServiceStatusUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<ServiceStatusEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
 	/// <summary>Factory to create new, empty ShipmentEntity objects.</summary>
 	[Serializable]
 	public partial class ShipmentEntityFactory : EntityFactoryBase2 {
@@ -6165,45 +6204,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
-	/// <summary>Factory to create new, empty WindowsServiceEntity objects.</summary>
-	[Serializable]
-	public partial class WindowsServiceEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public WindowsServiceEntityFactory() : base("WindowsServiceEntity", ShipWorks.Data.Model.EntityType.WindowsServiceEntity) { }
-
-		/// <summary>Creates a new, empty WindowsServiceEntity object.</summary>
-		/// <returns>A new, empty WindowsServiceEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new WindowsServiceEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWindowsService
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new WindowsServiceEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new WindowsServiceEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWindowsServiceUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<WindowsServiceEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
 	/// <summary>Factory to create new, empty WorldShipGoodsEntity objects.</summary>
 	[Serializable]
 	public partial class WorldShipGoodsEntityFactory : EntityFactoryBase2 {
@@ -6880,6 +6880,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ServerMessageSignoffEntity:
 					factoryToUse = new ServerMessageSignoffEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
+					factoryToUse = new ServiceStatusEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					factoryToUse = new ShipmentEntityFactory();
 					break;
@@ -6990,9 +6993,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.VolusionStoreEntity:
 					factoryToUse = new VolusionStoreEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.WindowsServiceEntity:
-					factoryToUse = new WindowsServiceEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity:
 					factoryToUse = new WorldShipGoodsEntityFactory();

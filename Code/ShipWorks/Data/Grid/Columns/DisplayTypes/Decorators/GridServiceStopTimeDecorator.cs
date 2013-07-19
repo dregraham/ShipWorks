@@ -14,7 +14,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// </summary>
         public override void ApplyDecoration(GridColumnFormattedValue formattedValue)
         {
-            var service = (WindowsServiceEntity)formattedValue.Entity;
+            var service = (ServiceStatusEntity)formattedValue.Entity;
 
             if (service.LastStopDateTime < service.LastStartDateTime)
                 formattedValue.ForeColor = Color.DarkGray;

@@ -93,8 +93,8 @@ namespace ShipWorks.Users
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                computer.WindowsServices.Clear();
-                computer.WindowsServices.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.WindowsServiceEntity).Cast<WindowsServiceEntity>());
+                computer.ServiceStatuses.Clear();
+                computer.ServiceStatuses.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.ServiceStatusEntity).Cast<ServiceStatusEntity>());
             }
         }
 

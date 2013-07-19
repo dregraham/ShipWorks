@@ -176,7 +176,7 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
 
-        private WindowsServiceEntity windowsServiceEntity;
+        private ServiceStatusEntity ServiceStatusEntity;
 
         public ShipWorksServiceBase()
         {
@@ -196,18 +196,18 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Attempts to get the WindowsServiceEntity for this Computer and ServiceType
+        /// Attempts to get the ServiceStatusEntity for this Computer and ServiceType
         /// </summary>
-        private WindowsServiceEntity CurrentWindowsServiceEntity
+        private ServiceStatusEntity CurrentServiceStatusEntity
         {
             get
             {
-                if (windowsServiceEntity == null)
+                if (ServiceStatusEntity == null)
                 {
-                    windowsServiceEntity = WindowsServiceManager.GetWindowsService(UserSession.Computer.ComputerID, ServiceType);
+                    ServiceStatusEntity = WindowsServiceManager.GetWindowsService(UserSession.Computer.ComputerID, ServiceType);
                 }
 
-                return windowsServiceEntity;
+                return ServiceStatusEntity;
             }
         }
 
@@ -285,16 +285,16 @@ namespace ShipWorks.ApplicationCore.Services
             // Setup the service for ShipWorks access.
             InitializeForApplication();
 
-            // Update the WindowsServiceEntity start and check in times.
-            CurrentWindowsServiceEntity.LastStartDateTime = DateTime.UtcNow;
-            CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStartDateTime;
-            CurrentWindowsServiceEntity.ServiceFullName = ServiceName;
+            // Update the ServiceStatusEntity start and check in times.
+            CurrentServiceStatusEntity.LastStartDateTime = DateTime.UtcNow;
+            CurrentServiceStatusEntity.LastCheckInDateTime = CurrentServiceStatusEntity.LastStartDateTime;
+            CurrentServiceStatusEntity.ServiceFullName = ServiceName;
 
             var manager = new WindowsServiceController(this);       //TODO: refactor to remove host-specific knowledge
-            CurrentWindowsServiceEntity.ServiceDisplayName =
+            CurrentServiceStatusEntity.ServiceDisplayName =
                 manager.IsServiceInstalled() ? manager.GetServiceDisplayName() : GetDisplayName(ServiceType);
 
-            WindowsServiceManager.SaveWindowsService(CurrentWindowsServiceEntity);
+            WindowsServiceManager.SaveWindowsService(CurrentServiceStatusEntity);
         }
 
         static void InitializeForApplication()
@@ -312,7 +312,7 @@ namespace ShipWorks.ApplicationCore.Services
 
         void OnCheckInTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            WindowsServiceManager.CheckIn(CurrentWindowsServiceEntity);
+            WindowsServiceManager.CheckIn(CurrentServiceStatusEntity);
         }
 
         /// <summary>
@@ -334,10 +334,10 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected virtual void OnStopCore()
         {
-            // Update the WindowsServiceEntity stop and check in times.
-            CurrentWindowsServiceEntity.LastStopDateTime = DateTime.UtcNow;
-            CurrentWindowsServiceEntity.LastCheckInDateTime = CurrentWindowsServiceEntity.LastStopDateTime;
-            WindowsServiceManager.SaveWindowsService(CurrentWindowsServiceEntity);
+            // Update the ServiceStatusEntity stop and check in times.
+            CurrentServiceStatusEntity.LastStopDateTime = DateTime.UtcNow;
+            CurrentServiceStatusEntity.LastCheckInDateTime = CurrentServiceStatusEntity.LastStopDateTime;
+            WindowsServiceManager.SaveWindowsService(CurrentServiceStatusEntity);
         }
     }
 }

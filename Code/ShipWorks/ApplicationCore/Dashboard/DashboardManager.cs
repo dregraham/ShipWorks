@@ -480,7 +480,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private static void CheckForWindowsServiceStoppedChanges()
         {
             // Check the database for any changes
-            List<WindowsServiceEntity> stoppedWindowsServices = SchedulerServiceMessageManager.StoppedWindowsServices;
+            List<ServiceStatusEntity> stoppedWindowsServices = SchedulerServiceMessageManager.StoppedWindowsServices;
             List<DashboardServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardServiceStoppedItem>().ToList<DashboardServiceStoppedItem>();
 
             // If the message is already there we don't have to do anything

@@ -6,14 +6,14 @@ using System;
 namespace ShipWorks.ApplicationCore.Services.Tests
 {
     [TestClass]
-    public class WindowsServiceEntityExtensionsTests
+    public class ServiceStatusEntityExtensionsTests
     {
-        WindowsServiceEntity target;
+        ServiceStatusEntity target;
 
         [TestInitialize]
         public void Initialize()
         {
-            target = new WindowsServiceEntity();
+            target = new ServiceStatusEntity();
         }
 
 

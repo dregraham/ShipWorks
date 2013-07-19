@@ -24,7 +24,7 @@ namespace ShipWorks.ApplicationCore.Services
     {
         static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceManager));
 
-        static TableSynchronizer<WindowsServiceEntity> tableSynchronizer;
+        static TableSynchronizer<ServiceStatusEntity> tableSynchronizer;
         static bool needCheckForChanges = false;
 
         const string ormConcurrencyExceptionMessage = "Another user has recently made changes.\n\n" +
@@ -62,7 +62,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Add any missing computers 
             AddMissingComputers();
 
-            tableSynchronizer = new TableSynchronizer<WindowsServiceEntity>();
+            tableSynchronizer = new TableSynchronizer<ServiceStatusEntity>();
             InternalCheckForChanges();
         }
 
@@ -86,7 +86,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 if (tableSynchronizer.Synchronize())
                 {
-                    tableSynchronizer.EntityCollection.Sort((int)WindowsServiceFieldIndex.ServiceDisplayName, ListSortDirection.Ascending);
+                    tableSynchronizer.EntityCollection.Sort((int)ServiceStatusFieldIndex.ServiceDisplayName, ListSortDirection.Ascending);
                 }
 
                 needCheckForChanges = false;
@@ -101,16 +101,16 @@ namespace ShipWorks.ApplicationCore.Services
             int numberOfServiceTypes = Enum.GetNames(typeof(ShipWorksServiceType)).Length;
 
             // Find computers that are missing WindowsService entries
-            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.WindowsServices == null || c.WindowsServices.Count != numberOfServiceTypes))
+            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatuses == null || c.ServiceStatuses.Count != numberOfServiceTypes))
             {
                 // For each ShipWorksServiceType, if the computer does have an entry for it, add it.
                 foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
                 {
-                    if (computer.WindowsServices == null || 
-                        computer.WindowsServices.Count == 0 || 
-                        computer.WindowsServices.All(ws => ws.ServiceType != (int)serviceType))
+                    if (computer.ServiceStatuses == null ||
+                        computer.ServiceStatuses.Count == 0 ||
+                        computer.ServiceStatuses.All(ws => ws.ServiceType != (int)serviceType))
                     {
-                        WindowsServiceEntity windowsService = new WindowsServiceEntity
+                        ServiceStatusEntity windowsService = new ServiceStatusEntity
                             {
                                 ServiceType = (int) serviceType,
                                 ServiceFullName = string.Empty,
@@ -127,7 +127,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// Get the current list of all WindowsServiceEntities
         /// </summary>
-        public static IList<WindowsServiceEntity> WindowsServices
+        public static IList<ServiceStatusEntity> WindowsServices
         {
             get
             {
@@ -144,25 +144,25 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Get the WindowsServiceEntity with the given ID, or null of no such action exists.
+        /// Get the ServiceStatusEntity with the given ID, or null of no such action exists.
         /// </summary>
-        public static WindowsServiceEntity GetWindowsService(long windowsServiceID)
+        public static ServiceStatusEntity GetWindowsService(long windowsServiceID)
         {
-            return WindowsServices.SingleOrDefault(a => a.WindowsServiceID == windowsServiceID);
+            return WindowsServices.SingleOrDefault(a => a.ServiceStatusID == windowsServiceID);
         }
 
         /// <summary>
-        /// Get the WindowsServiceEntity with the given Computer ID and ShipWorksServiceType, or null of no such action exists.
+        /// Get the ServiceStatusEntity with the given Computer ID and ShipWorksServiceType, or null of no such action exists.
         /// </summary>
-        public static WindowsServiceEntity GetWindowsService(long computerID, ShipWorksServiceType shipWorksServiceType)
+        public static ServiceStatusEntity GetWindowsService(long computerID, ShipWorksServiceType shipWorksServiceType)
         {
             return WindowsServices.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)shipWorksServiceType);
         }
 
         /// <summary>
-        /// Delete the given WindowsServiceEntity
+        /// Delete the given ServiceStatusEntity
         /// </summary>
-        public static void DeleteWindowsService(WindowsServiceEntity windowsService)
+        public static void DeleteWindowsService(ServiceStatusEntity windowsService)
         {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -175,9 +175,9 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Saves the given WindowsServiceEntity. 
+        /// Saves the given ServiceStatusEntity. 
         /// </summary>
-        public static void SaveWindowsService(WindowsServiceEntity windowsService, SqlAdapter adapter)
+        public static void SaveWindowsService(ServiceStatusEntity windowsService, SqlAdapter adapter)
         {
             try
             {
@@ -193,9 +193,9 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Saves the given WindowsServiceEntity. 
+        /// Saves the given ServiceStatusEntity. 
         /// </summary>
-        public static void SaveWindowsService(WindowsServiceEntity windowsService)
+        public static void SaveWindowsService(ServiceStatusEntity windowsService)
         {
             try
             {
@@ -219,7 +219,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// Update and persist the last check-in for the WindowsService
         /// </summary>
         /// <param name="windowsService">The WindowsService for which to check-in.</param>
-        public static void CheckIn(WindowsServiceEntity windowsService)
+        public static void CheckIn(ServiceStatusEntity windowsService)
         {
             windowsService.LastCheckInDateTime = DateTime.UtcNow;
 

@@ -168,6 +168,7 @@ namespace ShipWorks.Data.Adapter
 			InitSearsStoreEntityMappings();
 			InitServerMessageEntityMappings();
 			InitServerMessageSignoffEntityMappings();
+			InitServiceStatusEntityMappings();
 			InitShipmentEntityMappings();
 			InitShipmentCustomsItemEntityMappings();
 			InitShippingDefaultsRuleEntityMappings();
@@ -205,7 +206,6 @@ namespace ShipWorks.Data.Adapter
 			InitUserSettingsEntityMappings();
 			InitVersionSignoffEntityMappings();
 			InitVolusionStoreEntityMappings();
-			InitWindowsServiceEntityMappings();
 			InitWorldShipGoodsEntityMappings();
 			InitWorldShipPackageEntityMappings();
 			InitWorldShipProcessedEntityMappings();
@@ -2072,6 +2072,20 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ServerMessageSignoffEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 4 );
 			base.AddElementFieldMapping( "ServerMessageSignoffEntity", "Dismissed", "Dismissed", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
 		}
+		/// <summary>Inits ServiceStatusEntity's mappings</summary>
+		private void InitServiceStatusEntityMappings()
+		{
+			base.AddElementMapping( "ServiceStatusEntity", "ShipWorksLocal", @"dbo", "ServiceStatus", 9 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "ServiceStatusID", "ServiceStatusID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "LastStartDateTime", "LastStartDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "LastCheckInDateTime", "LastCheckInDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "ServiceStatusEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 8 );
+		}
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
@@ -2728,20 +2742,6 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ShipmentMethods", "ShipmentMethods", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 6 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZone", "ServerTimeZone", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZoneDST", "ServerTimeZoneDST", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
-		}
-		/// <summary>Inits WindowsServiceEntity's mappings</summary>
-		private void InitWindowsServiceEntityMappings()
-		{
-			base.AddElementMapping( "WindowsServiceEntity", "ShipWorksLocal", @"dbo", "WindowsService", 9 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "WindowsServiceID", "WindowsServiceID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ComputerID", "ComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStartDateTime", "LastStartDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastStopDateTime", "LastStopDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "LastCheckInDateTime", "LastCheckInDateTime", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceFullName", "ServiceFullName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "WindowsServiceEntity", "ServiceDisplayName", "ServiceDisplayName", false, (int)SqlDbType.NVarChar, 256, 0, 0, false, "", null, typeof(System.String), 8 );
 		}
 		/// <summary>Inits WorldShipGoodsEntity's mappings</summary>
 		private void InitWorldShipGoodsEntityMappings()

@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_CanUserDismiss_Test()
         {
-            testObject = new DashboardServiceStoppedItem(new List<WindowsServiceEntity>());
+            testObject = new DashboardServiceStoppedItem(new List<ServiceStatusEntity>());
 
             testObject.Initialize(new DashboardBar());
 
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_PrimaryText_Test()
         {
-            testObject = new DashboardServiceStoppedItem(new List<WindowsServiceEntity>());
+            testObject = new DashboardServiceStoppedItem(new List<ServiceStatusEntity>());
 
             testObject.Initialize(new DashboardBar());
 
@@ -34,11 +34,11 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_SecondaryText_WhenMoreThanOneSchedulers_Test()
         {
-            List<WindowsServiceEntity> schedulerEntities = new List<WindowsServiceEntity>
+            List<ServiceStatusEntity> schedulerEntities = new List<ServiceStatusEntity>
             {
-                new WindowsServiceEntity(),
-                new WindowsServiceEntity(),
-                new WindowsServiceEntity()
+                new ServiceStatusEntity(),
+                new ServiceStatusEntity(),
+                new ServiceStatusEntity()
             };
                 
             testObject = new DashboardServiceStoppedItem(schedulerEntities);
@@ -51,9 +51,9 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_SecondaryText_WhenOneSchedulerTest()
         {
-            List<WindowsServiceEntity> schedulerEntities = new List<WindowsServiceEntity>
+            List<ServiceStatusEntity> schedulerEntities = new List<ServiceStatusEntity>
             {
-                new WindowsServiceEntity()
+                new ServiceStatusEntity()
             };
 
             testObject = new DashboardServiceStoppedItem(schedulerEntities);
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_ImageIsNotNull_Test()
         {
-            testObject = new DashboardServiceStoppedItem(new List<WindowsServiceEntity>());
+            testObject = new DashboardServiceStoppedItem(new List<ServiceStatusEntity>());
 
             testObject.Initialize(new DashboardBar());
 
