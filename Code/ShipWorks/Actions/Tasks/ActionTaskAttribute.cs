@@ -19,17 +19,17 @@ namespace ShipWorks.Actions.Tasks
         {
             this.displayName = displayName;
             this.identifier = identifier;
-            allowedActionTriggerClassifications = ActionTriggerClassifications.Scheduled | ActionTriggerClassifications.NonScheduled; 
+            allowedActionTriggerClassifications = ActionTriggerClassifications.Scheduled | ActionTriggerClassifications.Nonscheduled; 
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionTaskAttribute(string displayName, string identifier, ActionTriggerClassifications actionTriggerClassifications)
+        public ActionTaskAttribute(string displayName, string identifier, ActionTriggerClassifications allowedActionTriggerClassifications)
         {
             this.displayName = displayName;
             this.identifier = identifier;
-            this.allowedActionTriggerClassifications = actionTriggerClassifications;
+            this.allowedActionTriggerClassifications = allowedActionTriggerClassifications;
         }
 
         /// <summary>

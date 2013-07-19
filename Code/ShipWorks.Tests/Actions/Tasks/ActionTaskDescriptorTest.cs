@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Actions.Tasks
             }
         }
 
-        [ActionTask("Non Schedulable Task", "NonSchedulableTaskTest", ActionTriggerClassifications.NonScheduled)]
+        [ActionTask("Non Schedulable Task", "NonSchedulableTaskTest", ActionTriggerClassifications.Nonscheduled)]
         private class NonSchedulableTaskTest : ActionTask
         {
             public override ActionTaskEditor CreateEditor()
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Actions.Tasks
             }
         }
 
-        [ActionTask("All Task", "AllTaskTest", ActionTriggerClassifications.NonScheduled | ActionTriggerClassifications.Scheduled)]
+        [ActionTask("All Task", "AllTaskTest", ActionTriggerClassifications.Nonscheduled | ActionTriggerClassifications.Scheduled)]
         private class AllTaskTest : ActionTask
         {
             public override ActionTaskEditor CreateEditor()

@@ -24,6 +24,6 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Task is allowed to be run from non-scheduled trigger
         /// </summary>
-        NonScheduled = 0x00000002
+        Nonscheduled = 0x00000002
     }
 }

@@ -34,7 +34,6 @@
             this.browse = new System.Windows.Forms.Button();
             this.backupPath = new System.Windows.Forms.TextBox();
             this.labelPath = new System.Windows.Forms.Label();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.labelPrefix = new System.Windows.Forms.Label();
             this.textPrefix = new System.Windows.Forms.TextBox();
             this.numericBackupCount = new System.Windows.Forms.NumericUpDown();
@@ -191,7 +190,6 @@
         private System.Windows.Forms.Button browse;
         private System.Windows.Forms.TextBox backupPath;
         private System.Windows.Forms.Label labelPath;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label labelPrefix;
         private System.Windows.Forms.TextBox textPrefix;
         private System.Windows.Forms.NumericUpDown numericBackupCount;

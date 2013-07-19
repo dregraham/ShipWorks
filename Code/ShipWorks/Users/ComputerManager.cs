@@ -109,9 +109,12 @@ namespace ShipWorks.Users
         /// <summary>
         /// Gets the computer that Sql Server is currently running on.
         /// </summary>
-        public static ComputerEntity GetSqlServerComputer()
+        public static ComputerEntity GetSqlServerComputer
         {
-            return Computers.SingleOrDefault(c => c.Name == SqlSession.Current.GetServerMachineName());
+            get
+            {
+                return Computers.SingleOrDefault(c => c.Name == SqlSession.Current.GetServerMachineName());   
+            }
         }
 
         /// <summary>

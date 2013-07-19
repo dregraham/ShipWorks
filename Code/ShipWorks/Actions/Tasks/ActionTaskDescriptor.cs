@@ -131,7 +131,7 @@ namespace ShipWorks.Actions.Tasks
         {
             ActionTriggerClassifications classification = (triggerType == ActionTriggerType.Scheduled) ? 
                 ActionTriggerClassifications.Scheduled : 
-                ActionTriggerClassifications.NonScheduled;
+                ActionTriggerClassifications.Nonscheduled;
             return (allowedActionTriggerClassifications & classification) != ActionTriggerClassifications.None;
         }
 
