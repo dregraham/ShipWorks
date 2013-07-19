@@ -28,11 +28,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 	// __LLBLGENPRO_USER_CODE_REGION_END
 
 	/// <summary>
-	/// Entity class which represents the entity 'WindowsService'.<br/><br/>
+	/// Entity class which represents the entity 'ServiceStatus'.<br/><br/>
 	/// 
 	/// </summary>
 	[Serializable]
-	public partial class WindowsServiceEntity : CommonEntityBase, ISerializable
+	public partial class ServiceStatusEntity : CommonEntityBase, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -62,13 +62,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static WindowsServiceEntity()
+		static ServiceStatusEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 
 		/// <summary> CTor</summary>
-		public WindowsServiceEntity():base("WindowsServiceEntity")
+		public ServiceStatusEntity():base("ServiceStatusEntity")
 		{
 			InitClassEmpty(null, CreateFields());
 		}
@@ -76,43 +76,43 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public WindowsServiceEntity(IEntityFields2 fields):base("WindowsServiceEntity")
+		public ServiceStatusEntity(IEntityFields2 fields):base("ServiceStatusEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this WindowsServiceEntity</param>
-		public WindowsServiceEntity(IValidator validator):base("WindowsServiceEntity")
+		/// <param name="validator">The custom validator object for this ServiceStatusEntity</param>
+		public ServiceStatusEntity(IValidator validator):base("ServiceStatusEntity")
 		{
 			InitClassEmpty(validator, CreateFields());
 		}
 				
 
 		/// <summary> CTor</summary>
-		/// <param name="windowsServiceID">PK value for WindowsService which data should be fetched into this WindowsService object</param>
+		/// <param name="serviceStatusID">PK value for ServiceStatus which data should be fetched into this ServiceStatus object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public WindowsServiceEntity(System.Int64 windowsServiceID):base("WindowsServiceEntity")
+		public ServiceStatusEntity(System.Int64 serviceStatusID):base("ServiceStatusEntity")
 		{
 			InitClassEmpty(null, CreateFields());
-			this.WindowsServiceID = windowsServiceID;
+			this.ServiceStatusID = serviceStatusID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="windowsServiceID">PK value for WindowsService which data should be fetched into this WindowsService object</param>
-		/// <param name="validator">The custom validator object for this WindowsServiceEntity</param>
+		/// <param name="serviceStatusID">PK value for ServiceStatus which data should be fetched into this ServiceStatus object</param>
+		/// <param name="validator">The custom validator object for this ServiceStatusEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public WindowsServiceEntity(System.Int64 windowsServiceID, IValidator validator):base("WindowsServiceEntity")
+		public ServiceStatusEntity(System.Int64 serviceStatusID, IValidator validator):base("ServiceStatusEntity")
 		{
 			InitClassEmpty(validator, CreateFields());
-			this.WindowsServiceID = windowsServiceID;
+			this.ServiceStatusID = serviceStatusID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected WindowsServiceEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ServiceStatusEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -136,9 +136,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((WindowsServiceFieldIndex)fieldIndex)
+			switch((ServiceStatusFieldIndex)fieldIndex)
 			{
-				case WindowsServiceFieldIndex.ComputerID:
+				case ServiceStatusFieldIndex.ComputerID:
 					DesetupSyncComputer(true, false);
 					break;
 				default:
@@ -179,7 +179,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
 		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return WindowsServiceEntity.GetRelationsForField(fieldName);
+			return ServiceStatusEntity.GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
@@ -191,7 +191,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 				case "Computer":
-					toReturn.Add(WindowsServiceEntity.Relations.ComputerEntityUsingComputerID);
+					toReturn.Add(ServiceStatusEntity.Relations.ComputerEntityUsingComputerID);
 					break;
 
 
@@ -320,8 +320,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public IPredicateExpression ConstructFilterForUCComputerIDServiceType()
 		{
 			IPredicateExpression filter = new PredicateExpression();
-			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)WindowsServiceFieldIndex.ComputerID], null, ComparisonOperator.Equal));
-			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)WindowsServiceFieldIndex.ServiceType], null, ComparisonOperator.Equal)); 
+			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)ServiceStatusFieldIndex.ComputerID], null, ComparisonOperator.Equal));
+			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)ServiceStatusFieldIndex.ServiceType], null, ComparisonOperator.Equal)); 
 			return filter;
 		}
 
@@ -329,7 +329,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
 		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(WindowsServiceFieldIndex fieldIndex)
+		public bool TestOriginalFieldValueForNull(ServiceStatusFieldIndex fieldIndex)
 		{
 			return base.Fields[(int)fieldIndex].IsNull;
 		}
@@ -338,7 +338,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
 		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
 		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(WindowsServiceFieldIndex fieldIndex)
+		public bool TestCurrentFieldValueForNull(ServiceStatusFieldIndex fieldIndex)
 		{
 			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
 		}
@@ -348,7 +348,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		public override List<IEntityRelation> GetAllRelations()
 		{
-			return new WindowsServiceRelations().GetAllRelations();
+			return new ServiceStatusRelations().GetAllRelations();
 		}
 		
 
@@ -369,7 +369,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
 		protected virtual IEntityFields2 CreateFields()
 		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.WindowsServiceEntity);
+			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.ServiceStatusEntity);
 		}
 
 		/// <summary>
@@ -384,7 +384,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(WindowsServiceEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(ServiceStatusEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -475,7 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable = null;
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("WindowsServiceID", fieldHashtable);
+			_fieldsCustomProperties.Add("ServiceStatusID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
@@ -508,7 +508,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncComputer(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", WindowsServiceEntity.Relations.ComputerEntityUsingComputerID, true, signalRelatedEntity, "WindowsServices", resetFKFields, new int[] { (int)WindowsServiceFieldIndex.ComputerID } );		
+			base.PerformDesetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", ServiceStatusEntity.Relations.ComputerEntityUsingComputerID, true, signalRelatedEntity, "ServiceStatuses", resetFKFields, new int[] { (int)ServiceStatusFieldIndex.ComputerID } );		
 			_computer = null;
 		}
 
@@ -520,7 +520,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				DesetupSyncComputer(true, true);
 				_computer = (ComputerEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", WindowsServiceEntity.Relations.ComputerEntityUsingComputerID, true, new string[] {  } );
+				base.PerformSetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", ServiceStatusEntity.Relations.ComputerEntityUsingComputerID, true, new string[] {  } );
 			}
 		}
 		
@@ -538,7 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this WindowsServiceEntity</param>
+		/// <param name="validator">The validator object for this ServiceStatusEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -557,9 +557,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static WindowsServiceRelations Relations
+		public  static ServiceStatusRelations Relations
 		{
-			get	{ return new WindowsServiceRelations(); }
+			get	{ return new ServiceStatusRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -579,7 +579,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get
 			{
 				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ComputerEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Computer")[0], (int)ShipWorks.Data.Model.EntityType.WindowsServiceEntity, (int)ShipWorks.Data.Model.EntityType.ComputerEntity, 0, null, null, null, null, "Computer", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+					(IEntityRelation)GetRelationsForField("Computer")[0], (int)ShipWorks.Data.Model.EntityType.ServiceStatusEntity, (int)ShipWorks.Data.Model.EntityType.ComputerEntity, 0, null, null, null, null, "Computer", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
 			}
 		}
 
@@ -589,7 +589,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return WindowsServiceEntity.CustomProperties;}
+			get { return ServiceStatusEntity.CustomProperties;}
 		}
 
 		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
@@ -605,106 +605,106 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return WindowsServiceEntity.FieldsCustomProperties;}
+			get { return ServiceStatusEntity.FieldsCustomProperties;}
 		}
 
-		/// <summary> The WindowsServiceID property of the Entity WindowsService<br/><br/>
+		/// <summary> The ServiceStatusID property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."WindowsServiceID"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceStatusID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-		public virtual System.Int64 WindowsServiceID
+		public virtual System.Int64 ServiceStatusID
 		{
-			get { return (System.Int64)GetValue((int)WindowsServiceFieldIndex.WindowsServiceID, true); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.WindowsServiceID, value); }
+			get { return (System.Int64)GetValue((int)ServiceStatusFieldIndex.ServiceStatusID, true); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.ServiceStatusID, value); }
 		}
 
-		/// <summary> The RowVersion property of the Entity WindowsService<br/><br/>
+		/// <summary> The RowVersion property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."RowVersion"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Byte[] RowVersion
 		{
-			get { return (System.Byte[])GetValue((int)WindowsServiceFieldIndex.RowVersion, true); }
+			get { return (System.Byte[])GetValue((int)ServiceStatusFieldIndex.RowVersion, true); }
 
 		}
 
-		/// <summary> The ComputerID property of the Entity WindowsService<br/><br/>
+		/// <summary> The ComputerID property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."ComputerID"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."ComputerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 ComputerID
 		{
-			get { return (System.Int64)GetValue((int)WindowsServiceFieldIndex.ComputerID, true); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.ComputerID, value); }
+			get { return (System.Int64)GetValue((int)ServiceStatusFieldIndex.ComputerID, true); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.ComputerID, value); }
 		}
 
-		/// <summary> The ServiceType property of the Entity WindowsService<br/><br/>
+		/// <summary> The ServiceType property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."ServiceType"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 ServiceType
 		{
-			get { return (System.Int32)GetValue((int)WindowsServiceFieldIndex.ServiceType, true); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.ServiceType, value); }
+			get { return (System.Int32)GetValue((int)ServiceStatusFieldIndex.ServiceType, true); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.ServiceType, value); }
 		}
 
-		/// <summary> The LastStartDateTime property of the Entity WindowsService<br/><br/>
+		/// <summary> The LastStartDateTime property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."LastStartDateTime"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."LastStartDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> LastStartDateTime
 		{
-			get { return (Nullable<System.DateTime>)GetValue((int)WindowsServiceFieldIndex.LastStartDateTime, false); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.LastStartDateTime, value); }
+			get { return (Nullable<System.DateTime>)GetValue((int)ServiceStatusFieldIndex.LastStartDateTime, false); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.LastStartDateTime, value); }
 		}
 
-		/// <summary> The LastStopDateTime property of the Entity WindowsService<br/><br/>
+		/// <summary> The LastStopDateTime property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."LastStopDateTime"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."LastStopDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> LastStopDateTime
 		{
-			get { return (Nullable<System.DateTime>)GetValue((int)WindowsServiceFieldIndex.LastStopDateTime, false); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.LastStopDateTime, value); }
+			get { return (Nullable<System.DateTime>)GetValue((int)ServiceStatusFieldIndex.LastStopDateTime, false); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.LastStopDateTime, value); }
 		}
 
-		/// <summary> The LastCheckInDateTime property of the Entity WindowsService<br/><br/>
+		/// <summary> The LastCheckInDateTime property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."LastCheckInDateTime"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."LastCheckInDateTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> LastCheckInDateTime
 		{
-			get { return (Nullable<System.DateTime>)GetValue((int)WindowsServiceFieldIndex.LastCheckInDateTime, false); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.LastCheckInDateTime, value); }
+			get { return (Nullable<System.DateTime>)GetValue((int)ServiceStatusFieldIndex.LastCheckInDateTime, false); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.LastCheckInDateTime, value); }
 		}
 
-		/// <summary> The ServiceFullName property of the Entity WindowsService<br/><br/>
+		/// <summary> The ServiceFullName property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."ServiceFullName"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceFullName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 256<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ServiceFullName
 		{
-			get { return (System.String)GetValue((int)WindowsServiceFieldIndex.ServiceFullName, true); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.ServiceFullName, value); }
+			get { return (System.String)GetValue((int)ServiceStatusFieldIndex.ServiceFullName, true); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.ServiceFullName, value); }
 		}
 
-		/// <summary> The ServiceDisplayName property of the Entity WindowsService<br/><br/>
+		/// <summary> The ServiceDisplayName property of the Entity ServiceStatus<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WindowsService"."ServiceDisplayName"<br/>
+		/// <remarks>Mapped on  table field: "ServiceStatus"."ServiceDisplayName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 256<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ServiceDisplayName
 		{
-			get { return (System.String)GetValue((int)WindowsServiceFieldIndex.ServiceDisplayName, true); }
-			set	{ SetValue((int)WindowsServiceFieldIndex.ServiceDisplayName, value); }
+			get { return (System.String)GetValue((int)ServiceStatusFieldIndex.ServiceDisplayName, true); }
+			set	{ SetValue((int)ServiceStatusFieldIndex.ServiceDisplayName, value); }
 		}
 
 
@@ -730,14 +730,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_computer != null)
 						{
-							_computer.UnsetRelatedEntity(this, "WindowsServices");
+							_computer.UnsetRelatedEntity(this, "ServiceStatuses");
 						}
 					}
 					else
 					{
 						if(_computer!=value)
 						{
-							((IEntity2)value).SetRelatedEntity(this, "WindowsServices");
+							((IEntity2)value).SetRelatedEntity(this, "ServiceStatuses");
 						}
 					}
 				}
@@ -762,7 +762,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.WindowsServiceEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.ServiceStatusEntity; }
 		}
 		#endregion
 

@@ -14734,6 +14734,56 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ServiceStatusEntity</summary>
+	public partial class ServiceStatusFields
+	{
+		/// <summary>Creates a new ServiceStatusEntity.ServiceStatusID field instance</summary>
+		public static EntityField2 ServiceStatusID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceStatusID);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ComputerID field instance</summary>
+		public static EntityField2 ComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ComputerID);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ServiceType field instance</summary>
+		public static EntityField2 ServiceType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceType);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.LastStartDateTime field instance</summary>
+		public static EntityField2 LastStartDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.LastStartDateTime);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.LastStopDateTime field instance</summary>
+		public static EntityField2 LastStopDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.LastStopDateTime);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.LastCheckInDateTime field instance</summary>
+		public static EntityField2 LastCheckInDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.LastCheckInDateTime);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ServiceFullName field instance</summary>
+		public static EntityField2 ServiceFullName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceFullName);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ServiceDisplayName field instance</summary>
+		public static EntityField2 ServiceDisplayName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceDisplayName);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ShipmentEntity</summary>
 	public partial class ShipmentFields
 	{
@@ -18321,56 +18371,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ServerTimeZoneDST
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ServerTimeZoneDST);}
-		}
-	}
-
-	/// <summary>Field Creation Class for entity WindowsServiceEntity</summary>
-	public partial class WindowsServiceFields
-	{
-		/// <summary>Creates a new WindowsServiceEntity.WindowsServiceID field instance</summary>
-		public static EntityField2 WindowsServiceID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.WindowsServiceID);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.RowVersion field instance</summary>
-		public static EntityField2 RowVersion
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.RowVersion);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.ComputerID field instance</summary>
-		public static EntityField2 ComputerID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ComputerID);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.ServiceType field instance</summary>
-		public static EntityField2 ServiceType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceType);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.LastStartDateTime field instance</summary>
-		public static EntityField2 LastStartDateTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.LastStartDateTime);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.LastStopDateTime field instance</summary>
-		public static EntityField2 LastStopDateTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.LastStopDateTime);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.LastCheckInDateTime field instance</summary>
-		public static EntityField2 LastCheckInDateTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.LastCheckInDateTime);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.ServiceFullName field instance</summary>
-		public static EntityField2 ServiceFullName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceFullName);}
-		}
-		/// <summary>Creates a new WindowsServiceEntity.ServiceDisplayName field instance</summary>
-		public static EntityField2 ServiceDisplayName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WindowsServiceFieldIndex.ServiceDisplayName);}
 		}
 	}
 

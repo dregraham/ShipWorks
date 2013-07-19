@@ -8955,12 +8955,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of WindowsServiceEntity
+	/// Strongly typed collection of ServiceStatusEntity
 	/// </summary>
-	public class WindowsServiceCollection : EntityCollection<WindowsServiceEntity>
+	public class ServiceStatusCollection : EntityCollection<ServiceStatusEntity>
 	{
         /// <summary>
-        /// Gets the count of all WindowsServiceEntity rows
+        /// Gets the count of all ServiceStatusEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -8968,7 +8968,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all WindowsServiceEntity rows filtered by the given predicate
+        /// Gets the count of all ServiceStatusEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -8979,13 +8979,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new WindowsServiceEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new ServiceStatusEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static WindowsServiceCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static ServiceStatusCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -8993,9 +8993,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static WindowsServiceCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static ServiceStatusCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            WindowsServiceCollection collection = new WindowsServiceCollection();
+            ServiceStatusCollection collection = new ServiceStatusCollection();
 
             RelationPredicateBucket bucket = null;
 

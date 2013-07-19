@@ -57,7 +57,7 @@ namespace ShipWorks.Data
                     EntityType.NoteEntity,
                     EntityType.EmailOutboundEntity,
                     EntityType.StoreEntity,
-                    EntityType.WindowsServiceEntity
+                    EntityType.ServiceStatusEntity
                 };
 
         // Maintains version information of each entity and when update, insert, and delets are detected for it

@@ -35,9 +35,9 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.DownloadEntityUsingComputerID);
 			toReturn.Add(this.PrintResultEntityUsingComputerID);
 			toReturn.Add(this.ServerMessageSignoffEntityUsingComputerID);
+			toReturn.Add(this.ServiceStatusEntityUsingComputerID);
 			toReturn.Add(this.TemplateComputerSettingsEntityUsingComputerID);
 			toReturn.Add(this.VersionSignoffEntityUsingComputerID);
-			toReturn.Add(this.WindowsServiceEntityUsingComputerID);
 
 
 			return toReturn;
@@ -120,6 +120,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ServiceStatusEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - ServiceStatus.ComputerID
+		/// </summary>
+		public virtual IEntityRelation ServiceStatusEntityUsingComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ServiceStatuses" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ServiceStatusFields.ComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ServiceStatusEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and TemplateComputerSettingsEntity over the 1:n relation they have, using the relation between the fields:
 		/// Computer.ComputerID - TemplateComputerSettings.ComputerID
 		/// </summary>
@@ -146,21 +161,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, VersionSignoffFields.ComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("VersionSignoffEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and WindowsServiceEntity over the 1:n relation they have, using the relation between the fields:
-		/// Computer.ComputerID - WindowsService.ComputerID
-		/// </summary>
-		public virtual IEntityRelation WindowsServiceEntityUsingComputerID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "WindowsServices" , true);
-				relation.AddEntityFieldPair(ComputerFields.ComputerID, WindowsServiceFields.ComputerID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WindowsServiceEntity", false);
 				return relation;
 			}
 		}

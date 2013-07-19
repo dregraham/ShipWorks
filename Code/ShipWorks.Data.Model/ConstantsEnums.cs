@@ -6910,6 +6910,35 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServiceStatus.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ServiceStatusFieldIndex:int
+	{
+		///<summary>ServiceStatusID. </summary>
+		ServiceStatusID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ComputerID. </summary>
+		ComputerID,
+		///<summary>ServiceType. </summary>
+		ServiceType,
+		///<summary>LastStartDateTime. </summary>
+		LastStartDateTime,
+		///<summary>LastStopDateTime. </summary>
+		LastStopDateTime,
+		///<summary>LastCheckInDateTime. </summary>
+		LastCheckInDateTime,
+		///<summary>ServiceFullName. </summary>
+		ServiceFullName,
+		///<summary>ServiceDisplayName. </summary>
+		ServiceDisplayName,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -8679,35 +8708,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WindowsService.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum WindowsServiceFieldIndex:int
-	{
-		///<summary>WindowsServiceID. </summary>
-		WindowsServiceID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
-		///<summary>ComputerID. </summary>
-		ComputerID,
-		///<summary>ServiceType. </summary>
-		ServiceType,
-		///<summary>LastStartDateTime. </summary>
-		LastStartDateTime,
-		///<summary>LastStopDateTime. </summary>
-		LastStopDateTime,
-		///<summary>LastCheckInDateTime. </summary>
-		LastCheckInDateTime,
-		///<summary>ServiceFullName. </summary>
-		ServiceFullName,
-		///<summary>ServiceDisplayName. </summary>
-		ServiceDisplayName,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WorldShipGoods.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9510,6 +9510,8 @@ namespace ShipWorks.Data.Model
 		ServerMessageEntity,
 		///<summary>ServerMessageSignoff</summary>
 		ServerMessageSignoffEntity,
+		///<summary>ServiceStatus</summary>
+		ServiceStatusEntity,
 		///<summary>Shipment</summary>
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>
@@ -9584,8 +9586,6 @@ namespace ShipWorks.Data.Model
 		VersionSignoffEntity,
 		///<summary>VolusionStore</summary>
 		VolusionStoreEntity,
-		///<summary>WindowsService</summary>
-		WindowsServiceEntity,
 		///<summary>WorldShipGoods</summary>
 		WorldShipGoodsEntity,
 		///<summary>WorldShipPackage</summary>

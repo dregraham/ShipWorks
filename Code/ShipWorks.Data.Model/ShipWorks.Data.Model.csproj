@@ -53,7 +53,7 @@
     <SccAuxPath>
     </SccAuxPath>
     <SccProvider>
-    </SccProvider>   
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -1138,10 +1138,10 @@
     <Compile Include=".\EntityClasses\ScanFormBatchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityClasses\WindowsServiceEntity.cs">
+    <Compile Include=".\RelationClasses\ServiceStatusRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\RelationClasses\WindowsServiceRelations.cs">
+    <Compile Include=".\EntityClasses\ServiceStatusEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>
@@ -1181,5 +1181,5 @@
     </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
-  </PropertyGroup>  
+  </PropertyGroup>
 </Project>

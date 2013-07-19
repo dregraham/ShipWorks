@@ -17,15 +17,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: WindowsService. </summary>
-	public partial class WindowsServiceRelations
+	/// <summary>Implements the static Relations variant for the entity: ServiceStatus. </summary>
+	public partial class ServiceStatusRelations
 	{
 		/// <summary>CTor</summary>
-		public WindowsServiceRelations()
+		public ServiceStatusRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the WindowsServiceEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the ServiceStatusEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
@@ -40,17 +40,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-		/// <summary>Returns a new IEntityRelation object, between WindowsServiceEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
-		/// WindowsService.ComputerID - Computer.ComputerID
+		/// <summary>Returns a new IEntityRelation object, between ServiceStatusEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
+		/// ServiceStatus.ComputerID - Computer.ComputerID
 		/// </summary>
 		public virtual IEntityRelation ComputerEntityUsingComputerID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Computer", false);
-				relation.AddEntityFieldPair(ComputerFields.ComputerID, WindowsServiceFields.ComputerID);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ServiceStatusFields.ComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WindowsServiceEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ServiceStatusEntity", true);
 				return relation;
 			}
 		}
