@@ -269,6 +269,23 @@ namespace ShipWorks.Actions
             }
 
             UpdateTaskArea();
+
+            // If any of the tasks are to backup the database, make sure the action
+            // runs on the Sql computer and disable the UI to change it
+            if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
+            {
+                runOnSpecificComputers.Checked = true;
+                runOnSpecificComputers.Enabled = false;
+                runOnAnyComputer.Enabled = false;
+                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer() });
+                runOnSpecificComputersList.Enabled = false;
+            }
+            else
+            {
+                runOnSpecificComputers.Enabled = true;
+                runOnAnyComputer.Enabled = true;
+                runOnSpecificComputersList.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -330,8 +347,15 @@ namespace ShipWorks.Actions
         void OnAddTask(object sender, EventArgs e)
         {
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((ToolStripMenuItem) sender).Tag;
+            ActionTask task = binding.CreateInstance();
 
-            AddTaskBubble(binding.CreateInstance());
+            // Cancel adding the task if it cannot currently be selected
+            if (!EnsureTaskCanBeSelected(task))
+            {
+                return;
+            }
+
+            AddTaskBubble(task);
         }
 
         /// <summary>
@@ -339,12 +363,6 @@ namespace ShipWorks.Actions
         /// </summary>
         private void AddTaskBubble(ActionTask task)
         {
-            // Cancel adding the task if it cannot currently be selected
-            if (!EnsureTaskCanBeSelected(task))
-            {
-                return;
-            }
-
             // Create the bubble that will hold it
             ActionTaskBubble bubble = new ActionTaskBubble(task, ActiveBubbles);
             bubble.Width = panelTasks.DisplayRectangle.Width;

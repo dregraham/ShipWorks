@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using System.Windows.Forms;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -51,6 +52,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             checkboxOnlyKeep.Checked = task.CleanOldBackups;
             checkboxOnlyKeep.CheckedChanged += OnOnlyKeepCheckChanged;
             numericBackupCount.Enabled = task.CleanOldBackups;
+
+            // Editing is not allowed unless the user is on the database server
+            Enabled = SqlSession.Current.IsLocalServer();
         }
 
         /// <summary>

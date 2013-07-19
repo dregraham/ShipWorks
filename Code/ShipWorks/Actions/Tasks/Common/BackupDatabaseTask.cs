@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using System.Xml.Serialization;
-using System.Media;
-using ShipWorks.ApplicationCore;
 using System.IO;
 using ShipWorks.Users.Security;
 using log4net;
