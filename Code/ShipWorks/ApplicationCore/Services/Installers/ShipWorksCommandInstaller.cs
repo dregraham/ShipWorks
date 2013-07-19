@@ -7,9 +7,10 @@ using ShipWorks.ApplicationCore.Interaction;
 namespace ShipWorks.ApplicationCore.Services.Installers
 {
     /// <summary>
-    /// Installs ShipWorks Service. Triggered command from command line (ShipWorks.exe /cmd:installservice
+    /// Installs ShipWorks Service. Providing the command line argument /cmd:installservice when
+    /// running ShipWorks from the command line will trigger this handler.
     /// </summary>
-    internal class ShipWorksCommandInstaller : ICommandLineCommandHandler
+    public class ShipWorksCommandInstaller : ICommandLineCommandHandler
     {
         /// <summary>
         /// The name of the command handled by the handler.  Must be unique within the application
@@ -35,8 +36,6 @@ namespace ShipWorks.ApplicationCore.Services.Installers
 
                 InstallService(serviceManager);
 
-                serviceManager.ChangeCredentials();
-
                 if (serviceManager.GetServiceStatus() == ServiceControllerStatus.Stopped)
                 {
                     serviceManager.StartService();
@@ -45,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Services.Installers
         }
 
         /// <summary>
-        /// Installs the service.
+        /// Installs the service and updates appropraite credentials.
         /// </summary>
         /// <param name="serviceManager">The service manager.</param>
         private static void InstallService(ShipWorksServiceManager serviceManager)
@@ -58,6 +57,8 @@ namespace ShipWorks.ApplicationCore.Services.Installers
                     Assembly.GetExecutingAssembly().Location
                 });
             }
+
+            serviceManager.ChangeCredentials();
         }
     }
 }

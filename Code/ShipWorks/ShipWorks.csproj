@@ -462,6 +462,7 @@
     <Compile Include="ApplicationCore\Help\ShipWorksAboutDlg.Designer.cs">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\Services\AddUserRight.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -7462,7 +7463,9 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\StoreShippingMethodOption.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv26.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv26.wsdl">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -10746,6 +10749,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\TrackingEvent.datasource">
       <DependentUpon>Reference.map</DependentUpon>

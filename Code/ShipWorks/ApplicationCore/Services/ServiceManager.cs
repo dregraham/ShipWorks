@@ -1,9 +1,8 @@
-﻿using log4net;
-using System;
-using System.Linq;
-using System.Reflection;
+﻿using System;
+using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
+using log4net;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -15,6 +14,8 @@ namespace ShipWorks.ApplicationCore.Services
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceManager));
 
         private readonly ShipWorksServiceBase shipWorksService;
+
+        private const int timeoutMilliseconds = 30000;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksServiceManager" /> class.
@@ -34,7 +35,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
                 {
-                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
                     service.Start();
                     service.WaitForStatus(ServiceControllerStatus.Running, timeout);
@@ -43,6 +44,41 @@ namespace ShipWorks.ApplicationCore.Services
             catch (Exception ex)
             {
                 log.Error("Can't start service " + shipWorksService.ServiceName, ex);
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Restarts the service.
+        /// </summary>
+        public void RestartService()
+        {
+            try
+            {
+                using (ServiceController service = new ServiceController(shipWorksService.ServiceName))
+                {
+                    int beforeStopService = Environment.TickCount;
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+                    ServiceControllerStatus serviceControllerStatus = GetServiceStatus();
+                    if (serviceControllerStatus != ServiceControllerStatus.Stopped && serviceControllerStatus != ServiceControllerStatus.StopPending)
+                    {
+                        service.Stop();
+                        service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);    
+                    }
+
+                    // count the rest of the timeout
+                    int afterStopService = Environment.TickCount;
+                    timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds - (afterStopService - beforeStopService));
+
+                    service.Start();
+                    service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Can't restart service " + shipWorksService.ServiceName, ex);
 
                 throw;
             }
@@ -97,7 +133,6 @@ namespace ShipWorks.ApplicationCore.Services
                     catch (InvalidOperationException)
                     {
                     }
-
                 }
             }
             catch (ArgumentException)
@@ -141,11 +176,11 @@ namespace ShipWorks.ApplicationCore.Services
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    string usernameWithDomain = string.Format(@"{0}\{1}",
-                        getWindowsCredentialsDlg.Domain ?? ".",
-                        getWindowsCredentialsDlg.UserName);
+                    AddUserRight.SetRight(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, "SeServiceLogonRight");
 
-                    ChangeServiceCredentials.ServicePasswordChange(usernameWithDomain, getWindowsCredentialsDlg.Password, shipWorksService.ServiceName);
+                    ChangeServiceCredentials.ServicePasswordChange(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, getWindowsCredentialsDlg.Password, shipWorksService.ServiceName);
+
+                    RestartService();
                 }
             }
         }

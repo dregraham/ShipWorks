@@ -9,8 +9,6 @@ namespace ShipWorks.ApplicationCore.Services
     /// </summary>
     internal static class ChangeServiceCredentials
     {
-
-
         private const int SC_MANAGER_ALL_ACCESS = 0x000F003F;
 
         private const uint SERVICE_NO_CHANGE = 0xffffffff; //this value is found in winsvc.h
@@ -22,19 +20,29 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// Services the password change.
         /// </summary>
-        /// <param name="domainAndUser">The domain and user.</param>
+        /// <param name="domain">The domain - null if none.</param>
+        /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <param name="serviceName">Name of the service.</param>
         /// <returns></returns>
-        /// <exception cref="System.Runtime.InteropServices.ExternalException">
+        /// <exception cref="ShipWorksServiceException">
         /// Open Service Manager Error
         /// or
         /// Open Service Error
         /// or
         /// Could not change password :  + win32Exception.Message
         /// </exception>
-        public static bool ServicePasswordChange(string domainAndUser, string password, string serviceName)
+        /// <exception cref="System.Runtime.InteropServices.ExternalException">Open Service Manager Error
+        /// or
+        /// Open Service Error
+        /// or
+        /// Could not change password :  + win32Exception.Message</exception>
+        public static bool ServicePasswordChange(string domain, string userName, string password, string serviceName)
         {
+            string domainAndUser = string.Format(@"{0}\{1}",
+                string.IsNullOrWhiteSpace(domain) ? "." : domain,
+                userName);
+
             IntPtr databaseHandle = NativeMethods.OpenSCManager(null, null, SC_MANAGER_ALL_ACCESS);
             if (databaseHandle == IntPtr.Zero)
             {
@@ -69,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Services
             public static extern Boolean ChangeServiceConfig(IntPtr hService, UInt32 nServiceType, UInt32 nStartType, UInt32 nErrorControl, String lpBinaryPathName, String lpLoadOrderGroup, IntPtr lpdwTagId, [In] char[] lpDependencies, String lpServiceStartName, String lpPassword, String lpDisplayName);
 
             [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-            public static extern IntPtr OpenService(IntPtr hSCManager, [MarshalAs(UnmanagedType.LPTStr)]string lpServiceName, uint dwDesiredAccess);
+            public static extern IntPtr OpenService(IntPtr hSCManager, [MarshalAs(UnmanagedType.LPTStr)] string lpServiceName, uint dwDesiredAccess);
 
             [DllImport("advapi32.dll", EntryPoint = "OpenSCManagerW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
             public static extern IntPtr OpenSCManager(string machineName, string databaseName, uint dwAccess);

@@ -1,8 +1,11 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using Microsoft.Win32;
 using System.Collections;
 using System.ComponentModel;
 using System.ServiceProcess;
+using System.Security;
 
 
 namespace ShipWorks.ApplicationCore.Services.Installers
@@ -42,7 +45,21 @@ namespace ShipWorks.ApplicationCore.Services.Installers
         public override void Install(IDictionary stateSaver)
         {
             InitializeInstance();
-            base.Install(stateSaver);
+
+            try
+            {
+                base.Install(stateSaver);
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException || ex is SecurityException)
+                {
+                    MessageBox.Show("Installer must be ran with administrative privileges.");
+                }
+
+                throw;
+            }
+
         }
 
         public override void Uninstall(IDictionary savedState)
