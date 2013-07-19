@@ -3,7 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices.Tests
+namespace ShipWorks.ApplicationCore.Services.Tests
 {
     [TestClass]
     public class WindowsServiceEntityExtensionsTests

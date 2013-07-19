@@ -5,7 +5,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
     /// Manages the starting and stopping of a ShipWorks service.

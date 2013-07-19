@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
     /// Change credentials of a service.  Code found on StackOverflow

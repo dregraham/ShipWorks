@@ -1,11 +1,10 @@
-﻿using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Actions.Scheduling;
-using System.Threading.Tasks;
+using ShipWorks.ApplicationCore.Services.Fakes;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices.Tests
+namespace ShipWorks.ApplicationCore.Services.Tests
 {
     [TestClass]
     public class ShipWorksSchedulerServiceTests

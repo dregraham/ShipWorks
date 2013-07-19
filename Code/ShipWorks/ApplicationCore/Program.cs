@@ -29,7 +29,7 @@ using ShipWorks.Filters.Management;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks

@@ -1,5 +1,5 @@
 ﻿using log4net;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 using System;
 using System.ServiceProcess;
 

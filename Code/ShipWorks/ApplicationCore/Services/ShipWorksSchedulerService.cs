@@ -7,7 +7,7 @@ using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
     /// Implementation for the ShipWorks Scheduler, so that the UI does not need to be running to process actions

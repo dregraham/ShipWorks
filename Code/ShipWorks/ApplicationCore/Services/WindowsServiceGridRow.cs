@@ -1,5 +1,5 @@
 ﻿using Divelements.SandGrid.Rendering;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Drawing;

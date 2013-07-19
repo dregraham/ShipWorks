@@ -16,7 +16,7 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Timers;
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     public partial class ShipWorksServiceBase : ServiceBase
     {

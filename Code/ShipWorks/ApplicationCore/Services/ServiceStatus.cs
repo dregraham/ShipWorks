@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
     /// Describes the status of a ShipWorks Windows service as inferred from check-in information.

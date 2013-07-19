@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     public static class WindowsServiceEntityExtensions
     {

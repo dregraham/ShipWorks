@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Actions.Scheduling;
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
     /// Exception thrown when there is a optimistic concurrency problem when saving actions

@@ -17,7 +17,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     public partial class ServiceStatusDialog : Form
     {

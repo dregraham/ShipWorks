@@ -1,8 +1,7 @@
-﻿using ShipWorks.ApplicationCore.WindowsServices;
-using ShipWorks.Actions.Scheduling;
+﻿using ShipWorks.Actions.Scheduling;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices.Tests
+namespace ShipWorks.ApplicationCore.Services.Fakes
 {
     [System.ComponentModel.DesignerCategory("")]
     public class FakeShipWorksSchedulerService : ShipWorksSchedulerService

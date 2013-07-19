@@ -4,7 +4,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using ShipWorks.ApplicationCore.Interaction;
 
-namespace ShipWorks.ApplicationCore.WindowsServices.Installers
+namespace ShipWorks.ApplicationCore.Services.Installers
 {
     /// <summary>
     /// Uninstalls the ShipWorks Service. Providing the command line argument /cmd:uninstallservice when 

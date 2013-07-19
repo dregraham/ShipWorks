@@ -15,7 +15,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Users;
 using log4net;
 
-namespace ShipWorks.ApplicationCore.WindowsServices
+namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
     /// Class for managing WindowsServiceEntities

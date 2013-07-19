@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.WindowsServices;
+﻿using ShipWorks.ApplicationCore.Services;
 
 
 namespace ShipWorks.ApplicationCore.ExecutionMode

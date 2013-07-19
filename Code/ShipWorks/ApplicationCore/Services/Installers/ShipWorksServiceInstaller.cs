@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ServiceProcess;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices.Installers
+namespace ShipWorks.ApplicationCore.Services.Installers
 {
     [System.ComponentModel.DesignerCategory("")]
     class ShipWorksServiceInstaller : ServiceInstaller

@@ -3,7 +3,7 @@ using System.Configuration.Install;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 
-namespace ShipWorks.ApplicationCore.WindowsServices.Installers
+namespace ShipWorks.ApplicationCore.Services.Installers
 {
     [RunInstaller(true)]
     public partial class MasterInstaller : Installer

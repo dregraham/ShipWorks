@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.ApplicationCore.WindowsServices;
+using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
 
