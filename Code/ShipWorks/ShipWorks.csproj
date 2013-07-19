@@ -495,7 +495,6 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceBase.Designer.cs">
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Services\WindowsServiceConcurrencyException.cs" />
     <Compile Include="ApplicationCore\Services\WindowsServiceEntityExtensions.cs" />
     <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
     <Compile Include="ApplicationCore\Services\WindowsServiceManager.cs" />

@@ -188,7 +188,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new WindowsServiceConcurrencyException(ormConcurrencyExceptionMessage, ex);
+                throw new ShipWorksServiceException(ormConcurrencyExceptionMessage, ex);
             }
         }
 
@@ -211,7 +211,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new WindowsServiceConcurrencyException(ormConcurrencyExceptionMessage, ex);
+                throw new ShipWorksServiceException(ormConcurrencyExceptionMessage, ex);
             }
         }
 
