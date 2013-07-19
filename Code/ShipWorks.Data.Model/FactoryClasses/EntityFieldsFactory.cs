@@ -368,6 +368,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ServerMessageSignoffEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ServerMessageSignoffEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ServiceStatusEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShipmentEntity");
 					break;
@@ -478,9 +481,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.VolusionStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "VolusionStoreEntity");
-					break;
-				case ShipWorks.Data.Model.EntityType.WindowsServiceEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "WindowsServiceEntity");
 					break;
 				case ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "WorldShipGoodsEntity");

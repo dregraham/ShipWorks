@@ -122,7 +122,7 @@ namespace ShipWorks.Users
         public static void InitializeForCurrentUser()
         {
             ComputerManager.InitializeForCurrentUser();
-            WindowsServiceManager.InitializeForCurrentUser();
+            ServiceStatusManager.InitializeForCurrentUser();
 
             ObjectLabelManager.InitializeForCurrentUser();
 

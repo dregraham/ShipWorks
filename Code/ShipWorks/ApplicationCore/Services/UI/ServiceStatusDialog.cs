@@ -44,10 +44,10 @@ namespace ShipWorks.ApplicationCore.Services.UI
             entityGrid.PrimaryGrid.NewRowType = typeof(ServiceGridRow);
 
             //Service status includes computer info too
-            PrefetchPath2 prefetch = new PrefetchPath2(EntityType.WindowsServiceEntity);
-            prefetch.Add(WindowsServiceEntity.PrefetchPathComputer);
+            PrefetchPath2 prefetch = new PrefetchPath2(EntityType.ServiceStatusEntity);
+            prefetch.Add(ServiceStatusEntity.PrefetchPathComputer);
 
-            entityProvider = new EntityCacheEntityProvider(EntityType.WindowsServiceEntity, prefetch);
+            entityProvider = new EntityCacheEntityProvider(EntityType.ServiceStatusEntity, prefetch);
             entityProvider.EntityChangesDetected += new EntityCacheChangeMonitoredChangedEventHandler(OnEntityProviderChangeDetected);
             
             //Prepare for paging
@@ -66,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
         void InitializeDefaultGridLayout(GridColumnLayout layout)
         {
-            layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[WindowsServiceFields.ComputerID].ColumnGuid;
+            layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[ServiceStatusFields.ComputerID].ColumnGuid;
             layout.DefaultSortOrder = ListSortDirection.Ascending;
         }
 
@@ -78,7 +78,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
         void OnEntityProviderChangeDetected(object sender, EntityCacheChangeMonitoredChangedEventArgs e)
         {
-            WindowsServiceManager.CheckForChangesNeeded();
+            ServiceStatusManager.CheckForChangesNeeded();
 
             if (e.Inserted.Count + e.Deleted.Count > 0)
             {

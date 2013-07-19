@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace ShipWorks.ApplicationCore.Services
 {
-    public static class WindowsServiceEntityExtensions
+    public static class ServiceStatusEntityExtensions
     {
         /// <summary>
         /// Gets the run status of service.
         /// </summary>
         /// <param name="instance">The service instance.</param>
         /// <returns>The service status.</returns>
-        public static ServiceStatus GetStatus(this WindowsServiceEntity instance)
+        public static ServiceStatus GetStatus(this ServiceStatusEntity instance)
         {
             if (null == instance)
                 throw new ArgumentNullException("instance");
@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Services
 
             if (
                 !instance.LastCheckInDateTime.HasValue ||
-                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-WindowsServiceManager.NotRunningTimeSpan)
+                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan)
             )
                 return ServiceStatus.NotResponding;
 
@@ -43,14 +43,14 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         /// <param name="instance">The service instance.</param>
         /// <returns>true if the service is required; otherwise false.</returns>
-        public static bool IsRequiredToRun(this WindowsServiceEntity instance)
+        public static bool IsRequiredToRun(this ServiceStatusEntity instance)
         {
             if (null == instance)
                 throw new ArgumentNullException("instance");
 
             if (instance.ServiceType == (int)ShipWorksServiceType.Scheduler)
             {
-                bool noOtherSchedulersAreRunning = WindowsServiceManager.WindowsServices
+                bool noOtherSchedulersAreRunning = ServiceStatusManager.ServicesStatuses
                     .Where(s => s.ServiceType == (int)ShipWorksServiceType.Scheduler && !s.Equals(instance))
                     .All(s => s.GetStatus() != ServiceStatus.Running);
 

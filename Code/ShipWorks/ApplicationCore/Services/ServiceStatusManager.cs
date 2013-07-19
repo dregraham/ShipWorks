@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Transactions;
+﻿using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users;
-using log4net;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace ShipWorks.ApplicationCore.Services
 {
     /// <summary>
-    /// Class for managing WindowsServiceEntities
+    /// Class for managing ServiceStatusEntities
     /// </summary>
-    public static class WindowsServiceManager
+    public static class ServiceStatusManager
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceManager));
+        static readonly ILog log = LogManager.GetLogger(typeof(ServiceStatusManager));
 
-        static TableSynchronizer<WindowsServiceEntity> tableSynchronizer;
+        static TableSynchronizer<ServiceStatusEntity> tableSynchronizer;
         static bool needCheckForChanges = false;
 
         const string ormConcurrencyExceptionMessage = "Another user has recently made changes.\n\n" +
@@ -62,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Add any missing computers 
             AddMissingComputers();
 
-            tableSynchronizer = new TableSynchronizer<WindowsServiceEntity>();
+            tableSynchronizer = new TableSynchronizer<ServiceStatusEntity>();
             InternalCheckForChanges();
         }
 
@@ -86,7 +82,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 if (tableSynchronizer.Synchronize())
                 {
-                    tableSynchronizer.EntityCollection.Sort((int)WindowsServiceFieldIndex.ServiceDisplayName, ListSortDirection.Ascending);
+                    tableSynchronizer.EntityCollection.Sort((int)ServiceStatusFieldIndex.ServiceDisplayName, ListSortDirection.Ascending);
                 }
 
                 needCheckForChanges = false;
@@ -94,23 +90,23 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Adds any computers to the WindowsService table if they are missing from it.
+        /// Adds any computers to the ServiceStatus table if they are missing from it.
         /// </summary>
         private static void AddMissingComputers()
         {
             int numberOfServiceTypes = Enum.GetNames(typeof(ShipWorksServiceType)).Length;
 
-            // Find computers that are missing WindowsService entries
-            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.WindowsServices == null || c.WindowsServices.Count != numberOfServiceTypes))
+            // Find computers that are missing ServiceStatus entries
+            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatuses == null || c.ServiceStatuses.Count != numberOfServiceTypes))
             {
                 // For each ShipWorksServiceType, if the computer does have an entry for it, add it.
                 foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
                 {
-                    if (computer.WindowsServices == null || 
-                        computer.WindowsServices.Count == 0 || 
-                        computer.WindowsServices.All(ws => ws.ServiceType != (int)serviceType))
+                    if (computer.ServiceStatuses == null ||
+                        computer.ServiceStatuses.Count == 0 ||
+                        computer.ServiceStatuses.All(ws => ws.ServiceType != (int)serviceType))
                     {
-                        WindowsServiceEntity windowsService = new WindowsServiceEntity
+                        ServiceStatusEntity serviceStatus = new ServiceStatusEntity
                             {
                                 ServiceType = (int) serviceType,
                                 ServiceFullName = string.Empty,
@@ -118,16 +114,16 @@ namespace ShipWorks.ApplicationCore.Services
                                 ComputerID = computer.ComputerID
                             };
 
-                        SaveWindowsService(windowsService);
+                        SaveServiceStatus(serviceStatus);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Get the current list of all WindowsServiceEntities
+        /// Get the current list of all ServiceStatusEntities
         /// </summary>
-        public static IList<WindowsServiceEntity> WindowsServices
+        public static IList<ServiceStatusEntity> ServicesStatuses
         {
             get
             {
@@ -144,30 +140,30 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Get the WindowsServiceEntity with the given ID, or null of no such action exists.
+        /// Get the ServiceStatusEntity with the given ID, or null of no such entity exists.
         /// </summary>
-        public static WindowsServiceEntity GetWindowsService(long windowsServiceID)
+        public static ServiceStatusEntity GetServiceStatus(long serviceStatusID)
         {
-            return WindowsServices.SingleOrDefault(a => a.WindowsServiceID == windowsServiceID);
+            return ServicesStatuses.SingleOrDefault(a => a.ServiceStatusID == serviceStatusID);
         }
 
         /// <summary>
-        /// Get the WindowsServiceEntity with the given Computer ID and ShipWorksServiceType, or null of no such action exists.
+        /// Get the ServiceStatusEntity with the given Computer ID and ShipWorksServiceType, or null of no such entity exists.
         /// </summary>
-        public static WindowsServiceEntity GetWindowsService(long computerID, ShipWorksServiceType shipWorksServiceType)
+        public static ServiceStatusEntity GetServiceStatus(long computerID, ShipWorksServiceType serviceType)
         {
-            return WindowsServices.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)shipWorksServiceType);
+            return ServicesStatuses.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)serviceType);
         }
 
         /// <summary>
-        /// Delete the given WindowsServiceEntity
+        /// Delete the given ServiceStatusEntity
         /// </summary>
-        public static void DeleteWindowsService(WindowsServiceEntity windowsService)
+        public static void DeleteServiceStatus(ServiceStatusEntity serviceStatus)
         {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                // Finally delete the action entity itself
-                adapter.DeleteEntity(windowsService);
+                // Finally delete the entity itself
+                adapter.DeleteEntity(serviceStatus);
 
                 // Commit transaction
                 adapter.Commit();
@@ -175,34 +171,34 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Saves the given WindowsServiceEntity. 
+        /// Saves the given ServiceStatusEntity. 
         /// </summary>
-        public static void SaveWindowsService(WindowsServiceEntity windowsService, SqlAdapter adapter)
+        public static void SaveServiceStatus(ServiceStatusEntity serviceStatus, SqlAdapter adapter)
         {
             try
             {
                 // Save and refetch.
-                adapter.SaveAndRefetch(windowsService);
+                adapter.SaveAndRefetch(serviceStatus);
             }
             catch (ORMConcurrencyException ex)
             {
                 log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new WindowsServiceConcurrencyException(ormConcurrencyExceptionMessage, ex);
+                throw new ShipWorksServiceException(ormConcurrencyExceptionMessage, ex);
             }
         }
 
         /// <summary>
-        /// Saves the given WindowsServiceEntity. 
+        /// Saves the given ServiceStatusEntity. 
         /// </summary>
-        public static void SaveWindowsService(WindowsServiceEntity windowsService)
+        public static void SaveServiceStatus(ServiceStatusEntity serviceStatus)
         {
             try
             {
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Save and refetch.
-                    SaveWindowsService(windowsService, adapter);
+                    SaveServiceStatus(serviceStatus, adapter);
 
                     adapter.Commit();
                 }
@@ -211,21 +207,21 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new WindowsServiceConcurrencyException(ormConcurrencyExceptionMessage, ex);
+                throw new ShipWorksServiceException(ormConcurrencyExceptionMessage, ex);
             }
         }
 
         /// <summary>
-        /// Update and persist the last check-in for the WindowsService
+        /// Update and persist the last check-in for the service
         /// </summary>
-        /// <param name="windowsService">The WindowsService for which to check-in.</param>
-        public static void CheckIn(WindowsServiceEntity windowsService)
+        /// <param name="serviceStatus">The service for which to check-in.</param>
+        public static void CheckIn(ServiceStatusEntity serviceStatus)
         {
-            windowsService.LastCheckInDateTime = DateTime.UtcNow;
+            serviceStatus.LastCheckInDateTime = DateTime.UtcNow;
 
-            log.InfoFormat("Windows Service '{0}' checking in at {1}", windowsService.ServiceDisplayName, windowsService.LastCheckInDateTime);
+            log.InfoFormat("Service '{0}' checking in at {1}", serviceStatus.ServiceDisplayName, serviceStatus.LastCheckInDateTime);
 
-            SaveWindowsService(windowsService);
+            SaveServiceStatus(serviceStatus);
         }
     }
 }

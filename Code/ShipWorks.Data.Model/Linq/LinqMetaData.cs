@@ -397,6 +397,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ServerMessageSignoffEntity:
 					toReturn = this.ServerMessageSignoff;
 					break;
+				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
+					toReturn = this.ServiceStatus;
+					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					toReturn = this.Shipment;
 					break;
@@ -507,9 +510,6 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.VolusionStoreEntity:
 					toReturn = this.VolusionStore;
-					break;
-				case ShipWorks.Data.Model.EntityType.WindowsServiceEntity:
-					toReturn = this.WindowsService;
 					break;
 				case ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity:
 					toReturn = this.WorldShipGoods;
@@ -1214,6 +1214,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ServerMessageSignoffEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting ServiceStatusEntity instances in the database.</summary>
+		public DataSource2<ServiceStatusEntity> ServiceStatus
+		{
+			get { return new DataSource2<ServiceStatusEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentEntity instances in the database.</summary>
 		public DataSource2<ShipmentEntity> Shipment
 		{
@@ -1434,12 +1440,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<VolusionStoreEntity> VolusionStore
 		{
 			get { return new DataSource2<VolusionStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting WindowsServiceEntity instances in the database.</summary>
-		public DataSource2<WindowsServiceEntity> WindowsService
-		{
-			get { return new DataSource2<WindowsServiceEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting WorldShipGoodsEntity instances in the database.</summary>

@@ -350,7 +350,7 @@
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
-    <Compile Include="ApplicationCore\Services\WindowsServiceEntityExtensionsTests.cs" />
+    <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

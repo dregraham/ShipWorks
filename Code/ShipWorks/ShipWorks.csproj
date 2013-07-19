@@ -409,7 +409,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItem.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\SchedulerServiceMessageManager.cs" />
@@ -504,10 +504,9 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceBase.Designer.cs">
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Services\WindowsServiceConcurrencyException.cs" />
-    <Compile Include="ApplicationCore\Services\WindowsServiceEntityExtensions.cs" />
+    <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
     <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
-    <Compile Include="ApplicationCore\Services\WindowsServiceManager.cs" />
+    <Compile Include="ApplicationCore\Services\ServiceStatusManager.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceController.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceBase.cs">
       <SubType>Component</SubType>

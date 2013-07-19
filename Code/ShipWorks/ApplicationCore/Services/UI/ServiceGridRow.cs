@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
         {
             base.DrawRowBackground(context);
 
-            var service = Entity as WindowsServiceEntity;
+            var service = Entity as ServiceStatusEntity;
 
             if (null != service && service.GetStatus() != ServiceStatus.Running && service.IsRequiredToRun())
             {
