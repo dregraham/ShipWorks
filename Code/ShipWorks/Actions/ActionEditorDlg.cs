@@ -284,7 +284,7 @@ namespace ShipWorks.Actions
             {
                 runOnSpecificComputers.Enabled = true;
                 runOnAnyComputer.Enabled = true;
-                runOnSpecificComputersList.Enabled = true;
+                runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
             }
         }
 
@@ -777,6 +777,10 @@ namespace ShipWorks.Actions
         void OnRunOnOtherComputersChecked(object sender, EventArgs e)
         {
             computersPanel.Enabled = runOnOtherComputers.Checked;
+
+            // Enabling the panel also enables its subcontrols so make sure that
+            // the computer list's enabled property is set correctly.
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
         }
 
         void OnRunOnSpecificComputersChecked(object sender, EventArgs e)

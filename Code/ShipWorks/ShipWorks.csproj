@@ -382,7 +382,14 @@
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
+    <Compile Include="Actions\Tasks\Common\CleanupDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>CleanupDatabaseTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5336,6 +5343,9 @@
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
       <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.resx">
+      <DependentUpon>CleanupDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -9641,6 +9651,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
+    <Content Include="Actions\Tasks\Common\CleanupScripts\AuditCleanup.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -11486,7 +11497,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
