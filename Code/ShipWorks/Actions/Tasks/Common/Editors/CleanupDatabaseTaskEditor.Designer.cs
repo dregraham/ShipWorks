@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    partial class AuditDatabaseCleanupTaskEditor
+    partial class CleanupDatabaseTaskEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -109,7 +109,7 @@
             this.labelCleanupDays.TabIndex = 21;
             this.labelCleanupDays.Text = "days.";
             // 
-            // AuditDatabaseCleanupTaskEditor
+            // CleanupDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -119,7 +119,7 @@
             this.Controls.Add(this.checkboxStopLongCleanups);
             this.Controls.Add(this.lableBackups);
             this.Controls.Add(this.numericStopAfterMinutes);
-            this.Name = "AuditDatabaseCleanupTaskEditor";
+            this.Name = "CleanupDatabaseTaskEditor";
             this.Size = new System.Drawing.Size(302, 57);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.numericStopAfterMinutes)).EndInit();

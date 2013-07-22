@@ -10,15 +10,15 @@ using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    public partial class AuditDatabaseCleanupTaskEditor : ActionTaskEditor
+    public partial class CleanupDatabaseTaskEditor : ActionTaskEditor
     {
-        private AuditDatabaseCleanupTask task;
+        private CleanupDatabaseTask task;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="task">Task which should be edited</param>
-        public AuditDatabaseCleanupTaskEditor(AuditDatabaseCleanupTask task)
+        public CleanupDatabaseTaskEditor(CleanupDatabaseTask task)
         {
             InitializeComponent();
 

@@ -382,14 +382,13 @@
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
-    <Compile Include="Actions\Tasks\Common\AuditDatabaseCleanupTask.cs" />
+    <Compile Include="Actions\Tasks\Common\CleanupDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
-    <Compile Include="Actions\Tasks\Common\DatabaseCleanupBasedTask.cs" />
-    <Compile Include="Actions\Tasks\Common\Editors\AuditDatabaseCleanupTaskEditor.cs">
+    <Compile Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Actions\Tasks\Common\Editors\AuditDatabaseCleanupTaskEditor.Designer.cs">
-      <DependentUpon>AuditDatabaseCleanupTaskEditor.cs</DependentUpon>
+    <Compile Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>CleanupDatabaseTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -5344,8 +5343,8 @@
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
       <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Actions\Tasks\Common\Editors\AuditDatabaseCleanupTaskEditor.resx">
-      <DependentUpon>AuditDatabaseCleanupTaskEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.resx">
+      <DependentUpon>CleanupDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
@@ -9652,6 +9651,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
+    <Content Include="Actions\Tasks\Common\CleanupScripts\AuditCleanup.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

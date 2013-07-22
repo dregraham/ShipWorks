@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
-    /// Task for cleaning old audit records
+    /// Task for cleaning old data
     /// </summary>
-    [ActionTask("Clean up audits", "AuditCleanup", ActionTriggerClassifications.Scheduled)]
-    public class AuditDatabaseCleanupTask : DatabaseCleanupBasedTask
+    [ActionTask("Clean up database", "CleanupDatabase", ActionTriggerClassifications.Scheduled)]
+    public class CleanupDatabaseTask : ActionTask
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(AuditDatabaseCleanupTask));
+        static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
         private int cleanupAfterDays = 90;
         private int stopAfterMinutes = 30;
 
@@ -24,7 +20,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         public override ActionTaskEditor CreateEditor()
         {
-            return new AuditDatabaseCleanupTaskEditor(this);
+            return new CleanupDatabaseTaskEditor(this);
         }
 
         /// <summary>
@@ -56,6 +52,15 @@ namespace ShipWorks.Actions.Tasks.Common
         public override bool RequiresInput
         {
             get { return false; }
+        }
+
+        /// <summary>
+        /// Runs the cleanup scripts.
+        /// </summary>
+        protected override void Run()
+        {
+            log.Info("Starting database cleanup...");
+            base.Run();
         }
     }
 }
