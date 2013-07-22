@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.XPath;
+using System;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 
@@ -98,6 +99,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void Run()
         {
+            DateTime stopAfterDate = DateTime.Now.AddMinutes(cleanupAfterDays);
             log.Info("Starting database cleanup...");
             base.Run();
         }
