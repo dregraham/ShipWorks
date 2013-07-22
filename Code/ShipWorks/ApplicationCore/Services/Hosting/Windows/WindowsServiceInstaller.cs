@@ -1,17 +1,16 @@
-﻿using System;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.ComponentModel;
-using System.ServiceProcess;
 using System.Security;
+using System.ServiceProcess;
+using System.Windows.Forms;
 
 
-namespace ShipWorks.ApplicationCore.Services.Installers
+namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     [System.ComponentModel.DesignerCategory("")]
-    class ShipWorksServiceInstaller : ServiceInstaller
+    class WindowsServiceInstaller : ServiceInstaller
     {
         [Description("The ShipWorks service type that this service implements.")]
         public ShipWorksServiceType ServiceType { get; set; }
@@ -54,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Services.Installers
             {
                 if (ex is InvalidOperationException || ex is SecurityException)
                 {
-                    MessageBox.Show("Installer must be ran with administrative privileges.");
+                    MessageBox.Show("Installer must be run with administrative privileges.");
                 }
 
                 throw;

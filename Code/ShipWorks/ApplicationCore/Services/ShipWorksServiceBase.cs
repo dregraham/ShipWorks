@@ -25,9 +25,9 @@ namespace ShipWorks.ApplicationCore.Services
         static Type[] serviceTypesCache;
 
         /// <summary>
-        /// Gets a service instance for a ShipWorks service type.
+        /// Gets service instances for all ShipWorks service types.
         /// </summary>
-        public static ShipWorksServiceBase GetService(ShipWorksServiceType serviceType)
+        public static ShipWorksServiceBase[] GetAllServices()
         {
             if (serviceTypesCache == null)
             {
@@ -39,7 +39,15 @@ namespace ShipWorks.ApplicationCore.Services
             return serviceTypesCache
                 .Select(Activator.CreateInstance)
                 .Cast<ShipWorksServiceBase>()
-                .Single(s => s.ServiceType == serviceType);
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Gets a service instance for a ShipWorks service type.
+        /// </summary>
+        public static ShipWorksServiceBase GetService(ShipWorksServiceType serviceType)
+        {
+            return GetAllServices().Single(s => s.ServiceType == serviceType);
         }
 
         /// <summary>
