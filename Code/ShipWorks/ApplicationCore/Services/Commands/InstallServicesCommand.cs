@@ -48,6 +48,11 @@ namespace ShipWorks.ApplicationCore.Services.Installers
                 throw new CommandLineCommandArgumentException(CommandName, string.Empty, message.ToString());
             }
 
+            new List<IServiceRegistrar> {
+                new WindowsServiceRegistrar(),
+                new BackgroundServiceRegistrar()
+            }.ForEach(x => x.UnregisterAll());
+
             registrar.RegisterAll();
         }
     }
