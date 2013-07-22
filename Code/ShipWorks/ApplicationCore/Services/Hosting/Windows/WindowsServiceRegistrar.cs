@@ -1,4 +1,4 @@
-﻿using System;
+﻿using log4net;
 using System.Configuration.Install;
 using System.Reflection;
 using System.ServiceProcess;
@@ -9,8 +9,12 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     public class WindowsServiceRegistrar : IServiceRegistrar
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceRegistrar));
+
         public void RegisterAll()
         {
+            log.Info("Registering all services as Windows services.");
+
             // The equivalent of running "installutil <path>", which invokes the MasterInstaller.
             ManagedInstallerClass.InstallHelper(new[] { Assembly.GetExecutingAssembly().Location });
 
@@ -37,11 +41,14 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
         public void UnregisterAll()
         {
+            log.Info("Unregistering all Windows services.");
+
             foreach (var service in ShipWorksServiceBase.GetAllServices())
             {
                 var controller = new WindowsServiceController(service);
 
-                if (controller.GetServiceStatus() != ServiceControllerStatus.Stopped)
+                if (controller.IsServiceInstalled() &&
+                    controller.GetServiceStatus() != ServiceControllerStatus.Stopped)
                 {
                     controller.StopService();
                 }

@@ -416,6 +416,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\DefaultServiceHostFactory.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeConfigurationException.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\ExecutionModeInitializerBase.cs" />

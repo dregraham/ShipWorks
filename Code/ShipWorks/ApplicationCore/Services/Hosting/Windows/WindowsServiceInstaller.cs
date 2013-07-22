@@ -64,7 +64,16 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         public override void Uninstall(IDictionary savedState)
         {
             InitializeInstance();
-            base.Uninstall(savedState);
+            try
+            {
+                base.Uninstall(savedState);
+            }
+            catch (Win32Exception ex)
+            {
+                // 1060 => ERROR_SERVICE_DOES_NOT_EXIST
+                if (ex.NativeErrorCode != 1060)
+                    throw;
+            }
         }
 
 
