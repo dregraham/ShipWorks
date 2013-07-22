@@ -1,8 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Xml.XPath;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Reflection;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -99,9 +105,65 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void Run()
         {
-            DateTime stopAfterDate = DateTime.Now.AddMinutes(cleanupAfterDays);
+            DateTime sqlDate = SqlSession.Current.GetLocalDate();
+            DateTime localStopExecutionAfter = DateTime.Now.AddMinutes(StopAfterMinutes);
+            DateTime sqlStopExecutionAfter = sqlDate.AddMinutes(StopAfterMinutes);
+            DateTime deleteOlderThan = sqlDate.AddDays(-CleanupAfterDays);
+            
             log.Info("Starting database cleanup...");
-            base.Run();
+
+            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            {
+                connection.Open();
+
+                foreach (string scriptName in ScriptsToRun)
+                {
+                    if (!StopLongCleanups || localStopExecutionAfter < DateTime.Now)
+                    {
+                        log.InfoFormat("Running {0}...", scriptName);
+
+                        string script = GetScript(scriptName);
+                        using (SqlCommand command = new SqlCommand(script, connection))
+                        {
+                            command.Parameters.AddWithValue("@StopExecutionAfter", StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
+                            command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// List of scripts that need to be run for the cleanup
+        /// </summary>
+        private IEnumerable<string> ScriptsToRun
+        {
+            get
+            {
+                return new[] {"AuditCleanup", "EmailCleanup"};
+            }
+        }
+
+        /// <summary>
+        /// Gets the specified script from the embedded task resources
+        /// </summary>
+        /// <param name="name">Name of the Sql script to retrieve</param>
+        /// <returns></returns>
+        private string GetScript(string name)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string resourceName = string.Format("ShipWorks.Actions.Tasks.Common.CleanupScripts.{0}.sql", name);
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }    
+            }
         }
     }
 }
