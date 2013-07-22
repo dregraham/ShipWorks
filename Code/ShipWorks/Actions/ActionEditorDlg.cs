@@ -117,6 +117,7 @@ namespace ShipWorks.Actions
             runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
             runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
             // Check all the boxes for the stores its limited to
             foreach (long storeID in action.StoreLimitedList)
@@ -509,7 +510,7 @@ namespace ShipWorks.Actions
                 return;
             }
 
-            if (runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
+            if (runOnSpecificComputers.Checked && !runOnSpecificComputersList.GetSelectedComputers().Any())
             {
                 optionControl.SelectedPage = optionPageSettings;
                 MessageHelper.ShowError(this, "At least one computer must be selected when choosing to run actions on specific computers.");

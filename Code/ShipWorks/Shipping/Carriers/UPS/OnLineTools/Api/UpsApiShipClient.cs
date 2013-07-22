@@ -131,8 +131,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     xmlWriter.WriteElementString("DocumentsOnly", null);
                 }
 
-                // From Doc: Required for shipments that do not have any packages of type UPS Letter and whose origin is the US and destination is Puerto Rico or Canada.
-                if (shipment.OriginCountryCode == "US" && (shipment.ShipCountryCode == "PR" || shipment.ShipCountryCode == "CA") && !shipment.ReturnShipment)
+                // Trial and error to figure out when InvoiceLineTotal is required:
+                //                                  From			
+                //                          US		                CA/PR	
+                //              Return	    Not Return	    Return      Not Return
+                //=================================================================
+                //To	US	 |  Not Allowed	Not Allowed	    Required	Not Allowed
+                //    CA/PR	 |  Not Allowed	Required	    Not Allowed	Not Allowed
+                if ((shipment.ReturnShipment && ((shipment.OriginCountryCode == "CA" || shipment.OriginCountryCode == "PR") && shipment.ShipCountryCode == "US")) ||
+                    (!shipment.ReturnShipment && (shipment.OriginCountryCode == "US" && (shipment.ShipCountryCode == "CA" || shipment.ShipCountryCode == "PR"))))
                 {
                     xmlWriter.WriteStartElement("InvoiceLineTotal");
                     xmlWriter.WriteElementString("CurrencyCode", UpsUtility.GetCurrency(account));

@@ -327,6 +327,7 @@
     <Compile Include="Utility\DeprecatedAttribute.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
+    <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />

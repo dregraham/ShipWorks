@@ -396,6 +396,13 @@
     <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.Designer.cs">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>ShrinkDatabaseTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\ShrinkDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\PrintShipmentsTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -415,6 +422,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
@@ -423,6 +431,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\DefaultServiceHostFactory.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeConfigurationException.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\ExecutionModeInitializerBase.cs" />
@@ -536,6 +545,7 @@
     </Compile>
     <Compile Include="ApplicationCore\Services\ShipWorksServiceType.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
+    <Compile Include="Data\Administration\SqlShrinkDatabase.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5348,6 +5358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.resx">
+      <DependentUpon>ShrinkDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
