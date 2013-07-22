@@ -336,6 +336,7 @@
     <Compile Include="Actions\Scheduling\Scheduler.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJob.cs" />
     <Compile Include="Actions\Scheduling\SchedulingException.cs" />
+    <Compile Include="Actions\ActionTaskChangingEventArgs.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFlowInfoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -379,6 +380,14 @@
     </Compile>
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
+    <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\PrintShipmentsTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -5326,6 +5335,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
       <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
+      <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>

@@ -269,6 +269,23 @@ namespace ShipWorks.Actions
             }
 
             UpdateTaskArea();
+
+            // If any of the tasks are to backup the database, make sure the action
+            // runs on the Sql computer and disable the UI to change it
+            if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
+            {
+                runOnSpecificComputers.Checked = true;
+                runOnSpecificComputers.Enabled = false;
+                runOnAnyComputer.Enabled = false;
+                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer });
+                runOnSpecificComputersList.Enabled = false;
+            }
+            else
+            {
+                runOnSpecificComputers.Enabled = true;
+                runOnAnyComputer.Enabled = true;
+                runOnSpecificComputersList.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -330,8 +347,15 @@ namespace ShipWorks.Actions
         void OnAddTask(object sender, EventArgs e)
         {
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((ToolStripMenuItem) sender).Tag;
+            ActionTask task = binding.CreateInstance();
 
-            AddTaskBubble(binding.CreateInstance());
+            // Cancel adding the task if it cannot currently be selected
+            if (!EnsureTaskCanBeSelected(task))
+            {
+                return;
+            }
+
+            AddTaskBubble(task);
         }
 
         /// <summary>
@@ -355,6 +379,16 @@ namespace ShipWorks.Actions
             bubble.MoveUp += new EventHandler(OnBubbleMoveUp);
             bubble.MoveDown += new EventHandler(OnBubbleMoveDown);
             bubble.Delete += new EventHandler(OnBubbleDelete);
+            bubble.ActionTaskChanging += OnBubbleTaskChanging;
+        }
+
+        /// <summary>
+        /// The selected task for the bubble has changed
+        /// </summary>
+        private void OnBubbleTaskChanging(object sender, ActionTaskChangingEventArgs e)
+        {
+            // Cancel the task change if the selected task cannot be selected
+            e.Cancel = !EnsureTaskCanBeSelected(e.NewTask);
         }
 
         /// <summary>
@@ -431,6 +465,25 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
+        /// Checks whether the the specified task can be selected 
+        /// </summary>
+        /// <param name="task">The task that should be checked</param>
+        /// <returns></returns>
+        private bool EnsureTaskCanBeSelected(ActionTask task)
+        {
+            if (task is BackupDatabaseTask && !SqlSession.Current.IsLocalServer())
+            {
+                MessageHelper.ShowError(this,
+                    string.Format(
+                        "The task '{0}' can only be configured from a computer running the database.",
+                        ActionTaskManager.GetDescriptor(task.GetType()).BaseName));
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// User is accepting changes to the action
         /// </summary>
         private void OnOK(object sender, EventArgs e)
@@ -494,8 +547,8 @@ namespace ShipWorks.Actions
                 ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
                 
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
-                List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).AllowedForScheduledTask).ToList();
-                if (actionTriggerType == ActionTriggerType.Scheduled && invalidTasks.Any())
+                List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).IsAllowedForTrigger(actionTriggerType)).ToList();
+                if (invalidTasks.Any())
                 {
                     string invalidTasksMsg = string.Join<string>(", ", invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName));
 
@@ -504,6 +557,12 @@ namespace ShipWorks.Actions
                         invalidTasksMsg,
                         invalidTasks.Count == 1 ? "is" : "are", 
                         EnumHelper.GetDescription(actionTriggerType)));
+                    return;
+                }
+
+                // Don't close the form if any of the bubbles have invalid data
+                if (ActiveBubbles.Any(bubble => !bubble.ValidateChildren()))
+                {
                     return;
                 }
 
