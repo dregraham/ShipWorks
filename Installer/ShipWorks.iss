@@ -222,7 +222,7 @@ var
 begin
     if Pos('3.', VersionFound) <> 1 Then
     begin
-        ShipWorksVersionHasScheduler := false;
+        Result := false;
     end
     else
     begin
@@ -236,10 +236,10 @@ begin
         StringMinorVersion := copy(StringMinorVersion, 1, MinorVersionEndPosition - 1);
         
         //Converts minor version into an int
-        Val(StringMinorVersion, IntMinorVersion);
+        IntMinorVersion:= StrToInt(StringMinorVersion);
         
         //If minor version is greater than 4, this is true.
-        ShipWorksVersionHasScheduler := IntMinorVersion > 4;
+        Result := IntMinorVersion > 4;
     end
 end;
 
