@@ -143,7 +143,7 @@ Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait post
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Description: Run ShipWorks in Background
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservice"; RunOnceId: "UninstallService"
+Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservices"; RunOnceId: "UninstallServices"
 
 [Dirs]
 Name: {app}
