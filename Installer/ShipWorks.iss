@@ -212,6 +212,39 @@ begin
 end;
 
 //----------------------------------------------------------------
+// Was the scheduler included in installed version of ShipWorks
+//----------------------------------------------------------------
+function ShipWorksVersionHasScheduler(VersionFound: String): Boolean;
+var
+    IntMinorVersion: Integer;
+    StringMinorVersion: string;
+    MinorVersionEndPosition: Integer;
+begin
+    if Pos('3.', VersionFound) <> 1 Then
+    begin
+        GetMinorVersion := false;
+    end
+    else
+    begin
+        // Gets Everything after 3.
+        StringMinorVersion := copy (VersionFound, 3, 100 );
+        
+        // Gets the position of the . at the end of the minor version.
+        MinorVersionEndPosition := Pos('.', StringMinorVersion);
+        
+        // Gets just the minor version
+        StringMinorVersion := copy(StringMinorVersion, 1, MinorVersionEndPosition - 1);
+        
+        //Converts minor version into an int
+        Val(StringMinorVersion, IntMinorVersion);
+        
+        //If minor version is greater than 4, this is true.
+        GetMinorVersion := IntMinorVersion > 4;
+    end
+end;
+
+
+//----------------------------------------------------------------
 // Add all our custom pages
 //----------------------------------------------------------------
 procedure InitializeWizard();
@@ -297,7 +330,7 @@ begin
 
 			end;
 
-			if Result
+			if Result AND ShipWorksVersionHasScheduler(VersionFound)
 			then begin
 				Exec(ExpandConstant(TargetExe), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, ServiceStarted)
 			end;
