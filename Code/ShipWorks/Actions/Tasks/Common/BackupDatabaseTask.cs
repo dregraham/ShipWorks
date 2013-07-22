@@ -20,10 +20,7 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BackupDatabaseTask));
 
-        private string backupDirectory;
-        private string filePrefix;
         private int keepNumberOfBackups = 5;
-        private bool cleanOldBackups;
         private readonly Regex backupFileNameMatcher = new Regex(@".*\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.swb");
 
         /// <summary>
@@ -37,19 +34,12 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Directory in which to store scheduled backups
         /// </summary>
-        public string BackupDirectory { 
-            get { return backupDirectory; }
-            set { backupDirectory = value; }
-        }
+        public string BackupDirectory { get; set; }
 
         /// <summary>
         /// Base file name to which a timestamp will be appended
         /// </summary>
-        public string FilePrefix
-        {
-            get { return filePrefix; }
-            set { filePrefix = value; }
-        }
+        public string FilePrefix { get; set; }
 
         /// <summary>
         /// How many backups should be kept in the backup directory
@@ -74,11 +64,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Should old backups be cleaned
         /// </summary>
-        public bool CleanOldBackups
-        {
-            get { return cleanOldBackups; }
-            set { cleanOldBackups = value; }
-        }
+        public bool CleanOldBackups { get; set; }
 
         /// <summary>
         /// Runs the database backup and cleanup task

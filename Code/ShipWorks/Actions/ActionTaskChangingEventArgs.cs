@@ -14,16 +14,6 @@ namespace ShipWorks.Actions
     public class ActionTaskChangingEventArgs : CancelEventArgs
     {
         /// <summary>
-        /// The task that was selcted before it was changed
-        /// </summary>
-        public ActionTask OriginalTask { get; private set; }
-
-        /// <summary>
-        /// The task that is currently selected
-        /// </summary>
-        public ActionTask NewTask { get; private set; }
-
-        /// <summary>
         /// Creates a new instance of the class
         /// </summary>
         /// <param name="originalTask">Task that was selected before it was changed</param>
@@ -33,5 +23,15 @@ namespace ShipWorks.Actions
             OriginalTask = originalTask;
             NewTask = newTask;
         }
+
+        /// <summary>
+        /// The task that was selcted before it was changed
+        /// </summary>
+        public ActionTask OriginalTask { get; private set; }
+
+        /// <summary>
+        /// The task that is currently selected
+        /// </summary>
+        public ActionTask NewTask { get; private set; }
     }
 }
