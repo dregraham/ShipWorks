@@ -222,7 +222,7 @@ var
 begin
     if Pos('3.', VersionFound) <> 1 Then
     begin
-        GetMinorVersion := false;
+        ShipWorksVersionHasScheduler := false;
     end
     else
     begin
@@ -239,7 +239,7 @@ begin
         Val(StringMinorVersion, IntMinorVersion);
         
         //If minor version is greater than 4, this is true.
-        GetMinorVersion := IntMinorVersion > 4;
+        ShipWorksVersionHasScheduler := IntMinorVersion > 4;
     end
 end;
 
