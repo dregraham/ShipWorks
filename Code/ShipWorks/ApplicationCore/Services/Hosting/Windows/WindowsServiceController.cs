@@ -166,23 +166,15 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         }
 
         /// <summary>
-        /// Prompts user for new credentials and updates the service with new credentials.
+        /// Updates the service with new credentials.
         /// </summary>
-        public void ChangeCredentials()
+        public void ChangeCredentials(string domain, string userName, string password)
         {
-            using (GetWindowsCredentialsDlg getWindowsCredentialsDlg = new GetWindowsCredentialsDlg())
-            {
-                DialogResult dialogResult = getWindowsCredentialsDlg.ShowDialog();
+            AddUserRight.SetRight(domain, userName, "SeServiceLogonRight");
 
-                if (dialogResult == DialogResult.OK)
-                {
-                    AddUserRight.SetRight(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, "SeServiceLogonRight");
+            ChangeServiceCredentials.ServicePasswordChange(domain, userName, password, service.ServiceName);
 
-                    ChangeServiceCredentials.ServicePasswordChange(getWindowsCredentialsDlg.Domain, getWindowsCredentialsDlg.UserName, getWindowsCredentialsDlg.Password, service.ServiceName);
-
-                    RestartService();
-                }
-            }
+            RestartService();
         }
     }
 }

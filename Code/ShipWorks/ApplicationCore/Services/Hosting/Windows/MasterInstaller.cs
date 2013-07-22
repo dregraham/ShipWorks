@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Configuration.Install;
-using ShipWorks.ApplicationCore.ExecutionMode;
 
 
-namespace ShipWorks.ApplicationCore.Services.Installers
+namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     [RunInstaller(true)]
     public partial class MasterInstaller : Installer

@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.ApplicationCore.Services.Installers
+﻿namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
     partial class MasterInstaller
     {
@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller;
-            ShipWorks.ApplicationCore.Services.Installers.ShipWorksServiceInstaller schedulerInstaller;
+            ShipWorks.ApplicationCore.Services.Hosting.Windows.WindowsServiceInstaller schedulerInstaller;
             serviceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
-            schedulerInstaller = new ShipWorks.ApplicationCore.Services.Installers.ShipWorksServiceInstaller();
+            schedulerInstaller = new ShipWorks.ApplicationCore.Services.Hosting.Windows.WindowsServiceInstaller();
             // 
             // serviceProcessInstaller
             // 
