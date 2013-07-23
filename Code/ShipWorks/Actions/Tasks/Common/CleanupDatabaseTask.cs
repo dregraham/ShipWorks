@@ -5,7 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Connection;
@@ -29,6 +32,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             StopAfterHours = 1;
             CleanupAfterDays = 30;
+            CleanupTypes = new List<CleanupDatabaseType>();
         }
 
 
@@ -100,6 +104,7 @@ namespace ShipWorks.Actions.Tasks.Common
             get;
             set;
         }
+
         /// <summary>
         /// Runs the cleanup scripts.
         /// </summary>
@@ -109,30 +114,34 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime localStopExecutionAfter = DateTime.Now.AddMinutes(StopAfterMinutes);
             DateTime sqlStopExecutionAfter = sqlDate.AddMinutes(StopAfterMinutes);
             DateTime deleteOlderThan = sqlDate.AddDays(-CleanupAfterDays);
-            
+
             log.Info("Starting database cleanup...");
 
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            foreach (string scriptName in ScriptsToRun)
             {
-                connection.Open();
-
-                foreach (string scriptName in ScriptsToRun)
+                // Stop executing if we've been running longer than the time the user has allowed.
+                if (StopLongCleanups && localStopExecutionAfter > DateTime.Now)
                 {
-                    if (!StopLongCleanups || localStopExecutionAfter < DateTime.Now)
+                    log.Info("Stopping cleanup because it has exceeded the maximum allowed time.");
+                    break;
+                }
+
+                log.InfoFormat("Running {0}...", scriptName);
+
+                // Run the current cleanup script
+                string script = GetScript(scriptName);
+                using (SqlConnection connection = SqlSession.Current.OpenConnection())
+                {
+                    using (SqlCommand command = SqlCommandProvider.Create(connection, script))
                     {
-                        log.InfoFormat("Running {0}...", scriptName);
+                        command.Parameters.AddWithValue("@StopExecutionAfter", StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
+                        command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
 
-                        string script = GetScript(scriptName);
-                        using (SqlCommand command = new SqlCommand(script, connection))
-                        {
-                            command.Parameters.AddWithValue("@StopExecutionAfter", StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
-                            command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
-
-                            command.ExecuteNonQuery();
-                        }
+                        command.ExecuteNonQuery();
                     }
                 }
-                
+
+                log.InfoFormat("Finished {0}.", scriptName);
             }
         }
 
@@ -143,7 +152,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return new[] {"AuditCleanup", "EmailCleanup"};
+                return CleanupTypes.Select(x => EnumHelper.GetApiValue(x));
             }
         }
 
@@ -154,16 +163,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         private string GetScript(string name)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = string.Format("ShipWorks.Actions.Tasks.Common.CleanupScripts.{0}.sql", name);
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }    
-            }
+            string resourceName = string.Format("ShipWorks.Data.Administration.Scripts.CleanupScripts.{0}.sql", name);
+            return ResourceUtility.ReadString(resourceName);
         }
     }
 }

@@ -4,25 +4,26 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum CleanupDatabaseType
     {
-        [Description("Audit")]
+        [Description("Audit"), ApiValue("AuditCleanup")]
         Audit = 0,
 
-        [Description("Downloads")]
+        [Description("Downloads"), ApiValue("Download")]
         Downloads = 1,
 
-        [Description("Email")]
+        [Description("Email"), ApiValue("EmailCleanup")]
         Email = 2,
 
-        [Description("Labels")]
+        [Description("Labels"), ApiValue("LabelCleanup")]
         Labels = 3,
 
-        [Description("Print Jobs")]
+        [Description("Print Jobs"), ApiValue("PrintResultCleanup")]
         PrintJobs = 4
     }
 }
