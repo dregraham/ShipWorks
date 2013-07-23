@@ -13,13 +13,16 @@ namespace ShipWorks.Actions.Tasks.Common
         [Description("Audit")]
         Audit = 0,
 
+        [Description("Downloads")]
+        Downloads = 1,
+
         [Description("Email")]
-        Email = 1,
+        Email = 2,
 
-        [Description("Label")]
-        Label = 2,
+        [Description("Labels")]
+        Labels = 3,
 
-        [Description("Print Job")]
-        Weekly = 3
+        [Description("Print Jobs")]
+        PrintJobs = 4
     }
 }

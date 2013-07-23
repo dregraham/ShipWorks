@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System.Collections.Generic;
+using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -11,15 +12,15 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
-        private int cleanupAfterDays = 90;
-        private int stopAfterMinutes = 30;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         /// <returns></returns>
         public override ActionTaskEditor CreateEditor()
         {
+            StopAfterHours = 30;
+            CleanupAfterDays = 90;
             return new CleanupDatabaseTaskEditor(this);
         }
 
@@ -29,12 +30,12 @@ namespace ShipWorks.Actions.Tasks.Common
         public bool StopLongCleanups { get; set; }
 
         /// <summary>
-        /// Defines the maximum minutes a cleanup can run
+        /// Defines the maximum hours a cleanup can run
         /// </summary>
-        public int StopAfterMinutes
+        public int StopAfterHours
         {
-            get { return stopAfterMinutes; }
-            set { stopAfterMinutes = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -42,8 +43,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public int CleanupAfterDays
         {
-            get { return cleanupAfterDays; }
-            set { cleanupAfterDays = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -54,6 +55,14 @@ namespace ShipWorks.Actions.Tasks.Common
             get { return false; }
         }
 
+        /// <summary>
+        /// Gets or sets the purges requested for this task.
+        /// </summary>
+        public List<CleanupDatabaseType> Purges
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// Runs the cleanup scripts.
         /// </summary>
