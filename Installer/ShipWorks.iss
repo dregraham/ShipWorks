@@ -140,7 +140,6 @@ Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueNam
 [Run]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait
 Filename: {app}\ShipWorks.exe; Parameters: "/command=installservices /background"; Flags: nowait
 
 
