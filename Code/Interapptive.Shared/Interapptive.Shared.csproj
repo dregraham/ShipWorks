@@ -323,9 +323,11 @@
     <Compile Include="Utility\ApiValueAttribute.cs" />
     <Compile Include="Utility\BreakpointTimer.cs" />
     <Compile Include="Utility\ByteUtility.cs" />
+    <Compile Include="Utility\DateTimeProvider.cs" />
     <Compile Include="Utility\DateTimeUtility.cs" />
     <Compile Include="Utility\DeprecatedAttribute.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
+    <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\PathUtility.cs" />

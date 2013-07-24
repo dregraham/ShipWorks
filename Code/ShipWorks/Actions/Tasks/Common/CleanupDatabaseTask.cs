@@ -1,13 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.XPath;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -24,26 +18,27 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
         private readonly ISqlPurgeScriptRunner scriptRunner;
+        private readonly IDateTimeProvider dateProvider; 
 
         /// <summary>
         /// Cleanups the type of the database.
         /// </summary>
-        public CleanupDatabaseTask()
-            : base()
+        public CleanupDatabaseTask() : this(new SqlPurgeScriptRunner(), new DateTimeProvider())
         {
-            StopAfterHours = 1;
-            CleanupAfterDays = 30;
-            CleanupTypes = new List<CleanupDatabaseType>();
-
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="scriptRunner">Let's which sql purge runner gets used for unit testing</param>
-        public CleanupDatabaseTask(ISqlPurgeScriptRunner scriptRunner)
+        /// <param name="scriptRunner">Specifies which sql purge runner gets used for unit testing</param>
+        /// <param name="dateProvider">Specifies how current dates will be retrieved so tests can use expected times</param>
+        public CleanupDatabaseTask(ISqlPurgeScriptRunner scriptRunner, IDateTimeProvider dateProvider) : base()
         {
+            StopAfterHours = 1;
+            CleanupAfterDays = 30;
+            Purges = new List<CleanupDatabaseType>();
             this.scriptRunner = scriptRunner;
+            this.dateProvider = dateProvider;
         }
 
 
@@ -121,9 +116,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void Run()
         {
-            DateTime sqlDate = SqlSession.Current.GetLocalDate();
-            DateTime localStopExecutionAfter = DateTime.Now.AddMinutes(StopAfterMinutes);
-            DateTime sqlStopExecutionAfter = sqlDate.AddMinutes(StopAfterMinutes);
+            DateTime sqlDate = scriptRunner.SqlUtcDateTime;
+            DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(StopAfterHours);
+            DateTime sqlStopExecutionAfter = sqlDate.AddHours(StopAfterHours);
             //DateTime deleteOlderThan = sqlDate.AddDays(-CleanupAfterDays);
 
             log.Info("Starting database cleanup...");
@@ -131,14 +126,14 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (string scriptName in ScriptsToRun)
             {
                 // Stop executing if we've been running longer than the time the user has allowed.
-                if (StopLongCleanups && localStopExecutionAfter > DateTime.Now)
+                if (StopLongCleanups && localStopExecutionAfter < dateProvider.UtcNow)
                 {
                     log.Info("Stopping cleanup because it has exceeded the maximum allowed time.");
                     break;
                 }
 
                 log.InfoFormat("Running {0}...", scriptName);
-                scriptRunner.RunScript(scriptName, cleanupAfterDays, StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
+                scriptRunner.RunScript(scriptName, CleanupAfterDays, StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
                 log.InfoFormat("Finished {0}.", scriptName);
             }
         }
@@ -150,7 +145,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return CleanupTypes.Select(x => EnumHelper.GetApiValue(x));
+                return Purges.Select(x => EnumHelper.GetApiValue(x));
             }
         }
     }

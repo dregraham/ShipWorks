@@ -14,7 +14,7 @@ namespace ShipWorks.Actions.Tasks.Common
         [Description("Audit"), ApiValue("AuditCleanup")]
         Audit = 0,
 
-        [Description("Downloads"), ApiValue("Download")]
+        [Description("Downloads"), ApiValue("DownloadCleanup")]
         Downloads = 1,
 
         [Description("Email"), ApiValue("EmailCleanup")]
