@@ -139,19 +139,6 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 log.InfoFormat("Running {0}...", scriptName);
                 scriptRunner.RunScript(scriptName, cleanupAfterDays, StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
-                // Run the current cleanup script
-                //string script = GetScript(scriptName);
-                //using (SqlConnection connection = SqlSession.Current.OpenConnection())
-                //{
-                //    using (SqlCommand command = SqlCommandProvider.Create(connection, script))
-                //    {
-                //        command.Parameters.AddWithValue("@StopExecutionAfter", StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
-                //        command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
-
-                //        command.ExecuteNonQuery();
-                //    }
-                //}
-
                 log.InfoFormat("Finished {0}.", scriptName);
             }
         }

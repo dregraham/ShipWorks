@@ -19,7 +19,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return SqlSession.Current.GetLocalDate();
+                return SqlSession.Current.GetLocalUtcDate();
             }
         }
 

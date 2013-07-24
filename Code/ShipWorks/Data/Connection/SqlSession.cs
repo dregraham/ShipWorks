@@ -37,6 +37,7 @@ namespace ShipWorks.Data.Connection
 
         // Cached properties of the server
         DateTime serverLocalDate;
+        DateTime serverLocalDateUtc;
         Stopwatch timeSinceTimeTaken;
 
 
@@ -404,32 +405,8 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public DateTime GetLocalDate()
         {
-            if (timeSinceTimeTaken != null)
-            {
-                if (timeSinceTimeTaken.Elapsed < TimeSpan.FromMinutes(30))
-                {
-                    return serverLocalDate + timeSinceTimeTaken.Elapsed;
-                }
-            }
-
-            timeSinceTimeTaken = Stopwatch.StartNew();
-
-            using (SqlConnection con = OpenConnection())
-            {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "SELECT GETDATE() as 'LocalDate'";
-
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
-                {
-                    reader.Read();
-
-                    serverLocalDate = (DateTime) reader["LocalDate"];
-
-                    log.InfoFormat("Server LocalDate ({0})", serverLocalDate);
-
-                    return serverLocalDate;
-                }
-            }
+            RefreshSqlDateTime();
+            return serverLocalDate + timeSinceTimeTaken.Elapsed;
         }
 
         /// <summary>
@@ -441,30 +418,35 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public DateTime GetLocalUtcDate()
         {
-            if (timeSinceTimeTaken != null)
-            {
-                if (timeSinceTimeTaken.Elapsed < TimeSpan.FromMinutes(30))
-                {
-                    return serverLocalDate + timeSinceTimeTaken.Elapsed;
-                }
-            }
+            RefreshSqlDateTime();
+            return serverLocalDateUtc + timeSinceTimeTaken.Elapsed;
+        }
 
-            timeSinceTimeTaken = Stopwatch.StartNew();
+        /// <summary>
+        /// Ensure that the cached Sql server time is reasonably fresh
+        /// </summary>
+        private void RefreshSqlDateTime()
+        {
+            if (timeSinceTimeTaken != null && timeSinceTimeTaken.Elapsed < TimeSpan.FromMinutes(30))
+            {
+                return;
+            }
 
             using (SqlConnection con = OpenConnection())
             {
                 SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "SELECT GETDATE() as 'LocalDate'";
+                cmd.CommandText = "SELECT GETDATE() as 'LocalDate', GETUTCDATE() as 'LocalDateUtc'";
 
                 using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
                 {
                     reader.Read();
 
-                    serverLocalDate = (DateTime)reader["LocalDate"];
+                    serverLocalDate = (DateTime) reader["LocalDate"];
+                    serverLocalDateUtc = (DateTime) reader["localDateUtc"];
 
-                    log.InfoFormat("Server LocalDate ({0})", serverLocalDate);
+                    log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverLocalDate, serverLocalDateUtc);
 
-                    return serverLocalDate;
+                    timeSinceTimeTaken = Stopwatch.StartNew();
                 }
             }
         }
