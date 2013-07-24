@@ -32,14 +32,14 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnLoad(object sender, EventArgs e)
         {
             backupPath.Text = task.BackupDirectory;
-            backupPath.Validating += OnRequiredTextValidating;
-            backupPath.Validated += OnTextValidated;
+            backupPath.Validating += OnBackupPathValidating;
+            backupPath.Validated += OnBackupPathValidated;
 
             textPrefix.Text = task.FilePrefix;
             textPrefix.TextChanged += OnPrefixTextChanged;
-            textPrefix.Validating += OnRequiredTextValidating;
+            //textPrefix.Validating += OnRequiredTextValidating;
             textPrefix.Validating += OnTextPrefixValidating;
-            textPrefix.Validated += OnTextValidated;
+            textPrefix.Validated += OnTextPrefixValidated;
 
             numericBackupCount.Value = task.KeepNumberOfBackups;
             numericBackupCount.ValueChanged += OnBackupCountValueChanged;
@@ -92,42 +92,52 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Validate that the text box has a value entered
-        /// </summary>
-        private void OnRequiredTextValidating(object sender, CancelEventArgs e)
-        {
-            TextBoxBase textBox = sender as TextBoxBase;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                errorProvider.SetError(textBox, "This value is required.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
         /// Validate that the file prefix does not use any illegal characters
         /// </summary>
         private void OnTextPrefixValidating(object sender, CancelEventArgs e)
         {
-            TextBoxBase textBox = sender as TextBoxBase;
-            if (textBox != null && textPrefix.Text.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
+            if (string.IsNullOrWhiteSpace(textPrefix.Text))
             {
-                errorProvider.SetError(textBox, string.Format("Prefix cannot contain the following characters: {0}", 
+                errorProvider.SetError(textPrefix, "This value is required.");
+                e.Cancel = true;
+            }
+
+            if (textPrefix.Text.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
+            {
+                errorProvider.SetError(textPrefix, string.Format("Prefix cannot contain the following characters: {0}", 
                     Path.GetInvalidFileNameChars().Where(x => x > 31).Aggregate("", (x, y) => x + " " + y)));
                 e.Cancel = true;
             }
         }
 
         /// <summary>
-        /// Validation has succeeded, so clear the errors
+        /// Clear the validation error for the prefix text box
         /// </summary>
-        private void OnTextValidated(object sender, EventArgs e)
+        private void OnTextPrefixValidated(object sender, EventArgs e)
         {
-            TextBoxBase textBox = sender as TextBoxBase;
-            if (textBox != null)
+            errorProvider.SetError(textPrefix, "");
+        }
+
+        /// <summary>
+        /// Validate that the text box has a value entered
+        /// </summary>
+        private void OnBackupPathValidating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(backupPath.Text))
             {
-                errorProvider.SetError(textBox, "");
+                errorProvider.SetError(browse, "This value is required.");
+                e.Cancel = true;
             }
+        }
+
+        /// <summary>
+        /// Clear the validation error for the backup path text box
+        /// </summary>
+        private void OnBackupPathValidated(object sender, EventArgs e)
+        {
+            // Use the browse button as the error control so that the validation
+            // UI shows up next to it instead of over it
+            errorProvider.SetError(browse, "");
         }
     }
 }

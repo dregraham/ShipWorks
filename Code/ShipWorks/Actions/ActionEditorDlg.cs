@@ -117,7 +117,7 @@ namespace ShipWorks.Actions
             runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
             runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
-            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
 
             // Check all the boxes for the stores its limited to
             foreach (long storeID in action.StoreLimitedList)
@@ -278,15 +278,17 @@ namespace ShipWorks.Actions
                 runOnSpecificComputers.Checked = true;
                 runOnSpecificComputers.Enabled = false;
                 runOnAnyComputer.Enabled = false;
+                runOnOtherComputers.Enabled = false;
                 runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer });
-                runOnSpecificComputersList.Enabled = false;
             }
             else
             {
                 runOnSpecificComputers.Enabled = true;
                 runOnAnyComputer.Enabled = true;
-                runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+                runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
             }
+
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
         }
 
         /// <summary>
@@ -774,22 +776,35 @@ namespace ShipWorks.Actions
             }
         }
 
-
+        /// <summary>
+        /// The RunOnOthersComputers checkbox was checked or unchecked
+        /// </summary>
         void OnRunOnOtherComputersChecked(object sender, EventArgs e)
         {
             computersPanel.Enabled = runOnOtherComputers.Checked;
 
             // Enabling the panel also enables its subcontrols so make sure that
             // the computer list's enabled property is set correctly.
-            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
         }
 
+        /// <summary>
+        /// The RunOnSpecificComputers checkbox was checked or unchecked
+        /// </summary>
         void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
         {
-            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
 
             if (runOnSpecificComputersList.Visible && runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
                 runOnSpecificComputersList.ShowPopup();
+        }
+
+        /// <summary>
+        /// Gets whether the RunOnSpecificComputersList should be enabled or not
+        /// </summary>
+        private bool ShouldEnableRunOnSpecificComputersList
+        {
+            get { return runOnSpecificComputers.Checked && runOnSpecificComputers.Enabled; }
         }
     }
 }

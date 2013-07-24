@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelNotice = new System.Windows.Forms.Label();
             this.browse = new System.Windows.Forms.Button();
             this.backupPath = new System.Windows.Forms.TextBox();
@@ -41,32 +40,23 @@
             this.checkboxOnlyKeep = new System.Windows.Forms.CheckBox();
             this.labelCleanup = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.information16;
-            this.pictureBox1.Location = new System.Drawing.Point(26, 122);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
             // labelNotice
             // 
-            this.labelNotice.Location = new System.Drawing.Point(45, 122);
+            this.labelNotice.AutoSize = true;
+            this.labelNotice.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelNotice.Location = new System.Drawing.Point(96, 24);
             this.labelNotice.Name = "labelNotice";
-            this.labelNotice.Size = new System.Drawing.Size(318, 16);
+            this.labelNotice.Size = new System.Drawing.Size(338, 13);
             this.labelNotice.TabIndex = 5;
-            this.labelNotice.Text = "The date and time of the backup will be appended to the prefix.\r\n";
+            this.labelNotice.Text = "(The date and time of the backup will be added to the backup name.)";
             // 
             // browse
             // 
-            this.browse.Location = new System.Drawing.Point(236, 58);
+            this.browse.Location = new System.Drawing.Point(352, 43);
             this.browse.Name = "browse";
             this.browse.Size = new System.Drawing.Size(75, 23);
             this.browse.TabIndex = 9;
@@ -76,7 +66,7 @@
             // 
             // backupPath
             // 
-            this.backupPath.Location = new System.Drawing.Point(64, 35);
+            this.backupPath.Location = new System.Drawing.Point(99, 45);
             this.backupPath.Name = "backupPath";
             this.backupPath.ReadOnly = true;
             this.backupPath.Size = new System.Drawing.Size(247, 21);
@@ -85,31 +75,33 @@
             // labelPath
             // 
             this.labelPath.AutoSize = true;
-            this.labelPath.Location = new System.Drawing.Point(25, 38);
+            this.labelPath.Location = new System.Drawing.Point(3, 48);
             this.labelPath.Name = "labelPath";
-            this.labelPath.Size = new System.Drawing.Size(33, 13);
+            this.labelPath.Size = new System.Drawing.Size(90, 13);
             this.labelPath.TabIndex = 7;
-            this.labelPath.Text = "Path:";
+            this.labelPath.Text = "Store backups in:";
+            this.labelPath.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelPrefix
             // 
             this.labelPrefix.AutoSize = true;
-            this.labelPrefix.Location = new System.Drawing.Point(25, 11);
+            this.labelPrefix.Location = new System.Drawing.Point(19, 3);
             this.labelPrefix.Name = "labelPrefix";
-            this.labelPrefix.Size = new System.Drawing.Size(39, 13);
+            this.labelPrefix.Size = new System.Drawing.Size(74, 13);
             this.labelPrefix.TabIndex = 10;
-            this.labelPrefix.Text = "Prefix:";
+            this.labelPrefix.Text = "Backup name:";
+            this.labelPrefix.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textPrefix
             // 
-            this.textPrefix.Location = new System.Drawing.Point(70, 8);
+            this.textPrefix.Location = new System.Drawing.Point(99, 0);
             this.textPrefix.Name = "textPrefix";
-            this.textPrefix.Size = new System.Drawing.Size(141, 21);
+            this.textPrefix.Size = new System.Drawing.Size(243, 21);
             this.textPrefix.TabIndex = 11;
             // 
             // numericBackupCount
             // 
-            this.numericBackupCount.Location = new System.Drawing.Point(157, 86);
+            this.numericBackupCount.Location = new System.Drawing.Point(173, 71);
             this.numericBackupCount.Minimum = new decimal(new int[] {
             1,
             0,
@@ -127,7 +119,7 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(209, 88);
+            this.lableBackups.Location = new System.Drawing.Point(225, 73);
             this.lableBackups.Name = "lableBackups";
             this.lableBackups.Size = new System.Drawing.Size(102, 13);
             this.lableBackups.TabIndex = 14;
@@ -136,7 +128,7 @@
             // checkboxOnlyKeep
             // 
             this.checkboxOnlyKeep.AutoSize = true;
-            this.checkboxOnlyKeep.Location = new System.Drawing.Point(81, 87);
+            this.checkboxOnlyKeep.Location = new System.Drawing.Point(99, 72);
             this.checkboxOnlyKeep.Name = "checkboxOnlyKeep";
             this.checkboxOnlyKeep.Size = new System.Drawing.Size(74, 17);
             this.checkboxOnlyKeep.TabIndex = 15;
@@ -146,11 +138,12 @@
             // labelCleanup
             // 
             this.labelCleanup.AutoSize = true;
-            this.labelCleanup.Location = new System.Drawing.Point(25, 88);
+            this.labelCleanup.Location = new System.Drawing.Point(35, 73);
             this.labelCleanup.Name = "labelCleanup";
-            this.labelCleanup.Size = new System.Drawing.Size(50, 13);
+            this.labelCleanup.Size = new System.Drawing.Size(58, 13);
             this.labelCleanup.TabIndex = 16;
-            this.labelCleanup.Text = "Cleanup:";
+            this.labelCleanup.Text = "Retention:";
+            this.labelCleanup.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // errorProvider
             // 
@@ -170,12 +163,10 @@
             this.Controls.Add(this.browse);
             this.Controls.Add(this.backupPath);
             this.Controls.Add(this.labelPath);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.labelNotice);
             this.Name = "BackupDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(366, 148);
+            this.Size = new System.Drawing.Size(456, 99);
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
@@ -185,7 +176,6 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label labelNotice;
         private System.Windows.Forms.Button browse;
         private System.Windows.Forms.TextBox backupPath;
