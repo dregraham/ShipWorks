@@ -6945,7 +6945,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Stores.Platforms.OrderMotion.OrderMotionWebClient.#log")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Data.Grid.Paging.PagedEntityGrid+PagedEntityGridRow.#log")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.Editors.PrintShipmentsTaskEditor.#task")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Program.#appMutex")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.ApplicationCore.ExecutionMode.UserInterfaceExecutionMode.#appMutex")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Shipping.ShippingDlg.#log")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.ApplicationCore.ShipWorksSession.#logTimer")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Templates.Management.SnippetEditorDlg.#sizeGripRenderer")]
@@ -12148,3 +12148,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "AfterHours", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.CleanupDatabaseTask.#StopAfterHours")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.CleanupDatabaseTask.#Purges")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.CleanupDatabaseTask.#DeserializeXml(System.Xml.XPath.XPathNavigator)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope = "type", Target = "ShipWorks.ApplicationCore.ExecutionMode.UserInterfaceExecutionMode")]
