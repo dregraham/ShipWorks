@@ -68,11 +68,19 @@ namespace ShipWorks
         public static IExecutionMode ExecutionMode { get; private set; }
 
         /// <summary>
+        /// Gets the path to the ShipWorks executable.
+        /// </summary>
+        public static string AppFileName
+        {
+            get { return Assembly.GetExecutingAssembly().Location; }
+        }
+
+        /// <summary>
         /// Gets the folder path containing the ShipWorks executable.
         /// </summary>
         public static string AppLocation
         {
-            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
+            get { return Path.GetDirectoryName(AppFileName); }
         }
 
         /// <summary>

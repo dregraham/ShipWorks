@@ -11,6 +11,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
@@ -128,6 +129,19 @@ namespace ShipWorks.ApplicationCore.Services
 
                 service.OnStop();
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Hosts all ShipWorks services as new instance-specific background processes.
+        /// If a background process is already running, it is signaled to stop and will be superseded by the new process.
+        /// This is a non-blocking call as all running services are started in new processes.
+        /// </summary>
+        public static void RunAllInBackground()
+        {
+            foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
+            {
+                Process.Start(Program.AppFileName, "/s=" + serviceType).Dispose();
             }
         }
 

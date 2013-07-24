@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Microsoft.Win32;
-using System.Reflection;
 
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Background
@@ -19,15 +18,18 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Background
             {
                 foreach(var service in ShipWorksServiceBase.GetAllServices())
                 {
-                    var command = Assembly.GetExecutingAssembly().Location + " /s=" + service.ServiceType;
-                    runKey.SetValue(service.ServiceName, command);
+                    runKey.SetValue(service.ServiceName, Program.AppFileName + " /s=" + service.ServiceType);
                 }
             }
+
+            ShipWorksServiceBase.RunAllInBackground();
         }
 
         public void UnregisterAll()
         {
             log.Info("Unregistering all background processes.");
+
+            ShipWorksServiceBase.StopAllInBackground();
 
             using (var runKey = Registry.LocalMachine.OpenSubKey(RunKeyName, true))
             {
