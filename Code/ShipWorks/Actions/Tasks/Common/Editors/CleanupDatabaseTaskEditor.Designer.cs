@@ -58,7 +58,7 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(261, 180);
+            this.lableBackups.Location = new System.Drawing.Point(255, 179);
             this.lableBackups.Name = "lableBackups";
             this.lableBackups.Size = new System.Drawing.Size(38, 13);
             this.lableBackups.TabIndex = 17;
@@ -66,7 +66,7 @@
             // 
             // numericStopAfterHours
             // 
-            this.numericStopAfterHours.Location = new System.Drawing.Point(208, 178);
+            this.numericStopAfterHours.Location = new System.Drawing.Point(202, 177);
             this.numericStopAfterHours.Minimum = new decimal(new int[] {
             1,
             0,
@@ -93,8 +93,13 @@
             // numericCleanupDays
             // 
             this.numericCleanupDays.Location = new System.Drawing.Point(186, 150);
+            this.numericCleanupDays.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
             this.numericCleanupDays.Minimum = new decimal(new int[] {
-            1,
+            7,
             0,
             0,
             0});
@@ -102,7 +107,7 @@
             this.numericCleanupDays.Size = new System.Drawing.Size(47, 21);
             this.numericCleanupDays.TabIndex = 20;
             this.numericCleanupDays.Value = new decimal(new int[] {
-            1,
+            7,
             0,
             0,
             0});

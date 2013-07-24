@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.XPath;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 
@@ -12,16 +13,45 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
-        
+
         /// <summary>
-        /// Constructor
+        /// Cleanups the type of the database.
         /// </summary>
-        /// <returns></returns>
+        public CleanupDatabaseTask()
+            : base()
+        {
+            StopAfterHours = 1;
+            CleanupAfterDays = 30;
+        }
+
+
+        /// <summary>
+        /// Creates the editor that is used to edit the task.
+        /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
-            StopAfterHours = 30;
-            CleanupAfterDays = 90;
             return new CleanupDatabaseTaskEditor(this);
+        }
+
+        /// <summary>
+        /// Load the object data from the given XPath. Overriden to populate purges.
+        /// </summary>
+        /// <param name="xpath"></param>
+        public override void DeserializeXml(XPathNavigator xpath)
+        {
+            base.DeserializeXml(xpath);
+
+            Purges = new List<CleanupDatabaseType>();
+
+            var purges = xpath.Select("/Settings/Purges/*[@value]");
+
+            foreach (object purge in purges)
+            {
+                var purgeNavigator = ((XPathNavigator) purge);
+                
+                purgeNavigator.MoveToAttribute("value", "");
+                Purges.Add((CleanupDatabaseType)(purgeNavigator).ValueAsInt);
+            }
         }
 
         /// <summary>
