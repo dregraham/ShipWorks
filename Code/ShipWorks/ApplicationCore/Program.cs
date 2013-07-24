@@ -1,46 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.ServiceProcess;
-using System.Threading;
-using System.Windows.Forms;
-using ActiproSoftware.SyntaxEditor;
 using Interapptive.Shared;
-using Interapptive.Shared.Data;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using log4net;
-using NDesk.Options;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.ApplicationCore.MessageBoxes;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Editions;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Management;
-using ShipWorks.UI;
-using ShipWorks.UI.Controls;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data.Connection;
+using ShipWorks.Users;
+using System;
+using System.IO;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace ShipWorks
 {
     static class Program
     {
-        // Mutex used to indicate the application is alive. The installer uses this to know the app needs
-        // shutdown before the installation can continue.
-        static Mutex appMutex;
-
-
         // Indicates if the application is shutting down due to an exception
         static bool isTerminating = false;
 
@@ -93,9 +70,6 @@ namespace ShipWorks
 
             try
             {
-                // The installer uses this to know the app needs shutdown before the installation can continue.
-                appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
-
                 // Determine any command line actions or options
                 ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(Environment.GetCommandLineArgs());
 

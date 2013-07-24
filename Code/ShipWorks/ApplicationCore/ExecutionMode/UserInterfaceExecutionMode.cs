@@ -1,27 +1,13 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Windows.Forms;
-using ActiproSoftware.SyntaxEditor;
-using Interapptive.Shared;
-using Interapptive.Shared.Data;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using log4net;
 using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.Data.Connection;
-using ShipWorks.Editions;
-using ShipWorks.Users;
-using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Management;
-using ShipWorks.UI;
-using ShipWorks.UI.Controls;
 using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
+using ShipWorks.UI;
+using ShipWorks.Users;
+using System;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -32,6 +18,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UserInterfaceExecutionMode));
         private readonly IExecutionModeInitializer initializer;
+
+        // Mutex used to indicate the application is alive. The installer uses this to know the app needs
+        // shutdown before the installation can continue.
+        Mutex appMutex;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInterfaceExecutionMode" /> class.
@@ -69,6 +59,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         public void Execute()
         {
+            // The installer uses this to know the app needs shutdown before the installation can continue.
+            appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
+
             SingleInstance.Register(ShipWorksSession.InstanceID);
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
