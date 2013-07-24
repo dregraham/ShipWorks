@@ -43,9 +43,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         /// <summary>
         /// Gets or sets the month changed.
         /// </summary>
-        /// <value>
-        /// The month changed.
-        /// </value>
         public Action MonthChanged
         {
             get;

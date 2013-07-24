@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using System.Collections.Generic;
+using System.Xml.XPath;
+using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -11,16 +13,45 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
-        private int cleanupAfterDays = 90;
-        private int stopAfterMinutes = 30;
 
         /// <summary>
-        /// Constructor
+        /// Cleanups the type of the database.
         /// </summary>
-        /// <returns></returns>
+        public CleanupDatabaseTask()
+            : base()
+        {
+            StopAfterHours = 1;
+            CleanupAfterDays = 30;
+        }
+
+
+        /// <summary>
+        /// Creates the editor that is used to edit the task.
+        /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
             return new CleanupDatabaseTaskEditor(this);
+        }
+
+        /// <summary>
+        /// Load the object data from the given XPath. Overriden to populate purges.
+        /// </summary>
+        /// <param name="xpath"></param>
+        public override void DeserializeXml(XPathNavigator xpath)
+        {
+            base.DeserializeXml(xpath);
+
+            Purges = new List<CleanupDatabaseType>();
+
+            var purges = xpath.Select("/Settings/Purges/*[@value]");
+
+            foreach (object purge in purges)
+            {
+                var purgeNavigator = ((XPathNavigator) purge);
+                
+                purgeNavigator.MoveToAttribute("value", "");
+                Purges.Add((CleanupDatabaseType)(purgeNavigator).ValueAsInt);
+            }
         }
 
         /// <summary>
@@ -29,12 +60,12 @@ namespace ShipWorks.Actions.Tasks.Common
         public bool StopLongCleanups { get; set; }
 
         /// <summary>
-        /// Defines the maximum minutes a cleanup can run
+        /// Defines the maximum hours a cleanup can run
         /// </summary>
-        public int StopAfterMinutes
+        public int StopAfterHours
         {
-            get { return stopAfterMinutes; }
-            set { stopAfterMinutes = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -42,8 +73,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public int CleanupAfterDays
         {
-            get { return cleanupAfterDays; }
-            set { cleanupAfterDays = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -54,6 +85,14 @@ namespace ShipWorks.Actions.Tasks.Common
             get { return false; }
         }
 
+        /// <summary>
+        /// Gets or sets the purges requested for this task.
+        /// </summary>
+        public List<CleanupDatabaseType> Purges
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// Runs the cleanup scripts.
         /// </summary>
