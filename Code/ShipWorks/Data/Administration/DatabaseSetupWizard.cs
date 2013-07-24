@@ -214,7 +214,6 @@ namespace ShipWorks.Data.Administration
                         sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
                         sqlSession.Configuration.Username = "sa";
                         sqlSession.Configuration.Password = SecureText.Decrypt((string)afterInstallSuccess.Attribute("password"), "sa");
-                        sqlSession.Configuration.RememberPassword = true;
                         sqlSession.Configuration.WindowsAuth = false;
 
                         // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
@@ -473,7 +472,6 @@ namespace ShipWorks.Data.Administration
             {
                 sqlSession.Configuration.Username = username.Text;
                 sqlSession.Configuration.Password = password.Text;
-                sqlSession.Configuration.RememberPassword = remember.Checked;
                 sqlSession.Configuration.WindowsAuth = false;
             }
             else
@@ -559,7 +557,6 @@ namespace ShipWorks.Data.Administration
         {
             username.Enabled = sqlServerAuth.Checked;
             password.Enabled = sqlServerAuth.Checked;
-            remember.Enabled = sqlServerAuth.Checked;
         }
 
         #endregion
@@ -726,7 +723,6 @@ namespace ShipWorks.Data.Administration
             // Save user\pass info
             sqlSession.Configuration.Username = "sa";
             sqlSession.Configuration.Password = saPassword.Text.Trim();
-            sqlSession.Configuration.RememberPassword = true;
             sqlSession.Configuration.WindowsAuth = false;
 
             e.NextPage = wizardPageDownloadSqlServer;

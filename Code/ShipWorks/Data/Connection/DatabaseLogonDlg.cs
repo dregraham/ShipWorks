@@ -44,25 +44,15 @@ namespace ShipWorks.Data.Connection
             if (SqlSession.Current.Configuration.WindowsAuth)
             {
                 windowsAuth.Checked = true;
-                ActiveControl = ok;
             }
             else
             {
                 sqlServerAuth.Checked = true;
                 username.Text = SqlSession.Current.Configuration.Username;
-
-                if (SqlSession.Current.Configuration.RememberPassword)
-                {
-                    password.Text = SqlSession.Current.Configuration.Password;
-                    ActiveControl = ok;
-                }
-                else
-                {
-                    ActiveControl = password;
-                }
-
-                remember.Checked = SqlSession.Current.Configuration.RememberPassword;
+                password.Text = SqlSession.Current.Configuration.Password;
             }
+
+            ActiveControl = ok;
         }
 
         /// <summary>
@@ -72,7 +62,6 @@ namespace ShipWorks.Data.Connection
         {
             username.Enabled = sqlServerAuth.Checked;
             password.Enabled = sqlServerAuth.Checked;
-            remember.Enabled = sqlServerAuth.Checked;
         }
 
         /// <summary>
@@ -87,7 +76,6 @@ namespace ShipWorks.Data.Connection
             // Set them to the new settings
             session.Configuration.Username = username.Text;
             session.Configuration.Password = password.Text;
-            session.Configuration.RememberPassword = remember.Checked;
             session.Configuration.WindowsAuth = windowsAuth.Checked;
 
             try

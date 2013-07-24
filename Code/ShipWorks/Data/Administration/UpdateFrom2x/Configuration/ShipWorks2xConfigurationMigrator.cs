@@ -382,7 +382,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
                 // Load the settings
                 string username = (string) xPathSession.Evaluate("string(//Username)");
                 string password = (string) xPathSession.Evaluate("string(//Password)");
-                bool remember = Convert.ToBoolean((string) xPathSession.Evaluate("string(//Remember)"));
 
                 // This is how we used to decrypt the password
                 password = SecureText.Decrypt(password, username + Environment.UserName);
@@ -415,7 +414,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Configuration
                 sqlSession.Configuration.DatabaseName = "ShipWorks";
                 sqlSession.Configuration.Username = username;
                 sqlSession.Configuration.Password = password;
-                sqlSession.Configuration.RememberPassword = remember;
                 sqlSession.Configuration.WindowsAuth = false;
 
                 log.Info("Migrating SqlSession from pre 2.4 configuration.");

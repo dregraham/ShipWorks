@@ -56,9 +56,6 @@ namespace ShipWorks.Data.Connection
         // SQL Server Password
         string password = string.Empty;
 
-        // Remember password
-        bool rememberPassword = false;
-
         // Use windows authentication
         bool windowsAuth = false;
 
@@ -90,7 +87,6 @@ namespace ShipWorks.Data.Connection
             this.databaseName = copy.DatabaseName;
             this.username = copy.Username;
             this.password = copy.Password;
-            this.rememberPassword = copy.RememberPassword;
             this.windowsAuth = copy.WindowsAuth;
 
             OnConnectionChanged();
@@ -182,26 +178,6 @@ namespace ShipWorks.Data.Connection
 
                 password = SecureText.Encrypt(value, username);
                 OnConnectionChanged();
-            }
-        }
-
-        /// <summary>
-        /// Set whether the password should be saved to disk.
-        /// </summary>
-        public bool RememberPassword
-        {
-            get
-            {
-                return rememberPassword;
-            }
-            set
-            {
-                if (frozen)
-                {
-                    throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
-                }
-
-                rememberPassword = value;
             }
         }
 
@@ -348,7 +324,6 @@ namespace ShipWorks.Data.Connection
             databaseName = XPathUtility.Evaluate(xpath, "//Database", "");
             username = XPathUtility.Evaluate(xpath, "//Username", "");
             password = XPathUtility.Evaluate(xpath, "//Password", "");
-            rememberPassword = XPathUtility.Evaluate(xpath, "//Remember", false);
             windowsAuth = XPathUtility.Evaluate(xpath, "//WindowsAuth", false);
 
             OnConnectionChanged();
@@ -390,8 +365,7 @@ namespace ShipWorks.Data.Connection
             // Credentials
             xmlWriter.WriteStartElement("Credentials");
             xmlWriter.WriteElementString("Username", username);
-            xmlWriter.WriteElementString("Password", rememberPassword ? password : "");
-            xmlWriter.WriteElementString("Remember", rememberPassword.ToString());
+            xmlWriter.WriteElementString("Password", password);
             xmlWriter.WriteElementString("WindowsAuth", windowsAuth.ToString());
             xmlWriter.WriteEndElement();
 

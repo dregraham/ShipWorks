@@ -9,7 +9,6 @@ namespace ShipWorks.Data.Connection
 
         string Username { get; set; }
         string Password { get; set; }
-        bool RememberPassword { get; set; }
 
         bool WindowsAuth { get; set; }
 
