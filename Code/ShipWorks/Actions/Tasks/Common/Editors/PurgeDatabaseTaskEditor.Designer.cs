@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    partial class CleanupDatabaseTaskEditor
+    partial class PurgeDatabaseTaskEditor
     {
         /// <summary> 
         /// Required designer variable.

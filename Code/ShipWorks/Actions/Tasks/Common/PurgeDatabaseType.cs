@@ -9,21 +9,21 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.Actions.Tasks.Common
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum CleanupDatabaseType
+    public enum PurgeDatabaseType
     {
-        [Description("Audit"), ApiValue("AuditCleanup")]
+        [Description("Audit"), ApiValue("PurgeAudit")]
         Audit = 0,
 
-        [Description("Downloads"), ApiValue("DownloadCleanup")]
+        [Description("Downloads"), ApiValue("PurgeDownload")]
         Downloads = 1,
 
-        [Description("Email"), ApiValue("EmailCleanup")]
+        [Description("Email"), ApiValue("PurgeEmail")]
         Email = 2,
 
-        [Description("Labels"), ApiValue("LabelCleanup")]
+        [Description("Labels"), ApiValue("PurgeLabel")]
         Labels = 3,
 
-        [Description("Print Jobs"), ApiValue("PrintResultCleanup")]
+        [Description("Print Jobs"), ApiValue("PurgePrintResult")]
         PrintJobs = 4
     }
 }

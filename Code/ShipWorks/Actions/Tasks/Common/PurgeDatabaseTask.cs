@@ -12,18 +12,18 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for cleaning old data
     /// </summary>
-    [ActionTask("Clean up database", "CleanupDatabase", ActionTriggerClassifications.Scheduled)]
-    public class CleanupDatabaseTask : ActionTask
+    [ActionTask("Delete old data", "PurgeDatabase", ActionTriggerClassifications.Scheduled)]
+    public class PurgeDatabaseTask : ActionTask
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
+        static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
         private readonly ISqlPurgeScriptRunner scriptRunner;
         private readonly IDateTimeProvider dateProvider; 
 
         /// <summary>
         /// Cleanups the type of the database.
         /// </summary>
-        public CleanupDatabaseTask() : this(new SqlPurgeScriptRunner(), new DateTimeProvider())
+        public PurgeDatabaseTask() : this(new SqlPurgeScriptRunner(), new DateTimeProvider())
         {
         }
 
@@ -32,11 +32,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         /// <param name="scriptRunner">Specifies which sql purge runner gets used for unit testing</param>
         /// <param name="dateProvider">Specifies how current dates will be retrieved so tests can use expected times</param>
-        public CleanupDatabaseTask(ISqlPurgeScriptRunner scriptRunner, IDateTimeProvider dateProvider) : base()
+        public PurgeDatabaseTask(ISqlPurgeScriptRunner scriptRunner, IDateTimeProvider dateProvider) : base()
         {
             StopAfterHours = 1;
             CleanupAfterDays = 30;
-            Purges = new List<CleanupDatabaseType>();
+            Purges = new List<PurgeDatabaseType>();
             this.scriptRunner = scriptRunner;
             this.dateProvider = dateProvider;
         }
@@ -47,7 +47,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
-            return new CleanupDatabaseTaskEditor(this);
+            return new PurgeDatabaseTaskEditor(this);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             base.DeserializeXml(xpath);
 
-            Purges = new List<CleanupDatabaseType>();
+            Purges = new List<PurgeDatabaseType>();
 
             var purges = xpath.Select("/Settings/Purges/*[@value]");
 
@@ -67,7 +67,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 var purgeNavigator = ((XPathNavigator) purge);
                 
                 purgeNavigator.MoveToAttribute("value", "");
-                Purges.Add((CleanupDatabaseType)(purgeNavigator).ValueAsInt);
+                Purges.Add((PurgeDatabaseType)(purgeNavigator).ValueAsInt);
             }
         }
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the purges requested for this task.
         /// </summary>
-        public List<CleanupDatabaseType> Purges
+        public List<PurgeDatabaseType> Purges
         {
             get;
             set;

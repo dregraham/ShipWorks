@@ -382,14 +382,14 @@
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
-    <Compile Include="Actions\Tasks\Common\CleanupDatabaseTask.cs" />
+    <Compile Include="Actions\Tasks\Common\PurgeDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
-    <Compile Include="Actions\Tasks\Common\CleanupDatabaseType.cs" />
-    <Compile Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.cs">
+    <Compile Include="Actions\Tasks\Common\PurgeDatabaseType.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.Designer.cs">
-      <DependentUpon>CleanupDatabaseTaskEditor.cs</DependentUpon>
+    <Compile Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -5356,8 +5356,8 @@
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
       <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Actions\Tasks\Common\Editors\CleanupDatabaseTaskEditor.resx">
-      <DependentUpon>CleanupDatabaseTaskEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.resx">
+      <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>

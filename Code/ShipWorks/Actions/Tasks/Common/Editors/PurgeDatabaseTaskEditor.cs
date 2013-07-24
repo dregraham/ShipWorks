@@ -10,15 +10,15 @@ using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    public partial class CleanupDatabaseTaskEditor : ActionTaskEditor
+    public partial class PurgeDatabaseTaskEditor : ActionTaskEditor
     {
-        private CleanupDatabaseTask task;
+        private PurgeDatabaseTask task;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="task">Task which should be edited</param>
-        public CleanupDatabaseTaskEditor(CleanupDatabaseTask task)
+        public PurgeDatabaseTaskEditor(PurgeDatabaseTask task)
         {
             InitializeComponent();
 
@@ -58,12 +58,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnPurgeCheckChanged(object sender, EventArgs e)
         {
-            task.Purges = new List<CleanupDatabaseType>();
-            if (audit.Checked) task.Purges.Add(CleanupDatabaseType.Audit);
-            if (downloads.Checked) task.Purges.Add(CleanupDatabaseType.Downloads);
-            if (email.Checked) task.Purges.Add(CleanupDatabaseType.Email);
-            if (labels.Checked) task.Purges.Add(CleanupDatabaseType.Labels);
-            if (printJobs.Checked) task.Purges.Add(CleanupDatabaseType.PrintJobs);
+            task.Purges = new List<PurgeDatabaseType>();
+            if (audit.Checked) task.Purges.Add(PurgeDatabaseType.Audit);
+            if (downloads.Checked) task.Purges.Add(PurgeDatabaseType.Downloads);
+            if (email.Checked) task.Purges.Add(PurgeDatabaseType.Email);
+            if (labels.Checked) task.Purges.Add(PurgeDatabaseType.Labels);
+            if (printJobs.Checked) task.Purges.Add(PurgeDatabaseType.PrintJobs);
         }
 
         /// <summary>
@@ -74,11 +74,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             if (task.Purges != null)
             {
-                audit.Checked = task.Purges.Contains(CleanupDatabaseType.Audit);
-                downloads.Checked = task.Purges.Contains(CleanupDatabaseType.Downloads);
-                email.Checked = task.Purges.Contains(CleanupDatabaseType.Email);
-                labels.Checked = task.Purges.Contains(CleanupDatabaseType.Labels);
-                printJobs.Checked = task.Purges.Contains(CleanupDatabaseType.PrintJobs);
+                audit.Checked = task.Purges.Contains(PurgeDatabaseType.Audit);
+                downloads.Checked = task.Purges.Contains(PurgeDatabaseType.Downloads);
+                email.Checked = task.Purges.Contains(PurgeDatabaseType.Email);
+                labels.Checked = task.Purges.Contains(PurgeDatabaseType.Labels);
+                printJobs.Checked = task.Purges.Contains(PurgeDatabaseType.PrintJobs);
             }
         }
 
