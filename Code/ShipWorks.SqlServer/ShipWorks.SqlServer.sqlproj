@@ -213,6 +213,7 @@
     <Compile Include="Users\GetUserID.cs" />
     <Compile Include="Actions\ActionDeleteTrigger.cs" />
     <Compile Include="Purge\AuditPurgeProcedure.cs" />
+    <Compile Include="Purge\PurgeException.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

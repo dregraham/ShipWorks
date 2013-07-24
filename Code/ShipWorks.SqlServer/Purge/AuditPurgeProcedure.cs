@@ -6,10 +6,11 @@ using Microsoft.SqlServer.Server;
 using ShipWorks.SqlServer.Common.Data;
 
 using ShipWorks.SqlServer;
+using ShipWorks.SqlServer.Purge;
 
 public partial class StoredProcedures
 {
-    private const string AuditPurgeAppLockName = "PurgeAuditLock";
+    private const string AuditPurgeAppLockName = "PurgeAuditLogs";
 
     /// <summary>
     /// Purges old audit records from the database.
@@ -18,32 +19,32 @@ public partial class StoredProcedures
     /// which Audit records will be purged. Any records with an Audit.Date value earlier than
     /// this date will be purged.</param>
     [SqlProcedure]
-    public static void PurgeAudit(SqlDateTime earliestRetentionDate)
+    public static void PurgeAudit(SqlDateTime earliestRetentionDateInUtc)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {
             try
             {
+                connection.Open();
+
                 if (!SqlAppLockUtility.IsLocked(connection, AuditPurgeAppLockName))
                 {
                     if (SqlAppLockUtility.AcquireLock(connection, AuditPurgeAppLockName))
                     {
-                        SqlCommand command = connection.CreateCommand();
-                        command.CommandText = AuditPurgeCommandText;
+                        using (SqlCommand command = connection.CreateCommand())
+                        {
+                            command.CommandText = AuditPurgeCommandText;
 
-                        command.Parameters.Add(new SqlParameter("@RetentionDate", earliestRetentionDate));
-
-                        connection.Open();
-                        command.ExecuteNonQuery();
-
-                        connection.Close();
+                            command.Parameters.Add(new SqlParameter("@RetentionDateInUtc", earliestRetentionDateInUtc));
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
                 else
                 {
                     // Let the caller know that someone else is already running the purge. (It may
                     // be beneficial to create/throw a more specific exception.)
-                    throw new Exception("Could not acquire applock for for purging audit logs.");
+                    throw new PurgeException("Could not acquire applock for for purging audit logs.");                    
                 }
             }
             finally
@@ -53,6 +54,9 @@ public partial class StoredProcedures
         }
     }
 
+    /// <summary>
+    /// The TSQL for the PurgeAudit stored procedure.
+    /// </summary>
     private static string AuditPurgeCommandText
     {
         get { return @"
@@ -72,7 +76,7 @@ public partial class StoredProcedures
                 AuditID
             )
             SELECT AuditID FROM Audit
-            WHERE [DATE] < @RetentionDate
+            WHERE [DATE] < @RetentionDateInUtc
     
 
             SELECT @RecordsToBeDeleted = COUNT(0) FROM #AuditTemp
