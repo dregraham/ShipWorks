@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
-using log4net.Appender;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Actions.Tasks.Common;
@@ -52,10 +48,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
             Mock<IDateTimeProvider> dateProvider = new Mock<IDateTimeProvider>();
-            dateProvider.SetupMany(x => x.UtcNow, new DateTime(2013, 7, 24, 12, 15, 21), 
-                new DateTime(2013, 7, 24, 13, 15, 21),
-                new DateTime(2013, 7, 24, 14, 15, 20), 
-                new DateTime(2013, 7, 24, 14, 15, 22));
+            dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
+                .Returns(new DateTime(2013, 7, 24, 13, 15, 21))
+                .Returns(new DateTime(2013, 7, 24, 14, 15, 20))
+                .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
 
             CleanupDatabaseTask testObject = new CleanupDatabaseTask(scriptRunner.Object, dateProvider.Object);
             testObject.Purges.Add(CleanupDatabaseType.Audit);

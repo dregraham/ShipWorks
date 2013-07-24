@@ -434,19 +434,21 @@ namespace ShipWorks.Data.Connection
 
             using (SqlConnection con = OpenConnection())
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "SELECT GETDATE() as 'LocalDate', GETUTCDATE() as 'LocalDateUtc'";
-
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
-                    reader.Read();
+                    cmd.CommandText = "SELECT GETDATE() as 'LocalDate', GETUTCDATE() as 'LocalDateUtc'";
 
-                    serverLocalDate = (DateTime) reader["LocalDate"];
-                    serverLocalDateUtc = (DateTime) reader["localDateUtc"];
+                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    {
+                        reader.Read();
 
-                    log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverLocalDate, serverLocalDateUtc);
+                        serverLocalDate = (DateTime)reader["LocalDate"];
+                        serverLocalDateUtc = (DateTime)reader["localDateUtc"];
 
-                    timeSinceTimeTaken = Stopwatch.StartNew();
+                        log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverLocalDate, serverLocalDateUtc);
+
+                        timeSinceTimeTaken = Stopwatch.StartNew();
+                    }
                 }
             }
         }

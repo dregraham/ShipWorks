@@ -12149,3 +12149,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.CleanupDatabaseTask.#Purges")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.CleanupDatabaseTask.#DeserializeXml(System.Xml.XPath.XPathNavigator)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope = "type", Target = "ShipWorks.ApplicationCore.ExecutionMode.UserInterfaceExecutionMode")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "ShipWorks.Data.Connection.SqlSession.#GetLocalUtcDate()")]
