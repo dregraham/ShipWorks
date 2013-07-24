@@ -403,6 +403,7 @@
     <Compile Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.Designer.cs">
       <DependentUpon>ShrinkDatabaseTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\ISqlPurgeScriptRunner.cs" />
     <Compile Include="Actions\Tasks\Common\ShrinkDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\PrintShipmentsTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -412,6 +413,7 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\PrintShipmentsTask.cs" />
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
+    <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
     <Compile Include="Actions\Triggers\ScheduledTrigger.cs" />
     <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.cs">
       <SubType>UserControl</SubType>
@@ -11482,7 +11484,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Actions\Tasks\Common\CleanupScripts\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

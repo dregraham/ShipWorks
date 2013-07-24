@@ -23,6 +23,7 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(CleanupDatabaseTask));
+        private readonly ISqlPurgeScriptRunner scriptRunner;
 
         /// <summary>
         /// Cleanups the type of the database.
@@ -33,6 +34,16 @@ namespace ShipWorks.Actions.Tasks.Common
             StopAfterHours = 1;
             CleanupAfterDays = 30;
             CleanupTypes = new List<CleanupDatabaseType>();
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="scriptRunner">Let's which sql purge runner gets used for unit testing</param>
+        public CleanupDatabaseTask(ISqlPurgeScriptRunner scriptRunner)
+        {
+            this.scriptRunner = scriptRunner;
         }
 
 
@@ -113,7 +124,7 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime sqlDate = SqlSession.Current.GetLocalDate();
             DateTime localStopExecutionAfter = DateTime.Now.AddMinutes(StopAfterMinutes);
             DateTime sqlStopExecutionAfter = sqlDate.AddMinutes(StopAfterMinutes);
-            DateTime deleteOlderThan = sqlDate.AddDays(-CleanupAfterDays);
+            //DateTime deleteOlderThan = sqlDate.AddDays(-CleanupAfterDays);
 
             log.Info("Starting database cleanup...");
 
@@ -127,19 +138,19 @@ namespace ShipWorks.Actions.Tasks.Common
                 }
 
                 log.InfoFormat("Running {0}...", scriptName);
-
+                scriptRunner.RunScript(scriptName, cleanupAfterDays, StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
                 // Run the current cleanup script
-                string script = GetScript(scriptName);
-                using (SqlConnection connection = SqlSession.Current.OpenConnection())
-                {
-                    using (SqlCommand command = SqlCommandProvider.Create(connection, script))
-                    {
-                        command.Parameters.AddWithValue("@StopExecutionAfter", StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
-                        command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
+                //string script = GetScript(scriptName);
+                //using (SqlConnection connection = SqlSession.Current.OpenConnection())
+                //{
+                //    using (SqlCommand command = SqlCommandProvider.Create(connection, script))
+                //    {
+                //        command.Parameters.AddWithValue("@StopExecutionAfter", StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
+                //        command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
 
-                        command.ExecuteNonQuery();
-                    }
-                }
+                //        command.ExecuteNonQuery();
+                //    }
+                //}
 
                 log.InfoFormat("Finished {0}.", scriptName);
             }
@@ -154,17 +165,6 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 return CleanupTypes.Select(x => EnumHelper.GetApiValue(x));
             }
-        }
-
-        /// <summary>
-        /// Gets the specified script from the embedded task resources
-        /// </summary>
-        /// <param name="name">Name of the Sql script to retrieve</param>
-        /// <returns></returns>
-        private string GetScript(string name)
-        {
-            string resourceName = string.Format("ShipWorks.Data.Administration.Scripts.CleanupScripts.{0}.sql", name);
-            return ResourceUtility.ReadString(resourceName);
         }
     }
 }

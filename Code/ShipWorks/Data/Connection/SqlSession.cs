@@ -433,6 +433,43 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Get the latest Utc time information from the server. Uses a cache mechanism for efficiency, so
+        /// we don't go to the server every invocation.
+        /// 
+        /// If the time has been retrieved from the server withing the past 30 minutes, then the current time
+        /// is estimated by adding the last retrieved time plus the elapsed time.
+        /// </summary>
+        public DateTime GetLocalUtcDate()
+        {
+            if (timeSinceTimeTaken != null)
+            {
+                if (timeSinceTimeTaken.Elapsed < TimeSpan.FromMinutes(30))
+                {
+                    return serverLocalDate + timeSinceTimeTaken.Elapsed;
+                }
+            }
+
+            timeSinceTimeTaken = Stopwatch.StartNew();
+
+            using (SqlConnection con = OpenConnection())
+            {
+                SqlCommand cmd = SqlCommandProvider.Create(con);
+                cmd.CommandText = "SELECT GETDATE() as 'LocalDate'";
+
+                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                {
+                    reader.Read();
+
+                    serverLocalDate = (DateTime)reader["LocalDate"];
+
+                    log.InfoFormat("Server LocalDate ({0})", serverLocalDate);
+
+                    return serverLocalDate;
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the machine name of the server that sql server is installed 
         /// </summary>
         public string GetServerMachineName()
