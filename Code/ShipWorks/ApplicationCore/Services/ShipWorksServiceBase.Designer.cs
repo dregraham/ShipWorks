@@ -40,7 +40,7 @@
             // tryStartTimer
             // 
             this.tryStartTimer.AutoReset = false;
-            this.tryStartTimer.Interval = 180000D;
+            this.tryStartTimer.Interval = 60000D;
             this.tryStartTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTryStartTimerElapsed);
             ((System.ComponentModel.ISupportInitialize)(this.checkInTimer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tryStartTimer)).EndInit();
