@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
-using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Connection;
-using ShipWorks.SqlServer.Common.Data;
+using ShipWorks.SqlServer.Purge;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -12,6 +13,8 @@ namespace ShipWorks.Actions.Tasks.Common
     /// </summary>
     public class SqlPurgeScriptRunner : ISqlPurgeScriptRunner
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
+
         /// <summary>
         /// Gets the Utc time from the Sql server
         /// </summary>
@@ -32,45 +35,24 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
         public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime stopExecutionAfterUtc)
         {
-            string script = GetScript(scriptName);
-
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
-                string lockName = string.Format("PurgeActionTask_{0}", scriptName);
-
-                if (SqlAppLockUtility.AcquireLock(connection, lockName))
+                try
                 {
-                    try
+                    using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
                     {
-                        using (SqlCommand command = SqlCommandProvider.Create(connection, script))
-                        {
-                            command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
-                            command.Parameters.AddWithValue("@StopExecutionAfter", stopExecutionAfterUtc);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
+                        command.Parameters.AddWithValue("@latestExecutionTimeInUtc", stopExecutionAfterUtc);
 
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    finally
-                    {
-                        SqlAppLockUtility.ReleaseLock(connection, lockName);
+                        command.ExecuteNonQuery();
                     }
                 }
-                else
+                catch (PurgeException ex)
                 {
-
+                    log.Warn(ex.Message);
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets the specified script from the embedded task resources
-        /// </summary>
-        /// <param name="name">Name of the Sql script to retrieve</param>
-        /// <returns></returns>
-        private static string GetScript(string name)
-        {
-            string resourceName = string.Format("ShipWorks.Data.Administration.Scripts.CleanupScripts.{0}.sql", name);
-            return ResourceUtility.ReadString(resourceName);
         }
     }
 }

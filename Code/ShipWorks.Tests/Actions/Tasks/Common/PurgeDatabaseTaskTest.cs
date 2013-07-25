@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [TestMethod]
-        public void Run_ShouldRunAllSelectedSelectedScripts_WhenTaskHasNoTimeout()
+        public void Run_ShouldRunAllSelectedScripts_WhenTaskHasNoTimeout()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
 
@@ -43,6 +43,24 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript("PurgeEmail", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript("PurgePrintResult", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
+        }
+
+        [TestMethod]
+        public void Run_ShouldRunSelectedScripts_WhenTaskHasNoTimeout()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Email);
+            testObject.StopLongPurges = false;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.RunScript("PurgeAudit", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript("PurgeDownload", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript("PurgeEmail", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript("PurgePrintResult", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
         }
 
         [TestMethod]
@@ -166,6 +184,27 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Run(null, null);
 
             scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), SqlDateTime.MaxValue.Value), Times.Once());
+        }
+
+        [TestMethod]
+        public void DeserializeXml_ShouldSetAllProperties()
+        {
+            string settings = @"<Settings>
+  <StopLongPurges value=""False"" />
+  <TimeoutInHours value=""1"" />
+  <RetentionPeriodInDays value=""7"" />
+  <Purges>
+    <Item type=""ShipWorks.Actions.Tasks.Common.PurgeDatabaseType"" value=""0"" />
+  </Purges>
+</Settings>";
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask();
+            testObject.Initialize(settings);
+
+            Assert.AreEqual(false, testObject.StopLongPurges);
+            Assert.AreEqual(1, testObject.TimeoutInHours);
+            Assert.AreEqual(7, testObject.RetentionPeriodInDays);
+            Assert.AreEqual(1, testObject.Purges.Count);
+            Assert.AreEqual(PurgeDatabaseType.Audit, testObject.Purges[0]);
         }
 
         #region "Support methods"

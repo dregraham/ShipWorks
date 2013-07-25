@@ -89,25 +89,16 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// Load the object data from the given XPath. Overriden to populate purges.
+        /// Gets a type from the specified type string
         /// </summary>
-        /// <param name="xpath"></param>
-        public override void DeserializeXml(XPathNavigator xpath)
+        /// <param name="typeString">Name and namespace of the type to get.</param>
+        /// <returns>The actual type for the string, or null if it can't be found.</returns>
+        /// <remarks>This is overridden so that the ShipWorks assembly is searched.</remarks>
+        protected override Type GetTypeByFullName(string typeString)
         {
-            base.DeserializeXml(xpath);
-
-            Purges = new List<PurgeDatabaseType>();
-            XPathNodeIterator purges = xpath.Select("/Settings/Purges/*[@value]");
-
-            foreach (object purge in purges)
-            {
-                var purgeNavigator = ((XPathNavigator) purge);
-                
-                purgeNavigator.MoveToAttribute("value", "");
-                Purges.Add((PurgeDatabaseType)(purgeNavigator).ValueAsInt);
-            }
+            return Type.GetType(typeString);
         }
-        
+
         /// <summary>
         /// Runs the purge scripts.
         /// </summary>
@@ -117,10 +108,6 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
             DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
             DateTime earliestRetentionDateInUtc = sqlDate.AddDays(RetentionPeriodInDays);
-
-            // Get the list of purges to run starting with the saved next purge
-            //int nextPurgeIndex = Purges.IndexOf(NextPurge);
-            //List<PurgeDatabaseType> orderedPurges = Purges.Skip(nextPurgeIndex).Concat(Purges.Take(nextPurgeIndex)).ToList();
 
             log.Info("Starting database purge...");
 
