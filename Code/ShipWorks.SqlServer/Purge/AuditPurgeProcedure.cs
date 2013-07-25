@@ -3,8 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
-using ShipWorks.SqlServer.Common.Data;
 
+using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer;
 using ShipWorks.SqlServer.Purge;
 
@@ -64,7 +64,7 @@ public partial class StoredProcedures
     }
 
     /// <summary>
-    /// The TSQL for the PurgeAudit stored procedure.
+    /// The T-SQL for the PurgeAudit stored procedure.
     /// </summary>
     private static string AuditPurgeCommandText
     {
@@ -101,8 +101,8 @@ public partial class StoredProcedures
                 INSERT INTO @CurrentBatch (	AuditID )
                     SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 		
         
-                -- Honor the hard stop if one is provided               
-                WHILE @@ROWCOUNT > 0 AND (@LatestExecutionTimeInUtc > GetUtcDate())
+                -- Honor the hard stop if one is provided
+                WHILE (@@ROWCOUNT > 0) AND (@LatestExecutionTimeInUtc > GETUTCDATE())
                 BEGIN
 
                     BEGIN TRANSACTION
