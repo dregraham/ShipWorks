@@ -13,6 +13,8 @@ Albacore.configure do |config|
 	end
 end
 
+@innoPath = "C:/Program Files (x86)/Inno Setup 5/ISCC.EXE"
+
 
 desc "Cleans and builds the solution with the debug config"
 task :rebuild => ["build:clean", "build:debug"]
@@ -43,6 +45,18 @@ namespace :build do
 		msb.properties :configuration => :Release
 		msb.targets :Clean, :Build
 	end
+	
+	desc "Build an unsigned Debug installer for local testing"
+	task :debug_installer => :debug do
+		print "Building unsigned debug installer package...\r\n\r\n"
+
+		print "Querying required schema version... "
+		print schemaID = `Build/echoerrorlevel.cmd "Artifacts\\Application\\ShipWorks.exe" /c=getdbschemaversion /type=required`, "\r\n"
+
+		print "Running INNO compiler... "
+		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
+		print "done.\r\n"
+	end
 
 	desc "Build ShipWorks and generate an MSI for internal testing"
 	msbuild :internal_installer do |msb|
@@ -60,7 +74,6 @@ namespace :build do
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preperation for the next run
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt /p:CCNetLabel=0.0.0." + revisionNumber
-		
 	end
 end
 
