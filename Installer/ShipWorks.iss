@@ -142,10 +142,6 @@ Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: 
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/command=installservices /background"; Flags: nowait
 
-
-[UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:uninstallservices /all"; RunOnceId: "UninstallServices"
-
 [Dirs]
 Name: {app}
 Name: {commonappdata}\Interapptive; Permissions: everyone-modify
@@ -373,3 +369,23 @@ end;
 
 // In case we need to see if anything went wrong
 #call SaveToFile('InnoSetup.iss')
+
+//----------------------------------------------------------------
+// Called by Inno when the uninstall step changes.
+// Used to stop services before file removal.
+//----------------------------------------------------------------
+procedure CurUninstallStepChanged(curUninstallStep: TUninstallStep);
+var
+	appExe: String;
+	resultCode: Integer;
+begin
+	if curUninstallStep = usUninstall then
+	begin
+		appExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+
+		Exec(appExe, '/cmd:uninstallservices /all', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
+
+		// Wait for up to 3 minutes for all service processes to exit.
+		DelayDeleteFile(appExe, 720);
+	end;
+end;

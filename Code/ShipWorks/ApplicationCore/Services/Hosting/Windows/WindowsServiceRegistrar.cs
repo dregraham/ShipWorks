@@ -16,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             log.Info("Registering all services as Windows services.");
 
             // The equivalent of running "installutil <path>", which invokes the MasterInstaller.
-            ManagedInstallerClass.InstallHelper(new[] { Assembly.GetExecutingAssembly().Location });
+            ManagedInstallerClass.InstallHelper(new[] { "/LogFile=", Assembly.GetExecutingAssembly().Location });
 
             using (GetWindowsCredentialsDlg credentialsDialog = new GetWindowsCredentialsDlg())
             {
@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             }
 
             // The equivalent of running "installutil /u <path>".
-            ManagedInstallerClass.InstallHelper(new[] { "/u", Assembly.GetExecutingAssembly().Location });
+            ManagedInstallerClass.InstallHelper(new[] { "/u", "/LogFile=", Assembly.GetExecutingAssembly().Location });
         }
     }
 }
