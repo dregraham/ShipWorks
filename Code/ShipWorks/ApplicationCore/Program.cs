@@ -134,7 +134,7 @@ namespace ShipWorks
                 HandleUnhandledException(ex, false);
             }
 
-            Environment.Exit(0);
+            Environment.Exit(Environment.ExitCode);
         }       
 
         /// <summary>
