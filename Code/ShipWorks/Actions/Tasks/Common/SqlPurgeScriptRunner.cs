@@ -35,13 +35,28 @@ namespace ShipWorks.Actions.Tasks.Common
 
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
-                SqlAppLockUtility.AcquireLock(connection, string.Format("PurgeActionTask_{0}", scriptName));
-                using (SqlCommand command = SqlCommandProvider.Create(connection, script))
-                {
-                    command.Parameters.AddWithValue("@StopExecutionAfter", stopExecutionAfterUtc);
-                    command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
+                string lockName = string.Format("PurgeActionTask_{0}", scriptName);
 
-                    command.ExecuteNonQuery();
+                if (SqlAppLockUtility.AcquireLock(connection, lockName))
+                {
+                    try
+                    {
+                        using (SqlCommand command = SqlCommandProvider.Create(connection, script))
+                        {
+                            command.Parameters.AddWithValue("@StopExecutionAfter", stopExecutionAfterUtc);
+                            command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    finally
+                    {
+                        SqlAppLockUtility.ReleaseLock(connection, lockName);
+                    }
+                }
+                else
+                {
+
                 }
             }
         }

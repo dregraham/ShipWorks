@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Xml.XPath;
 using System;
@@ -18,6 +19,14 @@ namespace ShipWorks.Actions.Tasks.Common
         static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
         private readonly ISqlPurgeScriptRunner scriptRunner;
         private readonly IDateTimeProvider dateProvider;
+        private readonly List<PurgeDatabaseType> purgeOrder = new List<PurgeDatabaseType>
+        {
+            PurgeDatabaseType.Labels,
+            PurgeDatabaseType.PrintJobs,
+            PurgeDatabaseType.Email,
+            PurgeDatabaseType.Audit,
+            PurgeDatabaseType.Downloads
+        };
         
         /// <summary>
         /// Initializes a new instance of the <see cref="PurgeDatabaseTask"/> class.
@@ -72,17 +81,6 @@ namespace ShipWorks.Actions.Tasks.Common
         public List<PurgeDatabaseType> Purges { get; set; }
 
         /// <summary>
-        /// List of scripts that need to be run for the cleanup
-        /// </summary>
-        private IEnumerable<string> ScriptsToRun
-        {
-            get
-            {
-                return Purges.Select(x => EnumHelper.GetApiValue(x));
-            }
-        }
-
-        /// <summary>
         /// Creates the editor that is used to edit the task.
         /// </summary>
         public override ActionTaskEditor CreateEditor()
@@ -118,11 +116,14 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime sqlDate = scriptRunner.SqlUtcDateTime;
             DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
             DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
-            // DateTime deleteOlderThan = sqlDate.AddDays(-RetentionPeriodInDays);
+
+            // Get the list of purges to run starting with the saved next purge
+            //int nextPurgeIndex = Purges.IndexOf(NextPurge);
+            //List<PurgeDatabaseType> orderedPurges = Purges.Skip(nextPurgeIndex).Concat(Purges.Take(nextPurgeIndex)).ToList();
 
             log.Info("Starting database purge...");
 
-            foreach (string scriptName in ScriptsToRun)
+            foreach (PurgeDatabaseType purge in purgeOrder.Intersect(Purges))
             {
                 // Stop executing if we've been running longer than the time the user has allowed.
                 if (StopLongPurges && localStopExecutionAfter < dateProvider.UtcNow)
@@ -131,10 +132,12 @@ namespace ShipWorks.Actions.Tasks.Common
                     break;
                 }
 
+                string scriptName = EnumHelper.GetApiValue(purge);
+
                 log.InfoFormat("Running {0}...", scriptName);
-                scriptRunner.RunScript(scriptName, RetentionPeriodInDays, StopLongPurges ? sqlStopExecutionAfter : sqlDate.AddYears(10));
+                scriptRunner.RunScript(scriptName, RetentionPeriodInDays, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
                 log.InfoFormat("Finished {0}.", scriptName);
             }
-        }     
+        }
     }
 }

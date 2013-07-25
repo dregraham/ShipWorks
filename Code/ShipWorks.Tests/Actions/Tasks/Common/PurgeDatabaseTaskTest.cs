@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data.SqlTypes;
 using Interapptive.Shared.Utility;
-using log4net.Appender;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Actions.Tasks.Common;
@@ -68,27 +66,107 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            scriptRunner.Verify(x => x.RunScript("PurgeAudit", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript("PurgeDownload", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript("PurgeLabel", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript("PurgePrintResult", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript("PurgeEmail", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript("PurgeLabel", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript("PurgePrintResult", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript("PurgeAudit", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript("PurgeDownload", It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never());
         }
 
-
-
-
-        /// <summary>
-        /// Gets a script runner that does nothing
-        /// </summary>
-        private static ISqlPurgeScriptRunner DefaultScriptRunner
+        [TestMethod]
+        public void Run_ShouldRunScriptsInCorrectOrder_WhenAllAreSelected()
         {
-            get
-            {
-                return new Mock<ISqlPurgeScriptRunner>().Object;
-            }
+            List<string> calledPurges = new List<string>();
+
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<DateTime>()))
+                .Callback<string, int, DateTime>((x, y, z) => calledPurges.Add(x));
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Audit);
+            testObject.Purges.Add(PurgeDatabaseType.Downloads);
+            testObject.Purges.Add(PurgeDatabaseType.Email);
+            testObject.Purges.Add(PurgeDatabaseType.Labels);
+            testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
+
+            testObject.Run(null, null);
+
+            Assert.AreEqual("PurgeLabel", calledPurges[0]);
+            Assert.AreEqual("PurgePrintResult", calledPurges[1]);
+            Assert.AreEqual("PurgeEmail", calledPurges[2]);
+            Assert.AreEqual("PurgeAudit", calledPurges[3]);
+            Assert.AreEqual("PurgeDownload", calledPurges[4]);
         }
 
+        [TestMethod]
+        public void Run_ShouldRunScriptsInCorrectOrder_WhenOnlySomeAreSelected()
+        {
+            List<string> calledPurges = new List<string>();
+
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<DateTime>()))
+                .Callback<string, int, DateTime>((x, y, z) => calledPurges.Add(x));
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Audit);
+            testObject.Purges.Add(PurgeDatabaseType.Downloads);
+            testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
+
+            testObject.Run(null, null);
+
+            Assert.AreEqual("PurgePrintResult", calledPurges[0]);
+            Assert.AreEqual("PurgeAudit", calledPurges[1]);
+            Assert.AreEqual("PurgeDownload", calledPurges[2]);
+        }
+
+        [TestMethod]
+        public void Run_ShouldPassRetentionPeriodToRunScript()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Audit);
+            testObject.RetentionPeriodInDays = 63;
+            testObject.StopLongPurges = false;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), 63, It.IsAny<DateTime>()), Times.Once()); 
+        }
+
+        [TestMethod]
+        public void Run_ShouldPassSqlTimeoutToRunScript_WhenStopLongPurgesIsTrue()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            scriptRunner.Setup(x => x.SqlUtcDateTime).Returns(new DateTime(2013, 7, 25, 3, 45, 16));
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Audit);
+            testObject.StopLongPurges = true;
+            testObject.TimeoutInHours = 4;
+
+            testObject.Run(null, null);
+
+            DateTime expectedDate = new DateTime(2013, 7, 25, 7, 45, 16);
+            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<int>(), expectedDate), Times.Once());
+        }
+
+        [TestMethod]
+        public void Run_ShouldPassMaxDateAsTimeToRunScript_WhenStopLongPurgesIsFalse()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Audit);
+            testObject.StopLongPurges = false;
+            testObject.TimeoutInHours = 4;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<int>(), SqlDateTime.MaxValue.Value), Times.Once());
+        }
+
+        #region "Support methods"
         /// <summary>
         /// Gets a date time provider that does nothing
         /// </summary>
@@ -99,5 +177,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 return new Mock<IDateTimeProvider>().Object;
             }
         }
+        #endregion
     }
 }

@@ -58,7 +58,7 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(255, 180);
+            this.lableBackups.Location = new System.Drawing.Point(256, 180);
             this.lableBackups.Name = "lableBackups";
             this.lableBackups.Size = new System.Drawing.Size(38, 13);
             this.lableBackups.TabIndex = 17;
@@ -66,7 +66,7 @@
             // 
             // timeoutInHours
             // 
-            this.timeoutInHours.Location = new System.Drawing.Point(202, 177);
+            this.timeoutInHours.Location = new System.Drawing.Point(203, 177);
             this.timeoutInHours.Minimum = new decimal(new int[] {
             1,
             0,
