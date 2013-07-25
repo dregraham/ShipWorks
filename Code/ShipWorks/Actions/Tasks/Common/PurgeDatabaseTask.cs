@@ -116,6 +116,7 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime sqlDate = scriptRunner.SqlUtcDateTime;
             DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
             DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
+            DateTime earliestRetentionDateInUtc = sqlDate.AddDays(RetentionPeriodInDays);
 
             // Get the list of purges to run starting with the saved next purge
             //int nextPurgeIndex = Purges.IndexOf(NextPurge);
@@ -135,7 +136,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 string scriptName = EnumHelper.GetApiValue(purge);
 
                 log.InfoFormat("Running {0}...", scriptName);
-                scriptRunner.RunScript(scriptName, RetentionPeriodInDays, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
+                scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
                 log.InfoFormat("Finished {0}.", scriptName);
             }
         }

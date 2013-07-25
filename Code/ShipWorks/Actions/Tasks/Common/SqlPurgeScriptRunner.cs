@@ -27,9 +27,10 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Run the specified purge script with the given parameters
         /// </summary>
         /// <param name="scriptName">Name of script resource to run</param>
-        /// <param name="deleteOlderThan">How many days of data should be kept</param>
+        /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
+        /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
-        public void RunScript(string scriptName, int deleteOlderThan, DateTime stopExecutionAfterUtc)
+        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime stopExecutionAfterUtc)
         {
             string script = GetScript(scriptName);
 
@@ -43,8 +44,8 @@ namespace ShipWorks.Actions.Tasks.Common
                     {
                         using (SqlCommand command = SqlCommandProvider.Create(connection, script))
                         {
+                            command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
                             command.Parameters.AddWithValue("@StopExecutionAfter", stopExecutionAfterUtc);
-                            command.Parameters.AddWithValue("@deleteOlderThan", deleteOlderThan);
 
                             command.ExecuteNonQuery();
                         }
