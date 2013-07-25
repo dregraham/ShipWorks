@@ -37,7 +37,6 @@ namespace :build do
 		msb.targets :Build
 	end
 
-
 	desc "Build ShipWorks in the Release configuration"
 	msbuild :release do |msb|
 		print "Building solution with the release config...\r\n\r\n"
@@ -46,15 +45,38 @@ namespace :build do
 		msb.targets :Clean, :Build
 	end
 	
+	desc "Build ShipWorks.Native in a given configuration and platform"
+	msbuild :native, [:configuration, :platform] do |msb, args|
+		print "Building the Native project with the #{args[:configuration]}|#{args[:platform]} config...\r\n\r\n"
+
+		msb.solution = "Code/ShipWorks.Native/Native.vcxproj"
+		msb.properties args
+		msb.targets :Build
+	end
+		
 	desc "Build an unsigned Debug installer for local testing"
 	task :debug_installer => :debug do
 		print "Building unsigned debug installer package...\r\n\r\n"
 
+		Rake::Task['build:native'].instance_exec do
+			invoke "Debug", "Win32"
+			reenable
+			invoke "Debug", "x64"
+		end
+
+		print "\r\nCopying Native dlls to Artifacts... "
+		FileUtils.mkdir_p "Artifacts/Application/Win32"
+		FileUtils.cp "Code/ShipWorks.Native/Win32/Debug/ShipWorks.Native.dll", "Artifacts/Application/Win32"
+		FileUtils.mkdir_p "Artifacts/Application/x64"
+		FileUtils.cp "Code/ShipWorks.Native/x64/Debug/ShipWorks.Native.dll", "Artifacts/Application/x64"
+		print "done.\r\n"
+
 		print "Querying required schema version... "
-		print schemaID = `Build/echoerrorlevel.cmd "Artifacts\\Application\\ShipWorks.exe" /c=getdbschemaversion /type=required`, "\r\n"
+		print schemaID = `Build/echoerrorlevel.cmd "Artifacts\\Application\\ShipWorks.exe" /c=getdbschemaversion /type=required`
 
 		print "Running INNO compiler... "
 		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
+		FileUtils.rm_f "InnoSetup.iss"
 		print "done.\r\n"
 	end
 
