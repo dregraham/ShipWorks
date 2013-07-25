@@ -5,12 +5,11 @@ using System;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
-    /// Task for cleaning old data
+    /// Task for deleting/purging old data.
     /// </summary>
     [ActionTask("Delete old data", "PurgeDatabase", ActionTriggerClassifications.Scheduled)]
     public class PurgeDatabaseTask : ActionTask
@@ -18,29 +17,70 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
         private readonly ISqlPurgeScriptRunner scriptRunner;
-        private readonly IDateTimeProvider dateProvider; 
-
+        private readonly IDateTimeProvider dateProvider;
+        
         /// <summary>
-        /// Cleanups the type of the database.
+        /// Initializes a new instance of the <see cref="PurgeDatabaseTask"/> class.
         /// </summary>
-        public PurgeDatabaseTask() : this(new SqlPurgeScriptRunner(), new DateTimeProvider())
-        {
-        }
+        public PurgeDatabaseTask() 
+            : this(new SqlPurgeScriptRunner(), new DateTimeProvider())
+        { }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PurgeDatabaseTask"/> class.
         /// </summary>
         /// <param name="scriptRunner">Specifies which sql purge runner gets used for unit testing</param>
         /// <param name="dateProvider">Specifies how current dates will be retrieved so tests can use expected times</param>
-        public PurgeDatabaseTask(ISqlPurgeScriptRunner scriptRunner, IDateTimeProvider dateProvider) : base()
+        public PurgeDatabaseTask(ISqlPurgeScriptRunner scriptRunner, IDateTimeProvider dateProvider)
         {
-            StopAfterHours = 1;
-            CleanupAfterDays = 30;
+            TimeoutInHours = 1;
+            RetentionPeriodInDays = 30;
+            
             Purges = new List<PurgeDatabaseType>();
+
             this.scriptRunner = scriptRunner;
             this.dateProvider = dateProvider;
         }
 
+        /// <summary>
+        /// This task does not require any input to run.
+        /// </summary>
+        public override bool RequiresInput
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Should cleanups be stopped if they go to long?
+        /// </summary>
+        public bool StopLongPurges { get; set; }
+
+        /// <summary>
+        /// Defines the maximum number of hours a purge can be running.
+        /// </summary>
+        public int TimeoutInHours { get; set; }
+
+        /// <summary>
+        /// How many days worth of data should be kept? Any records older than the
+        /// retention period will be deleted.
+        /// </summary>
+        public int RetentionPeriodInDays { get; set; }
+
+        /// <summary>
+        /// Gets or sets the purges requested for this task.
+        /// </summary>
+        public List<PurgeDatabaseType> Purges { get; set; }
+
+        /// <summary>
+        /// List of scripts that need to be run for the cleanup
+        /// </summary>
+        private IEnumerable<string> ScriptsToRun
+        {
+            get
+            {
+                return Purges.Select(x => EnumHelper.GetApiValue(x));
+            }
+        }
 
         /// <summary>
         /// Creates the editor that is used to edit the task.
@@ -59,8 +99,7 @@ namespace ShipWorks.Actions.Tasks.Common
             base.DeserializeXml(xpath);
 
             Purges = new List<PurgeDatabaseType>();
-
-            var purges = xpath.Select("/Settings/Purges/*[@value]");
+            XPathNodeIterator purges = xpath.Select("/Settings/Purges/*[@value]");
 
             foreach (object purge in purges)
             {
@@ -70,83 +109,32 @@ namespace ShipWorks.Actions.Tasks.Common
                 Purges.Add((PurgeDatabaseType)(purgeNavigator).ValueAsInt);
             }
         }
-
+        
         /// <summary>
-        /// Should cleanups be stopped if they go to long?
-        /// </summary>
-        public bool StopLongCleanups { get; set; }
-
-        /// <summary>
-        /// Defines the maximum hours a cleanup can run
-        /// </summary>
-        public int StopAfterHours
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// How many days worth of data should be kept?  All older will be cleaned.
-        /// </summary>
-        public int CleanupAfterDays
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// This task does not require any input to run.
-        /// </summary>
-        public override bool RequiresInput
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Gets or sets the purges requested for this task.
-        /// </summary>
-        public List<PurgeDatabaseType> Purges
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Runs the cleanup scripts.
+        /// Runs the purge scripts.
         /// </summary>
         protected override void Run()
         {
             DateTime sqlDate = scriptRunner.SqlUtcDateTime;
-            DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(StopAfterHours);
-            DateTime sqlStopExecutionAfter = sqlDate.AddHours(StopAfterHours);
-            //DateTime deleteOlderThan = sqlDate.AddDays(-CleanupAfterDays);
+            DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
+            DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
+            // DateTime deleteOlderThan = sqlDate.AddDays(-RetentionPeriodInDays);
 
-            log.Info("Starting database cleanup...");
+            log.Info("Starting database purge...");
 
             foreach (string scriptName in ScriptsToRun)
             {
                 // Stop executing if we've been running longer than the time the user has allowed.
-                if (StopLongCleanups && localStopExecutionAfter < dateProvider.UtcNow)
+                if (StopLongPurges && localStopExecutionAfter < dateProvider.UtcNow)
                 {
-                    log.Info("Stopping cleanup because it has exceeded the maximum allowed time.");
+                    log.Info("Stopping purge because it has exceeded the maximum allowed time.");
                     break;
                 }
 
                 log.InfoFormat("Running {0}...", scriptName);
-                scriptRunner.RunScript(scriptName, CleanupAfterDays, StopLongCleanups ? sqlStopExecutionAfter : sqlDate.AddYears(10));
+                scriptRunner.RunScript(scriptName, RetentionPeriodInDays, StopLongPurges ? sqlStopExecutionAfter : sqlDate.AddYears(10));
                 log.InfoFormat("Finished {0}.", scriptName);
             }
-        }
-
-        /// <summary>
-        /// List of scripts that need to be run for the cleanup
-        /// </summary>
-        private IEnumerable<string> ScriptsToRun
-        {
-            get
-            {
-                return Purges.Select(x => EnumHelper.GetApiValue(x));
-            }
-        }
+        }     
     }
 }

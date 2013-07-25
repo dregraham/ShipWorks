@@ -35,15 +35,15 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            checkboxStopLongCleanups.Checked = task.StopLongCleanups;
+            checkboxStopLongCleanups.Checked = task.StopLongPurges;
             checkboxStopLongCleanups.CheckedChanged += OnStopLongCleanupsCheckedChanged;
 
-            numericStopAfterHours.Value = task.StopAfterHours;
-            numericStopAfterHours.ValueChanged += OnStopAfterHoursValueChanged;
-            numericStopAfterHours.Enabled = task.StopLongCleanups;
+            timeoutInHours.Value = task.TimeoutInHours;
+            timeoutInHours.ValueChanged += OnStopAfterHoursValueChanged;
+            timeoutInHours.Enabled = task.StopLongPurges;
 
-            numericCleanupDays.Value = task.CleanupAfterDays;
-            numericCleanupDays.ValueChanged += OnCleanupDaysValueChanged;
+            retentionPeriodInDays.Value = task.RetentionPeriodInDays;
+            retentionPeriodInDays.ValueChanged += OnCleanupDaysValueChanged;
 
             LoadPurgeTasks();
             audit.CheckedChanged += OnPurgeCheckChanged;
@@ -87,7 +87,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary> 
         private void OnStopAfterHoursValueChanged(object sender, EventArgs eventArgs)
         {
-            task.StopAfterHours = (int)numericStopAfterHours.Value;
+            task.TimeoutInHours = (int)timeoutInHours.Value;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnCleanupDaysValueChanged(object sender, EventArgs eventArgs)
         {
-            task.CleanupAfterDays = (int)numericCleanupDays.Value;
+            task.RetentionPeriodInDays = (int)retentionPeriodInDays.Value;
         }
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnStopLongCleanupsCheckedChanged(object sender, EventArgs eventArgs)
         {
-            task.StopLongCleanups = checkboxStopLongCleanups.Checked;
-            numericStopAfterHours.Enabled = checkboxStopLongCleanups.Checked;
+            task.StopLongPurges = checkboxStopLongCleanups.Checked;
+            timeoutInHours.Enabled = checkboxStopLongCleanups.Checked;
         }
     }
 }

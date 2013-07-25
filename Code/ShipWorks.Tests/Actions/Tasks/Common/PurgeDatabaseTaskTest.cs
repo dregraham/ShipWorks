@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
-            testObject.StopLongCleanups = false;
+            testObject.StopLongPurges = false;
 
             testObject.Run(null, null);
 
@@ -63,8 +63,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
-            testObject.StopLongCleanups = true;
-            testObject.StopAfterHours = 2;
+            testObject.StopLongPurges = true;
+            testObject.TimeoutInHours = 2;
 
             testObject.Run(null, null);
 
