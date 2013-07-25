@@ -18,13 +18,17 @@ public partial class StoredProcedures
     /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
     /// which Audit records will be purged. Any records with an Audit.Date value earlier than
     /// this date will be purged.</param>
+    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
+    /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeAudit(SqlDateTime earliestRetentionDateInUtc)
+    public static void PurgeAudit(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {
             try
             {
+                // Need to have an open connection for the duration of the lock acquisition/release
                 connection.Open();
 
                 if (!SqlAppLockUtility.IsLocked(connection, AuditPurgeAppLockName))
@@ -36,7 +40,12 @@ public partial class StoredProcedures
                             command.CommandText = AuditPurgeCommandText;
 
                             command.Parameters.Add(new SqlParameter("@RetentionDateInUtc", earliestRetentionDateInUtc));
+                            command.Parameters.Add(new SqlParameter("@LatestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
+
+                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                            // to the console of client (i.e. SQL Management Studio)
+                            //SqlContext.Pipe.ExecuteAndSend(command);
                         }
                     }
                 }
@@ -44,7 +53,7 @@ public partial class StoredProcedures
                 {
                     // Let the caller know that someone else is already running the purge. (It may
                     // be beneficial to create/throw a more specific exception.)
-                    throw new PurgeException("Could not acquire applock for for purging audit logs.");                    
+                    throw new PurgeException("Could not acquire applock for purging audit logs.");                    
                 }
             }
             finally
@@ -63,23 +72,26 @@ public partial class StoredProcedures
             DECLARE 
                 @RecordsToBeDeleted INT,
                 @BatchSize INT
+            
+            SET @BatchSize = 100
 
             -- if this is the first time we've run this, figure out which resources must go
             IF OBJECT_ID('tempdb..#AuditTemp') IS NULL
             BEGIN
-                CREATE TABLE #AuditTemp (AuditID int)	
+                CREATE TABLE #AuditTemp (AuditID BIGINT)	
                 CREATE INDEX IX_ResourceWorking on #AuditTemp (AuditID)
             END
-
+            
             INSERT INTO #AuditTemp
             (
                 AuditID
             )
             SELECT AuditID FROM Audit
             WHERE [DATE] < @RetentionDateInUtc
-    
+            
+            
+            SELECT @RecordsToBeDeleted = COUNT(0) FROM #AuditTemp            
 
-            SELECT @RecordsToBeDeleted = COUNT(0) FROM #AuditTemp
             IF @RecordsToBeDeleted > 0
             BEGIN
 
@@ -87,11 +99,12 @@ public partial class StoredProcedures
                 DECLARE @DeletedAuditIds TABLE ( AuditChangeID BIGINT )
     
                 INSERT INTO @CurrentBatch (	AuditID )
-                    SELECT TOP 100 AuditID  FROM #AuditTemp 		
+                    SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 		
         
-                WHILE @@ROWCOUNT > 0
+                -- Honor the hard stop if one is provided               
+                WHILE @@ROWCOUNT > 0 AND (@LatestExecutionTimeInUtc > GetUtcDate())
                 BEGIN
-    
+
                     BEGIN TRANSACTION
                         DELETE AuditChange
                         OUTPUT deleted.AuditChangeID into @DeletedAuditIds
@@ -113,17 +126,16 @@ public partial class StoredProcedures
                         FROM #AuditTemp
                         INNER JOIN @CurrentBatch batch
                             ON #AuditTemp.AuditID = batch.AuditID
-                
                     COMMIT TRANSACTION
         
         
                     DELETE @CurrentBatch
                     DELETE @DeletedAuditIds
 
-                    --grab the next batch before ending loop
-                    --Must be last statement in while loop or the @@ROWCOUNT will be an issue
+                    -- Grab the next batch before ending loop
+                    -- Must be last statement in while loop or the @@ROWCOUNT will be an issue
                     INSERT INTO @CurrentBatch ( AuditID	)
-                        SELECT TOP 100 AuditID  FROM #AuditTemp 		
+                        SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 
                 END
 
             END
