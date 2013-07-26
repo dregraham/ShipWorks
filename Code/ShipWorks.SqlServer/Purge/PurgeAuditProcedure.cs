@@ -1,16 +1,13 @@
-using System;
-using System.Data;
+using Microsoft.SqlServer.Server;
+using ShipWorks.SqlServer.Common.Data;
+using ShipWorks.SqlServer.Purge;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using Microsoft.SqlServer.Server;
 
-using ShipWorks.SqlServer.Common.Data;
-using ShipWorks.SqlServer;
-using ShipWorks.SqlServer.Purge;
 
 public partial class StoredProcedures
 {
-    private const string AuditPurgeAppLockName = "PurgeAuditLogs";
+    private const string PurgeAuditAppLockName = "PurgeAudit";
 
     /// <summary>
     /// Purges old audit records from the database.
@@ -31,13 +28,13 @@ public partial class StoredProcedures
                 // Need to have an open connection for the duration of the lock acquisition/release
                 connection.Open();
 
-                if (!SqlAppLockUtility.IsLocked(connection, AuditPurgeAppLockName))
+                if (!SqlAppLockUtility.IsLocked(connection, PurgeAuditAppLockName))
                 {
-                    if (SqlAppLockUtility.AcquireLock(connection, AuditPurgeAppLockName))
+                    if (SqlAppLockUtility.AcquireLock(connection, PurgeAuditAppLockName))
                     {
                         using (SqlCommand command = connection.CreateCommand())
                         {
-                            command.CommandText = AuditPurgeCommandText;
+                            command.CommandText = PurgeAuditCommandText;
 
                             command.Parameters.Add(new SqlParameter("@RetentionDateInUtc", earliestRetentionDateInUtc));
                             command.Parameters.Add(new SqlParameter("@LatestExecutionTimeInUtc", latestExecutionTimeInUtc));
@@ -58,7 +55,7 @@ public partial class StoredProcedures
             }
             finally
             {
-                SqlAppLockUtility.ReleaseLock(connection, AuditPurgeAppLockName);
+                SqlAppLockUtility.ReleaseLock(connection, PurgeAuditAppLockName);
             }
         }
     }
@@ -66,7 +63,7 @@ public partial class StoredProcedures
     /// <summary>
     /// The T-SQL for the PurgeAudit stored procedure.
     /// </summary>
-    private static string AuditPurgeCommandText
+    private static string PurgeAuditCommandText
     {
         get { return @"
             DECLARE 

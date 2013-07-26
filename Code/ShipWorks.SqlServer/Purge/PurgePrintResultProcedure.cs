@@ -10,7 +10,7 @@ using ShipWorks.SqlServer.Purge;
 
 public partial class StoredProcedures
 {
-    private const string PrintResultPurgeAppLockName = "PurgePrintResults";
+    private const string PurgePrintResultAppLockName = "PurgePrintResult";
 
     /// <summary>
     /// Purges PrintResult resource data from the database and replaces it with a pointer to the
@@ -22,7 +22,7 @@ public partial class StoredProcedures
     /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
-    [Microsoft.SqlServer.Server.SqlProcedure]
+    [SqlProcedure]
     public static void PurgePrintResult(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
@@ -32,13 +32,13 @@ public partial class StoredProcedures
                 // Need to have an open connection for the duration of the lock acquisition/release
                 connection.Open();
 
-                if (!SqlAppLockUtility.IsLocked(connection, PrintResultPurgeAppLockName))
+                if (!SqlAppLockUtility.IsLocked(connection, PurgePrintResultAppLockName))
                 {
-                    if (SqlAppLockUtility.AcquireLock(connection, PrintResultPurgeAppLockName))
+                    if (SqlAppLockUtility.AcquireLock(connection, PurgePrintResultAppLockName))
                     {
                         using (SqlCommand command = connection.CreateCommand())
                         {
-                            command.CommandText = PrintResultPurgeCommandText;
+                            command.CommandText = PurgePrintResultCommandText;
 
                             command.Parameters.Add(new SqlParameter("@RetentionDateInUtc", earliestRetentionDateInUtc));
                             command.Parameters.Add(new SqlParameter("@LatestExecutionTimeInUtc", latestExecutionTimeInUtc));
@@ -58,7 +58,7 @@ public partial class StoredProcedures
             }
             finally
             {
-                SqlAppLockUtility.ReleaseLock(connection, PrintResultPurgeAppLockName);
+                SqlAppLockUtility.ReleaseLock(connection, PurgePrintResultAppLockName);
             }
         }
     }
@@ -66,7 +66,7 @@ public partial class StoredProcedures
     /// <summary>
     /// The T-SQL for the PurgePrintResult stored procedure.
     /// </summary>
-    private static string PrintResultPurgeCommandText
+    private static string PurgePrintResultCommandText
     {
         get
         {
