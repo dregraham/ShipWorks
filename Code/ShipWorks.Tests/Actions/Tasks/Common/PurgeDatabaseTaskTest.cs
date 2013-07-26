@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
@@ -22,7 +23,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldNotExecuteAnyScripts_WhenNoPurgesAreSelected()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
 
@@ -34,7 +35,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldRunAllSelectedScripts_WhenTaskHasNoTimeout()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
@@ -56,7 +57,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldRunSelectedScripts_WhenTaskHasNoTimeout()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Email);
@@ -74,7 +75,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldStopRunning_WhenTimeoutHasElapsed()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
             Mock<IDateTimeProvider> dateProvider = new Mock<IDateTimeProvider>();
             dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
                 .Returns(new DateTime(2013, 7, 24, 13, 15, 21))
@@ -104,7 +105,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             List<string> calledPurges = new List<string>();
 
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
             scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Callback<string, DateTime, DateTime>((x, y, z) => calledPurges.Add(x));
 
@@ -129,7 +130,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             List<string> calledPurges = new List<string>();
 
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
             scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Callback<string, DateTime, DateTime>((x, y, z) => calledPurges.Add(x));
 
@@ -153,12 +154,12 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.RetentionPeriodInDays = 63;
+            testObject.RetentionPeriodInDays = 8;
             testObject.StopLongPurges = false;
 
             testObject.Run(null, null);
 
-            DateTime expectedDate = new DateTime(2013, 9, 26, 3, 45, 16);
+            DateTime expectedDate = new DateTime(2013, 7, 17, 3, 45, 16);
             scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), expectedDate, It.IsAny<DateTime>()), Times.Once()); 
         }
 
@@ -182,7 +183,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldPassMaxDateAsTimeToRunScript_WhenStopLongPurgesIsFalse()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
@@ -197,7 +198,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldThrowActionTaskRunException_WhenSqlExceptionIsCaught()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
             scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Throws(new Mock<DbException>().Object);
 
@@ -220,7 +221,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldRunSecondPurge_WhenFirstPurgeThrowsException()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
             scriptRunner.Setup(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Throws(new Mock<DbException>().Object);
@@ -245,7 +246,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void Run_ShouldThrowAggregatedException_WhenPurgesThrowsExceptions()
         {
-            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
             scriptRunner.Setup(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Throws(new Mock<DbException>().Object);
@@ -305,6 +306,16 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             get
             {
                 return new Mock<IDateTimeProvider>().Object;
+            }
+        }
+
+        private static Mock<ISqlPurgeScriptRunner> MockedScriptRunner
+        {
+            get
+            {
+                Mock<ISqlPurgeScriptRunner> mock = new Mock<ISqlPurgeScriptRunner>();
+                mock.Setup(x => x.SqlUtcDateTime).Returns(new DateTime(2013, 7, 7, 1, 1, 1));
+                return mock;
             }
         }
         #endregion

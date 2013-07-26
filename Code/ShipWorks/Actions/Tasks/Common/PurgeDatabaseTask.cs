@@ -111,7 +111,7 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime sqlDate = scriptRunner.SqlUtcDateTime;
             DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
             DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
-            DateTime earliestRetentionDateInUtc = sqlDate.AddDays(RetentionPeriodInDays);
+            DateTime earliestRetentionDateInUtc = sqlDate.AddDays(-RetentionPeriodInDays);
 
             Dictionary<PurgeDatabaseType, Exception> exceptions = new Dictionary<PurgeDatabaseType, Exception>();
 
@@ -126,7 +126,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 string scriptName = EnumHelper.GetApiValue(purge);
 
-                log.InfoFormat("Running {0}...", scriptName);
+                log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, earliestRetentionDateInUtc);
                 try
                 {
                     scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
