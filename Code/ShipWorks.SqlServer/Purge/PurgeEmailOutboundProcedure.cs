@@ -36,8 +36,8 @@ public partial class StoredProcedures
                         {
                             command.CommandText = PurgeEmailOutboundCommandText;
 
-                            command.Parameters.Add(new SqlParameter("@RetentionDateInUtc", earliestRetentionDateInUtc));
-                            command.Parameters.Add(new SqlParameter("@LatestExecutionTimeInUtc", latestExecutionTimeInUtc));
+                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
+                            command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
                             // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
