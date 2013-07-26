@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Xml.XPath;
@@ -107,9 +111,9 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime sqlDate = scriptRunner.SqlUtcDateTime;
             DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
             DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
-            DateTime earliestRetentionDateInUtc = sqlDate.AddDays(RetentionPeriodInDays);
+            DateTime earliestRetentionDateInUtc = sqlDate.AddDays(-RetentionPeriodInDays);
 
-            log.Info("Starting database purge...");
+            Dictionary<PurgeDatabaseType, Exception> exceptions = new Dictionary<PurgeDatabaseType, Exception>();
 
             foreach (PurgeDatabaseType purge in purgeOrder.Intersect(Purges))
             {
@@ -122,9 +126,30 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 string scriptName = EnumHelper.GetApiValue(purge);
 
-                log.InfoFormat("Running {0}...", scriptName);
-                scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
-                log.InfoFormat("Finished {0}.", scriptName);
+                log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, earliestRetentionDateInUtc);
+                try
+                {
+                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
+                    log.InfoFormat("Finished {0} successfully.", scriptName);
+                }
+                catch (DbException ex)
+                {
+                    // Catch a DbException instead of a SqlException so this catch can be tested.
+                    // SqlException is sealed and can't be easily constructed.
+                    exceptions.Add(purge, ex);
+                    log.InfoFormat("Error running purge: {0}.", ex.Message);
+                }
+            }
+
+            // If any exceptions were saved, fail the task
+            if (exceptions.Any())
+            {
+                string exceptionMessage = string.Format("An error occurred while deleting the following items: {0}",
+                    exceptions.Keys
+                        .Select(x => EnumHelper.GetDescription(x))
+                        .Aggregate((x, y) => x + ", " + y));
+                throw new ActionTaskRunException(exceptionMessage, 
+                    new ExceptionCollection(new ArrayList(exceptions.Values)));
             }
         }
     }

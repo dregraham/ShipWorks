@@ -113,7 +113,10 @@
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
     <Compile Include="Actions\Tasks\ActionTaskDescriptorTest.cs" />
+    <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\TaskTestUtility.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
