@@ -44,7 +44,7 @@ public partial class StoredProcedures
                             command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
+                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
                             // to the console of client (i.e. SQL Management Studio)
                             // SqlContext.Pipe.ExecuteAndSend(command);
                         }
@@ -261,7 +261,7 @@ public partial class StoredProcedures
                         INSERT INTO @CurrentBatch
                             SELECT TOP (@BatchSize) * FROM #PrintJobWorking
                     END
-                END
+                END";
         }
     }
 }
