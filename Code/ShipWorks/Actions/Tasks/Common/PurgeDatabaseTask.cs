@@ -91,12 +91,12 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets a type from the specified type string
         /// </summary>
-        /// <param name="typeString">Name and namespace of the type to get.</param>
+        /// <param name="value">Name and namespace of the type to get.</param>
         /// <returns>The actual type for the string, or null if it can't be found.</returns>
         /// <remarks>This is overridden so that the ShipWorks assembly is searched.</remarks>
-        protected override Type GetTypeByFullName(string typeString)
+        protected override Type GetTypeByFullName(string value)
         {
-            return Type.GetType(typeString);
+            return Type.GetType(value);
         }
 
         /// <summary>

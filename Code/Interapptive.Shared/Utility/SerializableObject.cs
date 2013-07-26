@@ -251,13 +251,13 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Gets a type from the specified type string
         /// </summary>
-        /// <param name="typeString">Name and namespace of the type to get.</param>
+        /// <param name="value">Name and namespace of the type to get.</param>
         /// <returns>The actual type for the string, or null if it can't be found.</returns>
         /// <remarks>Subclasses should override this if they need the GetType method to
         /// look inside of their own assemblies.</remarks>
-        protected virtual Type GetTypeByFullName(string typeString)
+        protected virtual Type GetTypeByFullName(string value)
         {
-            return Type.GetType(typeString);
+            return Type.GetType(value);
         }
 
         /// <summary>
