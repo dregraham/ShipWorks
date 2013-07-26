@@ -66,6 +66,7 @@ public partial class StoredProcedures
     private static string PurgeAuditCommandText
     {
         get { return @"
+            SET NOCOUNT on
             DECLARE 
                 @RecordsToBeDeleted INT,
                 @BatchSize INT
@@ -73,17 +74,15 @@ public partial class StoredProcedures
             SET @BatchSize = 100
 
             CREATE TABLE #AuditTemp (AuditID BIGINT)	
-            CREATE INDEX IX_ResourceWorking on #AuditTemp (AuditID)
-            
             INSERT INTO #AuditTemp
             (
                 AuditID
             )
             SELECT AuditID FROM Audit
             WHERE [DATE] < @earliestRetentionDateInUtc
-            
-            
-            SELECT @RecordsToBeDeleted = COUNT(0) FROM #AuditTemp            
+            SELECT @RecordsToBeDeleted = @@ROWCOUNT     
+
+            CREATE INDEX IX_ResourceWorking on #AuditTemp (AuditID)      
 
             IF @RecordsToBeDeleted > 0
             BEGIN
@@ -131,7 +130,9 @@ public partial class StoredProcedures
                         SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 
                 END
 
-            END";
+            END
+            DROP TABLE #AuditTemp
+            ";
         }
     }
 }
