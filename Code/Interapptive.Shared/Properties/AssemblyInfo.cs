@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System;
@@ -8,12 +8,12 @@ using Interapptive.Shared;
 [assembly: Guid("C43D0B5D-CE95-4139-B996-3E5FA85F0098")]
 
 // Versioning
-[assembly: AssemblyVersion("0.0.0.43")]
-[assembly: AssemblyFileVersion("0.0.0.43")]
-[assembly: AssemblyInformationalVersion("0.0.0.43")]
+[assembly: AssemblyVersion("0.0.0.0")]
+[assembly: AssemblyFileVersion("0.0.0.0")]
+[assembly: AssemblyInformationalVersion("0.0.0.0")]
 
 // Build date\time
-[assembly: AssemblyDate("2013-07-22 15:22:52Z")]
+[assembly: AssemblyDate("2000-01-01 12:00:00Z")]
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
