@@ -36,7 +36,7 @@ public partial class StoredProcedures
                         {
                             command.CommandText = PurgeAuditCommandText;
 
-                            command.Parameters.Add(new SqlParameter("@retentionDateInUtc", earliestRetentionDateInUtc));
+                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
                             command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
@@ -84,7 +84,7 @@ public partial class StoredProcedures
                 AuditID
             )
             SELECT AuditID FROM Audit
-            WHERE [DATE] < @RetentionDateInUtc
+            WHERE [DATE] < @earliestRetentionDateInUtc
             
             
             SELECT @RecordsToBeDeleted = COUNT(0) FROM #AuditTemp            
@@ -99,7 +99,7 @@ public partial class StoredProcedures
                     SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 		
         
                 -- Honor the hard stop if one is provided
-                WHILE (@@ROWCOUNT > 0) AND (@LatestExecutionTimeInUtc > GETUTCDATE())
+                WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc > GETUTCDATE())
                 BEGIN
 
                     BEGIN TRANSACTION

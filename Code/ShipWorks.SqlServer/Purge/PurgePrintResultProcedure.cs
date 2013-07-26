@@ -185,7 +185,7 @@ public partial class StoredProcedures
                                 ON 
                                     ObjectReference.ObjectReferenceID = PrintResult.ContentResourceID
                             WHERE
-                                PrintResult.PrintDate < @RetentionDateInUtc
+                                PrintResult.PrintDate < @earliestRetentionDateInUtc
                                 AND ObjectReference.ObjectID NOT IN (@PrintImageResourceID, @EplResourceID)
 
                     CREATE INDEX IX_PrintJobWorking ON #PrintJobWorking (PrintResultID)
@@ -210,7 +210,7 @@ public partial class StoredProcedures
                             #PrintJobWorking
 
                     -- Honor the hard stop if one is provided
-                    WHILE (@@ROWCOUNT > 0) AND (@LatestExecutionTimeInUtc > GETUTCDATE())
+                    WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc > GETUTCDATE())
                     BEGIN
                         -- Wrap edits in transaction
                         BEGIN TRANSACTION
