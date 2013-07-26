@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -11,10 +7,10 @@ namespace ShipWorks.Actions.Tasks.Common
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum PurgeDatabaseType
     {
-        [Description("Audit"), ApiValue("PurgeAudit")]
+        [Description("Audit Trail"), ApiValue("PurgeAudit")]
         Audit = 0,
 
-        [Description("Downloads"), ApiValue("PurgeDownload")]
+        [Description("Download Records"), ApiValue("PurgeDownload")]
         Downloads = 1,
 
         [Description("Email"), ApiValue("PurgeEmail")]

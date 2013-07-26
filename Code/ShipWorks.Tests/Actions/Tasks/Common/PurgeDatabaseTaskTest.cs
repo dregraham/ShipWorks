@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
@@ -187,24 +195,105 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [TestMethod]
-        public void DeserializeXml_ShouldSetAllProperties()
+        public void Run_ShouldThrowActionTaskRunException_WhenSqlExceptionIsCaught()
         {
-            string settings = @"<Settings>
-  <StopLongPurges value=""False"" />
-  <TimeoutInHours value=""1"" />
-  <RetentionPeriodInDays value=""7"" />
-  <Purges>
-    <Item type=""ShipWorks.Actions.Tasks.Common.PurgeDatabaseType"" value=""0"" />
-  </Purges>
-</Settings>";
-            PurgeDatabaseTask testObject = new PurgeDatabaseTask();
-            testObject.Initialize(settings);
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Throws(new Mock<DbException>().Object);
 
-            Assert.AreEqual(false, testObject.StopLongPurges);
-            Assert.AreEqual(1, testObject.TimeoutInHours);
-            Assert.AreEqual(7, testObject.RetentionPeriodInDays);
-            Assert.AreEqual(1, testObject.Purges.Count);
-            Assert.AreEqual(PurgeDatabaseType.Audit, testObject.Purges[0]);
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Audit);
+
+            try
+            {
+                testObject.Run(null, null);
+                Assert.Fail("ActionTaskRunException should have been thrown.");
+            }
+            catch (ActionTaskRunException ex)
+            {
+                // Ensure a successful test since the correct exception was thrown.
+                Assert.IsInstanceOfType(ex.InnerException, typeof(ExceptionCollection));
+                Assert.IsInstanceOfType(((ExceptionCollection)ex.InnerException).Exceptions[0], typeof(DbException));
+            }
+        }
+
+        [TestMethod]
+        public void Run_ShouldRunSecondPurge_WhenFirstPurgeThrowsException()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+
+            scriptRunner.Setup(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Throws(new Mock<DbException>().Object);
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Labels);
+            testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
+
+            try
+            {
+                testObject.Run(null, null);
+            }
+            catch (ActionTaskRunException ex)
+            {
+                // We don't care about exceptions here...
+            }
+
+            scriptRunner.Verify(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript("PurgePrintResult", It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
+        }
+
+        [TestMethod]
+        public void Run_ShouldThrowAggregatedException_WhenPurgesThrowsExceptions()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
+
+            scriptRunner.Setup(x => x.RunScript("PurgeLabel", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Throws(new Mock<DbException>().Object);
+            scriptRunner.Setup(x => x.RunScript("PurgeDownload", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Throws(new Mock<DbException>().Object);
+
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Labels);
+            testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
+            testObject.Purges.Add(PurgeDatabaseType.Downloads);
+
+            try
+            {
+                testObject.Run(null, null);
+            }
+            catch (ActionTaskRunException ex)
+            {
+                Assert.IsTrue(ex.Message.ToLower().Contains("label"));
+                Assert.IsTrue(ex.Message.ToLower().Contains("download"));
+                Assert.IsInstanceOfType(ex.InnerException, typeof (ExceptionCollection));
+                ExceptionCollection exceptions = (ExceptionCollection) ex.InnerException;
+                Assert.AreEqual(2, exceptions.Exceptions.OfType<DbException>().Count());
+            }
+        }
+
+        [TestMethod]
+        public void DeserializeXml_ShouldDeserializeCorrectly()
+        {
+            // Create a new purge database task to serialize
+            PurgeDatabaseTask initialObject = new PurgeDatabaseTask();
+            initialObject.Purges.Add(PurgeDatabaseType.Audit);
+            initialObject.Purges.Add(PurgeDatabaseType.Email);
+            initialObject.StopLongPurges = true;
+            initialObject.TimeoutInHours = 8;
+            initialObject.RetentionPeriodInDays = 19;
+
+            string serializedObject = initialObject.SerializeSettings();
+
+            // Create a test purge database task and deserialize its settings
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask();
+            testObject.Initialize(serializedObject);
+            
+            Assert.AreEqual(true, testObject.StopLongPurges);
+            Assert.AreEqual(8, testObject.TimeoutInHours);
+            Assert.AreEqual(19, testObject.RetentionPeriodInDays);
+            Assert.AreEqual(2, testObject.Purges.Count);
+            Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Audit));
+            Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Email));
         }
 
         #region "Support methods"

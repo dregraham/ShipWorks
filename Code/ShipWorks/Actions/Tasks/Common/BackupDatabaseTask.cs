@@ -20,8 +20,15 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BackupDatabaseTask));
 
-        private int keepNumberOfBackups = 5;
         private readonly Regex backupFileNameMatcher = new Regex(@".*\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.swb");
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BackupDatabaseTask()
+        {
+            KeepNumberOfBackups = 5;
+        }
 
         /// <summary>
         /// Constructor
@@ -44,11 +51,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// How many backups should be kept in the backup directory
         /// </summary>
-        public int KeepNumberOfBackups
-        {
-            get { return keepNumberOfBackups; }
-            set { keepNumberOfBackups = value; }
-        }
+        public int KeepNumberOfBackups { get; set; }
 
         /// <summary>
         /// Backing up the database does not require input
@@ -101,7 +104,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 IEnumerable<FileInfo> filesToDelete = backupPath.GetFiles()
                        .Where(f => backupFileNameMatcher.IsMatch(f.Name))
                        .OrderByDescending(f => f.LastWriteTimeUtc)
-                       .Skip(keepNumberOfBackups);
+                       .Skip(KeepNumberOfBackups);
 
                 foreach (FileInfo file in filesToDelete)
                 {
