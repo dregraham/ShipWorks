@@ -44,7 +44,7 @@ public partial class StoredProcedures
                             command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
                             // to the console of client (i.e. SQL Management Studio)
                             // SqlContext.Pipe.ExecuteAndSend(command);
                         }
@@ -156,7 +156,7 @@ public partial class StoredProcedures
 
                 SELECT @EplReferenceKey = '#' + convert(VARCHAR(250), @EplResourceID)
 
-                -- create temp tables
+                -- Create temp tables
                 CREATE TABLE #PrintJobWorking
                 (
                     PrintResultID BIGINT,
@@ -210,18 +210,34 @@ public partial class StoredProcedures
                     BEGIN
                         -- Wrap edits in transaction
                         BEGIN TRANSACTION
-                        /* Upate ObjectReference refrerenced by EmailOutbound columnPlainPartResourceID
-                            so they point to to @PrintImageResourceID */
 
-                        UPDATE o
+                        -- Delete the previous resources (print job/image data) that the print results
+                        -- in this batch were pointing at
+                        DELETE Resource
+                        FROM 
+                            Resource
+                        INNER JOIN 
+                            ObjectReference
+                        ON 
+                            ObjectReference.ObjectID = Resource.ResourceID
+                        INNER JOIN 
+                            @CurrentBatch batch
+                        ON 
+                            batch.PrintResultID = ObjectReference.ConsumerID
+                            AND batch.ContentResourceID = ObjectReference.ObjectReferenceID
+
+
+                        -- Upate ObjectReference refrerenced by PrintResult.ContentResourceID so
+                        -- they point to the generic, purged resource ID
+                        UPDATE objRef
                             SET
-                                o.ObjectID = CASE batch.IsThermal
+                                objRef.ObjectID = CASE batch.IsThermal
                                     WHEN 1 THEN
                                         @EplResourceID
                                     ELSE
                                         @PrintImageResourceID
                                     END,
-                                o.ReferenceKey = CASE batch.IsThermal
+                                objRef.ReferenceKey = CASE batch.IsThermal
                                     WHEN 1 THEN
                                         @EplReferenceKey
                                     ELSE
@@ -230,11 +246,12 @@ public partial class StoredProcedures
                             FROM
                                 @CurrentBatch batch
                                 INNER JOIN 
-                                    ObjectReference o 
+                                    ObjectReference objRef
                                 ON 
-                                    o.ObjectReferenceID = batch.ContentResourceID
+                                    objRef.ObjectReferenceID = batch.ContentResourceID
 
-                        /* Delete ObjectReference not explicitly pointed at by PrintResult (and therefore updated to point to @PrintImageResourceID */
+
+                        -- Delete ObjectReference not explicitly pointed at by PrintResult (and therefore updated to point to @PrintImageResourceID
                         DELETE ObjectReference
                         FROM
                             ObjectReference 
@@ -243,6 +260,8 @@ public partial class StoredProcedures
                         ON 
                             batch.PrintResultID = ObjectReference.ConsumerID 
                             AND batch.ContentResourceID != ObjectReference.ObjectReferenceID
+
+                        
 
                         --Delete items in the batch from the #PrintJobWorking table
                         DELETE printJobWorking
