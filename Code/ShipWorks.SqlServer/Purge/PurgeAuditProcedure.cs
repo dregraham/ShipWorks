@@ -40,7 +40,7 @@ public partial class StoredProcedures
                             command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
                             // to the console of client (i.e. SQL Management Studio)
                             //SqlContext.Pipe.ExecuteAndSend(command);
                         }
@@ -72,12 +72,8 @@ public partial class StoredProcedures
             
             SET @BatchSize = 100
 
-            -- if this is the first time we've run this, figure out which resources must go
-            IF OBJECT_ID('tempdb..#AuditTemp') IS NULL
-            BEGIN
-                CREATE TABLE #AuditTemp (AuditID BIGINT)	
-                CREATE INDEX IX_ResourceWorking on #AuditTemp (AuditID)
-            END
+            CREATE TABLE #AuditTemp (AuditID BIGINT)	
+            CREATE INDEX IX_ResourceWorking on #AuditTemp (AuditID)
             
             INSERT INTO #AuditTemp
             (
@@ -136,8 +132,6 @@ public partial class StoredProcedures
                 END
 
             END
-
-            DROP TABLE #AuditTemp";
         }
     }
 }

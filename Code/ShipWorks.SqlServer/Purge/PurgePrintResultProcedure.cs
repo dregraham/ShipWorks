@@ -44,7 +44,7 @@ public partial class StoredProcedures
                             command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
                             // to the console of client (i.e. SQL Management Studio)
                             // SqlContext.Pipe.ExecuteAndSend(command);
                         }
@@ -156,40 +156,36 @@ public partial class StoredProcedures
 
                 SELECT @EplReferenceKey = '#' + convert(VARCHAR(250), @EplResourceID)
 
-                -- If this is the first time we've run this, figure out which resources must go
-                IF object_id('tempdb..#PrintJobWorking') IS NULL
-                BEGIN
-                    -- create temp tables
-                    CREATE TABLE #PrintJobWorking
-                    (
-                        PrintResultID BIGINT,
-                        ContentResourceID BIGINT,
-                        IsThermal BIT
-                    )
+                -- create temp tables
+                CREATE TABLE #PrintJobWorking
+                (
+                    PrintResultID BIGINT,
+                    ContentResourceID BIGINT,
+                    IsThermal BIT
+                )
 
-                    -- Find all of the old print jobs to wipe out
-                    INSERT INTO #PrintJobWorking (PrintResultID, ContentResourceID, IsThermal)
-                        SELECT 
-                            PrintResult.PrintResultID,
-                            PrintResult.ContentResourceID,
-                            CASE PrintResult.TemplateType
-                                WHEN 3 THEN
-                                       1
-                                ELSE
-                                       0
-                                END
-                            FROM
-                                PrintResult
-                            INNER JOIN 
-                                    ObjectReference 
-                                ON 
-                                    ObjectReference.ObjectReferenceID = PrintResult.ContentResourceID
-                            WHERE
-                                PrintResult.PrintDate < @earliestRetentionDateInUtc
-                                AND ObjectReference.ObjectID NOT IN (@PrintImageResourceID, @EplResourceID)
+                -- Find all of the old print jobs to wipe out
+                INSERT INTO #PrintJobWorking (PrintResultID, ContentResourceID, IsThermal)
+                    SELECT 
+                        PrintResult.PrintResultID,
+                        PrintResult.ContentResourceID,
+                        CASE PrintResult.TemplateType
+                            WHEN 3 THEN
+                                    1
+                            ELSE
+                                    0
+                            END
+                        FROM
+                            PrintResult
+                        INNER JOIN 
+                                ObjectReference 
+                            ON 
+                                ObjectReference.ObjectReferenceID = PrintResult.ContentResourceID
+                        WHERE
+                            PrintResult.PrintDate < @earliestRetentionDateInUtc
+                            AND ObjectReference.ObjectID NOT IN (@PrintImageResourceID, @EplResourceID)
 
-                    CREATE INDEX IX_PrintJobWorking ON #PrintJobWorking (PrintResultID)
-                END
+                CREATE INDEX IX_PrintJobWorking ON #PrintJobWorking (PrintResultID)
 
                 -- See if there's any actual work to do
                 IF EXISTS (SELECT 1 FROM #PrintJobWorking)
@@ -266,8 +262,6 @@ public partial class StoredProcedures
                             SELECT TOP (@BatchSize) * FROM #PrintJobWorking
                     END
                 END
-
-                DROP TABLE #PrintJobWorking";
         }
     }
 }
