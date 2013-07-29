@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
     public partial class PurgeDatabaseTaskEditor : ActionTaskEditor
     {
-        private PurgeDatabaseTask task;
+        private readonly PurgeDatabaseTask task;
 
         /// <summary>
         /// Constructor
@@ -35,15 +28,15 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            checkboxStopLongCleanups.Checked = task.StopLongPurges;
-            checkboxStopLongCleanups.CheckedChanged += OnStopLongCleanupsCheckedChanged;
+            timeoutPurgeCheckbox.Checked = task.CanTimeout;
+            timeoutPurgeCheckbox.CheckedChanged += OnTimeoutPurgeCheckedChanged;
 
             timeoutInHours.Value = task.TimeoutInHours;
-            timeoutInHours.ValueChanged += OnStopAfterHoursValueChanged;
-            timeoutInHours.Enabled = task.StopLongPurges;
+            timeoutInHours.ValueChanged += OnTimeoutInHoursValueChanged;
+            timeoutInHours.Enabled = task.CanTimeout;
 
             retentionPeriodInDays.Value = task.RetentionPeriodInDays;
-            retentionPeriodInDays.ValueChanged += OnCleanupDaysValueChanged;
+            retentionPeriodInDays.ValueChanged += OnRetentionPeriodInDaysValueChanged;
 
             LoadPurgeTasks();
             audit.CheckedChanged += OnPurgeCheckChanged;
@@ -59,11 +52,31 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnPurgeCheckChanged(object sender, EventArgs e)
         {
             task.Purges = new List<PurgeDatabaseType>();
-            if (audit.Checked) task.Purges.Add(PurgeDatabaseType.Audit);
-            if (downloads.Checked) task.Purges.Add(PurgeDatabaseType.Downloads);
-            if (email.Checked) task.Purges.Add(PurgeDatabaseType.Email);
-            if (labels.Checked) task.Purges.Add(PurgeDatabaseType.Labels);
-            if (printJobs.Checked) task.Purges.Add(PurgeDatabaseType.PrintJobs);
+
+            if (audit.Checked)
+            {
+                task.Purges.Add(PurgeDatabaseType.Audit);
+            }
+            
+            if (downloads.Checked)
+            {
+                task.Purges.Add(PurgeDatabaseType.Downloads);
+            }
+
+            if (email.Checked)
+            {
+                task.Purges.Add(PurgeDatabaseType.Email);
+            }
+
+            if (labels.Checked)
+            {
+                task.Purges.Add(PurgeDatabaseType.Labels);
+            }
+
+            if (printJobs.Checked)
+            {
+                task.Purges.Add(PurgeDatabaseType.PrintJobs);
+            }
         }
 
         /// <summary>
@@ -85,15 +98,15 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Stop after minutes value has been changed
         /// </summary> 
-        private void OnStopAfterHoursValueChanged(object sender, EventArgs eventArgs)
+        private void OnTimeoutInHoursValueChanged(object sender, EventArgs eventArgs)
         {
             task.TimeoutInHours = (int)timeoutInHours.Value;
         }
 
         /// <summary>
-        /// Cleanup days value has been changed
+        /// Retention period value has been changed
         /// </summary>
-        private void OnCleanupDaysValueChanged(object sender, EventArgs eventArgs)
+        private void OnRetentionPeriodInDaysValueChanged(object sender, EventArgs eventArgs)
         {
             task.RetentionPeriodInDays = (int)retentionPeriodInDays.Value;
         }
@@ -101,10 +114,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Stop long cleanups checkbox value has been changed
         /// </summary>
-        private void OnStopLongCleanupsCheckedChanged(object sender, EventArgs eventArgs)
+        private void OnTimeoutPurgeCheckedChanged(object sender, EventArgs eventArgs)
         {
-            task.StopLongPurges = checkboxStopLongCleanups.Checked;
-            timeoutInHours.Enabled = checkboxStopLongCleanups.Checked;
+            task.CanTimeout = timeoutPurgeCheckbox.Checked;
+            timeoutInHours.Enabled = timeoutPurgeCheckbox.Checked;
         }
     }
 }

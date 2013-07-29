@@ -62,11 +62,14 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get { return false; }
         }
-
+        
         /// <summary>
-        /// Should cleanups be stopped if they go to long?
+        /// Gets or sets a value indicating whether the purge task can timeout.
         /// </summary>
-        public bool StopLongPurges { get; set; }
+        /// <value>
+        /// <c>true</c> if the purge task can timeout; otherwise, <c>false</c>.
+        /// </value>
+        public bool CanTimeout { get; set; }
 
         /// <summary>
         /// Defines the maximum number of hours a purge can be running.
@@ -102,7 +105,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             return Type.GetType(value);
         }
-
+        
         /// <summary>
         /// Runs the purge scripts.
         /// </summary>
@@ -118,7 +121,7 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (PurgeDatabaseType purge in purgeOrder.Intersect(Purges))
             {
                 // Stop executing if we've been running longer than the time the user has allowed.
-                if (StopLongPurges && localStopExecutionAfter < dateProvider.UtcNow)
+                if (CanTimeout && localStopExecutionAfter < dateProvider.UtcNow)
                 {
                     log.Info("Stopping purge because it has exceeded the maximum allowed time.");
                     break;
@@ -129,7 +132,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, earliestRetentionDateInUtc);
                 try
                 {
-                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, StopLongPurges ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
+                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, CanTimeout ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
                     log.InfoFormat("Finished {0} successfully.", scriptName);
                 }
                 catch (DbException ex)
@@ -148,8 +151,8 @@ namespace ShipWorks.Actions.Tasks.Common
                     exceptions.Keys
                         .Select(x => EnumHelper.GetDescription(x))
                         .Aggregate((x, y) => x + ", " + y));
-                throw new ActionTaskRunException(exceptionMessage, 
-                    new ExceptionCollection(new ArrayList(exceptions.Values)));
+
+                throw new ActionTaskRunException(exceptionMessage, new ExceptionCollection(new ArrayList(exceptions.Values)));
             }
         }
     }

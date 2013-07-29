@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkboxStopLongCleanups = new System.Windows.Forms.CheckBox();
-            this.lableBackups = new System.Windows.Forms.Label();
+            this.timeoutPurgeCheckbox = new System.Windows.Forms.CheckBox();
+            this.timeoutHoursLabel = new System.Windows.Forms.Label();
             this.timeoutInHours = new System.Windows.Forms.NumericUpDown();
             this.labelCleanup = new System.Windows.Forms.Label();
             this.retentionPeriodInDays = new System.Windows.Forms.NumericUpDown();
-            this.labelCleanupDays = new System.Windows.Forms.Label();
+            this.retentionDaysLabel = new System.Windows.Forms.Label();
             this.email = new System.Windows.Forms.CheckBox();
             this.audit = new System.Windows.Forms.CheckBox();
             this.printJobs = new System.Windows.Forms.CheckBox();
@@ -45,24 +45,24 @@
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
             // 
-            // checkboxStopLongCleanups
+            // timeoutPurgeCheckbox
             // 
-            this.checkboxStopLongCleanups.AutoSize = true;
-            this.checkboxStopLongCleanups.Location = new System.Drawing.Point(18, 183);
-            this.checkboxStopLongCleanups.Name = "checkboxStopLongCleanups";
-            this.checkboxStopLongCleanups.Size = new System.Drawing.Size(185, 17);
-            this.checkboxStopLongCleanups.TabIndex = 10;
-            this.checkboxStopLongCleanups.Text = "Stop if deletion takes longer than";
-            this.checkboxStopLongCleanups.UseVisualStyleBackColor = true;
+            this.timeoutPurgeCheckbox.AutoSize = true;
+            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(18, 183);
+            this.timeoutPurgeCheckbox.Name = "timeoutPurgeCheckbox";
+            this.timeoutPurgeCheckbox.Size = new System.Drawing.Size(185, 17);
+            this.timeoutPurgeCheckbox.TabIndex = 10;
+            this.timeoutPurgeCheckbox.Text = "Stop if deletion takes longer than";
+            this.timeoutPurgeCheckbox.UseVisualStyleBackColor = true;
             // 
-            // lableBackups
+            // timeoutHoursLabel
             // 
-            this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(256, 184);
-            this.lableBackups.Name = "lableBackups";
-            this.lableBackups.Size = new System.Drawing.Size(38, 13);
-            this.lableBackups.TabIndex = 12;
-            this.lableBackups.Text = "hours.";
+            this.timeoutHoursLabel.AutoSize = true;
+            this.timeoutHoursLabel.Location = new System.Drawing.Point(256, 184);
+            this.timeoutHoursLabel.Name = "timeoutHoursLabel";
+            this.timeoutHoursLabel.Size = new System.Drawing.Size(38, 13);
+            this.timeoutHoursLabel.TabIndex = 12;
+            this.timeoutHoursLabel.Text = "hours.";
             // 
             // timeoutInHours
             // 
@@ -112,14 +112,14 @@
             0,
             0});
             // 
-            // labelCleanupDays
+            // retentionDaysLabel
             // 
-            this.labelCleanupDays.AutoSize = true;
-            this.labelCleanupDays.Location = new System.Drawing.Point(199, 158);
-            this.labelCleanupDays.Name = "labelCleanupDays";
-            this.labelCleanupDays.Size = new System.Drawing.Size(34, 13);
-            this.labelCleanupDays.TabIndex = 9;
-            this.labelCleanupDays.Text = "days.";
+            this.retentionDaysLabel.AutoSize = true;
+            this.retentionDaysLabel.Location = new System.Drawing.Point(199, 158);
+            this.retentionDaysLabel.Name = "retentionDaysLabel";
+            this.retentionDaysLabel.Size = new System.Drawing.Size(34, 13);
+            this.retentionDaysLabel.TabIndex = 9;
+            this.retentionDaysLabel.Text = "days.";
             // 
             // email
             // 
@@ -202,11 +202,11 @@
             this.Controls.Add(this.printJobs);
             this.Controls.Add(this.audit);
             this.Controls.Add(this.email);
-            this.Controls.Add(this.labelCleanupDays);
+            this.Controls.Add(this.retentionDaysLabel);
             this.Controls.Add(this.retentionPeriodInDays);
             this.Controls.Add(this.labelCleanup);
-            this.Controls.Add(this.checkboxStopLongCleanups);
-            this.Controls.Add(this.lableBackups);
+            this.Controls.Add(this.timeoutPurgeCheckbox);
+            this.Controls.Add(this.timeoutHoursLabel);
             this.Controls.Add(this.timeoutInHours);
             this.Name = "PurgeDatabaseTaskEditor";
             this.Size = new System.Drawing.Size(318, 218);
@@ -220,12 +220,12 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox checkboxStopLongCleanups;
-        private System.Windows.Forms.Label lableBackups;
+        private System.Windows.Forms.CheckBox timeoutPurgeCheckbox;
+        private System.Windows.Forms.Label timeoutHoursLabel;
         private System.Windows.Forms.NumericUpDown timeoutInHours;
         private System.Windows.Forms.Label labelCleanup;
         private System.Windows.Forms.NumericUpDown retentionPeriodInDays;
-        private System.Windows.Forms.Label labelCleanupDays;
+        private System.Windows.Forms.Label retentionDaysLabel;
         private System.Windows.Forms.CheckBox email;
         private System.Windows.Forms.CheckBox audit;
         private System.Windows.Forms.CheckBox printJobs;

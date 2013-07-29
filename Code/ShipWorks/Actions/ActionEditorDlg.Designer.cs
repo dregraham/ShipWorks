@@ -32,7 +32,6 @@
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.imageUser = new System.Windows.Forms.PictureBox();
-            this.name = new System.Windows.Forms.TextBox();
             this.labelName = new System.Windows.Forms.Label();
             this.optionControl = new ShipWorks.UI.Controls.OptionControl();
             this.optionPageAction = new ShipWorks.UI.Controls.OptionPage();
@@ -53,6 +52,7 @@
             this.checkBoxSample2 = new System.Windows.Forms.CheckBox();
             this.storeLimited = new System.Windows.Forms.CheckBox();
             this.enabled = new System.Windows.Forms.CheckBox();
+            this.name = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.imageUser)).BeginInit();
             this.optionControl.SuspendLayout();
@@ -94,14 +94,6 @@
             this.imageUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.imageUser.TabIndex = 8;
             this.imageUser.TabStop = false;
-            // 
-            // name
-            // 
-            this.name.Location = new System.Drawing.Point(52, 24);
-            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.ActionName);
-            this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(273, 21);
-            this.name.TabIndex = 1;
             // 
             // labelName
             // 
@@ -328,9 +320,16 @@
             this.enabled.Text = "Enabled";
             this.enabled.UseVisualStyleBackColor = true;
             // 
+            // name
+            // 
+            this.name.Location = new System.Drawing.Point(52, 24);
+            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.ActionName);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(273, 21);
+            this.name.TabIndex = 1;
+            // 
             // ActionEditorDlg
             // 
-            this.AcceptButton = this.ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;

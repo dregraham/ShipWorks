@@ -499,7 +499,7 @@ namespace ShipWorks.Actions
             }
 
             Cursor.Current = Cursors.WaitCursor;
-
+            
             try
             {
                 trigger.Validate();
@@ -523,7 +523,7 @@ namespace ShipWorks.Actions
             {
                 List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
                 List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
-
+                
                 // Update the flow order
                 foreach (ActionTask task in tasksToSave)
                 {

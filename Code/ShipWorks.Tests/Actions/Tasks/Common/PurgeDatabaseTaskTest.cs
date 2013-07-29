@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
-            testObject.StopLongPurges = false;
+            testObject.CanTimeout = false;
 
             testObject.Run(null, null);
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Email);
-            testObject.StopLongPurges = false;
+            testObject.CanTimeout = false;
 
             testObject.Run(null, null);
 
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
-            testObject.StopLongPurges = true;
+            testObject.CanTimeout = true;
             testObject.TimeoutInHours = 2;
 
             testObject.Run(null, null);
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
             testObject.RetentionPeriodInDays = 8;
-            testObject.StopLongPurges = false;
+            testObject.CanTimeout = false;
 
             testObject.Run(null, null);
 
@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.StopLongPurges = true;
+            testObject.CanTimeout = true;
             testObject.TimeoutInHours = 4;
 
             testObject.Run(null, null);
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.StopLongPurges = false;
+            testObject.CanTimeout = false;
             testObject.TimeoutInHours = 4;
 
             testObject.Run(null, null);
@@ -279,7 +279,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             PurgeDatabaseTask initialObject = new PurgeDatabaseTask();
             initialObject.Purges.Add(PurgeDatabaseType.Audit);
             initialObject.Purges.Add(PurgeDatabaseType.Email);
-            initialObject.StopLongPurges = true;
+            initialObject.CanTimeout = true;
             initialObject.TimeoutInHours = 8;
             initialObject.RetentionPeriodInDays = 19;
 
@@ -289,7 +289,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             PurgeDatabaseTask testObject = new PurgeDatabaseTask();
             testObject.Initialize(serializedObject);
             
-            Assert.AreEqual(true, testObject.StopLongPurges);
+            Assert.AreEqual(true, testObject.CanTimeout);
             Assert.AreEqual(8, testObject.TimeoutInHours);
             Assert.AreEqual(19, testObject.RetentionPeriodInDays);
             Assert.AreEqual(2, testObject.Purges.Count);
