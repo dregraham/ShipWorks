@@ -234,7 +234,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             {
                 testObject.Run(null, null);
             }
-            catch (ActionTaskRunException ex)
+            catch (ActionTaskRunException)
             {
                 // We don't care about exceptions here...
             }
