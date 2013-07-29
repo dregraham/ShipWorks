@@ -48,7 +48,7 @@
             // checkboxStopLongCleanups
             // 
             this.checkboxStopLongCleanups.AutoSize = true;
-            this.checkboxStopLongCleanups.Location = new System.Drawing.Point(18, 179);
+            this.checkboxStopLongCleanups.Location = new System.Drawing.Point(18, 183);
             this.checkboxStopLongCleanups.Name = "checkboxStopLongCleanups";
             this.checkboxStopLongCleanups.Size = new System.Drawing.Size(185, 17);
             this.checkboxStopLongCleanups.TabIndex = 10;
@@ -58,7 +58,7 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(256, 180);
+            this.lableBackups.Location = new System.Drawing.Point(256, 184);
             this.lableBackups.Name = "lableBackups";
             this.lableBackups.Size = new System.Drawing.Size(38, 13);
             this.lableBackups.TabIndex = 12;
@@ -66,7 +66,7 @@
             // 
             // timeoutInHours
             // 
-            this.timeoutInHours.Location = new System.Drawing.Point(203, 177);
+            this.timeoutInHours.Location = new System.Drawing.Point(203, 182);
             this.timeoutInHours.Minimum = new decimal(new int[] {
             1,
             0,
