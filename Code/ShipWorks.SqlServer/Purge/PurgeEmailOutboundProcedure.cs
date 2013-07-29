@@ -62,7 +62,7 @@ public partial class StoredProcedures
                 WHILE GETUTCDATE() < @latestExecutionTimeInUtc
                 BEGIN
                     INSERT #EmailPurgeBatch
-                    SELECT TOP 100 e.EmailOutboundID
+                    SELECT TOP 10000 e.EmailOutboundID
                     FROM EmailOutbound e
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID
