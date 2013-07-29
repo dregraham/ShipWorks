@@ -109,13 +109,13 @@ public partial class StoredProcedures
                     -- delete Resources no longer used
                     DELETE [Resource]
                     WHERE ResourceID IN (
-	                    SELECT o.ObjectID
-	                    FROM ObjectReference o
-	                    INNER JOIN EmailOutbound e ON
-		                    e.EmailOutboundID = o.ConsumerID
-	                    INNER JOIN #EmailPurgeBatch b ON 
-		                    b.EmailOutboundID = e.EmailOutboundID  
-	                    WHERE o.ObjectID <> @deletedEmailResourceID
+                        SELECT o.ObjectID
+                        FROM ObjectReference o
+                        INNER JOIN EmailOutbound e ON
+                            e.EmailOutboundID = o.ConsumerID
+                        INNER JOIN #EmailPurgeBatch b ON
+                            b.EmailOutboundID = e.EmailOutboundID
+                        WHERE o.ObjectID <> @deletedEmailResourceID
                     );
 
                     -- delete ObjectReferences not explicitly pointed to by EmailOutbound (embedded email images)
