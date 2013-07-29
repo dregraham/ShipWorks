@@ -51,7 +51,7 @@
             this.checkboxStopLongCleanups.Location = new System.Drawing.Point(18, 179);
             this.checkboxStopLongCleanups.Name = "checkboxStopLongCleanups";
             this.checkboxStopLongCleanups.Size = new System.Drawing.Size(185, 17);
-            this.checkboxStopLongCleanups.TabIndex = 18;
+            this.checkboxStopLongCleanups.TabIndex = 10;
             this.checkboxStopLongCleanups.Text = "Stop if deletion takes longer than";
             this.checkboxStopLongCleanups.UseVisualStyleBackColor = true;
             // 
@@ -61,7 +61,7 @@
             this.lableBackups.Location = new System.Drawing.Point(256, 180);
             this.lableBackups.Name = "lableBackups";
             this.lableBackups.Size = new System.Drawing.Size(38, 13);
-            this.lableBackups.TabIndex = 17;
+            this.lableBackups.TabIndex = 12;
             this.lableBackups.Text = "hours.";
             // 
             // timeoutInHours
@@ -74,7 +74,7 @@
             0});
             this.timeoutInHours.Name = "timeoutInHours";
             this.timeoutInHours.Size = new System.Drawing.Size(47, 21);
-            this.timeoutInHours.TabIndex = 16;
+            this.timeoutInHours.TabIndex = 11;
             this.timeoutInHours.Value = new decimal(new int[] {
             1,
             0,
@@ -87,7 +87,7 @@
             this.labelCleanup.Location = new System.Drawing.Point(15, 158);
             this.labelCleanup.Name = "labelCleanup";
             this.labelCleanup.Size = new System.Drawing.Size(129, 13);
-            this.labelCleanup.TabIndex = 19;
+            this.labelCleanup.TabIndex = 7;
             this.labelCleanup.Text = "Delete records older than";
             // 
             // retentionPeriodInDays
@@ -105,7 +105,7 @@
             0});
             this.retentionPeriodInDays.Name = "retentionPeriodInDays";
             this.retentionPeriodInDays.Size = new System.Drawing.Size(47, 21);
-            this.retentionPeriodInDays.TabIndex = 20;
+            this.retentionPeriodInDays.TabIndex = 8;
             this.retentionPeriodInDays.Value = new decimal(new int[] {
             7,
             0,
@@ -118,7 +118,7 @@
             this.labelCleanupDays.Location = new System.Drawing.Point(199, 158);
             this.labelCleanupDays.Name = "labelCleanupDays";
             this.labelCleanupDays.Size = new System.Drawing.Size(34, 13);
-            this.labelCleanupDays.TabIndex = 21;
+            this.labelCleanupDays.TabIndex = 9;
             this.labelCleanupDays.Text = "days.";
             // 
             // email
@@ -127,7 +127,7 @@
             this.email.Location = new System.Drawing.Point(18, 66);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(50, 17);
-            this.email.TabIndex = 22;
+            this.email.TabIndex = 3;
             this.email.Text = "Email";
             this.email.UseVisualStyleBackColor = true;
             // 
@@ -137,7 +137,7 @@
             this.audit.Location = new System.Drawing.Point(18, 20);
             this.audit.Name = "audit";
             this.audit.Size = new System.Drawing.Size(74, 17);
-            this.audit.TabIndex = 23;
+            this.audit.TabIndex = 1;
             this.audit.Text = "Audit Trail";
             this.audit.UseVisualStyleBackColor = true;
             // 
@@ -147,7 +147,7 @@
             this.printJobs.Location = new System.Drawing.Point(18, 112);
             this.printJobs.Name = "printJobs";
             this.printJobs.Size = new System.Drawing.Size(73, 17);
-            this.printJobs.TabIndex = 24;
+            this.printJobs.TabIndex = 5;
             this.printJobs.Text = "Print Jobs";
             this.printJobs.UseVisualStyleBackColor = true;
             // 
@@ -157,7 +157,7 @@
             this.labels.Location = new System.Drawing.Point(18, 89);
             this.labels.Name = "labels";
             this.labels.Size = new System.Drawing.Size(56, 17);
-            this.labels.TabIndex = 25;
+            this.labels.TabIndex = 4;
             this.labels.Text = "Labels";
             this.labels.UseVisualStyleBackColor = true;
             // 
@@ -167,7 +167,7 @@
             this.downloads.Location = new System.Drawing.Point(18, 43);
             this.downloads.Name = "downloads";
             this.downloads.Size = new System.Drawing.Size(115, 17);
-            this.downloads.TabIndex = 26;
+            this.downloads.TabIndex = 2;
             this.downloads.Text = "Download Records";
             this.downloads.UseVisualStyleBackColor = true;
             // 
@@ -178,7 +178,7 @@
             this.label1.Location = new System.Drawing.Point(0, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(98, 13);
-            this.label1.TabIndex = 27;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Items to delete:";
             // 
             // label2
@@ -188,7 +188,7 @@
             this.label2.Location = new System.Drawing.Point(0, 136);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
-            this.label2.TabIndex = 28;
+            this.label2.TabIndex = 6;
             this.label2.Text = "Options";
             // 
             // PurgeDatabaseTaskEditor
