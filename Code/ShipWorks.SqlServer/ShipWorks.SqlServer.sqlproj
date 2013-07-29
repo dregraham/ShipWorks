@@ -214,6 +214,8 @@
     <Compile Include="Actions\ActionDeleteTrigger.cs" />
     <Compile Include="Purge\PurgeAuditProcedure.cs" />
     <Compile Include="Purge\PurgeException.cs" />
+    <Compile Include="Purge\PurgeLabelsProcedure.cs" />
+    <Compile Include="Purge\PurgeScriptRunner.cs" />
     <Compile Include="Purge\PurgePrintResultProcedure.cs" />
     <Compile Include="Purge\PurgeEmailOutboundProcedure.cs" />
     <Compile Include="Purge\PurgeDownloadProcedure.cs" />

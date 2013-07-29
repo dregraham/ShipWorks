@@ -24,43 +24,7 @@ public partial class StoredProcedures
     [SqlProcedure]
     public static void PurgeDownload(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
-        using (SqlConnection connection = new SqlConnection("context connection=true"))
-        {
-            try
-            {
-                // Need to have an open connection for the duration of the lock acquisition/release
-                connection.Open();
-
-                if (!SqlAppLockUtility.IsLocked(connection, PurgeDownloadAppLockName))
-                {
-                    if (SqlAppLockUtility.AcquireLock(connection, PurgeDownloadAppLockName))
-                    {
-                        using (SqlCommand command = connection.CreateCommand())
-                        {
-                            command.CommandText = PurgeDownloadCommandText;
-
-                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
-                            command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
-                            command.ExecuteNonQuery();
-
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
-                            // to the console of client (i.e. SQL Management Studio)
-                            //SqlContext.Pipe.ExecuteAndSend(command);
-                        }
-                    }
-                }
-                else
-                {
-                    // Let the caller know that someone else is already running the purge. (It may
-                    // be beneficial to create/throw a more specific exception.)
-                    throw new PurgeException("Could not acquire applock for purging downloads.");                    
-                }
-            }
-            finally
-            {
-                SqlAppLockUtility.ReleaseLock(connection, PurgeDownloadAppLockName);
-            }
-        }
+        PurgeScriptRunner.RunPurgeScript(PurgeDownloadCommandText, PurgeDownloadAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);              
     }
 
     /// <summary>
