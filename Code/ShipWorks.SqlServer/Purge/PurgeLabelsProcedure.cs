@@ -245,7 +245,7 @@ BEGIN
 	INSERT INTO @currentBatch
 		SELECT TOP 100 *  FROM #labelsToCleanUp R
 
-	WHILE @@ROWCOUNT>0  AND (@LatestExecutionTimeInUtc > GetUtcDate())
+	WHILE @@ROWCOUNT>0  AND (@latestExecutionTimeInUtc > GetUtcDate())
 	BEGIN
 	BEGIN TRANSACTION
 		
