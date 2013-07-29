@@ -10,7 +10,7 @@ using ShipWorks.SqlServer.Purge;
 
 public partial class StoredProcedures
 {
-    private const string DownloadPurgeAppLockName = "PurgeDownloadEntries";
+    private const string PurgeDownloadAppLockName = "PurgeDownload";
 
     /// <summary>
     /// Purges old download records from the database.
@@ -22,7 +22,7 @@ public partial class StoredProcedures
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeDownloads(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgeDownload(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {
@@ -31,19 +31,19 @@ public partial class StoredProcedures
                 // Need to have an open connection for the duration of the lock acquisition/release
                 connection.Open();
 
-                if (!SqlAppLockUtility.IsLocked(connection, DownloadPurgeAppLockName))
+                if (!SqlAppLockUtility.IsLocked(connection, PurgeDownloadAppLockName))
                 {
-                    if (SqlAppLockUtility.AcquireLock(connection, DownloadPurgeAppLockName))
+                    if (SqlAppLockUtility.AcquireLock(connection, PurgeDownloadAppLockName))
                     {
                         using (SqlCommand command = connection.CreateCommand())
                         {
-                            command.CommandText = DownloadPurgeCommandText;
+                            command.CommandText = PurgeDownloadCommandText;
 
-                            command.Parameters.Add(new SqlParameter("@RetentionDateInUtc", earliestRetentionDateInUtc));
-                            command.Parameters.Add(new SqlParameter("@LatestExecutionTimeInUtc", latestExecutionTimeInUtc));
+                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
+                            command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
                             command.ExecuteNonQuery();
 
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
                             // to the console of client (i.e. SQL Management Studio)
                             //SqlContext.Pipe.ExecuteAndSend(command);
                         }
@@ -58,7 +58,7 @@ public partial class StoredProcedures
             }
             finally
             {
-                SqlAppLockUtility.ReleaseLock(connection, DownloadPurgeAppLockName);
+                SqlAppLockUtility.ReleaseLock(connection, PurgeDownloadAppLockName);
             }
         }
     }
@@ -66,7 +66,7 @@ public partial class StoredProcedures
     /// <summary>
     /// The TSQL for the PurgeDownload stored procedure.
     /// </summary>
-    private static string DownloadPurgeCommandText
+    private static string PurgeDownloadCommandText
     {
         get
         {
@@ -83,7 +83,7 @@ public partial class StoredProcedures
 	            SELECT DownloadID 
 	            INTO #DownloadTemp
 	            FROM Download
-	            WHERE Started < @RetentionDateInUtc
+	            WHERE Started < @earliestRetentionDateInUtc
 	
 	            CREATE INDEX IX_DownloadWorking on #DownloadTemp (DownloadID)
             END
@@ -97,7 +97,7 @@ public partial class StoredProcedures
 	            INSERT INTO @currentBatch
 		            SELECT TOP 100 *  FROM #DownloadTemp 
 		
-	            WHILE @@ROWCOUNT > 0 AND (@LatestExecutionTimeInUtc > GetUtcDate())
+	            WHILE @@ROWCOUNT > 0 AND (@latestExecutionTimeInUtc > GetUtcDate())
 	            BEGIN
 		            BEGIN TRANSACTION
 			            DELETE dd
