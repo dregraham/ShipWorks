@@ -58,11 +58,16 @@ public partial class StoredProcedures
                     EmailOutboundID BIGINT PRIMARY KEY
                 );
 
+                DECLARE
+                    @startTime DATETIME = GETUTCDATE(),
+                    @batchSize INT = 1000,
+                    @batchTotal BIGINT = 0;
+
                 -- purge in batches while time allows
                 WHILE GETUTCDATE() < @latestExecutionTimeInUtc
                 BEGIN
                     INSERT #EmailPurgeBatch
-                    SELECT TOP 10000 e.EmailOutboundID
+                    SELECT TOP (@batchSize) e.EmailOutboundID
                     FROM EmailOutbound e
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID
@@ -70,7 +75,14 @@ public partial class StoredProcedures
                         e.SentDate < @earliestRetentionDateInUtc AND
                         o.ObjectID <> @deletedEmailResourceID;
 
-                    IF @@ROWCOUNT = 0
+                    SET @batchSize = @@ROWCOUNT;
+                    IF @batchSize = 0
+                        BREAK;
+
+                    DECLARE @totalSeconds INT = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
+
+                    -- stop if the batch isn't expected to complete in time
+                    IF @batchTotal > 0 AND (@totalSeconds * @batchSize / @batchTotal) > DATEDIFF(SECOND, GETUTCDATE(), @latestExecutionTimeInUtc)
                         BREAK;
 
                     BEGIN TRANSACTION;
@@ -94,18 +106,17 @@ public partial class StoredProcedures
                     INNER JOIN #EmailPurgeBatch p ON
                         p.EmailOutboundID = e.EmailOutboundID;
 
-                    -- Delete Resources no longer used
-                    DELETE FROM dbo.[Resource] 
-                    WHERE ResourceID IN 
-                    (
-	                    SELECT objRef.ObjectID
-	                    FROM dbo.ObjectReference objRef
-	                    INNER JOIN dbo.EmailOutbound eo ON
-		                    eo.EmailOutboundID = objRef.ConsumerID
-	                    INNER JOIN #EmailPurgeBatch epb ON 
-		                    epb.EmailOutboundID = eo.EmailOutboundID  
-	                    WHERE objRef.ObjectID <> @deletedEmailResourceID
-                    )
+                    -- delete Resources no longer used
+                    DELETE [Resource]
+                    WHERE ResourceID IN (
+	                    SELECT o.ObjectID
+	                    FROM ObjectReference o
+	                    INNER JOIN EmailOutbound e ON
+		                    e.EmailOutboundID = o.ConsumerID
+	                    INNER JOIN #EmailPurgeBatch b ON 
+		                    b.EmailOutboundID = e.EmailOutboundID  
+	                    WHERE o.ObjectID <> @deletedEmailResourceID
+                    );
 
                     -- delete ObjectReferences not explicitly pointed to by EmailOutbound (embedded email images)
                     DELETE ObjectReference
@@ -119,6 +130,10 @@ public partial class StoredProcedures
                     COMMIT TRANSACTION;
 
                     TRUNCATE TABLE #EmailPurgeBatch;
+
+                    -- update batch total and adjust batch size to an amount expected to complete in 10 seconds
+                    SET @batchTotal = @batchTotal + @batchSize;
+                    SET @batchSize = @batchTotal / @totalSeconds * 10;
                 END;
             ";
         }
