@@ -24,11 +24,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
-            GridHyperlinkDecorator statusDecorator = new GridHyperlinkDecorator();
-            statusDecorator.LinkClicked += OnLinkClicked;
-            statusDecorator.QueryEnabled += EnableStatusHyperlink;
-
-            var definitions = new GridColumnDefinitionCollection
+            GridColumnDefinitionCollection definitions = new GridColumnDefinitionCollection
             {
                 new GridColumnDefinition("{7BE7DBCE-3500-4B01-8594-471035C001AD}", true,
                     new GridComputerDisplayType(),
@@ -44,7 +40,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     { DefaultWidth = 140 },
 
                 new GridColumnDefinition("{F1979994-BB60-45D6-B2C1-18966AB15B65}", true,
-                    new GridEnumDisplayType<ServiceStatus>(EnumSortMethod.Value).Decorate(statusDecorator),
+                    new GridEnumDisplayType<ServiceStatus>(EnumSortMethod.Value),
                     "Status", "(icon)",
                     new GridColumnFunctionValueProvider(x => ((ServiceStatusEntity)x).GetStatus()),
                     null) //new GridColumnSortProvider(CreateStatusSortField()))
@@ -63,63 +59,5 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
             return definitions;
         }
-
-        /// <summary>
-        /// Enables the hyperlink for any rows that do not have a ServiceStatus of Running.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="GridHyperlinkQueryEnabledEventArgs"/> instance containing the event data.</param>
-        private static void EnableStatusHyperlink(object sender, GridHyperlinkQueryEnabledEventArgs e)
-        {
-            GridHyperlinkDecorator hyperlinkDecorator = sender as GridHyperlinkDecorator;
-            if (hyperlinkDecorator != null)
-            {
-                if (e.Value is ServiceStatus)
-                {
-                    e.Enabled = (ServiceStatus)e.Value != ServiceStatus.Running;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when [link clicked].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="GridHyperlinkClickEventArgs"/> instance containing the event data.</param>
-        private static void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
-        {
-            ServiceStatusEntity serviceEntity = e.Row.Entity as ServiceStatusEntity;
-            if (serviceEntity != null && serviceEntity.GetStatus() != ServiceStatus.Running)
-            {
-                using (ServiceStartHelpDlg dlg = new ServiceStartHelpDlg())
-                {
-                    dlg.ShowDialog(e.Row.Grid.SandGrid.TopLevelControl);
-                }
-            }
-        }
-
-        ///// <summary>
-        ///// Mirrors the logic in <see cref="ServiceStatusEntityExtensions.GetStatus"/>.
-        ///// </summary>
-        //static EntityField2 CreateStatusSortField()
-        //{
-        //    var expression = new System.Text.StringBuilder()
-        //        .Append(" CASE WHEN LastStartDateTime IS NULL THEN ")
-        //            .Append((int)ServiceStatus.NeverStarted)
-        //        .Append(" ELSE ")
-        //            .Append(" CASE WHEN LastStopDateTime > LastStartDateTime THEN ")
-        //                .Append((int)ServiceStatus.Stopped)
-        //            .Append(" ELSE ")
-        //                .AppendFormat(" CASE WHEN LastCheckInDateTime IS NULL OR DATEDIFF(SECOND, LastCheckInDateTime, GETUTCDATE()) > {0:0} THEN ", ServicesStatusManager.NotRunningTimeSpan.TotalSeconds)
-        //                    .Append((int)ServiceStatus.NotResponding)
-        //                .Append(" ELSE ")
-        //                    .Append((int)ServiceStatus.Running)
-        //                .Append(" END ")
-        //            .Append(" END ")
-        //        .Append(" END ")
-        //        .ToString();
-
-        //    return ServiceStatusFields.LastCheckInDateTime.SetExpression(new DbFunctionCall(expression, null));
-        //}
     }
 }

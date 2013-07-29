@@ -3,6 +3,7 @@ using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer.Purge;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using ShipWorks.SqlServer;
 
 
 public partial class StoredProcedures
@@ -21,42 +22,7 @@ public partial class StoredProcedures
     [SqlProcedure]
     public static void PurgeEmailOutbound(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
-        using (SqlConnection connection = new SqlConnection("context connection=true"))
-        {
-            try
-            {
-                // Need to have an open connection for the duration of the lock acquisition/release
-                connection.Open();
-
-                if (!SqlAppLockUtility.IsLocked(connection, PurgeEmailOutboundAppLockName))
-                {
-                    if (SqlAppLockUtility.AcquireLock(connection, PurgeEmailOutboundAppLockName))
-                    {
-                        using (SqlCommand command = connection.CreateCommand())
-                        {
-                            command.CommandText = PurgeEmailOutboundCommandText;
-
-                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
-                            command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
-                            command.ExecuteNonQuery();
-
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
-                            // to the console of client (i.e. SQL Management Studio)
-                            // SqlContext.Pipe.ExecuteAndSend(command);
-                        }
-                    }
-                }
-                else
-                {
-                    // Let the caller know that someone else is already running the purge.
-                    throw new PurgeException("Could not acquire applock for purging email outbound.");
-                }
-            }
-            finally
-            {
-                SqlAppLockUtility.ReleaseLock(connection, PurgeEmailOutboundAppLockName);
-            }
-        }
+        PurgeScriptRunner.RunPurgeScript(PurgeEmailOutboundCommandText, PurgeEmailOutboundAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);             
     }
 
     /// <summary>
@@ -96,7 +62,7 @@ public partial class StoredProcedures
                 WHILE GETUTCDATE() < @latestExecutionTimeInUtc
                 BEGIN
                     INSERT #EmailPurgeBatch
-                    SELECT TOP 100 e.EmailOutboundID
+                    SELECT TOP 10000 e.EmailOutboundID
                     FROM EmailOutbound e
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID

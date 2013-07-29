@@ -25,42 +25,7 @@ public partial class StoredProcedures
     [SqlProcedure]
     public static void PurgePrintResult(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
-        using (SqlConnection connection = new SqlConnection("context connection=true"))
-        {
-            try
-            {
-                // Need to have an open connection for the duration of the lock acquisition/release
-                connection.Open();
-
-                if (!SqlAppLockUtility.IsLocked(connection, PurgePrintResultAppLockName))
-                {
-                    if (SqlAppLockUtility.AcquireLock(connection, PurgePrintResultAppLockName))
-                    {
-                        using (SqlCommand command = connection.CreateCommand())
-                        {
-                            command.CommandText = PurgePrintResultCommandText;
-
-                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
-                            command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
-                            command.ExecuteNonQuery();
-
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debugging to see output printed 
-                            // to the console of client (i.e. SQL Management Studio)
-                            // SqlContext.Pipe.ExecuteAndSend(command);
-                        }
-                    }
-                }
-                else
-                {
-                    // Let the caller know that someone else is already running the purge.
-                    throw new PurgeException("Could not acquire applock for purging print jobs.");
-                }
-            }
-            finally
-            {
-                SqlAppLockUtility.ReleaseLock(connection, PurgePrintResultAppLockName);
-            }
-        }
+        PurgeScriptRunner.RunPurgeScript(PurgePrintResultCommandText, PurgePrintResultAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);       
     }
 
     /// <summary>

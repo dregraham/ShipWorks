@@ -3,6 +3,7 @@ using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer.Purge;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using ShipWorks.SqlServer;
 
 
 public partial class StoredProcedures
@@ -21,43 +22,7 @@ public partial class StoredProcedures
     [SqlProcedure]
     public static void PurgeAudit(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
     {
-        using (SqlConnection connection = new SqlConnection("context connection=true"))
-        {
-            try
-            {
-                // Need to have an open connection for the duration of the lock acquisition/release
-                connection.Open();
-
-                if (!SqlAppLockUtility.IsLocked(connection, PurgeAuditAppLockName))
-                {
-                    if (SqlAppLockUtility.AcquireLock(connection, PurgeAuditAppLockName))
-                    {
-                        using (SqlCommand command = connection.CreateCommand())
-                        {
-                            command.CommandText = PurgeAuditCommandText;
-
-                            command.Parameters.Add(new SqlParameter("@earliestRetentionDateInUtc", earliestRetentionDateInUtc));
-                            command.Parameters.Add(new SqlParameter("@latestExecutionTimeInUtc", latestExecutionTimeInUtc));
-                            command.ExecuteNonQuery();
-
-                            // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
-                            // to the console of client (i.e. SQL Management Studio)
-                            //SqlContext.Pipe.ExecuteAndSend(command);
-                        }
-                    }
-                }
-                else
-                {
-                    // Let the caller know that someone else is already running the purge. (It may
-                    // be beneficial to create/throw a more specific exception.)
-                    throw new PurgeException("Could not acquire applock for purging audit logs.");                    
-                }
-            }
-            finally
-            {
-                SqlAppLockUtility.ReleaseLock(connection, PurgeAuditAppLockName);
-            }
-        }
+        PurgeScriptRunner.RunPurgeScript(PurgeAuditCommandText, PurgeAuditAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);
     }
 
     /// <summary>
