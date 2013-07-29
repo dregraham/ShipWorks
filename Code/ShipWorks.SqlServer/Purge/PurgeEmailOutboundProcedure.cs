@@ -94,6 +94,19 @@ public partial class StoredProcedures
                     INNER JOIN #EmailPurgeBatch p ON
                         p.EmailOutboundID = e.EmailOutboundID;
 
+                    -- Delete Resources no longer used
+                    DELETE FROM dbo.[Resource] 
+                    WHERE ResourceID IN 
+                    (
+	                    SELECT objRef.ObjectID
+	                    FROM dbo.ObjectReference objRef
+	                    INNER JOIN dbo.EmailOutbound eo ON
+		                    eo.EmailOutboundID = objRef.ConsumerID
+	                    INNER JOIN #EmailPurgeBatch epb ON 
+		                    epb.EmailOutboundID = eo.EmailOutboundID  
+	                    WHERE objRef.ObjectID <> @deletedEmailResourceID
+                    )
+
                     -- delete ObjectReferences not explicitly pointed to by EmailOutbound (embedded email images)
                     DELETE ObjectReference
                     FROM ObjectReference o
