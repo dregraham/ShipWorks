@@ -64,7 +64,7 @@ public partial class StoredProcedures
                     @batchTotal BIGINT = 0;
 
                 -- purge in batches while time allows
-                WHILE GETUTCDATE() < @latestExecutionTimeInUtc
+                WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
                 BEGIN
                     INSERT #EmailPurgeBatch
                     SELECT TOP (@batchSize) e.EmailOutboundID
@@ -82,7 +82,11 @@ public partial class StoredProcedures
                     DECLARE @totalSeconds INT = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
 
                     -- stop if the batch isn't expected to complete in time
-                    IF @batchTotal > 0 AND (@totalSeconds * @batchSize / @batchTotal) > DATEDIFF(SECOND, GETUTCDATE(), @latestExecutionTimeInUtc)
+                    IF (
+                        @latestExecutionTimeInUtc IS NOT NULL AND
+                        @batchTotal > 0 AND
+                        (@totalSeconds * @batchSize / @batchTotal) > DATEDIFF(SECOND, GETUTCDATE(), @latestExecutionTimeInUtc)
+                    )
                         BREAK;
 
                     BEGIN TRANSACTION;

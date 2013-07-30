@@ -1,11 +1,10 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using Interapptive.Shared.Data;
+﻿using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Purge;
-using System.Data.SqlTypes;
+using System;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -46,7 +45,7 @@ namespace ShipWorks.Actions.Tasks.Common
                         // Disable the command timeout since the scripts should take care of timing themselves out
                         command.CommandTimeout = 0;
                         command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
-                        command.Parameters.AddWithValue("@latestExecutionTimeInUtc", stopExecutionAfterUtc ?? SqlDateTime.MaxValue.Value);
+                        command.Parameters.AddWithValue("@latestExecutionTimeInUtc", (object)stopExecutionAfterUtc ?? DBNull.Value);
 
                         command.ExecuteNonQuery();
                     }

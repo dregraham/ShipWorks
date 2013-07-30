@@ -61,7 +61,7 @@ public partial class StoredProcedures
 	            INSERT INTO @currentBatch
 		            SELECT TOP 100 *  FROM #DownloadTemp 
 		
-	            WHILE @@ROWCOUNT > 0 AND (@latestExecutionTimeInUtc > GetUtcDate())
+	            WHILE @@ROWCOUNT > 0 AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GetUtcDate())
 	            BEGIN
 		            BEGIN TRANSACTION
 			            DELETE dd

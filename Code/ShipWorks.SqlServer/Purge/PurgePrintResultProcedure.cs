@@ -171,7 +171,7 @@ public partial class StoredProcedures
                             #PrintJobWorking
 
                     -- Honor the hard stop if one is provided
-                    WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc > GETUTCDATE())
+                    WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GETUTCDATE())
                     BEGIN
                         -- Wrap edits in transaction
                         BEGIN TRANSACTION

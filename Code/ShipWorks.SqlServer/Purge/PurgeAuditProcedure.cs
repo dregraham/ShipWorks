@@ -59,7 +59,7 @@ public partial class StoredProcedures
                     SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 		
         
                 -- Honor the hard stop if one is provided
-                WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc > GETUTCDATE())
+                WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GETUTCDATE())
                 BEGIN
 
                     BEGIN TRANSACTION
