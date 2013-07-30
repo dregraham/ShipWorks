@@ -33,16 +33,17 @@ public partial class StoredProcedures
         {
             return @"
 DECLARE 
-	@oldCount int,
-	@deleteLabelResourceID_PNG bigint,
-	@deleteLabelResourceID_GIF bigint,
-	@deleteLabelResourceID_JPG bigint,
-	@deleteLabelResourceID_EPL bigint,
-	@deleteLabelResourceID_ZPL bigint,
-	@batchSize int
+	@OldCount int,
+	@DeletedLabelResourceID_PNG bigint,
+	@DeletedLabelResourceID_GIF bigint,
+	@DeletedLabelResourceID_JPG bigint,
+	@DeletedLabelResourceID_EPL bigint,
+	@DeletedLabelResourceID_ZPL bigint,
+	@BatchSize int,
 
 -- create temp tables
-CREATE TABLE #labelsToCleanUp ( 
+CREATE TABLE #LabelsToCleanUp 
+( 
 	ObjectReferenceID bigint,
 	ResourceID bigint,
 	ImageFormat nvarchar(5)
@@ -50,93 +51,106 @@ CREATE TABLE #labelsToCleanUp (
 
 
 -- find all of the UPS labels we want to wipe out
-INSERT INTO #labelsToCleanUp
-	SELECT r.ObjectReferenceID AS ObjectReferenceID, ObjectID AS ResourceID, 
-	CASE 
-		WHEN isnull(s.ThermalType,-1) = 0 THEN 'EPL'
-		WHEN isnull(s.ThermalType,-1) = 1 THEN 'ZPL'
-		ELSE 'GIF'
-	END as ImageFormat
-	FROM [UpsPackage] p
-		INNER JOIN [Shipment] s ON p.ShipmentID = s.ShipmentID
-		INNER JOIN [ObjectReference] r ON p.UpsPackageID = r.ConsumerID	
+INSERT INTO #LabelsToCleanUp
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'GIF'
+		END as ImageFormat		
+	FROM [UpsPackage]
+		INNER JOIN [Shipment] ON [UpsPackage].ShipmentID = [Shipment].ShipmentID
+		INNER JOIN [ObjectReference] ON [UpsPackage].UpsPackageID = [ObjectReference].ConsumerID			
 	WHERE 
-		s.ProcessedDate < @earliestRetentionDateInUtc
-		AND s.Processed = 1
-		AND s.ShipmentType = 0 --UPS
+		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
+		AND [Shipment].Processed = 1
+		AND [Shipment].ShipmentType = 0 --UPS
 
 -- find all of the fedex labels we want to wipe out
-INSERT INTO #labelsToCleanUp		
-	SELECT r.ObjectReferenceID AS ObjectReferenceID, ObjectID AS ResourceID, 		
-	CASE 
-		WHEN isnull(s.ThermalType,-1) = 0 THEN 'EPL'
-		WHEN isnull(s.ThermalType,-1) = 1 THEN 'ZPL'
-		ELSE 'PNG'
-	END as ImageFormat
-	FROM [FedexPackage] p
-		INNER JOIN [Shipment] s ON p.ShipmentID = s.ShipmentID
-		INNER JOIN [ObjectReference] r ON p.FedexPackageID = r.ConsumerID
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 		
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'PNG'
+		END as ImageFormat
+	FROM [FedexPackage]
+		INNER JOIN [Shipment] ON [FedexPackage].ShipmentID = [Shipment].ShipmentID
+		INNER JOIN [ObjectReference] ON [FedexPackage].FedexPackageID = [ObjectReference].ConsumerID
 	WHERE 
-		s.ProcessedDate < @earliestRetentionDateInUtc	
-		AND s.Processed = 1
-		AND s.ShipmentType = 6	-- FedEx
+		[Shipment].ProcessedDate < @earliestRetentionDateInUtc	
+		AND [Shipment].Processed = 1
+		AND [Shipment].ShipmentType = 6	-- FedEx
 	
 -- find all of the onTrac labels we want to wipe out
-INSERT INTO #labelsToCleanUp		
-	SELECT r.ObjectReferenceID AS ObjectReferenceID, ObjectID AS ResourceID, 
-	CASE 
-		WHEN isnull(s.ThermalType,-1) = 0 THEN 'EPL'
-		WHEN isnull(s.ThermalType,-1) = 1 THEN 'ZPL'
-		ELSE 'GIF'
-	END as ImageFormat
-	FROM OnTracShipment o
-		INNER JOIN Shipment s on o.ShipmentID = s.ShipmentID
-		INNER JOIN [ObjectReference] r ON s.ShipmentID = r.ConsumerID		
-		inner join [Resource] re on re.ResourceID=r.ObjectID
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 
+		CASE 
+			WHEN ISNULL(Shipment.ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL(Shipment.ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'GIF'
+		END as ImageFormat
+	FROM OnTracShipment
+		INNER JOIN Shipment ON OnTracShipment.ShipmentID = Shipment.ShipmentID
+		INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
+		INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
 	where 
-		s.Processed = 1
-		AND s.ShipmentType = 11	-- OnTrac
-		AND s.ProcessedDate < @earliestRetentionDateInUtc	
+		Shipment.Processed = 1
+		AND Shipment.ShipmentType = 11	-- OnTrac
+		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
 		
 -- Endicia, Express1, & Stamps labels
-INSERT INTO #labelsToCleanUp		
-	SELECT r.ObjectReferenceID AS ObjectReferenceID, ObjectID AS ResourceID, 		
-	CASE 
-		WHEN isnull(s.ThermalType,-1) = 0 THEN 'EPL'
-		WHEN isnull(s.ThermalType,-1) = 1 THEN 'ZPL'
-		ELSE 'PNG'
-	END as ImageFormat
-	FROM [PostalShipment] p
-		INNER JOIN [Shipment] s ON p.ShipmentID = s.ShipmentID		
-		INNER JOIN [ObjectReference] r ON p.ShipmentID = r.ConsumerID		
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 		
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'PNG'
+		END as ImageFormat
+	FROM [PostalShipment]
+		INNER JOIN [Shipment] ON [PostalShipment].ShipmentID = [Shipment].ShipmentID		
+		INNER JOIN [ObjectReference] ON [PostalShipment].ShipmentID = [ObjectReference].ConsumerID		
 	WHERE 
-		s.ProcessedDate < @earliestRetentionDateInUtc
-		AND s.Processed = 1
-		AND s.ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
+		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
+		AND [Shipment].Processed = 1
+		AND [Shipment].ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
 
 -- find all of the iParcel labels we want to wipe out
-INSERT INTO #labelsToCleanUp		
-	SELECT r.ObjectReferenceID AS ObjectReferenceID, ObjectID AS ResourceID, 
-	CASE 
-		WHEN isnull(s.ThermalType,-1) = 0 THEN 'EPL'
-		WHEN isnull(s.ThermalType,-1) = 1 THEN 'ZPL'
-		ELSE 'JPG'
-	END as ImageFormat
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 		
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'JPG'
+		END as ImageFormat
 	FROM iParcelShipment i
-		INNER JOIN Shipment s on i.ShipmentID = s.ShipmentID
-		INNER JOIN [ObjectReference] r ON s.ShipmentID = r.ConsumerID		
-		inner join [Resource] re on re.ResourceID=r.ObjectID
+		INNER JOIN Shipment ON i.ShipmentID = Shipment.ShipmentID
+		INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
+		INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
 	where 
-		s.Processed = 1
-		AND s.ShipmentType = 12	-- iParcel
-		AND s.ProcessedDate < @earliestRetentionDateInUtc	
+		Shipment.Processed = 1
+		AND Shipment.ShipmentType = 12	-- iParcel
+		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
 
 			
-CREATE INDEX IX_ResourceWorking on #labelsToCleanUp (ObjectReferenceID, ResourceID)		
+CREATE INDEX IX_ResourceWorking on #LabelsToCleanUp (ObjectReferenceID, ResourceID)		
+
+
+
 
 -- insert the Deleted image (png format)
-SELECT @oldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_png.swr'
-IF (@oldCount = 0)
+SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_png.swr'
+IF (@OldCount = 0)
 BEGIN
 	
 	INSERT INTO [Resource] ([Data], [Checksum], [Compressed], [Filename])
@@ -145,17 +159,17 @@ BEGIN
 	0,
 	'__ResourceCleanup_png.swr');
 	
-	SET @deleteLabelResourceID_PNG = @@IDENTITY
+	SET @DeletedLabelResourceID_PNG = @@IDENTITY
 END
 ELSE
 BEGIN
 	-- we've run it once, so just locate the resource id we are redirecting to
-	SELECT @deleteLabelResourceID_PNG = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_png.swr'
+	SELECT @DeletedLabelResourceID_PNG = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_png.swr'
 END
 
 -- insert the Deleted image (gif format)
-SELECT @oldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_gif.swr'
-IF (@oldCount = 0)
+SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_gif.swr'
+IF (@OldCount = 0)
 BEGIN
 	-- insert the Deleted image (gif format)
 	INSERT INTO [Resource] ([Data], [Checksum], [Compressed], [Filename])
@@ -164,16 +178,16 @@ BEGIN
 	0,
 	'__ResourceCleanup_gif.swr');
 
-	SET @deleteLabelResourceID_GIF = @@IDENTITY
+	SET @DeletedLabelResourceID_GIF = @@IDENTITY
 END
 ELSE
 BEGIN
-	SELECT @deleteLabelResourceID_GIF = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_gif.swr'
+	SELECT @DeletedLabelResourceID_GIF = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_gif.swr'
 END
 
 -- insert the Deleted image (jpg format)
-SELECT @oldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_jpg.swr'
-IF (@oldCount = 0)
+SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_jpg.swr'
+IF (@OldCount = 0)
 BEGIN
 	-- insert the Deleted image (jpg format)
 	INSERT INTO [Resource] ([Data], [Checksum], [Compressed], [Filename])
@@ -182,16 +196,16 @@ BEGIN
 	0,
 	'__ResourceCleanup_jpg.swr');
 
-	SET @deleteLabelResourceID_JPG = @@IDENTITY
+	SET @DeletedLabelResourceID_JPG = @@IDENTITY
 END
 ELSE
 BEGIN
-	SELECT @deleteLabelResourceID_JPG = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_jpg.swr'
+	SELECT @DeletedLabelResourceID_JPG = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_jpg.swr'
 END
 
 -- insert the Deleted image (epl format)
-SELECT @oldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_epl.swr'
-IF (@oldCount = 0)
+SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_epl.swr'
+IF (@OldCount = 0)
 BEGIN
 	
 	INSERT INTO [Resource] ([Data], [Checksum], [Compressed], [Filename])
@@ -200,17 +214,17 @@ BEGIN
 	0,
 	'__ResourceCleanup_epl.swr');
 	
-	SET @deleteLabelResourceID_EPL = @@IDENTITY
+	SET @DeletedLabelResourceID_EPL = @@IDENTITY
 END
 ELSE
 BEGIN
 	-- we've run it once, so just locate the resource id we are redirecting to
-	SELECT @deleteLabelResourceID_EPL = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_epl.swr'
+	SELECT @DeletedLabelResourceID_EPL = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_epl.swr'
 END
 
 -- insert the Deleted image (zpl format)
-SELECT @oldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_zpl.swr'
-IF (@oldCount = 0)
+SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_zpl.swr'
+IF (@OldCount = 0)
 BEGIN
 	
 	INSERT INTO [Resource] ([Data], [Checksum], [Compressed], [Filename])
@@ -219,74 +233,87 @@ BEGIN
 	0,
 	'__ResourceCleanup_zpl.swr');
 	
-	SET @deleteLabelResourceID_ZPL = @@IDENTITY
+	SET @DeletedLabelResourceID_ZPL = @@IDENTITY
 END
 ELSE
 BEGIN
 	-- we've run it once, so just locate the resource id we are redirecting to
-	SELECT @deleteLabelResourceID_ZPL = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_zpl.swr'
+	SELECT @DeletedLabelResourceID_ZPL = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_zpl.swr'
 END
 
---remove any reference to the delete label
-DELETE #labelsToCleanUp
-WHERE ResourceID IN(@deleteLabelResourceID_GIF,@deleteLabelResourceID_JPG,@deleteLabelResourceID_PNG,@deleteLabelResourceID_EPL,@deleteLabelResourceID_ZPL)
+
+
+
+--remove any reference to the deleted label
+DELETE #LabelsToCleanUp
+WHERE ResourceID IN
+	(
+		@DeletedLabelResourceID_GIF,
+		@DeletedLabelResourceID_JPG,
+		@DeletedLabelResourceID_PNG,
+		@DeletedLabelResourceID_EPL,
+		@DeletedLabelResourceID_ZPL
+	)
 
 -- see if there's any actual work to do
-SELECT @oldCount = COUNT(*) FROM #labelsToCleanUp;
-IF @oldCount > 0
+SELECT @OldCount = COUNT(*) FROM #LabelsToCleanUp;
+IF @OldCount > 0
 BEGIN
 
-	DECLARE @currentBatch TABLE ( 
+	DECLARE @currentBatch TABLE 
+	( 
 		ObjectReferenceID bigint,
 		ResourceID bigint,
 		ImageFormat nvarchar(5)
 	)
 
 	INSERT INTO @currentBatch
-		SELECT TOP 100 *  FROM #labelsToCleanUp R
+		SELECT TOP 100 *  FROM #LabelsToCleanUp R
 
 	WHILE @@ROWCOUNT>0  AND (@latestExecutionTimeInUtc > GetUtcDate())
 	BEGIN
 	BEGIN TRANSACTION
 		
 		-- adjust the old reference to point to the new 'deleted' image resource, by image format			
-		UPDATE R 
-		SET ObjectID = 
+		UPDATE ObjectReference 
+		SET ObjectReference.ObjectID = 
 		(
-			CASE B.ImageFormat
-				WHEN 'PNG' THEN @deleteLabelResourceID_PNG
-				WHEN 'GIF' THEN @deleteLabelResourceID_GIF
-				WHEN 'JPG' THEN @deleteLabelResourceID_JPG
-				WHEN 'EPL' THEN @deleteLabelResourceID_EPL
-				ELSE @deleteLabelResourceID_ZPL
+			CASE batch.ImageFormat
+				WHEN 'PNG' THEN @DeletedLabelResourceID_PNG
+				WHEN 'GIF' THEN @DeletedLabelResourceID_GIF
+				WHEN 'JPG' THEN @DeletedLabelResourceID_JPG
+				WHEN 'EPL' THEN @DeletedLabelResourceID_EPL
+				ELSE @DeletedLabelResourceID_ZPL
 			END
 		)					
-		FROM @currentBatch AS B
-		INNER JOIN ObjectReference AS R 
-			ON B.ObjectReferenceID=R.ObjectReferenceID
+		FROM @currentBatch AS batch
+		INNER JOIN ObjectReference
+			ON batch.ObjectReferenceID = ObjectReference.ObjectReferenceID
 				
-		select * from  @currentBatch AS B
-		INNER JOIN [Resource] AS R 
-			ON B.ResourceID = R.ResourceID
+		SELECT * FROM @currentBatch AS batch
+		INNER JOIN [Resource] 
+			ON batch.ResourceID = [Resource].ResourceID
 
 		-- delete the old resources
-		DELETE R 
-		FROM @currentBatch AS B
-		INNER JOIN [Resource] AS R 
-			ON B.ResourceID = R.ResourceID
+		DELETE [Resource] 
+		FROM @currentBatch AS batch
+		INNER JOIN [Resource]
+			ON batch.ResourceID = [Resource].ResourceID
 			
 		-- delete from our temp table
-		DELETE R
-		FROM #labelsToCleanUp AS R 
-		INNER JOIN @currentBatch AS B
-			ON R.ResourceID = B.ResourceID AND R.ObjectReferenceID=B.ObjectReferenceID
+		DELETE labelsToCleanup
+		FROM #LabelsToCleanUp AS labelsToCleanup 
+		INNER JOIN @currentBatch AS batch
+			ON labelsToCleanup.ResourceID = batch.ResourceID AND labelsToCleanup.ObjectReferenceID = batch.ObjectReferenceID
 			
 	COMMIT TRANSACTION
 					
 		--grab the next batch before ending loop
 		DELETE @currentBatch
+		
 		INSERT INTO @currentBatch
-			SELECT TOP 100 *  FROM #labelsToCleanUp R		
+			SELECT TOP 100 * 
+			FROM #LabelsToCleanUp		
 	END
 END";
         }
