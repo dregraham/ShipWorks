@@ -42,6 +42,8 @@ namespace ShipWorks.Actions.Tasks.Common
                     using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
                     {
                         command.CommandType = CommandType.StoredProcedure;
+                        // Disable the command timeout since the scripts should take care of timing themselves out
+                        command.CommandTimeout = 0;
                         command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
                         command.Parameters.AddWithValue("@latestExecutionTimeInUtc", stopExecutionAfterUtc);
 
