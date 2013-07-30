@@ -19,6 +19,6 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
         /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
-        void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime stopExecutionAfterUtc);
+        void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc);
     }
 }

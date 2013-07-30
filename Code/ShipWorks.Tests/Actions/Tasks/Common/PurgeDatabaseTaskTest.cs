@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
         }
 
         [TestMethod]
@@ -48,11 +48,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
         }
 
         [TestMethod]
@@ -66,11 +66,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
         }
 
         [TestMethod]
@@ -94,11 +94,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
+            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Never());
         }
 
         [TestMethod]
@@ -107,8 +107,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             List<string> calledPurges = new List<string>();
 
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
-            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .Callback<string, DateTime, DateTime>((x, y, z) => calledPurges.Add(x));
+            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime?>()))
+                .Callback<string, DateTime, DateTime?>((x, y, z) => calledPurges.Add(x));
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
@@ -132,8 +132,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             List<string> calledPurges = new List<string>();
 
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
-            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .Callback<string, DateTime, DateTime>((x, y, z) => calledPurges.Add(x));
+            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime?>()))
+                .Callback<string, DateTime, DateTime?>((x, y, z) => calledPurges.Add(x));
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
@@ -161,7 +161,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Run(null, null);
 
             DateTime expectedDate = new DateTime(2013, 7, 17, 3, 45, 16);
-            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), expectedDate, It.IsAny<DateTime>()), Times.Once()); 
+            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), expectedDate, It.IsAny<DateTime?>()), Times.Once()); 
         }
 
         [TestMethod]
@@ -193,14 +193,14 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), SqlDateTime.MaxValue.Value), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), null), Times.Once());
         }
 
         [TestMethod]
         public void Run_ShouldThrowActionTaskRunException_WhenSqlExceptionIsCaught()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
-            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+            scriptRunner.Setup(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime?>()))
                 .Throws(new Mock<DbException>().Object);
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
@@ -224,7 +224,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
-            scriptRunner.Setup(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+            scriptRunner.Setup(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()))
                 .Throws(new Mock<DbException>().Object);
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
@@ -240,8 +240,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 // We don't care about exceptions here...
             }
 
-            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
+            scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()), Times.Once());
         }
 
         [TestMethod]
@@ -249,9 +249,9 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
 
-            scriptRunner.Setup(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+            scriptRunner.Setup(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()))
                 .Throws(new Mock<DbException>().Object);
-            scriptRunner.Setup(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+            scriptRunner.Setup(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>()))
                 .Throws(new Mock<DbException>().Object);
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);

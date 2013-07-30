@@ -1,15 +1,12 @@
-﻿using System.Collections;
+﻿using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Actions.Tasks.Common.Editors;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using System.Linq;
-using System.Xml.XPath;
-using System;
-using Interapptive.Shared.Utility;
-using log4net;
-using ShipWorks.Actions.Tasks.Common.Editors;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -132,7 +129,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, earliestRetentionDateInUtc);
                 try
                 {
-                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, CanTimeout ? sqlStopExecutionAfter : SqlDateTime.MaxValue.Value);
+                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, CanTimeout ? sqlStopExecutionAfter : (DateTime?)null);
                     log.InfoFormat("Finished {0} successfully.", scriptName);
                 }
                 catch (DbException ex)

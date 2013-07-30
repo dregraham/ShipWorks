@@ -5,6 +5,7 @@ using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Purge;
+using System.Data.SqlTypes;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -33,7 +34,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
         /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
-        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime stopExecutionAfterUtc)
+        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc)
         {
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
@@ -45,7 +46,7 @@ namespace ShipWorks.Actions.Tasks.Common
                         // Disable the command timeout since the scripts should take care of timing themselves out
                         command.CommandTimeout = 0;
                         command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
-                        command.Parameters.AddWithValue("@latestExecutionTimeInUtc", stopExecutionAfterUtc);
+                        command.Parameters.AddWithValue("@latestExecutionTimeInUtc", stopExecutionAfterUtc ?? SqlDateTime.MaxValue.Value);
 
                         command.ExecuteNonQuery();
                     }
