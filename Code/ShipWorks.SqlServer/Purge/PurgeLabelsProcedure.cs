@@ -39,7 +39,7 @@ DECLARE
 	@DeletedLabelResourceID_JPG bigint,
 	@DeletedLabelResourceID_EPL bigint,
 	@DeletedLabelResourceID_ZPL bigint,
-	@BatchSize int,
+	@BatchSize int;
 
 -- create temp tables
 CREATE TABLE #LabelsToCleanUp 
