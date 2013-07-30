@@ -13,10 +13,10 @@ namespace ShipWorks.Actions.Tasks.Common
         [Description("Download Records"), ApiValue("PurgeDownload")]
         Downloads = 1,
 
-        [Description("Email"), ApiValue("PurgeEmail")]
+        [Description("Email"), ApiValue("PurgeEmailOutbound")]
         Email = 2,
 
-        [Description("Labels"), ApiValue("PurgeLabel")]
+        [Description("Labels"), ApiValue("PurgeLabels")]
         Labels = 3,
 
         [Description("Print Jobs"), ApiValue("PurgePrintResult")]
