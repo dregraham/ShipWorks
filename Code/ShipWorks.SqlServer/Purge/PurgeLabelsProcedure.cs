@@ -289,10 +289,6 @@ BEGIN
 		FROM @currentBatch AS batch
 		INNER JOIN ObjectReference
 			ON batch.ObjectReferenceID = ObjectReference.ObjectReferenceID
-				
-		SELECT * FROM @currentBatch AS batch
-		INNER JOIN [Resource] 
-			ON batch.ResourceID = [Resource].ResourceID
 
 		-- delete the old resources
 		DELETE [Resource] 
