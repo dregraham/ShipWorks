@@ -32,7 +32,6 @@ public partial class StoredProcedures
         get
         {
             return @"
-
 SET NOCOUNT ON
 
 DECLARE 
@@ -43,113 +42,6 @@ DECLARE
 	@DeletedLabelResourceID_EPL bigint,
 	@DeletedLabelResourceID_ZPL bigint,
 	@BatchSize int;
-
--- create temp tables
-CREATE TABLE #LabelsToCleanUp 
-( 
-	ObjectReferenceID bigint,
-	ResourceID bigint,
-	ImageFormat nvarchar(5)
-)
-
-
--- find all of the UPS labels we want to wipe out
-INSERT INTO #LabelsToCleanUp
-	SELECT 
-		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-		[ObjectReference].ObjectID AS ResourceID, 
-		CASE 
-			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
-			ELSE 'GIF'
-		END as ImageFormat		
-	FROM [UpsPackage]
-		INNER JOIN [Shipment] ON [UpsPackage].ShipmentID = [Shipment].ShipmentID
-		INNER JOIN [ObjectReference] ON [UpsPackage].UpsPackageID = [ObjectReference].ConsumerID			
-	WHERE 
-		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
-		AND [Shipment].Processed = 1
-		AND [Shipment].ShipmentType = 0 --UPS
-
--- find all of the fedex labels we want to wipe out
-INSERT INTO #LabelsToCleanUp		
-	SELECT 
-		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-		[ObjectReference].ObjectID AS ResourceID, 		
-		CASE 
-			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
-			ELSE 'PNG'
-		END as ImageFormat
-	FROM [FedexPackage]
-		INNER JOIN [Shipment] ON [FedexPackage].ShipmentID = [Shipment].ShipmentID
-		INNER JOIN [ObjectReference] ON [FedexPackage].FedexPackageID = [ObjectReference].ConsumerID
-	WHERE 
-		[Shipment].ProcessedDate < @earliestRetentionDateInUtc	
-		AND [Shipment].Processed = 1
-		AND [Shipment].ShipmentType = 6	-- FedEx
-	
--- find all of the onTrac labels we want to wipe out
-INSERT INTO #LabelsToCleanUp		
-	SELECT 
-		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-		[ObjectReference].ObjectID AS ResourceID, 
-		CASE 
-			WHEN ISNULL(Shipment.ThermalType, -1) = 0 THEN 'EPL'
-			WHEN ISNULL(Shipment.ThermalType, -1) = 1 THEN 'ZPL'
-			ELSE 'GIF'
-		END as ImageFormat
-	FROM OnTracShipment
-		INNER JOIN Shipment ON OnTracShipment.ShipmentID = Shipment.ShipmentID
-		INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
-		INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
-	where 
-		Shipment.Processed = 1
-		AND Shipment.ShipmentType = 11	-- OnTrac
-		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
-		
--- Endicia, Express1, & Stamps labels
-INSERT INTO #LabelsToCleanUp		
-	SELECT 
-		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-		[ObjectReference].ObjectID AS ResourceID, 		
-		CASE 
-			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
-			ELSE 'PNG'
-		END as ImageFormat
-	FROM [PostalShipment]
-		INNER JOIN [Shipment] ON [PostalShipment].ShipmentID = [Shipment].ShipmentID		
-		INNER JOIN [ObjectReference] ON [PostalShipment].ShipmentID = [ObjectReference].ConsumerID		
-	WHERE 
-		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
-		AND [Shipment].Processed = 1
-		AND [Shipment].ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
-
--- find all of the iParcel labels we want to wipe out
-INSERT INTO #LabelsToCleanUp		
-	SELECT 
-		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
-		[ObjectReference].ObjectID AS ResourceID, 		
-		CASE 
-			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
-			ELSE 'JPG'
-		END as ImageFormat
-	FROM iParcelShipment i
-		INNER JOIN Shipment ON i.ShipmentID = Shipment.ShipmentID
-		INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
-		INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
-	where 
-		Shipment.Processed = 1
-		AND Shipment.ShipmentType = 12	-- iParcel
-		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
-
-			
-CREATE INDEX IX_ResourceWorking on #LabelsToCleanUp (ObjectReferenceID, ResourceID)		
-
-
-
 
 -- insert the Deleted image (png format)
 SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_png.swr'
@@ -244,19 +136,122 @@ BEGIN
 	SELECT @DeletedLabelResourceID_ZPL = ResourceID FROM [Resource] WHERE [Filename] = '__ResourceCleanup_zpl.swr'
 END
 
+CREATE TABLE #ResourceIDsToIgnore
+(
+	ResourceID bigint
+)
+INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@DeletedLabelResourceID_GIF )
+INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@DeletedLabelResourceID_JPG )
+INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@DeletedLabelResourceID_PNG )
+INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@DeletedLabelResourceID_EPL )
+INSERT INTO #ResourceIDsToIgnore ( ResourceID ) VALUES  (@DeletedLabelResourceID_ZPL )
 
+-- create temp tables
+CREATE TABLE #LabelsToCleanUp 
+( 
+	ObjectReferenceID bigint,
+	ResourceID bigint,
+	ImageFormat nvarchar(5)
+)
 
+-- find all of the UPS labels we want to wipe out
+INSERT INTO #LabelsToCleanUp
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'GIF'
+		END as ImageFormat		
+	FROM [UpsPackage]
+		INNER JOIN [Shipment] ON [UpsPackage].ShipmentID = [Shipment].ShipmentID
+		INNER JOIN [ObjectReference] ON [UpsPackage].UpsPackageID = [ObjectReference].ConsumerID			
+	WHERE 
+		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
+		AND [Shipment].Processed = 1
+		AND [Shipment].ShipmentType = 0 --UPS
+		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 
---remove any reference to the deleted label
-DELETE #LabelsToCleanUp
-WHERE ResourceID IN
-	(
-		@DeletedLabelResourceID_GIF,
-		@DeletedLabelResourceID_JPG,
-		@DeletedLabelResourceID_PNG,
-		@DeletedLabelResourceID_EPL,
-		@DeletedLabelResourceID_ZPL
-	)
+-- find all of the fedex labels we want to wipe out
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 		
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'PNG'
+		END as ImageFormat
+	FROM [FedexPackage]
+		INNER JOIN [Shipment] ON [FedexPackage].ShipmentID = [Shipment].ShipmentID
+		INNER JOIN [ObjectReference] ON [FedexPackage].FedexPackageID = [ObjectReference].ConsumerID
+	WHERE 
+		[Shipment].ProcessedDate < @earliestRetentionDateInUtc	
+		AND [Shipment].Processed = 1
+		AND [Shipment].ShipmentType = 6	-- FedEx
+		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
+	
+-- find all of the onTrac labels we want to wipe out
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 
+		CASE 
+			WHEN ISNULL(Shipment.ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL(Shipment.ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'GIF'
+		END as ImageFormat
+	FROM OnTracShipment
+		INNER JOIN Shipment ON OnTracShipment.ShipmentID = Shipment.ShipmentID
+		INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
+		INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
+	where 
+		Shipment.Processed = 1
+		AND Shipment.ShipmentType = 11	-- OnTrac
+		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
+		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
+		
+-- Endicia, Express1, & Stamps labels
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 		
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'PNG'
+		END as ImageFormat
+	FROM [PostalShipment]
+		INNER JOIN [Shipment] ON [PostalShipment].ShipmentID = [Shipment].ShipmentID		
+		INNER JOIN [ObjectReference] ON [PostalShipment].ShipmentID = [ObjectReference].ConsumerID		
+	WHERE 
+		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
+		AND [Shipment].Processed = 1
+		AND [Shipment].ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
+		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
+
+-- find all of the iParcel labels we want to wipe out
+INSERT INTO #LabelsToCleanUp		
+	SELECT 
+		[ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
+		[ObjectReference].ObjectID AS ResourceID, 		
+		CASE 
+			WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
+			WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			ELSE 'JPG'
+		END as ImageFormat
+	FROM iParcelShipment i
+		INNER JOIN Shipment ON i.ShipmentID = Shipment.ShipmentID
+		INNER JOIN [ObjectReference] ON Shipment.ShipmentID = [ObjectReference].ConsumerID		
+		INNER JOIN [Resource] ON [Resource].ResourceID = [ObjectReference].ObjectID
+	where 
+		Shipment.Processed = 1
+		AND Shipment.ShipmentType = 12	-- iParcel
+		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
+		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
+
+CREATE INDEX IX_ResourceWorking on #LabelsToCleanUp (ObjectReferenceID, ResourceID)		
 
 -- see if there's any actual work to do
 SELECT @OldCount = COUNT(*) FROM #LabelsToCleanUp;
@@ -271,7 +266,7 @@ BEGIN
 	)
 
 	INSERT INTO @currentBatch
-		SELECT TOP 100 *  FROM #LabelsToCleanUp R
+		SELECT TOP 10000 *  FROM #LabelsToCleanUp R
 
 	WHILE @@ROWCOUNT>0  AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GetUtcDate())
 	BEGIN
@@ -311,10 +306,14 @@ BEGIN
 		DELETE @currentBatch
 		
 		INSERT INTO @currentBatch
-			SELECT TOP 100 * 
+			SELECT TOP 10000 * 
 			FROM #LabelsToCleanUp		
 	END
-END";
+END
+
+DROP TABLE #LabelsToCleanUp
+DROP TABLE #ResourceIDsToIgnore
+";
         }
     }
 }
