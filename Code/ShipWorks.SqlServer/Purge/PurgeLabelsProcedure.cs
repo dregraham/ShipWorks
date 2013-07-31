@@ -32,6 +32,9 @@ public partial class StoredProcedures
         get
         {
             return @"
+
+SET NOCOUNT ON
+
 DECLARE 
 	@OldCount int,
 	@DeletedLabelResourceID_PNG bigint,
