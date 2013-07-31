@@ -30,73 +30,70 @@ public partial class StoredProcedures
     /// </summary>
     private static string PurgeAuditCommandText
     {
-        get { return @"
-            SET NOCOUNT on
-            DECLARE 
-                @RecordsToBeDeleted INT,
-                @BatchSize INT
-            
-            SET @BatchSize = 100
+        get
+        {
+            return @"
+                SET NOCOUNT ON;
 
-            CREATE TABLE #AuditTemp (AuditID BIGINT)	
-            INSERT INTO #AuditTemp
-            (
-                AuditID
-            )
-            SELECT AuditID FROM Audit
-            WHERE [DATE] < @earliestRetentionDateInUtc
-            SELECT @RecordsToBeDeleted = @@ROWCOUNT     
+                -- create batch purge ID table
+                CREATE TABLE #AuditPurgeBatch (
+                    AuditID BIGINT PRIMARY KEY
+                );
 
-            CREATE INDEX IX_ResourceWorking on #AuditTemp (AuditID)      
+                DECLARE
+                    @startTime DATETIME = GETUTCDATE(),
+                    @batchSize INT = 1000,
+                    @batchTotal BIGINT = 0;
 
-            IF @RecordsToBeDeleted > 0
-            BEGIN
-
-                DECLARE @CurrentBatch TABLE ( AuditID BIGINT )	
-                DECLARE @DeletedAuditIds TABLE ( AuditChangeID BIGINT )
-    
-                INSERT INTO @CurrentBatch (	AuditID )
-                    SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 		
-        
-                -- Honor the hard stop if one is provided
-                WHILE (@@ROWCOUNT > 0) AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GETUTCDATE())
+                -- purge in batches while time allows
+                WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
                 BEGIN
+                    INSERT #AuditPurgeBatch
+                    SELECT TOP (@batchSize) AuditID
+                    FROM Audit
+                    WHERE [Date] < @earliestRetentionDateInUtc;
 
-                    BEGIN TRANSACTION
-                        DELETE AuditChange
-                        OUTPUT deleted.AuditChangeID into @DeletedAuditIds
-                        FROM @CurrentBatch batch
-                        INNER JOIN AuditChange 
-                        ON AuditChange.AuditID = batch.AuditID
-            
-                        DELETE AuditChangeDetail
-                        FROM @DeletedAuditIds deleted
-                        INNER JOIN AuditChangeDetail
-                        ON AuditChangeDetail.AuditChangeID = deleted.AuditChangeID
-            
-                        DELETE Audit
-                        FROM @CurrentBatch batch
-                        INNER JOIN Audit
-                        ON Audit.AuditID = batch.AuditID
-            
-                        DELETE #AuditTemp
-                        FROM #AuditTemp
-                        INNER JOIN @CurrentBatch batch
-                            ON #AuditTemp.AuditID = batch.AuditID
-                    COMMIT TRANSACTION
-        
-        
-                    DELETE @CurrentBatch
-                    DELETE @DeletedAuditIds
+                    SET @batchSize = @@ROWCOUNT;
+                    IF @batchSize = 0
+                        BREAK;
 
-                    -- Grab the next batch before ending loop
-                    -- Must be last statement in while loop or the @@ROWCOUNT will be an issue
-                    INSERT INTO @CurrentBatch ( AuditID	)
-                        SELECT TOP (@BatchSize) AuditID  FROM #AuditTemp 
-                END
+                    DECLARE @totalSeconds INT = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
 
-            END
-            DROP TABLE #AuditTemp
+                    -- stop if the batch isn't expected to complete in time
+                    IF (
+                        @latestExecutionTimeInUtc IS NOT NULL AND
+                        @batchTotal > 0 AND
+                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+                    )
+                        BREAK;
+
+                    BEGIN TRANSACTION;
+
+                    DELETE AuditChangeDetail
+                    FROM AuditChangeDetail acd
+                    INNER JOIN AuditChange ac ON
+                        ac.AuditChangeID = acd.AuditChangeID
+                    INNER JOIN #AuditPurgeBatch b ON
+                        b.AuditID = ac.AuditID;
+
+                    DELETE AuditChange
+                    FROM AuditChange ac
+                    INNER JOIN #AuditPurgeBatch b ON
+                        b.AuditID = ac.AuditID;
+
+                    DELETE Audit
+                    FROM Audit a
+                    INNER JOIN #AuditPurgeBatch b ON
+                        b.AuditID = a.AuditID;
+
+                    COMMIT TRANSACTION;
+
+                    TRUNCATE TABLE #AuditPurgeBatch;
+
+                    -- update batch total and adjust batch size to an amount expected to complete in 10 seconds
+                    SET @batchTotal = @batchTotal + @batchSize;
+                    SET @batchSize = @batchTotal / @totalSeconds * 10;
+                END;
             ";
         }
     }

@@ -33,6 +33,8 @@ public partial class StoredProcedures
         get
         {
             return @"
+                SET NOCOUNT ON;
+
                 -- find or create the 'deleted' resource record
                 DECLARE @deletedEmailResourceID BIGINT = (
                     SELECT ResourceID FROM [Resource] WHERE [Filename] = '__EmailCleanup.swr'
