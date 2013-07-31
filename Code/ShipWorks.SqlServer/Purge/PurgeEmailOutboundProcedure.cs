@@ -73,6 +73,7 @@ public partial class StoredProcedures
                         o.ObjectReferenceID = e.PlainPartResourceID
                     WHERE
                         e.SentDate < @earliestRetentionDateInUtc AND
+                        e.SendStatus = 1 AND  -- only purge emails that have been sent
                         o.ObjectID <> @deletedEmailResourceID;
 
                     SET @batchSize = @@ROWCOUNT;
