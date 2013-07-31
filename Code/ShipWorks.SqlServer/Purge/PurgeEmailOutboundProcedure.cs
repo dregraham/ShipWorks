@@ -86,7 +86,7 @@ public partial class StoredProcedures
                     IF (
                         @latestExecutionTimeInUtc IS NOT NULL AND
                         @batchTotal > 0 AND
-                        (@totalSeconds * @batchSize / @batchTotal) > DATEDIFF(SECOND, GETUTCDATE(), @latestExecutionTimeInUtc)
+                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
                     )
                         BREAK;
 
