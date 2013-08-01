@@ -109,7 +109,7 @@
             this.domainNote.Name = "domainNote";
             this.domainNote.Size = new System.Drawing.Size(80, 13);
             this.domainNote.TabIndex = 7;
-            this.domainNote.Text = "(blank of none)";
+            this.domainNote.Text = "(blank if none)";
             // 
             // ok
             // 
