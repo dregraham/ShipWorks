@@ -31,9 +31,14 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
                         controller.ChangeCredentials(credentialsDialog.Domain, credentialsDialog.UserName, credentialsDialog.Password);
                     }
 
-                    if (controller.GetServiceStatus() == ServiceControllerStatus.Stopped)
+                    using (ServiceController serviceController = controller.GetServiceController())
                     {
-                        controller.StartService();
+                        WindowsServiceRetryConfigurator.SetRecoveryOptions(serviceController);
+
+                        if (controller.GetServiceStatus() == ServiceControllerStatus.Stopped)
+                        {
+                            controller.StartService();
+                        }
                     }
                 }
             }

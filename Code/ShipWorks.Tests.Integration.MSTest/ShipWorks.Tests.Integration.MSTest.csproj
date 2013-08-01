@@ -125,7 +125,9 @@
     <Content Include="Utilities\GenerateTestData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DataSources\FedExCanadaExpressDomestic.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -18,12 +18,21 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         private const int timeoutMilliseconds = 30000;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShipWorksServiceManager" /> class.
+        /// Initializes a new instance of the <see cref="WindowsServiceController" /> class.
         /// </summary>
-        /// <param name="shipWorksService">The service to manage.</param>
+        /// <param name="service">The service to manage.</param>
         public WindowsServiceController(ServiceBase service)
         {
             this.service = service;
+        }
+
+        /// <summary>
+        /// Gets the service controller.
+        /// </summary>
+        /// <returns></returns>
+        public ServiceController GetServiceController()
+        {
+            return new ServiceController(service.ServiceName);
         }
 
         /// <summary>
@@ -33,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             try
             {
-                using (ServiceController controller = new ServiceController(service.ServiceName))
+                using (ServiceController controller =  GetServiceController())
                 {
                     TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
@@ -56,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             try
             {
-                using (ServiceController controller = new ServiceController(service.ServiceName))
+                using (ServiceController controller =  GetServiceController())
                 {
                     int beforeStopService = Environment.TickCount;
                     TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
@@ -91,7 +100,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             try
             {
-                using (ServiceController controller = new ServiceController(service.ServiceName))
+                using (ServiceController controller =  GetServiceController())
                 {
                     TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
 
@@ -121,7 +130,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             bool serviceExists = false;
             try
             {
-                using (var controller = new ServiceController(service.ServiceName))
+                using (var controller =  GetServiceController())
                 {
                     try
                     {
@@ -148,7 +157,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// <returns>Status of the service.</returns>
         public ServiceControllerStatus GetServiceStatus()
         {
-            using (var controller = new ServiceController(service.ServiceName))
+            using (var controller =  GetServiceController())
             {
                 return controller.Status;
             }
@@ -159,7 +168,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// </summary>
         public string GetServiceDisplayName()
         {
-            using (var controller = new ServiceController(service.ServiceName))
+            using (var controller =  GetServiceController())
             {
                 return controller.DisplayName;
             }
@@ -172,7 +181,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             AddUserRight.SetRight(domain, userName, "SeServiceLogonRight");
 
-            ChangeServiceCredentials.ServicePasswordChange(domain, userName, password, service.ServiceName);
+            WindowsServiceChangeCredentials.ServicePasswordChange(domain, userName, password, service.ServiceName);
 
             RestartService();
         }
