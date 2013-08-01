@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.Text;
 using Microsoft.SqlServer.Server;
 using ShipWorks.SqlServer.Common.Data;
-using ShipWorks.SqlServer.Purge;
 
-namespace ShipWorks.SqlServer
+namespace ShipWorks.SqlServer.Purge
 {
     /// <summary>
     /// Runs Purge Scripts
@@ -55,7 +51,7 @@ namespace ShipWorks.SqlServer
                     {
                         // Let the caller know that someone else is already running the purge. (It may
                         // be beneficial to create/throw a more specific exception.)
-                        throw new PurgeException(string.Format("Could not acquire applock for purging: {0}", purgeAppLockName));
+                        throw new SqlLockException(string.Format("Could not acquire applock: {0}", purgeAppLockName));
                     }
                 }
                 finally

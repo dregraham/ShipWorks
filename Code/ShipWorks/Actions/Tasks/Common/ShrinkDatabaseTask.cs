@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Administration;
 using log4net;
+using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Templates;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Emailing;
@@ -42,6 +43,10 @@ namespace ShipWorks.Actions.Tasks.Common
             try
             {
                 SqlShrinkDatabase.ShrinkDatabase();
+            }
+            catch (SqlLockException ex)
+            {
+                throw new ActionTaskRunException("Another computer is currently running a shrink task.", ex);
             }
             catch (SqlException ex)
             {

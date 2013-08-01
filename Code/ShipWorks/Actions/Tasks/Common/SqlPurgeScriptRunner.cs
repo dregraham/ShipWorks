@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.Data.Connection;
-using ShipWorks.SqlServer.Purge;
+using ShipWorks.SqlServer.Common.Data;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -50,7 +50,7 @@ namespace ShipWorks.Actions.Tasks.Common
                         command.ExecuteNonQuery();
                     }
                 }
-                catch (PurgeException ex)
+                catch (SqlLockException ex)
                 {
                     log.Warn(ex.Message);
                 }

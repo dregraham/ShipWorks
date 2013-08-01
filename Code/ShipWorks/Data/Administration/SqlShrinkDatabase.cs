@@ -4,8 +4,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
+using Microsoft.SqlServer.Server;
 using ShipWorks.Data.Connection;
+using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer.General;
+using ShipWorks.SqlServer.Purge;
 
 namespace ShipWorks.Data.Administration
 {
@@ -22,12 +25,13 @@ namespace ShipWorks.Data.Administration
             // Attach to the connection
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                // Perform the shrink
-                SqlCommand calculationCmd = con.CreateCommand();
-                calculationCmd.CommandText = ShrinkDbSql;
-                calculationCmd.CommandTimeout = 0;
+                SqlAppLockUtility.GetLockedCommand("ShrinkDatabaseTaskLock", con, command =>
+                {
+                    command.CommandText = ShrinkDbSql;
+                    command.CommandTimeout = 0;
 
-                calculationCmd.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+                });
             }
         }
 

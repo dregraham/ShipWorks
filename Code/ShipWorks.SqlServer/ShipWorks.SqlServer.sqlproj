@@ -213,7 +213,6 @@
     <Compile Include="Users\GetUserID.cs" />
     <Compile Include="Actions\ActionDeleteTrigger.cs" />
     <Compile Include="Purge\PurgeAuditProcedure.cs" />
-    <Compile Include="Purge\PurgeException.cs" />
     <Compile Include="Purge\PurgeLabelsProcedure.cs" />
     <Compile Include="Purge\PurgeScriptRunner.cs" />
     <Compile Include="Purge\PurgePrintResultProcedure.cs" />
@@ -221,6 +220,7 @@
     <Compile Include="Purge\PurgeDownloadProcedure.cs" />
     <Compile Include="General\Functions\GetTicksFromDateTime.cs" />
     <Compile Include="General\Functions\GetLocalTimezoneName.cs" />
+    <Compile Include="Common\Data\SqlLockException.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

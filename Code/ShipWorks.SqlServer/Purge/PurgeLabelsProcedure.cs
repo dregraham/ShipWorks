@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 using ShipWorks.SqlServer;
+using ShipWorks.SqlServer.Purge;
 
 public partial class StoredProcedures
 {
