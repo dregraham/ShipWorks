@@ -37,7 +37,7 @@
             this.textPrefix = new System.Windows.Forms.TextBox();
             this.numericBackupCount = new System.Windows.Forms.NumericUpDown();
             this.lableBackups = new System.Windows.Forms.Label();
-            this.checkboxOnlyKeep = new System.Windows.Forms.CheckBox();
+            this.checkboxLimitBackupsRetained = new System.Windows.Forms.CheckBox();
             this.labelCleanup = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).BeginInit();
@@ -125,15 +125,15 @@
             this.lableBackups.TabIndex = 14;
             this.lableBackups.Text = "successful backups.";
             // 
-            // checkboxOnlyKeep
+            // checkboxLimitBackupsRetained
             // 
-            this.checkboxOnlyKeep.AutoSize = true;
-            this.checkboxOnlyKeep.Location = new System.Drawing.Point(99, 72);
-            this.checkboxOnlyKeep.Name = "checkboxOnlyKeep";
-            this.checkboxOnlyKeep.Size = new System.Drawing.Size(74, 17);
-            this.checkboxOnlyKeep.TabIndex = 15;
-            this.checkboxOnlyKeep.Text = "Only keep";
-            this.checkboxOnlyKeep.UseVisualStyleBackColor = true;
+            this.checkboxLimitBackupsRetained.AutoSize = true;
+            this.checkboxLimitBackupsRetained.Location = new System.Drawing.Point(99, 72);
+            this.checkboxLimitBackupsRetained.Name = "checkboxLimitBackupsRetained";
+            this.checkboxLimitBackupsRetained.Size = new System.Drawing.Size(74, 17);
+            this.checkboxLimitBackupsRetained.TabIndex = 15;
+            this.checkboxLimitBackupsRetained.Text = "Only keep";
+            this.checkboxLimitBackupsRetained.UseVisualStyleBackColor = true;
             // 
             // labelCleanup
             // 
@@ -155,7 +155,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.Controls.Add(this.labelCleanup);
-            this.Controls.Add(this.checkboxOnlyKeep);
+            this.Controls.Add(this.checkboxLimitBackupsRetained);
             this.Controls.Add(this.lableBackups);
             this.Controls.Add(this.numericBackupCount);
             this.Controls.Add(this.textPrefix);
@@ -184,7 +184,7 @@
         private System.Windows.Forms.TextBox textPrefix;
         private System.Windows.Forms.NumericUpDown numericBackupCount;
         private System.Windows.Forms.Label lableBackups;
-        private System.Windows.Forms.CheckBox checkboxOnlyKeep;
+        private System.Windows.Forms.CheckBox checkboxLimitBackupsRetained;
         private System.Windows.Forms.Label labelCleanup;
         private System.Windows.Forms.ErrorProvider errorProvider;
 

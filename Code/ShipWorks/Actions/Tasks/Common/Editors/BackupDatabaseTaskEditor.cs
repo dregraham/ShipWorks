@@ -9,7 +9,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 {
     public partial class BackupDatabaseTaskEditor : ActionTaskEditor
     {
-        private BackupDatabaseTask task;
+        private readonly BackupDatabaseTask task;
 
         /// <summary>
         /// Constructor
@@ -37,16 +37,15 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             textPrefix.Text = task.FilePrefix;
             textPrefix.TextChanged += OnPrefixTextChanged;
-            //textPrefix.Validating += OnRequiredTextValidating;
             textPrefix.Validating += OnTextPrefixValidating;
             textPrefix.Validated += OnTextPrefixValidated;
 
             numericBackupCount.Value = task.KeepNumberOfBackups;
             numericBackupCount.ValueChanged += OnBackupCountValueChanged;
 
-            checkboxOnlyKeep.Checked = task.CleanOldBackups;
-            checkboxOnlyKeep.CheckedChanged += OnOnlyKeepCheckChanged;
-            numericBackupCount.Enabled = task.CleanOldBackups;
+            checkboxLimitBackupsRetained.Checked = task.LimitNumberOfBackupsRetained;
+            checkboxLimitBackupsRetained.CheckedChanged += OnLimitBackupsRetainedCheckChanged;
+            numericBackupCount.Enabled = task.LimitNumberOfBackupsRetained;
 
             // Editing is not allowed unless the user is on the database server
             Enabled = SqlSession.Current.IsLocalServer();
@@ -83,12 +82,14 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// The cleanup checkbox has changed
+        /// Called when [limit backups retained check changed].
         /// </summary>
-        private void OnOnlyKeepCheckChanged(object sender, EventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnLimitBackupsRetainedCheckChanged(object sender, EventArgs e)
         {
-            task.CleanOldBackups = checkboxOnlyKeep.Checked;
-            numericBackupCount.Enabled = checkboxOnlyKeep.Checked;
+            task.LimitNumberOfBackupsRetained = checkboxLimitBackupsRetained.Checked;
+            numericBackupCount.Enabled = checkboxLimitBackupsRetained.Checked;
         }
 
         /// <summary>
@@ -104,8 +105,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             if (textPrefix.Text.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
             {
-                errorProvider.SetError(textPrefix, string.Format("Prefix cannot contain the following characters: {0}", 
+                errorProvider.SetError(textPrefix, string.Format("Backup name cannot contain the following characters: {0}", 
                     Path.GetInvalidFileNameChars().Where(x => x > 31).Aggregate("", (x, y) => x + " " + y)));
+
                 e.Cancel = true;
             }
         }

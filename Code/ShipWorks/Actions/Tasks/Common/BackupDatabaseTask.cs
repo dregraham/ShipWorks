@@ -19,8 +19,7 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BackupDatabaseTask));
-
-        private readonly Regex backupFileNameMatcher = new Regex(@".*\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.swb");
+        private const string FileNameSuffixPattern = @".*\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.swb";
 
         /// <summary>
         /// Constructor
@@ -65,9 +64,9 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// Should old backups be cleaned
+        /// Gets or sets a value indicating whether to [limit the number of backups retained].
         /// </summary>
-        public bool CleanOldBackups { get; set; }
+        public bool LimitNumberOfBackupsRetained { get; set; }
 
         /// <summary>
         /// Runs the database backup and cleanup task
@@ -96,11 +95,15 @@ namespace ShipWorks.Actions.Tasks.Common
                 throw new ActionTaskRunException(ex.Message, ex);
             }
             
-            if (CleanOldBackups)
+            if (LimitNumberOfBackupsRetained)
             {
-                // The regex match greatly reduces the chance of deleting files
-                // that aren't created by this scheduled task
                 DirectoryInfo backupPath = new DirectoryInfo(BackupDirectory);
+
+                // The regex match greatly reduces the chance of deleting files that aren't created by this scheduled
+                // task. Match on file prefix and the suffix pattern in case there are differently named backups in 
+                // the same directory (don't want to delete a backup not related to this specific task)
+                Regex backupFileNameMatcher = new Regex(string.Format("{0} {1}", FilePrefix, FileNameSuffixPattern));
+
                 IEnumerable<FileInfo> filesToDelete = backupPath.GetFiles()
                        .Where(f => backupFileNameMatcher.IsMatch(f.Name))
                        .OrderByDescending(f => f.LastWriteTimeUtc)

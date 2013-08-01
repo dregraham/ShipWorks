@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             // Create a new purge database task to serialize
             BackupDatabaseTask initialObject = new BackupDatabaseTask();
             initialObject.BackupDirectory = @"c:\shipworks\backup";
-            initialObject.CleanOldBackups = true;
+            initialObject.LimitNumberOfBackupsRetained = true;
             initialObject.FilePrefix = "MyBackup";
             initialObject.KeepNumberOfBackups = 9;
 
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             BackupDatabaseTask testObject = new BackupDatabaseTask();
             testObject.Initialize(serializedObject);
 
-            Assert.AreEqual(true, testObject.CleanOldBackups);
+            Assert.AreEqual(true, testObject.LimitNumberOfBackupsRetained);
             Assert.AreEqual(9, testObject.KeepNumberOfBackups);
             Assert.AreEqual(@"c:\shipworks\backup", testObject.BackupDirectory);
             Assert.AreEqual("MyBackup", testObject.FilePrefix);
