@@ -25,6 +25,8 @@ namespace ShipWorks.Data.Administration
                 // Perform the shrink
                 SqlCommand calculationCmd = con.CreateCommand();
                 calculationCmd.CommandText = ShrinkDbSql;
+                calculationCmd.CommandTimeout = 0;
+
                 calculationCmd.ExecuteNonQuery();
             }
         }
