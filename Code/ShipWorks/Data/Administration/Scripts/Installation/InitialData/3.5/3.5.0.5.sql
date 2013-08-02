@@ -120,7 +120,7 @@ BEGIN
 
 	RETURN @timeZoneName
 END
-go
+GO
 
 
 DECLARE @ActionID NVARCHAR(20)
