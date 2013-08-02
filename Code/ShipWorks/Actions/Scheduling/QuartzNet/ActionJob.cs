@@ -37,9 +37,29 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             {
                 log.InfoFormat("ActionJob: {0} Starting.", context.JobDetail.Key);
 
-                long actionId = 0;
+                long actionId = -1;
+                long actionIdByJobKeyName = -1;
 
+                // When SW adds default scheduled actions, we can't set the Quartz JobData field in SQL
+                // Therefore, we must check the job name to get the action ID if the JobDataMap is empty or has the wrong ActionID
+                // We get the ActionID defined by the job name in case we need it.
+                long.TryParse(context.JobDetail.Key.Name, out actionIdByJobKeyName);
+
+                // If we don't have an action id in the job data, use the action id from the job name
                 if (context.JobDetail.JobDataMap["ActionID"] == null || !long.TryParse(context.JobDetail.JobDataMap["ActionID"].ToString(), out actionId))
+                {
+                    // We couldn't parse an action id from the job data, so use the action id from the job name
+                    actionId = actionIdByJobKeyName;
+                }
+
+                // If the two don't match, we'll assume that an invalid one was entered into the job data and use the action id from the job name
+                if (actionId != actionIdByJobKeyName)
+                {
+                    actionId = actionIdByJobKeyName;
+                }
+
+                // If we still don't have an action id, delete the job and bail out.
+                if (actionId == -1)
                 {
                     log.ErrorFormat("ActionID not provided for job with Key: {0}.", context.JobDetail.Key);
 
@@ -49,6 +69,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                     return;
                 }
 
+                // Dispatch the action
                 ActionDispatcher.DispatchScheduledAction(actionId);
 
                 log.InfoFormat("ActionJob: {0} Ended.", context.JobDetail.Key);
