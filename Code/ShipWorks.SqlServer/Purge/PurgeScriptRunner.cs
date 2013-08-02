@@ -10,7 +10,6 @@ namespace ShipWorks.SqlServer.Purge
     /// </summary>
     public static class PurgeScriptRunner
     {
-
         public const string EarliestRetentionDateInUtcParamaterName = "@earliestRetentionDateInUtc";
 
         public const string LatestExecutionTimeInUtcParamaterName = "@latestExecutionTimeInUtc";
@@ -20,44 +19,30 @@ namespace ShipWorks.SqlServer.Purge
         /// </summary>
         /// <param name="script">Sql script to run. Assumes script has paramaters @RetentionDateInUtc and @LatestExecutionTimeInUtc.</param>
         /// <param name="purgeAppLockName">Checks for this AppLock. If applock is taken, script will not run and purge exception is thrown.</param>
+        /// <param name="earliestRetentionDateInUtc">Delete records older than this date</param>
+        /// <param name="latestExecutionTimeInUtc">Stop running the script if it runs longer than this time</param>
         public static void RunPurgeScript(string script, string purgeAppLockName, SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
         {
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
-                try
+                SqlAppLockUtility.GetLockedCommand(connection, purgeAppLockName, command =>
                 {
-                    // Need to have an open connection for the duration of the lock acquisition/release
-                    connection.Open();
+                    command.CommandText = script;
 
-                    if (!SqlAppLockUtility.IsLocked(connection, purgeAppLockName))
+                    command.Parameters.Add(new SqlParameter(EarliestRetentionDateInUtcParamaterName, earliestRetentionDateInUtc));
+                    command.Parameters.Add(new SqlParameter(LatestExecutionTimeInUtcParamaterName, latestExecutionTimeInUtc));
+
+                    // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                    // to the console of client (i.e. SQL Management Studio)
+                    if (SqlContext.Pipe != null)
                     {
-                        if (SqlAppLockUtility.AcquireLock(connection, purgeAppLockName))
-                        {
-                            using (SqlCommand command = connection.CreateCommand())
-                            {
-                                command.CommandText = script;
-
-                                command.Parameters.Add(new SqlParameter(EarliestRetentionDateInUtcParamaterName, earliestRetentionDateInUtc));
-                                command.Parameters.Add(new SqlParameter(LatestExecutionTimeInUtcParamaterName, latestExecutionTimeInUtc));
-                                //command.ExecuteNonQuery();
-
-                                // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
-                                // to the console of client (i.e. SQL Management Studio)
-                                SqlContext.Pipe.ExecuteAndSend(command);
-                            }
-                        }
+                        SqlContext.Pipe.ExecuteAndSend(command);
                     }
                     else
                     {
-                        // Let the caller know that someone else is already running the purge. (It may
-                        // be beneficial to create/throw a more specific exception.)
-                        throw new SqlLockException(string.Format("Could not acquire applock: {0}", purgeAppLockName));
+                        command.ExecuteNonQuery();
                     }
-                }
-                finally
-                {
-                    SqlAppLockUtility.ReleaseLock(connection, purgeAppLockName);
-                }
+                });
             }
         }
     }

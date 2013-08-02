@@ -13,7 +13,7 @@ public partial class StoredProcedures
     /// <summary>
     /// Purges old audit records from the database.
     /// </summary>
-    /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
+    /// <param name="earliestRetentionDateInUtc">Indicates the date/time to use for determining
     /// which Audit records will be purged. Any records with an Audit.Date value earlier than
     /// this date will be purged.</param>
     /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
