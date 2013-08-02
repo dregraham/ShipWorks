@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             if (commandLine.IsServiceSpecified)
             {
-                return new ServiceExecutionMode(commandLine.ServiceName, commandLine.ServiceOptions);
+                return new ServiceExecutionMode(commandLine.ServiceName, commandLine.ServiceOptions, commandLine.RecoveryAttempts);
             }
             
             if (commandLine.IsCommandSpecified)

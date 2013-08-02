@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.ServiceProcess;
+using ShipWorks.ApplicationCore.Crashes;
 
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
@@ -12,12 +13,20 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
     {
         static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceHost));
 
-        readonly ShipWorksServiceBase service;
+        private readonly ShipWorksServiceBase service;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WindowsServiceHost"/> class.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <exception cref="System.ArgumentNullException">service</exception>
         public WindowsServiceHost(ShipWorksServiceBase service)
         {
-            if (null == service)
+            if (service == null)
+            {
                 throw new ArgumentNullException("service");
+            }
+
             this.service = service;
         }
 
@@ -36,11 +45,13 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             if (Environment.UserInteractive)
             {
-                var controller = new WindowsServiceController(service);
-
                 log.InfoFormat("Starting the '{0}' Windows service via the service manager.", service.ServiceName);
+
+                WindowsServiceController controller = new WindowsServiceController(service);
                 if (controller.GetServiceStatus() == ServiceControllerStatus.Stopped)
+                {
                     controller.StartService();
+                }
             }
             else
             {
@@ -54,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// </summary>
         public void Stop()
         {
-            var controller = new WindowsServiceController(service);
+            WindowsServiceController controller = new WindowsServiceController(service);
 
             log.InfoFormat("Stopping the '{0}' Windows service via the service manager.", service.ServiceName);
             if (controller.GetServiceStatus() == ServiceControllerStatus.Running)
@@ -65,6 +76,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// Does nothing.  The exception is automatically logged to the system event logs
         /// if AutoLog is enabled for the service.
         /// </summary>
-        public void OnUnhandledException(Exception exception) { }
+        public void HandleServiceCrash(ServiceCrash serviceCrash) 
+        { }
     }
 }

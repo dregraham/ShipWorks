@@ -3,6 +3,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using ShipWorks.ApplicationCore.Crashes;
+using System.Collections.Generic;
 
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Background
@@ -50,22 +52,29 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Background
         }
 
         /// <summary>
-        /// Restarts the background process ("phoenix mode").
+        /// Handles a crash in the background process by trying to restart the process ("Phoenix" mode).
         /// </summary>
-        public void OnUnhandledException(Exception exception)
+        /// <param name="serviceCrash">The service crash.</param>
+        public void HandleServiceCrash(ServiceCrash serviceCrash)
         {
             log.InfoFormat("Attempting to restart the '{0}' background service.", service.ServiceName);
+
             try
             {
-                var commandArgs = Environment.GetCommandLineArgs();
+                // We want to restart using the same arguments as before, except incrementing the value of the recovery attempts
+                // to let the new process know it is being started as an attempt to recover from a crash
+                List<string> commandArgs = Environment.GetCommandLineArgs().ToList().Where(s => !s.Contains("recovery")).ToList();
+                commandArgs.Add(string.Format("/recovery={0}", serviceCrash.ServiceExecutionMode.RecoveryAttempts + 1));
 
-                var restartInfo = new ProcessStartInfo {
+                ProcessStartInfo restartInfo = new ProcessStartInfo
+                {
                     FileName = commandArgs[0],
                     Arguments = string.Join(" ", commandArgs.Skip(1))
                 };
 
                 Process.Start(restartInfo);
                 log.Info("Restart succeeded.");
+
                 Environment.Exit(-1);
             }
             catch (Exception ex)

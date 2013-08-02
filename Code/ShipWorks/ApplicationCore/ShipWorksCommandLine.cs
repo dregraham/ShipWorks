@@ -18,9 +18,12 @@ namespace ShipWorks.ApplicationCore
         // The service and service arguments specified.  Optional
         string serviceName;
         List<string> serviceOptions = new List<string>();
+
         // The command and command arguments specified.  Optional
         string commandName;
         List<string> commandOptions = new List<string>();
+
+        private string recoveryAttempts;
 
         /// <summary>
         /// Parse the given command line arguments into a command line object
@@ -42,10 +45,17 @@ namespace ShipWorks.ApplicationCore
         {
             OptionSet options = new OptionSet();
 
+            options.Add("recovery=", v =>
+            {
+                recoveryAttempts = v;
+                options.Remove("recovery");
+            });
+
             options.Add("s|service=", v => { serviceName = v; options.Remove("s"); options.Remove("c"); });
             options.Add("c|cmd|command=", v => { commandName = v; options.Remove("s"); options.Remove("c"); });
 
-            options.Add("<>", v => {
+            options.Add("<>", v =>
+            {
                 if (IsServiceSpecified)
                     serviceOptions.Add(v);
                 else if (IsCommandSpecified)
@@ -79,6 +89,25 @@ namespace ShipWorks.ApplicationCore
         public List<string> ServiceOptions
         {
             get { return serviceOptions; }
+        }
+
+        /// <summary>
+        /// Gets the number of attempts to recover from a service crash have been made.
+        /// </summary>
+        public int RecoveryAttempts
+        {
+            get 
+            { 
+                // This is done here instead of at command line constructor to avoid 
+                // crashing if a non-integer was provided.
+                int attemptNumber;
+                if (!int.TryParse(recoveryAttempts, out attemptNumber))
+                {
+                    attemptNumber = 0;
+                }
+
+                return attemptNumber;
+            }
         }
 
         /// <summary>
