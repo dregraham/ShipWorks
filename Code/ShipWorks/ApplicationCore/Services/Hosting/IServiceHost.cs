@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.Crashes;
 
 
 namespace ShipWorks.ApplicationCore.Services.Hosting
@@ -24,9 +25,9 @@ namespace ShipWorks.ApplicationCore.Services.Hosting
         void Stop();
 
         /// <summary>
-        /// Invoked when the process is terminating due to an unhandled exception.
+        /// Intended to handle a service crash to perform any cleanup/recovery actions.
         /// </summary>
-        /// <param name="exception">The unhandled exception.</param>
-        void OnUnhandledException(Exception exception);
+        /// <param name="serviceCrash">The service crash.</param>
+        void HandleServiceCrash(ServiceCrash serviceCrash);
     }
 }

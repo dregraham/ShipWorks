@@ -1,22 +1,15 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Net;
-using System.Web;
 using System.Linq;
 using System.Reflection;
-using System.Data.SqlClient;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using System.Threading;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared;
 using System.Collections.Generic;
 using ShipWorks.Data.Connection;
-using System.Xml;
-using System.Xml.Linq;
 using Interapptive.Shared.IO.Zip;
 
 namespace ShipWorks.ApplicationCore.Crashes 
@@ -26,6 +19,9 @@ namespace ShipWorks.ApplicationCore.Crashes
     /// </summary>
     public static class CrashSubmitter
     {
+        // Use this for trying to submit crashes internally; there have been
+        // problems tyring to connect to the other URL while inside the network
+        //const string url = "http://intapp01/shipworks/crash.ashx";
         const string url = "http://springfield.interapptive.com/shipworks/crash.ashx";
 
         // Properties we dont want to display for exception output
