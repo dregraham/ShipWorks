@@ -88,3 +88,12 @@ ELSE PRINT 'The database update failed'
 GO
 DROP TABLE #tmpErrors
 GO
+
+
+
+UPDATE FilterNodeContent
+SET UpdateCalculation = REPLACE(UpdateCalculation, 'RunComputerID', 'ComputerLimitedList') 
+
+-- Include a space at the end to avoid changing ComputerLimitedType to ComputerLimitedListType
+UPDATE FilterNodeContent
+SET UpdateCalculation = REPLACE(UpdateCalculation, 'ComputerLimited ', 'ComputerLimitedList ') 
