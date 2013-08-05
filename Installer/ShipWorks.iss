@@ -141,7 +141,7 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Run]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser;  Check: NotNeedRestart
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/command=installservices /background"; Flags: nowait; Check: NotNeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: NotNeedRestart
 
 [Dirs]
 Name: {app}
