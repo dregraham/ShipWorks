@@ -136,11 +136,12 @@ EnableISX=true
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: ComputerID; ValueData: {code:GetGuid}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks\Instances; ValueType: string; ValueName: {app}; ValueData: {code:GetAppID}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID};
+Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}; 
 
 [Run]
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser
+Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser;  Check: NotNeedRestart
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/command=installservices /background"; Flags: nowait
+Filename: {app}\ShipWorks.exe; Parameters: "/command=installservices /background"; Flags: nowait; Check: NotNeedRestart
 
 [Dirs]
 Name: {app}
@@ -204,8 +205,25 @@ begin
 			Result := newAppID;
 		end;
     end;
-    
-                 
+end;
+
+//----------------------------------------------------------------
+// Returns the background/service name (ShipWorksScheduler$GuidWithNonAlphaCharactersStripped)
+//----------------------------------------------------------------
+function GetBackgroundProcessName(Param: String): String;
+var
+    processName:string;
+begin
+    processName := GetAppID('');
+
+    delete(processName, 38, 1);
+    delete(processName, 25, 1);
+    delete(processName, 20, 1);
+    delete(processName, 15, 1);
+    delete(processName, 10, 1);
+    delete(processName, 1, 1);
+
+    Result := 'ShipWorksScheduler$' + processName;
 end;
 
 //----------------------------------------------------------------
@@ -365,6 +383,15 @@ end;
 function NeedRestart(): Boolean;
 begin
 	Result := DotNetNeedsReboot;
+end;
+
+//----------------------------------------------------------------
+// Called by Inno to see if it should restart.  We will determine
+// this depending on what the dotnet and mdac installs said.
+//----------------------------------------------------------------
+function NotNeedRestart(): Boolean;
+begin
+	Result := not(DotNetNeedsReboot);
 end;
 
 // In case we need to see if anything went wrong
