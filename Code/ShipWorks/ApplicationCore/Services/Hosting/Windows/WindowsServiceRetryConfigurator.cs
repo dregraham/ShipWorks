@@ -29,11 +29,11 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             var actions = new int[numActions * 2];
 
             actions[0] = 1; // First Failure - Restart
-            actions[1] = 0; // First Failure - Immediately
+            actions[1] = 60000; // First Failure - Restart after 1 minute
             actions[2] = 1; // Second Failure - Restart
-            actions[3] = 0; // Second Failure - Immediately
+            actions[3] = 300000; // Second Failure - Restart after 5 minutes
             actions[4] = 1; // Third Failure - Restart
-            actions[5] = 0; // Third Failure - Immediately
+            actions[5] = 600000; // Third Failure - Restart after 10 minutes
 
             IntPtr actionMemoryAllocation = Marshal.AllocHGlobal(numActions * 8);
             IntPtr serviceHandle = serviceController.ServiceHandle.DangerousGetHandle();
@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
                 var serviceFailureActions = new ServiceFailureActions
                 {
                     cActions = 3,
-                    dwResetPeriod = 0,
+                    dwResetPeriod = 86400,  // Reset failure count after 1 day
                     lpCommand = null,
                     lpRebootMsg = null,
                     lpsaActions = new IntPtr(actionMemoryAllocation.ToInt32())
