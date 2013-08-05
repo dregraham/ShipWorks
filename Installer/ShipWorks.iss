@@ -136,7 +136,7 @@ EnableISX=true
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: ComputerID; ValueData: {code:GetGuid}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks\Instances; ValueType: string; ValueName: {app}; ValueData: {code:GetAppID}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID};
-Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}; 
+Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}; Check: ShipWorksVersionDoesNotHaveScheduler;
 
 [Run]
 Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser;  Check: NotNeedRestart
@@ -226,15 +226,25 @@ begin
     Result := 'ShipWorksScheduler$' + processName;
 end;
 
+
 //----------------------------------------------------------------
 // Was the scheduler included in installed version of ShipWorks
 //----------------------------------------------------------------
-function ShipWorksVersionHasScheduler(VersionFound: String): Boolean;
+function ShipWorksVersionHasScheduler(): Boolean;
 var
+	VersionFound: string;	
     IntMinorVersion: Integer;
     StringMinorVersion: string;
     MinorVersionEndPosition: Integer;
+	TargetExe: string;
 begin
+
+	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+	if FileExists(TargetExe) then
+	{
+		GetVersionNumbersString(TargetExe, VersionFound);
+	}
+
     if Pos('3.', VersionFound) <> 1 Then
     begin
         Result := false;
@@ -253,11 +263,20 @@ begin
         //Converts minor version into an int
         IntMinorVersion:= StrToInt(StringMinorVersion);
         
+		MsgBox(StringMinorVersion, mbInformation, MB_OK);
+
         //If minor version is greater than 4, this is true.
         Result := IntMinorVersion > 4;
     end
 end;
 
+//----------------------------------------------------------------
+// Returns inverse of ShipWorksVersionHasScheduler. Used when registerring scheduler
+//----------------------------------------------------------------
+function ShipWorksVersionDoesNotHaveScheduler() : Boolean;
+begin
+	Result := not(ShipWorksVersionHasScheduler());
+end;
 
 //----------------------------------------------------------------
 // Add all our custom pages
@@ -345,7 +364,8 @@ begin
 
 			end;
 
-			if Result AND ShipWorksVersionHasScheduler(VersionFound)
+			// Sorry for double negative
+			if Result AND ShipWorksVersionHasScheduler()
 			then begin
 				Exec(ExpandConstant(TargetExe), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, ServiceStarted)
 			end;
