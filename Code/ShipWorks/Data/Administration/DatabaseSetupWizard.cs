@@ -1009,8 +1009,6 @@ namespace ShipWorks.Data.Administration
                         using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                         {
                             SqlDatabaseCreator.CreateSchemaAndData();
-
-                            InitialDataLoader.AddSqlScriptInitialDataToDatabase();
                         }
                     }
                     // If something goes wrong, drop the db we just created

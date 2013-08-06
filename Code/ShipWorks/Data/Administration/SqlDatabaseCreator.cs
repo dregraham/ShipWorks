@@ -101,6 +101,7 @@ namespace ShipWorks.Data.Administration
             // Create all the data that is needed for a fresh install of shipworks.
             InitialDataLoader.CreateCoreRequiredData();
             InitialDataLoader.CreateDefaultFreshInstallData();
+            InitialDataLoader.AddSqlScriptInitialDataToDatabase();
         }
 
         /// <summary>
