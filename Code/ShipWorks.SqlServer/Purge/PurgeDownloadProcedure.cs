@@ -35,63 +35,60 @@ public partial class StoredProcedures
         get
         {
             return @"
-            SET NOCOUNT ON;
-            DECLARE 
-	            @oldCount int,
-	            @batchSize INT
+                SET NOCOUNT ON;
 
-            -- if this is the first time we've run this, figure out which resources must go
-            IF OBJECT_ID('tempdb..#DownloadTemp') IS NULL
-            BEGIN
+                -- create batch purge ID table
+                CREATE TABLE #DownloadPurgeBatch (
+                    DownloadID BIGINT PRIMARY KEY
+                );
 
-	            SELECT DownloadID 
-	            INTO #DownloadTemp
-	            FROM Download
-	            WHERE Started < @earliestRetentionDateInUtc
-	
-	            CREATE INDEX IX_DownloadWorking on #DownloadTemp (DownloadID)
-            END
+                DECLARE
+                    @startTime DATETIME = GETUTCDATE(),
+                    @batchSize INT = 1000,
+                    @batchTotal BIGINT = 0;
 
-            SELECT @oldCount = COUNT(*) FROM #DownloadTemp
-            IF @oldCount > 0
-            BEGIN
+                -- purge in batches while time allows
+                WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
+                BEGIN
+                    INSERT #DownloadPurgeBatch
+                    SELECT TOP (@batchSize) DownloadID
+                    FROM Download
+                    WHERE Started < @earliestRetentionDateInUtc;
 
-	            DECLARE @currentBatch TABLE ( DownloadID bigint )
-	
-	            INSERT INTO @currentBatch
-		            SELECT TOP 100 *  FROM #DownloadTemp 
-		
-	            WHILE @@ROWCOUNT > 0 AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GetUtcDate())
-	            BEGIN
-		            BEGIN TRANSACTION
-			            DELETE dd
-			            FROM @currentBatch curBatch
-			            INNER JOIN Downloaddetail dd
-			            ON curBatch.DownloadID = dd.DownloadID
-			
-			            DELETE d
-			            FROM @currentBatch curBatch
-			            INNER JOIN Download d
-			            ON d.DownloadID= curBatch.DownloadID
-			
-			            DELETE dt
-			            FROM #DownloadTemp dt
-			            INNER JOIN @currentBatch curBatch
-				            ON dt.DownloadID = curBatch.DownloadID
-				
-		            COMMIT TRANSACTION
-		
-		            DELETE @currentBatch
+                    SET @batchSize = @@ROWCOUNT;
+                    IF @batchSize = 0
+                        BREAK;
 
-		            --grab the next batch before ending loop
-		            --Must be last statement in while loop or the @@rowcount will be an issue
-		            INSERT INTO @currentBatch
-			            SELECT TOP 100 *  FROM #DownloadTemp	
-	            END
+                    DECLARE @totalSeconds INT = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
 
-            END
+                    -- stop if the batch isn't expected to complete in time
+                    IF (
+                        @latestExecutionTimeInUtc IS NOT NULL AND
+                        @batchTotal > 0 AND
+                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+                    )
+                        BREAK;
 
-            DROP TABLE #DownloadTemp
+                    BEGIN TRANSACTION;
+
+                    DELETE DownloadDetail
+                    FROM DownloadDetail dd
+                    INNER JOIN #DownloadPurgeBatch b ON
+                        b.DownloadID = dd.DownloadID;
+
+                    DELETE Download
+                    FROM Download d
+                    INNER JOIN #DownloadPurgeBatch b ON
+                        b.DownloadID = d.DownloadID;
+
+                    COMMIT TRANSACTION;
+
+                    TRUNCATE TABLE #DownloadPurgeBatch;
+
+                    -- update batch total and adjust batch size to an amount expected to complete in 10 seconds
+                    SET @batchTotal = @batchTotal + @batchSize;
+                    SET @batchSize = @batchTotal / @totalSeconds * 10;
+                END;
             ";
         }
     }
