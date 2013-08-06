@@ -1,16 +1,20 @@
 require 'albacore'
 
 
-# Location of MSBuild and MSTest on this computer
-@msBuildPath = "#{ENV['SystemRoot']}\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"
-@msTestPath = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
+Albacore.configure do |config|
+	config.msbuild do |msbuild|
+		msbuild.use :net40
+		msbuild.parameters = "/m"
+		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+	end
 
+	config.mstest do |mstest|
+		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
+	end
+end
 
-# Assumes rake will be executed from the directory containing the rakefile and solution file
-@workingDirectory = pwd
-@solutionFile = "#{@workingDirectory}\\ShipWorks.sln"
+@innoPath = "C:/Program Files (x86)/Inno Setup 5/ISCC.EXE"
 
-@testMetadataFile = "#{@workingDirectory}\\ShipWorks.vsmdi"
 
 desc "Cleans and builds the solution with the debug config"
 task :rebuild => ["build:clean", "build:debug"]
@@ -23,7 +27,6 @@ namespace :build do
 	msbuild :clean do |msb|
 		print "Cleaning solution...\r\n\r\n"
 		msb.targets :Clean
-		msb.solution = "#{@solutionFile}"
 	end
 
 	desc "Build ShipWorks in the Debug configuration"
@@ -32,9 +35,7 @@ namespace :build do
 
 		msb.properties :configuration => :Debug
 		msb.targets :Build
-		msb.solution = "#{@solutionFile}"
 	end
-
 
 	desc "Build ShipWorks in the Release configuration"
 	msbuild :release do |msb|
@@ -42,7 +43,59 @@ namespace :build do
 
 		msb.properties :configuration => :Release
 		msb.targets :Clean, :Build
-		msb.solution = "#{@solutionFile}"
+	end
+	
+	desc "Build ShipWorks.Native in a given configuration and platform"
+	msbuild :native, [:configuration, :platform] do |msb, args|
+		print "Building the Native project with the #{args[:configuration]}|#{args[:platform]} config...\r\n\r\n"
+
+		msb.solution = "Code/ShipWorks.Native/Native.vcxproj"
+		msb.properties args
+		msb.targets :Build
+	end
+		
+	desc "Build an unsigned Debug installer for local testing"
+	task :debug_installer => :debug do
+		print "Building unsigned debug installer package...\r\n\r\n"
+
+		Rake::Task['build:native'].instance_exec do
+			invoke "Debug", "Win32"
+			reenable
+			invoke "Debug", "x64"
+		end
+
+		print "\r\nCopying Native dlls to Artifacts... "
+		FileUtils.mkdir_p "Artifacts/Application/Win32"
+		FileUtils.cp "Code/ShipWorks.Native/Win32/Debug/ShipWorks.Native.dll", "Artifacts/Application/Win32"
+		FileUtils.mkdir_p "Artifacts/Application/x64"
+		FileUtils.cp "Code/ShipWorks.Native/x64/Debug/ShipWorks.Native.dll", "Artifacts/Application/x64"
+		print "done.\r\n"
+
+		print "Querying required schema version... "
+		print schemaID = `Build/echoerrorlevel.cmd "Artifacts\\Application\\ShipWorks.exe" /c=getdbschemaversion /type=required`
+
+		print "Running INNO compiler... "
+		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
+		FileUtils.rm_f "InnoSetup.iss"
+		print "done.\r\n"
+	end
+
+	desc "Build ShipWorks and generate an MSI for internal testing"
+	msbuild :internal_installer do |msb|
+		print "Building internal release installer...\r\n\r\n"
+
+		# Use the MSBuild project when building the installer
+		msb.solution = "./Build/shipworks.proj"
+		msb.properties :configuration => :Release
+
+		# Grab the revision number to use for this build
+		revisionFile = File.open("C:\\Temp\\NextRevision.txt")
+		revisionNumber = revisionFile.readline
+		revisionFile.close
+
+		# Use the revisionNumber extracted from the file and pass the revision filename
+		# so the build will increment the version in preperation for the next run
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt /p:CCNetLabel=0.0.0." + revisionNumber
 	end
 end
 
@@ -53,108 +106,22 @@ namespace :test do
 
 	desc "Execute all test lists"
 	task :all do 
-		puts "Executing eBay tests"
-		Rake::Task['test:ebay'].execute
+		puts "Executing ShipWorks unit tests"
+		Rake::Task['test:units'].execute
 
-		puts "Executing stamps tests"
-		Rake::Task['test:stamps'].execute
-				
-		puts "Executing SCAN form tests"
-		Rake::Task['test:scanForms'].execute
-
-		puts "Executing FedEx tests"
-		Rake::Task['test:fedEx'].execute
-
-		puts "Executing iParcel tests"
-		Rake::Task['test:iParcel'].execute
-
-		puts "Executing OnTrac tests"
-		Rake::Task['test:onTrac'].execute
-
-		puts "Executing UPS tests"
-		Rake::Task['test:ups'].execute
-
-		puts "Executing Newegg tests"
-		Rake::Task['test:newegg'].execute
+		# If we ever wanted to include integration tests in the build we would uncomment
+		# the following two lines and add a section for "integration" below. Until then
+		# running rake test:all and rake test:units are equivalent.
+		# puts "Executing ShipWorks integration tests"
+		# Rake::Task['test:integration'].execute		
 	end
 
-	desc "Execute the eBay tests"
-	mstest :ebay do |mstest|
-		print "Deleting previous eBay test results...\r\n\r\n"
-		File.delete("TestResults/ebay-results.trx") if File.exist?("TestResults/ebay-results.trx")
-		print "Executing eBay tests...\r\n\r\n"
+	desc "Execute unit tests"
+	mstest :units do |mstest|
+		print "Deleting previous units results...\r\n\r\n"
+		File.delete("TestResults/units-results.trx") if File.exist?("TestResults/units-results.trx")
+		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"eBay Tests\"", "/resultsfile:TestResults/ebay-results.trx"
-	end
-
-	desc "Execute the stamps.com registration tests"
-	mstest :stamps do |mstest|
-		print "Deleting previous Stamps.com test results...\r\n\r\n"		
-		File.delete("TestResults/stamps-results.trx") if File.exist?("TestResults/stamps-results.trx")
-		print "Executing Stamps.com registration tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"Stamps Registration Tests\"", "/resultsfile:TestResults/stamps-results.trx"
-	end
-	
-	desc "Execute the SCAN form tests"
-	mstest :scanForms do |mstest|
-		print "Deleting previous ScanForm test results...\r\n\r\n"		
-		File.delete("TestResults/scanForm-results.trx") if File.exist?("TestResults/scanForm-results.trx")
-		print "Executing SCAN form tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"ScanForm Tests\"", "/resultsfile:TestResults/scanForm-results.trx"
-	end
-
-	desc "Execute the FedEx tests"
-	mstest :fedEx do |mstest|
-		print "Deleting previous FedEx test results...\r\n\r\n"
-		File.delete("TestResults/fedEx-results.trx") if File.exist?("TestResults/fedEx-results.trx")
-		print "Executing FedEx tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"FedEx Tests\"", "/resultsfile:TestResults/fedEx-results.trx"
-	end
-
-	desc "Execute the iParcel tests"
-	mstest :iParcel do |mstest|
-		print "Deleting previous i-parcel test results...\r\n\r\n"
-		File.delete("TestResults/iParcel-results.trx") if File.exist?("TestResults/iParcel-results.trx")
-		print "Executing iParcel tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"iParcel Tests\"", "/resultsfile:TestResults/iParcel-results.trx"
-	end
-
-	desc "Execute the OnTrac tests"
-	mstest :onTrac do |mstest|
-		print "Deleting previous OnTrac test results...\r\n\r\n"
-		File.delete("TestResults/onTrac-results.trx") if File.exist?("TestResults/onTrac-results.trx")
-		print "Executing OnTrac tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"OnTrac Tests\"", "/resultsfile:TestResults/onTrac-results.trx"
-	end
-
-	desc "Execute the UPS tests"
-	mstest :ups do |mstest|
-		print "Deleting previous UPS open account test results...\r\n\r\n"
-		File.delete("TestResults/ups-results.trx") if File.exist?("TestResults/ups-results.trx")
-		print "Executing UPS tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"UPS Tests\"", "/resultsfile:TestResults/ups-results.trx"
-	end
-
-	desc "Execute the Newegg tests"
-	mstest :newegg do |mstest|
-		print "Deleting previous Newegg test results...\r\n\r\n"
-		File.delete("TestResults/newegg-results.trx") if File.exist?("TestResults/newegg-results.trx")
-		print "Executing Newegg tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"		
-		mstest.parameters "/testmetadata:ShipWorks.vsmdi", "/testlist:\"Newegg Tests\"", "/resultsfile:TestResults/newegg-results.trx"
-	end
+		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
+	end	
 end

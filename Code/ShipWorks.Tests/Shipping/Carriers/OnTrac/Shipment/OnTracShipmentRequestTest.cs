@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
+using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 
@@ -20,6 +21,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         Mock<HttpVariableRequestSubmitter> mockedSubmitter;
 
         OnTracShipmentRequest testObject;
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            OnTracRequest.UseTestServer = true;
+        }
 
         [TestInitialize]
         public void Initialize()

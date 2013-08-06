@@ -45,6 +45,7 @@ using ShipWorks.FileTransfer;
 using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.ApplicationCore.Services;
 
 namespace ShipWorks.Users
 {
@@ -97,7 +98,7 @@ namespace ShipWorks.Users
             }
             else
             {
-                log.InfoFormat("ShipWorksSession initialized ({0}, {1})", SqlSession.Current.ServerInstance, SqlSession.Current.DatabaseName);
+                log.InfoFormat("ShipWorksSession initialized ({0}, {1})", SqlSession.Current.Configuration.ServerInstance, SqlSession.Current.Configuration.DatabaseName);
 
                 // Ensure this computer is registered on the current connection.
                 thisComputer = ComputerManager.RegisterThisComputer();
@@ -121,8 +122,13 @@ namespace ShipWorks.Users
         public static void InitializeForCurrentUser()
         {
             ComputerManager.InitializeForCurrentUser();
+            ServiceStatusManager.InitializeForCurrentUser();
+
             ObjectLabelManager.InitializeForCurrentUser();
-            GridColumnDefinitionManager.InitializeForCurrentUser();
+
+            if (UserSession.IsLoggedOn)
+                GridColumnDefinitionManager.InitializeForCurrentUser();
+
             FilterContentManager.InitializeForCurrentUser();
             ActionManager.InitializeForCurrentUser();
             FtpAccountManager.InitializeForCurrentUser();
@@ -131,9 +137,15 @@ namespace ShipWorks.Users
             LabelSheetManager.InitializeForCurrentUser();
             EmailAccountManager.InitializeForCurrentUser();
             SearchManager.InitializeForCurrentUser();
-            ServerMessageManager.InitializeForCurrentUser();
+
+            if (UserSession.IsLoggedOn)
+                ServerMessageManager.InitializeForCurrentUser();
+
             DownloadManager.InitializeForCurrentUser();
-            FilterLayoutContext.InitializeForCurrentUser();
+
+            if (UserSession.IsLoggedOn)
+                FilterLayoutContext.InitializeForCurrentUser();
+
             FilterNodeColumnManager.InitializeForCurrentUser();
             ShippingOriginManager.InitializeForCurrentUser();
             StampsAccountManager.InitializeForCurrentUser();

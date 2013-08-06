@@ -42,7 +42,6 @@ namespace ShipWorks.Data.Connection
             this.labelDatabase = new System.Windows.Forms.Label();
             this.sqlServer = new System.Windows.Forms.TextBox();
             this.labelServer = new System.Windows.Forms.Label();
-            this.remember = new System.Windows.Forms.CheckBox();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.sep = new System.Windows.Forms.Label();
@@ -51,13 +50,13 @@ namespace ShipWorks.Data.Connection
             this.subtitle = new System.Windows.Forms.Label();
             this.title = new System.Windows.Forms.Label();
             this.headerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.headerImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.headerImage)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(10, 70);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 13);
@@ -67,12 +66,12 @@ namespace ShipWorks.Data.Connection
             // labelWindowsAuthDescription
             // 
             this.labelWindowsAuthDescription.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWindowsAuthDescription.Location = new System.Drawing.Point(61, 297);
+            this.labelWindowsAuthDescription.Location = new System.Drawing.Point(65, 280);
             this.labelWindowsAuthDescription.Name = "labelWindowsAuthDescription";
             this.labelWindowsAuthDescription.Size = new System.Drawing.Size(336, 28);
             this.labelWindowsAuthDescription.TabIndex = 15;
             this.labelWindowsAuthDescription.Text = "You must be currently logged in to Windows as a user that has access to SQL Serve" +
-                "r.";
+    "r.";
             // 
             // username
             // 
@@ -85,9 +84,9 @@ namespace ShipWorks.Data.Connection
             // 
             this.password.Location = new System.Drawing.Point(123, 225);
             this.password.Name = "password";
-            this.password.UseSystemPasswordChar = true;
             this.password.Size = new System.Drawing.Size(217, 21);
             this.password.TabIndex = 12;
+            this.password.UseSystemPasswordChar = true;
             // 
             // sqlServerAuth
             // 
@@ -100,7 +99,7 @@ namespace ShipWorks.Data.Connection
             // 
             // windowsAuth
             // 
-            this.windowsAuth.Location = new System.Drawing.Point(43, 275);
+            this.windowsAuth.Location = new System.Drawing.Point(47, 258);
             this.windowsAuth.Name = "windowsAuth";
             this.windowsAuth.Size = new System.Drawing.Size(228, 24);
             this.windowsAuth.TabIndex = 14;
@@ -128,7 +127,7 @@ namespace ShipWorks.Data.Connection
             // labelConnectUsing
             // 
             this.labelConnectUsing.AutoSize = true;
-            this.labelConnectUsing.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelConnectUsing.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelConnectUsing.Location = new System.Drawing.Point(13, 153);
             this.labelConnectUsing.Name = "labelConnectUsing";
             this.labelConnectUsing.Size = new System.Drawing.Size(160, 13);
@@ -171,17 +170,10 @@ namespace ShipWorks.Data.Connection
             this.labelServer.TabIndex = 3;
             this.labelServer.Text = "SQL Server Instance:";
             // 
-            // remember
-            // 
-            this.remember.Location = new System.Drawing.Point(123, 247);
-            this.remember.Name = "remember";
-            this.remember.Size = new System.Drawing.Size(156, 24);
-            this.remember.TabIndex = 13;
-            this.remember.Text = "Remember Password";
-            // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(216, 338);
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Location = new System.Drawing.Point(216, 324);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 16;
@@ -190,8 +182,9 @@ namespace ShipWorks.Data.Connection
             // 
             // cancel
             // 
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(298, 338);
+            this.cancel.Location = new System.Drawing.Point(298, 324);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 17;
@@ -220,9 +213,9 @@ namespace ShipWorks.Data.Connection
             // 
             // headerImage
             // 
-            this.headerImage.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.headerImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.headerImage.Cursor = System.Windows.Forms.Cursors.Default;
-            this.headerImage.Image = ((System.Drawing.Image) (resources.GetObject("headerImage.Image")));
+            this.headerImage.Image = ((System.Drawing.Image)(resources.GetObject("headerImage.Image")));
             this.headerImage.Location = new System.Drawing.Point(325, 4);
             this.headerImage.Name = "headerImage";
             this.headerImage.Size = new System.Drawing.Size(48, 48);
@@ -240,7 +233,7 @@ namespace ShipWorks.Data.Connection
             // 
             // title
             // 
-            this.title.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.title.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(20, 10);
             this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(296, 14);
@@ -253,7 +246,7 @@ namespace ShipWorks.Data.Connection
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(389, 373);
+            this.ClientSize = new System.Drawing.Size(389, 359);
             this.Controls.Add(this.sep);
             this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.ok);
@@ -270,9 +263,8 @@ namespace ShipWorks.Data.Connection
             this.Controls.Add(this.labelDatabase);
             this.Controls.Add(this.sqlServer);
             this.Controls.Add(this.labelServer);
-            this.Controls.Add(this.remember);
             this.Controls.Add(this.label1);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -283,7 +275,7 @@ namespace ShipWorks.Data.Connection
             this.Load += new System.EventHandler(this.OnLoad);
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.headerImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.headerImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -304,7 +296,6 @@ namespace ShipWorks.Data.Connection
         private System.Windows.Forms.Label labelDatabase;
         private System.Windows.Forms.TextBox sqlServer;
         private System.Windows.Forms.Label labelServer;
-        private System.Windows.Forms.CheckBox remember;
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Label sep;

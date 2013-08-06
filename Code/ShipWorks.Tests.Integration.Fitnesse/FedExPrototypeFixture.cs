@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Integration.Fitnesse
                     swInstance = Guid.Parse("{00000000-143F-4C2B-A80F-5CF0E121A909}");
                     break;
                 case "kevin-pc":
-                    swInstance = Guid.Parse("{7735A885-9127-44A9-BD87-2D06F6273945}");
+                    swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
                     break;
                 case "fitnesse-vm":
                     swInstance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
@@ -76,8 +76,8 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             ApplicationCore.ShipWorksSession.Initialize(swInstance);
             SqlSession.Initialize();
 
-            Console.WriteLine(SqlSession.Current.DatabaseName);
-            Console.WriteLine(SqlSession.Current.ServerInstance);
+            Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
+            Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
 
             DataProvider.InitializeForApplication();
             AuditProcessor.InitializeForApplication();
@@ -323,7 +323,7 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             {
                 command.CommandTimeout = 15;
                 command.CommandType = CommandType.Text;
-                using (SqlConnection connection = new SqlConnection(SqlSession.Current.GetConnectionString()))
+                using (SqlConnection connection = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
                 {
                     command.Connection = connection;
                     command.Connection.Open();

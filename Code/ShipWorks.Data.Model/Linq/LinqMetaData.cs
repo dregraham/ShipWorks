@@ -397,6 +397,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ServerMessageSignoffEntity:
 					toReturn = this.ServerMessageSignoff;
 					break;
+				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
+					toReturn = this.ServiceStatus;
+					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					toReturn = this.Shipment;
 					break;
@@ -1209,6 +1212,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ServerMessageSignoffEntity> ServerMessageSignoff
 		{
 			get { return new DataSource2<ServerMessageSignoffEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ServiceStatusEntity instances in the database.</summary>
+		public DataSource2<ServiceStatusEntity> ServiceStatus
+		{
+			get { return new DataSource2<ServiceStatusEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentEntity instances in the database.</summary>

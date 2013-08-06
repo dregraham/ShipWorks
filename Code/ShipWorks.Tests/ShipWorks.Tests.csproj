@@ -41,6 +41,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
@@ -50,8 +54,13 @@
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Moq">
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,6 +71,7 @@
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -70,6 +80,7 @@
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
@@ -82,6 +93,34 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ComputerActionPolicyTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\DayComboFormatterTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\MonthlyActionScheduleTests.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactoryTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\WeeklyActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\WeeklyActionScheduleAdapterTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\MonthlyActionScheduleAdapterTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\DailyActionScheduleAdapterTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\Helpers\ActionScheduleAdapterExtensions.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\HourlyActionScheduleAdapterTest.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\OneTimeActionScheduleAdapterTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\IntervalCalendarTests.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
+    <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
+    <Compile Include="Actions\Tasks\ActionTaskDescriptorTest.cs" />
+    <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\TaskTestUtility.cs" />
+    <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
+    <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\GuidTests.cs" />
@@ -91,6 +130,7 @@
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
     <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
@@ -312,6 +352,9 @@
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
+    <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
+    <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
+    <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

@@ -36,6 +36,25 @@ namespace Interapptive.Shared.Utility
                 value = 0.01m  + (decimal) value - 0.01m;
             }
 
+            var serializableObject = value as SerializableObject;
+            if (serializableObject != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.ASCII);
+
+                    serializableObject.SerializeXml(xmlTextWriter);
+
+                    xmlTextWriter.Flush();
+
+                    memoryStream.Position = 0;
+
+                    var textReader = new StreamReader(memoryStream);
+
+                    value = textReader.ReadToEnd();
+                }
+            }
+
             return string.Format("{0}", value);
         }
 
@@ -95,21 +114,40 @@ namespace Interapptive.Shared.Utility
         /// <returns>An XML representation of the object.</returns>
         public static string SerializeToXml(object value)
         {
+            return SerializeToXml(value, false);
+        }
+
+        /// <summary>
+        /// Serializes the given object to XML.
+        /// </summary>
+        /// <param name="value">The obj.</param>
+        /// <param name="omitXmlDeclaration">Omit the xml declaration.</param>
+        /// <returns>An XML representation of the object.</returns>
+        public static string SerializeToXml(object value, bool omitXmlDeclaration)
+        {
             string serializedXml = string.Empty;
 
             if (value != null)
             {
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add(string.Empty, string.Empty);
                 XmlSerializer serializer = new XmlSerializer(value.GetType());
 
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-                    namespaces.Add(string.Empty, string.Empty);
-                    serializer.Serialize(memoryStream, value, namespaces);
+                XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+                xmlWriterSettings.Indent = true;
 
-                    StreamReader reader = new StreamReader(memoryStream);
-                    memoryStream.Position = 0;
-                    serializedXml = reader.ReadToEnd();
+                if (omitXmlDeclaration)
+                {
+                    xmlWriterSettings.OmitXmlDeclaration = true;
+                }
+
+                using (StringWriter stringWriter = new StringWriter())
+                {
+                    using (var writer = XmlWriter.Create(stringWriter, xmlWriterSettings))
+                    {
+                        serializer.Serialize(writer, value, namespaces);
+                        serializedXml = stringWriter.ToString();
+                    }
                 }
             }
 
@@ -132,12 +170,10 @@ namespace Interapptive.Shared.Utility
             serializedXml = serializedXml.Replace("©", "&#169;");
             serializedXml = serializedXml.Replace("™", "&#8482;");
 
-            byte[] bytes = Encoding.UTF8.GetBytes(serializedXml);
-
-            using (var memoryStream = new MemoryStream(bytes))
+            using (TextReader reader = new StringReader(serializedXml))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
-                obj = (T)serializer.Deserialize(memoryStream);
+                obj = (T)serializer.Deserialize(reader);
             }
 
             return obj;

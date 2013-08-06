@@ -201,9 +201,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 if (!shipWorksDsnExists)
                 {
                     // Get the db connection info from ShipWorks
-                    string dbName = SqlSession.Current.DatabaseName;
-                    string server = SqlSession.Current.ServerInstance;
-                    string userName = SqlSession.Current.Username;
+                    string dbName = SqlSession.Current.Configuration.DatabaseName;
+                    string server = SqlSession.Current.Configuration.ServerInstance;
+                    string userName = SqlSession.Current.Configuration.Username;
                     string driverName = FindValidSqlDriverName(worldShipOdbcMgr);
 
                     if (string.IsNullOrWhiteSpace(driverName))

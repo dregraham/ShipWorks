@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Connection
                 throw new InvalidOperationException("Only one SqlSessionScope may be active at a time.");
             }
 
-            log.InfoFormat("Entering SqlSessionScope ({0} - {1})", scopedSession.ServerInstance, scopedSession.DatabaseName);
+            log.InfoFormat("Entering SqlSessionScope ({0} - {1})", scopedSession.Configuration.ServerInstance, scopedSession.Configuration.DatabaseName);
 
             SqlSessionScope.scopedSession = scopedSession;
         }

@@ -76,8 +76,25 @@ namespace ShipWorks.Users
                         InternalCheckForChanges();
                     }
 
-                    return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+                    List<ComputerEntity> computers = EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+
+                    // Load the computers' ServiceStatusEntities.
+                    computers.ForEach(EnsureServiceStatusesLoaded);
+
+                    return computers;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Ensures the ServiceStatuses for the computer exist.
+        /// </summary>
+        public static void EnsureServiceStatusesLoaded(ComputerEntity computer)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                computer.ServiceStatuses.Clear();
+                computer.ServiceStatuses.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.ServiceStatusEntity).Cast<ServiceStatusEntity>());
             }
         }
 
@@ -87,6 +104,17 @@ namespace ShipWorks.Users
         public static ComputerEntity GetComputer(long computerID)
         {
             return Computers.SingleOrDefault(c => c.ComputerID == computerID);
+        }
+
+        /// <summary>
+        /// Gets the computer that Sql Server is currently running on.
+        /// </summary>
+        public static ComputerEntity GetSqlServerComputer
+        {
+            get
+            {
+                return Computers.SingleOrDefault(c => c.Name == SqlSession.Current.GetServerMachineName());   
+            }
         }
 
         /// <summary>

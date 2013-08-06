@@ -15,7 +15,6 @@
 [Dd]ebugPublic/
 [Rr]elease/
 x64/
-build/
 [Bb]in/
 [Oo]bj/
 
@@ -98,8 +97,7 @@ publish/
 *.pubxml
 
 # NuGet Packages Directory
-## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-#packages/
+packages/
 
 # Windows Azure Build Output
 csx
@@ -171,9 +169,8 @@ $RECYCLE.BIN/
 *.DotSettings
 
 
-=========================
+
 ### ShipWorks specific stuff ###
-=========================
 *~
 *.bak
 *.sln.cache

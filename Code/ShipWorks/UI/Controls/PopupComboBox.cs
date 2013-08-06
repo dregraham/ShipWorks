@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Interapptive.Shared;
 using System.Windows.Forms;
@@ -22,12 +23,14 @@ namespace ShipWorks.UI.Controls
         int selectedIndex = -1;
 
         Size? lastSize = null;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public PopupComboBox()
         {
+            DropDownMinimumHeight = 200;
+
             InitializeComponent();
 
             SetStyle(ControlStyles.ResizeRedraw, true);
@@ -44,6 +47,13 @@ namespace ShipWorks.UI.Controls
             // 
             this.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ResumeLayout(false);
+        }
+
+        [Category("Behavior"), DefaultValue(200)]
+        public int DropDownMinimumHeight
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -108,6 +118,57 @@ namespace ShipWorks.UI.Controls
 
         }
 
+        public void ShowPopup()
+        {
+            if (GetStyle(ControlStyles.Selectable))
+            {
+                Focus();
+            }
+
+            Refresh();
+
+            if (popupController != null)
+            {
+                Size popupSize;
+
+                if (lastSize != null)
+                {
+                    popupSize = lastSize.Value;
+                }
+                else
+                {
+                    Size idealSize = GetIdealPopupSize();
+
+                    // Account for the bottom resizer bar
+                    idealSize.Height += SystemInformation.HorizontalScrollBarHeight;
+
+                    // Make it start out at least as wide as the ComboBox
+                    idealSize.Width = Math.Max(idealSize.Width, Width);
+
+                    // But don't let it start out wider than 400px (Unless the combo is already that big)
+                    idealSize.Width = Math.Min(idealSize.Width, Math.Max(400, Width));
+
+                    // Start out at least 200px tall
+                    idealSize.Height = Math.Max(idealSize.Height, DropDownMinimumHeight);
+
+                    // But don't let it start out more than 1200px tall
+                    idealSize.Height = Math.Min(idealSize.Height, 1200);
+
+                    popupSize = idealSize;
+                }
+
+                OnShowingDropDown();
+
+                popupController.PassOnDismissClick = false;
+                popupController.Size = popupSize;
+                popupController.ShowDropDown(Bounds, Parent);
+
+                popupController.PopupClosing += new EventHandler(OnPopupClosing);
+            }
+
+            Invalidate();
+        }
+
         /// <summary>
         /// Intercept the mouse down
         /// </summary>
@@ -116,53 +177,7 @@ namespace ShipWorks.UI.Controls
             // On mouse down, we show our color chooser
             if (m.Msg == NativeMethods.WM_LBUTTONDOWN || m.Msg == NativeMethods.WM_LBUTTONDBLCLK)
             {
-                if (GetStyle(ControlStyles.Selectable))
-                {
-                    Focus();
-                }
-
-                Refresh();
-
-                if (popupController != null)
-                {
-                    Size popupSize;
-
-                    if (lastSize != null)
-                    {
-                        popupSize = lastSize.Value;
-                    }
-                    else
-                    {
-                        Size idealSize = GetIdealPopupSize();
-
-                        // Account for the bottom resizer bar
-                        idealSize.Height += SystemInformation.HorizontalScrollBarHeight;
-
-                        // Make it start out at least as wide as the ComboBox
-                        idealSize.Width = Math.Max(idealSize.Width, Width);
-
-                        // But don't let it start out wider than 400px (Unless the combo is already that big)
-                        idealSize.Width = Math.Min(idealSize.Width, Math.Max(400, Width));
-
-                        // Start out at least 200px tall
-                        idealSize.Height = Math.Max(idealSize.Height, 200);
-
-                        // But don't let it start out more than 1200px tall
-                        idealSize.Height = Math.Min(idealSize.Height, 1200);
-
-                        popupSize = idealSize;
-                    }
-
-                    OnShowingDropDown();
-
-                    popupController.PassOnDismissClick = false;
-                    popupController.Size = popupSize;
-                    popupController.ShowDropDown(Bounds, Parent);
-
-                    popupController.PopupClosing += new EventHandler(OnPopupClosing);
-                }
-
-                Invalidate();
+                ShowPopup();
             }
 
             else

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
+using ShipWorks.ApplicationCore.Services;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
@@ -110,7 +111,7 @@ namespace ShipWorks
     /// <summary>
     /// Main window of the application.
     /// </summary>
-    partial class MainForm : RibbonForm
+    public partial class MainForm : RibbonForm
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
@@ -432,13 +433,13 @@ namespace ShipWorks
                 try
                 {
                     SqlSession master = new SqlSession(SqlSession.Current);
-                    master.DatabaseName = "master";
+                    master.Configuration.DatabaseName = "master";
 
-                    using (SqlConnection testConnection = new SqlConnection(master.GetConnectionString()))
+                    using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
                     {
                         testConnection.Open();
 
-                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.DatabaseName))
+                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
                         {
                             using (SingleUserModeDlg dlg = new SingleUserModeDlg())
                             {

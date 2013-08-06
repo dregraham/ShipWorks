@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -13,6 +10,7 @@ namespace ShipWorks.Actions.Tasks
     {
         string displayName;
         string identifier;
+        ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
         /// Constructor
@@ -21,6 +19,17 @@ namespace ShipWorks.Actions.Tasks
         {
             this.displayName = displayName;
             this.identifier = identifier;
+            allowedActionTriggerClassifications = ActionTriggerClassifications.Scheduled | ActionTriggerClassifications.Nonscheduled; 
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ActionTaskAttribute(string displayName, string identifier, ActionTriggerClassifications allowedActionTriggerClassifications)
+        {
+            this.displayName = displayName;
+            this.identifier = identifier;
+            this.allowedActionTriggerClassifications = allowedActionTriggerClassifications;
         }
 
         /// <summary>
@@ -44,6 +53,18 @@ namespace ShipWorks.Actions.Tasks
             {
                 return identifier;
             }
-        }    
+        }
+
+        /// <summary>
+        /// If this task is allowed to be added to an Action that is of Scheduled type.  For example, "Play a Sound" is not allowed
+        /// as the sound will not be heard when run as a service.
+        /// </summary>
+        public ActionTriggerClassifications AllowedActionTriggerClassifications
+        {
+            get
+            {
+                return allowedActionTriggerClassifications;
+            }
+        }  
     }
 }

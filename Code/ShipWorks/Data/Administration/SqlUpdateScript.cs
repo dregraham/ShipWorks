@@ -17,19 +17,19 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
-        public SqlUpdateScript(string resourcePath)
+        public SqlUpdateScript(string folderContainingScripts, string resourcePath)
         {
             // We have to extract out the path part
-            int updateIndex = resourcePath.IndexOf("Update");
+            int updateIndex = resourcePath.IndexOf(folderContainingScripts);
             if (updateIndex < 0)
             {
                 throw new InvalidOperationException("Unexpected sql update script path.");
             }
 
             // Set the script name
-            scriptName = resourcePath.Substring(updateIndex + "Update.".Length);
+            scriptName = resourcePath.Substring(updateIndex + (folderContainingScripts + ".").Length);
 
-            Match versionMatch = Regex.Match(resourcePath, @"\d+\.\d+\.\d+\.\d+\.sql$");
+            Match versionMatch = Regex.Match(resourcePath, @"\d+\.\d+\.\d+\.\d+\.sql$"); 
             if (!versionMatch.Success)
             {
                 throw new InvalidOperationException("Could not extract script name from path " + resourcePath);

@@ -163,7 +163,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
                         shrinkProgress.PercentComplete = 50;
 
                         shrinkProgress.Detail = "Shrinking database...";
-                        cmd.CommandText = String.Format("DBCC SHRINKDATABASE({0})", SqlSession.Current.DatabaseName);
+                        cmd.CommandText = String.Format("DBCC SHRINKDATABASE({0})", SqlSession.Current.Configuration.DatabaseName);
                         cmd.ExecuteNonQuery();
                     }
                 }

@@ -16,6 +16,7 @@ using ShipWorks.Filters;
 using log4net;
 using System.Transactions;
 using ShipWorks.Data;
+using ShipWorks.Actions.Scheduling;
 
 namespace ShipWorks.Actions
 {
@@ -94,7 +95,7 @@ namespace ShipWorks.Actions
         /// </summary>
         public static ActionEntity GetAction(long actionID)
         {
-            return Actions.Where(a => a.ActionID == actionID).SingleOrDefault();
+            return Actions.SingleOrDefault(a => a.ActionID == actionID);
         }
 
         /// <summary>
@@ -171,6 +172,12 @@ namespace ShipWorks.Actions
             // We have to give the trigger a chance to cleanup its state too
             ActionTrigger trigger = LoadTrigger(action);
 
+            if (trigger.TriggerType == ActionTriggerType.Scheduled)
+            {
+                // We need to unschedule the scheudled action
+                new Scheduler().UnscheduleAction(action);
+            }
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Delete all the tasks
@@ -220,12 +227,54 @@ namespace ShipWorks.Actions
         {
             try
             {
-                adapter.SaveAndRefetch(action);
+                // If we are a scheduled action, we need to do additional checking before trying to save.
+                if (action.TriggerType == (int) ActionTriggerType.Scheduled)
+                {
+                    // Get the scheduled trigger for this action.
+                    ScheduledTrigger scheduledTrigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, action.TriggerSettings) as ScheduledTrigger;
+
+                    // We need to see if any field has changed (other than the Enabled field, since the user could modify it on the Action list dialog)
+                    var changedFields = action.Fields.GetAsEntityFieldCoreArray().Where(f => f.FieldIndex != ActionFields.Enabled.FieldIndex && f.IsChanged);
+
+                    bool updateJob = action.IsDirty && changedFields.Any();
+
+                    // If we are to update the job, validate the date
+                    if (updateJob)
+                    {
+                        // Jobs/actions cannot be scheduled to occur in the past
+                        if (scheduledTrigger.Schedule.StartDateTimeInUtc <= DateTime.UtcNow)
+                        {
+                            throw new SchedulingException("The start date must be in the future when modifying a scheduled action.");
+                        }
+                    }
+
+                    // Now we can save it to the db
+                    adapter.SaveAndRefetch(action);
+
+                    // And finally schedule the action
+                    if (updateJob)
+                    {
+                        Scheduler scheduler = new Scheduler();
+                        scheduler.ScheduleAction(action, scheduledTrigger.Schedule);
+                    }
+                }
+                else
+                {
+                    // The action isn't a scheduled one, so save.
+                    adapter.SaveAndRefetch(action);
+                }
+
+                CheckForChangesNeeded();
             }
             catch (ORMConcurrencyException ex)
             {
                 throw new ActionConcurrencyException("Another user has recently made changes.\n\n" +
-                    "Your changes cannot be saved since they would overwrite the other changes.", ex);
+                                                     "Your changes cannot be saved since they would overwrite the other changes.", ex);
+            }
+            catch (SchedulingException schedulingException)
+            {
+                log.Error(string.Format("An error occurred while scheduling an action. {0}", schedulingException.Message), schedulingException);
+                throw;
             }
         }
 
@@ -247,6 +296,24 @@ namespace ShipWorks.Actions
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Gets the ActionQueueType based on UserInteractive.
+        /// </summary>
+        public static ActionQueueType ActionQueueType
+        {
+            get
+            {
+                ActionQueueType actionQueueType = ActionQueueType.Scheduled;
+
+                if (Program.ExecutionMode.IsUserInteractive)
+                {
+                    actionQueueType = ActionQueueType.UserInterface;
+                }
+
+                return actionQueueType;
+            }
         }
     }
 }

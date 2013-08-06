@@ -115,6 +115,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         [TestMethod]
         [ExpectedException(typeof(NeweggException))]
+        [Ignore]
         public void Cancel_ThrowsNeweggException_WhenCancellingAnInvoicedOrder_WithNeweggAPI_IntegrationTest()
         {
             // We're going to try to bounce the request off of the Newegg API, so setup 

@@ -223,7 +223,7 @@ namespace ShipWorks.Data.Administration
 
             foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(r => r.StartsWith(sqlLoader.ResourcePath)))
             {
-                scripts.Add(new SqlUpdateScript(resource));
+                scripts.Add(new SqlUpdateScript("Update", resource));
             }
 
             return scripts.OrderBy(s => s.SchemaVersion).ToList();

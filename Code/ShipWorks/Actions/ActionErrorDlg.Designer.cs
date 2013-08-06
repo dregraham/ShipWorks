@@ -41,13 +41,13 @@
             this.retry = new System.Windows.Forms.Button();
             this.labelErrors = new System.Windows.Forms.Label();
             this.panelGridArea.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.panelTools)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelTools)).BeginInit();
             this.panelTools.SuspendLayout();
             this.SuspendLayout();
             // 
             // close
             // 
-            this.close.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.close.Location = new System.Drawing.Point(696, 407);
             this.close.Name = "close";
@@ -58,9 +58,9 @@
             // 
             // panelGridArea
             // 
-            this.panelGridArea.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelGridArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelGridArea.BackColor = System.Drawing.Color.White;
             this.panelGridArea.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelGridArea.Controls.Add(this.entityGrid);
@@ -119,11 +119,11 @@
             // 
             // labelGridSettings
             // 
-            this.labelGridSettings.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelGridSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelGridSettings.AutoSize = true;
             this.labelGridSettings.BackColor = System.Drawing.Color.Transparent;
             this.labelGridSettings.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labelGridSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelGridSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelGridSettings.ForeColor = System.Drawing.Color.Blue;
             this.labelGridSettings.Location = new System.Drawing.Point(561, 6);
             this.labelGridSettings.Name = "labelGridSettings";
@@ -134,7 +134,7 @@
             // 
             // showErrorMessages
             // 
-            this.showErrorMessages.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.showErrorMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.showErrorMessages.AutoSize = true;
             this.showErrorMessages.BackColor = System.Drawing.Color.Transparent;
             this.showErrorMessages.Location = new System.Drawing.Point(660, 91);
@@ -147,7 +147,7 @@
             // 
             // delete
             // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Image = global::ShipWorks.Properties.Resources.delete16;
             this.delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.delete.Location = new System.Drawing.Point(656, 41);
@@ -160,7 +160,7 @@
             // 
             // retry
             // 
-            this.retry.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.retry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.retry.Image = global::ShipWorks.Properties.Resources.gear_run16;
             this.retry.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.retry.Location = new System.Drawing.Point(656, 12);
@@ -173,14 +173,14 @@
             // 
             // labelErrors
             // 
-            this.labelErrors.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelErrors.AutoSize = true;
-            this.labelErrors.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelErrors.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelErrors.Location = new System.Drawing.Point(656, 74);
             this.labelErrors.Name = "labelErrors";
-            this.labelErrors.Size = new System.Drawing.Size(100, 13);
+            this.labelErrors.Size = new System.Drawing.Size(94, 13);
             this.labelErrors.TabIndex = 3;
-            this.labelErrors.Text = "Error Messsages";
+            this.labelErrors.Text = "Error Messages";
             // 
             // ActionErrorDlg
             // 
@@ -194,7 +194,7 @@
             this.Controls.Add(this.delete);
             this.Controls.Add(this.panelGridArea);
             this.Controls.Add(this.close);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(584, 368);
@@ -208,7 +208,7 @@
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelGridArea.ResumeLayout(false);
             this.panelGridArea.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.panelTools)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelTools)).EndInit();
             this.panelTools.ResumeLayout(false);
             this.panelTools.PerformLayout();
             this.ResumeLayout(false);

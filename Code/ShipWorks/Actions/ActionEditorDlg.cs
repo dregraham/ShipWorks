@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Data.Connection;
@@ -106,16 +107,22 @@ namespace ShipWorks.Actions
 
             UpdateTaskBubbles();
 
-            // Load the various settings
+            // Load the basic settings
             enabled.Checked = action.Enabled;
-            runOnAnyComputer.Checked = !action.ComputerLimited;
             storeLimited.Checked = action.StoreLimited;
             panelStores.Enabled = action.StoreLimited;
+
+            //Load the computer limited settings
+            runOnOtherComputers.Checked = action.ComputerLimitedType != (int)ComputerLimitationType.TriggeringComputer;
+            runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
+            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
+            runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
 
             // Check all the boxes for the stores its limited to
             foreach (long storeID in action.StoreLimitedList)
             {
-                CheckBox storeBox = panelStores.Controls.OfType<CheckBox>().Where(c => (long)c.Tag == storeID).SingleOrDefault();
+                CheckBox storeBox = panelStores.Controls.OfType<CheckBox>().SingleOrDefault(c => (long)c.Tag == storeID);
                 if (storeBox != null)
                 {
                     storeBox.Checked = true;
@@ -189,6 +196,18 @@ namespace ShipWorks.Actions
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
             CreateTriggerEditor();
+
+            //Scheduled actions must be allowed to run on other computers
+            if(triggerType == ActionTriggerType.Scheduled)
+            {
+                runOnOtherComputers.Checked = true;
+                runOnOtherComputers.Enabled = false;
+            }
+            else
+            {
+                runOnOtherComputers.Checked = action.ComputerLimitedType != (int)ComputerLimitationType.TriggeringComputer;
+                runOnOtherComputers.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -205,6 +224,9 @@ namespace ShipWorks.Actions
         private void CreateTriggerEditor()
         {
             ActionTriggerEditor editor = trigger.CreateEditor();
+
+            editor.SizeChanged += OnActionTriggerEditorSizeChanged;
+
             panelTrigger.Height = editor.Height;
 
             editor.Dock = DockStyle.Fill;
@@ -219,6 +241,15 @@ namespace ShipWorks.Actions
             }
 
             UpdateTaskBubbles();
+        }
+
+        /// <summary>
+        /// Updates the panel height when the action trigger editor changes it's height.
+        /// </summary>
+        void OnActionTriggerEditorSizeChanged(object sender, EventArgs e)
+        {
+            panelTrigger.Height = ((ActionTriggerEditor) sender).Height;
+            UpdateTaskArea();
         }
 
         /// <summary>
@@ -239,6 +270,25 @@ namespace ShipWorks.Actions
             }
 
             UpdateTaskArea();
+
+            // If any of the tasks are to backup the database, make sure the action
+            // runs on the Sql computer and disable the UI to change it
+            if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
+            {
+                runOnSpecificComputers.Checked = true;
+                runOnSpecificComputers.Enabled = false;
+                runOnAnyComputer.Enabled = false;
+                runOnOtherComputers.Enabled = false;
+                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer });
+            }
+            else
+            {
+                runOnSpecificComputers.Enabled = true;
+                runOnAnyComputer.Enabled = true;
+                runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
+            }
+
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
         }
 
         /// <summary>
@@ -300,8 +350,15 @@ namespace ShipWorks.Actions
         void OnAddTask(object sender, EventArgs e)
         {
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((ToolStripMenuItem) sender).Tag;
+            ActionTask task = binding.CreateInstance();
 
-            AddTaskBubble(binding.CreateInstance());
+            // Cancel adding the task if it cannot currently be selected
+            if (!EnsureTaskCanBeSelected(task))
+            {
+                return;
+            }
+
+            AddTaskBubble(task);
         }
 
         /// <summary>
@@ -325,6 +382,16 @@ namespace ShipWorks.Actions
             bubble.MoveUp += new EventHandler(OnBubbleMoveUp);
             bubble.MoveDown += new EventHandler(OnBubbleMoveDown);
             bubble.Delete += new EventHandler(OnBubbleDelete);
+            bubble.ActionTaskChanging += OnBubbleTaskChanging;
+        }
+
+        /// <summary>
+        /// The selected task for the bubble has changed
+        /// </summary>
+        private void OnBubbleTaskChanging(object sender, ActionTaskChangingEventArgs e)
+        {
+            // Cancel the task change if the selected task cannot be selected
+            e.Cancel = !EnsureTaskCanBeSelected(e.NewTask);
         }
 
         /// <summary>
@@ -401,6 +468,25 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
+        /// Checks whether the the specified task can be selected 
+        /// </summary>
+        /// <param name="task">The task that should be checked</param>
+        /// <returns></returns>
+        private bool EnsureTaskCanBeSelected(ActionTask task)
+        {
+            if (task is BackupDatabaseTask && !SqlSession.Current.IsLocalServer())
+            {
+                MessageHelper.ShowError(this,
+                    string.Format(
+                        "The task '{0}' can only be configured from a computer running the database.",
+                        ActionTaskManager.GetDescriptor(task.GetType()).BaseName));
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// User is accepting changes to the action
         /// </summary>
         private void OnOK(object sender, EventArgs e)
@@ -413,12 +499,31 @@ namespace ShipWorks.Actions
             }
 
             Cursor.Current = Cursors.WaitCursor;
+            
+            try
+            {
+                trigger.Validate();
+            }
+            catch (Exception ex)
+            {
+                optionControl.SelectedPage = optionPageAction;
+                ActiveControl = panelTrigger;
+                MessageHelper.ShowError(this, ex.Message);
+                return;
+            }
+
+            if (runOnSpecificComputers.Checked && !runOnSpecificComputersList.GetSelectedComputers().Any())
+            {
+                optionControl.SelectedPage = optionPageSettings;
+                MessageHelper.ShowError(this, "At least one computer must be selected when choosing to run actions on specific computers.");
+                return;
+            }
 
             try
             {
                 List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
                 List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
-
+                
                 // Update the flow order
                 foreach (ActionTask task in tasksToSave)
                 {
@@ -442,6 +547,43 @@ namespace ShipWorks.Actions
                     return;
                 }
 
+                ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
+                
+                // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
+                List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).IsAllowedForTrigger(actionTriggerType)).ToList();
+                if (invalidTasks.Any())
+                {
+                    string invalidTasksMsg = string.Join<string>(", ", invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName));
+
+                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} not allowed for use with '{3}'", 
+                        invalidTasks.Count == 1 ? "" : "s", 
+                        invalidTasksMsg,
+                        invalidTasks.Count == 1 ? "is" : "are", 
+                        EnumHelper.GetDescription(actionTriggerType)));
+                    return;
+                }
+
+                // Don't close the form if any of the bubbles have invalid data
+                if (ActiveBubbles.Any(bubble => !bubble.ValidateChildren()))
+                {
+                    return;
+                }
+
+                if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Scheduled)
+                {
+                    try
+                    {
+                        // User changed the trigger from a scheduled trigger to another type of trigger, so we need to make sure
+                        // the action is remvoed from the schedule
+                        new Scheduler().UnscheduleAction(action);
+                    }
+                    catch (SchedulingException schedulingException)
+                    {
+                        MessageHelper.ShowError(this, string.Format("An error occurred trying to remove a scheduled action. {0}", schedulingException.Message));
+                        return;
+                    }
+                }
+
                 // Transacted since we affect multiple action tables
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -459,9 +601,25 @@ namespace ShipWorks.Actions
                     action.TriggerType = (int) triggerCombo.SelectedValue;
                     action.TaskSummary = ActionManager.GetTaskSummary(tasksToSave);
                     action.Enabled = enabled.Checked;
-                    action.ComputerLimited = !runOnAnyComputer.Checked;
                     action.StoreLimited = storeLimited.Checked;
                     action.StoreLimitedList = GenerateStoreLimitedListFromUI();
+
+                    //Save the computer limited settings
+                    if (!runOnOtherComputers.Checked)
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitationType.TriggeringComputer;
+                        action.ComputerLimitedList = new long[0];
+                    }
+                    else if (runOnAnyComputer.Checked)
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitationType.None;
+                        action.ComputerLimitedList = new long[0];
+                    }
+                    else
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitationType.NamedList;
+                        action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
+                    }
 
                     // If we changed triggers, we need to notify the original that it is being deleted
                     if (trigger != originalTrigger)
@@ -520,6 +678,10 @@ namespace ShipWorks.Actions
             {
                 MessageHelper.ShowError(this, "The action has been deleted by another user.");
                 DialogResult = DialogResult.Abort;
+            }
+            catch (SchedulingException schedulingException)
+            {
+                MessageHelper.ShowError(this, schedulingException.Message);
             }
         }
 
@@ -612,6 +774,37 @@ namespace ShipWorks.Actions
             {
                 action.RollbackChanges();
             }
+        }
+
+        /// <summary>
+        /// The RunOnOthersComputers checkbox was checked or unchecked
+        /// </summary>
+        void OnRunOnOtherComputersChecked(object sender, EventArgs e)
+        {
+            computersPanel.Enabled = runOnOtherComputers.Checked;
+
+            // Enabling the panel also enables its subcontrols so make sure that
+            // the computer list's enabled property is set correctly.
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
+        }
+
+        /// <summary>
+        /// The RunOnSpecificComputers checkbox was checked or unchecked
+        /// </summary>
+        void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
+        {
+            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
+
+            if (runOnSpecificComputersList.Visible && runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
+                runOnSpecificComputersList.ShowPopup();
+        }
+
+        /// <summary>
+        /// Gets whether the RunOnSpecificComputersList should be enabled or not
+        /// </summary>
+        private bool ShouldEnableRunOnSpecificComputersList
+        {
+            get { return runOnSpecificComputers.Checked && runOnSpecificComputers.Enabled; }
         }
     }
 }

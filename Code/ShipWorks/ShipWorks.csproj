@@ -110,6 +110,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net1210">
+      <HintPath>..\..\Components\Common.Logging.Log4Net1210.dll</HintPath>
+    </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ComponentFactory.Krypton.Toolkit.dll</HintPath>
@@ -134,10 +141,14 @@
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -197,6 +208,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -204,6 +216,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.IdentityModel">
@@ -255,9 +268,76 @@
     <Compile Include="Actions\ActionQueueStatus.cs" />
     <Compile Include="Actions\ActionQueueStepStatus.cs" />
     <Compile Include="Actions\ActionProcessingContext.cs" />
+    <Compile Include="Actions\ActionQueueType.cs" />
     <Compile Include="Actions\ActionRunnerResult.cs" />
     <Compile Include="Actions\ActionStepContext.cs" />
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
+    <Compile Include="Actions\ComputerLimitationType.cs" />
+    <Compile Include="Actions\ComputerActionPolicy.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\DateOfMonthComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\DateOfMonthComboFormatter.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\MonthComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Enums\ActionScheduleType.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Enums\MonthyCalendarType.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Enums\MonthType.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Enums\WeekOfMonthType.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\WeeklyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\ActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\DailyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\DailyActionScheduleEditor.Designer.cs">
+      <DependentUpon>DailyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.Designer.cs">
+      <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.Designer.cs">
+      <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.Designer.cs">
+      <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\HourlyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\MonthlyActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\ActionSchedules\OneTimeActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\IScheduler.cs" />
+    <Compile Include="Actions\Scheduling\ISchedulingEngine.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\WeeklyActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\DailyActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\HourlyActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\OneTimeActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapters\MonthlyActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\IntervalCalendar.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\QuartzActionSchedule.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ReflectingActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\IActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\SqlSchedulerFactory.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngine.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionScheduleAdapter.cs" />
+    <Compile Include="Actions\Scheduling\Scheduler.cs" />
+    <Compile Include="Actions\Scheduling\QuartzNet\ActionJob.cs" />
+    <Compile Include="Actions\Scheduling\SchedulingException.cs" />
+    <Compile Include="Actions\ActionTaskChangingEventArgs.cs" />
     <Compile Include="Actions\Tasks\ActionTaskFlowInfoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -302,6 +382,30 @@
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
+    <Compile Include="Actions\Tasks\Common\PurgeDatabaseTask.cs" />
+    <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
+    <Compile Include="Actions\Tasks\Common\PurgeDatabaseType.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.Designer.cs">
+      <DependentUpon>ShrinkDatabaseTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\ISqlPurgeScriptRunner.cs" />
+    <Compile Include="Actions\Tasks\Common\ShrinkDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\PrintShipmentsTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -310,10 +414,45 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\PrintShipmentsTask.cs" />
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
+    <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
+    <Compile Include="Actions\Triggers\ScheduledTrigger.cs" />
+    <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.Designer.cs">
+      <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\UI\ComputersComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
+    <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\SchedulerServiceMessageManager.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\DefaultServiceHostFactory.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeConfigurationException.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\Initialization\ExecutionModeInitializerBase.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\Initialization\IExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\Initialization\ServiceExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\Initialization\UserInterfaceExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\IServiceHostFactory.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\MultipleExecutionModeInstancesException.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactory.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\IExecutionMode.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ServiceExecutionMode.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\IServiceHost.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\UserInterfaceExecutionMode.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRetryConfigurator.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceInstaller.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceHost.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -355,6 +494,9 @@
     <Compile Include="ApplicationCore\Help\ShipWorksAboutDlg.Designer.cs">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\AddUserRight.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\IServiceRegistrar.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -362,13 +504,60 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceChangeCredentials.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.Designer.cs">
+      <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.Designer.cs">
+      <DependentUpon>MasterInstaller.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\Commands\InstallServicesCommand.cs" />
+    <Compile Include="ApplicationCore\Services\Commands\UninstallServicesCommand.cs" />
+    <Compile Include="ApplicationCore\Services\UI\ServiceStartHelpDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\UI\ServiceStartHelpDlg.Designer.cs">
+      <DependentUpon>ServiceStartHelpDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ServiceStatus.cs" />
+    <Compile Include="ApplicationCore\Services\ShipWorksServiceBase.Designer.cs">
+      <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
+    <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
     <Compile Include="Data\Administration\ShipWorksSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ServiceStatusManager.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceController.cs" />
+    <Compile Include="ApplicationCore\Services\ShipWorksServiceBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ShipWorksSchedulerService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ShipWorksSchedulerService.Designer.cs">
+      <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ShipWorksServiceException.cs" />
+    <Compile Include="ApplicationCore\Services\UI\ServiceStatusDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Data\Administration\ShipWorksSetupWizard.Designer.cs">
       <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\Services\UI\ServiceStatusDialog.Designer.cs">
+      <DependentUpon>ServiceStatusDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Services\ShipWorksServiceType.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
+    <Compile Include="Data\Administration\SqlShrinkDatabase.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -389,6 +578,7 @@
     <Compile Include="Data\Caching\EntityTypeChangeMonitor.cs" />
     <Compile Include="Data\Caching\EntityTypeChangeNotifier.cs" />
     <Compile Include="Data\Caching\EntityTypeChangeVersion.cs" />
+    <Compile Include="Data\Connection\ISqlSessionConfiguration.cs" />
     <Compile Include="Data\Connection\SingleUserModeDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,6 +588,9 @@
     <Compile Include="Data\Connection\SingleUserModeException.cs" />
     <Compile Include="Data\Controls\PersonException.cs" />
     <Compile Include="Data\Connection\SqlSessionPermissionSet.cs" />
+    <Compile Include="Data\Grid\Columns\Definitions\ServiceStatusColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridComputerListDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Decorators\GridServiceStopTimeDecorator.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridBooleanDisplayType.cs" />
     <Compile Include="Data\Grid\Paging\EntityCacheEntityProvider.cs" />
     <Compile Include="Data\Grid\Paging\DataProviderEntityProvider.cs" />
@@ -519,6 +712,7 @@
     <Compile Include="Data\Import\Xml\IGenericXmlOrderLoadObserver.cs" />
     <Compile Include="Data\OrderHeader.cs" />
     <Compile Include="Data\OrderHeaderProvider.cs" />
+    <Compile Include="Data\Connection\SqlSessionConfiguration.cs" />
     <Compile Include="Data\Utility\SortDefinition.cs" />
     <Compile Include="Editions\Brown\BrownEdition.cs" />
     <Compile Include="Editions\Brown\BrownEditionUtility.cs" />
@@ -5161,6 +5355,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\DailyActionScheduleEditor.resx">
+      <DependentUpon>DailyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\HourlyActionScheduleEditor.resx">
+      <DependentUpon>HourlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\WeeklyActionScheduleEditor.resx">
+      <DependentUpon>WeeklyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
+      <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.resx">
+      <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
+      <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\ShrinkDatabaseTaskEditor.resx">
+      <DependentUpon>ShrinkDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
+      <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Help\SubmitHelpRequestDlg.resx">
       <DependentUpon>SubmitHelpRequestDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -5176,6 +5394,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.resx">
+      <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.resx">
+      <DependentUpon>MasterInstaller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Services\UI\ServiceStartHelpDlg.resx">
+      <DependentUpon>ServiceStartHelpDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Services\ShipWorksSchedulerService.resx">
+      <DependentUpon>ShipWorksSchedulerService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Services\UI\ServiceStatusDialog.resx">
+      <DependentUpon>ServiceStatusDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Services\ShipWorksServiceBase.resx">
+      <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\ShipWorksSetupWizard.resx">
       <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
@@ -7283,6 +7519,7 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv29.wsdl" />
+
     <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -9376,6 +9613,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateOrderRollups.sql" />
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
       <Link>Properties\AnalysisDictionary.xml</Link>
+      <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\UpdateCustomerRollups.sql" />
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_Users.estimate.sql" />
@@ -9444,7 +9682,17 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.4.0.sql" />
-    <Content Include="Data\Administration\Scripts\Update\3.4\3.4.5.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.5.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Maintenance\ShrinkDatabase.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\AuditCleanup.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\EmailCleanup.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\LabelCleanup.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\PrintResultCleanup.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData\3.5\3.5.0.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.5.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -9524,6 +9772,7 @@
     </EmbeddedResource>
     <None Include="Resources\shoppingcart_full.png" />
     <None Include="Resources\star_green.png" />
+    <None Include="Resources\start_shipworks_service.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -10565,6 +10814,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\TrackingEvent.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -11277,9 +11527,18 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>setlocal
+set exe="$(SolutionDir)Artifacts\Application\$(TargetFileName)"
+if exist %25exe%25 (
+    REM Stopping the ShipWorks Service (Scheduler)
+    %25exe%25 /s=scheduler /stop
+)
+</PreBuildEvent>
+  </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

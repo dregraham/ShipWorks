@@ -21,7 +21,7 @@ using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
 using System.Diagnostics;
 using Interapptive.Shared.Win32;
-using ShipWorks.ApplicationCore.MessagesBoxes;
+using ShipWorks.ApplicationCore.MessageBoxes;
 
 namespace ShipWorks.Templates.Management
 {

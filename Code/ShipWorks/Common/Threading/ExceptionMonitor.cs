@@ -96,6 +96,11 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         private static bool HandleException(Exception ex, StackTrace invokingThreadTrace)
         {
+            if (!Program.ExecutionMode.IsUserInteractive)
+            {
+                return false;
+            }
+
             // If the main window has already died, forget it
             if (Program.MainForm.Disposing || !Program.MainForm.Visible)
             {

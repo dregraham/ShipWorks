@@ -27,5 +27,8 @@ namespace ShipWorks.Actions.Triggers
 
         [Description("A filter's content changes")]
         FilterContentChanged = 5,
+
+        [Description("A scheduled time")]
+        Scheduled = 6
     }
 }

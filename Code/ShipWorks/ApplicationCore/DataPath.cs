@@ -257,7 +257,7 @@ namespace ShipWorks.ApplicationCore
         {
             get
             {
-                return Path.Combine(Application.StartupPath, "ShipWorks.Native.dll");
+                return Path.Combine(Program.AppLocation, "ShipWorks.Native.dll");
             }
         }
 

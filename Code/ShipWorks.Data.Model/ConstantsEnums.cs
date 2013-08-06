@@ -27,8 +27,10 @@ namespace ShipWorks.Data.Model
 		Name,
 		///<summary>Enabled. </summary>
 		Enabled,
-		///<summary>ComputerLimited. </summary>
-		ComputerLimited,
+		///<summary>ComputerLimitedType. </summary>
+		ComputerLimitedType,
+		///<summary>InternalComputerLimitedList. </summary>
+		InternalComputerLimitedList,
 		///<summary>StoreLimited. </summary>
 		StoreLimited,
 		///<summary>InternalStoreLimitedList. </summary>
@@ -58,8 +60,10 @@ namespace ShipWorks.Data.Model
 		FilterNodeID,
 		///<summary>Direction. </summary>
 		Direction,
-		///<summary>ComputerLimited. </summary>
-		ComputerLimited,
+		///<summary>ComputerLimitedType. </summary>
+		ComputerLimitedType,
+		///<summary>InternalComputerLimitedList. </summary>
+		InternalComputerLimitedList,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -87,8 +91,8 @@ namespace ShipWorks.Data.Model
 		TriggerDate,
 		///<summary>TriggerComputerID. </summary>
 		TriggerComputerID,
-		///<summary>RunComputerID. </summary>
-		RunComputerID,
+		///<summary>InternalComputerLimitedList. </summary>
+		InternalComputerLimitedList,
 		///<summary>ObjectID. </summary>
 		ObjectID,
 		///<summary>Status. </summary>
@@ -97,6 +101,8 @@ namespace ShipWorks.Data.Model
 		NextStep,
 		///<summary>ContextLock. </summary>
 		ContextLock,
+		///<summary>ActionQueueType. </summary>
+		ActionQueueType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6906,6 +6912,35 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ServiceStatus.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ServiceStatusFieldIndex:int
+	{
+		///<summary>ServiceStatusID. </summary>
+		ServiceStatusID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ComputerID. </summary>
+		ComputerID,
+		///<summary>ServiceType. </summary>
+		ServiceType,
+		///<summary>LastStartDateTime. </summary>
+		LastStartDateTime,
+		///<summary>LastStopDateTime. </summary>
+		LastStopDateTime,
+		///<summary>LastCheckInDateTime. </summary>
+		LastCheckInDateTime,
+		///<summary>ServiceFullName. </summary>
+		ServiceFullName,
+		///<summary>ServiceDisplayName. </summary>
+		ServiceDisplayName,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9479,6 +9514,8 @@ namespace ShipWorks.Data.Model
 		ServerMessageEntity,
 		///<summary>ServerMessageSignoff</summary>
 		ServerMessageSignoffEntity,
+		///<summary>ServiceStatus</summary>
+		ServiceStatusEntity,
 		///<summary>Shipment</summary>
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>

@@ -37,10 +37,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.Enabled);}
 		}
-		/// <summary>Creates a new ActionEntity.ComputerLimited field instance</summary>
-		public static EntityField2 ComputerLimited
+		/// <summary>Creates a new ActionEntity.ComputerLimitedType field instance</summary>
+		public static EntityField2 ComputerLimitedType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.ComputerLimited);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.ComputerLimitedType);}
+		}
+		/// <summary>Creates a new ActionEntity.InternalComputerLimitedList field instance</summary>
+		public static EntityField2 InternalComputerLimitedList
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFieldIndex.InternalComputerLimitedList);}
 		}
 		/// <summary>Creates a new ActionEntity.StoreLimited field instance</summary>
 		public static EntityField2 StoreLimited
@@ -92,10 +97,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.Direction);}
 		}
-		/// <summary>Creates a new ActionFilterTriggerEntity.ComputerLimited field instance</summary>
-		public static EntityField2 ComputerLimited
+		/// <summary>Creates a new ActionFilterTriggerEntity.ComputerLimitedType field instance</summary>
+		public static EntityField2 ComputerLimitedType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.ComputerLimited);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.ComputerLimitedType);}
+		}
+		/// <summary>Creates a new ActionFilterTriggerEntity.InternalComputerLimitedList field instance</summary>
+		public static EntityField2 InternalComputerLimitedList
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionFilterTriggerFieldIndex.InternalComputerLimitedList);}
 		}
 	}
 
@@ -142,10 +152,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.TriggerComputerID);}
 		}
-		/// <summary>Creates a new ActionQueueEntity.RunComputerID field instance</summary>
-		public static EntityField2 RunComputerID
+		/// <summary>Creates a new ActionQueueEntity.InternalComputerLimitedList field instance</summary>
+		public static EntityField2 InternalComputerLimitedList
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.RunComputerID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.InternalComputerLimitedList);}
 		}
 		/// <summary>Creates a new ActionQueueEntity.ObjectID field instance</summary>
 		public static EntityField2 ObjectID
@@ -166,6 +176,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ContextLock
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ContextLock);}
+		}
+		/// <summary>Creates a new ActionQueueEntity.ActionQueueType field instance</summary>
+		public static EntityField2 ActionQueueType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionQueueType);}
 		}
 	}
 
@@ -14721,6 +14736,56 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Dismissed
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ServerMessageSignoffFieldIndex.Dismissed);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ServiceStatusEntity</summary>
+	public partial class ServiceStatusFields
+	{
+		/// <summary>Creates a new ServiceStatusEntity.ServiceStatusID field instance</summary>
+		public static EntityField2 ServiceStatusID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceStatusID);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ComputerID field instance</summary>
+		public static EntityField2 ComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ComputerID);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ServiceType field instance</summary>
+		public static EntityField2 ServiceType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceType);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.LastStartDateTime field instance</summary>
+		public static EntityField2 LastStartDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.LastStartDateTime);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.LastStopDateTime field instance</summary>
+		public static EntityField2 LastStopDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.LastStopDateTime);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.LastCheckInDateTime field instance</summary>
+		public static EntityField2 LastCheckInDateTime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.LastCheckInDateTime);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ServiceFullName field instance</summary>
+		public static EntityField2 ServiceFullName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceFullName);}
+		}
+		/// <summary>Creates a new ServiceStatusEntity.ServiceDisplayName field instance</summary>
+		public static EntityField2 ServiceDisplayName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceDisplayName);}
 		}
 	}
 

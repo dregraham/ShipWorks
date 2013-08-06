@@ -52,6 +52,7 @@ namespace ShipWorks.Data
         /// </summary>
         static EntityUtility()
         {
+            entitySeedValues[EntityType.ComputerEntity] = 1;
             entitySeedValues[EntityType.UserEntity] = 2;
             entitySeedValues[EntityType.AuditChangeEntity] = 3;
             entitySeedValues[EntityType.StoreEntity] = 5;
@@ -83,6 +84,7 @@ namespace ShipWorks.Data
             entitySeedValues[EntityType.EndiciaAccountEntity] = 66;
             entitySeedValues[EntityType.EquaShipAccountEntity] = 67;
             entitySeedValues[EntityType.ScanFormBatchEntity] = 95;
+            entitySeedValues[EntityType.ServiceStatusEntity] = 96;
         }
 
         /// <summary>

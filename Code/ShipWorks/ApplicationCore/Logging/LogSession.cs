@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
+using Common.Logging.Log4Net;
+using ShipWorks.Common.Threading;
 using log4net.Config;
 using System.Diagnostics;
 using System.Data;
@@ -19,9 +22,10 @@ using ShipWorks.ApplicationCore;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Interaction;
 using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
 using System.Security;
 using ShipWorks.Data.Grid.Paging;
+using CommonLogging = Common.Logging;
+
 
 namespace ShipWorks.ApplicationCore.Logging
 {
@@ -68,6 +72,10 @@ namespace ShipWorks.ApplicationCore.Logging
 
             // Check on idle to see if an logs are old enough to delete.  Run at most once an hour.
             IdleWatcher.RegisterDatabaseIndependentWork("LogCleanup", CleanupThread, TimeSpan.FromHours(1));
+
+
+            CommonLogging.LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
+            
         }
 
         /// <summary>

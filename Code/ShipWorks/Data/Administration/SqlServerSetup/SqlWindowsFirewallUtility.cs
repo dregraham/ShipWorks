@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             // Extract the instance name from the server\instance 
-            string instance = SqlInstanceUtility.ExtractInstanceName(SqlSession.Current.ServerInstance);
+            string instance = SqlInstanceUtility.ExtractInstanceName(SqlSession.Current.Configuration.ServerInstance);
 
             // For vista we need elevation
             if (MyComputer.IsWindowsVistaOrHigher || InterapptiveOnly.MagicKeysDown)

@@ -47,6 +47,17 @@
       <Word>write_shipping</Word>
       <Word>pgp</Word>
       <Word>partnerid</Word>
+      <Word>api</Word>
+      <Word>auth</Word>
+      <Word>Usb</Word>
+      <Word>iso</Word>
+      <Word>ascii</Word>
+      <Word>lbs</Word>
+      <Word>sku</Word>
+      <Word>nafta</Word>
+      <Word>ups</Word>
+      <Word>username</Word>
+      <Word>MainForm</Word>
 		</Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
@@ -58,6 +69,7 @@
       <Term>FedEx</Term>
       <Term>AmeriCommerce</Term>
       <Term>EquaShip</Term>
+      <Term>MainForm</Term>
     </DiscreteExceptions>
 		<Deprecated>
 			<Term PreferredAlternate="EnterpriseServices">ComPlus</Term>

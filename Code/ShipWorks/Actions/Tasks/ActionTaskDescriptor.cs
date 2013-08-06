@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Reflection;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Stores.Platforms;
 using ShipWorks.Stores;
 
@@ -17,6 +18,7 @@ namespace ShipWorks.Actions.Tasks
         Type type;
         string baseName;
         string identifier;
+        ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
         /// Constructor
@@ -47,7 +49,8 @@ namespace ShipWorks.Actions.Tasks
 
             bool validNamespace =
                 type.Namespace.StartsWith("ShipWorks.Actions.Tasks.Common") ||
-                type.Namespace.EndsWith("CoreExtensions.Actions");
+                type.Namespace.EndsWith("CoreExtensions.Actions") || 
+                type.Namespace.StartsWith("ShipWorks.Tests.Actions");
 
             Debug.Assert(validNamespace,
                 @"When obfuscated, only types in the above namespace formats will work.  This is due to the xr option we use with demeanor.  If a type truly
@@ -61,6 +64,7 @@ namespace ShipWorks.Actions.Tasks
             ActionTaskAttribute attribute = (ActionTaskAttribute) Attribute.GetCustomAttribute(type, typeof(ActionTaskAttribute));
             this.baseName = attribute.DisplayName;
             this.identifier = attribute.Identifier;
+            this.allowedActionTriggerClassifications = attribute.AllowedActionTriggerClassifications;
         }
 
         /// <summary>
@@ -104,6 +108,31 @@ namespace ShipWorks.Actions.Tasks
             {
                 return type;
             }
+        }
+
+        /// <summary>
+        /// If this task is allowed to be added to an Action that is of Scheduled type.  For example, "Play a Sound" is not allowed
+        /// as the sound will not be heard when run as a service.
+        /// </summary>
+        public ActionTriggerClassifications TriggerClassifications
+        {
+            get
+            {
+                return allowedActionTriggerClassifications;
+            }
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            ActionTriggerClassifications classification = (triggerType == ActionTriggerType.Scheduled) ? 
+                ActionTriggerClassifications.Scheduled : 
+                ActionTriggerClassifications.Nonscheduled;
+            return (allowedActionTriggerClassifications & classification) != ActionTriggerClassifications.None;
         }
 
         /// <summary>

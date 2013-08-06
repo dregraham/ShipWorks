@@ -579,7 +579,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         private static void UpgradeSqlServerNormally(string installerPath, SqlSession sqlSession)
         {
-            string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.ServerInstance);
+            string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.Configuration.ServerInstance);
 
             string args = GetUpgradeArgs(instance, Path.GetFileName(installerPath) == sqlx86FileName);
             log.InfoFormat("Executing: {0}", args);
@@ -633,7 +633,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         private static void EnableRemoteConnections(SqlSession sqlSession)
         {
-            string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.ServerInstance);
+            string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.Configuration.ServerInstance);
 
             ManagementScope scope = new ManagementScope(@"\\.\root\Microsoft\SqlServer\ComputerManagement10");
 
@@ -734,7 +734,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             log.InfoFormat("MSDE detected, upgrade has to jump through hoops.");
 
-            string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.ServerInstance);
+            string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.Configuration.ServerInstance);
             if (string.IsNullOrEmpty(instance))
             {
                 throw new InvalidOperationException("Upgrading from default instance of MSDE not supported.");
@@ -753,7 +753,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             {
                 // If we don't know their sa password what we will do is one to install 08, 
                 // and then override it with the HASH from the current install.
-                needOverrideSa = sqlSession.WindowsAuth || sqlSession.Username != "sa";
+                needOverrideSa = sqlSession.Configuration.WindowsAuth || sqlSession.Configuration.Username != "sa";
                 saPasswordHash = null;
 
                 if (needOverrideSa)
@@ -867,9 +867,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             // We need a new SQL Session that uses windows auth - which we know we can login as.  If the session
             // was configured to use a non SA SQL Admin it would failed, b\c it doesn't exist on this new instance (yet)
             SqlSession copySession = new SqlSession();
-            copySession.ServerInstance = sqlSession.ServerInstance;
-            copySession.DatabaseName = "master";
-            copySession.WindowsAuth = true;
+            copySession.Configuration.ServerInstance = sqlSession.Configuration.ServerInstance;
+            copySession.Configuration.DatabaseName = "master";
+            copySession.Configuration.WindowsAuth = true;
 
             // It's possible we are here after a successful SQL 08 install - but that needed to reboot before we moved on.  If that's the case we skip over the install (its already installed)
             // and move on to fixing up the db stuff.
@@ -884,7 +884,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     return false;
                 }
 #endif
-                string saPassword = needOverrideSa ? "temporary" : sqlSession.Password;
+                string saPassword = needOverrideSa ? "temporary" : sqlSession.Configuration.Password;
                 string args = GetInstallArgs(instance, saPassword, true);
 
                 log.Info("Installing SQL server with args: " + args);
@@ -933,7 +933,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             try
             {
                 // This section moves the mdf\ldf files to the location of the new 08 install
-                using (SqlConnection con = new SqlConnection(copySession.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(copySession.Configuration.GetConnectionString()))
                 {
                     con.Open();
 

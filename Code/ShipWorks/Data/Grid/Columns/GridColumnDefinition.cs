@@ -211,6 +211,12 @@ namespace ShipWorks.Data.Grid.Columns
         {
             EntityGridColumn column = DisplayType.CreateGridColumn(this);
 
+            if (null == SortProvider)
+            {
+                column.AutoSortType = ColumnAutoSortType.None;
+                column.Clickable = false;
+            }
+
             return column;
         }
 

@@ -36,9 +36,9 @@ namespace ShipWorks.Tests
         public static void Initialize(string server, string database)
         {
             SqlSession sqlSession = new SqlSession();
-            sqlSession.ServerInstance = server;
-            sqlSession.DatabaseName = database;
-            sqlSession.WindowsAuth = true;
+            sqlSession.Configuration.ServerInstance = server;
+            sqlSession.Configuration.DatabaseName = database;
+            sqlSession.Configuration.WindowsAuth = true;
 
             sqlScope = new SqlSessionScope(sqlSession);
             auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditBehaviorDisabledState.Disabled);

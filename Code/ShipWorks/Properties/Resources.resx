@@ -421,7 +421,7 @@
   <data name="lock16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\lock.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="fedex" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhiAAxAIQAAAAAAP////v3+/fz+Pbv+WYAmc2p3o5EtqlvyNe65+zh8u3s7t3Y5Pv7+/Pz88/P
@@ -1323,5 +1323,8 @@
   </data>
   <data name="iparcelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iparcelLogo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="start_shipworks_service" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\start_shipworks_service.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

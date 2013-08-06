@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Email.Outlook;
-using ShipWorks.Actions;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
-using ShipWorks.Data.Grid.Columns.SortProviders;
+﻿using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Globalization;
-using Interapptive.Shared.Utility;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.SortProviders;
+using ShipWorks.Data.Grid.Columns.ValueProviders;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -32,9 +26,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         ActionQueueFields.TriggerDate),
 
                     new GridColumnDefinition("{A34E560E-DDC6-44c6-A532-A262C9CB9D3E}", true,
-                        new GridComputerDisplayType(), "Computer", @"\\ShippingPC",
-                        new GridColumnFieldValueProvider(ActionQueueFields.RunComputerID),
-                        new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ActionQueueFields.RunComputerID, JoinHint.Right)), 
+                        new GridComputerListDisplayType(), "Computer(s)", @"\\ShippingPC",
+                        new GridColumnFunctionValueProvider(x => ((ActionQueueEntity)x).ComputerLimitedList),
+                        null),
 
                     new GridColumnDefinition("{10668EBE-8755-47A0-94E7-06E4DB466766}",
                         new GridComputerDisplayType(), "Triggered On", @"\\ShippingPC",

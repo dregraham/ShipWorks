@@ -3,12 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
 	ProjectSection(SolutionItems) = preProject
+		Build\AnalysisDictionary.xml = Build\AnalysisDictionary.xml
+		rakefile.rb = rakefile.rb
 		Build\shared.targets = Build\shared.targets
 		Installer\ShipWorks.iss = Installer\ShipWorks.iss
 		LLBLGen\ShipWorks.lgp = LLBLGen\ShipWorks.lgp
 		Build\shipworks.proj = Build\shipworks.proj
-		ShipWorks.testsettings = ShipWorks.testsettings
-		ShipWorks.vsmdi = ShipWorks.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks", "Code\ShipWorks\ShipWorks.csproj", "{02653371-C0DC-4D70-949D-60D37C69F781}"
@@ -35,9 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Tests.Integration.MSTest", "Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj", "{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = ShipWorks.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (x86)|Any CPU = Debug (x86)|Any CPU
 		Debug (x86)|Mixed Platforms = Debug (x86)|Mixed Platforms
@@ -259,22 +256,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(VaultVsipSolution-v2) = preSolution
-		VaultHost = http://vault.interapptive.com/VaultService
-		VaultRepositoryID = 2
-		VaultRepositoryGUID = 4dc65538-e67f-4277-9622-0ab008abf2fc
-		ProjectCount = 11
-		ProjectRelativeDiskPath1 = Code\ShipWorks\ShipWorks.csproj
-		ProjectRelativeDiskPath2 = Code\ShipWorks.Native\Native.vcxproj
-		ProjectRelativeDiskPath3 = Code\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj
-		ProjectRelativeDiskPath4 = Code\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj
-		ProjectRelativeDiskPath5 = Code\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj
-		ProjectRelativeDiskPath6 = Code\Interapptive.Shared\Interapptive.Shared.csproj
-		ProjectRelativeDiskPath7 = Code\ShipWorks.Shared\ShipWorks.Shared.csproj
-		ProjectRelativeDiskPath8 = Code\ShipWorks.Tests\ShipWorks.Tests.csproj
-		ProjectRelativeDiskPath9 = ShipWorks.sln
-		ProjectRelativeDiskPath10 = Code\ShipWorks.Tests.Integration.Fitnesse\ShipWorks.Tests.Integration.Fitnesse.csproj
-		ProjectRelativeDiskPath11 = Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj
 	EndGlobalSection
 EndGlobal

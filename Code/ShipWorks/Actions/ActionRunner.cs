@@ -161,9 +161,10 @@ namespace ShipWorks.Actions
             }
             else
             {
+                ActionEntity actionEntity = ActionManager.GetAction(queue.ActionID);
 
                 // If its for a different computer we can't do it
-                if (queue.RunComputerID != null && queue.RunComputerID != UserSession.Computer.ComputerID)
+                if (actionEntity.ComputerLimitedType != (int)ComputerLimitationType.None && queue.ComputerLimitedList != null && !queue.ComputerLimitedList.Any(x => x == UserSession.Computer.ComputerID))
                 {
                     result = ActionRunnerResult.WrongComputer;
                     return null;

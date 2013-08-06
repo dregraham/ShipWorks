@@ -22,6 +22,8 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,13 +44,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Moq">
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -66,6 +77,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Scheduling\ActionScheduleTest.cs" />
+    <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCAGroundDomesticInternational.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExPrototypeFixture.cs" />
@@ -76,12 +89,15 @@
     <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsFixture.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntegrationTestBase.cs" />
+    <Compile Include="Actions\Scheduling\HourlyActionScheduleTest.cs" />
+    <Compile Include="ShipWorksInitializer.cs" />
     <Compile Include="Utilities\InterapptiveOnlyUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\iParcel\iParcelFixture.cs" />
     <Compile Include="Utilities\ShipWorksDataMethods.cs" />
     <Compile Include="Fixtures\ShipWorksFixtureBase.cs" />
     <Compile Include="IntegrationTests.cs" />
+    <Compile Include="Utilities\SystemTimeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -109,7 +125,9 @@
     <Content Include="Utilities\GenerateTestData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DataSources\FedExCanadaExpressDomestic.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

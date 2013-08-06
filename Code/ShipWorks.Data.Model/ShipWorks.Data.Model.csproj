@@ -24,14 +24,6 @@
     </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
@@ -126,6 +118,8 @@
   <ItemGroup>
     <Compile Include="Custom\ActiveTableInheritanceManager.cs" />
     <Compile Include="Custom\EntityClasses\ActionEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ActionFilterTriggerEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
     <Compile Include="Custom\EntityClasses\CommonEntityBase.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
@@ -1134,6 +1128,12 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\EntityClasses\ScanFormBatchEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\ServiceStatusRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\ServiceStatusEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

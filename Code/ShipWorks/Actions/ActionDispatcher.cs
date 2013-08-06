@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Communication;
@@ -10,6 +11,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Users;
 using ShipWorks.Shipping;
 using log4net;
+using System.Globalization;
 
 namespace ShipWorks.Actions
 {
@@ -144,6 +146,45 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
+        /// Creates an ActionQueue entry for a scheduled Action whose time has come.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+        public static void DispatchScheduledAction(long actionID)
+        {
+            ActionManager.CheckForChangesNeeded();
+            ActionEntity actionEntity = ActionManager.GetAction(actionID);
+            if (!actionEntity.Enabled)
+                return;
+
+            ActionTriggerType actionTriggerType = (ActionTriggerType)actionEntity.TriggerType;
+
+            // Get the specific action trigger type and check any specific settings
+            switch (actionTriggerType)
+            {
+                case ActionTriggerType.OrderDownloaded:
+                case ActionTriggerType.DownloadFinished:
+                case ActionTriggerType.ShipmentProcessed:
+                case ActionTriggerType.ShipmentVoided:
+                case ActionTriggerType.FilterContentChanged:
+                    log.WarnFormat("Scheduled Actions do not support trigger type: {0}", EnumHelper.GetDescription(actionTriggerType));
+                    return;
+                case ActionTriggerType.Scheduled:
+                    // TODO: Add any cron trigger checks...
+                    // CronTrigger cronTrigger = new CronTrigger(actionEntity.TriggerSettings);
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            // Scheduled actions should not be running in any sql adapter context, so create one now
+            using (SqlAdapter adapter = new SqlAdapter(false))
+            {
+                DispatchAction(actionEntity, null, adapter);
+            }
+        }
+
+        /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
         private static void DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter)
@@ -152,15 +193,22 @@ namespace ShipWorks.Actions
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
+            entity.ActionQueueType = (int)ActionManager.ActionQueueType;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
-
-            // If it's limited to only running on this computer set the ID
-            if (action.ComputerLimited)
+            
+            if (action.ComputerLimitedType == (int) ComputerLimitationType.TriggeringComputer)
             {
-                entity.RunComputerID = UserSession.Computer.ComputerID;
+                // It's limited to only running on this computer, so use this computer ID as
+                // the only computer that can execute the action
+                entity.InternalComputerLimitedList = UserSession.Computer.ComputerID.ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                // Just copy over the list of computers that are able to execute the action
+                entity.InternalComputerLimitedList = action.InternalComputerLimitedList;
             }
 
             // Set the initial status and the first step

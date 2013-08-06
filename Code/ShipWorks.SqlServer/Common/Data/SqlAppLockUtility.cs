@@ -109,5 +109,56 @@ namespace ShipWorks.SqlServer.Common.Data
 
             return ((int) cmd.ExecuteScalar()) != 1;
         }
+
+        /// <summary>
+        /// Gets a SqlCommand from the given connection that is locked using the specified lock name.
+        /// </summary>
+        /// <param name="connection">Connection to use for locking and to create the command</param>
+        /// <param name="lockName">Name of the lock that should be used</param>
+        /// <param name="commandMethod">Action that will be called with the locked command</param>
+        public static void GetLockedCommand(SqlConnection connection, string lockName, Action<SqlCommand> commandMethod)
+        {
+            bool needsClosing = false;
+
+            try
+            {
+                // Need to have an open connection for the duration of the lock acquisition/release
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                    needsClosing = true;
+                }
+
+                // Try to get a lock, if possible
+                if (!IsLocked(connection, lockName) && AcquireLock(connection, lockName))
+                {
+                    try
+                    {
+                        using (SqlCommand command = connection.CreateCommand())
+                        {
+                            commandMethod(command);
+                        }
+                    }
+                    finally
+                    {
+                        ReleaseLock(connection, lockName);
+                    }
+                }
+                else
+                {
+                    // Let the caller know that someone else already has this lock
+                    throw new SqlLockException(lockName);
+                }
+            }
+            finally
+            {
+                // If this method opened the command, close it
+                if (needsClosing && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+                
+        }
     }
 }

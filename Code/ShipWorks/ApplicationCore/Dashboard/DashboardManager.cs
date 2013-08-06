@@ -51,6 +51,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         static List<Type> itemTypeSortOrder = new List<Type>
             {
                 typeof(DashboardActionErrorItem),
+                typeof(DashboardSchedulerServiceStoppedItem),
                 typeof(DashboardEmailItem),
                 typeof(DashboardStoreItem),
                 typeof(DashboardMessageItem),
@@ -451,8 +452,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
             catch (ServerMessageFeedException ex)
             {
-                Debug.Fail(ex.Message, ex.ToString());
                 log.Error("Failed to read server message feed.", ex);
+                Debug.Fail(ex.Message, ex.ToString());
             }
         }
 
@@ -470,6 +471,48 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForServerMessageChanges();
             CheckForEmailChanges();
             CheckForActionChanges();
+            CheckForSchedulerServiceStoppedChanges();
+        }
+
+        /// <summary>
+        /// Check for any changes in the database for scheduler service stopped messages
+        /// </summary>
+        private static void CheckForSchedulerServiceStoppedChanges()
+        {
+            // Check the database for any changes
+            List<ServiceStatusEntity> stoppedSchedulerServices = SchedulerServiceMessageManager.StoppedServices;
+            List<DashboardSchedulerServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardSchedulerServiceStoppedItem>().ToList<DashboardSchedulerServiceStoppedItem>();
+
+            // If the message is already there we don't have to do anything
+            if (!existingDashboardItems.Any() && stoppedSchedulerServices.Count > 0)
+            {
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
+                AddDashboardItem(item);
+            }
+            else if (existingDashboardItems.Any() && stoppedSchedulerServices.Count == 0)
+            {
+                // The stopped services are now running, so remove the stopped dashboard item.
+                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
+                
+                existingDashboardItems.ForEach(RemoveDashboardItem);
+
+                //// It's no longer active, so we've got to get rid of it.
+                //RemoveDashboardItem(item);
+            }
+            else if (stoppedSchedulerServices.Count > 0)
+            {
+                // There are existing service dashboard items AND the number of stopped services has changed, so remove
+                // the current dashboard item and add the new one.
+                existingDashboardItems.ForEach(RemoveDashboardItem);
+
+                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
+
+                //// It's no longer active, so we've got to get rid of it.
+                //RemoveDashboardItem(item);
+
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
+                AddDashboardItem(item);
+            }
         }
 
         /// <summary>

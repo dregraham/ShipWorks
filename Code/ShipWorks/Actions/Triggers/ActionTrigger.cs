@@ -87,5 +87,10 @@ namespace ShipWorks.Actions.Triggers
         {
 
         }
+
+        /// <summary>
+        /// Validates the state of the trigger.  An exception is thrown to indicate validation failure.
+        /// </summary>
+        public virtual void Validate() { }
     }
 }

@@ -445,7 +445,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Direction", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ComputerLimited", fieldHashtable);
+			_fieldsCustomProperties.Add("ComputerLimitedType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InternalComputerLimitedList", fieldHashtable);
 		}
 		#endregion
 
@@ -544,15 +547,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ActionFilterTriggerFieldIndex.Direction, value); }
 		}
 
-		/// <summary> The ComputerLimited property of the Entity ActionFilterTrigger<br/><br/>
+		/// <summary> The ComputerLimitedType property of the Entity ActionFilterTrigger<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."ComputerLimited"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."ComputerLimitedType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ComputerLimited
+		public virtual System.Int32 ComputerLimitedType
 		{
-			get { return (System.Boolean)GetValue((int)ActionFilterTriggerFieldIndex.ComputerLimited, true); }
-			set	{ SetValue((int)ActionFilterTriggerFieldIndex.ComputerLimited, value); }
+			get { return (System.Int32)GetValue((int)ActionFilterTriggerFieldIndex.ComputerLimitedType, true); }
+			set	{ SetValue((int)ActionFilterTriggerFieldIndex.ComputerLimitedType, value); }
+		}
+
+		/// <summary> The InternalComputerLimitedList property of the Entity ActionFilterTrigger<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."ComputerLimitedList"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String InternalComputerLimitedList
+		{
+			get { return (System.String)GetValue((int)ActionFilterTriggerFieldIndex.InternalComputerLimitedList, true); }
+			set	{ SetValue((int)ActionFilterTriggerFieldIndex.InternalComputerLimitedList, value); }
 		}
 
 

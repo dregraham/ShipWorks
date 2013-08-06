@@ -15,14 +15,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -73,7 +65,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
@@ -113,6 +106,7 @@
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
+    <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
@@ -321,10 +315,13 @@
     <Compile Include="Utility\ApiValueAttribute.cs" />
     <Compile Include="Utility\BreakpointTimer.cs" />
     <Compile Include="Utility\ByteUtility.cs" />
+    <Compile Include="Utility\DateTimeProvider.cs" />
     <Compile Include="Utility\DateTimeUtility.cs" />
     <Compile Include="Utility\DeprecatedAttribute.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
+    <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
+    <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
@@ -334,6 +331,7 @@
     <Compile Include="Utility\SortOrderAttribute.cs" />
     <Compile Include="Utility\StreamUtility.cs" />
     <Compile Include="Utility\StringUtility.cs" />
+    <Compile Include="Utility\UserControlTypeDescriptionProvider.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
     <Compile Include="Utility\XmlUtility.cs" />

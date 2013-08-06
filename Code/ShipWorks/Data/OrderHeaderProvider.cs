@@ -90,7 +90,7 @@ namespace ShipWorks.Data
             }
 
             // If we're on the UI, show the wait cursor, in case this is going to take a while
-            if (!Program.MainForm.InvokeRequired)
+            if (Program.ExecutionMode.IsUserInteractive && !Program.MainForm.InvokeRequired)
             {
                 Cursor.Current = Cursors.WaitCursor;
             }

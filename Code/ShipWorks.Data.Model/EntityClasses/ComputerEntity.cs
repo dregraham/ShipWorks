@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		private EntityCollection<ServiceStatusEntity> _serviceStatuses;
 
 
 
@@ -69,6 +70,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			/// <summary>Member name ServiceStatuses</summary>
+			public static readonly string ServiceStatuses = "ServiceStatuses";
 
 
 
@@ -140,6 +143,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				_serviceStatuses = (EntityCollection<ServiceStatusEntity>)info.GetValue("_serviceStatuses", typeof(EntityCollection<ServiceStatusEntity>));
 
 
 
@@ -191,6 +195,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "ServiceStatuses":
+					this.ServiceStatuses.Add((ServiceStatusEntity)entity);
+					break;
 
 
 
@@ -226,6 +233,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "ServiceStatuses":
+					toReturn.Add(ComputerEntity.Relations.ServiceStatusEntityUsingComputerID);
+					break;
 
 
 
@@ -275,6 +285,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "ServiceStatuses":
+					this.ServiceStatuses.Add((ServiceStatusEntity)relatedEntity);
+					break;
 
 
 
@@ -298,6 +311,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "ServiceStatuses":
+					base.PerformRelatedEntityRemoval(this.ServiceStatuses, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 
 
 
@@ -336,6 +352,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			toReturn.Add(this.ServiceStatuses);
 
 
 
@@ -357,6 +374,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				info.AddValue("_serviceStatuses", ((_serviceStatuses!=null) && (_serviceStatuses.Count>0) && !this.MarkedForDeletion)?_serviceStatuses:null);
 
 
 
@@ -415,6 +433,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'ServiceStatus' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoServiceStatuses()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ServiceStatusFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
+			return bucket;
+		}
+
 
 
 
@@ -456,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			collectionsQueue.Enqueue(this._serviceStatuses);
 
 
 
@@ -475,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			this._serviceStatuses = (EntityCollection<ServiceStatusEntity>) collectionsQueue.Dequeue();
 
 
 
@@ -493,6 +523,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			if (this._serviceStatuses != null)
+			{
+				return true;
+			}
 
 
 
@@ -514,6 +548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ServiceStatusEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ServiceStatusEntityFactory))) : null);
 
 
 
@@ -536,6 +571,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			toReturn.Add("ServiceStatuses", _serviceStatuses);
 
 
 
@@ -555,6 +591,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			if(_serviceStatuses!=null)
+			{
+				_serviceStatuses.ActiveContext = base.ActiveContext;
+			}
 
 
 
@@ -575,6 +615,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			_serviceStatuses = null;
 
 
 
@@ -648,6 +689,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ServiceStatus' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathServiceStatuses
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<ServiceStatusEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ServiceStatusEntityFactory))),
+					(IEntityRelation)GetRelationsForField("ServiceStatuses")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.ServiceStatusEntity, 0, null, null, null, null, "ServiceStatuses", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
 
 
 
@@ -728,6 +780,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'ServiceStatusEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(ServiceStatusEntity))]
+		public virtual EntityCollection<ServiceStatusEntity> ServiceStatuses
+		{
+			get
+			{
+				if(_serviceStatuses==null)
+				{
+					_serviceStatuses = new EntityCollection<ServiceStatusEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ServiceStatusEntityFactory)));
+					_serviceStatuses.SetContainingEntityInfo(this, "Computer");
+				}
+				return _serviceStatuses;
+			}
+		}
 
 
 

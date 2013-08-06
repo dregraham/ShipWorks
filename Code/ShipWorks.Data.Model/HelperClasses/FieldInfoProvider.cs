@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (157 + 0));
+			base.InitClass( (158 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -169,6 +169,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitSearsStoreEntityInfos();
 			InitServerMessageEntityInfos();
 			InitServerMessageSignoffEntityInfos();
+			InitServiceStatusEntityInfos();
 			InitShipmentEntityInfos();
 			InitShipmentCustomsItemEntityInfos();
 			InitShippingDefaultsRuleEntityInfos();
@@ -225,7 +226,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ActionFieldIndex.RowVersion, 0, 0, 0);
 			base.AddElementFieldInfo("ActionEntity", "Name", typeof(System.String), false, false, false, false,  (int)ActionFieldIndex.Name, 50, 0, 0);
 			base.AddElementFieldInfo("ActionEntity", "Enabled", typeof(System.Boolean), false, false, false, false,  (int)ActionFieldIndex.Enabled, 0, 0, 0);
-			base.AddElementFieldInfo("ActionEntity", "ComputerLimited", typeof(System.Boolean), false, false, false, false,  (int)ActionFieldIndex.ComputerLimited, 0, 0, 0);
+			base.AddElementFieldInfo("ActionEntity", "ComputerLimitedType", typeof(System.Int32), false, false, false, false,  (int)ActionFieldIndex.ComputerLimitedType, 0, 0, 10);
+			base.AddElementFieldInfo("ActionEntity", "InternalComputerLimitedList", typeof(System.String), false, false, false, false,  (int)ActionFieldIndex.InternalComputerLimitedList, 150, 0, 0);
 			base.AddElementFieldInfo("ActionEntity", "StoreLimited", typeof(System.Boolean), false, false, false, false,  (int)ActionFieldIndex.StoreLimited, 0, 0, 0);
 			base.AddElementFieldInfo("ActionEntity", "InternalStoreLimitedList", typeof(System.String), false, false, false, false,  (int)ActionFieldIndex.InternalStoreLimitedList, 150, 0, 0);
 			base.AddElementFieldInfo("ActionEntity", "TriggerType", typeof(System.Int32), false, false, false, false,  (int)ActionFieldIndex.TriggerType, 0, 0, 10);
@@ -239,7 +241,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionFilterTriggerEntity", "ActionID", typeof(System.Int64), true, true, false, false,  (int)ActionFilterTriggerFieldIndex.ActionID, 0, 0, 19);
 			base.AddElementFieldInfo("ActionFilterTriggerEntity", "FilterNodeID", typeof(System.Int64), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.FilterNodeID, 0, 0, 19);
 			base.AddElementFieldInfo("ActionFilterTriggerEntity", "Direction", typeof(System.Int32), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.Direction, 0, 0, 10);
-			base.AddElementFieldInfo("ActionFilterTriggerEntity", "ComputerLimited", typeof(System.Boolean), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.ComputerLimited, 0, 0, 0);
+			base.AddElementFieldInfo("ActionFilterTriggerEntity", "ComputerLimitedType", typeof(System.Int32), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.ComputerLimitedType, 0, 0, 10);
+			base.AddElementFieldInfo("ActionFilterTriggerEntity", "InternalComputerLimitedList", typeof(System.String), false, false, false, false,  (int)ActionFilterTriggerFieldIndex.InternalComputerLimitedList, 150, 0, 0);
 		}
 		/// <summary>Inits ActionQueueEntity's FieldInfo objects</summary>
 		private void InitActionQueueEntityInfos()
@@ -252,11 +255,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionQueueEntity", "QueueVersion", typeof(System.Byte[]), false, false, true, false,  (int)ActionQueueFieldIndex.QueueVersion, 8, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "TriggerDate", typeof(System.DateTime), false, false, false, false,  (int)ActionQueueFieldIndex.TriggerDate, 0, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "TriggerComputerID", typeof(System.Int64), false, true, false, false,  (int)ActionQueueFieldIndex.TriggerComputerID, 0, 0, 19);
-			base.AddElementFieldInfo("ActionQueueEntity", "RunComputerID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ActionQueueFieldIndex.RunComputerID, 0, 0, 19);
+			base.AddElementFieldInfo("ActionQueueEntity", "InternalComputerLimitedList", typeof(System.String), false, false, false, false,  (int)ActionQueueFieldIndex.InternalComputerLimitedList, 150, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "ObjectID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ActionQueueFieldIndex.ObjectID, 0, 0, 19);
 			base.AddElementFieldInfo("ActionQueueEntity", "Status", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.Status, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
+			base.AddElementFieldInfo("ActionQueueEntity", "ActionQueueType", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.ActionQueueType, 0, 0, 10);
 		}
 		/// <summary>Inits ActionQueueStepEntity's FieldInfo objects</summary>
 		private void InitActionQueueStepEntityInfos()
@@ -1957,6 +1961,19 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ServerMessageSignoffEntity", "UserID", typeof(System.Int64), false, false, false, false,  (int)ServerMessageSignoffFieldIndex.UserID, 0, 0, 19);
 			base.AddElementFieldInfo("ServerMessageSignoffEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)ServerMessageSignoffFieldIndex.ComputerID, 0, 0, 19);
 			base.AddElementFieldInfo("ServerMessageSignoffEntity", "Dismissed", typeof(System.DateTime), false, false, false, false,  (int)ServerMessageSignoffFieldIndex.Dismissed, 0, 0, 0);
+		}
+		/// <summary>Inits ServiceStatusEntity's FieldInfo objects</summary>
+		private void InitServiceStatusEntityInfos()
+		{
+			base.AddElementFieldInfo("ServiceStatusEntity", "ServiceStatusID", typeof(System.Int64), true, false, true, false,  (int)ServiceStatusFieldIndex.ServiceStatusID, 0, 0, 19);
+			base.AddElementFieldInfo("ServiceStatusEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ServiceStatusFieldIndex.RowVersion, 0, 0, 0);
+			base.AddElementFieldInfo("ServiceStatusEntity", "ComputerID", typeof(System.Int64), false, true, false, false,  (int)ServiceStatusFieldIndex.ComputerID, 0, 0, 19);
+			base.AddElementFieldInfo("ServiceStatusEntity", "ServiceType", typeof(System.Int32), false, false, false, false,  (int)ServiceStatusFieldIndex.ServiceType, 0, 0, 10);
+			base.AddElementFieldInfo("ServiceStatusEntity", "LastStartDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ServiceStatusFieldIndex.LastStartDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("ServiceStatusEntity", "LastStopDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ServiceStatusFieldIndex.LastStopDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("ServiceStatusEntity", "LastCheckInDateTime", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ServiceStatusFieldIndex.LastCheckInDateTime, 0, 0, 0);
+			base.AddElementFieldInfo("ServiceStatusEntity", "ServiceFullName", typeof(System.String), false, false, false, false,  (int)ServiceStatusFieldIndex.ServiceFullName, 256, 0, 0);
+			base.AddElementFieldInfo("ServiceStatusEntity", "ServiceDisplayName", typeof(System.String), false, false, false, false,  (int)ServiceStatusFieldIndex.ServiceDisplayName, 256, 0, 0);
 		}
 		/// <summary>Inits ShipmentEntity's FieldInfo objects</summary>
 		private void InitShipmentEntityInfos()

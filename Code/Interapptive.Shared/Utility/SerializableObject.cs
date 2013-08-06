@@ -236,7 +236,7 @@ namespace Interapptive.Shared.Utility
                     return null;
                 }
 
-                type = Type.GetType(typeString);
+                type = GetTypeByFullName(typeString);
             }
 
             string valueText = XPathUtility.Evaluate(xpathItem, "@value", null);
@@ -246,6 +246,18 @@ namespace Interapptive.Shared.Utility
             }
 
             return SerializationUtility.DeserializeValue(valueText, type);
+        }
+
+        /// <summary>
+        /// Gets a type from the specified type string
+        /// </summary>
+        /// <param name="value">Name and namespace of the type to get.</param>
+        /// <returns>The actual type for the string, or null if it can't be found.</returns>
+        /// <remarks>Subclasses should override this if they need the GetType method to
+        /// look inside of their own assemblies.</remarks>
+        protected virtual Type GetTypeByFullName(string value)
+        {
+            return Type.GetType(value);
         }
 
         /// <summary>

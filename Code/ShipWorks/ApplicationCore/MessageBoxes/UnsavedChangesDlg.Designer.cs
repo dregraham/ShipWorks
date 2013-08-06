@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.ApplicationCore.MessagesBoxes
+﻿namespace ShipWorks.ApplicationCore.MessageBoxes
 {
     partial class UnsavedChangesDlg
     {

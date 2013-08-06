@@ -15,9 +15,15 @@ namespace ShipWorks.ApplicationCore
         // now we don't support any, but if they do, here's where to find them.
         List<string> programOptions = new List<string>();
 
+        // The service and service arguments specified.  Optional
+        string serviceName;
+        List<string> serviceOptions = new List<string>();
+
         // The command and command arguments specified.  Optional
-        string commandName = null;
+        string commandName;
         List<string> commandOptions = new List<string>();
+
+        private string recoveryAttempts;
 
         /// <summary>
         /// Parse the given command line arguments into a command line object
@@ -28,16 +34,80 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
+        /// An empty command line.
+        /// </summary>
+        public static readonly ShipWorksCommandLine Empty = new ShipWorksCommandLine(new string[0]);
+
+        /// <summary>
         /// Can't instantiate publically
         /// </summary>
         private ShipWorksCommandLine(IEnumerable<string> args)
         {
             OptionSet options = new OptionSet();
-            
-            options.Add("c|cmd|command=", v => { commandName = v; options.Remove("c"); } );
-            options.Add("<>", v => { if (string.IsNullOrEmpty(commandName)) programOptions.Add(v); else commandOptions.Add(v); } );
+
+            options.Add("recovery=", v =>
+            {
+                recoveryAttempts = v;
+                options.Remove("recovery");
+            });
+
+            options.Add("s|service=", v => { serviceName = v; options.Remove("s"); options.Remove("c"); });
+            options.Add("c|cmd|command=", v => { commandName = v; options.Remove("s"); options.Remove("c"); });
+
+            options.Add("<>", v =>
+            {
+                if (IsServiceSpecified)
+                    serviceOptions.Add(v);
+                else if (IsCommandSpecified)
+                    commandOptions.Add(v);
+                else
+                    programOptions.Add(v);
+            });
 
             options.Parse(args);
+        }
+
+        /// <summary>
+        /// Indicates if a service was specified and ShipWorks should run a service.
+        /// </summary>
+        public bool IsServiceSpecified
+        {
+            get { return !string.IsNullOrEmpty(serviceName); }
+        }
+
+        /// <summary>
+        /// The ShipWorks service name passed on the command line, if any.
+        /// </summary>
+        public string ServiceName
+        {
+            get { return serviceName; }
+        }
+
+        /// <summary>
+        /// The service options passed on the command line.
+        /// </summary>
+        public List<string> ServiceOptions
+        {
+            get { return serviceOptions; }
+        }
+
+        /// <summary>
+        /// Gets the number of attempts to recover from a service crash have been made.
+        /// </summary>
+        public int RecoveryAttempts
+        {
+            get 
+            { 
+                // This is done here instead of at command line constructor to avoid 
+                // crashing if a non-integer was provided.
+                int attemptNumber;
+                if (!int.TryParse(recoveryAttempts, out attemptNumber))
+                {
+                    attemptNumber = 0;
+                }
+
+                return attemptNumber;
+            }
         }
 
         /// <summary>
@@ -57,7 +127,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// The CommandOptions passed on the command line, or null if none passed
+        /// The CommandOptions passed on the command line.
         /// </summary>
         public List<string> CommandOptions
         {

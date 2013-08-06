@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Grid.Columns
             columnDefinitions[GridColumnDefinitionSet.EmailOutboundRelation] = LoadColumnDefinitions(EmailOutboundRelationColumnDefinitionFactory.CreateDefinitions(), columnFormats);
             columnDefinitions[GridColumnDefinitionSet.Audit] = LoadColumnDefinitions(AuditColumnDefinitionFactory.CreateDefinitions(), columnFormats);
             columnDefinitions[GridColumnDefinitionSet.AuditChanges] = LoadColumnDefinitions(AuditChangeColumnDefinitionFactory.CreateDefinitions(), columnFormats);
+            columnDefinitions[GridColumnDefinitionSet.ServiceStatus] = LoadColumnDefinitions(ServiceStatusColumnDefinitionFactory.CreateDefinitions(), columnFormats);
 
             // If there are left over columns, they must have been deleted from ShipWorks, and need removed from the database
             if (columnFormats.Count > 0)

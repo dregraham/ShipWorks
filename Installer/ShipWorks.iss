@@ -57,7 +57,7 @@ VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2012
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2013
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 
@@ -115,6 +115,9 @@ Source: {#AppArtifacts}\SpreadsheetGear.dll; DestDir: {app}; Flags: overwriterea
 Source: {#AppArtifacts}\Newtonsoft.Json.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\RestSharp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Web.Services3.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Quartz.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Common.Logging.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Common.Logging.Log4Net1210.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 
@@ -133,10 +136,12 @@ EnableISX=true
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: ComputerID; ValueData: {code:GetGuid}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks\Instances; ValueType: string; ValueName: {app}; ValueData: {code:GetAppID}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID};
+Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler; Check: ShipWorksVersionDoesNotHaveScheduler;
 
 [Run]
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser
+Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser;  Check: NotNeedRestart
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
+Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: NotNeedRestart
 
 [Dirs]
 Name: {app}
@@ -200,8 +205,77 @@ begin
 			Result := newAppID;
 		end;
     end;
-    
-                 
+end;
+
+//----------------------------------------------------------------
+// Returns the background/service name (ShipWorksScheduler$GuidWithNonAlphaCharactersStripped)
+//----------------------------------------------------------------
+function GetBackgroundProcessName(Param: String): String;
+var
+    processName:string;
+begin
+    processName := GetAppID('');
+
+    delete(processName, 38, 1);
+    delete(processName, 25, 1);
+    delete(processName, 20, 1);
+    delete(processName, 15, 1);
+    delete(processName, 10, 1);
+    delete(processName, 1, 1);
+
+    Result := 'ShipWorksScheduler$' + processName;
+end;
+
+
+//----------------------------------------------------------------
+// Was the scheduler included in installed version of ShipWorks
+//----------------------------------------------------------------
+function ShipWorksVersionHasScheduler(): Boolean;
+var
+	VersionFound: string;	
+    IntMinorVersion: Integer;
+    StringMinorVersion: string;
+    MinorVersionEndPosition: Integer;
+	TargetExe: string;
+begin
+
+	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+	if FileExists(TargetExe) then
+	{
+		GetVersionNumbersString(TargetExe, VersionFound);
+	}
+
+    if Pos('3.', VersionFound) <> 1 Then
+    begin
+        Result := false;
+    end
+    else
+    begin
+        // Gets Everything after 3.
+        StringMinorVersion := copy (VersionFound, 3, 100 );
+        
+        // Gets the position of the . at the end of the minor version.
+        MinorVersionEndPosition := Pos('.', StringMinorVersion);
+        
+        // Gets just the minor version
+        StringMinorVersion := copy(StringMinorVersion, 1, MinorVersionEndPosition - 1);
+        
+        //Converts minor version into an int
+        IntMinorVersion:= StrToInt(StringMinorVersion);
+        
+		MsgBox(StringMinorVersion, mbInformation, MB_OK);
+
+        //If minor version is greater than 4, this is true.
+        Result := IntMinorVersion > 4;
+    end
+end;
+
+//----------------------------------------------------------------
+// Returns inverse of ShipWorksVersionHasScheduler. Used when registerring scheduler
+//----------------------------------------------------------------
+function ShipWorksVersionDoesNotHaveScheduler() : Boolean;
+begin
+	Result := not(ShipWorksVersionHasScheduler());
 end;
 
 //----------------------------------------------------------------
@@ -240,6 +314,7 @@ var
 	TargetExe: string;
 	VersionFound: string;
 	SchemaFound: Integer;
+	ServiceStarted: Integer;
 begin
 
 	Result := True;
@@ -261,16 +336,7 @@ begin
                    'Please select a different installation directory.  The first time you run ShipWorks 3 it will walk you through upgrading your data from ShipWorks 2.',
                  mbCriticalError,
                  MB_OK);
-             Result := False; 
-        
-		(*	if (MsgBox('The installation folder you selected contains ShipWorks 2.' + #13 +
-					   '' + #13 +
-					   'Continue and upgrade to ShipWorks 3?',
-				mbConfirmation,
-				MB_OKCANCEL) = IDCANCEL)
-			then begin
-				Result := False;
-			end; *)
+             Result := False;
 		end
 
 		// Existing 3x version
@@ -296,6 +362,12 @@ begin
 
 				end;
 
+			end;
+
+			// Sorry for double negative
+			if Result AND ShipWorksVersionHasScheduler()
+			then begin
+				Exec(ExpandConstant(TargetExe), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, ServiceStarted)
 			end;
 
 		end;
@@ -333,5 +405,34 @@ begin
 	Result := DotNetNeedsReboot;
 end;
 
+//----------------------------------------------------------------
+// Called by Inno to see if it should restart.  We will determine
+// this depending on what the dotnet and mdac installs said.
+//----------------------------------------------------------------
+function NotNeedRestart(): Boolean;
+begin
+	Result := not(DotNetNeedsReboot);
+end;
+
 // In case we need to see if anything went wrong
 #call SaveToFile('InnoSetup.iss')
+
+//----------------------------------------------------------------
+// Called by Inno when the uninstall step changes.
+// Used to stop services before file removal.
+//----------------------------------------------------------------
+procedure CurUninstallStepChanged(curUninstallStep: TUninstallStep);
+var
+	appExe: String;
+	resultCode: Integer;
+begin
+	if curUninstallStep = usUninstall then
+	begin
+		appExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+
+		Exec(appExe, '/cmd:uninstallservices /all', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
+
+		// Wait for up to 3 minutes for all service processes to exit.
+		DelayDeleteFile(appExe, 720);
+	end;
+end;
