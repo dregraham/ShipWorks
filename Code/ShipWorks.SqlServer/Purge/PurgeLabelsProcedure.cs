@@ -42,7 +42,9 @@ DECLARE
 	@DeletedLabelResourceID_JPG bigint,
 	@DeletedLabelResourceID_EPL bigint,
 	@DeletedLabelResourceID_ZPL bigint,
-	@BatchSize int;
+	@startTime DATETIME = GETUTCDATE(),
+    @batchSize INT = 1000,
+    @batchTotal BIGINT = 0;
 
 -- insert the Deleted image (png format)
 SELECT @OldCount = COUNT(*) FROM [Resource] WHERE [Filename] = '__ResourceCleanup_png.swr'
@@ -266,14 +268,31 @@ BEGIN
 		ImageFormat nvarchar(5)
 	)
 
-	INSERT INTO @currentBatch
-		SELECT TOP 10000 *  FROM #LabelsToCleanUp R
-
-	WHILE @@ROWCOUNT>0  AND (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GetUtcDate())
+	WHILE @latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GetUtcDate()
 	BEGIN
-	BEGIN TRANSACTION
+	
+
+		INSERT INTO @currentBatch
+			SELECT TOP (@batchSize) * 
+			FROM #LabelsToCleanUp	
+
+        SET @batchSize = @@ROWCOUNT;
+        IF @batchSize = 0
+            BREAK;
+	    
+	    DECLARE @totalSeconds INT = DATEDIFF(SECOND, @startTime, GETUTCDATE()) + 1;
+
+        -- stop if the batch isn't expected to complete in time
+        IF (
+            @latestExecutionTimeInUtc IS NOT NULL AND
+            @batchTotal > 0 AND
+            DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+        )
+            BREAK;
+	    
+        BEGIN TRANSACTION	
 		
-		-- adjust the old reference to point to the new 'deleted' image resource, by image format			
+        -- adjust the old reference to point to the new 'deleted' image resource, by image format			
 		UPDATE ObjectReference 
 		SET ObjectReference.ObjectID = 
 		(
@@ -304,11 +323,11 @@ BEGIN
 	COMMIT TRANSACTION
 					
 		--grab the next batch before ending loop
-		DELETE @currentBatch
+		DELETE @currentBatch	
 		
-		INSERT INTO @currentBatch
-			SELECT TOP 10000 * 
-			FROM #LabelsToCleanUp		
+                -- update batch total and adjust batch size to an amount expected to complete in 10 seconds
+        SET @batchTotal = @batchTotal + @batchSize;
+        SET @batchSize = @batchTotal / @totalSeconds * 10;
 	END
 END
 
