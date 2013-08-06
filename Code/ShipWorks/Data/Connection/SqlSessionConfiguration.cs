@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.SqlServerSetup;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Users;
@@ -110,6 +111,14 @@ namespace ShipWorks.Data.Connection
                 }
 
                 serverInstance = value;
+
+                // Translate the true localdb connection string coming in to the user-visible clean way we store it
+                if (string.Compare(serverInstance, SqlInstanceUtility.LocalDbDisplayName, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    serverInstance = SqlInstanceUtility.LocalDbServerInstance;
+                }
+                
+
                 OnConnectionChanged();
             }
         }
@@ -188,6 +197,11 @@ namespace ShipWorks.Data.Connection
         {
             get
             {
+                if (IsLocalDb())
+                {
+                    return true;
+                }
+
                 return windowsAuth;
             }
             set
@@ -202,6 +216,13 @@ namespace ShipWorks.Data.Connection
             }
         }
 
+        /// <summary>
+        /// Indicates if this session is connected to SQL Server Local DB
+        /// </summary>
+        public bool IsLocalDb()
+        {
+            return string.Compare(serverInstance, SqlInstanceUtility.LocalDbServerInstance, StringComparison.OrdinalIgnoreCase) == 0;
+        }
 
         public event EventHandler ConnectionChanged;
 
@@ -290,7 +311,7 @@ namespace ShipWorks.Data.Connection
             log.InfoFormat("Loading SqlSessionConfiguration from {0}.", SettingsFile);
 
             // If the file does not exist, do nothing
-            if (!File.Exists(SettingsFile))
+            if (!File.Exists(SettingsFile) || InterapptiveOnly.MagicKeysDown)
             {
                 log.Info("SqlSessionConfiguration file not found.");
                 return;

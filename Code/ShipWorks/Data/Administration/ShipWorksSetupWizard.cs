@@ -108,8 +108,8 @@ namespace ShipWorks.Data.Administration
                 // If we can actually connect to the ShipWorks database, then there is nothing more for this wizard to do
                 if (CanConnectToLocalDb(SqlInstanceUtility.LocalDbDatabaseName))
                 {
-                    sqlSession.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
-                    sqlSession.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
+                    sqlSession.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
+                    sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
                     sqlSession.SaveAsCurrent();
 
                     e.NextPage = wizardPageFinishExisting;
@@ -211,8 +211,8 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void CreateDatabase()
         {
-            sqlSession.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
-            sqlSession.DatabaseName = "";
+            sqlSession.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
+            sqlSession.Configuration.DatabaseName = "";
 
             try
             {
@@ -227,7 +227,7 @@ namespace ShipWorks.Data.Administration
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
                     SqlDatabaseCreator.CreateDatabase(SqlInstanceUtility.LocalDbDatabaseName, con);
-                    sqlSession.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
+                    sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
 
                     createdDatabase = true;
                 }
@@ -364,11 +364,10 @@ namespace ShipWorks.Data.Administration
         {
             if (SqlInstanceUtility.IsLocalDbInstalled())
             {
-                SqlSession session = new SqlSession()
-                {
-                    ServerInstance = SqlInstanceUtility.LocalDbServerInstance,
-                    DatabaseName = database
-                };
+                SqlSession session = new SqlSession();
+
+                session.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
+                session.Configuration.DatabaseName = database;
 
                 return session.CanConnect();
             }
@@ -397,7 +396,7 @@ namespace ShipWorks.Data.Administration
                 MessageHelper.ShowError(this, "There was an error rolling back the created database.\n\n" + ex.Message);
             }
 
-            sqlSession.DatabaseName = "";
+            sqlSession.Configuration.DatabaseName = "";
             createdDatabase = false;
         }
 
