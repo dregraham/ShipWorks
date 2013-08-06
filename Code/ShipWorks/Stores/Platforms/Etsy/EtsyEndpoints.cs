@@ -54,18 +54,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
         }
 
-        public static Uri CreateReceiptOnSandbox
-        {
-            get
-            {
-                return new Uri(etsyURL + "receipts");
-            }
-        }
-
         /// <summary>
         /// Given the shopID return the URL to FindAllShopReceipts
         /// </summary>
-        public static Uri GetFindAllShopReceiptsURL(long shopID)
+        public static Uri GetFindAllShopReceiptsUrl(long shopID)
         {
             return new Uri(string.Format("{0}shops/{1}/receipts", etsyURL, shopID));
         }
@@ -73,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Given a comma seperated list of id's return the URL to MarkAsShipped
         /// </summary>
-        public static Uri GetMarkAsShippedURL(string receipts)
+        public static Uri GetMarkAsShippedUrl(string receipts)
         {
             return new Uri(string.Format("{0}private/receipts/{1}", etsyURL, receipts));
         }
@@ -81,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Given a comma seperated list of id's return the URL to GetReceipt
         /// </summary>
-        public static Uri GetReceiptURL(string receipts)
+        public static Uri GetReceiptUrl(string receipts)
         {
             return new Uri(string.Format("{0}receipts/{1}", etsyURL, receipts));
         }
@@ -92,6 +84,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public static Uri GetItemUrl(string transactionID)
         {
             return new Uri(string.Format("https://www.etsy.com/transaction/{0}", transactionID));
+        }
+
+        /// <summary>
+        /// Gets the submit tracking URL.
+        /// </summary>
+        public static Uri GetSubmitTrackingUrl(long etsyShopID, long orderID)
+        {
+            return new Uri(string.Format("{0}shops/{1}/receipts/{2}/tracking", etsyURL, etsyShopID, orderID));
         }
     }
 }

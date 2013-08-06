@@ -5,12 +5,12 @@ GO
 CREATE DATABASE {DBNAME}  
     ON (
         NAME = N'ShipWorks_Data', 
-        FILENAME = N'{FILEPATH}{DBNAME}_Data.MDF' , 
+        FILENAME = N'{FILEPATH}{FILENAME}.mdf' , 
         SIZE = 10, 
         FILEGROWTH = 100MB) 
     LOG ON (
         NAME = N'ShipWorks_Log', 
-        FILENAME = N'{FILEPATH}{DBNAME}_Log.LDF' , 
+        FILENAME = N'{FILEPATH}{FILENAME}_log.ldf' , 
         SIZE = 10, 
         FILEGROWTH = 100MB)
     COLLATE SQL_Latin1_General_CP1_CI_AS

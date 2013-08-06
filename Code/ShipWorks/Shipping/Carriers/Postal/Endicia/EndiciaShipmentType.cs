@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
@@ -53,20 +54,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
             string carrier;
+            PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-            // The shipment is an Endicia shipment, check to see if it's DHL
-            if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType)shipment.Postal.Service))
+            if (ShipmentTypeManager.IsEndiciaConsolidator(service))
             {
-                // The DHL carrier for Endicia is:
-                carrier = "DHL Global Mail";
+                return "Consolidator";
             }
             else
             {
-                // Use the default carrier for other Endicia types
-                carrier = "USPS";
-            }
+                // The shipment is an Endicia shipment, check to see if it's DHL
+                if (ShipmentTypeManager.IsEndiciaDhl(service))
+                {
+                    // The DHL carrier for Endicia is:
+                    carrier = "DHL Global Mail";
+                }
+                else
+                {
+                    // Use the default carrier for other Endicia types
+                    carrier = "USPS";
+                }
 
-            return string.Format("{0} {1}", carrier, EnumHelper.GetDescription((PostalServiceType)shipment.Postal.Service));
+                return string.Format("{0} {1}", carrier, EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
+            }
         }
 
         /// <summary>
@@ -326,8 +335,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             try
             {
                 List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
-                    EndiciaApiClient.GetRatesSlow(shipment) :
-                    EndiciaApiClient.GetRatesFast(shipment);
+                    EndiciaApiClient.GetRatesSlow(shipment, this) :
+                    EndiciaApiClient.GetRatesFast(shipment, this);
 
                 // For endicia, we want to either promote Express1 or show the Express1 savings
                 if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
@@ -465,7 +474,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 try
                 {
                     // Check Endicia amount
-                    List<RateResult> endiciaRates = EndiciaApiClient.GetRatesFast(shipment);
+                    List<RateResult> endiciaRates = EndiciaApiClient.GetRatesFast(shipment, this);
                     RateResult endiciaRate = endiciaRates.Where(er => er.Selectable).FirstOrDefault(er =>
                            ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service 
                         && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation); 
@@ -475,7 +484,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                     shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
-                    List<RateResult> express1Rates = EndiciaApiClient.GetRatesFast(shipment);
+                    List<RateResult> express1Rates = EndiciaApiClient.GetRatesFast(shipment, this);
                     RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
                            ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service 
                         && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation); 
@@ -521,7 +530,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 try
                 {
-                    EndiciaApiClient.ProcessShipment(shipment);
+                    EndiciaApiClient.ProcessShipment(shipment, this);
                 }
                 catch (EndiciaException ex)
                 {
@@ -626,6 +635,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Get the endicia MailClass code for the given service
+        /// </summary>
+        public virtual string GetMailClassCode(PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            switch (serviceType)
+            {
+                case PostalServiceType.ExpressMail: return "PriorityExpress";
+                case PostalServiceType.FirstClass: return "First";
+                case PostalServiceType.LibraryMail: return "LibraryMail";
+                case PostalServiceType.MediaMail: return "MediaMail";
+                case PostalServiceType.StandardPost: return "StandardPost";
+                case PostalServiceType.ParcelSelect: return "ParcelSelect";
+                case PostalServiceType.PriorityMail: return "Priority";
+                case PostalServiceType.CriticalMail: return "CriticalMail";
+
+                case PostalServiceType.InternationalExpress: return "PriorityMailExpressInternational";
+                case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
+
+                case PostalServiceType.InternationalFirst:
+                    {
+                        return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
+                    }
+            }
+
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsEndiciaConsolidator(serviceType))
+            {
+                return EnumHelper.GetApiValue(serviceType);
+            }
+
+            throw new EndiciaException(string.Format("{0} is not supported when shipping with Endicia.", PostalUtility.GetPostalServiceTypeDescription(serviceType)));
         }
     }
 }

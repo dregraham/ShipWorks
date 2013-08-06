@@ -101,14 +101,14 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                UploadShipmentDetails(store, postponedKeys.Concat(inputKeys));
             }
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private void UpdloadShipmentDetails(BuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
+        private void UploadShipmentDetails(BuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {

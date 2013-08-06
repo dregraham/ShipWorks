@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Net.OAuth;
@@ -183,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public int GetOrderCount(DateTime startDate, DateTime endDate)
         {
-            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsURL(store.EtsyShopID));
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsUrl(store.EtsyShopID));
 
             oAuth.OtherParameters.Add("min_created", DateTimeUtility.ToUnixTimestamp(startDate).ToString());
             oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(endDate).ToString());
@@ -202,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public List<JToken> GetOrders(DateTime startDate, DateTime endDate, int limit, int offset)
         {
             double startDateStamp = DateTimeUtility.ToUnixTimestamp(startDate);
-            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsURL(store.EtsyShopID));
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsUrl(store.EtsyShopID));
 
             oAuth.OtherParameters.Add("min_created", startDateStamp.ToString());
             oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(endDate).ToString());
@@ -241,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="wasPaid">Only upload status has value</param>
         public void UploadStatusDetails(long orderNumber, string comment, bool? wasPaid = null, bool? wasShipped = null)
         {
-            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetMarkAsShippedURL(orderNumber.ToString()));
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetMarkAsShippedUrl(orderNumber.ToString()));
 
             if (wasShipped.HasValue)
             {
@@ -264,11 +266,51 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        public void UploadShipmentDetails(long etsyShopID, long orderNumber, string trackingNumber, string etsyCarrierName)
+        {
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetSubmitTrackingUrl(etsyShopID, orderNumber));
+
+            oAuth.OtherParameters.Add("tracking_code", trackingNumber);
+            oAuth.OtherParameters.Add("carrier_name", etsyCarrierName);
+
+            oAuth.OtherParameters.Add("method", "POST");
+
+            try
+            {
+                ProcessRequest(oAuth, "SubmitTracking");
+            }
+            catch (EtsyException etsyException)
+            {
+                WebException webException = etsyException.InnerException as WebException;
+
+                if (webException != null && ((HttpWebResponse) webException.Response).StatusCode == HttpStatusCode.NotImplemented)
+                {
+                    string errorFromEtsy;
+                    using (Stream stream = webException.Response.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true))
+                        {
+                            errorFromEtsy = reader.ReadToEnd();
+                        }
+                    }
+
+                    log.Warn(string.Format("Etsy order {0} already marked as shipped.", orderNumber), webException);
+
+                    throw new EtsyException(String.Format("Error uploading tracking information: {0}", errorFromEtsy));
+                }
+
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Given a comma seperated list of recieptsID's, return the orders shipped and paid status.
         /// </summary>
         private JArray GetOrderStatuses(string receipts)
         {
-            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetReceiptURL(receipts));
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetReceiptUrl(receipts));
 
             oAuth.OtherParameters.Add("fields", "receipt_id,was_shipped,was_paid");
 
@@ -389,7 +431,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public JArray GetPaymentInformation(string formattedOrderNumbers)
         {
-            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetReceiptURL(formattedOrderNumbers));
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetReceiptUrl(formattedOrderNumbers));
 
             oAuth.OtherParameters.Add("fields", "receipt_id,was_paid,payment_method,message_from_payment");
 

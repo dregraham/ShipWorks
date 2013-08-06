@@ -29,6 +29,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
         Merchandise = 4,
 
         [Description("Returned Goods")]
-        ReturnedGoods = 5
+        ReturnedGoods = 5,
+
+        [Description("Humanitarian Donation")]
+        HumanitarianDonation,
+
+        [Description("Dangerous Goods")]
+        DangerousGoods
     }
 }

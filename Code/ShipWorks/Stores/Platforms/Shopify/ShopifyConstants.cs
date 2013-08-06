@@ -13,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         // Token param names
         public const string AccessTokenParamName = "access_token";
         public const string RequestTokenParamName = "code";
+        public const string CallbackUrl = "http://www.shipworks.com/shopify/?r=sfy";
 
         // 250 is the max that Shopify allows 
         [Range(1, 250, ErrorMessage = "Value for OrdersPageSize must be between 1 and 250.")]

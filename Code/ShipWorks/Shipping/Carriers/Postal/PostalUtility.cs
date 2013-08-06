@@ -122,6 +122,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 if (shipmentType == ShipmentTypeCode.Endicia)
                 {
+                    // If consolidation is supported, add it in
+                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None)
+                    {
+                        services.Add(PostalServiceType.ConsolidatorDomestic);
+                    }
+
                     // If not restricted from Endicia DHL, add them in
                     if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None)
                     {
@@ -150,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
             else
             {
-                return new List<PostalServiceType>
+                var services = new List<PostalServiceType>
                     {
                         PostalServiceType.InternationalPriority,
                         PostalServiceType.InternationalFirst,
@@ -161,6 +167,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         PostalServiceType.GlobalExpressGuaranteed,
                         PostalServiceType.GlobalExpressGuaranteedNonDocument
                     };
+
+                if (shipmentType == ShipmentTypeCode.Endicia)
+                {
+                    // If consolidation is supported, add it in
+                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None)
+                    {
+                        services.Add(PostalServiceType.ConsolidatorInternational);
+                        services.Add(PostalServiceType.ConsolidatorIpa);
+                        services.Add(PostalServiceType.ConsolidatorIsal);
+                    }
+                }
+
+                return services;
             }
         }
 
@@ -263,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public static bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType packagingType)
         {
             // Has to be Canada
-            if (countryCode == "CA")
+            if (IsCountryEligibleForFreeInternationalDeliveryConfirmation(countryCode))
             {
                 if (packagingType == PostalPackagingType.FlatRateSmallBox)
                 {
@@ -291,6 +310,49 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return false;
+        }
+
+	    /// <summary>
+        /// Determines whether [is country eligible for free international delivery confirmation] [the specified country code].
+        /// </summary>
+        /// <param name="countryCode">The country code.</param>
+        /// <returns>
+        ///   <c>true</c> if [is country eligible for free international delivery confirmation] [the specified country code]; otherwise, <c>false</c>.
+        /// </returns>
+        private static bool IsCountryEligibleForFreeInternationalDeliveryConfirmation(string countryCode)
+        {
+            // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark,
+            // France, Germany, Great Britain, Northern Ireland, Israel, Netherlands, New Zealand, 
+            // Spain, and Switzerland
+            List<string> eligibleCountryCodes = new List<string>
+            {
+                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH"
+            };
+
+            return eligibleCountryCodes.Contains(countryCode);
+        }
+        
+        /// <summary>
+        /// Temporary helper method to add the old service name to the end of the new service name for ExpressMail and InternationalExpress
+        /// </summary>
+        public static string GetPostalServiceTypeDescription(PostalServiceType postalServiceType)
+        {
+            if (postalServiceType == PostalServiceType.ExpressMail)
+            {
+                return EnumHelper.GetDescription(postalServiceType) + " (Express Mail)";
+            }
+
+            return EnumHelper.GetDescription(postalServiceType);
+        }
+
+        /// <summary>
+        /// Indicates if the EntryFacility and SortType is required for a service
+        /// </summary>
+        public static bool IsEntryFacilityRequired(PostalServiceType serviceType)
+        {
+            return 
+                serviceType == PostalServiceType.ParcelSelect || 
+                ShipmentTypeManager.IsEndiciaDhl(serviceType);
         }
     }
 }

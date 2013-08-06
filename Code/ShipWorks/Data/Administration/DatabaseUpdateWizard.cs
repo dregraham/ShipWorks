@@ -116,8 +116,8 @@ namespace ShipWorks.Data.Administration
             sqlInstaller.Exited += new EventHandler(OnUpgraderSqlServerExited);
 
             sqlDownloader = new WizardDownloadHelper(this, 
-                sqlInstaller.GetLocalExe(SqlServerInstallerPurpose.Upgrade), 
-                sqlInstaller.GetDownloadUri(SqlServerInstallerPurpose.Upgrade));
+                sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade), 
+                sqlInstaller.GetInstallerDownloadUri(SqlServerInstallerPurpose.Upgrade));
 
             // Remove the placeholder...
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
@@ -126,7 +126,7 @@ namespace ShipWorks.Data.Administration
             if (!SqlServerInstaller.IsMsdeMigrationInProgress)
             {
                 // If its not the current sql version, then sql is going to be upgraded, which means we need some prereqs
-                if (!SqlSession.Current.IsSqlServer2008())
+                if (!SqlSession.Current.IsSqlServer2008OrLater())
                 {
                     // Add the pages to detect and install .NET 3.5 SP1 if necessary
                     DotNet35DownloadPage dotNet35Page = new DotNet35DownloadPage(
@@ -201,7 +201,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // If its 08, we move right on to the db upgrade
-            if (SqlSession.Current.IsSqlServer2008())
+            if (SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 return;
@@ -537,7 +537,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // If the installer is already available, or we don't need to download, just skip over the download.
-            if (sqlInstaller.IsLocalExeValid(SqlServerInstallerPurpose.Upgrade) || (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008()))
+            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater()))
             {
                 e.Skip = true;
                 return;
@@ -577,7 +577,7 @@ namespace ShipWorks.Data.Administration
         private void OnSteppingIntoUpgradeSqlServer(object sender, WizardSteppingIntoEventArgs e)
         {
             // If its already upgraded, move on
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008())
+            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -597,7 +597,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // If its upgraded now, we are ok to move on.
-            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008())
+            if (!SqlServerInstaller.IsMsdeMigrationInProgress && SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.NextPage = wizardPageWindowsFirewall;
                 return;
@@ -619,7 +619,7 @@ namespace ShipWorks.Data.Administration
             }
             catch (Win32Exception ex)
             {
-                MessageHelper.ShowError(this, "An error occurred while upgrading to SQL Server 2008:\n\n" + ex.Message);
+                MessageHelper.ShowError(this, "An error occurred while upgrading SQL Server:\n\n" + ex.Message);
 
                 // Reset the gui
                 panelUpgradeSqlServer.BringToFront();
@@ -628,7 +628,7 @@ namespace ShipWorks.Data.Administration
             }
             catch (SqlException ex)
             {
-                MessageHelper.ShowError(this, "An error occurred while upgrading to SQL Server 2008:\n\n" + ex.Message);
+                MessageHelper.ShowError(this, "An error occurred while upgrading SQL Server:\n\n" + ex.Message);
 
                 // Reset the gui
                 panelUpgradeSqlServer.BringToFront();
@@ -651,7 +651,7 @@ namespace ShipWorks.Data.Administration
             log.InfoFormat("SQL Server upgrade exited {0}", sqlInstaller.LastExitCode);
 
             // If it was successful, we should now be able to connect.
-            if (sqlInstaller.LastExitCode == 0 && SqlSession.Current.IsSqlServer2008())
+            if (sqlInstaller.LastExitCode == 0 && SqlSession.Current.IsSqlServer2008OrLater())
             {
                 // Since we installed it, we can do this without asking
                 using (SqlConnection con = SqlSession.Current.OpenConnection())
@@ -665,7 +665,7 @@ namespace ShipWorks.Data.Administration
             else if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 Pages.Add(new RebootRequiredPage(
-                    "SQL Server 2008",
+                    "SQL Server",
                     StartupAction.ContinueDatabaseUpgrade,
                     () => { return new XElement("AfterInstallSuccess"); }));
 

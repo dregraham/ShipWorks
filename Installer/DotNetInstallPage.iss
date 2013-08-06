@@ -35,11 +35,7 @@ begin
     installProgress.SetProgress(0, 0);
     installProgress.Show;
 
-    if (IsDotNetIncluded()) then begin
-		installFile := 'dotNetFx40_Full_x86_x64.exe';
-	end else begin
-		installFile := 'dotNetFx40_Full_setup.exe';
-	end;
+    installFile := GetDotNetFileName();
 
     try
 		execSuccess := ShellExec('open',
@@ -107,28 +103,7 @@ end;
 // Called to start installing .net
 //----------------------------------------------------------------
 function OnInstallDotNetNextButtonClick(Page: TWizardPage): Boolean;
-var
-    extractProgress: TOutputProgressWizardPage;
 begin
-
-  // See if we first have to extract the file from setup
-  if (IsDotNetIncluded() and not FileExists(ExpandConstant('{tmp}\dotNetFx40_Full_x86_x64.exe'))) then
-	begin
-
-        extractProgress := CreateOutputProgressPage(
-            Page.Caption,
-            Page.Description);
-        extractProgress.SetText('Preparing installation files...', '');
-        extractProgress.SetProgress(0, 0);
-        extractProgress.Show;
-
-        try
-		    // Try to extract the file ourselves
-		    ExtractTemporaryFile('dotNetFx40_Full_x86_x64.exe');
-        finally
-            extractProgress.Hide;
-        end;
-  end;
 
   // Do the install
   Result := InstallDotNetFramework(Page);
@@ -145,27 +120,17 @@ var
 begin
   Page := CreateCustomPage(
     PreviousPageId,
-    ExpandConstant('Install Microsoft .NET Framework 4.0'),
-    ExpandConstant('ShipWorks requires the Microsoft .NET Framework 4.0.')
+    ExpandConstant('Install Microsoft .NET Framework ' + GetSupportedDotNetVersion()),
+    ExpandConstant('ShipWorks requires the Microsoft .NET Framework ' + GetSupportedDotNetVersion() + '.')
   );
 
   infoLabel := TLabel.Create(Page);
   infoLabel.Parent := Page.Surface;
 
-  if (IsDotNetIncluded()) then
-  begin
-      infoLabel.Caption :=
-        'ShipWorks requires the Microsoft .NET Framework 4.0, which is not installed on your computer.' + #13 +
-        '' + #13 +
-        'Click Next to install the .NET Framework.';
-  end
-  else
-  begin
-      infoLabel.Caption :=
-        'Setup has downloaded the .NET Framework.' + #13 +
-        '' + #13 +
-        'Click Next to begin the installation.';
-  end
+  infoLabel.Caption :=
+    'Setup has downloaded the .NET Framework.' + #13 +
+    '' + #13 +
+    'Click Next to begin the installation.';
 
   with infoLabel do
   begin

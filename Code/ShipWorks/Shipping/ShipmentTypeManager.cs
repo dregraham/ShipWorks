@@ -220,5 +220,22 @@ namespace ShipWorks.Shipping
 
             return false;
         }
+
+        /// <summary>
+        /// Indicates if the given service represents an Endicia consolidator service (that is NOT DHL GM)
+        /// </summary>
+        public static bool IsEndiciaConsolidator(PostalServiceType service)
+        {
+            switch (service)
+            {
+                case PostalServiceType.ConsolidatorDomestic:
+                case PostalServiceType.ConsolidatorInternational:
+                case PostalServiceType.ConsolidatorIpa:
+                case PostalServiceType.ConsolidatorIsal:
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

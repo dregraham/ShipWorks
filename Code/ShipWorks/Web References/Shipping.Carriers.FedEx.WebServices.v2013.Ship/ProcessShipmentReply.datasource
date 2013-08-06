@@ -6,5 +6,5 @@
     cause the file to be unrecognizable by the program.
 -->
 <GenericObjectDataSource DisplayName="ProcessShipmentReply" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.ProcessShipmentReply</TypeInfo>
+   <TypeInfo>ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.ProcessShipmentReply, Web References.Shipping.Carriers.FedEx.WebServices.v2013.Ship.Reference.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
 </GenericObjectDataSource>

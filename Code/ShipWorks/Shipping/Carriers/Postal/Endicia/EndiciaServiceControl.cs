@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
 
-                    if (serviceType == PostalServiceType.ParcelSelect || ShipmentTypeManager.IsEndiciaDhl(serviceType))
+                    if (PostalUtility.IsEntryFacilityRequired(serviceType))
                     {
                         anyRequireEntryFacility = true;
                     }
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 PostalServiceType serviceType = (PostalServiceType) service.SelectedValue;
 
-                sectionEntryFacility.Visible = (serviceType == PostalServiceType.ParcelSelect || ShipmentTypeManager.IsEndiciaDhl(serviceType));
+                sectionEntryFacility.Visible = PostalUtility.IsEntryFacilityRequired(serviceType);
             }
         }
 

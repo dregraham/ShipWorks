@@ -80,9 +80,6 @@ namespace ShipWorks.Data.Administration
         // The user that will be used for restoring the db
         long userForRestore;
 
-        // Used for loading \ executing sql
-        SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Installation");
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -95,8 +92,8 @@ namespace ShipWorks.Data.Administration
             sqlInstaller.Exited += new EventHandler(OnInstallerSqlServerExited);
 
             sqlDownloader = new WizardDownloadHelper(this, 
-                sqlInstaller.GetLocalExe(SqlServerInstallerPurpose.Install), 
-                sqlInstaller.GetDownloadUri(SqlServerInstallerPurpose.Install));
+                sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install), 
+                sqlInstaller.GetInstallerDownloadUri(SqlServerInstallerPurpose.Install));
 
             // Prepopulate the instance box with the current
             if (SqlSession.IsConfigured)
@@ -143,7 +140,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
                 if (StartupController.StartupArgument.Name == "Upgrade2x")
@@ -265,7 +261,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoRestoreOption(object sender, WizardSteppingIntoEventArgs e)
         {
-            bool canConnectCurrent = SqlSession.IsConfigured && SqlSession.Current.CanConnect() && SqlSession.Current.IsSqlServer2008();
+            bool canConnectCurrent = SqlSession.IsConfigured && SqlSession.Current.CanConnect() && SqlSession.Current.IsSqlServer2008OrLater();
 
             // Can only choose current if there is a current
             radioRestoreIntoCurrent.Enabled = canConnectCurrent;
@@ -499,16 +495,16 @@ namespace ShipWorks.Data.Administration
                 // Attempts to make a connection to the database
                 sqlSession.TestConnection();
 
-                if (!sqlSession.IsSqlServer2008())
+                if (!sqlSession.IsSqlServer2008OrLater())
                 {
                     // If trying to create a new database in an existing sql instance
                     if (radioRestoreDatabase.Checked || (radioSetupNewDatabase.Checked && radioSqlServerAlreadyInstalled.Checked))
                     {
                         MessageHelper.ShowError(this,
-                            "ShipWorks requires SQL Server 2008.\n\n" +
+                            "ShipWorks requires SQL Server.\n\n" +
                             "The SQL Server instance you have selected is previous version that " +
                             "is not compatible with ShipWorks.\n\n" +
-                            "You can install the ShipWorks database in a new SQL Server 2008 instance " +
+                            "You can install the ShipWorks database in a new SQL Server instance " +
                             "by returning to the beginning of this wizard.");
 
                         e.NextPage = CurrentPage;
@@ -523,7 +519,7 @@ namespace ShipWorks.Data.Administration
                 }
                 
                 // If its not 08, we'll be upgrading it (and the CLR status) later
-                if (sqlSession.IsSqlServer2008() && !sqlSession.IsClrEnabled())
+                if (sqlSession.IsSqlServer2008OrLater() && !sqlSession.IsClrEnabled())
                 {
                     log.Info("CLR is not enabled on the server.");
 
@@ -751,7 +747,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // If the installer is already available, just skip over the download.
-            if (sqlInstaller.IsLocalExeValid(SqlServerInstallerPurpose.Install))
+            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Install))
             {
                 e.Skip = true;
             }
@@ -838,7 +834,7 @@ namespace ShipWorks.Data.Administration
             }
             catch (Win32Exception ex)
             {
-                MessageHelper.ShowError(this, "An error occurred while installing SQL Server 2008:\n\n" + ex.Message);
+                MessageHelper.ShowError(this, "An error occurred while installing SQL Server:\n\n" + ex.Message);
 
                 // Reset the gui
                 labelInstallSqlServer.BringToFront();
@@ -875,7 +871,7 @@ namespace ShipWorks.Data.Administration
             else if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 Pages.Add(new RebootRequiredPage(
-                    "SQL Server 2008", 
+                    "SQL Server", 
                     StartupAction.OpenDatabaseSetup,
                     () =>
                         {
@@ -890,7 +886,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "SQL Server 2008 was not installed.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
+                    "SQL Server was not installed.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
 
                 // Reset the gui
                 labelInstallSqlServer.BringToFront();
@@ -906,7 +902,7 @@ namespace ShipWorks.Data.Administration
         {
             if (!NextEnabled)
             {
-                MessageHelper.ShowMessage(this, "Please wait for the installation of SQL Server 2008 to complete.");
+                MessageHelper.ShowMessage(this, "Please wait for the installation of SQL Server to complete.");
                 e.Cancel = true;
             }
         }
@@ -1023,24 +1019,7 @@ namespace ShipWorks.Data.Administration
                     {
                         using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                         {
-                            // Create the ShipWorks schema in the database
-                            CreateSchema();
-
-                            // Load our .NET code into sql server from ShipWorks.Common and ShipWorks.SqlServer
-                            using (SqlConnection con = SqlSession.Current.OpenConnection())
-                            {
-                                SqlAssemblyDeployer.DeployAssemblies(con);
-
-                                // Update the database to be marked with the correct db version
-                                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
-                            }
-
-                            // Create the ShipWorks "SuperUser"
-                            SuperUser.Create(SqlAdapter.Default);
-
-                            // Create all the data that is needed for a fresh install of shipworks.
-                            InitialDataLoader.CreateCoreRequiredData();
-                            InitialDataLoader.CreateDefaultFreshInstallData();
+                            SqlDatabaseCreator.CreateSchemaAndData();
                         }
                     }
                     // If something goes wrong, drop the db we just created
@@ -1067,18 +1046,6 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Create the database schema
-        /// </summary>
-        private void CreateSchema()
-        {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                // Create the ShipWorks schema
-                sqlLoader["CreateSchema"].Execute(con);
-            }
-        }
-
-        /// <summary>
         /// Drop the database that we created due to the use going back or cancelling
         /// the wizard.
         /// </summary>
@@ -1091,16 +1058,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-
-                using (SqlConnection con = sqlSession.OpenConnection())
-                {
-                    con.ChangeDatabase("master");
-
-                    // This frees any existing connections so the db is not marked as in use
-                    SqlConnection.ClearAllPools();
-
-                    SqlCommandProvider.ExecuteNonQuery(con, "drop database " + pendingDatabaseName);
-                }
+                SqlDatabaseCreator.DropDatabase(sqlSession, pendingDatabaseName);
 
                 sqlSession.DatabaseName = "";
             }

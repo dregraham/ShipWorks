@@ -431,11 +431,33 @@ namespace ShipWorks.Stores.Platforms.Etsy
             item.Quantity = transaction.GetValue("quantity", 0);
             item.UnitPrice = transaction.GetValue("price", 0m);
 
+            LoadOrderItemAttributes(item, (JArray) transaction["variations"]);
+
             JToken images = (JToken) transaction["MainImage"];
             if (images != null && images.Type != JTokenType.Null)
             {
                 item.Thumbnail = images.GetValue("url_75x75", "");
                 item.Image = images.GetValue("url_570xN", "");
+            }
+        }
+
+        /// <summary>
+        /// Loads the order item attributes.
+        /// </summary>
+        private void LoadOrderItemAttributes(OrderItemEntity item, JArray variations)
+        {
+            if (variations!=null)
+            {
+                foreach (JToken variation in variations)
+                {
+                    item.OrderItemAttributes.Add(new OrderItemAttributeEntity()
+                    {
+                        Name = variation.GetValue("formatted_name",""),
+                        Description = variation.GetValue("formatted_value",""),
+                        IsManual = false,
+                        UnitPrice = 0
+                    });
+                }
             }
         }
 

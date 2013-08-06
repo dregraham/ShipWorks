@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NeweggAPIResponse>
+  <IsSuccess>true</IsSuccess>
+  <SellerID>A09V</SellerID>
+  <OperationType>GetOrderInfoResponse</OperationType>
+  <ResponseBody>
+    <PageInfo>
+      <TotalCount>0</TotalCount>
+      <TotalPageCount>0</TotalPageCount>
+      <PageSize>100</PageSize>
+      <PageIndex>1</PageIndex>
+    </PageInfo>
+    <OrderInfoList></OrderInfoList>
+  </ResponseBody>
+  <Memo></Memo>
+  <ResponseDate>06/25/2012 06:37:40</ResponseDate>
+</NeweggAPIResponse>

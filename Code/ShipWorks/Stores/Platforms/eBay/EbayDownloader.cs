@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 DateTime rangeEnd = eBayCurrentDate.AddMinutes(-5);
 
                 // limit the ranges to be within our imposed caps
-                DateTime rangeCap = rangeEnd.AddDays(-29).AddHours(2);
+                DateTime rangeCap = rangeEnd.AddDays(-7).AddHours(2);
 
                 // default to going the max of the cap
                 DateTime transactionRangeBegin = rangeCap;

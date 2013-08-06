@@ -278,6 +278,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         case UpsServiceType.UpsMailInnovationsIntEconomy:
                         case UpsServiceType.UpsMailInnovationsIntPriority:
                             return "MI";
+                        case UpsServiceType.WorldwideSaver:
+                            return "UPSWorldwideSaver";
+                        case UpsServiceType.UpsExpress:
+                            return "UPSExpress";
+                        case UpsServiceType.UpsExpressEarlyAm:
+                            return "UPSExpressEarlyAm";
+                        case UpsServiceType.UpsExpressSaver:
+                            return "UPSExpressSaver";
+                        case UpsServiceType.UpsExpedited:
+                            return "UPSExpedited";
+                        case UpsServiceType.Ups3DaySelectFromCanada:
+                            return "UPS3DaySelectFromCanada";
+                        case UpsServiceType.UpsCaWorldWideExpressSaver:
+                            return "UPSCaWorldWideExpressSaver";
+                        case UpsServiceType.UpsCaWorldWideExpressPlus:
+                            return "UPSCaWorldWideExpressPlus";
+                        case UpsServiceType.UpsCaWorldWideExpress:
+                            return "UPSCaWorldWideExpress";
+                        case UpsServiceType.Ups2nDayAirIntra:
+                            return "UPS2nDayAirIntra";
                     }
 
                     break;
@@ -315,6 +335,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             // CA doesnt have a default code for Critical right now (10-21-2011) so fallback
                         case PostalServiceType.CriticalMail:
                             return "PRIORITY";
+                    }
+
+                    if (ShipmentTypeManager.IsEndiciaConsolidator(postalServiceType))
+                    {
+                        return "CONSOLIDATOR";
                     }
 
                     if (ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
@@ -356,9 +381,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "USPS";
                 
                 case ShipmentTypeCode.Endicia:
-                    if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
+                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+
+                    if (ShipmentTypeManager.IsEndiciaDhl(service))
                     {
                         return "DHL";
+                    }
+                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    {
+                        return "Consolidator";
                     }
                     else
                     {

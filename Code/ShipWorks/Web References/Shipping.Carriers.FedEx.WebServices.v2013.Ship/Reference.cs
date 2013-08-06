@@ -12828,6 +12828,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship {
         PAYOR_LIST_SHIPMENT,
         
         /// <remarks/>
+        PAYOR_RETAIL_SHIPMENT,
+        
+        /// <remarks/>
         PREFERRED_ACCOUNT_PACKAGE,
         
         /// <remarks/>

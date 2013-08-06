@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV26
+    partial class SwsimV29
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         ApiLogEntry logEntry;
@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV26(ApiLogEntry logEntry)
+        internal SwsimV29(ApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

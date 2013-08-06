@@ -24,11 +24,22 @@ namespace ShipWorks.Shipping.Settings.Defaults
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDefaultsRuleControl));
 
         ShippingDefaultsRuleEntity rule;
+        int position = 0;
 
         /// <summary>
         /// User has clicked the delete button on the rule line
         /// </summary>
         public event EventHandler DeleteClicked;
+
+        /// <summary>
+        /// User has clicked to move the rule up
+        /// </summary>
+        public event EventHandler MoveUpClicked;
+
+        /// <summary>
+        /// User has clicked to move the rule down
+        /// </summary>
+        public event EventHandler MoveDownClicked;
 
         /// <summary>
         /// User wants to manage profiles
@@ -83,9 +94,14 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Displayed index of the rule
         /// </summary>
-        public void UpdateDisplay(int index)
+        public void UpdatePosition(int index, int total)
         {
             labelIndex.Text = string.Format("{0}.", index);
+
+            buttonMoveUp.Enabled = (index > 1);
+            buttonMoveDown.Enabled = (index < total);
+
+            position = index;
 
             UpdateProfileDisplay(ShippingProfileManager.GetProfile((long) linkProfile.Tag));
         }
@@ -98,6 +114,28 @@ namespace ShipWorks.Shipping.Settings.Defaults
             if (DeleteClicked != null)
             {
                 DeleteClicked(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Move this rule down
+        /// </summary>
+        private void OnMoveDown(object sender, EventArgs e)
+        {
+            if (MoveDownClicked != null)
+            {
+                MoveDownClicked(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Move this rule up
+        /// </summary>
+        private void OnMoveUp(object sender, EventArgs e)
+        {
+            if (MoveUpClicked != null)
+            {
+                MoveUpClicked(this, EventArgs.Empty);
             }
         }
 
@@ -202,6 +240,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         {
             rule.FilterNodeID = filterCombo.SelectedFilterNodeID;
             rule.ShippingProfileID = (long) linkProfile.Tag;
+            rule.Position = position;
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {

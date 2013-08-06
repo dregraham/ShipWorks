@@ -65,8 +65,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         }
 
-
-
         /// <summary>
         /// Load the list of UPS accounts
         /// </summary>
@@ -190,6 +188,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 serviceType = null;
             }
 
+            //ShipmentTypeManager.GetType(overriddenShipments.First());
+            //this.shipmen
             UpdateMiAndSurePostSpecificVisibility(serviceType);
 
             // Unhook events
@@ -386,7 +386,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             confirmationPanel.Visible = !isSurePost;
             sectionCod.Visible = !isSurePost;
-            sectionReturns.Visible = !isSurePost;
+
+            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost;    
 
             sectionSurePost.Visible = isSurePost;
 

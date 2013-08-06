@@ -21,8 +21,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyCreateTokenWizard));
 
-        PortListener loginCallbackListener;
-
         string browserDisplayedShopName;
         string accessToken;
 
@@ -32,16 +30,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public ShopifyCreateTokenWizard()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Initialization of the wizard
-        /// </summary>
-        private void OnLoad(object sender, EventArgs e)
-        {
-            loginCallbackListener = new PortListener();
-            loginCallbackListener.StartListening();
-            loginCallbackListener.BeginRequest += new EventHandler<PortListenerRequestBeginEventArgs>(OnInterceptLoginCallback);
         }
 
         /// <summary>
@@ -125,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             webBrowser.DocumentCompleted -= new WebBrowserDocumentCompletedEventHandler(OnBrowserLogoutCompleted);
 
             webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(OnBrowserDocumentCompleted);
-            webBrowser.Navigate(new ShopifyEndpoints(ShopUrlName).GetApiAuthorizeUrl(loginCallbackListener.Port));
+            webBrowser.Navigate(new ShopifyEndpoints(ShopUrlName).GetApiAuthorizeUrl());
         }
 
         /// <summary>
@@ -140,17 +128,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Intercept the callback after a succesful login
+        /// Intercept the callback after a successful login
         /// </summary>
-        private void OnInterceptLoginCallback(object sender, PortListenerRequestBeginEventArgs e)
+        private void OnInterceptLoginCallback(object sender, Uri requestedUrl)
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new MethodInvoker(delegate { OnInterceptLoginCallback(sender, e); }));
+                BeginInvoke(new MethodInvoker(delegate { OnInterceptLoginCallback(sender, requestedUrl); }));
                 return;
             }
 
-            if (e.RequestedUrl.PathAndQuery.Contains("access_denied"))
+            if (requestedUrl.PathAndQuery.Contains("access_denied"))
             {
                 DialogResult = DialogResult.Cancel;
                 return;
@@ -159,13 +147,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
             try
             {
                 // We've got the request token now, so go ask for the actual Access Token that will be persisted.
-                accessToken = ShopifyWebClient.GetAccessToken(ShopUrlName, e.RequestedUrl);
+                accessToken = ShopifyWebClient.GetAccessToken(ShopUrlName, requestedUrl);
 
                 MoveNext();
             }
             catch (ShopifyException ex)
             {
-                MessageHelper.ShowError(this, string.Format("ShipWorks was not authenticated to connect to Shopify:\n\n{0}", ex.Message));
+                string errorMessage = string.Format("ShipWorks was not authenticated to connect to Shopify:\n\n{0}", ex.Message);
+
+                log.Error(errorMessage, ex);
+                MessageHelper.ShowError(this, errorMessage);
 
                 DialogResult = DialogResult.Cancel;
             }
@@ -177,7 +168,20 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             webBrowser.Dispose();
-            loginCallbackListener.Dispose();
+        }
+
+        /// <summary>
+        /// Fires when the web browser has navigated to a page.  This is the event needed to determine if we have received a valid
+        /// authorization code.
+        /// </summary>
+        private void OnWebBrowserNavigated(object sender, WebBrowserNavigatedEventArgs e)
+        {
+            // This gets called for every navigable link on the page, so make sure the Url is the one we care about.
+            if (ShopifyWebClient.UriHasRequestToken(e.Url))
+            {
+                // We have a url with the request token, process it.
+                OnInterceptLoginCallback(this, e.Url);
+            }
         }
     }
 }

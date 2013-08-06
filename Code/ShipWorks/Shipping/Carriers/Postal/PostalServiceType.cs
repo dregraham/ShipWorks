@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("First Class")]
         FirstClass = 1,
 
-        [Description("Express Mail")]
+        [Description("Priority Mail Express")]
         ExpressMail = 2,
 
         [Description("Media Mail")]
@@ -95,6 +95,22 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("DHL GM SM Media Mail Ground")]
         [ApiValue("DHLGMSMMEDIAMAILGROUND")]
-        DhlMediaMailStandard = 108
+        DhlMediaMailStandard = 108,
+
+        [Description("Consolidator Label")]
+        [ApiValue("ParcelSelect")]
+        ConsolidatorDomestic = 200,
+
+        [Description("Consolidator (International)")]
+        [ApiValue("CONSINTL")]
+        ConsolidatorInternational = 201,
+
+        [Description("Consolidator (IPA)")]
+        [ApiValue("IPA")]
+        ConsolidatorIpa = 202,
+
+        [Description("Consolidator (ISAL)")]
+        [ApiValue("ISAL")]
+        ConsolidatorIsal = 203
     }
 }

@@ -113,6 +113,12 @@ namespace ShipWorks.Editions
         /// UPS SurePost service type can be restricted
         /// </summary>
         [Description("Your ShipWorks account does not support using the UPS SurePost service.")]
-        UpsSurePost
+        UpsSurePost,
+
+        /// <summary>
+        /// Endicia consolidator
+        /// </summary>
+        [Description("Your ShipWorks account does not support using consolidators through Endicia.")]
+        EndiciaConsolidator
     }
 }

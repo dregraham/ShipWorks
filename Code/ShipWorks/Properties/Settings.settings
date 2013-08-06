@@ -50,9 +50,6 @@
     <Setting Name="ShipWorks_Shipping_Carriers_iParcel_WebServices_XMLSOAP" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://www.i-parcel.com/soap/xmlsoap.asmx</Value>
     </Setting>
-    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/ship</Value>
-    </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_PackageMovement_PackageMovementInformationService" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services</Value>
     </Setting>
@@ -65,14 +62,17 @@
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Close_CloseService" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://gatewaybeta.fedex.com:443/web-services/close</Value>
     </Setting>
-    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/rate</Value>
-    </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Track_TrackService" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/track</Value>
     </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://wwwcie.ups.com/webservices/OpenAccount</Value>
+    </Setting>
+    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/ship</Value>
+    </Setting>
+    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/rate</Value>
     </Setting>
   </Settings>
 </SettingsFile>

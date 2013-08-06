@@ -428,7 +428,7 @@ namespace ShipWorks.Data.Administration
                     throw new InvalidOperationException("A ShipWorks restore can only be done on the computer that is running SQL Server.");
                 }
 
-                if (!SqlSession.Current.IsSqlServer2008())
+                if (!SqlSession.Current.IsSqlServer2008OrLater())
                 {
                     throw new InvalidOperationException("A ShipWorks restore can only be done when connected to SQL Server 2008 or better.");
                 }

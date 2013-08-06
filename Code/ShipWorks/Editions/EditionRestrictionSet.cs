@@ -85,6 +85,7 @@ namespace ShipWorks.Editions
                 case EditionFeature.EndiciaInsurance:
                 case EditionFeature.EndiciaDhl:
                 case EditionFeature.UpsSurePost:
+                case EditionFeature.EndiciaConsolidator:
                     return CheckNonExistanceRestriction(feature);
             }
 

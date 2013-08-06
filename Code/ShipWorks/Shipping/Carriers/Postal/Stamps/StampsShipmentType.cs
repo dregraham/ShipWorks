@@ -126,23 +126,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV10 stampsRate in StampsApiSession.GetRates(shipment))
+                foreach (RateV11 stampsRate in StampsApiSession.GetRates(shipment))
                 {
                     PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
                     RateResult baseRate = null;
                     
                     // If its a rate that has sig\deliv, then you can's select the core rate itself
-                    if (stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV3.USADC))
+                    if (stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
                     {
                         baseRate = new RateResult(
-                            EnumHelper.GetDescription(serviceType),
+                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
                             stampsRate.DeliverDays.Replace("Days", ""));
                     }
                     else
                     {
                         baseRate = new RateResult(
-                             EnumHelper.GetDescription(serviceType),
+                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
                              stampsRate.DeliverDays.Replace("Days", ""),
                              stampsRate.Amount,
                              new PostalRateSelection(serviceType, PostalConfirmationType.None));
@@ -151,19 +151,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     rates.Add(baseRate);
 
                     // Add a rate for each add-on
-                    foreach (AddOnV3 addOn in stampsRate.AddOns)
+                    foreach (AddOnV4 addOn in stampsRate.AddOns)
                     {
                         string name = null;
                         PostalConfirmationType confirmationType = PostalConfirmationType.None;
 
                         switch (addOn.AddOnType)
                         {
-                            case AddOnTypeV3.USADC:
+                            case AddOnTypeV4.USADC:
                                 name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
                                 confirmationType = PostalConfirmationType.Delivery;
                                 break;
 
-                            case AddOnTypeV3.USASC:
+                            case AddOnTypeV4.USASC:
                                 name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
                                 confirmationType = PostalConfirmationType.Signature;
                                 break;

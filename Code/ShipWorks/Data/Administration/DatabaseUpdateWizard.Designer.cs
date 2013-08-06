@@ -468,8 +468,8 @@ namespace ShipWorks.Data.Administration
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(449, 30);
             this.label8.TabIndex = 1;
-            this.label8.Text = "You have an older version of SQL Server installed, but ShipWorks can upgrade it t" +
-                "o SQL Server 2008.  Once complete, this cannot be undone. ";
+            this.label8.Text = "You have an older version of SQL Server installed, but ShipWorks can upgrade it." +
+                "  Once complete, this cannot be undone. ";
             // 
             // label11
             // 
@@ -477,7 +477,7 @@ namespace ShipWorks.Data.Administration
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(449, 33);
             this.label11.TabIndex = 6;
-            this.label11.Text = "If you choose not to upgrade you can install a new SQL Server 2008 instance in th" +
+            this.label11.Text = "If you choose not to upgrade you can install a new SQL Server instance in th" +
                 "e Database Setup wizard.";
             // 
             // label9
@@ -524,8 +524,8 @@ namespace ShipWorks.Data.Administration
             this.labelCantUpgrade.Name = "labelCantUpgrade";
             this.labelCantUpgrade.Size = new System.Drawing.Size(462, 200);
             this.labelCantUpgrade.TabIndex = 8;
-            this.labelCantUpgrade.Text = "You have an older version of SQL Server installed.  ShipWorks can upgrade it to S" +
-                "QL Server 2008, but only on the computer that is running SQL Server.";
+            this.labelCantUpgrade.Text = "You have an older version of SQL Server installed.  ShipWorks can upgrade," +
+                " but only on the computer that is running SQL Server.";
             // 
             // labelSqlServer08Required
             // 
@@ -535,7 +535,7 @@ namespace ShipWorks.Data.Administration
             this.labelSqlServer08Required.Name = "labelSqlServer08Required";
             this.labelSqlServer08Required.Size = new System.Drawing.Size(275, 13);
             this.labelSqlServer08Required.TabIndex = 0;
-            this.labelSqlServer08Required.Text = "ShipWorks requires Microsoft SQL Server 2008. ";
+            this.labelSqlServer08Required.Text = "ShipWorks requires Microsoft SQL Server. ";
             // 
             // wizardPageServerUpgradeDownload
             // 
@@ -543,7 +543,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageServerUpgradeDownload.Controls.Add(this.downloadSqlServer);
             this.wizardPageServerUpgradeDownload.Controls.Add(this.progressSqlServer);
             this.wizardPageServerUpgradeDownload.Controls.Add(this.labelDownloadSqlServer);
-            this.wizardPageServerUpgradeDownload.Description = "ShipWorks needs to download Microsoft SQL Server 2008.";
+            this.wizardPageServerUpgradeDownload.Description = "ShipWorks needs to download Microsoft SQL Server.";
             this.wizardPageServerUpgradeDownload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageServerUpgradeDownload.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageServerUpgradeDownload.Location = new System.Drawing.Point(0, 0);
@@ -585,14 +585,14 @@ namespace ShipWorks.Data.Administration
             this.labelDownloadSqlServer.Name = "labelDownloadSqlServer";
             this.labelDownloadSqlServer.Size = new System.Drawing.Size(508, 46);
             this.labelDownloadSqlServer.TabIndex = 12;
-            this.labelDownloadSqlServer.Text = "ShipWorks will upgrade to Microsoft SQL Server 2008, but first it must be downloa" +
-                "ded. \r\n\r\nClick Download to download Microsoft SQL Server 2008.";
+            this.labelDownloadSqlServer.Text = "ShipWorks will upgrade Microsoft SQL Server, but first it must be downloa" +
+                "ded. \r\n\r\nClick Download to download Microsoft SQL Server.";
             // 
             // wizardPageServerUpgradeInstall
             // 
             this.wizardPageServerUpgradeInstall.Controls.Add(this.panelUpgradeSqlServer);
             this.wizardPageServerUpgradeInstall.Controls.Add(this.panelUpgradingSqlServer);
-            this.wizardPageServerUpgradeInstall.Description = "ShipWorks is ready to upgrade to Microsoft SQL Server 2008.";
+            this.wizardPageServerUpgradeInstall.Description = "ShipWorks is ready to upgrade Microsoft SQL Server.";
             this.wizardPageServerUpgradeInstall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageServerUpgradeInstall.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageServerUpgradeInstall.Location = new System.Drawing.Point(0, 0);
@@ -667,7 +667,7 @@ namespace ShipWorks.Data.Administration
             this.labelUpgradingSqlServer.Name = "labelUpgradingSqlServer";
             this.labelUpgradingSqlServer.Size = new System.Drawing.Size(449, 23);
             this.labelUpgradingSqlServer.TabIndex = 158;
-            this.labelUpgradingSqlServer.Text = "ShipWorks is now upgrading to Microsoft SQL Server 2008.  This may take a long ti" +
+            this.labelUpgradingSqlServer.Text = "ShipWorks is now upgrading Microsoft SQL Server.  This may take a long ti" +
                 "me.";
             // 
             // wizardPageShipWorksAdmin

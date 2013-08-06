@@ -313,7 +313,7 @@
 </value>
   </data>
   <data name="labelChooseNewOrExistingSqlServer.Text" xml:space="preserve">
-    <value>The ShipWorks database will be created in Microsoft SQL Server 2008.  ShipWorks can install a new instance of SQL Server, or you can create a ShipWorks database in an instance that is already installed.</value>
+    <value>The ShipWorks database will be created in Microsoft SQL Server.  ShipWorks can install a new instance of SQL Server, or you can create a ShipWorks database in an instance that is already installed.</value>
   </data>
   <data name="pictureServerSearching.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

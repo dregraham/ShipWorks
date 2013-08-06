@@ -179,15 +179,6 @@ namespace ShipWorks.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/ship")]
-        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService {
-            get {
-                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services")]
         public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_PackageMovement_PackageMovementInformationService {
             get {
@@ -227,15 +218,6 @@ namespace ShipWorks.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/rate")]
-        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService {
-            get {
-                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/track")]
         public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Track_TrackService {
             get {
@@ -250,6 +232,26 @@ namespace ShipWorks.Properties {
         public string ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService {
             get {
                 return ((string)(this["ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/ship")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/rate")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService"]));
             }
         }
     }

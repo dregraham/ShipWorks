@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(395, 33);
             this.label2.TabIndex = 10;
-            this.label2.Text = "ShipWorks uses Microsoft SQL Server 2008, which requires Microsoft Data Access Co" +
+            this.label2.Text = "ShipWorks uses Microsoft SQL Server, which requires Microsoft Data Access Co" +
                 "mponents (MDAC) 2.8.";
             // 
             // label1
@@ -115,7 +115,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             this.Name = "NeedMdac28";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Interapptive ShipWorks";
+            this.Text = "ShipWorks";
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

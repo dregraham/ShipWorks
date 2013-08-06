@@ -125,16 +125,16 @@
             this.groupExpressMail.Size = new System.Drawing.Size(417, 53);
             this.groupExpressMail.TabIndex = 9;
             this.groupExpressMail.TabStop = false;
-            this.groupExpressMail.Text = "Express Mail";
+            this.groupExpressMail.Text = "Priority Mail Express";
             // 
             // expressSignatureRequirement
             // 
             this.expressSignatureRequirement.AutoSize = true;
             this.expressSignatureRequirement.Location = new System.Drawing.Point(47, 22);
             this.expressSignatureRequirement.Name = "expressSignatureRequirement";
-            this.expressSignatureRequirement.Size = new System.Drawing.Size(238, 17);
+            this.expressSignatureRequirement.Size = new System.Drawing.Size(281, 17);
             this.expressSignatureRequirement.TabIndex = 97;
-            this.expressSignatureRequirement.Text = "Waive signature requirement for Express Mail";
+            this.expressSignatureRequirement.Text = "Waive signature requirement for Priority Mail Express";
             this.expressSignatureRequirement.UseVisualStyleBackColor = true;
             // 
             // expressSignatureRequirementState
@@ -574,7 +574,7 @@
             this.confirmation.Location = new System.Drawing.Point(110, 40);
             this.confirmation.Name = "confirmation";
             this.confirmation.PromptText = "(Multiple Values)";
-            this.confirmation.Size = new System.Drawing.Size(144, 21);
+            this.confirmation.Size = new System.Drawing.Size(250, 21);
             this.confirmation.TabIndex = 50;
             // 
             // service
@@ -584,7 +584,7 @@
             this.service.Location = new System.Drawing.Point(110, 13);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(144, 21);
+            this.service.Size = new System.Drawing.Size(250, 21);
             this.service.TabIndex = 49;
             this.service.SelectedIndexChanged += new System.EventHandler(this.OnChangeService);
             // 

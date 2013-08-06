@@ -95,7 +95,7 @@ namespace ShipWorks.ApplicationCore
             this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.Name = "SplashScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Interapptive ShipWorks";
+            this.Text = "ShipWorks";
             this.Load += new System.EventHandler(this.OnLoad);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.ResumeLayout(false);

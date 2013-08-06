@@ -74,11 +74,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// The url to which the user is sent for granting ShipWorks access
         /// </summary>
-        public Uri GetApiAuthorizeUrl(int callbackPort)
+        public Uri GetApiAuthorizeUrl()
         {
-            return new Uri(string.Format(ApiAuthorizeUrlFormat, ApiBaseUrl, ShopifyConstants.InterapptiveAppApiKey, Scopes, string.Format("http://localhost:{0}", callbackPort)));
+            return new Uri(string.Format(ApiAuthorizeUrlFormat, ApiBaseUrl, ShopifyConstants.InterapptiveAppApiKey, Scopes,
+                ShopifyConstants.CallbackUrl));
         }
-
 
         /// <summary>
         /// The url used to ask Shopify for an AccessToken

@@ -249,7 +249,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             this.MinimizeBox = false;
             this.Name = "CrashWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Interapptive ShipWorks";
+            this.Text = "ShipWorks";
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize) (this.crashImage)).EndInit();
             this.panelBottom.ResumeLayout(false);

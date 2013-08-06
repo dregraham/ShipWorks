@@ -252,9 +252,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             foreach (FedExPackageEntity fedExPackageEntity in fedExShipmentEntity.Packages)
             {
                 fedExPackageEntity.ContainsAlcohol = false;
-                fedExPackageEntity.Insurance = false;
-                fedExPackageEntity.InsurancePennyOne = false;
-                fedExPackageEntity.InsuranceValue = 0m;
                 fedExPackageEntity.DryIceWeight = 0;
                 fedExPackageEntity.PriorityAlert = false;
                 fedExPackageEntity.PriorityAlertDetailContent = string.Empty;

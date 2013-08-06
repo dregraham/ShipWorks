@@ -27,6 +27,8 @@ using ShipWorks.ApplicationCore.Interaction;
 using NDesk.Options;
 using System.Xml.Linq;
 using System.Xml;
+using Interapptive.Shared.Win32;
+using System.Net;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -38,8 +40,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SqlServerInstaller));
 
-        const string sqlInstallerX64 = "SQLEXPR_x64_ENU.exe";
-        const string sqlInstallerX86 = "SQLEXPR_x86_ENU.exe";
+        const string sqlx64FileName = "SQLEXPR_x64_ENU.exe";
+        const string sqlx86FileName = "SQLEXPR_x86_ENU.exe";
 
         // Custom isntall error codes
         const int msdeUpgrade08Failed = -200; 
@@ -48,6 +50,11 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         // A value of exactly OxBC2 means installation was successful, but a reboot is now required.
         // Anything else (such as 0x0XXX0BC2) means a reboot is required before install.
         const int successRebootRequired = 0xBC2;
+        
+        /// <summary>
+        /// For SQL 2012 this sometimes seems to indicate a failure to install b\c of the presense of MSDE
+        /// </summary>
+        const int failedDueToMsdeExists = -2068774911;
 
         // The exit code from the last attempt at installation
         int lastExitCode = 0;
@@ -83,6 +90,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
         }
 
+        #region Initialization and Detection
+
         /// <summary>
         /// The exit code that indicates that installation was successful, but a reboot is now required.
         /// </summary>
@@ -108,13 +117,78 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
+        /// Indicates if SQL Server 2012 is supported on the current computer
+        /// </summary>
+        public static bool IsSqlServer2012Supported
+        {
+            get
+            {
+                // This is how to detect for .NET 4.5 - if this key exists, and if "Release" exists within it.  SQL 2012 doesn't necessarily need .NET 4.5, 
+                // but it has the same OS requirements.  Our installer installs .NET 4.5 if the OS supports it - so the presense of .NET 4.5 in the 
+                // case of ShipWorks is identicial to checking for 2012 compatibility
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
+                {
+                    return (key != null && key.GetValue("Release") != null);
+                }
+            }
+        }
+
+        /// <summary>
+        /// SQL Server requires Windows Installer 4.5
+        /// </summary>
+        public static bool IsWindowsInstallerRequired
+        {
+            get
+            {
+                Version version = MyComputer.WindowsInstallerVersion;
+
+                if (version.Major > 4)
+                {
+                    return false;
+                }
+
+                if (version.Major == 4 && version.Minor >= 5)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// SQL Server requires .NET 3.5
+        /// </summary>
+        public static bool IsDotNet35Required
+        {
+            get
+            {
+                // Although documented as needing it, in practice from what I've seen SQL 2012 runs just fine without it
+                if (IsSqlServer2012Supported)
+                {
+                    return false;
+                }
+
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5"))
+                {
+                    if (key != null)
+                    {
+                        return Convert.ToInt32(key.GetValue("SP", 0)) == 0;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Initialize the install to be used against the current SqlSession.  If there is none, then upgrading is not possible.  If there is one,
         /// then it doesnt affect a new Install, but it Upgrading can only apply to the current SqlSession.
         /// </summary>
         public void InitializeForCurrentSqlSession()
         {
             // For fresh installs we just go by the bitness of the OS
-            installPackageExe = MyComputer.Is64BitWindows ? sqlInstallerX64 : sqlInstallerX86;
+            installPackageExe = MyComputer.Is64BitWindows ? sqlx64FileName : sqlx86FileName;
             log.InfoFormat("SQL Server intallation package: {0}", installPackageExe);
 
             // Can only upgrade the current SqlSession - if there is one
@@ -123,19 +197,19 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 // For upgrades, if we are on a 32 bit OS, then we know we need the 32bit
                 if (!MyComputer.Is64BitWindows)
                 {
-                    upgradePackageExe = sqlInstallerX86;
+                    upgradePackageExe = sqlx86FileName;
                 }
                 else
                 {
                     // For MSDE we do an uninstall followed by a clean install - we can use the 64bit for sure
                     if (IsMsdeMigrationInProgress || SqlSession.Current.GetServerVersion().Major <= 8)
                     {
-                        upgradePackageExe = sqlInstallerX64;
+                        upgradePackageExe = sqlx64FileName;
                     }
                     else
                     {
                         // We have to determine the bitness of the currently installed SQL server, and use the same one.
-                        upgradePackageExe = SqlSession.Current.Is64Bit() ? sqlInstallerX64 : sqlInstallerX86;
+                        upgradePackageExe = SqlSession.Current.Is64Bit() ? sqlx64FileName : sqlx86FileName;
                     }
                 }
             }
@@ -144,31 +218,93 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// The path to the location of the SQL Express installer for new installations on the local disk
+        /// Validate that the installer has been initialized for the given purpose, or throw
         /// </summary>
-        public string GetLocalExe(SqlServerInstallerPurpose purpose)
+        private void ValidateInitialized(SqlServerInstallerPurpose purpose)
+        {
+            if (purpose == SqlServerInstallerPurpose.LocalDb && !IsSqlServer2012Supported)
+            {
+                throw new InvalidOperationException("Cannot install LocalDB when SQL 2012 is not supported.");
+            }
+
+            if (installPackageExe == null)
+            {
+                throw new InvalidOperationException("The SqlServerInstaller has not been initialized.");
+            }
+
+            if (purpose == SqlServerInstallerPurpose.Upgrade && upgradePackageExe == null)
+            {
+                throw new InvalidOperationException("The SqlServerInstaller has been initialized, but upgrading is invalid due to no SqlSession.");
+            }
+        }
+
+        #endregion
+
+        #region Local and Remote Paths
+
+        /// <summary>
+        /// The path to the location of the SQL installer for new installations on the local disk
+        /// </summary>
+        public string GetInstallerLocalFilePath(SqlServerInstallerPurpose purpose)
         {
             ValidateInitialized(purpose);
 
-            return Path.Combine(DataPath.Components, (purpose == SqlServerInstallerPurpose.Install) ? installPackageExe : upgradePackageExe);
+            string fileName;
+
+            if (purpose == SqlServerInstallerPurpose.LocalDb)
+            {
+                fileName = "SqlLocalDB.MSI";
+            }
+            else
+            {
+                fileName = (purpose == SqlServerInstallerPurpose.Install) ? installPackageExe : upgradePackageExe;
+            }
+
+            return Path.Combine(DataPath.Components, fileName);
         }
 
         /// <summary>
         /// The full Uri for downloading the SQL Express installer used for new installations
         /// </summary>
-        public Uri GetDownloadUri(SqlServerInstallerPurpose purpose)
+        public Uri GetInstallerDownloadUri(SqlServerInstallerPurpose purpose)
         {
             ValidateInitialized(purpose);
 
-            return new Uri("http://www.interapptive.com/download/components/sqlexpress08r2/" + ((purpose == SqlServerInstallerPurpose.Install) ? installPackageExe : upgradePackageExe));
+            if (purpose == SqlServerInstallerPurpose.LocalDb)
+            {
+                return new Uri(string.Format("http://www.interapptive.com/download/components/sqlserver2012/localdb/{0}/SqlLocalDB.MSI", MyComputer.Is64BitWindows ? "x64" : "x86"));
+            }
+            else
+            {
+                string url = IsSqlServer2012Supported ? "http://www.interapptive.com/download/components/sqlserver2012/express/" : "http://www.interapptive.com/download/components/sqlexpress08r2sp2/";
+
+                return new Uri(url + ((purpose == SqlServerInstallerPurpose.Install) ? installPackageExe : upgradePackageExe));
+            }
+        }
+
+        /// <summary>
+        /// Get the total file length on disk of the given installer
+        /// </summary>
+        public long GetInstallerFileLength(SqlServerInstallerPurpose purpose)
+        {
+            switch (GetInstallerDownloadUri(purpose).ToString())
+            {
+                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x64_ENU.exe": return 128331696;
+                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x86_ENU.exe": return 115763632;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x64_ENU.exe": return 138757208;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x86_ENU.exe": return 122317400;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x64/SqlLocalDB.MSI": return 34635776;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x86/SqlLocalDB.MSI": return 29097984;
+                default: throw new InvalidOperationException("Unknown SQL Server installer for checksum: " + purpose);
+            }
         }
 
         /// <summary>
         /// Determines if the installer for SQL Express installer is valid, as in not partially downloaded or corrupted.
         /// </summary>
-        public bool IsLocalExeValid(SqlServerInstallerPurpose purpose)
+        public bool IsInstallerLocalFileValid(SqlServerInstallerPurpose purpose)
         {
-            string localExe = GetLocalExe(purpose);
+            string localExe = GetInstallerLocalFilePath(purpose);
 
             if (!File.Exists(localExe))
             {
@@ -184,10 +320,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             string knownChecksum;
 
-            switch (Path.GetFileName(localExe))
+            switch (GetInstallerDownloadUri(purpose).ToString())
             {
-                case sqlInstallerX64: knownChecksum = "L/GlCyJ3mHyc1luZgSzq8qZ+o2I="; break;
-                case sqlInstallerX86: knownChecksum = "NvzkLrED6cSzhOgrQlk9XoLrYzI="; break;
+                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x64_ENU.exe": knownChecksum = "52ijtw4/O1lu/6n1fYEvlcCgUGs="; break;
+                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x86_ENU.exe": knownChecksum = "bONPV6E+De2VyvRAX60TPoWa3jA="; break;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x64_ENU.exe": knownChecksum = "5FYdXKp2Gl0dqg0wX0/s7cag05w="; break;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x86_ENU.exe": knownChecksum = "KHXaFzH7vmGDycwPKMpZBdxnKIo="; break;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x64/SqlLocalDB.MSI": knownChecksum = "JCf2I6gCsTUta7bJR4KYqCroJTk="; break;
+                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x86/SqlLocalDB.MSI": knownChecksum = "Fjii+pBm3xmiR6t8vgYXJ5laqT0="; break;
                 default: throw new InvalidOperationException("Unknown SQL Server installer for checksum: " + localExe);
             }
 
@@ -195,7 +335,32 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Begin the installation of the SQL Server 2008.  The method returns before the installation is complete.
+        /// Download the SQL Server installer to be used for the given purpose
+        /// </summary>
+        private string DownloadSqlServer(SqlServerInstallerPurpose purpose)
+        {
+            string localFile = GetInstallerLocalFilePath(purpose);
+
+            if (!IsInstallerLocalFileValid(purpose))
+            {
+                Uri remoteUri = GetInstallerDownloadUri(purpose);
+
+                log.InfoFormat("Using WebClient to download {0}", remoteUri);
+
+                // We can do this synchronously becauase we are already running as a secondary background elevated process, and won't be blocking any UI
+                WebClient webClient = new WebClient();
+                webClient.DownloadFile(remoteUri, localFile);
+            }
+
+            return localFile;
+        }
+
+        #endregion
+
+        #region Installation
+
+        /// <summary>
+        /// Begin the installation of the SQL Server.  The method returns before the installation is complete.
         /// </summary>
         public void InstallSqlServer(string instanceName, string sapassword)
         {
@@ -279,8 +444,78 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             return args.ToString();
         }
 
+        #endregion
+
+        #region LocalDB
+
         /// <summary>
-        /// Begin the upgrade to SQL Server 2008 on the instance that is referred to by the current SQL Session.  The method returns before the upgrade is complete.
+        /// Kick off the installation of SQL Server Local DB,  The method returns before the installation is complete.
+        /// </summary>
+        public void InstallLocalDb()
+        {
+            log.Info("Launching external process to elevate permissions to install SQL server Local DB.");
+            lastExitCode = 0;
+
+            // We need to launch the process to elevate ourselves.
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, "/command:sqlserver -action=localdb");
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.EnableRaisingEvents = true;
+            process.Exited += new EventHandler(OnInstallerExited);
+
+            // Elevate for vista
+            if (MyComputer.IsWindowsVistaOrHigher)
+            {
+                process.StartInfo.Verb = "runas";
+            }
+
+            process.Start();
+        }
+
+        /// <summary>
+        /// The actual installation that occurs in a seperate elevated process
+        /// </summary>
+        private void InstallLocalDbInternal()
+        {
+            // First we have to make sure it's downloaded
+            string installerPath = DownloadSqlServer(SqlServerInstallerPurpose.LocalDb);
+
+            string args = "/qn IACCEPTSQLLOCALDBLICENSETERMS=YES";
+
+            log.InfoFormat("Executing: {0}", args);
+
+            Process process = new Process();
+            int exitCode;
+
+            try
+            {
+                process.StartInfo = new ProcessStartInfo(installerPath, args);
+                process.Start();
+                process.WaitForExit();
+
+                exitCode = process.ExitCode;
+            }
+            catch (Win32Exception ex)
+            {
+                log.Error("Error installing sql server", ex);
+                exitCode = ex.ErrorCode;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error installing sql server", ex);
+                exitCode = unknownException;
+            }
+
+            log.InfoFormat("Exiting with code: {0}", exitCode);
+            Environment.ExitCode = exitCode;
+        }
+
+        #endregion
+
+        #region Upgrading
+
+        /// <summary>
+        /// Begin the upgrade to SQL Server on the instance that is referred to by the current SQL Session.  The method returns before the upgrade is complete.
         /// </summary>
         public void UpgradeSqlServer()
         {
@@ -346,7 +581,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.ServerInstance);
 
-            string args = GetUpgradeArgs(instance, Path.GetFileName(installerPath) == sqlInstallerX86);
+            string args = GetUpgradeArgs(instance, Path.GetFileName(installerPath) == sqlx86FileName);
             log.InfoFormat("Executing: {0}", args);
 
             Process process = new Process();
@@ -638,7 +873,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             // It's possible we are here after a successful SQL 08 install - but that needed to reboot before we moved on.  If that's the case we skip over the install (its already installed)
             // and move on to fixing up the db stuff.
-            bool alreadyInstalled = copySession.CanConnect() && copySession.IsSqlServer2008();
+            bool alreadyInstalled = copySession.CanConnect() && copySession.IsSqlServer2008OrLater();
 
             if (!alreadyInstalled)
             {
@@ -904,6 +1139,28 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
+        /// If there is an MSDE -> 08 upgrade in progress, but has not yet been completed, this cancels it.
+        /// </summary>
+        public static void CancelMsdeMigrationInProgress()
+        {
+            if (File.Exists(MsdeMigrationInfoFile))
+            {
+                log.InfoFormat("Cancel MSDE Miration in Progress");
+
+                File.Move(MsdeMigrationInfoFile,
+                    Path.Combine(
+                        Path.GetDirectoryName(MsdeMigrationInfoFile),
+                        Path.GetFileNameWithoutExtension(MsdeMigrationInfoFile) +
+                            "_canceled_" +
+                                DateTime.UtcNow.ToString("yyyy-MM-dd HH.mm.ss") + ".xml"));
+            }
+        }
+
+        #endregion
+
+        #region Installation \ Upgrade Exiting
+
+        /// <summary>
         /// The installation process has exited
         /// </summary>
         private void OnInstallerExited(object sender, EventArgs e)
@@ -953,14 +1210,19 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             if (code == msdeUpgrade08Failed)
             {
                 return
-                    "SQL Server 2008 failed to install, but the previous version of SQL Server\n" +
+                    "SQL Server failed to install, but the previous version of SQL Server\n" +
                     "was already removed.\n\n" +
                     "Please contact Interapptive for assistance with completing the upgrade.";
             }
 
             if (IsErrorCodeRebootRequiredBeforeInstall(code))
             {
-                return "Your computer must be restarted before installing SQL Server 2008.";
+                return "Your computer must be restarted before installing SQL Server.";
+            }
+
+            if (code == failedDueToMsdeExists)
+            {
+                return "SQL Server failed to install.  This may be becuase a previous version of SQL Server (MSDE) is installed on your computer.  Uninstalling MSDE may resolve the issue.";
             }
 
             return string.Format("Reason code: {0:X}.", code);
@@ -984,81 +1246,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             return hex.EndsWith("BC2", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// SQL Server 2008 requires Windows Installer 4.5
-        /// </summary>
-        public static bool IsWindowsInstallerRequired
-        {
-            get
-            {
-                Version version = MyComputer.WindowsInstallerVersion;
-
-                if (version.Major > 4)
-                {
-                    return false;
-                }
-
-                if (version.Major == 4 && version.Minor >= 5)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// SQL Server 2008 requires .NET 3.5
-        /// </summary>
-        public static bool IsDotNet35Required
-        {
-            get
-            {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5"))
-                {
-                    if (key != null)
-                    {
-                        return Convert.ToInt32(key.GetValue("SP", 0)) == 0;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Validate that the installer has been initialized for the given purpose, or throw
-        /// </summary>
-        private void ValidateInitialized(SqlServerInstallerPurpose purpose)
-        {
-            if (installPackageExe == null)
-            {
-                throw new InvalidOperationException("The SqlServerInstaller has not been initialized.");
-            }
-
-            if (purpose == SqlServerInstallerPurpose.Upgrade && upgradePackageExe == null)
-            {
-                throw new InvalidOperationException("The SqlServerInstaller has been initialized, but upgrading is invalid due to no SqlSession.");
-            }
-        }
-
-        /// <summary>
-        /// If there is an MSDE -> 08 upgrade in progress, but has not yet been completed, this cancels it.
-        /// </summary>
-        public static void CancelMsdeMigrationInProgress()
-        {
-            if (File.Exists(MsdeMigrationInfoFile))
-            {
-                log.InfoFormat("Cancel MSDE Miration in Progress");
-
-                File.Move(MsdeMigrationInfoFile, 
-                    Path.Combine(
-                        Path.GetDirectoryName(MsdeMigrationInfoFile), 
-                        Path.GetFileNameWithoutExtension(MsdeMigrationInfoFile) + 
-                            "_canceled_" + 
-                                DateTime.UtcNow.ToString("yyyy-MM-dd HH.mm.ss") + ".xml"));
-            }
-        }
+        #endregion
 
         /// <summary>
         /// Handle commands comming in from the command line for sql server
@@ -1120,7 +1308,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                 installer.InitializeForCurrentSqlSession();
 
                                 UpgradeSqlServerInternal(
-                                    installer.GetLocalExe(SqlServerInstallerPurpose.Upgrade), 
+                                    installer.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade), 
                                     SqlSession.Current);
 
                                 break;
@@ -1144,7 +1332,19 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                 SqlServerInstaller installer = new SqlServerInstaller();
                                 installer.InitializeForCurrentSqlSession();
 
-                                InstallSqlServerInternal(installer.GetLocalExe(SqlServerInstallerPurpose.Install), instance, sapassword);
+                                InstallSqlServerInternal(installer.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install), instance, sapassword);
+
+                                break;
+                            }
+
+                        case "localdb":
+                            {
+                                log.InfoFormat("Processing request to install LocalDB.");
+
+                                // We need to initialize an installer to get the correct installer package exe's
+                                SqlServerInstaller installer = new SqlServerInstaller();
+                                installer.InitializeForCurrentSqlSession();
+                                installer.InstallLocalDbInternal();
 
                                 break;
                             }

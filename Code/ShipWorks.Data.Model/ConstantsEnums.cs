@@ -483,6 +483,8 @@ namespace ShipWorks.Data.Model
 		MarketplaceID,
 		///<summary>ExcludeFBA. </summary>
 		ExcludeFBA,
+		///<summary>DomainName. </summary>
+		DomainName,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7071,6 +7073,8 @@ namespace ShipWorks.Data.Model
 		FilterNodeID,
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
+		///<summary>Position. </summary>
+		Position,
 		/// <summary></summary>
 		AmountOfFields
 	}

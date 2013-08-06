@@ -248,7 +248,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                     payment.Payor.ResponsibleParty.Contact.PersonName = shipment.FedEx.PayorDutiesName;
 
                     payment.Payor.ResponsibleParty.AccountNumber = shipment.FedEx.PayorDutiesAccount;
-                    payment.Payor.ResponsibleParty.Address.CountryCode = shipment.FedEx.PayorDutiesCountryCode;
+
+                    if (!string.IsNullOrWhiteSpace(shipment.FedEx.PayorDutiesAccount))
+                    {
+                        payment.Payor.ResponsibleParty.Address.CountryCode = shipment.FedEx.PayorDutiesCountryCode;
+                    }
+                    else
+                    {
+                        payment.Payor.ResponsibleParty.Address.CountryCode = string.Empty;
+                    }
                 }
             }
 

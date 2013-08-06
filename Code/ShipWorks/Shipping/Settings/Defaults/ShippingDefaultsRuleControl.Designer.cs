@@ -34,6 +34,8 @@
             this.linkProfile = new System.Windows.Forms.Label();
             this.labelApply = new System.Windows.Forms.Label();
             this.labelOrder = new System.Windows.Forms.Label();
+            this.buttonMoveUp = new System.Windows.Forms.ToolStripButton();
+            this.buttonMoveDown = new System.Windows.Forms.ToolStripButton();
             this.filterCombo = new ShipWorks.Filters.Controls.FilterComboBox();
             this.toolStipDelete.SuspendLayout();
             this.SuspendLayout();
@@ -41,8 +43,8 @@
             // labelIndex
             // 
             this.labelIndex.AutoSize = true;
-            this.labelIndex.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labelIndex.Location = new System.Drawing.Point(26, 6);
+            this.labelIndex.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelIndex.Location = new System.Drawing.Point(75, 6);
             this.labelIndex.Name = "labelIndex";
             this.labelIndex.Size = new System.Drawing.Size(17, 13);
             this.labelIndex.TabIndex = 1;
@@ -56,12 +58,14 @@
             this.toolStipDelete.GripMargin = new System.Windows.Forms.Padding(0);
             this.toolStipDelete.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStipDelete.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buttonMoveUp,
+            this.buttonMoveDown,
             this.buttonDelete});
             this.toolStipDelete.Location = new System.Drawing.Point(1, 1);
             this.toolStipDelete.Name = "toolStipDelete";
             this.toolStipDelete.Padding = new System.Windows.Forms.Padding(0);
             this.toolStipDelete.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStipDelete.Size = new System.Drawing.Size(25, 25);
+            this.toolStipDelete.Size = new System.Drawing.Size(102, 25);
             this.toolStipDelete.Stretch = true;
             this.toolStipDelete.TabIndex = 0;
             // 
@@ -72,16 +76,16 @@
             this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(23, 22);
-            this.buttonDelete.Text = "Remove Line";
+            this.buttonDelete.Text = "Delete";
             this.buttonDelete.Click += new System.EventHandler(this.OnDelete);
             // 
             // linkProfile
             // 
             this.linkProfile.AutoSize = true;
             this.linkProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkProfile.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.linkProfile.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkProfile.ForeColor = System.Drawing.Color.Blue;
-            this.linkProfile.Location = new System.Drawing.Point(360, 6);
+            this.linkProfile.Location = new System.Drawing.Point(409, 6);
             this.linkProfile.Name = "linkProfile";
             this.linkProfile.Size = new System.Drawing.Size(66, 13);
             this.linkProfile.TabIndex = 5;
@@ -91,7 +95,7 @@
             // labelApply
             // 
             this.labelApply.AutoSize = true;
-            this.labelApply.Location = new System.Drawing.Point(295, 6);
+            this.labelApply.Location = new System.Drawing.Point(344, 6);
             this.labelApply.Name = "labelApply";
             this.labelApply.Size = new System.Drawing.Size(66, 13);
             this.labelApply.TabIndex = 4;
@@ -100,18 +104,38 @@
             // labelOrder
             // 
             this.labelOrder.AutoSize = true;
-            this.labelOrder.Location = new System.Drawing.Point(49, 6);
+            this.labelOrder.Location = new System.Drawing.Point(98, 6);
             this.labelOrder.Name = "labelOrder";
             this.labelOrder.Size = new System.Drawing.Size(84, 13);
             this.labelOrder.TabIndex = 2;
             this.labelOrder.Text = "If the order is in";
+            // 
+            // buttonMoveUp
+            // 
+            this.buttonMoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonMoveUp.Image = global::ShipWorks.Properties.Resources.arrow_up_blue;
+            this.buttonMoveUp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonMoveUp.Name = "buttonMoveUp";
+            this.buttonMoveUp.Size = new System.Drawing.Size(23, 22);
+            this.buttonMoveUp.Text = "Move Up";
+            this.buttonMoveUp.Click += new System.EventHandler(this.OnMoveUp);
+            // 
+            // buttonMoveDown
+            // 
+            this.buttonMoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonMoveDown.Image = global::ShipWorks.Properties.Resources.arrow_down_blue;
+            this.buttonMoveDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonMoveDown.Name = "buttonMoveDown";
+            this.buttonMoveDown.Size = new System.Drawing.Size(23, 22);
+            this.buttonMoveDown.Text = "Move Down";
+            this.buttonMoveDown.Click += new System.EventHandler(this.OnMoveDown);
             // 
             // filterCombo
             // 
             this.filterCombo.AllowQuickFilter = true;
             this.filterCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filterCombo.FormattingEnabled = true;
-            this.filterCombo.Location = new System.Drawing.Point(134, 3);
+            this.filterCombo.Location = new System.Drawing.Point(183, 3);
             this.filterCombo.Name = "filterCombo";
             this.filterCombo.Size = new System.Drawing.Size(159, 21);
             this.filterCombo.TabIndex = 3;
@@ -126,7 +150,7 @@
             this.Controls.Add(this.labelApply);
             this.Controls.Add(this.filterCombo);
             this.Controls.Add(this.labelOrder);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ShippingDefaultsRuleControl";
             this.Size = new System.Drawing.Size(530, 28);
             this.toolStipDelete.ResumeLayout(false);
@@ -145,5 +169,7 @@
         private System.Windows.Forms.Label labelApply;
         private ShipWorks.Filters.Controls.FilterComboBox filterCombo;
         private System.Windows.Forms.Label labelOrder;
+        private System.Windows.Forms.ToolStripButton buttonMoveUp;
+        private System.Windows.Forms.ToolStripButton buttonMoveDown;
     }
 }

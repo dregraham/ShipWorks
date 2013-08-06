@@ -35,6 +35,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
         {
+            MagentoStoreEntity magentoStore = (MagentoStoreEntity) Store;
+            request.Variables.Add("storecode", magentoStore.ModuleOnlineStoreCode);
+            request.Variables.Add("sendemail", magentoStore.MagentoTrackingEmails ? "1" : "0");
+
             switch (action)
             {
                 case "getstatuscodes":

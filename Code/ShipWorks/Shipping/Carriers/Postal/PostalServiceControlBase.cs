@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -140,16 +141,20 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
 
-            // If they are all internation we can load up all the international services
+            // If they are all international we can load up all the international services
             if (allInternational)
             {
-                service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetInternationalServices(ShipmentTypeCode).Select(type => new KeyValuePair<string, PostalServiceType>(EnumHelper.GetDescription(type), type)).ToList());
+                service.DataSource = ActiveEnumerationBindingSource
+                    .Create<PostalServiceType>(PostalUtility.GetInternationalServices(ShipmentTypeCode)
+                    .Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type))
+                    .ToList());
             }
             // If they are all domestic we can load up all the domestic services
             else if (allDomestic)
             {
                 service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(ShipmentTypeCode)
-                    .Select(type => new KeyValuePair<string, PostalServiceType>(EnumHelper.GetDescription(type), type)).ToList());
+                    .Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type))
+                    .ToList());
             }
             // Otherwise there is nothing to choose from
             else

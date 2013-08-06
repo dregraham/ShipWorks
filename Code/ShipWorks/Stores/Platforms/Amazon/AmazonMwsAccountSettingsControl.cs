@@ -72,6 +72,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // save the values
             saveStore.MerchantID = merchantID.Text.Trim();
             saveStore.MarketplaceID = marketplaceID.Text.Trim();
+            saveStore.DomainName = GetStoreDomainName(saveStore.MarketplaceID);
 
             try
             {
@@ -88,6 +89,31 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                 return false;
             }
+        }
+
+        private string GetStoreDomainName(string marketplaceId)
+        {
+            // Find the domain name of the marketplace provided to account for Amazon Canada store; default to an empty string - another
+            // attempt will be made to populate it when a link is clicked (primarily so existing customers don't have to take explicit
+            // action to have the domain name populated
+            string storeDomainName = string.Empty;
+
+            List<AmazonMwsMarketplace> marketplaces = GetMarketplaces();
+
+            if (marketplaces != null)
+            {
+                AmazonMwsMarketplace marketplace = marketplaces.FirstOrDefault(m => m.MarketplaceID.ToUpperInvariant() == marketplaceId.ToUpperInvariant());
+                storeDomainName = marketplace == null || string.IsNullOrWhiteSpace(marketplace.DomainName) ? string.Empty : marketplace.DomainName;
+
+                if (!string.IsNullOrWhiteSpace(storeDomainName))
+                {
+                    // We're just interested in the domain name without the "www." (e.g. amazon.com instead of www.amazon.com)
+                    Uri url = new UriBuilder(storeDomainName).Uri;
+                    storeDomainName = url.Host.Replace("www.", string.Empty);
+                }
+            }
+
+            return storeDomainName;
         }
 
         /// <summary>

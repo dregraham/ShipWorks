@@ -28,6 +28,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         {
             AddAttribute("ID", () => customerID);
 
+            var summaryOutline = AddElement("Summary");
+            summaryOutline.AddElement("TotalSpent", () => Customer.RollupOrderTotal);
+            summaryOutline.AddElement("OrdersPlaced", () => Customer.RollupOrderCount);
+
             AddElement("Address", new AddressOutline(context, "ship", true), () => new PersonAdapter(Customer, "Ship"));
             AddElement("Address", new AddressOutline(context, "bill", true), () => new PersonAdapter(Customer, "Bill"));
 

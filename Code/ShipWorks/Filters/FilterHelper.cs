@@ -40,6 +40,25 @@ namespace ShipWorks.Filters
 
         const string myFiltersName = "My Filters";
 
+        static readonly Dictionary<FilterImageType, Image> filterImageCache = new Dictionary<FilterImageType, Image>();
+
+        enum FilterImageType
+        {
+            MyFilters,
+            Orders,
+            Customers,
+            Search,
+            HardLinkFolder,
+            HardLinkFodlerWithCondition,
+            HardLinkFilter,
+            SoftLinkFolder,
+            SoftLinkFodlerWithCondition,
+            SoftLinkFilter,
+            Folder,
+            FolderWithCondition,
+            Filter
+        }
+
         /// <summary>
         /// Indicates that the filter is a hard-coded filter required by ShipWorks
         /// </summary>
@@ -210,6 +229,16 @@ namespace ShipWorks.Filters
         /// </summary>
         public static bool IsValidName(FilterEntity filter, string name)
         {
+            // When copying, we add " (Copy)" to the filter name which can push the filter's name over the max length.
+            // Check here and throw if the requested name is too long.
+            if (name.Length > filter.Fields[(int)FilterFieldIndex.Name].MaxLength)
+            {
+                throw new FilterException(
+                    string.Format(
+                        "Filter names may only be {0} characters or less.  Please shorten the requested filter name '{1}'.",
+                        filter.Fields[(int)FilterFieldIndex.Name].MaxLength, name));
+            }
+
             int count = FilterCollection.GetCount(SqlAdapter.Default,
                 FilterFields.Name == name & FilterFields.IsFolder == filter.IsFolder & FilterFields.FilterTarget == filter.FilterTarget);
 
@@ -233,7 +262,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Get the image to use for the given node
         /// </summary>
-        public static Image GetFilterImage(FilterNodeEntity node)
+        public static Image GetFilterImage(FilterNodeEntity node, bool createCopy = true)
         {
             FilterEntity filter = node.Filter;
 
@@ -242,14 +271,14 @@ namespace ShipWorks.Filters
                 if (filter.Name == myFiltersName)
                 {
                     return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.MyFilters).Level == EditionRestrictionLevel.None ?
-                        Resources.my_filters :
+                        GetFilterImage(FilterImageType.MyFilters, createCopy) :
                         EditionGuiHelper.GetLockImage(16);
                 }
 
                 switch ((FilterTarget) filter.FilterTarget)
                 {
-                    case FilterTarget.Orders: return Resources.order16;
-                    case FilterTarget.Customers: return Resources.customer16;
+                    case FilterTarget.Orders: return GetFilterImage(FilterImageType.Orders, createCopy);
+                    case FilterTarget.Customers: return GetFilterImage(FilterImageType.Customers, createCopy);
                     default:
                         throw new InvalidOperationException("Unhandled FilterTarget in GetFilterImage");
                 }
@@ -257,41 +286,80 @@ namespace ShipWorks.Filters
 
             if (node.Purpose == (int) FilterNodePurpose.Search)
             {
-                return Resources.view;
+                return GetFilterImage(FilterImageType.Search, createCopy);
             }
 
             if (IsFilterHardLinked(filter))
             {
                 if (filter.IsFolder)
                 {
-                    return filter.Definition == null ? Resources.folderclosed_linked_infinity : Resources.folderfilter_linked_infinity;
+                    return filter.Definition == null ? GetFilterImage(FilterImageType.HardLinkFolder, createCopy) : GetFilterImage(FilterImageType.HardLinkFodlerWithCondition, createCopy);
                 }
                 else
                 {
-                    return Resources.funnel_linked_infinity;
+                    return GetFilterImage(FilterImageType.HardLinkFilter, createCopy);
                 }
             }
             else if (IsFilterSoftLinked(filter))
             {
                 if (filter.IsFolder)
                 {
-                    return filter.Definition == null ? Resources.folderclosed_linked_arrow : Resources.folderfilter_linked_arrow;
+                    return filter.Definition == null ? GetFilterImage(FilterImageType.SoftLinkFolder, createCopy) : GetFilterImage(FilterImageType.SoftLinkFodlerWithCondition, createCopy);
                 }
                 else
                 {
-                    return Resources.funnel_linked_arrow;
+                    return GetFilterImage(FilterImageType.SoftLinkFilter, createCopy);
                 }
             }
             else
             {
                 if (filter.IsFolder)
                 {
-                    return filter.Definition == null ? Resources.folderclosed : Resources.folderfilter;
+                    return filter.Definition == null ? GetFilterImage(FilterImageType.Folder, createCopy) : GetFilterImage(FilterImageType.FolderWithCondition, createCopy);
                 }
                 else
                 {
-                    return Resources.filter;
+                    return GetFilterImage(FilterImageType.Filter, createCopy);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Get the filter image of the given type, either from our a cache of reusable images or creating a new copy
+        /// </summary>
+        private static Image GetFilterImage(FilterImageType filterImageType, bool createCopy)
+        {
+            if (createCopy)
+            {
+                switch (filterImageType)
+                {
+                    case FilterImageType.MyFilters: return Resources.my_filters;
+                    case FilterImageType.Orders: return Resources.order16;
+                    case FilterImageType.Customers: return Resources.customer16;
+                    case FilterImageType.Search: return Resources.view;
+                    case FilterImageType.HardLinkFolder: return Resources.folderclosed_linked_infinity;
+                    case FilterImageType.HardLinkFodlerWithCondition: return Resources.folderfilter_linked_infinity;
+                    case FilterImageType.HardLinkFilter: return Resources.funnel_linked_infinity;
+                    case FilterImageType.SoftLinkFolder: return Resources.folderclosed_linked_arrow;
+                    case FilterImageType.SoftLinkFodlerWithCondition: return Resources.folderfilter_linked_arrow;
+                    case FilterImageType.SoftLinkFilter: return Resources.funnel_linked_arrow;
+                    case FilterImageType.Folder: return Resources.folderclosed;
+                    case FilterImageType.FolderWithCondition: return Resources.folderfilter;
+                    case FilterImageType.Filter: return Resources.filter;
+               }
+
+                throw new NotFoundException("Could not find filter image for " + filterImageType);
+            }
+            else
+            {
+                Image image;
+                if (!filterImageCache.TryGetValue(filterImageType, out image))
+                {
+                    image = GetFilterImage(filterImageType, true);
+                    filterImageCache[filterImageType] = image;
+                }
+
+                return image;
             }
         }
 

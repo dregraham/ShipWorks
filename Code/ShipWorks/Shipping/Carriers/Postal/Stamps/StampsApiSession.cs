@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         static readonly ILog log = LogManager.GetLogger(typeof(StampsApiSession));
 
-        static string productionUrl = "https://swsim.stamps.com/swsim/SwsimV26.asmx";
+        static string productionUrl = "https://swsim.stamps.com/swsim/SwsimV29.asmx";
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
         // Maps stamps.com usernames to their latest authenticator tokens
@@ -61,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the webserivce instance with the appropriate URL
         /// </summary>
-        private static SwsimV26 CreateWebService(string logName)
+        private static SwsimV29 CreateWebService(string logName)
         {
-            SwsimV26 webService = new SwsimV26(new ApiLogEntry(ApiLogSource.UspsStamps, logName));
+            SwsimV29 webService = new SwsimV29(new ApiLogEntry(ApiLogSource.UspsStamps, logName));
             webService.Url = productionUrl;
 
             return webService;
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
 
-                using (SwsimV26 webService = CreateWebService("Authenticate"))
+                using (SwsimV29 webService = CreateWebService("Authenticate"))
                 {
                     string auth = webService.AuthenticateUser(new Credentials
                     {
@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address address;
             string email;
 
-            using (SwsimV26 webService = CreateWebService("GetAccountInfo"))
+            using (SwsimV29 webService = CreateWebService("GetAccountInfo"))
             {
                 string auth = webService.GetAccountInfo(GetAuthenticator(account), out accountInfo, out address, out email);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             string url;
 
-            using (SwsimV26 webService = CreateWebService("GetURL"))
+            using (SwsimV29 webService = CreateWebService("GetURL"))
             {
                 string auth = webService.GetURL(GetAuthenticator(account), urlType, string.Empty, out url);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             bool miRequired_Unused;
 
-            using (SwsimV26 webService = CreateWebService("PurchasePostage"))
+            using (SwsimV29 webService = CreateWebService("PurchasePostage"))
             {
                 string auth = webService.PurchasePostage(GetAuthenticator(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        public static List<RateV10> GetRates(ShipmentEntity shipment)
+        public static List<RateV11> GetRates(ShipmentEntity shipment)
         {
             StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
             if (account == null)
@@ -203,15 +203,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private static List<RateV10> GetRatesInternal(ShipmentEntity shipment, StampsAccountEntity account)
+        private static List<RateV11> GetRatesInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            RateV10 rate = CreateRateForRating(shipment, account);
+            RateV11 rate = CreateRateForRating(shipment, account);
 
-            List<RateV10> rateResults = new List<RateV10>();
+            List<RateV11> rateResults = new List<RateV11>();
 
-            using (SwsimV26 webService = CreateWebService("GetRates"))
+            using (SwsimV29 webService = CreateWebService("GetRates"))
             {
-                RateV10[] ratesArray;
+                RateV11[] ratesArray;
 
                 string auth = webService.GetRates(GetAuthenticator(account), rate, out ratesArray);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -219,7 +219,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 rateResults = ratesArray.ToList();
             }
 
-            List<RateV10> noConfirmationServiceRates = new List<RateV10>();
+            List<RateV11> noConfirmationServiceRates = new List<RateV11>();
 
             // If its a "Flat" then FirstClass and Priority can't have a confirmation
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
@@ -229,11 +229,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // Remove the Delivery and Signature add ons from all those that shouldnt support it
-            foreach (RateV10 noConfirmationServiceRate in noConfirmationServiceRates)
+            foreach (RateV11 noConfirmationServiceRate in noConfirmationServiceRates)
             {
                 if (noConfirmationServiceRate != null && noConfirmationServiceRate.AddOns != null)
                 {
-                    noConfirmationServiceRate.AddOns = noConfirmationServiceRate.AddOns.Where(a => a.AddOnType != AddOnTypeV3.USASC && a.AddOnType != AddOnTypeV3.USADC).ToArray();
+                    noConfirmationServiceRate.AddOns = noConfirmationServiceRate.AddOns.Where(a => a.AddOnType != AddOnTypeV4.USASC && a.AddOnType != AddOnTypeV4.USADC).ToArray();
                 }
             }
 
@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address[] candidates;
             StatusCodes statusCodes;
 
-            using (SwsimV26 webService = CreateWebService("CleanseAddress"))
+            using (SwsimV29 webService = CreateWebService("CleanseAddress"))
             {
                 string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -306,7 +306,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (SwsimV26 webService = CreateWebService("RegisterAccount"))
+                using (SwsimV29 webService = CreateWebService("RegisterAccount"))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API 
                     // for cleansing an address assumes there are existing credentials. Question is out to Stamps.com 
@@ -376,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
 
-            using (SwsimV26 webService = CreateWebService("ScanForm"))
+            using (SwsimV29 webService = CreateWebService("ScanForm"))
             {
                 webService.CreateScanForm
                 (
@@ -424,7 +424,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            using (SwsimV26 webService = CreateWebService("Void"))
+            using (SwsimV29 webService = CreateWebService("Void"))
             {
                 string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Stamps.StampsTransactionID);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -457,8 +457,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
             Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Stamps.RequireFullAddressValidation);
 
-            RateV10 rate = CreateRateForProcessing(shipment, account);
-            Customs customs = CreateCustoms(shipment);
+            RateV11 rate = CreateRateForProcessing(shipment, account);
+            CustomsV2 customs = CreateCustoms(shipment);
             PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Stamps.Memo, shipment.ShipmentID), 200);
 
@@ -483,6 +483,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             string mac_Unused;
             string postageHash;
+            byte[][] imageData;
 
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope)
             {
@@ -490,7 +491,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to Stamps.com as of v. 22
-                using (SwsimV26 webService = CreateWebService("Process"))
+                using (SwsimV29 webService = CreateWebService("Process"))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -517,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV26 webService = CreateWebService("Process"))
+                using (SwsimV29 webService = CreateWebService("Process"))
                 {
                     string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
                         ref tracking,
@@ -545,12 +546,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         null, false, // print instructions
                         false, // request postage hash
                         NonDeliveryOption.Return, // return to sender
+                        null, // redirectTo
                         null, // OriginalPostageHash 
+                        null, false, // returnImageData
                         out stampsGuid,
                         out labelUrl,
                         out postageBalance,
                         out mac_Unused,
-                        out postageHash);
+                        out postageHash,
+                        out imageData);
 
                     usernameAuthenticatorMap[account.Username] = auth;
                 }
@@ -783,24 +787,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         /// <param name="person">The person.</param>
         /// <returns>A from_address_v1 object.</returns>
-        private static from_address_v1 CreateScanFormAddress(PersonAdapter person)
+        private static Address CreateScanFormAddress(PersonAdapter person)
         {
-            from_address_v1 fromAddress = new from_address_v1();
+            var fromAddress = new Address();
 
             PersonName originName = new PersonName(person);
-            fromAddress.name_ = originName.FullName;
-            fromAddress.company_ = person.Company;
+            fromAddress.FullName = originName.FullName;
+            fromAddress.Company = person.Company;
 
-            fromAddress.address_1_ = person.Street1;
-            fromAddress.address_2_ = person.Street2;
+            fromAddress.Address1 = person.Street1;
+            fromAddress.Address2 = person.Street2;
 
-            fromAddress.city_ = person.City;
+            fromAddress.City = person.City;
 
-            fromAddress.state_ = person.StateProvCode;
-            fromAddress.zip_code_ = person.PostalCode5;
-            fromAddress.zip_code_add_on_ = person.PostalCode4;
+            fromAddress.State = person.StateProvCode;
+            fromAddress.ZIPCode = person.PostalCode5;
+            fromAddress.ZIPCodeAddOn = person.PostalCode4;
 
-            fromAddress.phone_number_ = person.Phone;
+            fromAddress.PhoneNumber = person.Phone;
 
             return fromAddress;
         }
@@ -852,9 +856,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create a Rate object used as the rate info for the GetRates method
         /// </summary>
-        private static RateV10 CreateRateForRating(ShipmentEntity shipment, StampsAccountEntity account)
+        private static RateV11 CreateRateForRating(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            RateV10 rate = new RateV10();
+            RateV11 rate = new RateV11();
 
             if (!string.IsNullOrEmpty(account.MailingPostalCode))
             {
@@ -905,15 +909,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        private static RateV10 CreateRateForProcessing(ShipmentEntity shipment, StampsAccountEntity account)
+        private static RateV11 CreateRateForProcessing(ShipmentEntity shipment, StampsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
-            RateV10 rate = CreateRateForRating(shipment, account);
+            RateV11 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
 
-            List<AddOnV3> addOns = new List<AddOnV3>();
+            List<AddOnV4> addOns = new List<AddOnV4>();
 
             // For domestic, add in Delivery\Signature confirmation
             if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
@@ -923,25 +927,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // If the service type is Parcel Select, Force DC, otherwise stamps throws an error
                 if (confirmation == PostalConfirmationType.Delivery)
                 {
-                    addOns.Add(new AddOnV3 { AddOnType = AddOnTypeV3.USADC });
+                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USADC });
                 }
 
                 if (confirmation == PostalConfirmationType.Signature)
                 {
-                    addOns.Add(new AddOnV3 { AddOnType = AddOnTypeV3.USASC });
+                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USASC });
                 }
 
                 // Add in the hidden postage option (but not supported for envelopes)
                 if (shipment.Postal.Stamps.HidePostage && shipment.Postal.PackagingType != (int) PostalPackagingType.Envelope)
                 {
-                    addOns.Add(new AddOnV3 { AddOnType = AddOnTypeV3.SCAHP });
+                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.SCAHP });
                 }
             }
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
-                addOns.Add(new AddOnV3 { AddOnType = AddOnTypeV3.USADC });
+                addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USADC });
             }
 
             // For express, apply the signature waiver if necessary
@@ -949,7 +953,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 if (!shipment.Postal.ExpressSignatureWaiver)
                 {
-                    addOns.Add(new AddOnV3 { AddOnType = AddOnTypeV3.USASR });
+                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USASR });
                 }
             }
 
@@ -970,18 +974,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the customs information for the given shipment
         /// </summary>
-        private static Customs CreateCustoms(ShipmentEntity shipment)
+        private static CustomsV2 CreateCustoms(ShipmentEntity shipment)
         {
             if (!CustomsManager.IsCustomsRequired(shipment))
             {
                 return null;
             }
 
-            Customs customs = new Customs();
+            CustomsV2 customs = new CustomsV2();
 
             // Content type
             customs.ContentType = StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType);
-            if (customs.ContentType == ContentType.Other)
+            if (customs.ContentType == ContentTypeV2.Other)
             {
                 if (shipment.Postal.CustomsContentType == (int)PostalCustomsContentType.Merchandise)
                 {

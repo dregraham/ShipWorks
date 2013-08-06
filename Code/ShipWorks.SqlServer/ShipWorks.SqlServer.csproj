@@ -170,6 +170,7 @@
     <Compile Include="Shipping\UpsPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\FedExPackageDeleteTrigger.cs" />
     <Compile Include="Shipping\ShipmentDeleteTrigger.cs" />
+    <Compile Include="Shipping\WorldShipProcessedInvalidShipmentIdTrigger.cs" />
     <Compile Include="Templates\GetTemplateFullName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\GetTemplateDescendantsOfFolder.cs" />

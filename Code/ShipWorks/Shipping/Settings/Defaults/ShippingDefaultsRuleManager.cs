@@ -48,7 +48,21 @@ namespace ShipWorks.Shipping.Settings.Defaults
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int) ShippingDefaultsRuleFieldIndex.ShippingDefaultsRuleID, ListSortDirection.Ascending);
+                    var sorted = synchronizer.EntityCollection.ToList();
+                    sorted.Sort((left, right) =>
+                        {
+                            if (left.Position == right.Position)
+                            {
+                                return left.ShippingDefaultsRuleID.CompareTo(right.ShippingDefaultsRuleID);
+                            }
+                            else
+                            {
+                                return left.Position.CompareTo(right.Position);
+                            }
+                        });
+
+                    synchronizer.EntityCollection.Clear();
+                    synchronizer.EntityCollection.AddRange(sorted);
                 }
 
                 needCheckForChanges = false;
@@ -67,7 +81,8 @@ namespace ShipWorks.Shipping.Settings.Defaults
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(r => r.ShipmentType == (int) shipmentType));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection
+                    .Where(r => r.ShipmentType == (int) shipmentType));
             }
         }
 

@@ -180,7 +180,7 @@ namespace ShipWorks.Email.Accounts
                         string.Format("ShipWorks <{0}>", emailAccount.EmailAddress),
                         testEmailAddress.Text.Trim(),
                         "ShipWorks Test Message",
-                        "This is an email message sent automatically by Interapptive ShipWorks while testing the settings for your account.");
+                        "This is an email message sent automatically by ShipWorks while testing the settings for your account.");
                 }
 
                 smtp.Disconnect();

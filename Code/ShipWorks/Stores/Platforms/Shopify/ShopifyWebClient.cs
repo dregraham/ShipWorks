@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             try
             {
-                requestSubmitter.Uri = new ShopifyEndpoints(shopUrlName).GetApiAuthorizeUrl(0);
+                requestSubmitter.Uri = new ShopifyEndpoints(shopUrlName).GetApiAuthorizeUrl();
             }
             catch (UriFormatException ex)
             {
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 request.Verb = HttpVerb.Post;
 
                 // Get the response from the call.  
-                // This is the json response that contains the access token
+                // This is the JSON response that contains the access token
                 using (var reader = ProcessRequestReader(request, "GetAccessToken"))
                 {
                     string response = reader.ReadResult();
@@ -516,6 +516,24 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <param name="requestTokenUrl">The url returned from the Shopify Callback</param>
         private static string ExtractRequestToken(Uri requestTokenUrl)
         {
+            // Now get the value of the request token param if it exists
+            if (UriHasRequestToken(requestTokenUrl))
+            {
+                // Get the query string from the uri
+                NameValueCollection queryStringParams = HttpUtility.ParseQueryString(requestTokenUrl.Query);
+
+                return queryStringParams[ShopifyConstants.RequestTokenParamName].ToString();
+            }
+
+            throw new InvalidOperationException(string.Format("The requestToken could not be extracted from {0}", requestTokenUrl));
+        }
+
+        /// <summary>
+        /// Checks the given Uri to determine if the RequestTokenParamName exists.
+        /// </summary>
+        /// <param name="requestTokenUrl">The url returned from the Shopify Callback</param>
+        public static bool UriHasRequestToken(Uri requestTokenUrl)
+        {
             if (requestTokenUrl == null)
             {
                 throw new ArgumentNullException("requestTokenUrl", "requestTokenUrl is required");
@@ -527,10 +545,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // Now get the value of the request token param
             if (queryStringParams != null && queryStringParams[ShopifyConstants.RequestTokenParamName] != null && !string.IsNullOrEmpty(queryStringParams[ShopifyConstants.RequestTokenParamName]))
             {
-                return queryStringParams[ShopifyConstants.RequestTokenParamName].ToString();
+                return true;
             }
 
-            throw new InvalidOperationException(string.Format("The requestToken could not be extracted from {0}", requestTokenUrl));
+            return false;
         }
 
     }

@@ -22,7 +22,7 @@ namespace ShipWorks.Filters.Controls
         /// Constructor
         /// </summary>
         public FilterTreeGridRow(FilterNodeEntity filterNode)
-            : base(filterNode.Filter.Name, FilterHelper.GetFilterImage(filterNode))
+            : base(filterNode.Filter.Name, FilterHelper.GetFilterImage(filterNode, false))
         {
             this.filterNode = filterNode;
             this.filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);

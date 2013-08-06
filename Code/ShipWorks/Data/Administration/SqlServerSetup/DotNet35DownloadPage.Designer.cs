@@ -65,7 +65,7 @@
             this.labeDownloadInfo.Name = "labeDownloadInfo";
             this.labeDownloadInfo.Size = new System.Drawing.Size(508, 59);
             this.labeDownloadInfo.TabIndex = 20;
-            this.labeDownloadInfo.Text = "Microsoft SQL Server 2008 requires some additional .NET Framework components, but" +
+            this.labeDownloadInfo.Text = "Microsoft SQL Server requires some additional .NET Framework components, but" +
                 " they are not installed on your computer.\r\n\r\nClick Download to download the requ" +
                 "ired components.";
             // 

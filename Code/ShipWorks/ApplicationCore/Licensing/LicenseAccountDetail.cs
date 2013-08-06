@@ -115,6 +115,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check to see if SurePost is allowed
             bool upsSurePost = XPathUtility.Evaluate(xpath, "//UpsSurePostEnabled/@status", 0) == 1;
             edition.SharedOptions.UpsSurePostEnabled = upsSurePost;
+
+            // Check if Endicia consolidation is allowed
+            bool endiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
+            edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
             
             return edition;
         }

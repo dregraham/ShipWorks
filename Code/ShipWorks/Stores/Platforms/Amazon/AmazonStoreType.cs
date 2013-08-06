@@ -234,6 +234,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MerchantID = "";
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
+            storeEntity.DomainName = string.Empty;
 
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
@@ -381,6 +382,55 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 // add the error to issues for the user
                 issueAdder.Add(headers, ex);
             }
+        }
+
+        /// <summary>
+        /// Gets the Amazon domain name associated with this store. 
+        /// </summary>
+        /// <returns>The domain name for the store (e.g. amazon.com, amazon.ca, etc.)</returns>
+        /// <exception cref="AmazonException">Thrown when an error occurs when the domain name needs to be looked 
+        /// up via Amazon MWS</exception>
+        public string GetDomainName()
+        {
+            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
+
+            if (string.IsNullOrWhiteSpace(amazonStore.DomainName))
+            {
+                try
+                {
+                    // The domain name has not been retrieved from Amazon yet (the store was registered before
+                    // this functionality was added), so we need to try to look it up
+                    using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
+                    {
+                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces(amazonStore.MerchantID);
+                        if (marketplaces != null)
+                        {
+                            // Lookup the marketplace based on the marketplace ID, so we get the correct domain name
+                            // in the event the merchant ID is setup with  multiple marketplaces
+                            AmazonMwsMarketplace marketplace = marketplaces.FirstOrDefault(m => m.MarketplaceID.ToUpperInvariant() == amazonStore.MarketplaceID.ToUpperInvariant());
+                            string domainName = marketplace == null || string.IsNullOrWhiteSpace(marketplace.DomainName) ? string.Empty : marketplace.DomainName;
+
+                            if (!string.IsNullOrWhiteSpace(domainName))
+                            {
+                                // We're just interested in the domain name without the "www." (e.g. amazon.com instead of www.amazon.com)
+                                Uri url = new UriBuilder(domainName).Uri;
+                                domainName = url.Host.Replace("www.", string.Empty);
+
+                                // Save the domain to the store, so we don't have to retrieve it from Amazon next time
+                                amazonStore.DomainName = domainName;
+                                StoreManager.SaveStore(amazonStore);
+                            }
+                        }
+                    }
+                }
+                catch (AmazonException ex)
+                {
+                    log.ErrorFormat("The domain name could not be retrieved from Amazon MWS due to an error: {0}.", ex.Message);
+                    throw;
+                }
+            }
+
+            return amazonStore.DomainName;
         }
     }
 }

@@ -231,6 +231,9 @@ namespace Interapptive.Shared
             log.InfoFormat("x64 OS: {0}", Is64BitWindows);
             log.InfoFormat("x64 Process: {0}", Is64BitProcess);
 
+            // .NET version
+            log.InfoFormat(".NET Version: {0}", Environment.Version);
+
             // Session
             log.InfoFormat("TerminalServices: {0}", SystemInformation.TerminalServerSession);
 

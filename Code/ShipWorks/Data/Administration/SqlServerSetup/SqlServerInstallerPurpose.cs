@@ -11,6 +11,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
     public enum SqlServerInstallerPurpose
     {
         Install,
-        Upgrade
+        Upgrade,
+        LocalDb
     }
 }

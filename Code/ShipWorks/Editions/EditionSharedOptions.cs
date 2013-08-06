@@ -25,5 +25,10 @@ namespace ShipWorks.Editions
         /// </summary>
         /// <value><c>true</c> if UPS SurePost is enabled; otherwise, <c>false</c>.</value>
         public bool UpsSurePostEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates whether consolidator support is enabled for the customer's endicia account
+        /// </summary>
+        public bool EndiciaConsolidatorEnabled { get; set; }
     }
 }

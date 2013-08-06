@@ -446,6 +446,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Position", fieldHashtable);
 		}
 		#endregion
 
@@ -564,6 +567,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ShippingDefaultsRuleFieldIndex.ShippingProfileID, true); }
 			set	{ SetValue((int)ShippingDefaultsRuleFieldIndex.ShippingProfileID, value); }
+		}
+
+		/// <summary> The Position property of the Entity ShippingDefaultsRule<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingDefaultsRule"."Position"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 Position
+		{
+			get { return (System.Int32)GetValue((int)ShippingDefaultsRuleFieldIndex.Position, true); }
+			set	{ SetValue((int)ShippingDefaultsRuleFieldIndex.Position, value); }
 		}
 
 

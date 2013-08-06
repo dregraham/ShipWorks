@@ -222,19 +222,30 @@ namespace ShipWorks.Stores.Platforms.Volusion
             {
                 case ShipmentTypeCode.FedEx:
                     return "FEDEX";
+
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
+
                 case ShipmentTypeCode.PostalExpress1:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
+
                 case ShipmentTypeCode.Endicia:
-                    if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
+                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+
+                    if (ShipmentTypeManager.IsEndiciaDhl(service))
                     {
                         return "DHL";
                     }
+                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    {
+                        return "OTHER";
+                    }
+
                     return "USPS";
+
                 default:
                     return "";
             }

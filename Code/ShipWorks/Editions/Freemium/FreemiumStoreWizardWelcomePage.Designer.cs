@@ -59,7 +59,7 @@
             this.Description = "Setup ShipWorks to work with your eBay and Endicia accounts.";
             this.Name = "FreemiumStoreWizardWelcomePage";
             this.Size = new System.Drawing.Size(535, 200);
-            this.Title = "Welcome to Interapptive ShipWorks";
+            this.Title = "Welcome to ShipWorks";
             this.ResumeLayout(false);
             this.PerformLayout();
 

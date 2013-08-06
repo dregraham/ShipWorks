@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnClickLinkFedEx(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.fedex.com", this);
+            WebHelper.OpenUrl("http://www.fedex.com/us/oadr/en/discounts/index.html", this);
         }
 
         /// <summary>

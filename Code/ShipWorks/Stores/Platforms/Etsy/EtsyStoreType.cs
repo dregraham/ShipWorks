@@ -19,6 +19,7 @@ using log4net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -131,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            return new EtsyOnlineShipmentUpdateActionControl();
+            return new OnlineUpdateShipmentUpdateActionControl(typeof(EtsyShipmentUploadTask));
         }
 
         /// <summary>
@@ -166,12 +167,33 @@ namespace ShipWorks.Stores.Platforms.Etsy
             MenuCommand uploadPaid = new MenuCommand("Mark as Paid", new MenuCommandExecutor(OnUploadPaidStatus)) { BreakBefore = true };
             MenuCommand uploadUnpaid = new MenuCommand("Mark as Not Paid", new MenuCommandExecutor(OnUploadNotPaidStatus));
 
+            MenuCommand uploadTrackingInformation = new MenuCommand("Upload Tracking Information", OnUploadTrackingDetails);
+
+            commands.Add(uploadTrackingInformation);
             commands.Add(uploadShipped);
             commands.Add(uploadNotShipped);
             commands.Add(uploadPaid);
             commands.Add(uploadUnpaid);
 
             return commands;
+        }
+
+        /// <summary>
+        /// Called to upload tracking information to Etsy
+        /// </summary>
+        private void OnUploadTrackingDetails(MenuCommandExecutionContext context)
+        {
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
+               "Upload Shipment Tracking",
+               "ShipWorks is uploading shipment information.",
+               "Updating order {0} of {1}");
+
+            executor.ExecuteCompleted += (o, e) =>
+            {
+                context.Complete(e.Issues, MenuCommandResult.Error);
+            };
+
+            executor.ExecuteAsync(TrackingUploadCallback, context.SelectedKeys);
         }
 
         /// <summary>
@@ -330,6 +352,27 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 // log it
                 log.ErrorFormat("Error uploading payment information for orders {0}", ex.Message);
+
+                // add the error to issues for the user
+                issueAdder.Add(orderID, ex);
+            }
+        }
+
+        /// <summary>
+        /// Trackings the upload callback.
+        /// </summary>
+        private void TrackingUploadCallback(long orderID, object userstate, BackgroundIssueAdder<long> issueAdder)
+        {
+            try
+            {
+                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity)Store);
+
+                etsyUpdater.UploadShipmentDetails(orderID);
+            }
+            catch (EtsyException ex)
+            {
+                // log it
+                log.ErrorFormat("Error uploading tracking information for orders {0}", ex.Message);
 
                 // add the error to issues for the user
                 issueAdder.Add(orderID, ex);

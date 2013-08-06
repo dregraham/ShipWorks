@@ -309,6 +309,10 @@ namespace ShipWorks.Stores.Platforms.Newegg
                         // The DHL carrier for Endicia is:
                         carrierCode = "DHL";
                     }
+                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsEndiciaConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+                    {
+                        carrierCode = "Consolidator";
+                    }
                     else
                     {
                         // Use the default carrier for other Endicia types

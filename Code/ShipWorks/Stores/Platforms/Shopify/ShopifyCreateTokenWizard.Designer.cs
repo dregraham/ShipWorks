@@ -166,6 +166,7 @@
             this.webBrowser.ScriptErrorsSuppressed = true;
             this.webBrowser.Size = new System.Drawing.Size(707, 747);
             this.webBrowser.TabIndex = 0;
+            this.webBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.OnWebBrowserNavigated);
             // 
             // wizardPageSuccess
             // 
@@ -214,7 +215,6 @@
             this.wizardPageSuccess});
             this.Text = "Shopify Login Token";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
-            this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);

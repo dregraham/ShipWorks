@@ -228,8 +228,7 @@ namespace ShipWorks.Templates.Processing
 
                 // Output all the body content
                 while (settings.NextResultIndex < results.Count &&
-                       settings.NextResultIndex - startIndex < maxResultsToUse &&
-                       writer.GetStringBuilder().Length < TemplateHelper.MaxMemoryForHtml)
+                       settings.NextResultIndex - startIndex < maxResultsToUse)
                 {
                     // If this is not the first one, we need a page break
                     if (startIndex != settings.NextResultIndex)
@@ -241,6 +240,12 @@ namespace ShipWorks.Templates.Processing
                     writer.Write(EncodeForHtml(xslResult, settings.OutputFormat));
 
                     settings.NextResultIndex++;
+
+                    // If we've exceeded the max space we are supposed to use, then stop using more results for now
+                    if (writer.GetStringBuilder().Length >= TemplateHelper.MaxMemoryForHtml)
+                    {
+                        break;
+                    }
                 }
 
                 if (usage == TemplateResultUsage.ShipWorksDisplay || usage == TemplateResultUsage.Copy)

@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests.Download
     public class EbayCombinedPaymentRequest : EbayRequest, ICombinedPaymentRequest
     {
         // Set the orders per page to 10 per eBay support due to eBay timeouts and slow response times with this service call
-        private const int MaximumOrdersPerPage = 10;
+        private const int MaximumOrdersPerPage = 25;
         private GetOrdersRequestType request; 
 
         /// <summary>

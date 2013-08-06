@@ -2628,7 +2628,7 @@ namespace ShipWorks
             this.MinimumSize = new System.Drawing.Size(310, 300);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.WindowText = "Interapptive ShipWorks";
+            this.WindowText = "ShipWorks";
             this.Activated += new System.EventHandler(this.OnActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);

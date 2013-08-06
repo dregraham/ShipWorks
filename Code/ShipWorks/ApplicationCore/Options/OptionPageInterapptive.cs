@@ -86,6 +86,10 @@ namespace ShipWorks.ApplicationCore.Options
             multipleInstances.Checked = InterapptiveOnly.AllowMultipleInstances;
 
             buyDotComMapChooser.Initialize(new BuyDotComOrderImportSchema());
+
+            EnumHelper.BindComboBox <EndiciaTestServer>(endiciaTestServers);
+            endiciaTestServers.SelectedValue = EndiciaApiClient.UseTestServerUrl;
+            endiciaTestServers.Enabled = endiciaTestServer.Checked;
         }
 
         /// <summary>
@@ -117,6 +121,8 @@ namespace ShipWorks.ApplicationCore.Options
             SearchFitStoreType.LeaveOnServer = !searchFitDeleteAfterDownload.Checked;
 
             InterapptiveOnly.AllowMultipleInstances = multipleInstances.Checked;
+
+            EndiciaApiClient.UseTestServerUrl = (EndiciaTestServer)endiciaTestServers.SelectedValue;
         }
 
         /// <summary>
@@ -211,6 +217,14 @@ namespace ShipWorks.ApplicationCore.Options
             {
                 dlg.ShowDialog(this);
             }
+        }
+
+        /// <summary>
+        /// Enable/disable the list of endicia test servers, based on Use Test Server checked state.
+        /// </summary>
+        private void OnEndiciaTestServerCheckedChanged(object sender, EventArgs e)
+        {
+            endiciaTestServers.Enabled = endiciaTestServer.Checked;
         }
     }
 }

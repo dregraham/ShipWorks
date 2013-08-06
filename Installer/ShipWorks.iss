@@ -27,9 +27,9 @@ AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
 AppVerName=ShipWorks® {#= Version} {#= EditionName}
 AppPublisher=Interapptive®, Inc.
-AppPublisherURL=http://www.interapptive.com
-AppSupportURL=http://www.interapptive.com
-AppUpdatesURL=http://www.interapptive.com
+AppPublisherURL=http://www.shipworks.com
+AppSupportURL=http://www.shipworks.com
+AppUpdatesURL=http://www.shipworks.com
 AppMutex={{AX70DA71-2A39-4f8c-8F97-7F5348493F57}
 DefaultDirName={pf}\ShipWorks3
 DefaultGroupName=ShipWorks 3

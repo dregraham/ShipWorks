@@ -372,7 +372,7 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 bounds.Offset(1, 0);
-                Image image = FilterHelper.GetFilterImage(selectedNode);
+                Image image = FilterHelper.GetFilterImage(selectedNode, false);
 
                 if (Enabled)
                 {

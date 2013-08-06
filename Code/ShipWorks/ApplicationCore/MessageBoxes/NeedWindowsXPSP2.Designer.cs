@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(395, 33);
             this.label2.TabIndex = 10;
-            this.label2.Text = "ShipWorks uses Microsoft SQL Server 2008, which requires Service Pack 2 when runn" +
+            this.label2.Text = "ShipWorks uses Microsoft SQL Server, which requires Service Pack 2 when runn" +
                 "ing on Windows XP.";
             // 
             // label1
@@ -114,7 +114,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             this.Name = "NeedWindowsXPSP2";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Interapptive ShipWorks";
+            this.Text = "ShipWorks";
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

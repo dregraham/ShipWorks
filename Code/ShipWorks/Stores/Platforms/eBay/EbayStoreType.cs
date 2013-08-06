@@ -471,7 +471,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             get
             {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 29 };
+                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 7, MaxDaysBack = 7 };
             }
         }
 

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NeweggAPIResponse>
+  <IsSuccess>true</IsSuccess>
+  <SellerID>A09V</SellerID>
+  <OperationType>GetOrderInfoResponse</OperationType>
+  <ResponseBody>
+    <!-- 
+      This is a mock XML response from Newegg to test the download info 
+      functionality to calculate the page count from the page info node 
+      so the order list is empty
+    -->
+    <PageInfo>
+      <TotalCount>200</TotalCount>
+      <TotalPageCount>200</TotalPageCount>
+      <PageSize>1</PageSize>
+      <PageIndex>1</PageIndex>
+    </PageInfo>
+    <OrderInfoList></OrderInfoList>
+  </ResponseBody>
+  <Memo></Memo>
+  <ResponseDate>06/25/2012 06:37:40</ResponseDate>
+</NeweggAPIResponse>

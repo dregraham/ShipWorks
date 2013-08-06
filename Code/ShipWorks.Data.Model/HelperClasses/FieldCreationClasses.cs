@@ -997,6 +997,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ExcludeFBA);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.DomainName field instance</summary>
+		public static EntityField2 DomainName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomainName);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmeriCommerceStoreEntity</summary>
@@ -15081,6 +15086,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShippingProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingDefaultsRuleFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new ShippingDefaultsRuleEntity.Position field instance</summary>
+		public static EntityField2 Position
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingDefaultsRuleFieldIndex.Position);}
 		}
 	}
 

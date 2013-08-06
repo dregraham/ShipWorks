@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping
 
             if (shipment.OriginCountryCode == "US")
             {
-                if (PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+                if (!PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
                 {
                     if (shipment.ShipCountryCode != "GU")
                     {

@@ -382,6 +382,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 case PostalCustomsContentType.Documents: return "DOCUMENTS";
                 case PostalCustomsContentType.ReturnedGoods: return "RETURN";
                 case PostalCustomsContentType.Other: return "OTHER";
+                case PostalCustomsContentType.DangerousGoods: return "OTHER";
+                case PostalCustomsContentType.HumanitarianDonation: return "OTHER";
+
                 default:
                     throw new InvalidOperationException("Invalid contentType " + contentType);
             }

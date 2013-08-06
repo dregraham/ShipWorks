@@ -198,7 +198,7 @@
             this.confirmation.Location = new System.Drawing.Point(90, 37);
             this.confirmation.Name = "confirmation";
             this.confirmation.PromptText = "(Multiple Values)";
-            this.confirmation.Size = new System.Drawing.Size(179, 21);
+            this.confirmation.Size = new System.Drawing.Size(300, 21);
             this.confirmation.TabIndex = 3;
             this.confirmation.SelectedIndexChanged += new System.EventHandler(this.OnConfirmationChanged);
             // 
@@ -209,7 +209,7 @@
             this.service.Location = new System.Drawing.Point(90, 10);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(179, 21);
+            this.service.Size = new System.Drawing.Size(300, 21);
             this.service.TabIndex = 1;
             this.service.SelectedIndexChanged += new System.EventHandler(this.OnConfirmationChanged);
             // 
@@ -299,7 +299,7 @@
             this.sectionExpress.ExtraText = "";
             this.sectionExpress.Location = new System.Drawing.Point(3, 452);
             this.sectionExpress.Name = "sectionExpress";
-            this.sectionExpress.SectionName = "Express Mail";
+            this.sectionExpress.SectionName = "Priority Mail Express";
             this.sectionExpress.SettingsKey = "{1883602a-4bec-4004-9ce5-7fba05b99e17}";
             this.sectionExpress.Size = new System.Drawing.Size(390, 24);
             this.sectionExpress.TabIndex = 12;

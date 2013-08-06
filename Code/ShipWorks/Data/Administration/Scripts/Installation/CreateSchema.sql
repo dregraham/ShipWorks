@@ -355,7 +355,8 @@ CREATE TABLE [dbo].[AmazonStore]
 [WeightDownloads] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ExcludeFBA] [bit] NOT NULL
+[ExcludeFBA] [bit] NOT NULL,
+[DomainName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonStore] on [dbo].[AmazonStore]'
@@ -2582,7 +2583,7 @@ CREATE TABLE [dbo].[SearsOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [LineNumber] [int] NOT NULL,
-[ItemID] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ItemID] [varchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Commission] [money] NOT NULL,
 [Shipping] [money] NOT NULL,
 [OnlineStatus] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
@@ -3853,7 +3854,8 @@ CREATE TABLE [dbo].[ShippingDefaultsRule]
 [RowVersion] [timestamp] NOT NULL,
 [ShipmentType] [int] NOT NULL,
 [FilterNodeID] [bigint] NOT NULL,
-[ShippingProfileID] [bigint] NOT NULL
+[ShippingProfileID] [bigint] NOT NULL,
+[Position] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingDefaultsRule] on [dbo].[ShippingDefaultsRule]'

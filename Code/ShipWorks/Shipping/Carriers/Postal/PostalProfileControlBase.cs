@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShipmentTypeCode shipmentType = (ShipmentTypeCode) Profile.ShipmentType;
 
             service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType).Concat(PostalUtility.GetInternationalServices(shipmentType))
-                .Select(s => new KeyValuePair<string, PostalServiceType>(EnumHelper.GetDescription(s), s)).ToList());
+                .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s)).ToList());
         }
         
         /// <summary>
@@ -135,7 +135,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Gets the avaliable confirmation types based on the service type.
         /// </summary>
-        /// <param name="isServiceStateChecked">if set to <c>true</c> [is service state checked].</param>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>A List of PostalConfirmationType values.</returns>
         protected List<PostalConfirmationType> GetAvailableConfirmationTypes(PostalServiceType serviceType)

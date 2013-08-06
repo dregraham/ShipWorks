@@ -559,18 +559,25 @@ namespace ShipWorks.Templates.Printing
             // Capture what the start label position will be, in case its a label sheet
             LabelPosition startPosition = (settings.TemplateType == TemplateType.Label) ? new LabelPosition(settings.LabelPosition) : null;
 
+            // Where we are starting from
+            int startResultIndex = settings.NextResultIndex;
+
             htmlControl.Html = TemplateResultFormatter.FormatHtml(
                 templateResults,
                 usage,
                 settings);
+
+            // Count how many results we actually used
+            int resultsUsed = settings.NextResultIndex - startResultIndex;
 
             htmlControl.WaitForComplete(TimeSpan.FromSeconds(5));
 
             // Process sure size now that its ready
             TemplateSureSizeProcessor.Process(htmlControl);
 
-            // Update the document content information so the browser can display appropriately
-            bridge.DocumentContent.TemplateResultsDisplayed = settings.NextResultIndex;
+            // Update the document content information so the browser can display appropriately.  This is just used to warn the user if results were truncated and the preview isn't
+            // going to show the whole thing at once.
+            bridge.DocumentContent.TemplateResultsDisplayed = resultsUsed;
             bridge.DocumentContent.TemplateResultsTotal = templateResults.Count;
 
             // Set whether this is for a label sheet or not
@@ -580,7 +587,7 @@ namespace ShipWorks.Templates.Printing
             // think there is overflow when there really should not be.  This way we can force the # of pages to be truncated to this number.
             if (bridge.DocumentContent.IsLabelSheet)
             {
-                int cellsUsed = (startPosition.Row - 1) * settings.LabelSheet.Columns + (startPosition.Column - 1) + settings.NextResultIndex;
+                int cellsUsed = (startPosition.Row - 1) * settings.LabelSheet.Columns + (startPosition.Column - 1) + resultsUsed;
                 int pagesUsed = (int) Math.Ceiling((double) cellsUsed / (double) (settings.LabelSheet.Columns * settings.LabelSheet.Rows));
 
                 bridge.DocumentContent.LabelSheetsRequired = pagesUsed;

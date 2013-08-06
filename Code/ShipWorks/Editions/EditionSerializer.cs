@@ -104,6 +104,9 @@ namespace ShipWorks.Editions
                 
                 bool upsSurePostEnabled = xOptions.Descendants("UpsSurePost").Any() && (bool) xOptions.Element("UpsSurePost");
                 edition.SharedOptions.UpsSurePostEnabled = upsSurePostEnabled;
+
+                bool endiciaConsolidator = xOptions.Descendants("EndiciaConsolidator").Any() && (bool) xOptions.Element("EndiciaConsolidator");
+                edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
             }
         }
 
@@ -160,7 +163,8 @@ namespace ShipWorks.Editions
             elements.Add(new XElement("SharedOptions",
                 new XElement("EndiciaDhl", edition.SharedOptions.EndiciaDhlEnabled),
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
-                new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled)));
+                new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
+                new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled)));
 
             return elements;
         }

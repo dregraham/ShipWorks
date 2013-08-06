@@ -62,7 +62,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(476, 38);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Microsoft SQL Server 2008 supports running software built with the Microsoft .NET" +
+            this.label2.Text = "Microsoft SQL Server supports running software built with the Microsoft .NET" +
                 " Framework.  ShipWorks requires this support to be enabled.";
             // 
             // label3

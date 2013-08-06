@@ -336,7 +336,7 @@ namespace ShipWorks.Data.Administration
             this.labelShipWorksUsesSqlServer.Name = "labelShipWorksUsesSqlServer";
             this.labelShipWorksUsesSqlServer.Size = new System.Drawing.Size(508, 34);
             this.labelShipWorksUsesSqlServer.TabIndex = 0;
-            this.labelShipWorksUsesSqlServer.Text = "ShipWorks uses Microsoft SQL Server 2008 to store its data.  Please select from o" +
+            this.labelShipWorksUsesSqlServer.Text = "ShipWorks uses Microsoft SQL Server to store its data.  Please select from o" +
                 "ne of the following options to continue.\r\n";
             // 
             // wizardPageChooseSqlServer
@@ -348,19 +348,19 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseSqlServer.Controls.Add(this.labelInstanceName);
             this.wizardPageChooseSqlServer.Controls.Add(this.radioInstallSqlServer);
             this.wizardPageChooseSqlServer.Controls.Add(this.labelChooseNewOrExistingSqlServer);
-            this.wizardPageChooseSqlServer.Description = "Install or use an existing installation of Microsoft SQL Server 2008.";
+            this.wizardPageChooseSqlServer.Description = "Install or use an existing installation of Microsoft SQL Server.";
             this.wizardPageChooseSqlServer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageChooseSqlServer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageChooseSqlServer.Location = new System.Drawing.Point(0, 0);
             this.wizardPageChooseSqlServer.Name = "wizardPageChooseSqlServer";
             this.wizardPageChooseSqlServer.Size = new System.Drawing.Size(548, 271);
             this.wizardPageChooseSqlServer.TabIndex = 0;
-            this.wizardPageChooseSqlServer.Title = "Setup Microsoft SQL Server 2008";
+            this.wizardPageChooseSqlServer.Title = "Setup Microsoft SQL Server";
             this.wizardPageChooseSqlServer.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewOrExistingSqlServer);
             // 
             // infoTip1
             // 
-            this.infoTip1.Caption = "Multiple instances of Microsoft SQL Server 2008 can be installed on a computer.  " +
+            this.infoTip1.Caption = "Multiple instances of Microsoft SQL Server can be installed on a computer.  " +
                 "Each one must have a unique instance name that is used when connecting to it.";
             this.infoTip1.Location = new System.Drawing.Point(252, 82);
             this.infoTip1.Name = "infoTip1";
@@ -377,7 +377,7 @@ namespace ShipWorks.Data.Administration
             this.label5.Size = new System.Drawing.Size(437, 13);
             this.label5.TabIndex = 6;
             this.label5.Text = "Select this option if you already own or have already installed Microsoft SQL Ser" +
-                "ver 2008.";
+                "ver.";
             // 
             // radioSqlServerAlreadyInstalled
             // 
@@ -387,7 +387,7 @@ namespace ShipWorks.Data.Administration
             this.radioSqlServerAlreadyInstalled.Name = "radioSqlServerAlreadyInstalled";
             this.radioSqlServerAlreadyInstalled.Size = new System.Drawing.Size(346, 17);
             this.radioSqlServerAlreadyInstalled.TabIndex = 4;
-            this.radioSqlServerAlreadyInstalled.Text = "Use an existing installation of Microsoft SQL Server 2008.";
+            this.radioSqlServerAlreadyInstalled.Text = "Use an existing installation of Microsoft SQL Server.";
             this.radioSqlServerAlreadyInstalled.UseVisualStyleBackColor = true;
             this.radioSqlServerAlreadyInstalled.CheckedChanged += new System.EventHandler(this.OnChangeInstallSqlServer);
             // 
@@ -418,7 +418,7 @@ namespace ShipWorks.Data.Administration
             this.radioInstallSqlServer.Size = new System.Drawing.Size(216, 17);
             this.radioInstallSqlServer.TabIndex = 1;
             this.radioInstallSqlServer.TabStop = true;
-            this.radioInstallSqlServer.Text = "Install Microsoft SQL Server 2008.";
+            this.radioInstallSqlServer.Text = "Install Microsoft SQL Server.";
             this.radioInstallSqlServer.UseVisualStyleBackColor = true;
             this.radioInstallSqlServer.CheckedChanged += new System.EventHandler(this.OnChangeInstallSqlServer);
             // 
@@ -540,7 +540,7 @@ namespace ShipWorks.Data.Administration
             this.labelAboutSa.Name = "labelAboutSa";
             this.labelAboutSa.Size = new System.Drawing.Size(496, 35);
             this.labelAboutSa.TabIndex = 0;
-            this.labelAboutSa.Text = "Microsoft SQL Server 2008 has a builtin system administrator user called \'sa\'.  S" +
+            this.labelAboutSa.Text = "Microsoft SQL Server has a builtin system administrator user called \'sa\'.  S" +
                 "QL Server requires that you create a password for the \'sa\' account.";
             // 
             // wizardPageSelectSqlServerInstance
@@ -551,7 +551,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelFoundInstanceTroubleshooting);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.comboSqlServers);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelFoundInstances);
-            this.wizardPageSelectSqlServerInstance.Description = "Select a running instance of Microsoft SQL Server 2008.";
+            this.wizardPageSelectSqlServerInstance.Description = "Select a running instance of Microsoft SQL Server.";
             this.wizardPageSelectSqlServerInstance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageSelectSqlServerInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageSelectSqlServerInstance.Location = new System.Drawing.Point(0, 0);
@@ -815,14 +815,14 @@ namespace ShipWorks.Data.Administration
             this.wizardPageDownloadSqlServer.Controls.Add(this.downloadSqlServer);
             this.wizardPageDownloadSqlServer.Controls.Add(this.progressSqlServer);
             this.wizardPageDownloadSqlServer.Controls.Add(this.labelDownloadSqlServer);
-            this.wizardPageDownloadSqlServer.Description = "ShipWorks needs to download Microsoft SQL Server 2008.";
+            this.wizardPageDownloadSqlServer.Description = "ShipWorks needs to download Microsoft SQL Server.";
             this.wizardPageDownloadSqlServer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageDownloadSqlServer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageDownloadSqlServer.Location = new System.Drawing.Point(0, 0);
             this.wizardPageDownloadSqlServer.Name = "wizardPageDownloadSqlServer";
             this.wizardPageDownloadSqlServer.Size = new System.Drawing.Size(548, 271);
             this.wizardPageDownloadSqlServer.TabIndex = 0;
-            this.wizardPageDownloadSqlServer.Title = "Install Microsoft SQL Server 2008";
+            this.wizardPageDownloadSqlServer.Title = "Install Microsoft SQL Server";
             this.wizardPageDownloadSqlServer.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoDownloadSqlServer);
             this.wizardPageDownloadSqlServer.PageShown += new System.EventHandler<ShipWorks.UI.Wizard.WizardPageShownEventArgs>(this.OnShownDownloadSqlServer);
             this.wizardPageDownloadSqlServer.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancelSqlServerDownload);
@@ -858,14 +858,14 @@ namespace ShipWorks.Data.Administration
             this.labelDownloadSqlServer.Name = "labelDownloadSqlServer";
             this.labelDownloadSqlServer.Size = new System.Drawing.Size(508, 46);
             this.labelDownloadSqlServer.TabIndex = 8;
-            this.labelDownloadSqlServer.Text = "ShipWorks needs to install Microsoft SQL Server 2008, but first it must be downlo" +
-                "aded. \r\n\r\nClick Download to download Microsoft SQL Server 2008.";
+            this.labelDownloadSqlServer.Text = "ShipWorks needs to install Microsoft SQL Server, but first it must be downlo" +
+                "aded. \r\n\r\nClick Download to download Microsoft SQL Server.";
             // 
             // wizardPageInstallSqlServer
             // 
             this.wizardPageInstallSqlServer.Controls.Add(this.labelInstallSqlServer);
             this.wizardPageInstallSqlServer.Controls.Add(this.labelInstallingSqlServer);
-            this.wizardPageInstallSqlServer.Description = "ShipWorks is ready to install Microsoft SQL Server 2008.";
+            this.wizardPageInstallSqlServer.Description = "ShipWorks is ready to install Microsoft SQL Server.";
             this.wizardPageInstallSqlServer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageInstallSqlServer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.wizardPageInstallSqlServer.Location = new System.Drawing.Point(0, 0);
@@ -873,7 +873,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageInstallSqlServer.NextRequiresElevation = true;
             this.wizardPageInstallSqlServer.Size = new System.Drawing.Size(548, 271);
             this.wizardPageInstallSqlServer.TabIndex = 0;
-            this.wizardPageInstallSqlServer.Title = "Install Microsoft SQL Server 2008";
+            this.wizardPageInstallSqlServer.Title = "Install Microsoft SQL Server";
             this.wizardPageInstallSqlServer.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInstallSqlServer);
             this.wizardPageInstallSqlServer.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoInstallSqlServer);
             this.wizardPageInstallSqlServer.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancellInstallSqlServer);
@@ -894,7 +894,7 @@ namespace ShipWorks.Data.Administration
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(470, 30);
             this.label21.TabIndex = 2;
-            this.label21.Text = "ShipWorks will now install Microsoft SQL Server 2008. Click Next to continue with" +
+            this.label21.Text = "ShipWorks will now install Microsoft SQL Server. Click Next to continue with" +
                 " the installation.";
             // 
             // labelNote
@@ -920,7 +920,7 @@ namespace ShipWorks.Data.Administration
             this.labelInstallingSqlServer.Name = "labelInstallingSqlServer";
             this.labelInstallingSqlServer.Size = new System.Drawing.Size(491, 78);
             this.labelInstallingSqlServer.TabIndex = 156;
-            this.labelInstallingSqlServer.Text = "ShipWorks is now installing Microsoft SQL Server 2008.  This may take a few minut" +
+            this.labelInstallingSqlServer.Text = "ShipWorks is now installing Microsoft SQL Server.  This may take a few minut" +
                 "es.";
             // 
             // wizardPageComplete

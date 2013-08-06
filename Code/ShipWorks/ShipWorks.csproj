@@ -57,6 +57,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -357,6 +358,12 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Administration\ShipWorksSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Data\Administration\ShipWorksSetupWizard.Designer.cs">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
@@ -579,6 +586,7 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipServiceType.cs" />
@@ -1593,6 +1601,7 @@
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\EligibilityRule.cs" />
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\IGlobalShippingProgramRule.cs" />
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRule.cs" />
+    <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTask.cs" />
     <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -5164,6 +5173,9 @@
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\Administration\ShipWorksSetupWizard.resx">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\CreateSchema.sql">
       <SubType>
       </SubType>
@@ -6603,6 +6615,7 @@
     <None Include="App.Ups.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -7090,6 +7103,34 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseReportsReprintReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CancelPendingShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CreatePendingShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessTagReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -7121,14 +7162,6 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\ServiceAvailabilityReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -7142,28 +7175,6 @@
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\VersionCaptureReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CancelPendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CreatePendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessTagReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipServiceDefinitions.wsdl">
-      <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -7240,6 +7251,9 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\cost_code_info_v1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\CountryInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\IndiciumData.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -7252,7 +7266,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\NetstampsStatus.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\RateV10.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\RateV11.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\ResidentialDeliveryIndicatorType.datasource">
@@ -7264,7 +7278,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\StoreShippingMethodOption.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv26.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv29.wsdl" />
     <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -9423,6 +9437,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.4.0.sql" />
+    <Content Include="Data\Administration\Scripts\Update\3.4\3.4.5.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10784,17 +10802,6 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v12\Wsdl\ShipService_v12.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v12\Wsdl\ShipService_v12.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\PackageMovementInformationService_v5.wsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\</RelPath>
@@ -10828,6 +10835,28 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\</RelPath>
+      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\</RelPath>
+      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\</RelPath>
@@ -10860,17 +10889,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_GlobalShipAddress_GlobalShipAddressService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\</RelPath>
-      <UpdateFromURL>E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://api.3dcart.com/cart.asmx">
       <UrlBehavior>Static</UrlBehavior>
@@ -11048,10 +11066,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv26.wsdl">
+    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv26.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

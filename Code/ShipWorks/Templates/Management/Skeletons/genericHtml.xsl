@@ -15,7 +15,7 @@
     <html>
 
     <head>
-        <title>Interapptive ShipWorks Template</title>
+        <title>ShipWorks Template</title>
 
         <!-- CSS -->
         <style>

@@ -266,24 +266,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     // We have shipping information, so get the shipment details   
                     ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
-
-                    try
-                    {
-                        ShippingManager.EnsureShipmentLoaded(shipment);
-                    }
-                    catch (ObjectDeletedException)
-                    {
-                        log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
-                        continue;
-                    }
-                    catch (SqlForeignKeyException)
-                    {
-                        log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
-                        continue;
-                    }
-
+                    
                     if (shipment != null)
                     {
+                        try
+                        {
+                            ShippingManager.EnsureShipmentLoaded(shipment);
+                        }
+                        catch (ObjectDeletedException)
+                        {
+                            log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
+                            continue;
+                        }
+                        catch (SqlForeignKeyException)
+                        {
+                            log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
+                            continue;
+                        }
+
                         carrierType = GetShippingCarrier(shipment);
 
                         // tracking number to upload
@@ -397,11 +397,18 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     carrierType = ShippingCarrierCodeType.USPS;
                     break;
                 case ShipmentTypeCode.Endicia:
+
+                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+
                     // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType)shipment.Postal.Service))
+                    if (ShipmentTypeManager.IsEndiciaDhl(service))
                     {
                         // The DHL carrier for Endicia is:
                         carrierType = ShippingCarrierCodeType.DHL;
+                    }
+                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    {
+                        carrierType = ShippingCarrierCodeType.Other;
                     }
                     else
                     {

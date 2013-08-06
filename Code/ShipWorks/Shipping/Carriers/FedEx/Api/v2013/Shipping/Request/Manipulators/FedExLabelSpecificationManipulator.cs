@@ -5,8 +5,10 @@ using System.Text;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators
 {
@@ -130,8 +132,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 labelSpecification.LabelStockType = LabelStockType.PAPER_4X6;
             }
 
+            AddPrintedLabelOrigin(shipmentEntity, labelSpecification);
+
             labelSpecification.ImageTypeSpecified = true;
             labelSpecification.LabelStockTypeSpecified = true;
+        }
+
+        /// <summary>
+        /// Adds the printed label origin. This is needed for SmartPost's return address. 
+        /// </summary>
+        private static void AddPrintedLabelOrigin(ShipmentEntity shipmentEntity, LabelSpecification labelSpecification)
+        {
+            if (shipmentEntity.FedEx.Service == (int) FedExServiceType.SmartPost)
+            {
+                if (!shipmentEntity.ReturnShipment)
+                {
+                    PersonAdapter person = new PersonAdapter(shipmentEntity, "Origin");
+
+                    labelSpecification.PrintedLabelOrigin = new ContactAndAddress()
+                    {
+                        Contact = new Contact()
+                        {
+                            CompanyName = person.Company,
+                            PersonName = person.UnparsedName,
+                            PhoneNumber = person.Phone
+                        },
+                        Address = new Address()
+                        {
+                            StreetLines = person.StreetLines,
+                            City = person.City,
+                            StateOrProvinceCode = person.StateProvCode,
+                            PostalCode = person.PostalCode,
+                            CountryCode = person.CountryCode
+                        }
+                    };
+                }
+            }
         }
 
         /// <summary>

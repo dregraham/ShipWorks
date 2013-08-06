@@ -19,6 +19,7 @@ using Interapptive.Shared.Data;
 using System.Collections.Generic;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Administration;
+using ShipWorks.Data.Administration.SqlServerSetup;
 
 namespace ShipWorks.Data.Connection
 {
@@ -206,7 +207,7 @@ namespace ShipWorks.Data.Connection
 
             csb.IntegratedSecurity = WindowsAuth;
 
-            if (!windowsAuth)
+            if (!WindowsAuth)
             {
                 csb.UserID = Username;
                 csb.Password = Password;
@@ -230,7 +231,7 @@ namespace ShipWorks.Data.Connection
                 var logCsb = new SqlConnectionStringBuilder(connectionString);
 
                 // Have to make sure the password is stripped
-                if (!windowsAuth)
+                if (!WindowsAuth)
                 {
                     logCsb.Password = "";
                 }
@@ -296,7 +297,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Determines if this session is
+        /// Determines if this session is a connection to a server instance on the local machine
         /// </summary>
         public bool IsLocalServer()
         {
@@ -304,9 +305,17 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Indicates if this session is connected to SQL Server Local DB
+        /// </summary>
+        public bool IsLocalDb()
+        {
+            return string.Compare(serverInstance, SqlInstanceUtility.LocalDbServerInstance, true) == 0;
+        }
+
+        /// <summary>
         /// Indicates if we are connected to an instance of SQL Server 2008 or better
         /// </summary>
-        public bool IsSqlServer2008()
+        public bool IsSqlServer2008OrLater()
         {
             using (SqlConnection con = OpenConnection())
             {
@@ -388,6 +397,12 @@ namespace ShipWorks.Data.Connection
         public List<string> DetermineMissingPermissions(SqlSessionPermissionSet permissionSet)
         {
             List<string> missing = new List<string>();
+
+            // If it's not a 2008 and later database, the functions we use to check don't even exist
+            if (!IsSqlServer2008OrLater())
+            {
+                return missing;
+            }
 
             // We always need the server level stuff
             if (true)
@@ -565,6 +580,13 @@ namespace ShipWorks.Data.Connection
                 }
 
                 serverInstance = value;
+
+                // Translate the true localdb connection string coming in to the user-visible clean way we store it
+                if (string.Compare(serverInstance, SqlInstanceUtility.LocalDbDisplayName, true) == 0)
+                {
+                    serverInstance = SqlInstanceUtility.LocalDbServerInstance;
+                }
+                
                 ConnectionChanged();
             }
         }
@@ -663,6 +685,11 @@ namespace ShipWorks.Data.Connection
         {
             get
             {
+                if (IsLocalDb())
+                {
+                    return true;
+                }
+
                 return windowsAuth;
             }
             set
@@ -707,7 +734,7 @@ namespace ShipWorks.Data.Connection
             log.InfoFormat("Loading SqlSession from {0}.", SettingsFile);
 
             // If the file does not exist, do nothing
-            if (!File.Exists(SettingsFile))
+            if (!File.Exists(SettingsFile) || InterapptiveOnly.MagicKeysDown)
             {
                 log.Info("SqlSession file not found.");
                 return;

@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         /// </summary>
         private void OnLinkSupportForum(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/support", this);
+            WebHelper.OpenUrl("http://www.shipworks.com/support", this);
         }
     }
 }

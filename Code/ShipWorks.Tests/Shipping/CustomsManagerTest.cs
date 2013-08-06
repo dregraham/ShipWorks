@@ -77,6 +77,15 @@ namespace ShipWorks.Tests.Shipping
         //}
 
         //[TestMethod]
+        //public void IsCustomsRequiredByShipment_FromUnitedStatesToMilitaryState_WhenUsingEndicia_Test()
+        //{
+        //    shipment.ShipStateProvCode = "AA";
+        //    shipment.ShipmentType = (int) ShipmentTypeCode.Endicia;
+
+        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //}
+
+        //[TestMethod]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToNonUSCountry_Test()
         //{
         //    shipment.ShipCountryCode = "CA";

@@ -19,6 +19,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     public class WorldShipShipmentType : UpsShipmentType
     {
         /// <summary>
+        /// Indicates if the shipment service type supports return shipments
+        /// </summary>
+        public override bool SupportsReturns
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Type code for WorldShip
         /// </summary>
         public override ShipmentTypeCode ShipmentTypeCode

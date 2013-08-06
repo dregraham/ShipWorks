@@ -115,6 +115,12 @@ namespace ShipWorks.Editions
                 AddRestriction(EditionFeature.UpsSurePost, EditionRestrictionLevel.Hidden);
             }
 
+            // Endicia Consolidation
+            if (!sharedOptions.EndiciaConsolidatorEnabled)
+            {
+                AddRestriction(EditionFeature.EndiciaConsolidator, EditionRestrictionLevel.Hidden);
+            }
+
             restrictionsFinalized = true;
 
             return restrictions;

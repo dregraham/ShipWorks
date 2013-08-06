@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.BrokerEmail = "";
 
             shipment.FedEx.PayorTransportName = string.Empty;
-            shipment.FedEx.PayorDutiesCountryCode = "US";
+            shipment.FedEx.PayorDutiesCountryCode = string.Empty;
             shipment.FedEx.PayorDutiesName = string.Empty;
 
             shipment.FedEx.CustomsAdmissibilityPackaging = (int) FedExPhysicalPackagingType.Box;

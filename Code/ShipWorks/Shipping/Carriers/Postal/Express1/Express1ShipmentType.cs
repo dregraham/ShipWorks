@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
@@ -64,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             try
             {
-                EndiciaApiClient.ProcessShipment(shipment);
+                EndiciaApiClient.ProcessShipment(shipment, this);
             }
             catch (EndiciaException ex)
             {
@@ -92,6 +94,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public override Form CreateSetupWizard()
         {
             return new Express1SetupWizard();
+        }
+
+        /// <summary>
+        /// Get the Express1 MailClass code for the given service
+        /// </summary>
+        public override string GetMailClassCode(PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            // Express1 is not supporting the July 2013 Express/Priority Express updates, so this is the same
+            // as the virtual method it overrides with the exception of ExpressMail returns "Express" instead
+            // of "PriorityExpress"
+            switch (serviceType)
+            {
+                case PostalServiceType.ExpressMail: return "Express";
+                case PostalServiceType.FirstClass: return "First";
+                case PostalServiceType.LibraryMail: return "LibraryMail";
+                case PostalServiceType.MediaMail: return "MediaMail";
+                case PostalServiceType.StandardPost: return "StandardPost";
+                case PostalServiceType.ParcelSelect: return "ParcelSelect";
+                case PostalServiceType.PriorityMail: return "Priority";
+                case PostalServiceType.CriticalMail: return "CriticalMail";
+
+                case PostalServiceType.InternationalExpress: return "ExpressMailInternational";
+                case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
+
+                case PostalServiceType.InternationalFirst:
+                    {
+                        return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
+                    }
+            }
+
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType))
+            {
+                return EnumHelper.GetApiValue(serviceType);
+            }
+
+            throw new EndiciaException(string.Format("{0} is not supported when shipping with Endicia.", PostalUtility.GetPostalServiceTypeDescription(serviceType)));
         }
     }
 }

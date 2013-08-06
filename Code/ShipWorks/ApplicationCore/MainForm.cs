@@ -260,7 +260,7 @@ namespace ShipWorks
             SqlSession.Initialize();
 
             // If the action is to open the DB setup, we can do that now - no need to logon first.
-            if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup || InterapptiveOnly.MagicKeysDown)
+            if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
                 using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
                 {
@@ -273,18 +273,29 @@ namespace ShipWorks
             {
                 log.InfoFormat("SqlSession not configured; showing welcome.");
 
-                using (WelcomeDlg welcomeDlg = new WelcomeDlg())
+                if (SqlServerInstaller.IsSqlServer2012Supported)
                 {
-                    if (welcomeDlg.ShowDialog(this) != DialogResult.OK)
+                    using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
                     {
-                        return;
+                        wizard.ShowDialog(this);
+                    }
+                }
+                else
+                {
+                    using (WelcomeDlg welcomeDlg = new WelcomeDlg())
+                    {
+                        if (welcomeDlg.ShowDialog(this) != DialogResult.OK)
+                        {
+                            return;
+                        }
+                    }
+
+                    using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                    {
+                        dlg.ShowDialog(this);
                     }
                 }
 
-                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
-                {
-                    dlg.ShowDialog(this);
-                }
             }
 
             // If its still not setup, dont go on
@@ -762,7 +773,7 @@ namespace ShipWorks
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
             // See if it needs upgraded
-            if (installedVersion < SqlSchemaUpdater.GetRequiredSchemaVersion() || !SqlSession.Current.IsSqlServer2008() || MigrationController.IsMigrationInProgress())
+            if (installedVersion < SqlSchemaUpdater.GetRequiredSchemaVersion() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {

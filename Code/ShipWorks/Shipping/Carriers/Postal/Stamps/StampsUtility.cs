@@ -59,7 +59,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 case ServiceType.USPM: return PostalServiceType.PriorityMail;
                 case ServiceType.USXM: return PostalServiceType.ExpressMail;
                 case ServiceType.USMM: return PostalServiceType.MediaMail;
-                case ServiceType.USBP: return PostalServiceType.LibraryMail;
+                case ServiceType.USBP: return PostalServiceType.BoundPrintedMatter;
+                case ServiceType.USLM: return PostalServiceType.LibraryMail;
                 case ServiceType.USPS: return PostalServiceType.ParcelSelect;
                 case ServiceType.USEMI: return PostalServiceType.InternationalExpress;
                 case ServiceType.USPMI: return PostalServiceType.InternationalPriority;
@@ -82,12 +83,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 case PostalServiceType.PriorityMail: return ServiceType.USPM;
                 case PostalServiceType.ExpressMail: return ServiceType.USXM;
                 case PostalServiceType.MediaMail: return ServiceType.USMM;
-                case PostalServiceType.LibraryMail: return ServiceType.USBP;
+                case PostalServiceType.BoundPrintedMatter: return ServiceType.USBP;
+                case PostalServiceType.LibraryMail: return ServiceType.USLM;
                 case PostalServiceType.ParcelSelect: return ServiceType.USPS;
                 case PostalServiceType.InternationalExpress: return ServiceType.USEMI;
                 case PostalServiceType.InternationalPriority: return ServiceType.USPMI;
                 case PostalServiceType.InternationalFirst: return ServiceType.USFCI;
                 case PostalServiceType.CriticalMail: return ServiceType.USCM;
+
 
                 default:
                     throw new ShippingException(string.Format("Stamps.com does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
@@ -97,16 +100,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Get the Stamps.com ContentType api value from our own internal content type enum
         /// </summary>
-        public static ContentType GetApiContentType(PostalCustomsContentType contentType)
+        public static ContentTypeV2 GetApiContentType(PostalCustomsContentType contentType)
         {
             switch (contentType)
             {
-                case PostalCustomsContentType.Documents: return ContentType.Document;
-                case PostalCustomsContentType.Gift: return ContentType.Gift;
-                case PostalCustomsContentType.Merchandise: return ContentType.Other;
-                case PostalCustomsContentType.Other: return ContentType.Other;
-                case PostalCustomsContentType.ReturnedGoods: return ContentType.ReturnedGoods;
-                case PostalCustomsContentType.Sample: return ContentType.CommercialSample;
+                case PostalCustomsContentType.Documents: return ContentTypeV2.Document;
+                case PostalCustomsContentType.Gift: return ContentTypeV2.Gift;
+                case PostalCustomsContentType.Merchandise: return ContentTypeV2.Merchandise;
+                case PostalCustomsContentType.Other: return ContentTypeV2.Other;
+                case PostalCustomsContentType.ReturnedGoods: return ContentTypeV2.ReturnedGoods;
+                case PostalCustomsContentType.Sample: return ContentTypeV2.CommercialSample;
+                case PostalCustomsContentType.HumanitarianDonation: return ContentTypeV2.HumanitarianDonation;
+                case PostalCustomsContentType.DangerousGoods: return ContentTypeV2.DangerousGoods;
 
                 default:
                     throw new ShippingException("Unsupported customs content type.");

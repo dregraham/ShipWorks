@@ -169,8 +169,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 string id = (string) xElement.Element(amz + "MarketplaceId");
                 string name = (string) xElement.Element(amz + "Name");
+                string domain = (string)xElement.Element(amz + "DomainName");
 
-                marketplaces.Add(new AmazonMwsMarketplace { MarketplaceID = id, Name = name });
+                marketplaces.Add(new AmazonMwsMarketplace { MarketplaceID = id, Name = name, DomainName = domain });
             }
 
             return marketplaces;
@@ -536,11 +537,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
                 else
                 {
+                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+
                     // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
+                    if (ShipmentTypeManager.IsEndiciaDhl(service))
                     {
                         // The DHL carrier for Endicia is:
                         carrier = "DHL Global Mail";
+                    }
+                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    {
+                        carrier = "Consolidator";
                     }
                     else
                     {

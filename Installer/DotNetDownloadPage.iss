@@ -29,7 +29,7 @@ var
 begin
 	// They do, so  setup the download
 	isxdl_ClearFiles();
-	isxdl_SetOption('title','Setup - Downloading Microsoft .NET Framework 4.0...');
+	isxdl_SetOption('title','Setup - Downloading Microsoft .NET Framework ' + GetSupportedDotNetVersion() + '...');
 	isxdl_SetOption('noftpsize','false');
 	isxdl_SetOption('aborttimeout','8');
 	hWnd := StrToInt(ExpandConstant('{wizardhwnd}'));
@@ -38,9 +38,9 @@ begin
 	ShowWindow(hWnd, SW_HIDE);
 
 	isxdl_AddFileSize(
-		'http://www.interapptive.com/download/components/dotnet40/dotNetFx40_Full_setup.exe',
-		ExpandConstant('{tmp}\dotNetFx40_Full_setup.exe'),
-		(869) * 1024);
+		GetDotNetDownloadURL(),
+		ExpandConstant('{tmp}\' + GetDotNetFileName()),
+		GetDotNetFileSize);
 
 	// Try to download
 	Success := isxdl_DownloadFiles(hWnd);
@@ -69,7 +69,7 @@ end;
 //----------------------------------------------------------------
 function OnDownloadDotNetShouldSkipPage(Page: TWizardPage): Boolean;
 begin
-  Result := not (IsDotNetInstallRequired() and not IsDotNetIncluded() and not FileExists(ExpandConstant('{tmp}\dotNetFx40_Full_setup.exe')));
+  Result := not (IsDotNetInstallRequired() and not FileExists(ExpandConstant('{tmp}\' + GetDotNetFileName())));
 end;
 
 //----------------------------------------------------------------
@@ -90,8 +90,8 @@ var
 begin
   Page := CreateCustomPage(
     PreviousPageId,
-    ExpandConstant('Install Microsoft .NET Framework 4.0'),
-    ExpandConstant('ShipWorks requires the Microsoft .NET Framework 4.0.')
+    ExpandConstant('Install Microsoft .NET Framework ' + GetSupportedDotNetVersion()),
+    ExpandConstant('ShipWorks requires the Microsoft .NET Framework ' + GetSupportedDotNetVersion() + '.')
   );
 
   infoLabel := TLabel.Create(Page);
@@ -99,9 +99,9 @@ begin
   begin
     Parent := Page.Surface;
     Caption :=
-      'ShipWorks requires the Microsoft .NET Framework 4.0, which is not installed on your computer.' + #13 +
+      'ShipWorks requires the Microsoft .NET Framework ' + GetSupportedDotNetVersion() + ', which is not installed on your computer.' + #13 +
       '' + #13 +
-      'Click Next to download it now (0.8 MB).';
+      'Click Next to download it now (0.9 MB).';
     Left := ScaleX(0);
     Top := ScaleY(0);
     Width := ScaleX(415);

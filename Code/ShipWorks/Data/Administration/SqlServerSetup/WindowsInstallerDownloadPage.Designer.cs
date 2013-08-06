@@ -65,7 +65,7 @@
             this.labeDownloadWindowsInstallerInfo.Name = "labeDownloadWindowsInstallerInfo";
             this.labeDownloadWindowsInstallerInfo.Size = new System.Drawing.Size(508, 46);
             this.labeDownloadWindowsInstallerInfo.TabIndex = 16;
-            this.labeDownloadWindowsInstallerInfo.Text = "Microsoft SQL Server 2008 requires Windows Installer 4.5, but it is not installed" +
+            this.labeDownloadWindowsInstallerInfo.Text = "Microsoft SQL Server requires Windows Installer 4.5, but it is not installed" +
                 " on your computer.\r\n\r\nClick Download to download Windows Installer 4.5.";
             // 
             // WindowsInstallerDownload

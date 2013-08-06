@@ -62,6 +62,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelBuyDotCom = new System.Windows.Forms.Panel();
             this.onTracTestServer = new System.Windows.Forms.CheckBox();
             this.newegg = new System.Windows.Forms.CheckBox();
+            this.endiciaTestServers = new System.Windows.Forms.ComboBox();
             this.panelBuyDotCom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Options
             // fedexTestServer
             // 
             this.fedexTestServer.AutoSize = true;
-            this.fedexTestServer.Location = new System.Drawing.Point(46, 146);
+            this.fedexTestServer.Location = new System.Drawing.Point(46, 167);
             this.fedexTestServer.Name = "fedexTestServer";
             this.fedexTestServer.Size = new System.Drawing.Size(56, 17);
             this.fedexTestServer.TabIndex = 5;
@@ -108,7 +109,7 @@ namespace ShipWorks.ApplicationCore.Options
             // upsOnLineTools
             // 
             this.upsOnLineTools.AutoSize = true;
-            this.upsOnLineTools.Location = new System.Drawing.Point(46, 167);
+            this.upsOnLineTools.Location = new System.Drawing.Point(46, 188);
             this.upsOnLineTools.Name = "upsOnLineTools";
             this.upsOnLineTools.Size = new System.Drawing.Size(108, 17);
             this.upsOnLineTools.TabIndex = 6;
@@ -119,7 +120,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionDatabase.Location = new System.Drawing.Point(13, 576);
+            this.sectionDatabase.Location = new System.Drawing.Point(13, 597);
             this.sectionDatabase.Name = "sectionDatabase";
             this.sectionDatabase.Size = new System.Drawing.Size(350, 22);
             this.sectionDatabase.TabIndex = 9;
@@ -127,7 +128,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // deployAssembly
             // 
-            this.deployAssembly.Location = new System.Drawing.Point(28, 604);
+            this.deployAssembly.Location = new System.Drawing.Point(28, 625);
             this.deployAssembly.Name = "deployAssembly";
             this.deployAssembly.Size = new System.Drawing.Size(119, 23);
             this.deployAssembly.TabIndex = 10;
@@ -149,7 +150,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.labelOptions.AutoSize = true;
             this.labelOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOptions.Location = new System.Drawing.Point(24, 231);
+            this.labelOptions.Location = new System.Drawing.Point(24, 252);
             this.labelOptions.Name = "labelOptions";
             this.labelOptions.Size = new System.Drawing.Size(99, 13);
             this.labelOptions.TabIndex = 7;
@@ -158,7 +159,7 @@ namespace ShipWorks.ApplicationCore.Options
             // fedexListRates
             // 
             this.fedexListRates.AutoSize = true;
-            this.fedexListRates.Location = new System.Drawing.Point(46, 250);
+            this.fedexListRates.Location = new System.Drawing.Point(46, 271);
             this.fedexListRates.Name = "fedexListRates";
             this.fedexListRates.Size = new System.Drawing.Size(277, 17);
             this.fedexListRates.TabIndex = 8;
@@ -174,12 +175,13 @@ namespace ShipWorks.ApplicationCore.Options
             this.endiciaTestServer.TabIndex = 4;
             this.endiciaTestServer.Text = "USPS (Endicia)";
             this.endiciaTestServer.UseVisualStyleBackColor = true;
+            this.endiciaTestServer.CheckedChanged += new System.EventHandler(this.OnEndiciaTestServerCheckedChanged);
             // 
             // sectionPlatforms
             // 
             this.sectionPlatforms.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionPlatforms.Location = new System.Drawing.Point(12, 280);
+            this.sectionPlatforms.Location = new System.Drawing.Point(12, 301);
             this.sectionPlatforms.Name = "sectionPlatforms";
             this.sectionPlatforms.Size = new System.Drawing.Size(350, 22);
             this.sectionPlatforms.TabIndex = 11;
@@ -188,7 +190,7 @@ namespace ShipWorks.ApplicationCore.Options
             // ebay
             // 
             this.ebay.AutoSize = true;
-            this.ebay.Location = new System.Drawing.Point(46, 326);
+            this.ebay.Location = new System.Drawing.Point(46, 347);
             this.ebay.Name = "ebay";
             this.ebay.Size = new System.Drawing.Size(50, 17);
             this.ebay.TabIndex = 12;
@@ -199,7 +201,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.labelPlatformsTestServers.AutoSize = true;
             this.labelPlatformsTestServers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPlatformsTestServers.Location = new System.Drawing.Point(24, 307);
+            this.labelPlatformsTestServers.Location = new System.Drawing.Point(24, 328);
             this.labelPlatformsTestServers.Name = "labelPlatformsTestServers";
             this.labelPlatformsTestServers.Size = new System.Drawing.Size(79, 13);
             this.labelPlatformsTestServers.TabIndex = 13;
@@ -208,7 +210,7 @@ namespace ShipWorks.ApplicationCore.Options
             // marketplaceAdvisor
             // 
             this.marketplaceAdvisor.AutoSize = true;
-            this.marketplaceAdvisor.Location = new System.Drawing.Point(46, 346);
+            this.marketplaceAdvisor.Location = new System.Drawing.Point(46, 367);
             this.marketplaceAdvisor.Name = "marketplaceAdvisor";
             this.marketplaceAdvisor.Size = new System.Drawing.Size(120, 17);
             this.marketplaceAdvisor.TabIndex = 14;
@@ -218,7 +220,7 @@ namespace ShipWorks.ApplicationCore.Options
             // marketplaceAdvisorMarkProcessed
             // 
             this.marketplaceAdvisorMarkProcessed.AutoSize = true;
-            this.marketplaceAdvisorMarkProcessed.Location = new System.Drawing.Point(47, 423);
+            this.marketplaceAdvisorMarkProcessed.Location = new System.Drawing.Point(47, 444);
             this.marketplaceAdvisorMarkProcessed.Name = "marketplaceAdvisorMarkProcessed";
             this.marketplaceAdvisorMarkProcessed.Size = new System.Drawing.Size(317, 17);
             this.marketplaceAdvisorMarkProcessed.TabIndex = 16;
@@ -229,7 +231,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(25, 404);
+            this.label2.Location = new System.Drawing.Point(25, 425);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(99, 13);
             this.label2.TabIndex = 15;
@@ -238,7 +240,7 @@ namespace ShipWorks.ApplicationCore.Options
             // yahooDeleteMessages
             // 
             this.yahooDeleteMessages.AutoSize = true;
-            this.yahooDeleteMessages.Location = new System.Drawing.Point(47, 465);
+            this.yahooDeleteMessages.Location = new System.Drawing.Point(47, 486);
             this.yahooDeleteMessages.Name = "yahooDeleteMessages";
             this.yahooDeleteMessages.Size = new System.Drawing.Size(255, 17);
             this.yahooDeleteMessages.TabIndex = 17;
@@ -248,7 +250,7 @@ namespace ShipWorks.ApplicationCore.Options
             // payPal
             // 
             this.payPal.AutoSize = true;
-            this.payPal.Location = new System.Drawing.Point(46, 383);
+            this.payPal.Location = new System.Drawing.Point(46, 404);
             this.payPal.Name = "payPal";
             this.payPal.Size = new System.Drawing.Size(58, 17);
             this.payPal.TabIndex = 18;
@@ -258,7 +260,7 @@ namespace ShipWorks.ApplicationCore.Options
             // searchFitDeleteAfterDownload
             // 
             this.searchFitDeleteAfterDownload.AutoSize = true;
-            this.searchFitDeleteAfterDownload.Location = new System.Drawing.Point(47, 444);
+            this.searchFitDeleteAfterDownload.Location = new System.Drawing.Point(47, 465);
             this.searchFitDeleteAfterDownload.Name = "searchFitDeleteAfterDownload";
             this.searchFitDeleteAfterDownload.Size = new System.Drawing.Size(254, 17);
             this.searchFitDeleteAfterDownload.TabIndex = 19;
@@ -269,7 +271,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionSettings.Location = new System.Drawing.Point(12, 517);
+            this.sectionSettings.Location = new System.Drawing.Point(12, 538);
             this.sectionSettings.Name = "sectionSettings";
             this.sectionSettings.Size = new System.Drawing.Size(350, 22);
             this.sectionSettings.TabIndex = 20;
@@ -278,7 +280,7 @@ namespace ShipWorks.ApplicationCore.Options
             // multipleInstances
             // 
             this.multipleInstances.AutoSize = true;
-            this.multipleInstances.Location = new System.Drawing.Point(47, 548);
+            this.multipleInstances.Location = new System.Drawing.Point(47, 569);
             this.multipleInstances.Name = "multipleInstances";
             this.multipleInstances.Size = new System.Drawing.Size(192, 17);
             this.multipleInstances.TabIndex = 21;
@@ -287,7 +289,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // regenerateFilters
             // 
-            this.regenerateFilters.Location = new System.Drawing.Point(28, 633);
+            this.regenerateFilters.Location = new System.Drawing.Point(28, 654);
             this.regenerateFilters.Name = "regenerateFilters";
             this.regenerateFilters.Size = new System.Drawing.Size(119, 23);
             this.regenerateFilters.TabIndex = 22;
@@ -297,7 +299,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // deployChosenAssembly
             // 
-            this.deployChosenAssembly.Location = new System.Drawing.Point(153, 604);
+            this.deployChosenAssembly.Location = new System.Drawing.Point(153, 625);
             this.deployChosenAssembly.Name = "deployChosenAssembly";
             this.deployChosenAssembly.Size = new System.Drawing.Size(119, 23);
             this.deployChosenAssembly.TabIndex = 23;
@@ -308,7 +310,7 @@ namespace ShipWorks.ApplicationCore.Options
             // express1TestServer
             // 
             this.express1TestServer.AutoSize = true;
-            this.express1TestServer.Location = new System.Drawing.Point(46, 125);
+            this.express1TestServer.Location = new System.Drawing.Point(46, 146);
             this.express1TestServer.Name = "express1TestServer";
             this.express1TestServer.Size = new System.Drawing.Size(106, 17);
             this.express1TestServer.TabIndex = 24;
@@ -317,7 +319,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // purgeLabels
             // 
-            this.purgeLabels.Location = new System.Drawing.Point(154, 632);
+            this.purgeLabels.Location = new System.Drawing.Point(154, 653);
             this.purgeLabels.Name = "purgeLabels";
             this.purgeLabels.Size = new System.Drawing.Size(118, 23);
             this.purgeLabels.TabIndex = 25;
@@ -327,7 +329,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // purgePrintJobsButton
             // 
-            this.purgePrintJobsButton.Location = new System.Drawing.Point(28, 662);
+            this.purgePrintJobsButton.Location = new System.Drawing.Point(28, 683);
             this.purgePrintJobsButton.Name = "purgePrintJobsButton";
             this.purgePrintJobsButton.Size = new System.Drawing.Size(119, 23);
             this.purgePrintJobsButton.TabIndex = 26;
@@ -338,7 +340,7 @@ namespace ShipWorks.ApplicationCore.Options
             // equaShipTestServer
             // 
             this.equaShipTestServer.AutoSize = true;
-            this.equaShipTestServer.Location = new System.Drawing.Point(46, 188);
+            this.equaShipTestServer.Location = new System.Drawing.Point(46, 209);
             this.equaShipTestServer.Name = "equaShipTestServer";
             this.equaShipTestServer.Size = new System.Drawing.Size(70, 17);
             this.equaShipTestServer.TabIndex = 27;
@@ -348,7 +350,7 @@ namespace ShipWorks.ApplicationCore.Options
             // buyDotComArchiveOrderFile
             // 
             this.buyDotComArchiveOrderFile.AutoSize = true;
-            this.buyDotComArchiveOrderFile.Location = new System.Drawing.Point(47, 484);
+            this.buyDotComArchiveOrderFile.Location = new System.Drawing.Point(47, 505);
             this.buyDotComArchiveOrderFile.Name = "buyDotComArchiveOrderFile";
             this.buyDotComArchiveOrderFile.Size = new System.Drawing.Size(236, 17);
             this.buyDotComArchiveOrderFile.TabIndex = 28;
@@ -360,7 +362,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.buyDotComMapChooser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buyDotComMapChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buyDotComMapChooser.Location = new System.Drawing.Point(-2, -14);
+            this.buyDotComMapChooser.Location = new System.Drawing.Point(-2, 0);
             this.buyDotComMapChooser.Map = null;
             this.buyDotComMapChooser.Name = "buyDotComMapChooser";
             this.buyDotComMapChooser.Size = new System.Drawing.Size(344, 91);
@@ -370,7 +372,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionBuyDotCom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionBuyDotCom.Location = new System.Drawing.Point(13, 696);
+            this.sectionBuyDotCom.Location = new System.Drawing.Point(13, 717);
             this.sectionBuyDotCom.Name = "sectionBuyDotCom";
             this.sectionBuyDotCom.Size = new System.Drawing.Size(350, 22);
             this.sectionBuyDotCom.TabIndex = 30;
@@ -381,15 +383,15 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelBuyDotCom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBuyDotCom.Controls.Add(this.buyDotComMapChooser);
-            this.panelBuyDotCom.Location = new System.Drawing.Point(13, 724);
+            this.panelBuyDotCom.Location = new System.Drawing.Point(13, 732);
             this.panelBuyDotCom.Name = "panelBuyDotCom";
-            this.panelBuyDotCom.Size = new System.Drawing.Size(347, 94);
+            this.panelBuyDotCom.Size = new System.Drawing.Size(347, 83);
             this.panelBuyDotCom.TabIndex = 31;
             // 
             // onTracTestServer
             // 
             this.onTracTestServer.AutoSize = true;
-            this.onTracTestServer.Location = new System.Drawing.Point(46, 211);
+            this.onTracTestServer.Location = new System.Drawing.Point(46, 232);
             this.onTracTestServer.Name = "onTracTestServer";
             this.onTracTestServer.Size = new System.Drawing.Size(61, 17);
             this.onTracTestServer.TabIndex = 29;
@@ -399,21 +401,35 @@ namespace ShipWorks.ApplicationCore.Options
             // newegg
             // 
             this.newegg.AutoSize = true;
-            this.newegg.Location = new System.Drawing.Point(46, 365);
+            this.newegg.Location = new System.Drawing.Point(46, 386);
             this.newegg.Name = "newegg";
             this.newegg.Size = new System.Drawing.Size(65, 17);
             this.newegg.TabIndex = 18;
             this.newegg.Text = "Newegg";
             this.newegg.UseVisualStyleBackColor = true;
             // 
+            // endiciaTestServers
+            // 
+            this.endiciaTestServers.AutoCompleteCustomSource.AddRange(new string[] {
+            "www.envmgr.com",
+            "elstestserver.endicia.com (New Sandbox)"});
+            this.endiciaTestServers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.endiciaTestServers.Enabled = false;
+            this.endiciaTestServers.FormattingEnabled = true;
+            this.endiciaTestServers.Location = new System.Drawing.Point(65, 121);
+            this.endiciaTestServers.Name = "endiciaTestServers";
+            this.endiciaTestServers.Size = new System.Drawing.Size(213, 21);
+            this.endiciaTestServers.TabIndex = 32;
+            // 
             // OptionPageInterapptive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.sectionBuyDotCom);
+            this.Controls.Add(this.endiciaTestServers);
             this.Controls.Add(this.onTracTestServer);
             this.Controls.Add(this.panelBuyDotCom);
-            this.Controls.Add(this.sectionBuyDotCom);
             this.Controls.Add(this.buyDotComArchiveOrderFile);
             this.Controls.Add(this.equaShipTestServer);
             this.Controls.Add(this.purgePrintJobsButton);
@@ -446,7 +462,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageInterapptive";
-            this.Size = new System.Drawing.Size(374, 828);
+            this.Size = new System.Drawing.Size(374, 858);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelBuyDotCom.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -490,5 +506,6 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Panel panelBuyDotCom;
         private System.Windows.Forms.CheckBox onTracTestServer;
         private System.Windows.Forms.CheckBox newegg;
+        private System.Windows.Forms.ComboBox endiciaTestServers;
     }
 }
