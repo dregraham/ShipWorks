@@ -4,7 +4,7 @@ require 'albacore'
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
 		msbuild.use :net40
-		msbuild.parameters = "/m"
+		msbuild.parameters = "/m:3"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 	end
 
