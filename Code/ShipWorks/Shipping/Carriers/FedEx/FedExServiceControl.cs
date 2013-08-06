@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
 
                 service.DataSource = FedExUtility.GetValidServiceTypes(overriddenShipments)
-                    .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
+                       .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
             }
             else
             {

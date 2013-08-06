@@ -14,10 +14,14 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SccProjectName>ShipWorks.Tests</SccProjectName>
-    <SccLocalPath>2~4dc65538-e67f-4277-9622-0ab008abf2fc</SccLocalPath>
-    <SccAuxPath>http://vault.interapptive.com/VaultService</SccAuxPath>
-    <SccProvider>SourceGear Vault Visual Studio 2005 Client:{1EA47954-8515-402d-82D9-B5C332120A8D}</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -358,8 +362,8 @@
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
-      <Project>{CFF69808-F073-42B7-96A2-2616987F6737}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.csproj">
