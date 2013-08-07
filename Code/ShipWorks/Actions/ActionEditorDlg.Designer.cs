@@ -42,18 +42,18 @@
             this.labelTasksHeader = new System.Windows.Forms.Label();
             this.labelTriggerHeader = new System.Windows.Forms.Label();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
+            this.runOnTriggerringComputer = new System.Windows.Forms.RadioButton();
+            this.specifyComputerLabels = new System.Windows.Forms.Label();
             this.runOnSpecificComputersList = new ShipWorks.Actions.UI.ComputersComboBox();
             this.runOnSpecificComputers = new System.Windows.Forms.RadioButton();
-            this.runOnAnyComputer = new System.Windows.Forms.RadioButton();
             this.panelStores = new System.Windows.Forms.Panel();
             this.checkBoxSample1 = new System.Windows.Forms.CheckBox();
             this.checkBoxSample2 = new System.Windows.Forms.CheckBox();
+            this.runOnAnyComputer = new System.Windows.Forms.RadioButton();
             this.storeLimited = new System.Windows.Forms.CheckBox();
             this.enabled = new System.Windows.Forms.CheckBox();
             this.name = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.specifyComputerLabels = new System.Windows.Forms.Label();
-            this.runOnTriggerringComputer = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.imageUser)).BeginInit();
             this.optionControl.SuspendLayout();
             this.optionPageAction.SuspendLayout();
@@ -216,13 +216,32 @@
             this.optionPageSettings.TabIndex = 4;
             this.optionPageSettings.Text = "Settings";
             // 
+            // runOnTriggerringComputer
+            // 
+            this.runOnTriggerringComputer.AutoSize = true;
+            this.runOnTriggerringComputer.Location = new System.Drawing.Point(27, 70);
+            this.runOnTriggerringComputer.Name = "runOnTriggerringComputer";
+            this.runOnTriggerringComputer.Size = new System.Drawing.Size(220, 17);
+            this.runOnTriggerringComputer.TabIndex = 8;
+            this.runOnTriggerringComputer.Text = "On the computer that triggers the action";
+            this.runOnTriggerringComputer.UseVisualStyleBackColor = true;
+            // 
+            // specifyComputerLabels
+            // 
+            this.specifyComputerLabels.AutoSize = true;
+            this.specifyComputerLabels.Location = new System.Drawing.Point(3, 32);
+            this.specifyComputerLabels.Name = "specifyComputerLabels";
+            this.specifyComputerLabels.Size = new System.Drawing.Size(215, 13);
+            this.specifyComputerLabels.TabIndex = 5;
+            this.specifyComputerLabels.Text = "Specify computers for this action to run on:";
+            // 
             // runOnSpecificComputersList
             // 
             this.runOnSpecificComputersList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.runOnSpecificComputersList.Enabled = false;
             this.runOnSpecificComputersList.FormattingEnabled = true;
             this.runOnSpecificComputersList.IntegralHeight = false;
-            this.runOnSpecificComputersList.Location = new System.Drawing.Point(167, 93);
+            this.runOnSpecificComputersList.Location = new System.Drawing.Point(167, 92);
             this.runOnSpecificComputersList.Name = "runOnSpecificComputersList";
             this.runOnSpecificComputersList.Size = new System.Drawing.Size(250, 21);
             this.runOnSpecificComputersList.TabIndex = 7;
@@ -230,24 +249,13 @@
             // runOnSpecificComputers
             // 
             this.runOnSpecificComputers.AutoSize = true;
-            this.runOnSpecificComputers.Location = new System.Drawing.Point(27, 94);
+            this.runOnSpecificComputers.Location = new System.Drawing.Point(27, 93);
             this.runOnSpecificComputers.Name = "runOnSpecificComputers";
             this.runOnSpecificComputers.Size = new System.Drawing.Size(134, 17);
             this.runOnSpecificComputers.TabIndex = 6;
             this.runOnSpecificComputers.Text = "On specific computers:";
             this.runOnSpecificComputers.UseVisualStyleBackColor = true;
             this.runOnSpecificComputers.CheckedChanged += new System.EventHandler(this.OnRunOnSpecificComputersChecked);
-            // 
-            // runOnAnyComputer
-            // 
-            this.runOnAnyComputer.AutoSize = true;
-            this.runOnAnyComputer.Checked = true;
-            this.runOnAnyComputer.Location = new System.Drawing.Point(27, 48);
-            this.runOnAnyComputer.Name = "runOnAnyComputer";
-            this.runOnAnyComputer.Size = new System.Drawing.Size(108, 17);
-            this.runOnAnyComputer.TabIndex = 5;
-            this.runOnAnyComputer.Text = "On any computer";
-            this.runOnAnyComputer.UseVisualStyleBackColor = true;
             // 
             // panelStores
             // 
@@ -278,6 +286,18 @@
             this.checkBoxSample2.Text = "Liznobber Incorporated";
             this.checkBoxSample2.UseVisualStyleBackColor = true;
             // 
+            // runOnAnyComputer
+            // 
+            this.runOnAnyComputer.AutoSize = true;
+            this.runOnAnyComputer.Checked = true;
+            this.runOnAnyComputer.Location = new System.Drawing.Point(27, 48);
+            this.runOnAnyComputer.Name = "runOnAnyComputer";
+            this.runOnAnyComputer.Size = new System.Drawing.Size(108, 17);
+            this.runOnAnyComputer.TabIndex = 5;
+            this.runOnAnyComputer.TabStop = true;
+            this.runOnAnyComputer.Text = "On any computer";
+            this.runOnAnyComputer.UseVisualStyleBackColor = true;
+            // 
             // storeLimited
             // 
             this.storeLimited.AutoSize = true;
@@ -306,25 +326,6 @@
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(273, 21);
             this.name.TabIndex = 1;
-            // 
-            // specifyComputerLabels
-            // 
-            this.specifyComputerLabels.AutoSize = true;
-            this.specifyComputerLabels.Location = new System.Drawing.Point(21, 32);
-            this.specifyComputerLabels.Name = "specifyComputerLabels";
-            this.specifyComputerLabels.Size = new System.Drawing.Size(215, 13);
-            this.specifyComputerLabels.TabIndex = 5;
-            this.specifyComputerLabels.Text = "Specify computers for this action to run on:";
-            // 
-            // runOnTriggerringComputer
-            // 
-            this.runOnTriggerringComputer.AutoSize = true;
-            this.runOnTriggerringComputer.Location = new System.Drawing.Point(27, 71);
-            this.runOnTriggerringComputer.Name = "runOnTriggerringComputer";
-            this.runOnTriggerringComputer.Size = new System.Drawing.Size(220, 17);
-            this.runOnTriggerringComputer.TabIndex = 8;
-            this.runOnTriggerringComputer.Text = "On the computer that triggers the action";
-            this.runOnTriggerringComputer.UseVisualStyleBackColor = true;
             // 
             // ActionEditorDlg
             // 
