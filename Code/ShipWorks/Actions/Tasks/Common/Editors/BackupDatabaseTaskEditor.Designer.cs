@@ -101,7 +101,7 @@
             // 
             // numericBackupCount
             // 
-            this.numericBackupCount.Location = new System.Drawing.Point(173, 71);
+            this.numericBackupCount.Location = new System.Drawing.Point(253, 71);
             this.numericBackupCount.Minimum = new decimal(new int[] {
             1,
             0,
@@ -119,20 +119,20 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(225, 73);
+            this.lableBackups.Location = new System.Drawing.Point(306, 73);
             this.lableBackups.Name = "lableBackups";
-            this.lableBackups.Size = new System.Drawing.Size(102, 13);
+            this.lableBackups.Size = new System.Drawing.Size(110, 13);
             this.lableBackups.TabIndex = 14;
-            this.lableBackups.Text = "successful backups.";
+            this.lableBackups.Text = "successful backup(s).";
             // 
             // checkboxLimitBackupsRetained
             // 
             this.checkboxLimitBackupsRetained.AutoSize = true;
             this.checkboxLimitBackupsRetained.Location = new System.Drawing.Point(99, 72);
             this.checkboxLimitBackupsRetained.Name = "checkboxLimitBackupsRetained";
-            this.checkboxLimitBackupsRetained.Size = new System.Drawing.Size(74, 17);
+            this.checkboxLimitBackupsRetained.Size = new System.Drawing.Size(153, 17);
             this.checkboxLimitBackupsRetained.TabIndex = 15;
-            this.checkboxLimitBackupsRetained.Text = "Only keep";
+            this.checkboxLimitBackupsRetained.Text = "Only keep the most recent";
             this.checkboxLimitBackupsRetained.UseVisualStyleBackColor = true;
             // 
             // labelCleanup
