@@ -113,11 +113,11 @@ namespace ShipWorks.Actions
             panelStores.Enabled = action.StoreLimited;
 
             //Load the computer limited settings
-            runOnOtherComputers.Checked = action.ComputerLimitedType != (int)ComputerLimitationType.TriggeringComputer;
-            runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
+            runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitationType.None;
+            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.TriggeringComputer;
             runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
-            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
             // Check all the boxes for the stores its limited to
             foreach (long storeID in action.StoreLimitedList)
@@ -196,18 +196,6 @@ namespace ShipWorks.Actions
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
             CreateTriggerEditor();
-
-            //Scheduled actions must be allowed to run on other computers
-            if(triggerType == ActionTriggerType.Scheduled)
-            {
-                runOnOtherComputers.Checked = true;
-                runOnOtherComputers.Enabled = false;
-            }
-            else
-            {
-                runOnOtherComputers.Checked = action.ComputerLimitedType != (int)ComputerLimitationType.TriggeringComputer;
-                runOnOtherComputers.Enabled = true;
-            }
         }
 
         /// <summary>
@@ -278,17 +266,17 @@ namespace ShipWorks.Actions
                 runOnSpecificComputers.Checked = true;
                 runOnSpecificComputers.Enabled = false;
                 runOnAnyComputer.Enabled = false;
-                runOnOtherComputers.Enabled = false;
+                runOnTriggerringComputer.Enabled = false;
                 runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer });
             }
             else
             {
                 runOnSpecificComputers.Enabled = true;
                 runOnAnyComputer.Enabled = true;
-                runOnOtherComputers.Enabled = trigger.TriggerType != ActionTriggerType.Scheduled;
+                runOnTriggerringComputer.Enabled = true;
             }
 
-            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
         }
 
         /// <summary>
@@ -498,6 +486,14 @@ namespace ShipWorks.Actions
                 return;
             }
 
+            if (((ActionTriggerType)triggerCombo.SelectedValue) == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
+            {
+                ActiveControl = runOnTriggerringComputer;
+                optionControl.SelectedPage = optionPageSettings;
+                MessageHelper.ShowMessage(this, "A scheduled action cannot be set to run on the triggerring computer.");
+                return;
+            }
+
             Cursor.Current = Cursors.WaitCursor;
             
             try
@@ -605,7 +601,7 @@ namespace ShipWorks.Actions
                     action.StoreLimitedList = GenerateStoreLimitedListFromUI();
 
                     //Save the computer limited settings
-                    if (!runOnOtherComputers.Checked)
+                    if (runOnTriggerringComputer.Checked)
                     {
                         action.ComputerLimitedType = (int)ComputerLimitationType.TriggeringComputer;
                         action.ComputerLimitedList = new long[0];
@@ -777,34 +773,14 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// The RunOnOthersComputers checkbox was checked or unchecked
-        /// </summary>
-        void OnRunOnOtherComputersChecked(object sender, EventArgs e)
-        {
-            computersPanel.Enabled = runOnOtherComputers.Checked;
-
-            // Enabling the panel also enables its subcontrols so make sure that
-            // the computer list's enabled property is set correctly.
-            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
-        }
-
-        /// <summary>
         /// The RunOnSpecificComputers checkbox was checked or unchecked
         /// </summary>
         void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
         {
-            runOnSpecificComputersList.Enabled = ShouldEnableRunOnSpecificComputersList;
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
             if (runOnSpecificComputersList.Visible && runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
                 runOnSpecificComputersList.ShowPopup();
-        }
-
-        /// <summary>
-        /// Gets whether the RunOnSpecificComputersList should be enabled or not
-        /// </summary>
-        private bool ShouldEnableRunOnSpecificComputersList
-        {
-            get { return runOnSpecificComputers.Checked && runOnSpecificComputers.Enabled; }
         }
     }
 }
