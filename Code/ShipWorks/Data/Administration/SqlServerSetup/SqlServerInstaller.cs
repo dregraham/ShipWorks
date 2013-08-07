@@ -396,45 +396,46 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             log.InfoFormat("Executing: {0}", args);
 
-            Process process = new Process();
             int exitCode;
-
-            try
+            using (Process process = new Process())
             {
-                process.StartInfo = new ProcessStartInfo(installerPath, args);
-                process.Start();
-                process.WaitForExit();
-
-                exitCode = process.ExitCode;
-
-                // If the install was a succses, open the firewall as long as we're already elevated
-                if (exitCode == 0 || exitCode == ExitCodeSuccessRebootRequired)
+                try
                 {
-                    try
-                    {
-                        SqlWindowsFirewallUtility.OpenWindowsFirewallElevated(instanceName);
+                    process.StartInfo = new ProcessStartInfo(installerPath, args);
+                    process.Start();
+                    process.WaitForExit();
 
-                        log.Info("Windows firewall opened.");
-                    }
-                    catch (Win32Exception ex)
+                    exitCode = process.ExitCode;
+
+                    // If the install was a succses, open the firewall as long as we're already elevated
+                    if (exitCode == 0 || exitCode == ExitCodeSuccessRebootRequired)
                     {
-                        log.Error("Failed to open windows firewall", ex);
-                    }
-                    catch (WindowsFirewallException ex)
-                    {
-                        log.Error("Failed to open windows firewall", ex);
+                        try
+                        {
+                            SqlWindowsFirewallUtility.OpenWindowsFirewallElevated(instanceName);
+
+                            log.Info("Windows firewall opened.");
+                        }
+                        catch (Win32Exception ex)
+                        {
+                            log.Error("Failed to open windows firewall", ex);
+                        }
+                        catch (WindowsFirewallException ex)
+                        {
+                            log.Error("Failed to open windows firewall", ex);
+                        }
                     }
                 }
-            }
-            catch (Win32Exception ex)
-            {
-                log.Error("Error installing sql server", ex);
-                exitCode = ex.ErrorCode;
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error installing sql server", ex);
-                exitCode = unknownException;
+                catch (Win32Exception ex)
+                {
+                    log.Error("Error installing sql server", ex);
+                    exitCode = ex.ErrorCode;
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error installing sql server", ex);
+                    exitCode = unknownException;
+                }
             }
 
             log.InfoFormat("Exiting with code: {0}", exitCode);

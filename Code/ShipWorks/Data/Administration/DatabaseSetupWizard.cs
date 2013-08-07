@@ -58,13 +58,9 @@ namespace ShipWorks.Data.Administration
 
         // The sql installer and file downloader
         SqlServerInstaller sqlInstaller;
-        WizardDownloadHelper sqlDownloader;
 
         // List of instances installed during the lifetime of the wizard
         List<string> installedInstances = new List<string>();
-
-        // List of instances having their firewall opened during lifetime of wizard
-        List<string> firewallOpenedInstances = new List<string>();
 
         // The SQL Instance that we have loaded data file location for
         string dataFileSqlInstance = null;
@@ -93,10 +89,6 @@ namespace ShipWorks.Data.Administration
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += new EventHandler(OnInstallerSqlServerExited);
-
-            sqlDownloader = new WizardDownloadHelper(this, 
-                sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install), 
-                sqlInstaller.GetInstallerDownloadUri(SqlServerInstallerPurpose.Install));
 
             // Prepopulate the instance box with the current
             if (SqlSession.IsConfigured)
@@ -333,7 +325,7 @@ namespace ShipWorks.Data.Administration
             {
                 radioSqlServerCurrent.Checked = true;
 
-                labelSqlServerCurrentName.Text = string.Format("({0})", SqlSession.Current.IsLocalDb() ? "Local only" : SqlSession.Current.ServerInstance);
+                labelSqlServerCurrentName.Text = string.Format("({0})", SqlSession.Current.Configuration.IsLocalDb() ? "Local only" : SqlSession.Current.Configuration.ServerInstance);
             }
             // Otherwise, current isn't an option, and installing a new one is the first option
             else
@@ -358,11 +350,10 @@ namespace ShipWorks.Data.Administration
                 instanceName.Text = instanceName.Text.Trim();
 
                 // Save the instance
-                sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
-                sqlSession.Username = "sa";
-                sqlSession.Password = SqlInstanceUtility.ShipWorksSaPassword;
-                sqlSession.RememberPassword = true;
-                sqlSession.WindowsAuth = false;
+                sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                sqlSession.Configuration.Username = "sa";
+                sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
+                sqlSession.Configuration.WindowsAuth = false;
 
                 // If we've already installed this instance during this showing of the wizard (which means the user has just stepped back),
                 // we can just skip right to the install step, which will then automatically skip to the next appropriate step.
@@ -378,7 +369,7 @@ namespace ShipWorks.Data.Administration
                     }
                     else
                     {
-                        sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                        sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
                         e.NextPage = pageFirstPrerequisite;
                     }
                 }
@@ -388,10 +379,10 @@ namespace ShipWorks.Data.Administration
 
                 if (radioSqlServerCurrent.Checked)
                 {
-                    sqlSession.ServerInstance = SqlSession.Current.ServerInstance;
-                    sqlSession.Username = SqlSession.Current.Username;
-                    sqlSession.Password = SqlSession.Current.Password;
-                    sqlSession.WindowsAuth = SqlSession.Current.WindowsAuth;
+                    sqlSession.Configuration.ServerInstance = SqlSession.Current.Configuration.ServerInstance;
+                    sqlSession.Configuration.Username = SqlSession.Current.Configuration.Username;
+                    sqlSession.Configuration.Password = SqlSession.Current.Configuration.Password;
+                    sqlSession.Configuration.WindowsAuth = SqlSession.Current.Configuration.WindowsAuth;
 
                     e.NextPage = wizardPageDatabaseName;
                 }
@@ -905,7 +896,6 @@ namespace ShipWorks.Data.Administration
             {
                 sqlSession.Configuration.Username = "sa";
                 sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
-                sqlSession.Configuration.RememberPassword = true;
                 sqlSession.Configuration.WindowsAuth = false;
                 sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
 
@@ -976,7 +966,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // See if we need to load up where the data files will go
-            if (dataFileSqlInstance != sqlSession.ServerInstance)
+            if (dataFileSqlInstance != sqlSession.Configuration.ServerInstance)
             {
                 linkChooseDataLocation.Visible = true;
                 panelDataFiles.Visible = false;
@@ -986,7 +976,7 @@ namespace ShipWorks.Data.Administration
                     pathDataFiles.Text = SqlUtility.GetMasterDataFilePath(con);
                 }
 
-                dataFileSqlInstance = sqlSession.ServerInstance;
+                dataFileSqlInstance = sqlSession.Configuration.ServerInstance;
             }
         }
 

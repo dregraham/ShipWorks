@@ -32,7 +32,10 @@ namespace ShipWorks.Data.Administration
         public static void CreateDatabase(string name, string path, SqlConnection con)
         {
             object result = SqlCommandProvider.ExecuteScalar(con, string.Format("SELECT name FROM master.dbo.sysdatabases WHERE name = N'{0}'", name));
-            if (result is string && (string) result == name)
+
+            var resultString = result as string;
+
+            if (resultString != null && resultString == name)
             {
                 throw new SqlScriptException(string.Format("A database named '{0}' already exists.", name));
             }

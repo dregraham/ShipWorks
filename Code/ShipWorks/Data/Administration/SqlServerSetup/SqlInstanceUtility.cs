@@ -29,6 +29,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
+        /// Get the name of the LocalDB instance we display to users
+        /// </summary>
+        public static string LocalDbDisplayName
+        {
+            get { return "(Local)"; }
+        }
+
+        /// <summary>
         /// The default password ShipWorks uses for sa when it installs new SQL instances
         /// </summary>
         public static string ShipWorksSaPassword

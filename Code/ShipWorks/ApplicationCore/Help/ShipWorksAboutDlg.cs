@@ -46,7 +46,7 @@ namespace ShipWorks.ApplicationCore.Help
 
             if (SqlSession.IsConfigured)
             {
-                labelDatabase.Text = SqlSession.Current.IsLocalDb() ? "Local only" : string.Format("'{0}' on {1}", SqlSession.Current.DatabaseName, SqlSession.Current.ServerInstance);
+                labelDatabase.Text = SqlSession.Current.Configuration.IsLocalDb() ? "Local only" : string.Format("'{0}' on {1}", SqlSession.Current.Configuration.DatabaseName, SqlSession.Current.Configuration.ServerInstance);
             }
             else
             {
