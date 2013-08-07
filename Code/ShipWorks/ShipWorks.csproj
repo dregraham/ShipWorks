@@ -9677,6 +9677,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.3\3.3.8.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.4.0.sql" />
