@@ -490,7 +490,7 @@ namespace ShipWorks.Actions
             {
                 ActiveControl = runOnTriggerringComputer;
                 optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowMessage(this, "A scheduled action cannot be set to run on the triggerring computer.");
+                MessageHelper.ShowMessage(this, "A scheduled action cannot be set to run on the triggering computer.");
                 return;
             }
 
