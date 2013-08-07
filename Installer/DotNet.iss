@@ -128,7 +128,6 @@ end;
 function IsDotNetInstallRequired(): Boolean;
 var
 	DotNetRegValue: Cardinal;
-    version: TWindowsVersion;
 begin
 	// We will set this to fals if we find out otherwise
 	Result := True;

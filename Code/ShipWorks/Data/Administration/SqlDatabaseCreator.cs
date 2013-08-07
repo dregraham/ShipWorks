@@ -19,48 +19,49 @@ namespace ShipWorks.Data.Administration
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Installation");
 
         /// <summary>
-        /// Create a database with the given name.
+        /// Create a database with the given name in the default SQL server data path
         /// </summary>
         public static void CreateDatabase(string name, SqlConnection con)
         {
-            object fileResult = SqlCommandProvider.ExecuteScalar(con, "select filename from master..sysdatabases where name = 'master'");
+            CreateDatabase(name, SqlUtility.GetMasterDataFilePath(con), con);
+        }
 
-            if (fileResult == null || fileResult is DBNull)
+        /// <summary>
+        /// Create a database with the given name in the given path
+        /// </summary>
+        public static void CreateDatabase(string name, string path, SqlConnection con)
+        {
+            object result = SqlCommandProvider.ExecuteScalar(con, string.Format("SELECT name FROM master.dbo.sysdatabases WHERE name = N'{0}'", name));
+            if (result is string && (string) result == name)
             {
-                throw new SqlScriptException(string.Format("The user you are connecting to SQL Server as ('{0}') does not have permissions to create a database.",
-                    SqlUtility.GetUsername(con)));
+                throw new SqlScriptException(string.Format("A database named '{0}' already exists.", name));
             }
 
-            // Get the filepath to master
-            string masterPath = Path.GetDirectoryName((string) fileResult);
+            string createDbSql = sqlLoader.LoadScript("CreateDatabase.sql").Content;
 
             // We need it to end in a slash
-            if (!masterPath.EndsWith("\\"))
+            if (!path.EndsWith("\\"))
             {
-                masterPath += "\\";
+                path += "\\";
             }
-
-            string scriptName = "CreateDatabase.sql";
-
-            string createDbSql = sqlLoader.LoadScript(scriptName).Content;
 
             // Set the path to Program Files
             createDbSql = createDbSql.Replace("{DBNAME}", name);
-            createDbSql = createDbSql.Replace("{FILEPATH}", masterPath);
-            createDbSql = createDbSql.Replace("{FILENAME}", DetermineAvailableFilename(masterPath, name));
+            createDbSql = createDbSql.Replace("{FILEPATH}", path);
+            createDbSql = createDbSql.Replace("{FILENAME}", DetermineAvailableFilename(path, name));
 
             // Create the database
-            SqlUtility.ExecuteScriptSql(scriptName, createDbSql, con);
+            SqlUtility.ExecuteScriptSql("Create Database", createDbSql, con);
         }
 
         /// <summary>
         /// Determine the first available name of the file to use for the database, without extension
         /// </summary>
-        private static string DetermineAvailableFilename(string masterPath, string databaseName)
+        private static string DetermineAvailableFilename(string path, string databaseName)
         {
             // First check that just the database name is available
-            if (!File.Exists(Path.Combine(masterPath, databaseName + ".mdf")) &&
-                !File.Exists(Path.Combine(masterPath, databaseName + "_log.ldf")))
+            if (!File.Exists(Path.Combine(path, databaseName + ".mdf")) &&
+                !File.Exists(Path.Combine(path, databaseName + "_log.ldf")))
             {
                 return databaseName;
             }
@@ -69,8 +70,8 @@ namespace ShipWorks.Data.Administration
 
             while (true)
             {
-                if (!File.Exists(Path.Combine(masterPath, string.Format("{0}{1}.mdf", databaseName, counter))) &&
-                    !File.Exists(Path.Combine(masterPath, string.Format("{0}{1}_log.ldf", databaseName, counter))))
+                if (!File.Exists(Path.Combine(path, string.Format("{0}{1}.mdf", databaseName, counter))) &&
+                    !File.Exists(Path.Combine(path, string.Format("{0}{1}_log.ldf", databaseName, counter))))
                 {
                     return databaseName + counter;
                 }

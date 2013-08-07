@@ -76,15 +76,20 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
             else
             {
-                OpenWindowsFirewallInternal(instance);
+                OpenWindowsFirewallElevated(instance);
             }
         }
 
         /// <summary>
-        /// Opens the windows firewall for the given SQL Instance
+        /// Opens the windows firewall for the given SQL Instance.  The process must already be elevated
         /// </summary>
-        private static void OpenWindowsFirewallInternal(string instance)
+        public static void OpenWindowsFirewallElevated(string instance)
         {
+            if (!MyComputer.HasWindowsFirewall)
+            {
+                return;
+            }
+
             WindowsFirewallUtility.ExecuteSetServiceEnabled("FILEANDPRINT");
 
             string sqlBrowserKeyPath = @"SYSTEM\CurrentControlSet\Services\SQLBrowser";
@@ -200,7 +205,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     string sqlinstance = args[0];
                     log.InfoFormat("Processing request to open firewall: {0}", sqlinstance);
 
-                    OpenWindowsFirewallInternal(sqlinstance);
+                    OpenWindowsFirewallElevated(sqlinstance);
                 }
                 catch (Win32Exception ex)
                 {

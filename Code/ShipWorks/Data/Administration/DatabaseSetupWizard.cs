@@ -66,6 +66,9 @@ namespace ShipWorks.Data.Administration
         // List of instances having their firewall opened during lifetime of wizard
         List<string> firewallOpenedInstances = new List<string>();
 
+        // The SQL Instance that we have loaded data file location for
+        string dataFileSqlInstance = null;
+
         // True if we have created a database that may need to be dropped
         // if the users cancels or goes back.
         bool pendingDatabaseCreated = false;
@@ -109,7 +112,7 @@ namespace ShipWorks.Data.Administration
 
             // Add the pages to detect and install .NET 3.5 SP1 if necessary
             DotNet35DownloadPage dotNet35Page = new DotNet35DownloadPage(
-                wizardPageNewCredentials,
+                wizardPageInstallSqlServer,
                 StartupAction.OpenDatabaseSetup,
                 () =>
                     {
@@ -209,7 +212,7 @@ namespace ShipWorks.Data.Administration
                         // Reload all the SQL Session from last time
                         sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
                         sqlSession.Configuration.Username = "sa";
-                        sqlSession.Configuration.Password = SecureText.Decrypt((string)afterInstallSuccess.Attribute("password"), "sa");
+                        sqlSession.Configuration.Password = SecureText.Decrypt((string) afterInstallSuccess.Attribute("password"), "sa");
                         sqlSession.Configuration.WindowsAuth = false;
 
                         // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
@@ -225,6 +228,19 @@ namespace ShipWorks.Data.Administration
 
                 StartupController.ClearStartupAction();
             }
+
+            if (SqlServerInstaller.IsSqlServer2012Supported)
+            {
+                panelSetupLegacy.Visible = false;
+                radioSetupNewDatabase.Checked = false;
+            }
+            else
+            {
+                panelSetup2012.Visible = false;
+                radioConnectToAnotherPC.Checked = false;
+            }
+
+            panelSetupLegacy.Location = panelSetup2012.Location;
         }
 
         #region Setup or Connect
@@ -234,21 +250,29 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextSetupOrConnect(object sender, WizardStepEventArgs e)
         {
-            if (radioSetupNewDatabase.Checked)
+            if (radioSetupNewDatabase.Checked || radioNewDatabase.Checked)
             {
                 e.NextPage = wizardPageChooseSqlServer;
             }
 
-            if (radioConnectRunningDatabase.Checked)
+            else if (radioConnectRunningDatabase.Checked || radioConnectToAnotherPC.Checked)
             {
                 e.NextPage = wizardPageSelectSqlServerInstance;
                 pageAfterSqlLogin = wizardPageChooseDatabase;
             }
 
-            if (radioRestoreDatabase.Checked)
+            else if (radioRestoreDatabase.Checked || radioRestoreBackup.Checked)
             {
                 e.NextPage = wizardPageRestoreOption;
             }
+        }
+
+        /// <summary>
+        /// Click on the labels for Another PC
+        /// </summary>
+        private void OnClickAnotherPcLabels(object sender, EventArgs e)
+        {
+            radioConnectToAnotherPC.Checked = true;
         }
 
         #endregion
@@ -292,14 +316,36 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region Choose SQL Server
+        #region New Or Existing SQL Server
 
         /// <summary>
-        /// Changing whether they are going to install or select SQL Server
+        /// Stepping into the new or existing SQL Server page
         /// </summary>
-        private void OnChangeInstallSqlServer(object sender, EventArgs e)
+        private void OnSteppingIntoNewOrExistingSqlServer(object sender, WizardSteppingIntoEventArgs e)
         {
-            instanceName.Enabled = radioInstallSqlServer.Checked;
+            if (!e.FirstTime)
+            {
+                return;
+            }
+
+            // If the SQL Session is configured, then the first thing we'll list is the option to use the current SQL Server
+            if (SqlSession.IsConfigured)
+            {
+                radioSqlServerCurrent.Checked = true;
+
+                labelSqlServerCurrentName.Text = string.Format("({0})", SqlSession.Current.IsLocalDb() ? "Local only" : SqlSession.Current.ServerInstance);
+            }
+            // Otherwise, current isn't an option, and installing a new one is the first option
+            else
+            {
+                radioSqlServerRunning.Text = "Choose a running instance of Microsoft SQL Server";
+
+                panelSqlInstanceCurrent.Visible = false;
+                radioInstallSqlServer.Checked = true;
+
+                panelSqlInstanceInstall.Location = panelSqlInstanceCurrent.Location;
+                panelSqlInstanceRunning.Top = panelSqlInstanceInstall.Bottom;
+            }
         }
 
         /// <summary>
@@ -310,6 +356,13 @@ namespace ShipWorks.Data.Administration
             if (radioInstallSqlServer.Checked)
             {
                 instanceName.Text = instanceName.Text.Trim();
+
+                // Save the instance
+                sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                sqlSession.Username = "sa";
+                sqlSession.Password = SqlInstanceUtility.ShipWorksSaPassword;
+                sqlSession.RememberPassword = true;
+                sqlSession.WindowsAuth = false;
 
                 // If we've already installed this instance during this showing of the wizard (which means the user has just stepped back),
                 // we can just skip right to the install step, which will then automatically skip to the next appropriate step.
@@ -325,18 +378,29 @@ namespace ShipWorks.Data.Administration
                     }
                     else
                     {
-                        // Save the instance
-                        sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
-
+                        sqlSession.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
                         e.NextPage = pageFirstPrerequisite;
                     }
                 }
             }
             else
             {
-                pageAfterSqlLogin = wizardPageDatabaseName;
 
-                e.NextPage = wizardPageSelectSqlServerInstance;
+                if (radioSqlServerCurrent.Checked)
+                {
+                    sqlSession.ServerInstance = SqlSession.Current.ServerInstance;
+                    sqlSession.Username = SqlSession.Current.Username;
+                    sqlSession.Password = SqlSession.Current.Password;
+                    sqlSession.WindowsAuth = SqlSession.Current.WindowsAuth;
+
+                    e.NextPage = wizardPageDatabaseName;
+                }
+                else
+                {
+                    pageAfterSqlLogin = wizardPageDatabaseName;
+
+                    e.NextPage = wizardPageSelectSqlServerInstance;
+                }
             }
         }
 
@@ -375,6 +439,58 @@ namespace ShipWorks.Data.Administration
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Changing whether they are going to install or select SQL Server
+        /// </summary>
+        private void OnChangeInstallSqlServerOption(object sender, EventArgs e)
+        {
+            if (!((RadioButton) sender).Checked)
+            {
+                return;
+            }
+
+            List<RadioButton> radios = new List<RadioButton>
+                {
+                    radioSqlServerRunning,
+                    radioSqlServerCurrent,
+                    radioInstallSqlServer
+                };
+
+            foreach (var radio in radios)
+            {
+                if (radio != sender)
+                {
+                    radio.Checked = false;
+                }
+            }
+
+            instanceName.Enabled = radioInstallSqlServer.Checked;
+        }
+
+        /// <summary>
+        /// Clicking one of the labels next to the radio
+        /// </summary>
+        private void OnClickSqlCurrentInstanceLabel(object sender, EventArgs e)
+        {
+            radioSqlServerCurrent.Checked = true;
+        }
+
+        /// <summary>
+        /// Clicking one of the labels next to the radio
+        /// </summary>
+        private void OnClickSqlRunningInstanceLabel(object sender, EventArgs e)
+        {
+            radioSqlServerRunning.Checked = true;
+        }
+
+        /// <summary>
+        /// Clicking one of the labels next to the radio
+        /// </summary>
+        private void OnClickSqlNewInstanceLabel(object sender, EventArgs e)
+        {
+            radioInstallSqlServer.Checked = true;
         }
 
         #endregion
@@ -489,7 +605,7 @@ namespace ShipWorks.Data.Administration
                 if (!sqlSession.IsSqlServer2008OrLater())
                 {
                     // If trying to create a new database in an existing sql instance
-                    if (radioRestoreDatabase.Checked || (radioSetupNewDatabase.Checked && radioSqlServerAlreadyInstalled.Checked))
+                    if (radioRestoreDatabase.Checked || (radioSetupNewDatabase.Checked && radioSqlServerCurrent.Checked))
                     {
                         MessageHelper.ShowError(this,
                             "ShipWorks requires SQL Server.\n\n" +
@@ -661,118 +777,6 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region Create SA
-
-        /// <summary>
-        /// Stepping into the page to specify the SA password
-        /// </summary>
-        private void OnSteppingIntoCreateSa(object sender, WizardSteppingIntoEventArgs e)
-        {
-            if (SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))
-            {
-                e.Skip = true;
-                e.RaiseStepEventWhenSkipping = true;
-            }
-        }
-
-        /// <summary>
-        /// Stepping next on the create SA page
-        /// </summary>
-        private void OnStepNextCreateSa(object sender, WizardStepEventArgs e)
-        {
-            if (saPassword.Text.Length == 0 ||
-                saPassword.Text.IndexOf(" ") != -1 ||
-                saPassword.Text.IndexOf("\"") != -1)
-            {
-                MessageHelper.ShowError(this, "The password cannot be blank, and cannot contain spaces or slashes.");
-
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            // Verify the passwords match
-            if (saPassword.Text != saPasswordAgain.Text)
-            {
-                MessageHelper.ShowError(this, "The password and repeat password do not match.");
-
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            List<string> knownBadPasswords = new List<string>()
-                {
-                    "admin",
-                    "administrator",
-                    "password",
-                    "sa",
-                    "sysadmin"
-                };
-
-            if (knownBadPasswords.Contains(saPassword.Text))
-            {
-                MessageHelper.ShowError(this, "The password you entered is not allowed by SQL Server for security reasons.");
-
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            // Save user\pass info
-            sqlSession.Configuration.Username = "sa";
-            sqlSession.Configuration.Password = saPassword.Text.Trim();
-            sqlSession.Configuration.WindowsAuth = false;
-
-            e.NextPage = wizardPageDownloadSqlServer;
-        }
-
-        #endregion
-
-        #region Download SQL Server
-
-        /// <summary>
-        /// Stepping into the download page for SQL Server
-        /// </summary>
-        private void OnSteppingIntoDownloadSqlServer(object sender, WizardSteppingIntoEventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            // If the installer is already available, just skip over the download.
-            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Install))
-            {
-                e.Skip = true;
-            }
-        }
-
-        /// <summary>
-        /// Download sql server page is being shown
-        /// </summary>
-        private void OnShownDownloadSqlServer(object sender, EventArgs e)
-        {
-            downloadSqlServer.Enabled = true;
-            progressSqlServer.Value = 0;
-            bytesSqlServer.Text = "";
-
-            // Cant click next, have to download
-            NextEnabled = false;
-        }
-
-        /// <summary>
-        /// Download the sql server install from the interapptive server
-        /// </summary>
-        private void OnDownloadSqlServer(object sender, EventArgs e)
-        {
-            sqlDownloader.Download(downloadSqlServer, progressSqlServer, bytesSqlServer);
-        }
-
-        /// <summary>
-        /// Cancel the current download
-        /// </summary>
-        private void OnCancelSqlServerDownload(object sender, CancelEventArgs e)
-        {
-            sqlDownloader.OnCancelDownload(sender, e);
-        }
-
-        #endregion
-
         #region Install SQL Server
 
         /// <summary>
@@ -803,14 +807,16 @@ namespace ShipWorks.Data.Administration
             // If its installed now, we are ok to move on.
             if (SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))
             {
-                e.NextPage = wizardPageWindowsFirewall;
+                e.NextPage = wizardPageDatabaseName;
                 return;
             }
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // Bring the installing message up and dislabe and the browsing buttons
-            labelInstallingSqlServer.BringToFront();
+            // Bring the installing message up and diable and the browsing buttons
+            panelSqlServerInstallProgress.Location = panelSqlServerInstallReady.Location;
+            panelSqlServerInstallProgress.Visible = true;
+            panelSqlServerInstallReady.Visible = false;
             NextEnabled = false;
             BackEnabled = false;
 
@@ -819,16 +825,65 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                sqlInstaller.InstallSqlServer(instanceName.Text, saPassword.Text);
+                sqlInstaller.InstallSqlServer(instanceName.Text, SqlInstanceUtility.ShipWorksSaPassword);
+
+                progressPreparing.Value = 0;
+                progressTimer.Start();
+                progressTimer.Tag = null;
             }
             catch (Win32Exception ex)
             {
-                MessageHelper.ShowError(this, "An error occurred while installing SQL Server:\n\n" + ex.Message);
+                if (ex.NativeErrorCode == 1602 || ex.NativeErrorCode == 1603 || ex.NativeErrorCode == 1223)
+                {
+                    MessageHelper.ShowInformation(this, "You must click 'Yes' when asked to allow ShipWorks to make changes to your computer.");
+                }
+                else
+                {
+                    MessageHelper.ShowError(this, "An error occurred while installing SQL Server:\n\n" + ex.Message);
+                }
 
                 // Reset the gui
-                labelInstallSqlServer.BringToFront();
+                panelSqlServerInstallProgress.Visible = false;
+                panelSqlServerInstallReady.Visible = true;
                 NextEnabled = true;
                 BackEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Simple UI timer we use to keep the progress of SQL Server install aproximated
+        /// </summary>
+        void OnInstallSqlServerProgressTimer(object sender, EventArgs e)
+        {
+            FileInfo fileInfo = new FileInfo(sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install));
+            long expectedFileSize = sqlInstaller.GetInstallerFileLength(SqlServerInstallerPurpose.Install);
+
+            // Not downloaded at all
+            if (!fileInfo.Exists)
+            {
+                progressPreparing.Value = 0;
+            }
+            // In the process of downloading
+            else if (fileInfo.Length < expectedFileSize)
+            {
+                progressPreparing.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
+
+                log.InfoFormat("Updated value to {0}.  ({1} of {2})", progressPreparing.Value, fileInfo.Length, expectedFileSize);
+            }
+            // Fully downloaded
+            else
+            {
+                Stopwatch elapsed = progressTimer.Tag as Stopwatch;
+                if (elapsed == null)
+                {
+                    elapsed = Stopwatch.StartNew();
+                    progressTimer.Tag = elapsed;
+                }
+
+                // Download counts as 33%.  After that, installing counts all the way up to 100, and we progress it assuming it will take 5 minutes
+                progressPreparing.Value = 33 + (int) ((elapsed.Elapsed.TotalSeconds / 300.0) * 0.66 * 100);
+
+                log.InfoFormat("Installing - updated progress to {0}", progressPreparing.Value);
             }
         }
 
@@ -843,10 +898,17 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
+            progressTimer.Stop();
+
             // If it was successful, we should now be able to connect.
             if (sqlInstaller.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))
             {
+                sqlSession.Configuration.Username = "sa";
+                sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
+                sqlSession.Configuration.RememberPassword = true;
+                sqlSession.Configuration.WindowsAuth = false;
                 sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+
                 installedInstances.Add(instanceName.Text);
 
                 // Since we installed it, we can do this without asking
@@ -877,11 +939,13 @@ namespace ShipWorks.Data.Administration
                 MessageHelper.ShowError(this,
                     "SQL Server was not installed.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
 
-                // Reset the gui
-                labelInstallSqlServer.BringToFront();
                 NextEnabled = true;
                 BackEnabled = true;
             }
+
+            // Reset the gui
+            panelSqlServerInstallProgress.Visible = false;
+            panelSqlServerInstallReady.Visible = true;
         }
 
         /// <summary>
@@ -898,57 +962,6 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region Windows Firewall
-
-        /// <summary>
-        /// Stepping into the windows firewall page
-        /// </summary>
-        private void OnSteppingIntoWindowsFirewall(object sender, WizardSteppingIntoEventArgs e)
-        {
-            e.Skip = !MyComputer.HasWindowsFirewall || firewallOpenedInstances.Contains(sqlSession.Configuration.ServerInstance);
-
-            if (!e.Skip)
-            {
-                // These may have been set the other way by updating windows firewall from another sql instance install.  Not likely
-                // to do to sql installs in one wizard, but possible.
-                updateWindowsFirewall.Enabled = true;
-                firewallUpdatedPicture.Visible = false;
-                firewallUpdatedLabel.Visible = false;
-            }
-        }
-
-        /// <summary>
-        /// Update the windows firewall to work with ShipWorks
-        /// </summary>
-        private void OnUpdateWindowsFirewall(object sender, EventArgs e)
-        {
-            UseWaitCursor = true;
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
-                {
-                    SqlWindowsFirewallUtility.OpenWindowsFirewall();
-                }
-
-                firewallOpenedInstances.Add(sqlSession.Configuration.ServerInstance);
-
-                updateWindowsFirewall.Enabled = false;
-                firewallUpdatedPicture.Visible = true;
-                firewallUpdatedLabel.Visible = true;
-
-                UseWaitCursor = false;
-            }
-            catch (WindowsFirewallException ex)
-            {
-                UseWaitCursor = false;
-                MessageHelper.ShowError(this, ex.Message);
-            }
-        }
-
-        #endregion
-
         #region Create Database
 
         /// <summary>
@@ -960,6 +973,20 @@ namespace ShipWorks.Data.Administration
             if (pendingDatabaseCreated)
             {
                 DropPendingDatabase();
+            }
+
+            // See if we need to load up where the data files will go
+            if (dataFileSqlInstance != sqlSession.ServerInstance)
+            {
+                linkChooseDataLocation.Visible = true;
+                panelDataFiles.Visible = false;
+
+                using (SqlConnection con = sqlSession.OpenConnection())
+                {
+                    pathDataFiles.Text = SqlUtility.GetMasterDataFilePath(con);
+                }
+
+                dataFileSqlInstance = sqlSession.ServerInstance;
             }
         }
 
@@ -988,7 +1015,7 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
-                    SqlDatabaseCreator.CreateDatabase(name, con);
+                    SqlDatabaseCreator.CreateDatabase(name, pathDataFiles.Text, con);
                 }
 
                 sqlSession.Configuration.DatabaseName = name;
@@ -1058,6 +1085,28 @@ namespace ShipWorks.Data.Administration
 
             pendingDatabaseCreated = false;
             pendingDatabaseName = "";
+        }
+
+        /// <summary>
+        /// Clicking the link to choose the data file location
+        /// </summary>
+        private void OnChooseDataFileLocation(object sender, EventArgs e)
+        {
+            linkChooseDataLocation.Visible = false;
+            panelDataFiles.Visible = true;
+        }
+
+        /// <summary>
+        /// Browse for the database file location
+        /// </summary>
+        private void OnBrowseDatabaseLocation(object sender, EventArgs e)
+        {
+            databaseLocationBrowserDialog.SelectedPath = pathDataFiles.Text;
+
+            if (databaseLocationBrowserDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                pathDataFiles.Text = databaseLocationBrowserDialog.SelectedPath;
+            }
         }
 
         #endregion
@@ -1451,7 +1500,7 @@ namespace ShipWorks.Data.Administration
             // If we created the admin user, go ahead and log that user in
             if (adminUserCreated)
             {
-                UserSession.Logon(swUsername.Text.Trim(), swPassword.Text, swAutomaticLogon.Checked);
+                UserSession.Logon(swUsername.Text.Trim(), swPassword.Text, true);
             }
         }
 
@@ -1467,6 +1516,7 @@ namespace ShipWorks.Data.Administration
         }
 
         #endregion
+
     }
 }
 

@@ -139,7 +139,6 @@ Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueNam
 Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler; Check: ShipWorksVersionDoesNotHaveScheduler;
 
 [Run]
-Filename: {app}\ShipWorks.exe; Parameters: "/cmd:openshipworksfirewall"; Flags: runhidden runascurrentuser;  Check: NotNeedRestart
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: NotNeedRestart
 

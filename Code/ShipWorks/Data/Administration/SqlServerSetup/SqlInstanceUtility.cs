@@ -29,11 +29,11 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Get the name of the LocalDB instance we display to users
+        /// The default password ShipWorks uses for sa when it installs new SQL instances
         /// </summary>
-        public static string LocalDbDisplayName
+        public static string ShipWorksSaPassword
         {
-            get { return "(Local)"; }
+            get { return "ShipW@rks1"; }
         }
 
         /// <summary>
@@ -63,7 +63,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     return databaseName;
                 }
 
-                string baseName = "ShipWorks";
+                // We put the underscore so we can try to not conflict with databases users may end up creating on their own
+                string baseName = "_ShipWorks";
 
                 int largestIndex = -1;
 

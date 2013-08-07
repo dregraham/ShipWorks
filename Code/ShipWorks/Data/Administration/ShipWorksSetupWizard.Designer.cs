@@ -33,7 +33,6 @@
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.labelWelcomeNext = new System.Windows.Forms.Label();
-            this.labelWelcomeDetailed = new System.Windows.Forms.Label();
             this.labelWelcomeGlad = new System.Windows.Forms.Label();
             this.linkDetailedSetup = new ShipWorks.UI.Controls.LinkControl();
             this.labelWelcomeAdvanced = new System.Windows.Forms.Label();
@@ -75,22 +74,43 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.SuspendLayout();
             // 
+            // next
+            // 
+            this.next.Location = new System.Drawing.Point(380, 343);
+            // 
+            // cancel
+            // 
+            this.cancel.Location = new System.Drawing.Point(461, 343);
+            // 
+            // back
+            // 
+            this.back.Location = new System.Drawing.Point(299, 343);
+            // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageUser);
+            this.mainPanel.Controls.Add(this.wizardPageLocalDb);
+            this.mainPanel.Size = new System.Drawing.Size(548, 271);
+            // 
+            // etchBottom
+            // 
+            this.etchBottom.Location = new System.Drawing.Point(0, 333);
+            this.etchBottom.Size = new System.Drawing.Size(552, 2);
             // 
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.sw_cubes_big;
-            this.pictureBox.Location = new System.Drawing.Point(464, 3);
+            this.pictureBox.Location = new System.Drawing.Point(486, 3);
             this.pictureBox.Size = new System.Drawing.Size(54, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            // 
+            // topPanel
+            // 
+            this.topPanel.Size = new System.Drawing.Size(548, 56);
             // 
             // wizardPageWelcome
             // 
             this.wizardPageWelcome.Controls.Add(this.kryptonBorderEdge);
             this.wizardPageWelcome.Controls.Add(this.labelWelcomeNext);
-            this.wizardPageWelcome.Controls.Add(this.labelWelcomeDetailed);
             this.wizardPageWelcome.Controls.Add(this.labelWelcomeGlad);
             this.wizardPageWelcome.Controls.Add(this.linkDetailedSetup);
             this.wizardPageWelcome.Controls.Add(this.labelWelcomeAdvanced);
@@ -101,7 +121,7 @@
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
             this.wizardPageWelcome.NextRequiresElevation = true;
-            this.wizardPageWelcome.Size = new System.Drawing.Size(526, 278);
+            this.wizardPageWelcome.Size = new System.Drawing.Size(548, 271);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Welcome to ShipWorks";
             this.wizardPageWelcome.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
@@ -115,7 +135,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(88, 49);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(320, 1);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(342, 1);
             this.kryptonBorderEdge.TabIndex = 50;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -127,16 +147,6 @@
             this.labelWelcomeNext.Size = new System.Drawing.Size(104, 13);
             this.labelWelcomeNext.TabIndex = 49;
             this.labelWelcomeNext.Text = "Click \'Next\' to begin.";
-            // 
-            // labelWelcomeDetailed
-            // 
-            this.labelWelcomeDetailed.AutoSize = true;
-            this.labelWelcomeDetailed.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelWelcomeDetailed.Location = new System.Drawing.Point(134, 93);
-            this.labelWelcomeDetailed.Name = "labelWelcomeDetailed";
-            this.labelWelcomeDetailed.Size = new System.Drawing.Size(115, 13);
-            this.labelWelcomeDetailed.TabIndex = 47;
-            this.labelWelcomeDetailed.Text = "for the detailed setup.";
             // 
             // labelWelcomeGlad
             // 
@@ -154,11 +164,11 @@
             this.linkDetailedSetup.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkDetailedSetup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkDetailedSetup.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.linkDetailedSetup.Location = new System.Drawing.Point(86, 93);
+            this.linkDetailedSetup.Location = new System.Drawing.Point(86, 77);
             this.linkDetailedSetup.Name = "linkDetailedSetup";
-            this.linkDetailedSetup.Size = new System.Drawing.Size(53, 13);
+            this.linkDetailedSetup.Size = new System.Drawing.Size(141, 13);
             this.linkDetailedSetup.TabIndex = 45;
-            this.linkDetailedSetup.Text = "Click here";
+            this.linkDetailedSetup.Text = "Switch to the detailed setup";
             this.linkDetailedSetup.Click += new System.EventHandler(this.OnLinkDetailedSetup);
             // 
             // labelWelcomeAdvanced
@@ -167,9 +177,9 @@
             this.labelWelcomeAdvanced.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelWelcomeAdvanced.Location = new System.Drawing.Point(86, 60);
             this.labelWelcomeAdvanced.Name = "labelWelcomeAdvanced";
-            this.labelWelcomeAdvanced.Size = new System.Drawing.Size(227, 26);
+            this.labelWelcomeAdvanced.Size = new System.Drawing.Size(227, 13);
             this.labelWelcomeAdvanced.TabIndex = 44;
-            this.labelWelcomeAdvanced.Text = "Is ShipWorks already installed on another PC?\r\nAre you a super geek?";
+            this.labelWelcomeAdvanced.Text = "Is ShipWorks already installed on another PC?";
             // 
             // pictureBoxCubes
             // 
@@ -193,7 +203,7 @@
             this.wizardPageLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageLocalDb.Location = new System.Drawing.Point(0, 0);
             this.wizardPageLocalDb.Name = "wizardPageLocalDb";
-            this.wizardPageLocalDb.Size = new System.Drawing.Size(526, 278);
+            this.wizardPageLocalDb.Size = new System.Drawing.Size(548, 271);
             this.wizardPageLocalDb.TabIndex = 0;
             this.wizardPageLocalDb.Title = "ShipWorks Setup";
             this.wizardPageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInstallLocalDb);
@@ -313,7 +323,7 @@
             this.wizardPageUser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageUser.Location = new System.Drawing.Point(0, 0);
             this.wizardPageUser.Name = "wizardPageUser";
-            this.wizardPageUser.Size = new System.Drawing.Size(526, 278);
+            this.wizardPageUser.Size = new System.Drawing.Size(548, 271);
             this.wizardPageUser.TabIndex = 0;
             this.wizardPageUser.Title = "ShipWorks Account";
             this.wizardPageUser.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCreateUsername);
@@ -417,7 +427,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(548, 378);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MinimumSize = new System.Drawing.Size(554, 406);
             this.Name = "ShipWorksSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
@@ -454,7 +466,6 @@
         private UI.Wizard.WizardPage wizardPageWelcome;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private System.Windows.Forms.Label labelWelcomeNext;
-        private System.Windows.Forms.Label labelWelcomeDetailed;
         private System.Windows.Forms.Label labelWelcomeGlad;
         private UI.Controls.LinkControl linkDetailedSetup;
         private System.Windows.Forms.Label labelWelcomeAdvanced;

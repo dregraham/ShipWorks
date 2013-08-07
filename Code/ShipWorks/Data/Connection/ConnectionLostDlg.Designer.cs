@@ -36,20 +36,21 @@ namespace ShipWorks.Data.Connection
             this.label1 = new System.Windows.Forms.Label();
             this.cancel = new System.Windows.Forms.Button();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize) (this.headerImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.headerImage)).BeginInit();
             this.SuspendLayout();
             // 
             // headerImage
             // 
-            this.headerImage.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.headerImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.headerImage.Cursor = System.Windows.Forms.Cursors.Default;
-            this.headerImage.Image = ((System.Drawing.Image) (resources.GetObject("headerImage.Image")));
+            this.headerImage.Image = ((System.Drawing.Image)(resources.GetObject("headerImage.Image")));
             this.headerImage.Location = new System.Drawing.Point(12, 9);
             this.headerImage.Name = "headerImage";
             this.headerImage.Size = new System.Drawing.Size(48, 48);
             this.headerImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.headerImage.TabIndex = 6;
             this.headerImage.TabStop = false;
+            this.headerImage.Click += new System.EventHandler(this.OnClickHeaderImage);
             // 
             // reconnect
             // 
@@ -62,7 +63,7 @@ namespace ShipWorks.Data.Connection
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(66, 43);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(222, 23);
@@ -76,7 +77,7 @@ namespace ShipWorks.Data.Connection
             this.label1.Size = new System.Drawing.Size(330, 34);
             this.label1.TabIndex = 173;
             this.label1.Text = "ShipWorks has lost its connection to the database.  ShipWorks will continue to tr" +
-                "y to reconnect, or you can exit at any time.";
+    "y to reconnect, or you can exit at any time.";
             // 
             // cancel
             // 
@@ -105,7 +106,7 @@ namespace ShipWorks.Data.Connection
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.headerImage);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -115,7 +116,7 @@ namespace ShipWorks.Data.Connection
             this.Text = "Database Connection Lost";
             this.Load += new System.EventHandler(this.OnLoad);
             this.Shown += new System.EventHandler(this.OnShown);
-            ((System.ComponentModel.ISupportInitialize) (this.headerImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.headerImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

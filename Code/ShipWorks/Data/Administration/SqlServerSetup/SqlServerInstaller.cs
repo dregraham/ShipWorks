@@ -387,9 +387,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// The actual installation that occurs in a seperate elevated process
         /// </summary>
-        private static void InstallSqlServerInternal(string installerPath, string instanceName, string sapassword)
+        private void InstallSqlServerInternal(string instanceName, string sapassword)
         {
-            string args = GetInstallArgs(instanceName, sapassword, false);
+            // First we have to make sure it's downloaded
+            string installerPath = DownloadSqlServer(SqlServerInstallerPurpose.Install);
+
+            string args = GetInstallArgs(instanceName, sapassword, true);
 
             log.InfoFormat("Executing: {0}", args);
 
@@ -403,6 +406,25 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 process.WaitForExit();
 
                 exitCode = process.ExitCode;
+
+                // If the install was a succses, open the firewall as long as we're already elevated
+                if (exitCode == 0 || exitCode == ExitCodeSuccessRebootRequired)
+                {
+                    try
+                    {
+                        SqlWindowsFirewallUtility.OpenWindowsFirewallElevated(instanceName);
+
+                        log.Info("Windows firewall opened.");
+                    }
+                    catch (Win32Exception ex)
+                    {
+                        log.Error("Failed to open windows firewall", ex);
+                    }
+                    catch (WindowsFirewallException ex)
+                    {
+                        log.Error("Failed to open windows firewall", ex);
+                    }
+                }
             }
             catch (Win32Exception ex)
             {
@@ -1331,8 +1353,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                 // We need to initialize an installer to get the correct installer package exe's
                                 SqlServerInstaller installer = new SqlServerInstaller();
                                 installer.InitializeForCurrentSqlSession();
-
-                                InstallSqlServerInternal(installer.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install), instance, sapassword);
+                                installer.InstallSqlServerInternal(instance, sapassword);
 
                                 break;
                             }

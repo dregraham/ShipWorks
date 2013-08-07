@@ -126,11 +126,11 @@ namespace Interapptive.Shared.Data
                 }
                 catch (SqlException ex)
                 {
-                    throw new SqlScriptException(name, i, ex);
+                    throw new SqlScriptException(name, i, ex) { ShowScriptDetails = batches.Count > 1 };
                 }
                 catch (Exception ex)
                 {
-                    throw new SqlScriptException(name, i, ex);
+                    throw new SqlScriptException(name, i, ex) { ShowScriptDetails = batches.Count > 1 };
                 }
             }
         }

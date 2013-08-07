@@ -61,7 +61,6 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -9727,6 +9726,9 @@
     <None Include="Resources\flag_yellow.png" />
     <None Include="Resources\help2_16.png" />
     <None Include="Resources\iparcelLogo.jpg" />
+    <None Include="Resources\client_network1.png" />
+    <None Include="Resources\data_gear.png" />
+    <None Include="Resources\data_into1.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

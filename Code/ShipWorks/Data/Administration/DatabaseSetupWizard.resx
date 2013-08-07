@@ -118,78 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="pictureBox.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-</value>
-  </data>
   <data name="pictureBoxRestoreDatabase.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -228,92 +156,6 @@
         7L2v6v/05ZCS0j0pOPjmNrL51LFjmdcOHbpSQalvo/HbRSnvorBpaPupXr3aN2/Rov1hFhYujqamrh/S
         TyeM/cMvMASB4D9jciqHn9mdiQAAAABJRU5ErkJggg==
 </value>
-  </data>
-  <data name="pictureBoxConnectRunningDatabase.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-</value>
-  </data>
-  <data name="pictureBoxSetupNewDatabase.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK6QAA
-        CukB/XXO0wAAB/pJREFUWEftVmtQlOcZ/Uynf2rSpj8yk0ymjb2lSUzDTaBIFBWbImhUZMBgECO3kZty
-        EVFwAQNVbiqgKIiIwHJflpvcAnITCBAg3BdhAVlYRC4uFBZ3cff0fT8WK42IyUxn+qNn5pvd4fKd8z7P
-        ec77MP+TAMOsg8Vbv0To1g3QYn6Lzcx72Mq8AzXmDfK711R/9t8BIVsPbeZP+AOju9gd6D9s+aVPr9fp
-        2BZOKL82+GZVaWRuY3pcQ3t8fEdfXFzzUHR0w1BERK0wOLi8IzCwuN7Xl1/g5ZUZ5+6ezDl2LN7C0zP7
-        96pXrw1C/iY5pYaU48R5yAnpmRlLU4is7CFytMeglxcEQZHKtoh0ZXP6XWVlbp+ytHQKxcUTuHPnIfLz
-        xUoebwjp6f24dasdV67UIyioGB4eKUpr6+u9lpZXPHR0jv9cRfVDsCfXZTSnz/snTpzzw/TnuyAXXcK8
-        oz7mDmti1nITpvYYQnzND8IqHupjS1HC66PEyM0dQU6OCNnZD0BFZGUNskIyMoTs97S0PpibB2PHjpO3
-        VXQrwfZci3kf6oyxyM1tCk7bsGiujsVSC8jLzCBv9MSc9Z8hvWGOJ6IoCL9yRmPIbdy9VY08QkzJKXFm
-        5gAhpY+Q/Z6S0osbN1pw7twd2Nldh76+64SKciVI2V/H+4we3mPsHhtvl8os1KGcCoWyyQMYNQbgB2Wd
-        FZRKf8gO/wXzljswFhGBfl45mqtHUV09jZKSMfD5Q0hO7kRUVB0CAgpw4kQSbGyiYWoaRMmhp+eyigBD
-        4vAyO0eMh5TJvvV5+jTFDIoaZ2DSEOh8E+h6C3hkgCfJxpg9o4bJ/R+j2+YIvvG/hqTwQkRG1iE0tILt
-        OYeTi9Ons+Dmlgxb22s4eDAUJiYcbNvmAV1dp3EV5UpAk9lAKrAbbzMxC0FGckX/l4DECGj/BdDEAI3k
-        EbwD5dMASONNMG26EYOH9qHSPwoZ4bkgk4BLl6px4cI37Ml9fLLh7s5ly/68AG3tY2IV5UqQsfsdEbEb
-        nzCxc7s3PlkM/RTKia+AFkK8LKDzDSiGjLGQaIRpk48wtO9zVHJeXYCBgTu0tOxGVJQrAR3mXWLCvxMB
-        IfOWH0rkqeZQtJ8Bhj5YEtH6GqmIOeSVlpB320D2JB7j1WGouRiDtEuFLxXwxRdhrIDt2z2hoWHbo6Jc
-        CexgfkVEfEqmwFliojuntN9IDGcPxYgvMGcHTBnhaY8bZPWukOz5EI+2a6PdxRtVV7hIia5GTMx3xAe1
-        xAd38fXXhTh7Ngeenqk4ciQKe/b448CBf7BmJALmVZQrQcbwZ6QNG4mAfaMHrSYUsjgoEk2hjP4bFvMs
-        oZDYYP68Ph67a2DM+CO0HNgNvhMHN05GI+BsNry9M+HllU5Dhz25q+ttuLgkwNn5FvtJBRgYuEFd3XZG
-        RflDkAr8Gn9k/jr6febEXIIvFvYS1/vshNTsE8iLbSFLOYq5vZsx7nIUgvAYNMTeQWlGJxs+dN5p+l2/
-        3oTw8Ep27qmg//SAhob9pIruxYD3BxvaUnPuP0rkYSo8DNMeDpg+cgBTTmaY6bqKTqfTqPGLREkIF7mx
-        VUhK7EJcXOsrm5C04MVjuAyaiJXpHbz+ohaM5VdgmMuHMJaLnrAEPOgqQN3FNJRE5SE7rhap5NRJSd0/
-        SgCZgn4V1eooLJwumhqbhfA7MQaqeyEgYlqzGtBU0oASbjOyuJ1syVNT779UAPWDg0MsK2DXLl/s3x9I
-        KmD38hZQFBRM1IjFZOokC2hqEoPP60VF+RjKyydRUDBKMl7IXjQ066kI2vsXTQFNQjOz8+xjZXUZe/cG
-        QE3NVqqiWR1EQGV/PzAwAIyPAzMzJAZax8iV24v4+FZisiqQu5+N3WUyGr107GjZKfHx44nsc+pUBhvH
-        //aA3doCyN1e1t+vxOAg0N0tJ1WYQ22tBPX1EvJdgsbGx7h37zFKSyeRl0crMgAuV0DEteHq1W/ZKvj7
-        57MteMEUrC0gP/9hSkeHDENDSwKam+dYwrKycXLtDpP+3yc3nmBND6wyBUIVzerIyRlPFYlk6OtTordX
-        gZaW+WcC8vKGSf/7XsmEywKWo5gaUVvbQaKiWR18/miuWKzA5KSUkI6Q8k+T8s+isnIKhYVisuEMPNt2
-        aOlv3vx+hQkDA4vYK/nkyTS2/0ZGPqwRaSXU1GzWbgGfL+YJBIsQiQCplKwCXRNk0ehmUy44uIyYr4Sc
-        tgaxsc3sQ5cP+vMzZ3hwcopnM//o0avsJ60AXUpoFG/dSqPYbvUoXgafP5xCBVAPdHXJ0dYmJRMhw/Cw
-        gjVmW5scRUViJJIUpKLo8klPT9tA20FFhYVVsNNBc8DCIuS5ILJfuwU83oh7Xd0MW4GeniUT1tRQ14+T
-        SizlPpfby7aALpsJCR2skGUP0AlYzYSamja1KprV0daG9cQHna2tUgiFNAOkxISSn2RCe/sYHDp0kRWw
-        aZPDgra222YVzcvR2oq3i4v7q4qLh5VNTbNk9mdRUUGTUPRMAD398wIuX65hvUBNSKtAw4kK2LnzFCm9
-        wwN9fe8tqte/KrCuqemf5jye+F5SUo8iLY2W/f6z0y/v/tQLdPWmZqQVoNewtXUkDA1PKbW0HAV6eu4e
-        urqu61Uv/WnIyZn8TXR042FS5ogLF0qL/Pzy2onrRSR+J4jLJ4jZHpLtR2BqGlj52Wc+cVu2nHDU0XH7
-        mPzruqU3/B+rgWH+BT1PVWKQcaRHAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="labelChooseNewOrExistingSqlServer.Text" xml:space="preserve">
-    <value>The ShipWorks database will be created in Microsoft SQL Server.  ShipWorks can install a new instance of SQL Server, or you can create a ShipWorks database in an instance that is already installed.</value>
   </data>
   <data name="pictureServerSearching.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -358,6 +200,42 @@ It is also possible to manually enter the instance name in the form:
      ComputerName\InstanceName
 </value>
   </data>
+  <data name="picturePreparing.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        JApAKSMhADsAAAAAAAAAAAA=
+</value>
+  </data>
   <metadata name="fieldLengthProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>326, 17</value>
   </metadata>
@@ -380,9 +258,10 @@ It is also possible to manually enter the instance name in the form:
   <metadata name="openBackupFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 17</value>
   </metadata>
-  <data name="label14.Text" xml:space="preserve">
-    <value>Windows Firewall needs to be configured to allow ShipWorks to work on multiple computers.  
-
-You can skip this step, but if you run ShipWorks on another computer it may not be able to connect to the ShipWorks database.</value>
-  </data>
+  <metadata name="databaseLocationBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>484, 17</value>
+  </metadata>
+  <metadata name="progressTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>710, 17</value>
+  </metadata>
 </root>

@@ -244,5 +244,29 @@ namespace Interapptive.Shared.Data
             return result != 0;
         }
 
+        /// <summary>
+        /// Get the file path to the master database mdf file
+        /// </summary>
+        public static string GetMasterDataFilePath(SqlConnection con)
+        {
+            object fileResult = SqlCommandProvider.ExecuteScalar(con, "select filename from master..sysdatabases where name = 'master'");
+
+            if (fileResult == null || fileResult is DBNull)
+            {
+                throw new SqlScriptException(string.Format("The user you are connecting to SQL Server as ('{0}') does not have permissions to create a database.",
+                    SqlUtility.GetUsername(con)));
+            }
+
+            // Get the filepath to master
+            string masterPath = Path.GetDirectoryName((string) fileResult);
+
+            // We need it to end in a slash
+            if (!masterPath.EndsWith("\\"))
+            {
+                masterPath += "\\";
+            }
+
+            return masterPath;
+        }
     }
 }

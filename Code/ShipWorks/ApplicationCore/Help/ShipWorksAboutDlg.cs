@@ -46,11 +46,12 @@ namespace ShipWorks.ApplicationCore.Help
 
             if (SqlSession.IsConfigured)
             {
-                labelSqlServer.Text = SqlSession.Current.Configuration.ServerInstance;
-                labelDatabase.Text = SqlSession.Current.Configuration.DatabaseName;
-                labelCredentials.Text = FormatCredentials(SqlSession.Current.Configuration);
+                labelDatabase.Text = SqlSession.Current.IsLocalDb() ? "Local only" : string.Format("'{0}' on {1}", SqlSession.Current.DatabaseName, SqlSession.Current.ServerInstance);
             }
-
+            else
+            {
+                labelDatabase.Text = "(Not connected)";
+            }
 
             Refresh();
             LoadUsage();
@@ -59,9 +60,9 @@ namespace ShipWorks.ApplicationCore.Help
         /// <summary>
         /// Open the browser to the support forum
         /// </summary>
-        private void OnSupportForum(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnGetSupport(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/support", this);
+            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/getsupport.php", this);
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Help
         /// </summary>
         private void OnEmailSupport(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenMailTo("support@interapptive.com", this);
+            WebHelper.OpenMailTo("support@shipworks.com", this);
         }
 
         /// <summary>

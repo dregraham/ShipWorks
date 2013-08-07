@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Administration
         {
             using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
             {
-                Hide();
+                BeginInvoke(new MethodInvoker(Hide));
 
                 DialogResult = dlg.ShowDialog(this);
             }
@@ -354,6 +354,7 @@ namespace ShipWorks.Data.Administration
             UserSession.Logon(username, swPassword.Text, true);
 
             // We're done - the AddStoreWizard should open next
+            e.NextPage = CurrentPage;
             DialogResult = DialogResult.OK;
         }
 

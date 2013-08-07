@@ -20,6 +20,11 @@ namespace Interapptive.Shared.Data
         bool executionException = false;
 
         /// <summary>
+        /// Indicates if script details (if available) will be shown
+        /// </summary>
+        bool showScriptDetails = true;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public SqlScriptException(string name, int batch, Exception inner)
@@ -40,13 +45,22 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Indicates if script details (if available) will be shown
+        /// </summary>
+        public bool ShowScriptDetails
+        {
+            get { return showScriptDetails; }
+            set { showScriptDetails = value; }
+        }
+
+        /// <summary>
         /// Format the message of the exception.
         /// </summary>
         public override string Message
         {
             get
             {
-                if (executionException)
+                if (executionException && showScriptDetails)
                 {
                     StringBuilder message = new StringBuilder();
                     message.Append(base.Message + "\n\n");

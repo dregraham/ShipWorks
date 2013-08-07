@@ -229,6 +229,8 @@ namespace ShipWorks
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + StampsAccountManager.Accounts.Count) > 0);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => (SqlSession.IsConfigured && !SqlSession.Current.IsLocalDb()));
+            ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => (SqlSession.IsConfigured && !SqlSession.Current.IsLocalDb()));
 
             // Prepare stuff that needs prepare for dealing with UI changes for Editions
             PrepareEditionManagedUI();
@@ -274,29 +276,7 @@ namespace ShipWorks
             {
                 log.InfoFormat("SqlSession not configured; showing welcome.");
 
-                if (SqlServerInstaller.IsSqlServer2012Supported)
-                {
-                    using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
-                    {
-                        wizard.ShowDialog(this);
-                    }
-                }
-                else
-                {
-                    using (WelcomeDlg welcomeDlg = new WelcomeDlg())
-                    {
-                        if (welcomeDlg.ShowDialog(this) != DialogResult.OK)
-                        {
-                            return;
-                        }
-                    }
-
-                    using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
-                    {
-                        dlg.ShowDialog(this);
-                    }
-                }
-
+                OpenShipWorksSetup();
             }
 
             // If its still not setup, dont go on
@@ -307,6 +287,27 @@ namespace ShipWorks
 
             // Initiate the logon sequence
             InitiateLogon();
+        }
+
+        /// <summary>
+        /// Open the appropriate ShipWorks setup \ database setup window based on the current state of the system
+        /// </summary>
+        private bool OpenShipWorksSetup()
+        {
+            if (SqlServerInstaller.IsSqlServer2012Supported)
+            {
+                using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                {
+                    return wizard.ShowDialog(this) == DialogResult.OK;
+                }
+            }
+            else
+            {
+                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                {
+                    return dlg.ShowDialog(this) == DialogResult.OK;
+                }
+            }
         }
 
         /// <summary>
@@ -1301,7 +1302,6 @@ namespace ShipWorks
             if (!UserSession.IsLoggedOn)
             {
                 mainMenuItemBackupDatabase.Visible = false;
-                mainMenuItemRestoreDatabase.Visible = false;
             }
         }
 
@@ -1361,16 +1361,13 @@ namespace ShipWorks
                     SaveCurrentUserSettings();
                 }
 
-                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                if (OpenShipWorksSetup() || scope.DatabaseRestoreInitiated)
                 {
-                    if (dlg.ShowDialog(this) == DialogResult.OK || scope.DatabaseRestoreInitiated)
-                    {
-                        needLogon = true;
+                    needLogon = true;
 
-                        // If they were in the middle of upgrading MSDE to 08... and had to reboot, or whatever.  But then chose Setup Database and finished successfully
-                        // then we need to forget about that MSDE upgrade that was in the middle of happening, the user has moved on.
-                        SqlServerInstaller.CancelMsdeMigrationInProgress();
-                    }
+                    // If they were in the middle of upgrading MSDE to 08... and had to reboot, or whatever.  But then chose Setup Database and finished successfully
+                    // then we need to forget about that MSDE upgrade that was in the middle of happening, the user has moved on.
+                    SqlServerInstaller.CancelMsdeMigrationInProgress();
                 }
             }
 

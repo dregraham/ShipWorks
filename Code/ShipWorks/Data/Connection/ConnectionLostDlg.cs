@@ -15,6 +15,7 @@ using ShipWorks.ApplicationCore.Crashes;
 using System.Diagnostics;
 using Interapptive.Shared.UI;
 using ShipWorks.UI.Utility;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Connection
 {
@@ -186,6 +187,17 @@ namespace ShipWorks.Data.Connection
             }
 
             return connected;
+        }
+
+        /// <summary>
+        /// Easter egg access to the call stack
+        /// </summary>
+        private void OnClickHeaderImage(object sender, EventArgs e)
+        {
+            if (InterapptiveOnly.MagicKeysDown)
+            {
+                MessageHelper.ShowMessage(this, new StackTrace().ToString());
+            }
         }
     }
 }
