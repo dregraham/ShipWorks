@@ -43,6 +43,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.allStoresLabel = new System.Windows.Forms.Label();
             this.allStoresImage = new System.Windows.Forms.PictureBox();
+            this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.allStoresImage)).BeginInit();
@@ -214,10 +215,22 @@
             this.allStoresImage.TabIndex = 17;
             this.allStoresImage.TabStop = false;
             // 
+            // reclaimDiskSpaceCheckbox
+            // 
+            this.reclaimDiskSpaceCheckbox.AutoSize = true;
+            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(18, 230);
+            this.reclaimDiskSpaceCheckbox.Name = "reclaimDiskSpaceCheckbox";
+            this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(114, 17);
+            this.reclaimDiskSpaceCheckbox.TabIndex = 19;
+            this.reclaimDiskSpaceCheckbox.Text = "Reclaim disk space";
+            this.reclaimDiskSpaceCheckbox.UseVisualStyleBackColor = true;
+            this.reclaimDiskSpaceCheckbox.CheckedChanged += new System.EventHandler(this.OnReclaimDiskSpaceCheckedChanged);
+            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.reclaimDiskSpaceCheckbox);
             this.Controls.Add(this.allStoresLabel);
             this.Controls.Add(this.allStoresImage);
             this.Controls.Add(this.label2);
@@ -234,7 +247,7 @@
             this.Controls.Add(this.timeoutHoursLabel);
             this.Controls.Add(this.timeoutInHours);
             this.Name = "PurgeDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(318, 228);
+            this.Size = new System.Drawing.Size(318, 261);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).EndInit();
@@ -261,5 +274,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label allStoresLabel;
         private System.Windows.Forms.PictureBox allStoresImage;
+        private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
     }
 }

@@ -119,5 +119,13 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             task.CanTimeout = timeoutPurgeCheckbox.Checked;
             timeoutInHours.Enabled = timeoutPurgeCheckbox.Checked;
         }
+
+        /// <summary>
+        /// Recleaim disk space has changed
+        /// </summary>
+        private void OnReclaimDiskSpaceCheckedChanged(object sender, EventArgs e)
+        {
+            task.ShrinkDatabase = reclaimDiskSpaceCheckbox.Checked;
+        }
     }
 }
