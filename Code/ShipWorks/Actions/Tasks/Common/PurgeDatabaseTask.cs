@@ -28,11 +28,11 @@ namespace ShipWorks.Actions.Tasks.Common
             PurgeDatabaseType.Audit,
             PurgeDatabaseType.Downloads
         };
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PurgeDatabaseTask"/> class.
         /// </summary>
-        public PurgeDatabaseTask() 
+        public PurgeDatabaseTask()
             : this(new SqlPurgeScriptRunner(), new DateTimeProvider())
         { }
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             TimeoutInHours = 1;
             RetentionPeriodInDays = 30;
-            
+
             Purges = new List<PurgeDatabaseType>();
 
             this.scriptRunner = scriptRunner;
@@ -59,7 +59,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get { return false; }
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the purge task can timeout.
         /// </summary>
@@ -85,6 +85,11 @@ namespace ShipWorks.Actions.Tasks.Common
         public List<PurgeDatabaseType> Purges { get; set; }
 
         /// <summary>
+        /// Gets or sets whether the database should be shrunk after the purge is complete.
+        /// </summary>
+        public bool ShrinkDatabase { get; set; }
+
+        /// <summary>
         /// Creates the editor that is used to edit the task.
         /// </summary>
         public override ActionTaskEditor CreateEditor()
@@ -102,7 +107,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             return Type.GetType(value);
         }
-        
+
         /// <summary>
         /// Runs the purge scripts.
         /// </summary>
@@ -139,6 +144,21 @@ namespace ShipWorks.Actions.Tasks.Common
                     exceptions.Add(purge, ex);
                     log.InfoFormat("Error running purge: {0}.", ex.Message);
                 }
+            }
+
+            try
+            {
+                if (ShrinkDatabase && (!CanTimeout || localStopExecutionAfter < dateProvider.UtcNow))
+                {
+                    scriptRunner.ShrinkDatabase();
+                }
+            }
+            catch (DbException ex)
+            {
+                // Catch a DbException instead of a SqlException so this catch can be tested.
+                // SqlException is sealed and can't be easily constructed.
+                log.InfoFormat("Error shrinking database: {0}.", ex.Message);
+                throw new ActionTaskRunException(ex.Message, ex);
             }
 
             // If any exceptions were saved, fail the task

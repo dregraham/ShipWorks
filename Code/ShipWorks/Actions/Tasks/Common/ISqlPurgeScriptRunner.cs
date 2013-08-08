@@ -20,5 +20,10 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
         void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc);
+
+        /// <summary>
+        /// Connects to the database and attempts to shrink the database.
+        /// </summary>
+        void ShrinkDatabase();
     }
 }

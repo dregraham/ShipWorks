@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Common.Data;
@@ -54,6 +55,35 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     log.Warn(ex.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Connects to the database and attempts to shrink the database.
+        /// </summary>
+        public void ShrinkDatabase()
+        {
+            // Attach to the connection
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                SqlAppLockUtility.GetLockedCommand(con, "ShrinkDatabaseTaskLock", command =>
+                {
+                    command.CommandText = ShrinkDbSql;
+                    command.CommandTimeout = 0;
+
+                    command.ExecuteNonQuery();
+                });
+            }
+        }
+
+        /// <summary>
+        /// The TSQL to shrink the db
+        /// </summary>
+        private static string ShrinkDbSql
+        {
+            get
+            {
+                return ResourceUtility.ReadString("ShipWorks.Data.Administration.Scripts.Maintenance.ShrinkDatabase.sql");
             }
         }
     }

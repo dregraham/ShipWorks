@@ -298,6 +298,68 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Email));
         }
 
+        [TestMethod]
+        public void Run_ShouldShrinkDatabase_WhenRequested()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.ShrinkDatabase = true;
+            testObject.CanTimeout = false;
+
+            testObject.Run(null, null);
+            
+            scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Once());
+        }
+
+        [TestMethod]
+        public void Run_ShouldNotShrinkDatabase_WhenNotRequested()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.ShrinkDatabase = false;
+            testObject.CanTimeout = false;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Never());
+        }
+
+        [TestMethod]
+        public void Run_ShouldNotShrinkDatabase_WhenRequestedButTimeoutHasElapsed()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+
+            Mock<IDateTimeProvider> dateProvider = new Mock<IDateTimeProvider>();
+            dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
+                .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.ShrinkDatabase = true;
+            testObject.CanTimeout = true;
+            testObject.TimeoutInHours = 1;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Never());
+        }
+
+        [TestMethod]
+        public void Run_ShouldShrinkDatabase_WhenTimeoutHasElapsedButCanTimeoutIsFalse()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+
+            Mock<IDateTimeProvider> dateProvider = new Mock<IDateTimeProvider>();
+            dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
+                .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.ShrinkDatabase = true;
+            testObject.CanTimeout = false;
+            testObject.TimeoutInHours = 1;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Once());
+        }
+
         #region "Support methods"
         /// <summary>
         /// Gets a date time provider that does nothing
