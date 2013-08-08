@@ -13,15 +13,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
     public class EbayException : Exception
     {
         // Soap error code, if one exists
-        string errorCode = "";
-
-        /// <summary>
-        /// The eBay SOAP error code
-        /// </summary>
-        public string ErrorCode
-        {
-            get { return errorCode; }
-        }
+        private readonly string errorCode = "";
 
         /// <summary>
         /// Deserialization constructor
@@ -46,17 +38,21 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public EbayException(string message, Exception inner)
             : base(message, inner)
-        {
-
-        }
+        { }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public EbayException(string message)
             : this(message, string.Empty)
-        {
+        { }
 
+        /// <summary>
+        /// The eBay SOAP error code
+        /// </summary>
+        public string ErrorCode
+        {
+            get { return errorCode; }
         }
 
         /// <summary>

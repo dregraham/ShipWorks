@@ -773,9 +773,18 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         }
                     }
 
-                    if (!ProcessTransaction(fullTransaction))
+                    try
                     {
-                        return false;
+                        if (!ProcessTransaction(fullTransaction))
+                        {
+                            return false;
+                        }
+                    }
+                    catch (EbayMissingGspReferenceException exception)
+                    {
+                        // Skip any orders that failed to missing a GSP reference number, so the user isn't
+                        // stuck waiting on eBay to fix the problem and can continue downloading other orders 
+                        log.WarnFormat("Skipping eBay transaction {0}. {1}", fullTransaction.TransactionID, exception.Message);
                     }
 
                     // Now this will exist
@@ -1643,11 +1652,21 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     // update the download count
                     Progress.Detail = String.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                    if (!ProcessTransaction(transaction))
+                    try
                     {
-                        return false;
+                        if (!ProcessTransaction(transaction))
+                        {
+                            return false;
+                        }
                     }
-
+                    catch (EbayMissingGspReferenceException exception)
+                    {
+                        // Skip any orders that failed to missing a GSP reference number, so the user isn't
+                        // stuck waiting on eBay to fix the problem and  can continue downloading other orders.
+                        // The order should be downloaded when the reference number is updated (i.e. the modified 
+                        // date is changed)
+                        log.WarnFormat("Skipping eBay transaction {0}. {1}", transaction.TransactionID, exception.Message);
+                    }
 
                     // note that this transaction has been processed
                     AddToProcessedCache(processedCache, transaction);
@@ -2057,7 +2076,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     string message = string.Format("eBay did not provide a reference ID for an order designated for the Global Shipping Program. The order was placed on {0} from buyer {1}.",
                                         StringUtility.FormatFriendlyDateTime(ebayOrder.OrderDate), ebayOrder.BillUnparsedName);
 
-                    throw new EbayException(message);
+                    throw new EbayMissingGspReferenceException(message);
                 }
             }
             else
