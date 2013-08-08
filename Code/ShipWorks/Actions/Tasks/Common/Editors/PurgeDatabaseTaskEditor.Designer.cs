@@ -44,6 +44,8 @@
             this.allStoresLabel = new System.Windows.Forms.Label();
             this.allStoresImage = new System.Windows.Forms.PictureBox();
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
+            this.selectAllLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.selectNoneLinkLabel = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.allStoresImage)).BeginInit();
@@ -226,10 +228,34 @@
             this.reclaimDiskSpaceCheckbox.UseVisualStyleBackColor = true;
             this.reclaimDiskSpaceCheckbox.CheckedChanged += new System.EventHandler(this.OnReclaimDiskSpaceCheckedChanged);
             // 
+            // selectAllLinkLabel
+            // 
+            this.selectAllLinkLabel.AutoSize = true;
+            this.selectAllLinkLabel.Location = new System.Drawing.Point(104, 28);
+            this.selectAllLinkLabel.Name = "selectAllLinkLabel";
+            this.selectAllLinkLabel.Size = new System.Drawing.Size(49, 13);
+            this.selectAllLinkLabel.TabIndex = 20;
+            this.selectAllLinkLabel.TabStop = true;
+            this.selectAllLinkLabel.Text = "Select all";
+            this.selectAllLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnSelectAllLinkClicked);
+            // 
+            // selectNoneLinkLabel
+            // 
+            this.selectNoneLinkLabel.AutoSize = true;
+            this.selectNoneLinkLabel.Location = new System.Drawing.Point(160, 28);
+            this.selectNoneLinkLabel.Name = "selectNoneLinkLabel";
+            this.selectNoneLinkLabel.Size = new System.Drawing.Size(63, 13);
+            this.selectNoneLinkLabel.TabIndex = 21;
+            this.selectNoneLinkLabel.TabStop = true;
+            this.selectNoneLinkLabel.Text = "Select none";
+            this.selectNoneLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnSelectNoneLinkClicked);
+            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.selectNoneLinkLabel);
+            this.Controls.Add(this.selectAllLinkLabel);
             this.Controls.Add(this.reclaimDiskSpaceCheckbox);
             this.Controls.Add(this.allStoresLabel);
             this.Controls.Add(this.allStoresImage);
@@ -247,7 +273,7 @@
             this.Controls.Add(this.timeoutHoursLabel);
             this.Controls.Add(this.timeoutInHours);
             this.Name = "PurgeDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(318, 261);
+            this.Size = new System.Drawing.Size(318, 249);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).EndInit();
@@ -275,5 +301,7 @@
         private System.Windows.Forms.Label allStoresLabel;
         private System.Windows.Forms.PictureBox allStoresImage;
         private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
+        private System.Windows.Forms.LinkLabel selectAllLinkLabel;
+        private System.Windows.Forms.LinkLabel selectNoneLinkLabel;
     }
 }

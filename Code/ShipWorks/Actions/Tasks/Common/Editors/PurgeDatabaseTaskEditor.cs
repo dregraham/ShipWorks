@@ -129,5 +129,34 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             task.ReclaimDiskSpace = reclaimDiskSpaceCheckbox.Checked;
         }
+
+        /// <summary>
+        /// User wants to select all purge tasks
+        /// </summary>
+        private void OnSelectAllLinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
+            TogglePurgeTasks(true);
+        }
+
+        /// <summary>
+        /// User wants to deselect all purge tasks
+        /// </summary>
+        private void OnSelectNoneLinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
+            TogglePurgeTasks(false);
+        }
+
+        /// <summary>
+        /// Toggle the selection status of all the purge tasks
+        /// </summary>
+        /// <param name="value">Value that should be set for all purge selections</param>
+        private void TogglePurgeTasks(bool value)
+        {
+            audit.Checked = value;
+            downloads.Checked = value;
+            email.Checked = value;
+            labels.Checked = value;
+            printJobs.Checked = value;
+        }
     }
 }
