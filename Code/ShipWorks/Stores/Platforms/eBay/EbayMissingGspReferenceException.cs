@@ -11,6 +11,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// is expecting there to be one (i.e. an order is downloaded from eBay, the order is marked
     /// as a GSP order, but the GSP reference ID is not provided).
     /// </summary>
+    [Serializable]
     public class EbayMissingGspReferenceException : EbayException
     {
         /// <summary>
