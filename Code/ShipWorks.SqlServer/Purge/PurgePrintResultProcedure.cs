@@ -191,21 +191,6 @@ BEGIN
             -- Wrap edits in transaction 
             BEGIN TRANSACTION 
 
-            -- Delete the previous resources (print job/image data) that the print results 
-            -- in this batch were pointing at 
-            DELETE Resource 
-            FROM   
-                Resource 
-            INNER JOIN 
-                ObjectReference 
-            ON 
-                ObjectReference.ObjectID = Resource.ResourceID
-            INNER JOIN 
-                @CurrentBatch batch 
-            ON 
-                batch.PrintResultID = ObjectReference.ConsumerID
-                AND batch.ContentResourceID = ObjectReference.ObjectReferenceID
-
 
             -- Update ObjectReference refrerenced by PrintResult.ContentResourceID so they point to the generic, purged resource ID 
             UPDATE objRef 

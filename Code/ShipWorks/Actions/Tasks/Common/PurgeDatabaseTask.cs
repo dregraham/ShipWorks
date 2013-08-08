@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using System;
@@ -144,7 +145,10 @@ namespace ShipWorks.Actions.Tasks.Common
                     exceptions.Add(purge, ex);
                     log.InfoFormat("Error running purge: {0}.", ex.Message);
                 }
-            }
+            }            
+			
+			// Resources may have been orphaned during the purge, so ask they be deleted.
+            DataResourceManager.DeleteAbandonedResourceData();
 
             try
             {

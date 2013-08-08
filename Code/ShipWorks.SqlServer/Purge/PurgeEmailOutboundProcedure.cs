@@ -94,20 +94,6 @@ public partial class StoredProcedures
 
                     BEGIN TRANSACTION;
 
-                    -- Delete Resources that will no longer be used (after the updates below). 
-                    -- This takes place before the updates otherwise there would be orphaned
-                    -- resource records that originally pointed to the PlainPartResourceID
-                    DELETE [Resource]
-                    WHERE ResourceID IN (
-                        SELECT o.ObjectID
-                        FROM ObjectReference o
-                        INNER JOIN EmailOutbound e ON
-                            e.EmailOutboundID = o.ConsumerID
-                        INNER JOIN #EmailPurgeBatch b ON
-                            b.EmailOutboundID = e.EmailOutboundID
-                        WHERE o.ObjectID <> @deletedEmailResourceID
-                    );
-
                     -- update EmailOutbound.PlainPartResourceID to point to the @deletedEmailResourceID
                     UPDATE ObjectReference
                     SET

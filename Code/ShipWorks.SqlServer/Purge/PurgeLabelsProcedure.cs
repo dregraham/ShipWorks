@@ -308,12 +308,7 @@ BEGIN
 		INNER JOIN ObjectReference
 			ON batch.ObjectReferenceID = ObjectReference.ObjectReferenceID
 
-		-- delete the old resources
-		DELETE [Resource] 
-		FROM @currentBatch AS batch
-		INNER JOIN [Resource]
-			ON batch.ResourceID = [Resource].ResourceID
-			
+		
 		-- delete from our temp table
 		DELETE labelsToCleanup
 		FROM #LabelsToCleanUp AS labelsToCleanup 
