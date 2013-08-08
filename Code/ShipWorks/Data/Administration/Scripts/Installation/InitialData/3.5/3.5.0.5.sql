@@ -152,11 +152,11 @@ VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Sch
 
 PRINT(N'Add 1 row to [dbo].[ActionTask]')
 INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError]) 
-VALUES (CONVERT(BIGINT, @ActionID), N'PurgeDatabase', CONVERT(xml,N'<Settings><CanTimeout value="True"/><TimeoutInHours value="3"/><RetentionPeriodInDays value="30"/><Purges><Item type="ShipWorks.Actions.Tasks.Common.PurgeDatabaseType" value="3"/></Purges></Settings>',1), 0, 1, -1, 0, -1, 0, 0, 0)
+VALUES (CONVERT(BIGINT, @ActionID), N'PurgeDatabase', CONVERT(xml,N'<Settings><CanTimeout value="True"/><TimeoutInHours value="3"/><RetentionPeriodInDays value="30"/><Purges><Item type="ShipWorks.Actions.Tasks.Common.PurgeDatabaseType" value="3"/></Purges><ReclaimDiskSpace value="False" /></Settings>',1), 0, 1, -1, 0, -1, 0, 0, 0)
  
 PRINT (N'Add 1 row to [dbo].[ActionTask]')
 INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError])
-VALUES (CONVERT(BIGINT, @ActionID), N'PurgeDatabase', CONVERT(xml, N'<Settings><CanTimeout value="True"/><TimeoutInHours value="3"/><RetentionPeriodInDays value="180"/><Purges><Item type="ShipWorks.Actions.Tasks.Common.PurgeDatabaseType" value="2"/><Item type="ShipWorks.Actions.Tasks.Common.PurgeDatabaseType" value="4"/></Purges></Settings>', 1), 0, 1, -1, 0, -1, 0, 0, 0)
+VALUES (CONVERT(BIGINT, @ActionID), N'PurgeDatabase', CONVERT(xml, N'<Settings><CanTimeout value="True"/><TimeoutInHours value="3"/><RetentionPeriodInDays value="180"/><Purges><Item type="ShipWorks.Actions.Tasks.Common.PurgeDatabaseType" value="2"/><Item type="ShipWorks.Actions.Tasks.Common.PurgeDatabaseType" value="4"/></Purges><ReclaimDiskSpace value="True" /></Settings>', 1), 0, 1, -1, 0, -1, 0, 0, 0)
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [NEXT_FIRE_TIME], [PREV_FIRE_TIME], [PRIORITY], [TRIGGER_STATE], [TRIGGER_TYPE], [START_TIME], [END_TIME], [CALENDAR_NAME], [MISFIRE_INSTR], [JOB_DATA]) 

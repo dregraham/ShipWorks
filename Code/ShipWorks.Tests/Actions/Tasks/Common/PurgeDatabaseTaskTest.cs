@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
-            testObject.ShrinkDatabase = true;
+            testObject.ReclaimDiskSpace = true;
             testObject.CanTimeout = false;
 
             testObject.Run(null, null);
@@ -316,7 +316,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
-            testObject.ShrinkDatabase = false;
+            testObject.ReclaimDiskSpace = false;
             testObject.CanTimeout = false;
 
             testObject.Run(null, null);
@@ -333,7 +333,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
                 .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
-            testObject.ShrinkDatabase = true;
+            testObject.ReclaimDiskSpace = true;
             testObject.CanTimeout = true;
             testObject.TimeoutInHours = 1;
 
@@ -351,7 +351,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
                 .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
-            testObject.ShrinkDatabase = true;
+            testObject.ReclaimDiskSpace = true;
             testObject.CanTimeout = false;
             testObject.TimeoutInHours = 1;
 

@@ -87,7 +87,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets whether the database should be shrunk after the purge is complete.
         /// </summary>
-        public bool ShrinkDatabase { get; set; }
+        public bool ReclaimDiskSpace { get; set; }
 
         /// <summary>
         /// Creates the editor that is used to edit the task.
@@ -148,7 +148,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
             try
             {
-                if (ShrinkDatabase && (!CanTimeout || localStopExecutionAfter < dateProvider.UtcNow))
+                if (ReclaimDiskSpace && (!CanTimeout || localStopExecutionAfter < dateProvider.UtcNow))
                 {
                     scriptRunner.ShrinkDatabase();
                 }

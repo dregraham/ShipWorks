@@ -28,6 +28,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            reclaimDiskSpaceCheckbox.Checked = task.ReclaimDiskSpace;
+
             timeoutPurgeCheckbox.Checked = task.CanTimeout;
             timeoutPurgeCheckbox.CheckedChanged += OnTimeoutPurgeCheckedChanged;
 
@@ -125,7 +127,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnReclaimDiskSpaceCheckedChanged(object sender, EventArgs e)
         {
-            task.ShrinkDatabase = reclaimDiskSpaceCheckbox.Checked;
+            task.ReclaimDiskSpace = reclaimDiskSpaceCheckbox.Checked;
         }
     }
 }
