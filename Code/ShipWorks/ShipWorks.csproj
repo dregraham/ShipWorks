@@ -1752,6 +1752,7 @@
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbaySelectedShippingMethodCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayGlobalShippingProgramEligibilityDisplayType.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayDownloadSummary.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayMissingGspReferenceException.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayUrlUtilities.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayShippingMethod.cs" />
     <Compile Include="Stores\Platforms\Ebay\IEbayWebClient.cs" />
