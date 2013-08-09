@@ -33,14 +33,12 @@ namespace ShipWorks.Data.Connection
         // Global instance of the SQL Session
         static SqlSession current;
 
-
         readonly SqlSessionConfiguration configuration;
 
         // Cached properties of the server
         DateTime serverLocalDate;
         DateTime serverLocalDateUtc;
         Stopwatch timeSinceTimeTaken;
-
 
         /// <summary>
         /// Static constructor
@@ -58,7 +56,6 @@ namespace ShipWorks.Data.Connection
                 throw new NotSupportedException("Have to updated hard-coded value in ShipWorks.SqlServer.General.UserContext.");
             }
         }
-
 
         /// <summary>
         /// Constructor
@@ -82,7 +79,6 @@ namespace ShipWorks.Data.Connection
             Configuration.ConnectionChanged += delegate { ConnectionChanged(); };
         }
 
-
         /// <summary>
         /// One-time initializtion of the SqlSession.
         /// </summary>
@@ -94,7 +90,6 @@ namespace ShipWorks.Data.Connection
             // Set the loaded session as current
             Current = session;
         }
-
 
         /// <summary>
         /// Gets the global instance of the SqlSession object.  If the server and database have not been configured, null is returned.
@@ -136,8 +131,6 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-
-
         /// <summary>
         /// Needs to be called whenver a core property of teh connection string changes
         /// </summary>
@@ -147,7 +140,6 @@ namespace ShipWorks.Data.Connection
             timeSinceTimeTaken = null;
         }
 
-        
         /// <summary>
         /// Open a connection using the current properties of the SqlSession
         /// </summary>
@@ -199,8 +191,6 @@ namespace ShipWorks.Data.Connection
         {
             return GetServerMachineName() == Environment.MachineName;
         }
-
-
 
         /// <summary>
         /// Indicates if we are connected to an instance of SQL Server 2008 or better
@@ -473,15 +463,15 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-
+        /// <summary>
+        /// The current configuration of the session
+        /// </summary>
         public SqlSessionConfiguration Configuration
         {
             get { return configuration; }
         }
 
-
         /// <summary>
-
         /// Saves the state of the SqlSession object and sets it as the current sql session.
         /// </summary>
         public void SaveAsCurrent()
@@ -490,7 +480,6 @@ namespace ShipWorks.Data.Connection
 
             Current = this;
         }
-
 
         /// <summary>
         /// The state of the configuration used to connect to SQL Server

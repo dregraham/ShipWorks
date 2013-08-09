@@ -1082,6 +1082,15 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnChooseDataFileLocation(object sender, EventArgs e)
         {
+            if (!sqlSession.IsLocalServer())
+            {
+                MessageHelper.ShowError(this,
+                    "You can only choose the location of the data files from the same computer that is running the database.\n\n" +
+                    "(Your database is on '" + sqlSession.GetServerMachineName() + "')");
+
+                return;
+            }
+
             linkChooseDataLocation.Visible = false;
             panelDataFiles.Visible = true;
         }
