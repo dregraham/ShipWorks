@@ -24,7 +24,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             base.OnLoad(e);
             CreateVerbMenu();
-            LoadTaskUI();
+
+            verbLabel.Text = EnumHelper.GetDescription(task.Verb);
+            urlTextBox.Text = task.UrlToHit;
+
+            UpdateBodyUI();
         }
 
         void CreateVerbMenu()
@@ -54,13 +58,32 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             if (task.Verb != clickedVerb)
             {
                 task.Verb = clickedVerb;
-                LoadTaskUI();
+                verbLabel.Text = EnumHelper.GetDescription(clickedVerb);
+                UpdateBodyUI();
             }
         }
 
-        void LoadTaskUI()
+        void OnUrlTextChanged(object sender, EventArgs e)
         {
-            verbLabel.Text = EnumHelper.GetDescription(task.Verb);
+            task.UrlToHit = urlTextBox.Text;
+        }
+
+        void UpdateBodyUI()
+        {
+            labelTemplate.Visible =
+            templateCombo.Visible =
+            asBodyLabel.Visible =
+                task.Verb != HttpVerb.Get;
+
+            if (templateCombo.Visible)
+            {
+                this.Height = templateCombo.Bottom + 6;
+            }
+            else
+            {
+                templateCombo.SelectedTemplate = null;
+                this.Height = templateCombo.Top - 6;
+            }
         }
     }
 }

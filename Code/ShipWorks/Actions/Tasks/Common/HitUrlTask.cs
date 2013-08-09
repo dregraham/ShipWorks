@@ -24,7 +24,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return "Hit URL using:";
+                return "Using";
             }
         }
 
