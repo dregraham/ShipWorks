@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.Net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
@@ -117,6 +118,8 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         private void ProcessResult(HttpRequestSubmitter request)
         {
+            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
+
             request.Uri = new Uri(UrlToHit);
             request.Verb = Verb;
 
@@ -130,7 +133,11 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Headers.Add(header.Key, header.Value);
             }
 
-            request.GetResponse();
+            logger.LogRequest(request);
+
+            IHttpResponseReader httpResponseReader = request.GetResponse();
+            
+            logger.LogResponse(httpResponseReader.ReadResult(), "txt");
         }
 
         /// <summary>
