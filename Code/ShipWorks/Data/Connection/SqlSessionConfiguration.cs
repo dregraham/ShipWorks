@@ -13,6 +13,9 @@ using System.Xml.XPath;
 
 namespace ShipWorks.Data.Connection
 {
+    /// <summary>
+    /// Configuration settings storage for SqlSession instances
+    /// </summary>
     public class SqlSessionConfiguration : ISqlSessionConfiguration
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSessionConfiguration));
@@ -20,13 +23,77 @@ namespace ShipWorks.Data.Connection
         // Default connection timeout
         static readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(10);
 
-
         // Used to track change to the connection string for logging purposes
         [ThreadStatic]
         static string lastConnectionString;
 
         // File from which to save and restore settings
         static string filename;
+
+        // Instance of SQL Server the app uses to connect to
+        string serverInstance = string.Empty;
+
+        // The database name to connect to
+        string databaseName = string.Empty;
+
+        // SQL Server Username
+        string username = string.Empty;
+
+        // SQL Server Password
+        string password = string.Empty;
+
+        // Use windows authentication
+        bool windowsAuth = false;
+
+        // Indicates if the configuration is readonly
+        bool frozen = false;
+
+        /// <summary>
+        /// Raised when the the cnofiguration changes
+        /// </summary>
+        public event EventHandler ConnectionChanged;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public SqlSessionConfiguration() 
+        { 
+        
+        }
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        public SqlSessionConfiguration(SqlSessionConfiguration copy)
+        {
+            CopyFrom(copy);
+        }
+
+        /// <summary>
+        /// Copy from the given configuration into this one
+        /// </summary>
+        public void CopyFrom(SqlSessionConfiguration copy)
+        {
+            if (null == copy)
+            {
+                throw new ArgumentNullException("copy");
+            }
+
+            if (frozen)
+            {
+                throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
+            }
+
+            // Important to copy the raw values here, not the properties, as the properties do some processing on the data coming out 
+            // (decrypting, forcing windows auth, etc)
+            this.serverInstance = copy.serverInstance;
+            this.databaseName = copy.databaseName;
+            this.username = copy.username;
+            this.password = copy.password;
+            this.windowsAuth = copy.windowsAuth;
+
+            OnConnectionChanged();
+        }
 
         /// <summary>
         /// The file the settings are stored in.
@@ -44,55 +111,34 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-
-        // Instance of SQL Server the app uses to connect to
-        string serverInstance = string.Empty;
-
-        // The database name to connect to
-        string databaseName = string.Empty;
-
-        // SQL Server Username
-        string username = string.Empty;
-
-        // SQL Server Password
-        string password = string.Empty;
-
-        // Use windows authentication
-        bool windowsAuth = false;
-
-        bool frozen = false;
-
-
-        public SqlSessionConfiguration() { }
+        /// <summary>
+        /// Called to raise the ConnectionChanged event
+        /// </summary>
+        void OnConnectionChanged()
+        {
+            var handlers = ConnectionChanged;
+            
+            if (null != handlers)
+            {
+                handlers(this, EventArgs.Empty);
+            }
+        }
 
         /// <summary>
-        /// Copy constructor
+        /// Clear the configuration
         /// </summary>
-        public SqlSessionConfiguration(SqlSessionConfiguration copy)
+        public void Clear()
         {
-            CopyFrom(copy);
+            CopyFrom(new SqlSessionConfiguration());
         }
 
-
-        public void CopyFrom(ISqlSessionConfiguration copy)
+        /// <summary>
+        /// Freeze the configuration from being changed
+        /// </summary>
+        public void Freeze()
         {
-            if (null == copy)
-                throw new ArgumentNullException("copy");
-
-            if (frozen)
-            {
-                throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
-            }
-
-            this.serverInstance = copy.ServerInstance;
-            this.databaseName = copy.DatabaseName;
-            this.username = copy.Username;
-            this.password = copy.Password;
-            this.windowsAuth = copy.WindowsAuth;
-
-            OnConnectionChanged();
+            this.frozen = true;
         }
-
 
         /// <summary>
         /// The SQL Server instance to which we connect
@@ -224,27 +270,6 @@ namespace ShipWorks.Data.Connection
             return string.Compare(serverInstance, SqlInstanceUtility.LocalDbServerInstance, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public event EventHandler ConnectionChanged;
-
-        void OnConnectionChanged()
-        {
-            var handlers = this.ConnectionChanged;
-            if (null != handlers)
-                handlers(this, EventArgs.Empty);
-        }
-
-
-        public void Clear()
-        {
-            CopyFrom(new SqlSessionConfiguration());
-        }
-
-        public void Freeze()
-        {
-            this.frozen = true;
-        }
-
-
         /// <summary>
         /// Creates the connection string.
         /// </summary>
@@ -299,7 +324,6 @@ namespace ShipWorks.Data.Connection
 
             return connectionString;
         }
-
 
         /// <summary>
         /// Loads configuration state from disk.
