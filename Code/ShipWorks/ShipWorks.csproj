@@ -2255,6 +2255,9 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClient.cs" />
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
+    <Compile Include="UI\Controls\NameValueGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
