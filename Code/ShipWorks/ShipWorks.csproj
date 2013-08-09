@@ -382,6 +382,13 @@
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
+    <Compile Include="Actions\Tasks\Common\DownloadOrdersTask.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.Designer.cs">
+      <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseType.cs" />
@@ -5359,6 +5366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\MonthlyActionScheduleEditor.resx">
       <DependentUpon>MonthlyActionScheduleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.resx">
+      <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.resx">
       <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
