@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls
@@ -50,7 +51,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Fires when the data in the grid changes
         /// </summary>
-        public event Action<object, EventArgs> DataChanged;
+        public event EventHandler<EventArgs> DataChanged;
 
         /// <summary>
         /// Create the layout of the grid
@@ -109,6 +110,20 @@ namespace ShipWorks.UI.Controls
         private static string CellValue(DataGridViewCell cell)
         {
             return cell.Value == null ? string.Empty : cell.Value.ToString();
+        }
+
+        /// <summary>
+        /// Dispose of any resources
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                grid.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }
