@@ -27,6 +27,7 @@ namespace ShipWorks.Actions.Tasks.Common
         public BackupDatabaseTask()
         {
             KeepNumberOfBackups = 5;
+            LimitNumberOfBackupsRetained = true;
         }
 
         /// <summary>
