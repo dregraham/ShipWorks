@@ -20,6 +20,14 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
 
+        public override string InputLabel
+        {
+            get
+            {
+                return "Hit URL using:";
+            }
+        }
+
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
@@ -90,7 +98,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
-            return new HitUrlEditor(this);
+            return new HitUrlTaskEditor(this);
         }
 
         /// <summary>
