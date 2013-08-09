@@ -32,9 +32,10 @@
             System.Windows.Forms.Label requestToLabel;
             System.Windows.Forms.Label sendALabel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
-            this.urlTextBox = new System.Windows.Forms.TextBox();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.verbLabel = new System.Windows.Forms.Label();
             this.asBodyLabel = new System.Windows.Forms.Label();
+            this.urlTextBox = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             requestUrlPanel = new System.Windows.Forms.FlowLayoutPanel();
             requestToLabel = new System.Windows.Forms.Label();
             sendALabel = new System.Windows.Forms.Label();
@@ -98,8 +99,8 @@
             verbUrlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             verbUrlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             verbUrlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            verbUrlPanel.Controls.Add(sendALabel, 0, 0);
             verbUrlPanel.Controls.Add(this.urlTextBox, 3, 0);
+            verbUrlPanel.Controls.Add(sendALabel, 0, 0);
             verbUrlPanel.Controls.Add(this.verbLabel, 1, 0);
             verbUrlPanel.Controls.Add(requestToLabel, 2, 0);
             verbUrlPanel.Location = new System.Drawing.Point(4, 0);
@@ -108,15 +109,6 @@
             verbUrlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             verbUrlPanel.Size = new System.Drawing.Size(501, 27);
             verbUrlPanel.TabIndex = 5;
-            // 
-            // urlTextBox
-            // 
-            this.urlTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.urlTextBox.Location = new System.Drawing.Point(126, 3);
-            this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(372, 21);
-            this.urlTextBox.TabIndex = 3;
-            this.urlTextBox.TextChanged += new System.EventHandler(this.OnUrlTextChanged);
             // 
             // verbLabel
             // 
@@ -144,6 +136,16 @@
             this.asBodyLabel.Text = "as the request body.";
             this.asBodyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // urlTextBox
+            // 
+            this.urlTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.urlTextBox.Location = new System.Drawing.Point(126, 3);
+            this.urlTextBox.MaxLength = 32767;
+            this.urlTextBox.Name = "urlTextBox";
+            this.urlTextBox.Size = new System.Drawing.Size(372, 21);
+            this.urlTextBox.TabIndex = 7;
+            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
             // HitUrlTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -168,8 +170,8 @@
         #endregion
 
         private System.Windows.Forms.Label verbLabel;
-        private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.Label asBodyLabel;
+        private Templates.Tokens.TemplateTokenTextBox urlTextBox;
 
     }
 }

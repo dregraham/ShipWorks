@@ -12223,3 +12223,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.Editors.HitUrlEditor.#task")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.HitUrlTask.#log")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.Editors.HitUrlTaskEditor.#CreateVerbMenu()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.Editors.HitUrlTaskEditor.#InitializeComponent()")]
