@@ -25,5 +25,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Connects to the database and attempts to shrink the database.
         /// </summary>
         void ShrinkDatabase();
+
+        /// <summary>
+        /// Makes a call to DataResourceManager.DeleteAbandonedResourceData() to delete any abandoned Resource rows.
+        /// This is a wrapper method for testing purposes.
+        /// </summary>
+        void PurgeAbandonedResources();
     }
 }

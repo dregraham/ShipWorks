@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
@@ -358,6 +359,66 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Run(null, null);
 
             scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Once());
+        }
+
+        [TestMethod]
+        public void Run_ShouldPurgeAbandonedResources_WhenAtLeastOnePurgeScriptRequested()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Labels);
+            testObject.CanTimeout = false;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.PurgeAbandonedResources(), Times.Once());
+        }
+
+        [TestMethod]
+        public void Run_ShouldNotPurgeAbandonedResources_WhenNoPurgeScriptRequested()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.CanTimeout = false;
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.PurgeAbandonedResources(), Times.Never());
+        }
+
+        [TestMethod]
+        public void Run_ShouldNotPurgeAbandonedResources_WhenRequestedButTimeoutHasElapsed()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+
+            Mock<IDateTimeProvider> dateProvider = new Mock<IDateTimeProvider>();
+            dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
+                .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Labels);
+            testObject.CanTimeout = true;
+            testObject.TimeoutInHours = 1;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.PurgeAbandonedResources(), Times.Never());
+        }
+
+        [TestMethod]
+        public void Run_ShouldPurgeAbandonedResources_WhenTimeoutHasElapsedButCanTimeoutIsFalse()
+        {
+            Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
+
+            Mock<IDateTimeProvider> dateProvider = new Mock<IDateTimeProvider>();
+            dateProvider.SetupSequence(x => x.UtcNow).Returns(new DateTime(2013, 7, 24, 12, 15, 21))
+                .Returns(new DateTime(2013, 7, 24, 14, 15, 22));
+            PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
+            testObject.Purges.Add(PurgeDatabaseType.Labels);
+            testObject.CanTimeout = false;
+            testObject.TimeoutInHours = 1;
+
+            testObject.Run(null, null);
+
+            scriptRunner.Verify(x => x.PurgeAbandonedResources(), Times.Once());
         }
 
         #region "Support methods"

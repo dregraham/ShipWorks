@@ -121,7 +121,8 @@ namespace ShipWorks.Actions.Tasks.Common
 
             Dictionary<PurgeDatabaseType, Exception> exceptions = new Dictionary<PurgeDatabaseType, Exception>();
 
-            foreach (PurgeDatabaseType purge in purgeOrder.Intersect(Purges))
+            IEnumerable<PurgeDatabaseType> purges = purgeOrder.Intersect(Purges);
+            foreach (PurgeDatabaseType purge in purges)
             {
                 // Stop executing if we've been running longer than the time the user has allowed.
                 if (CanTimeout && localStopExecutionAfter < dateProvider.UtcNow)
@@ -145,10 +146,13 @@ namespace ShipWorks.Actions.Tasks.Common
                     exceptions.Add(purge, ex);
                     log.InfoFormat("Error running purge: {0}.", ex.Message);
                 }
-            }            
-			
-			// Resources may have been orphaned during the purge, so ask they be deleted.
-            DataResourceManager.DeleteAbandonedResourceData();
+            }
+
+            if (purges.Any() && (!CanTimeout || localStopExecutionAfter < dateProvider.UtcNow))
+            {
+                // Resources may have been orphaned during the purge, so ask they be deleted.
+                scriptRunner.PurgeAbandonedResources();
+            }
 
             try
             {

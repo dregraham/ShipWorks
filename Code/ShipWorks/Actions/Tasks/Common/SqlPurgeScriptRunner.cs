@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using log4net;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -65,6 +66,15 @@ namespace ShipWorks.Actions.Tasks.Common
         public void ShrinkDatabase()
         {
             SqlShrinkDatabase.ShrinkDatabase();
+        }
+
+        /// <summary>
+        /// Makes a call to DataResourceManager.DeleteAbandonedResourceData() to delete any abandoned Resource rows.
+        /// This is a wrapper method for testing purposes.
+        /// </summary>
+        public void PurgeAbandonedResources()
+        {
+            DataResourceManager.DeleteAbandonedResourceData();
         }
     }
 }
