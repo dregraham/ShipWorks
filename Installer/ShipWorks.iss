@@ -127,7 +127,7 @@ Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additi
 
 [Icons]
 Name: {group}\ShipWorks 3; Filename: {app}\ShipWorks.exe; IconIndex: 0
-Name: {group}\Advanced\Launch ShipWorks Background Process; Filename: {app}\ShipWorks.exe; Parameters:"ShipWorks.exe /service=scheduler";
+Name: {group}\Advanced\Launch ShipWorks Background Process; Filename: {app}\ShipWorks.exe; Parameters:"/service=scheduler";
 Name: {userdesktop}\ShipWorks 3; Filename: {app}\ShipWorks.exe; Tasks: desktopicon
 
 [_ISTool]
