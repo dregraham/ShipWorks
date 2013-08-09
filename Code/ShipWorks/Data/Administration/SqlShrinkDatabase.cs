@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using Microsoft.SqlServer.Server;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer.General;
 using ShipWorks.SqlServer.Purge;
+using log4net;
 
 namespace ShipWorks.Data.Administration
 {
@@ -17,21 +20,27 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public static class SqlShrinkDatabase
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(SqlShrinkDatabase));
+
         /// <summary>
         /// Connects to the database and attempts to shrink the database.
         /// </summary>
         public static void ShrinkDatabase()
         {
-            // Attach to the connection
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (new LoggedStopwatch(log, "Shrink Database"))
             {
-                SqlAppLockUtility.GetLockedCommand(con, "ShrinkDatabaseTaskLock", command =>
-                {
-                    command.CommandText = ShrinkDbSql;
-                    command.CommandTimeout = 0;
 
-                    command.ExecuteNonQuery();
-                });
+                // Attach to the connection
+                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                {
+                    SqlAppLockUtility.GetLockedCommand(con, "ShrinkDatabaseTaskLock", command =>
+                        {
+                            command.CommandText = ShrinkDbSql;
+                            command.CommandTimeout = 0;
+
+                            command.ExecuteNonQuery();
+                        });
+                }
             }
         }
 
