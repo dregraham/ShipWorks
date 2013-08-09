@@ -38,14 +38,21 @@ namespace ShipWorks.Actions
                 resultFields.DefineField(ActionQueueFields.ActionQueueID, 1, "ActionQueueID", "");
                 resultFields.DefineField(ActionQueueFields.InternalComputerLimitedList, 2, "InternalComputerLimitedList", "");
 
+                // Always grab the UI actions and only grab the scheduled actions based on the ActionManager (i.e. an action 
+                // manager capable of processing scheduled actions is also capable of processing UI based actions but an UI
+                // action manager is only capable of processing UI based actions
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
-                    (ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType) &
+                    (ActionQueueFields.ActionQueueType == (int) ActionQueueType.UserInterface | ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType) &
                     (ActionQueueFields.ActionQueueID > lastQueueID) &
                     (ActionQueueFields.Status == (int) ActionQueueStatus.Dispatched |
                      ActionQueueFields.Status == (int) ActionQueueStatus.Incomplete |
                      ActionQueueFields.Status == (int) ActionQueueStatus.ResumeFromPostponed));
 
-                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 100, new SortExpression(ActionQueueFields.ActionQueueID | SortOperator.Ascending), true))
+                // Process the actions as they came into the queue regardless of the action queue type
+                SortExpression sortExpression = new SortExpression();
+                sortExpression.Add(ActionQueueFields.ActionQueueID | SortOperator.Ascending);
+
+                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 100, sortExpression, true))
                 {
                     List<long> keys = new List<long>();
 
