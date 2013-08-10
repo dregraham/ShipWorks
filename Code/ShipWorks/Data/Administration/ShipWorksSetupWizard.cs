@@ -226,7 +226,7 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
-                    SqlDatabaseCreator.CreateDatabase(SqlInstanceUtility.LocalDbDatabaseName, con);
+                    ShipWorksDatabaseUtility.CreateDatabase(SqlInstanceUtility.LocalDbDatabaseName, con);
                     sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
 
                     createdDatabase = true;
@@ -239,7 +239,7 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                 {
-                    SqlDatabaseCreator.CreateSchemaAndData();
+                    ShipWorksDatabaseUtility.CreateSchemaAndData();
                 }
 
                 Invoke((MethodInvoker) delegate { progressPreparing.Value = 100; });
@@ -389,7 +389,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                SqlDatabaseCreator.DropDatabase(sqlSession, SqlInstanceUtility.LocalDbDatabaseName);
+                ShipWorksDatabaseUtility.DropDatabase(sqlSession, SqlInstanceUtility.LocalDbDatabaseName);
 
             }
             catch (SqlException ex)

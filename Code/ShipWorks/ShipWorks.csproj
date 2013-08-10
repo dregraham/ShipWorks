@@ -523,6 +523,7 @@
     </Compile>
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
     <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
+    <Compile Include="Data\Administration\ShipWorksDatabaseDetail.cs" />
     <Compile Include="Data\Administration\ShipWorksSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -549,6 +550,12 @@
     </Compile>
     <Compile Include="ApplicationCore\Services\ShipWorksServiceType.cs" />
     <Compile Include="Data\Administration\ShipWorksWindowsFirewallOpener.cs" />
+    <Compile Include="Data\Administration\SqlCredentialsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Data\Administration\SqlCredentialsDlg.Designer.cs">
+      <DependentUpon>SqlCredentialsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Administration\SqlShrinkDatabase.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Database\Tasks\PostMigration\ShippingPages\Express1WizardPage.cs">
       <SubType>UserControl</SubType>
@@ -2276,7 +2283,7 @@
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Data\Administration\SqlDatabaseCreator.cs" />
+    <Compile Include="Data\Administration\ShipWorksDatabaseUtility.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\DotNet35DownloadPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6254,6 +6261,9 @@
     <EmbeddedResource Include="ApplicationCore\MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Administration\SqlCredentialsDlg.resx">
+      <DependentUpon>SqlCredentialsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\SqlServerSetup\DotNet35DownloadPage.resx">
       <DependentUpon>DotNet35DownloadPage.cs</DependentUpon>
@@ -11531,7 +11541,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

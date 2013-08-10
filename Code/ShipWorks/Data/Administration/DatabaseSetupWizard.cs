@@ -38,6 +38,8 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Administration.UpdateFrom2x;
 using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
 using Interapptive.Shared.Win32;
+using System.Threading.Tasks;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Data.Administration
 {
@@ -51,6 +53,9 @@ namespace ShipWorks.Data.Administration
 
         // The current state of the SQL Session data
         SqlSession sqlSession = new SqlSession();
+
+        // The session that we are currently testing in the background for succesfully connect
+        SqlSession connectionSession = null;
 
         // Navigation helpers
         WizardPage pageAfterSqlLogin;
@@ -90,14 +95,6 @@ namespace ShipWorks.Data.Administration
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += new EventHandler(OnInstallerSqlServerExited);
 
-            // Prepopulate the instance box with the current
-            if (SqlSession.IsConfigured)
-            {
-                comboSqlServers.Text = SqlSession.Current.Configuration.ServerInstance;
-            }
-
-            StartSearchingSqlServers();
-
             // Remove the placeholder...
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
             Pages.Remove(wizardPagePrerequisitePlaceholder);
@@ -135,6 +132,8 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            StartSearchingSqlServers();
+
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
                 if (StartupController.StartupArgument.Name == "Upgrade2x")
@@ -527,6 +526,9 @@ namespace ShipWorks.Data.Administration
             pictureServerSearching.Visible = false;
             labelServerSearching.Visible = false;
 
+            panelSqlInstanceHelp.Location = pictureServerSearching.Location;
+            panelSqlInstanceHelp.Visible = true;
+
             string[] servers = (string[]) e.UserState;
 
             // Load the list with all servers found on the LAN
@@ -539,6 +541,141 @@ namespace ShipWorks.Data.Administration
             if (comboSqlServers.Text.Length == 0 && comboSqlServers.Items.Count > 0)
             {
                 comboSqlServers.SelectedIndex = 0;
+            }
+        }
+
+        /// <summary>
+        /// Stepping into the SQL instance window
+        /// </summary>
+        private void OnSteppingIntoSelectSqlInstance(object sender, WizardSteppingIntoEventArgs e)
+        {
+            if (!e.FirstTime)
+            {
+                return;
+            }
+
+            // Prepopulate the instance box with the current
+            if (SqlSession.IsConfigured)
+            {
+                comboSqlServers.Text = SqlSession.Current.Configuration.ServerInstance;
+
+                OnChangeSelectedInstance(null, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// The selected SQL Server instance has changed
+        /// </summary>
+        private void OnChangeSelectedInstance(object sender, EventArgs e)
+        {
+            linkSqlInstanceAccount.Visible = false;
+
+            pictureSqlConnection.Image = Resources.arrows_greengray;
+            pictureSqlConnection.Visible = true;
+
+            labelSqlConnection.Text = "Connecting...";
+            labelSqlConnection.Visible = true;
+
+            // Create a copy that we can mess around with without affecting the UI session
+            connectionSession = new SqlSession(sqlSession);
+            connectionSession.Configuration.ServerInstance = comboSqlServers.Text;
+
+            // Create another variable for closure purposes
+            SqlSession backgroundSession = connectionSession;
+
+            // Start the background task to try to log in and figure out the background databases...
+            var task = Task.Factory.StartNew(() =>
+                {
+                    backgroundSession.Configuration.DatabaseName = "master";
+
+                    // First we try the session as it is...
+
+                    // Then we'll try the sa account with the password we create - we know that'd be an admin
+                    SqlSession saSession = new SqlSession(backgroundSession);
+                    saSession.Configuration.Username = "sa";
+                    saSession.Configuration.Password = SqlInstanceUtility.LocalDbServerInstance;
+                    saSession.Configuration.WindowsAuth = false;
+
+                    // Then we'll try windows auth
+                    SqlSession windowsSession = new SqlSession(backgroundSession);
+                    windowsSession.Configuration.WindowsAuth = true;
+
+                    List<SqlSession> sessionsToTry = new List<SqlSession> 
+                        {
+                            backgroundSession,
+                            saSession,
+                            windowsSession
+                        };
+
+                    foreach (SqlSession session in sessionsToTry)
+                    {
+                        try
+                        {
+                            session.TestConnection();
+
+                            using (SqlConnection con = session.OpenConnection())
+                            {
+                                return Tuple.Create(session.Configuration, ShipWorksDatabaseUtility.GetShipWorksDatabases(con));
+                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            log.Info("Failed to connect.", ex);
+                        }
+                    }
+
+                    return null;
+                });
+
+            task.ContinueWith(t =>
+                {
+                    // If the background session we know about isn't the same as the current connection session, then the user has changed
+                    // it in the meantime on us and we discard the results
+                    if (backgroundSession != connectionSession)
+                    {
+                        return;
+                    }
+
+                    // Null indicates error
+                    if (t.Result == null)
+                    {
+                        pictureSqlConnection.Image = Resources.warning16;
+                        labelSqlConnection.Text = "ShipWorks could not connect to the selected database server.";
+                        linkSqlInstanceAccount.Text = "Try changing the account";
+                    }
+                    else
+                    {
+                        SqlSessionConfiguration configuration = t.Result.Item1;
+                        List<ShipWorksDatabaseDetail> databases = t.Result.Item2;
+
+                        pictureSqlConnection.Image = Resources.check16;
+                        labelSqlConnection.Text = string.Format("Successfully connected using {0} account.", configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
+                        linkSqlInstanceAccount.Text = "Change";
+
+                        // Save the credentials
+                        sqlSession.Configuration.ServerInstance = configuration.ServerInstance;
+                        sqlSession.Configuration.Username = configuration.Username;
+                        sqlSession.Configuration.Password = configuration.Password;
+                        sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+                    }
+
+                    linkSqlInstanceAccount.Left = labelSqlConnection.Right;
+                    linkSqlInstanceAccount.Visible = !backgroundSession.Configuration.IsLocalDb();
+
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        /// <summary>
+        /// User wants to change the SQL Server account to use
+        /// </summary>
+        private void OnChangeSqlInstanceAccount(object sender, EventArgs e)
+        {
+            using (SqlCredentialsDlg dlg = new SqlCredentialsDlg(sqlSession))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    OnChangeSelectedInstance(null, EventArgs.Empty);
+                }
             }
         }
 
@@ -558,30 +695,6 @@ namespace ShipWorks.Data.Administration
             // Save the instance
             sqlSession.Configuration.ServerInstance = comboSqlServers.Text;
 
-            e.NextPage = wizardPageLoginSqlServer;
-        }
-
-        #endregion
-
-        #region SQL Server Login
-
-        /// <summary>
-        /// Stepping next on the credentials page.
-        /// </summary>
-        private void OnStepNextSqlLogin(object sender, WizardStepEventArgs e)
-        {
-            // Set the credentials
-            if (sqlServerAuth.Checked)
-            {
-                sqlSession.Configuration.Username = username.Text;
-                sqlSession.Configuration.Password = password.Text;
-                sqlSession.Configuration.WindowsAuth = false;
-            }
-            else
-            {
-                sqlSession.Configuration.WindowsAuth = true;
-            }
-
             // Ensure the database name is cleared
             sqlSession.Configuration.DatabaseName = "";
 
@@ -596,10 +709,9 @@ namespace ShipWorks.Data.Administration
                 if (!sqlSession.IsSqlServer2008OrLater())
                 {
                     // If trying to create a new database in an existing sql instance
-                    if (radioRestoreDatabase.Checked || (radioSetupNewDatabase.Checked && radioSqlServerCurrent.Checked))
+                    if ((radioRestoreDatabase.Checked || radioRestoreBackup.Checked) || ((radioSetupNewDatabase.Checked || radioNewDatabase.Checked)))
                     {
                         MessageHelper.ShowError(this,
-                            "ShipWorks requires SQL Server.\n\n" +
                             "The SQL Server instance you have selected is previous version that " +
                             "is not compatible with ShipWorks.\n\n" +
                             "You can install the ShipWorks database in a new SQL Server instance " +
@@ -615,7 +727,7 @@ namespace ShipWorks.Data.Administration
                     e.NextPage = CurrentPage;
                     return;
                 }
-                
+
                 // If its not 08, we'll be upgrading it (and the CLR status) later
                 if (sqlSession.IsSqlServer2008OrLater() && !sqlSession.IsClrEnabled())
                 {
@@ -651,15 +763,6 @@ namespace ShipWorks.Data.Administration
 
                 e.NextPage = CurrentPage;
             }
-        }
-
-        /// <summary>
-        /// Changing the login method on the credentials page
-        /// </summary>
-        private void OnChangeLoginMethod(object sender, System.EventArgs e)
-        {
-            username.Enabled = sqlServerAuth.Checked;
-            password.Enabled = sqlServerAuth.Checked;
         }
 
         #endregion
@@ -1005,7 +1108,7 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
-                    SqlDatabaseCreator.CreateDatabase(name, pathDataFiles.Text, con);
+                    ShipWorksDatabaseUtility.CreateDatabase(name, pathDataFiles.Text, con);
                 }
 
                 sqlSession.Configuration.DatabaseName = name;
@@ -1025,7 +1128,7 @@ namespace ShipWorks.Data.Administration
                     {
                         using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                         {
-                            SqlDatabaseCreator.CreateSchemaAndData();
+                            ShipWorksDatabaseUtility.CreateSchemaAndData();
                         }
                     }
                     // If something goes wrong, drop the db we just created
@@ -1064,7 +1167,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                SqlDatabaseCreator.DropDatabase(sqlSession, pendingDatabaseName);
+                ShipWorksDatabaseUtility.DropDatabase(sqlSession, pendingDatabaseName);
 
                 sqlSession.Configuration.DatabaseName = "";
             }
@@ -1515,7 +1618,6 @@ namespace ShipWorks.Data.Administration
         }
 
         #endregion
-
     }
 }
 
