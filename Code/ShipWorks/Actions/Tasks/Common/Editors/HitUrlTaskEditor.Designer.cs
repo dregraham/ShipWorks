@@ -34,7 +34,6 @@
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             System.Windows.Forms.Label labelHeaders;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HitUrlTaskEditor));
             this.urlTextBox = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.verbLabel = new System.Windows.Forms.Label();
             this.asBodyLabel = new System.Windows.Forms.Label();
