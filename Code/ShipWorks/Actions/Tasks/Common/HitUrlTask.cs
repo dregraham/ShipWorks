@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Xml.XPath;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,14 +22,6 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
 
-        public override string InputLabel
-        {
-            get
-            {
-                return "Using";
-            }
-        }
-
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
@@ -44,6 +38,33 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get;
             set;
+        }
+
+
+        /// <summary>
+        /// The object is being deserialized into its values
+        /// </summary>
+        public override void DeserializeXml(XPathNavigator xpath)
+        {
+            base.DeserializeXml(xpath);
+
+            XPathNodeIterator headeriIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
+
+            List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
+            foreach (XPathNavigator header in headeriIterator)
+            {
+                string[] keyValue = ((string)header.TypedValue).Split(',');
+
+                // ignore the first character as it is "["
+                string key = keyValue[0].Substring(1).Trim();
+
+                // ignore the last character as it is "]"
+                string value = keyValue[1].Substring(0, keyValue[1].Length - 1).Trim();
+
+                headerList.Add(new KeyValuePair<string, string>(key,value));
+            }
+
+            HttpHeaders = headerList.ToArray();
         }
 
         /// <summary>
@@ -76,7 +97,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the HTTP headers.
         /// </summary>
-        public Dictionary<string, string> HttpHeaders
+        public KeyValuePair<string,string>[] HttpHeaders
         {
             get;
             set;
@@ -90,6 +111,17 @@ namespace ShipWorks.Actions.Tasks.Common
             get
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// The label that goes before what the data source for the task should be.
+        /// </summary>
+        public override string InputLabel
+        {
+            get
+            {
+                return "Enter Webpage information you want to call.";
             }
         }
 
@@ -136,7 +168,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Credentials = new NetworkCredential(Username, Password);
             }
 
-            foreach (var header in HttpHeaders)
+            foreach (KeyValuePair<string, string> header in HttpHeaders)
             {
                 request.Headers.Add(header.Key, header.Value);
             }
@@ -144,7 +176,7 @@ namespace ShipWorks.Actions.Tasks.Common
             logger.LogRequest(request);
 
             IHttpResponseReader httpResponseReader = request.GetResponse();
-            
+
             logger.LogResponse(httpResponseReader.ReadResult(), "txt");
         }
 
