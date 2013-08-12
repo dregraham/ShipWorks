@@ -12,7 +12,7 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class NameValueGrid : Panel
     {
-        readonly DataGridView grid = new DataGridView { AllowUserToDeleteRows = true, Dock = DockStyle.Fill };
+        readonly DataGridView grid;
         private readonly Image deleteIcon = Properties.Resources.delete16;
         private readonly Image nullImage = new Bitmap(1, 1);
         private bool mouseDown;
@@ -25,6 +25,15 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public NameValueGrid()
         {
+            grid = new DataGridView
+            {
+                AllowUserToDeleteRows = true,
+                Dock = DockStyle.Fill,
+                ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+                RowHeadersWidth = 24,
+                RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing
+            };
+
             // Wire up event handlers
             grid.CellContentClick += OnGridCellContentClick;
             grid.CellEnter += OnGridCellEnter;
@@ -77,7 +86,6 @@ namespace ShipWorks.UI.Controls
         protected override void InitLayout()
         {
             Controls.Add(grid);
-
             AddDeleteImageColumnToGrid();
             AddTextColumnToGrid("Name", "NameColumn", x => x.FillWeight = 33);
             AddTextColumnToGrid("Value", "ValueColumn");
@@ -137,10 +145,11 @@ namespace ShipWorks.UI.Controls
         {
             var deleteIconCell = new DataGridViewImageColumn();
             deleteIconCell.Image = deleteIcon;
-            deleteIconCell.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             deleteIconCell.DefaultCellStyle.NullValue = null;
-            deleteIconCell.FillWeight = 5;
+            deleteIconCell.Width = 24;
+            deleteIconCell.ImageLayout = DataGridViewImageCellLayout.Normal;
             deleteIconCell.ReadOnly = true;
+            deleteIconCell.Resizable = DataGridViewTriState.False;
             grid.Columns.Add(deleteIconCell);
         }
 
@@ -193,10 +202,10 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void EnableDoubleBuffering()
         {
-            Type dgvType = grid.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
+            Type gridType = grid.GetType();
+            PropertyInfo property = gridType.GetProperty("DoubleBuffered",
                 BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(grid, true, null);
+            property.SetValue(grid, true, null);
         }
 
         /// <summary>
