@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls
@@ -11,16 +12,33 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class NameValueGrid : Panel
     {
-        readonly DataGridView grid = new DataGridView { AllowUserToDeleteRows = true };
+        readonly DataGridView grid = new DataGridView { AllowUserToDeleteRows = true, Dock = DockStyle.Fill };
+        private readonly Image deleteIcon = Properties.Resources.delete16;
+        private readonly Image nullImage = new Bitmap(1, 1);
+        private bool mouseDown;
+        private const int deleteCellIndex = 0;
+        private const int nameCellIndex = 1;
+        private const int valueCellIndex = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public NameValueGrid()
         {
+            // Wire up event handlers
+            grid.CellContentClick += OnGridCellContentClick;
+            grid.CellEnter += OnGridCellEnter;
+            grid.RowPrePaint += OnGridRowPrePaint;
+
             // Set up the event handlers to let us know when data has changed
             grid.RowsRemoved += (sender, args) => OnDataChanged();
             grid.CellEndEdit += (sender, args) => OnDataChanged();
+
+            // If the mouse is down, we don't want to tab to the next cell if a readonly cell is entered
+            grid.MouseDown += (sender, args) => mouseDown = true;
+            grid.MouseUp += (sender, args) => mouseDown = false;
+            
+            EnableDoubleBuffering();
         }
 
         /// <summary>
@@ -32,14 +50,14 @@ namespace ShipWorks.UI.Controls
             {
                 return grid.Rows.OfType<DataGridViewRow>()
                     .Where(x => !x.IsNewRow)
-                    .Select(x => new KeyValuePair<string, string>(CellValue(x.Cells[0]), CellValue(x.Cells[1])))
+                    .Select(x => new KeyValuePair<string, string>(CellValue(x.Cells[nameCellIndex]), CellValue(x.Cells[valueCellIndex])))
                     .ToList();
             }
             set
             {
                 grid.Rows.Clear();
 
-                foreach (object[] rowValue in value.Select(x => new[] { x.Key, x.Value }))
+                foreach (object[] rowValue in value.Select(x => new object[] { deleteIcon, x.Key, x.Value }))
                 {
                     grid.Rows.Add(rowValue);
                 }
@@ -60,12 +78,70 @@ namespace ShipWorks.UI.Controls
         {
             Controls.Add(grid);
 
-            AddGridColumn("Name", "NameColumn", x => x.FillWeight = 33);
-            AddGridColumn("Value", "ValueColumn");
-
-            grid.Dock = DockStyle.Fill;
+            AddDeleteImageColumnToGrid();
+            AddTextColumnToGrid("Name", "NameColumn", x => x.FillWeight = 33);
+            AddTextColumnToGrid("Value", "ValueColumn");
 
             base.InitLayout();
+        }
+
+        /// <summary>
+        /// A grid row is about to be painted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnGridRowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            DataGridViewCell deleteCell = grid.Rows[e.RowIndex].Cells[deleteCellIndex];
+
+            if (grid.Rows[e.RowIndex].IsNewRow)
+            {
+                // Show an empty image if this is the last row
+                deleteCell.Value = nullImage;
+            }
+            else if (deleteCell.Value == nullImage)
+            {
+                // Show the default image if it's not already shown
+                deleteCell.Value = null;
+            }
+        }
+
+        /// <summary>
+        /// A cell in the grid has been entered
+        /// </summary>
+        void OnGridCellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if cell is read-only. If so then force move to next control.
+            if (!mouseDown && grid.Rows[e.RowIndex].Cells[e.ColumnIndex].ReadOnly)
+            {
+                SendKeys.Send("{TAB}");
+            }
+        }
+
+        /// <summary>
+        /// The contents of a grid cell has been clicked
+        /// </summary>
+        void OnGridCellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Delete the current rows if the user clicked on the first column of an existing row
+            if (e.ColumnIndex == 0 && !grid.Rows[e.RowIndex].IsNewRow)
+            {
+                grid.Rows.RemoveAt(e.RowIndex);
+            }
+        }
+
+        /// <summary>
+        /// Add a delete image column to the grid
+        /// </summary>
+        private void AddDeleteImageColumnToGrid()
+        {
+            var deleteIconCell = new DataGridViewImageColumn();
+            deleteIconCell.Image = deleteIcon;
+            deleteIconCell.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            deleteIconCell.DefaultCellStyle.NullValue = null;
+            deleteIconCell.FillWeight = 5;
+            deleteIconCell.ReadOnly = true;
+            grid.Columns.Add(deleteIconCell);
         }
 
         /// <summary>
@@ -80,12 +156,12 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Add a column to the grid
+        /// Add a text column to the grid
         /// </summary>
         /// <param name="headerText">Text to display in the column header</param>
         /// <param name="name">Name of the column</param>
         /// <param name="setExtraProperties">Action that will allow the caller to set any other properties on the cell</param>
-        private void AddGridColumn(string headerText, string name, Action<DataGridViewTextBoxColumn> setExtraProperties = null)
+        private void AddTextColumnToGrid(string headerText, string name, Action<DataGridViewTextBoxColumn> setExtraProperties = null)
         {
             DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn
             {
@@ -96,9 +172,9 @@ namespace ShipWorks.UI.Controls
 
             if (setExtraProperties != null)
             {
-                setExtraProperties(column);
+                setExtraProperties(column);    
             }
-
+            
             grid.Columns.Add(column);
         }
 
@@ -113,14 +189,27 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Dispose of any resources
+        /// Enables double-buffering to reduce flickering when a cell is clicked
         /// </summary>
-        /// <param name="disposing"></param>
+        private void EnableDoubleBuffering()
+        {
+            Type dgvType = grid.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            pi.SetValue(grid, true, null);
+        }
+
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
+        /// <param name="disposing">Should managed resources be disposed</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 grid.Dispose();
+                deleteIcon.Dispose();
+                nullImage.Dispose();
             }
 
             base.Dispose(disposing);
