@@ -15,7 +15,7 @@ namespace ShipWorks.UI.Controls
         readonly DataGridView grid;
         private readonly Image deleteIcon = Properties.Resources.delete16;
         private readonly Image nullImage = new Bitmap(1, 1);
-        private bool mouseDown;
+        private DataGridView.HitTestInfo lastClickInfo;
         private const int deleteCellIndex = 0;
         private const int nameCellIndex = 1;
         private const int valueCellIndex = 2;
@@ -35,18 +35,17 @@ namespace ShipWorks.UI.Controls
             };
 
             // Wire up event handlers
-            grid.CellContentClick += OnGridCellContentClick;
             grid.CellEnter += OnGridCellEnter;
             grid.RowPrePaint += OnGridRowPrePaint;
-            grid.CellStateChanged += OnGridCellStateChanged;
+            grid.SelectionChanged += GridOnSelectionChanged;
 
             // Set up the event handlers to let us know when data has changed
             grid.RowsRemoved += (sender, args) => OnDataChanged();
             grid.CellEndEdit += (sender, args) => OnDataChanged();
 
             // If the mouse is down, we don't want to tab to the next cell if a readonly cell is entered
-            grid.MouseDown += (sender, args) => mouseDown = true;
-            grid.MouseUp += (sender, args) => mouseDown = false;
+            grid.MouseDown += GridOnMouseDown;
+            grid.MouseUp += GridOnMouseUp;
             
             EnableDoubleBuffering();
         }
@@ -70,6 +69,12 @@ namespace ShipWorks.UI.Controls
                 foreach (object[] rowValue in value.Select(x => new object[] { deleteIcon, x.Key, x.Value }))
                 {
                     grid.Rows.Add(rowValue);
+                }
+
+                // Select the name cell of the first row
+                if (grid.RowCount > 0)
+                {
+                    grid.CurrentCell = grid.Rows[0].Cells[nameCellIndex];
                 }
 
                 OnDataChanged();
@@ -115,37 +120,103 @@ namespace ShipWorks.UI.Controls
             }
         }
 
-        void OnGridCellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
-        {
-            // Prevent the delete button cells from being selected
-            if (e.StateChanged == DataGridViewElementStates.Selected && e.Cell.ColumnIndex == 0)
-            {
-                e.Cell.Selected = false;
-            }
-        }
-
         /// <summary>
         /// A cell in the grid has been entered
         /// </summary>
         void OnGridCellEnter(object sender, DataGridViewCellEventArgs e)
         {
             // Check if cell is read-only. If so then force move to next control.
-            if (!mouseDown && grid.Rows[e.RowIndex].Cells[e.ColumnIndex].ReadOnly)
+            if (lastClickInfo == null && grid.Rows[e.RowIndex].Cells[e.ColumnIndex].ReadOnly)
             {
                 SendKeys.Send("{TAB}");
             }
         }
 
         /// <summary>
-        /// The contents of a grid cell has been clicked
+        /// The selection of the grid cells has changed
         /// </summary>
-        void OnGridCellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void GridOnSelectionChanged(object sender, EventArgs eventArgs)
         {
-            // Delete the current rows if the user clicked on the first column of an existing row
-            if (e.ColumnIndex == 0 && !grid.Rows[e.RowIndex].IsNewRow)
+            foreach (DataGridViewCell cell in grid.SelectedCells)
             {
-                grid.Rows.RemoveAt(e.RowIndex);
+                if (cell.ColumnIndex == 0)
+                {
+                    cell.Selected = false;
+                }
             }
+        }
+
+        /// <summary>
+        /// The mouse was released over the grid
+        /// </summary>
+        private void GridOnMouseUp(object sender, MouseEventArgs e)
+        {
+            // Only handle the left mouse button
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            // Ensure that the click started and ended in the same cell
+            if (WasClickInSingleCell(e) && IsClickedColumnDeletable())
+            {
+                // Delete the current rows if the user clicked on the first column of an existing row
+                grid.Rows.RemoveAt(lastClickInfo.RowIndex);
+                grid.CurrentCell = grid.Rows[lastClickInfo.RowIndex].Cells[nameCellIndex];
+            }
+
+            // Clear the last clicked location
+            lastClickInfo = null;
+        }
+
+        /// <summary>
+        /// The mouse has been depressed over the grid
+        /// </summary>
+        private void GridOnMouseDown(object sender, MouseEventArgs e)
+        {
+            // Only handle the left mouse button
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
+            // Save where the mouse was pressed to check if it was released in the same cell
+            lastClickInfo = grid.HitTest(e.Location.X, e.Location.Y);
+        }
+
+        /// <summary>
+        /// Checks whether the clicked column is deletable.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsClickedColumnDeletable()
+        {
+            if (lastClickInfo == null)
+            {
+                return false;
+            }
+
+            return lastClickInfo.ColumnIndex == 0 && 
+                   lastClickInfo.RowIndex >= 0 &&
+                   !grid.Rows[lastClickInfo.RowIndex].IsNewRow;
+        }
+
+        /// <summary>
+        /// Checks whether the mouse click started and ended in the same cell
+        /// </summary>
+        /// <param name="e">EventArgs generated by the MouseUp event handler</param>
+        /// <returns></returns>
+        private bool WasClickInSingleCell(MouseEventArgs e)
+        {
+            if (lastClickInfo == null)
+            {
+                return false;
+            }
+
+            DataGridView.HitTestInfo info = grid.HitTest(e.Location.X, e.Location.Y);
+            
+            // Ensure that the click started and ended in the same cell
+            return info.RowIndex == lastClickInfo.RowIndex &&
+                    info.ColumnIndex == lastClickInfo.ColumnIndex;
         }
 
         /// <summary>
