@@ -121,6 +121,7 @@
             this.urlTextBox.TabIndex = 2;
             this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
             this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.urlTextBox.TextChanged += new System.EventHandler(this.OnUrlTextChanged);
             // 
             // verbLabel
             // 

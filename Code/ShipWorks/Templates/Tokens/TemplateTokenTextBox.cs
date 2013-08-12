@@ -29,6 +29,7 @@ namespace ShipWorks.Templates.Tokens
         /// <summary>
         /// Raised when the Text property changes
         /// </summary>
+        [Browsable(true)]
         public new event EventHandler TextChanged;
 
         // Hook for displaying the multi-value text over the text box
