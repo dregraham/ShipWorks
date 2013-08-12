@@ -38,7 +38,7 @@
             // 
             this.panelStores.Controls.Add(this.checkBoxSample1);
             this.panelStores.Controls.Add(this.checkBoxSample2);
-            this.panelStores.Location = new System.Drawing.Point(3, 3);
+            this.panelStores.Location = new System.Drawing.Point(0, 0);
             this.panelStores.Name = "panelStores";
             this.panelStores.Size = new System.Drawing.Size(488, 45);
             this.panelStores.TabIndex = 4;
@@ -69,7 +69,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelStores);
             this.Name = "StoreCheckBoxPanel";
-            this.Size = new System.Drawing.Size(496, 57);
+            this.Size = new System.Drawing.Size(496, 53);
             this.panelStores.ResumeLayout(false);
             this.panelStores.PerformLayout();
             this.ResumeLayout(false);

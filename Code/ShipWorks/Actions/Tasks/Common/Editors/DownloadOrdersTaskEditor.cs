@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -14,8 +15,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <param name="task">The task.</param>
         public DownloadOrdersTaskEditor(DownloadOrdersTask task)
         {
-            InitializeComponent();
+            if (task == null)
+            {
+                throw new ArgumentNullException("task");
+            }
 
+            InitializeComponent();
             this.task = task;
 
             // Don't truncate the display of the panel after loading the stores
@@ -23,7 +28,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             Height = storeCheckBoxPanel.Bottom + 5;
 
             // Update the selected stores based on the task settings
-            List<StoreEntity> stores = task.StoreIDs.Select(storeID => new StoreEntity(storeID)).ToList();
+            List<StoreEntity> stores = this.task.StoreIDs.Select(storeID => new StoreEntity(storeID)).ToList();
             storeCheckBoxPanel.SelectedStores = stores;
 
             storeCheckBoxPanel.StoreSelectionChanged += OnStoreSelectionChanged;

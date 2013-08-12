@@ -36,18 +36,18 @@
             // taskDescription
             // 
             this.taskDescription.AutoSize = true;
-            this.taskDescription.Location = new System.Drawing.Point(3, 5);
+            this.taskDescription.Location = new System.Drawing.Point(-3, 0);
             this.taskDescription.Name = "taskDescription";
-            this.taskDescription.Size = new System.Drawing.Size(276, 13);
+            this.taskDescription.Size = new System.Drawing.Size(227, 13);
             this.taskDescription.TabIndex = 0;
-            this.taskDescription.Text = "Select the stores that orders should be downloaded for:";
+            this.taskDescription.Text = "Select the stores you want to download from:";
             // 
             // storeCheckBoxPanel
             // 
-            this.storeCheckBoxPanel.Location = new System.Drawing.Point(4, 21);
+            this.storeCheckBoxPanel.Location = new System.Drawing.Point(14, 17);
             this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
             this.storeCheckBoxPanel.SelectedStores = ((System.Collections.Generic.IEnumerable<ShipWorks.Data.Model.EntityClasses.StoreEntity>)(resources.GetObject("storeCheckBoxPanel.SelectedStores")));
-            this.storeCheckBoxPanel.Size = new System.Drawing.Size(496, 57);
+            this.storeCheckBoxPanel.Size = new System.Drawing.Size(335, 57);
             this.storeCheckBoxPanel.TabIndex = 1;
             // 
             // DownloadOrdersTaskEditor
@@ -57,7 +57,7 @@
             this.Controls.Add(this.storeCheckBoxPanel);
             this.Controls.Add(this.taskDescription);
             this.Name = "DownloadOrdersTaskEditor";
-            this.Size = new System.Drawing.Size(513, 89);
+            this.Size = new System.Drawing.Size(362, 75);
             this.ResumeLayout(false);
             this.PerformLayout();
 

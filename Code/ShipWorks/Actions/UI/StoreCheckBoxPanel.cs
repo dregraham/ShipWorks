@@ -34,7 +34,7 @@ namespace ShipWorks.Actions.UI
         {
             panelStores.Controls.Clear();
 
-            Point location = new Point(3, 3);
+            Point location = new Point(0, 0);
 
             // Go through all the stores
             foreach (StoreEntity store in StoreManager.GetAllStores())
@@ -52,7 +52,7 @@ namespace ShipWorks.Actions.UI
             }
 
             panelStores.Height = location.Y + 4;
-            this.Height = panelStores.Height + 4;
+            Height = panelStores.Height + 4;
         }
 
         /// <summary>
@@ -90,13 +90,16 @@ namespace ShipWorks.Actions.UI
             }
             set
             {
-                foreach (StoreEntity store in value)
+                if (value != null)
                 {
-                    // Update the state of the checkboxes based on the store list provided
-                    CheckBox storeCheckBox = panelStores.Controls.OfType<CheckBox>().Single(c => (long) c.Tag == store.StoreID);
-                    if (storeCheckBox != null)
+                    foreach (StoreEntity store in value)
                     {
-                        storeCheckBox.Checked = true;
+                        // Update the state of the checkboxes based on the store list provided
+                        CheckBox storeCheckBox = panelStores.Controls.OfType<CheckBox>().Single(c => (long) c.Tag == store.StoreID);
+                        if (storeCheckBox != null)
+                        {
+                            storeCheckBox.Checked = true;
+                        }
                     }
                 }
             }
