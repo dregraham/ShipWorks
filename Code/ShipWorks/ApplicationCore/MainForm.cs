@@ -294,13 +294,24 @@ namespace ShipWorks
         /// </summary>
         private bool OpenShipWorksSetup()
         {
-            if (SqlServerInstaller.IsSqlServer2012Supported)
+            // If we are configured, but connected to LocalDB, open the special window for "Enabling remote connections"
+            if (SqlSession.IsConfigured && SqlSession.Current.Configuration.IsLocalDb())
+            {
+                // TODO: To be replaced with the "Enable remote connections" window
+                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                {
+                    return dlg.ShowDialog(this) == DialogResult.OK;
+                }                
+            }
+            // If we aren't configured and 2012 is supported, open the fast track setup wizard
+            else if (!SqlSession.IsConfigured && SqlServerInstaller.IsSqlServer2012Supported)
             {
                 using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
                 {
                     return wizard.ShowDialog(this) == DialogResult.OK;
                 }
             }
+            // Otherwise, we use our normal database setup wizard
             else
             {
                 using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
