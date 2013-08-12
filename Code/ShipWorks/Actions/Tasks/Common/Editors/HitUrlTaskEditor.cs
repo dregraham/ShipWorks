@@ -12,6 +12,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
     {
         readonly HitUrlTask task;
         ContextMenuStrip verbMenu;
+        ContextMenuStrip authMenu;
 
         public HitUrlTaskEditor(HitUrlTask task)
             : base(task)
@@ -25,13 +26,18 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             base.OnLoad(e);
             CreateVerbMenu();
+            CreateAuthMenu();
 
             verbLabel.Text = EnumHelper.GetDescription(task.Verb);
             urlTextBox.Text = task.UrlToHit;
+            authLabel.Text = task.UseBasicAuthentication ? "basic" : "no";
+            userNameTextBox.Text = task.Username;
+            passwordTextBox.Text = task.Password;
 
             if(null != task.HttpHeaders)
                 headersGrid.Values = task.HttpHeaders;
 
+            UpdateAuthUI();
             UpdateBodyUI();
         }
 
@@ -49,6 +55,21 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             }
         }
 
+        void CreateAuthMenu()
+        {
+            authMenu = new ContextMenuStrip();
+
+            var noMenuItem = new ToolStripMenuItem("no");
+            noMenuItem.Click += OnClickAuthMenuItem;
+            noMenuItem.Tag = false;
+            authMenu.Items.Add(noMenuItem);
+
+            var basicMenuItem = new ToolStripMenuItem("basic");
+            basicMenuItem.Click += OnClickAuthMenuItem;
+            basicMenuItem.Tag = true;
+            authMenu.Items.Add(basicMenuItem);
+        }
+
         void OnClickVerbLabel(object sender, EventArgs e)
         {
             verbMenu.Show(verbLabel.Parent.PointToScreen(new Point(verbLabel.Left, verbLabel.Bottom)));
@@ -62,7 +83,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             if (task.Verb != clickedVerb)
             {
                 task.Verb = clickedVerb;
-                verbLabel.Text = EnumHelper.GetDescription(clickedVerb);
+                verbLabel.Text = verbMenuItem.Text;
                 UpdateBodyUI();
             }
         }
@@ -70,6 +91,46 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         void OnUrlTextChanged(object sender, EventArgs e)
         {
             task.UrlToHit = urlTextBox.Text;
+        }
+
+        void OnClickAuthLabel(object sender, EventArgs e)
+        {
+            authMenu.Show(authLabel.Parent.PointToScreen(new Point(authLabel.Left, authLabel.Bottom)));
+        }
+
+        void OnClickAuthMenuItem(object sender, EventArgs e)
+        {
+            var authMenuItem = (ToolStripMenuItem)sender;
+            var useBasicAuth = (bool)authMenuItem.Tag;
+
+            if (task.UseBasicAuthentication != useBasicAuth)
+            {
+                task.UseBasicAuthentication = useBasicAuth;
+                authLabel.Text = authMenuItem.Text;
+                UpdateAuthUI();
+            }
+        }
+
+        void OnUserNameTextChanged(object sender, EventArgs e)
+        {
+            task.Username = userNameTextBox.Text;
+        }
+
+        void OnPasswordTextChanged(object sender, EventArgs e)
+        {
+            task.Password = passwordTextBox.Text;
+        }
+
+        void UpdateAuthUI()
+        {
+            basicAuthPanel.Visible =
+                task.UseBasicAuthentication;
+
+            if (!basicAuthPanel.Visible)
+            {
+                userNameTextBox.Text = null;
+                passwordTextBox.Text = null;
+            }
         }
 
         void OnHeadersGridDataChanged(object sender, EventArgs e)
