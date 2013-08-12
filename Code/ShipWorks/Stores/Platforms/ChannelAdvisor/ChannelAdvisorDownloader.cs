@@ -108,12 +108,39 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 return false;
             }
 
+            // check for cancellation
+            if (Progress.IsCancelRequested)
+            {
+                return true;
+            }
+
+            MarkOrdersAsExported(client, caOrders);
+            LoadOrders(client, caOrders);
+
+            return true;
+        }
+
+        private void MarkOrdersAsExported(ChannelAdvisorClient client, List<OrderResponseDetailComplete> caOrders)
+        {
+            foreach (OrderResponseDetailComplete caOrder in caOrders)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Loads the orders into ShipWorks database.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <param name="caOrders">The ca orders.</param>
+        private void LoadOrders(ChannelAdvisorClient client, List<OrderResponseDetailComplete> caOrders)
+        {
             foreach (OrderResponseDetailComplete caOrder in caOrders)
             {
                 // check for cancellation
                 if (Progress.IsCancelRequested)
                 {
-                    return true;
+                    break;
                 }
 
                 Progress.Detail = String.Format("Processing order {0}...", (QuantitySaved + 1));
@@ -122,8 +149,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // update the status, 100 max
                 Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);
             }
-
-            return true;
         }
 
         /// <summary>

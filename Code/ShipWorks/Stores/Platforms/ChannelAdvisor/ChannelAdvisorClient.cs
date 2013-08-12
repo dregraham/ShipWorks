@@ -478,6 +478,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                                         OrderFields.IsManual == false);
         }
 
+
+        /// <summary>
+        /// Sets the order as exported on Channel Advisor..
+        /// </summary>
+        public void SetOrdersExportStatus(List<int> orderIDList)
+        {
+            
+        }
         /// <summary>
         /// Uploads the shipment details for the specified order
         /// </summary>
