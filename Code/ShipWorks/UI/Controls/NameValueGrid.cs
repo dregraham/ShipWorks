@@ -38,6 +38,7 @@ namespace ShipWorks.UI.Controls
             grid.CellContentClick += OnGridCellContentClick;
             grid.CellEnter += OnGridCellEnter;
             grid.RowPrePaint += OnGridRowPrePaint;
+            grid.CellStateChanged += OnGridCellStateChanged;
 
             // Set up the event handlers to let us know when data has changed
             grid.RowsRemoved += (sender, args) => OnDataChanged();
@@ -111,6 +112,15 @@ namespace ShipWorks.UI.Controls
             {
                 // Show the default image if it's not already shown
                 deleteCell.Value = null;
+            }
+        }
+
+        void OnGridCellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
+        {
+            // Prevent the delete button cells from being selected
+            if (e.StateChanged == DataGridViewElementStates.Selected && e.Cell.ColumnIndex == 0)
+            {
+                e.Cell.Selected = false;
             }
         }
 
