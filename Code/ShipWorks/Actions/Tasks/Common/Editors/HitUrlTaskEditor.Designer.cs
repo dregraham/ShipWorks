@@ -33,26 +33,32 @@
             System.Windows.Forms.Label sendALabel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            System.Windows.Forms.Label labelHeaders;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HitUrlTaskEditor));
             this.urlTextBox = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.verbLabel = new System.Windows.Forms.Label();
             this.asBodyLabel = new System.Windows.Forms.Label();
+            this.headersGrid = new ShipWorks.UI.Controls.NameValueGrid();
+            this.headersPanel = new System.Windows.Forms.TableLayoutPanel();
             requestUrlPanel = new System.Windows.Forms.FlowLayoutPanel();
             requestToLabel = new System.Windows.Forms.Label();
             sendALabel = new System.Windows.Forms.Label();
             verbUrlPanel = new System.Windows.Forms.TableLayoutPanel();
+            labelHeaders = new System.Windows.Forms.Label();
             verbUrlPanel.SuspendLayout();
+            this.headersPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTemplate
             // 
-            this.labelTemplate.Location = new System.Drawing.Point(4, 103);
+            this.labelTemplate.Location = new System.Drawing.Point(4, 163);
             this.labelTemplate.Margin = new System.Windows.Forms.Padding(0);
             this.labelTemplate.Size = new System.Drawing.Size(78, 13);
             this.labelTemplate.Text = "Using template";
             // 
             // templateCombo
             // 
-            this.templateCombo.Location = new System.Drawing.Point(85, 100);
+            this.templateCombo.Location = new System.Drawing.Point(85, 160);
             this.templateCombo.TabIndex = 20;
             // 
             // requestUrlPanel
@@ -108,7 +114,7 @@
             verbUrlPanel.Name = "verbUrlPanel";
             verbUrlPanel.RowCount = 1;
             verbUrlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            verbUrlPanel.Size = new System.Drawing.Size(501, 27);
+            verbUrlPanel.Size = new System.Drawing.Size(497, 27);
             verbUrlPanel.TabIndex = 5;
             // 
             // urlTextBox
@@ -117,7 +123,7 @@
             this.urlTextBox.Location = new System.Drawing.Point(126, 3);
             this.urlTextBox.MaxLength = 32767;
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(372, 21);
+            this.urlTextBox.Size = new System.Drawing.Size(368, 21);
             this.urlTextBox.TabIndex = 2;
             this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
             this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
@@ -138,33 +144,74 @@
             this.verbLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.verbLabel.Click += new System.EventHandler(this.OnClickVerbLabel);
             // 
+            // labelHeaders
+            // 
+            labelHeaders.Anchor = System.Windows.Forms.AnchorStyles.None;
+            labelHeaders.AutoSize = true;
+            labelHeaders.Location = new System.Drawing.Point(0, 53);
+            labelHeaders.Margin = new System.Windows.Forms.Padding(0);
+            labelHeaders.Name = "labelHeaders";
+            labelHeaders.Size = new System.Drawing.Size(71, 13);
+            labelHeaders.TabIndex = 0;
+            labelHeaders.Text = "With headers";
+            labelHeaders.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // asBodyLabel
             // 
             this.asBodyLabel.AutoSize = true;
-            this.asBodyLabel.Location = new System.Drawing.Point(341, 103);
+            this.asBodyLabel.Location = new System.Drawing.Point(341, 163);
             this.asBodyLabel.Margin = new System.Windows.Forms.Padding(0);
             this.asBodyLabel.Name = "asBodyLabel";
-            this.asBodyLabel.Size = new System.Drawing.Size(108, 13);
+            this.asBodyLabel.Size = new System.Drawing.Size(104, 13);
             this.asBodyLabel.TabIndex = 0;
-            this.asBodyLabel.Text = "as the request body.";
+            this.asBodyLabel.Text = "as the request body";
             this.asBodyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // headersGrid
+            // 
+            this.headersGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.headersGrid.Location = new System.Drawing.Point(74, 3);
+            this.headersGrid.Name = "headersGrid";
+            this.headersGrid.Size = new System.Drawing.Size(420, 113);
+            this.headersGrid.TabIndex = 21;
+            this.headersGrid.DataChanged += new System.EventHandler<System.EventArgs>(this.OnHeadersGridDataChanged);
+            // 
+            // headersPanel
+            // 
+            this.headersPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.headersPanel.ColumnCount = 2;
+            this.headersPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.headersPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.headersPanel.Controls.Add(this.headersGrid, 1, 0);
+            this.headersPanel.Controls.Add(labelHeaders, 0, 0);
+            this.headersPanel.Location = new System.Drawing.Point(4, 33);
+            this.headersPanel.Name = "headersPanel";
+            this.headersPanel.RowCount = 1;
+            this.headersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.headersPanel.Size = new System.Drawing.Size(497, 119);
+            this.headersPanel.TabIndex = 22;
             // 
             // HitUrlTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.headersPanel);
             this.Controls.Add(this.asBodyLabel);
             this.Controls.Add(verbUrlPanel);
             this.Controls.Add(requestUrlPanel);
             this.Name = "HitUrlTaskEditor";
-            this.Size = new System.Drawing.Size(505, 131);
+            this.Size = new System.Drawing.Size(501, 190);
             this.Controls.SetChildIndex(requestUrlPanel, 0);
             this.Controls.SetChildIndex(verbUrlPanel, 0);
+            this.Controls.SetChildIndex(this.asBodyLabel, 0);
             this.Controls.SetChildIndex(this.labelTemplate, 0);
             this.Controls.SetChildIndex(this.templateCombo, 0);
-            this.Controls.SetChildIndex(this.asBodyLabel, 0);
+            this.Controls.SetChildIndex(this.headersPanel, 0);
             verbUrlPanel.ResumeLayout(false);
             verbUrlPanel.PerformLayout();
+            this.headersPanel.ResumeLayout(false);
+            this.headersPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -175,6 +222,8 @@
         private System.Windows.Forms.Label verbLabel;
         private System.Windows.Forms.Label asBodyLabel;
         private Templates.Tokens.TemplateTokenTextBox urlTextBox;
+        private ShipWorks.UI.Controls.NameValueGrid headersGrid;
+        private System.Windows.Forms.TableLayoutPanel headersPanel;
 
     }
 }

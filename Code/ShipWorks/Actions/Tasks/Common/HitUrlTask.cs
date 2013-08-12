@@ -121,7 +121,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return "Enter Webpage information you want to call.";
+                return "Using";
             }
         }
 

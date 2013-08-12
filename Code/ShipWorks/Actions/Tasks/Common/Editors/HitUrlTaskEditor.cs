@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 
@@ -27,6 +28,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             verbLabel.Text = EnumHelper.GetDescription(task.Verb);
             urlTextBox.Text = task.UrlToHit;
+
+            if(null != task.HttpHeaders)
+                headersGrid.Values = task.HttpHeaders;
 
             UpdateBodyUI();
         }
@@ -68,6 +72,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             task.UrlToHit = urlTextBox.Text;
         }
 
+        void OnHeadersGridDataChanged(object sender, EventArgs e)
+        {
+            task.HttpHeaders = headersGrid.Values.ToArray();
+        }
+
         void UpdateBodyUI()
         {
             labelTemplate.Visible =
@@ -82,7 +91,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             else
             {
                 templateCombo.SelectedTemplate = null;
-                this.Height = templateCombo.Top - 6;
+                this.Height = templateCombo.Top - 3;
             }
         }
     }
