@@ -33,9 +33,9 @@
             System.Windows.Forms.Label sendALabel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            this.urlTextBox = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.verbLabel = new System.Windows.Forms.Label();
             this.asBodyLabel = new System.Windows.Forms.Label();
-            this.urlTextBox = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             requestUrlPanel = new System.Windows.Forms.FlowLayoutPanel();
             requestToLabel = new System.Windows.Forms.Label();
             sendALabel = new System.Windows.Forms.Label();
@@ -53,6 +53,7 @@
             // templateCombo
             // 
             this.templateCombo.Location = new System.Drawing.Point(85, 100);
+            this.templateCombo.TabIndex = 20;
             // 
             // requestUrlPanel
             // 
@@ -74,7 +75,7 @@
             requestToLabel.Margin = new System.Windows.Forms.Padding(0);
             requestToLabel.Name = "requestToLabel";
             requestToLabel.Size = new System.Drawing.Size(57, 13);
-            requestToLabel.TabIndex = 2;
+            requestToLabel.TabIndex = 0;
             requestToLabel.Text = "request to";
             requestToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -86,7 +87,7 @@
             sendALabel.Margin = new System.Windows.Forms.Padding(0);
             sendALabel.Name = "sendALabel";
             sendALabel.Size = new System.Drawing.Size(40, 13);
-            sendALabel.TabIndex = 2;
+            sendALabel.TabIndex = 0;
             sendALabel.Text = "Send a";
             sendALabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -110,6 +111,17 @@
             verbUrlPanel.Size = new System.Drawing.Size(501, 27);
             verbUrlPanel.TabIndex = 5;
             // 
+            // urlTextBox
+            // 
+            this.urlTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.urlTextBox.Location = new System.Drawing.Point(126, 3);
+            this.urlTextBox.MaxLength = 32767;
+            this.urlTextBox.Name = "urlTextBox";
+            this.urlTextBox.Size = new System.Drawing.Size(372, 21);
+            this.urlTextBox.TabIndex = 2;
+            this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
+            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
             // verbLabel
             // 
             this.verbLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -120,7 +132,7 @@
             this.verbLabel.Margin = new System.Windows.Forms.Padding(0);
             this.verbLabel.Name = "verbLabel";
             this.verbLabel.Size = new System.Drawing.Size(26, 13);
-            this.verbLabel.TabIndex = 0;
+            this.verbLabel.TabIndex = 1;
             this.verbLabel.Text = "GET";
             this.verbLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.verbLabel.Click += new System.EventHandler(this.OnClickVerbLabel);
@@ -132,19 +144,9 @@
             this.asBodyLabel.Margin = new System.Windows.Forms.Padding(0);
             this.asBodyLabel.Name = "asBodyLabel";
             this.asBodyLabel.Size = new System.Drawing.Size(108, 13);
-            this.asBodyLabel.TabIndex = 6;
+            this.asBodyLabel.TabIndex = 0;
             this.asBodyLabel.Text = "as the request body.";
             this.asBodyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // urlTextBox
-            // 
-            this.urlTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.urlTextBox.Location = new System.Drawing.Point(126, 3);
-            this.urlTextBox.MaxLength = 32767;
-            this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(372, 21);
-            this.urlTextBox.TabIndex = 7;
-            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // HitUrlTaskEditor
             // 

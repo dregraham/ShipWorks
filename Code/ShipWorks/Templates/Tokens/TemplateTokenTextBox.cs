@@ -23,6 +23,7 @@ namespace ShipWorks.Templates.Tokens
         bool isMultiValued = false;
 
         TokenUsage usage = TokenUsage.Generic;
+        TokenSelectionMode selectionMode = TokenSelectionMode.Replace;
         private ITokenSuggestionFactory tokenSuggestionFactory;
 
         /// <summary>
@@ -164,7 +165,7 @@ namespace ShipWorks.Templates.Tokens
 
                 if (value)
                 {
-                    tokenTextBox.Text = "";
+                    SetInnerText("");
                 }
 
                 isMultiValued = value;
@@ -185,7 +186,7 @@ namespace ShipWorks.Templates.Tokens
             }
             set
             {
-                tokenTextBox.Text = value;
+                SetInnerText(value);
 
                 if (isMultiValued)
                 {
@@ -193,6 +194,13 @@ namespace ShipWorks.Templates.Tokens
                     tokenTextBox.TextBox.Invalidate();
                 }
             }
+        }
+
+        void SetInnerText(string value)
+        {
+            tokenTextBox.Text = value;
+            tokenTextBox.SelectionStart = tokenTextBox.Text.Length;
+            tokenTextBox.SelectionLength = 0;
         }
 
         [DefaultValue(TokenUsage.Generic)]
@@ -213,6 +221,13 @@ namespace ShipWorks.Templates.Tokens
 
                 UpdateTokenSuggestionsMenu();
             }
+        }
+
+        [DefaultValue(TokenSelectionMode.Replace)]
+        public TokenSelectionMode TokenSelectionMode
+        {
+            get { return selectionMode; }
+            set { selectionMode = value; }
         }
 
         /// <summary>
@@ -291,7 +306,7 @@ namespace ShipWorks.Templates.Tokens
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    tokenTextBox.Text = dlg.TokenText;
+                    SetInnerText(dlg.TokenText);
                 }
             }
         }
@@ -303,12 +318,14 @@ namespace ShipWorks.Templates.Tokens
         {
             string text = ((ToolStripMenuItem) sender).Text;
 
-            // This is how you'd do it if you just wanted to append\replace selection.  This is 
-            // what I thought it should be at first. Wes was confused by it, and later I thought
-            // maybe its not best.
-            //    tokenTextBox.TextBox.Paste(text);
-
-            tokenTextBox.Text = text;
+            if (TokenSelectionMode == Tokens.TokenSelectionMode.Paste)
+            {
+                tokenTextBox.TextBox.Paste(text);
+            }
+            else
+            {
+                SetInnerText(text);
+            }
         }
 
         /// <summary>
@@ -325,6 +342,14 @@ namespace ShipWorks.Templates.Tokens
             if (TextChanged != null)
             {
                 TextChanged(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnClickTokenOptionsDropdown(object sender, EventArgs e)
+        {
+            if (TokenSelectionMode == Tokens.TokenSelectionMode.Paste)
+            {
+                tokenTextBox.Focus();
             }
         }
     }
