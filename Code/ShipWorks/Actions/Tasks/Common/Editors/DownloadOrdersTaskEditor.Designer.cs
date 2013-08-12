@@ -28,25 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DownloadOrdersTaskEditor));
             this.taskDescription = new System.Windows.Forms.Label();
+            this.storeCheckBoxPanel = new ShipWorks.Actions.UI.StoreCheckBoxPanel();
             this.SuspendLayout();
             // 
             // taskDescription
             // 
             this.taskDescription.AutoSize = true;
-            this.taskDescription.Location = new System.Drawing.Point(4, 4);
+            this.taskDescription.Location = new System.Drawing.Point(3, 5);
             this.taskDescription.Name = "taskDescription";
-            this.taskDescription.Size = new System.Drawing.Size(376, 13);
+            this.taskDescription.Size = new System.Drawing.Size(276, 13);
             this.taskDescription.TabIndex = 0;
-            this.taskDescription.Text = "Use the Settings tab to select the stores that orders should be downloaded for.";
+            this.taskDescription.Text = "Select the stores that orders should be downloaded for:";
+            // 
+            // storeCheckBoxPanel
+            // 
+            this.storeCheckBoxPanel.Location = new System.Drawing.Point(4, 21);
+            this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
+            this.storeCheckBoxPanel.SelectedStores = ((System.Collections.Generic.IEnumerable<ShipWorks.Data.Model.EntityClasses.StoreEntity>)(resources.GetObject("storeCheckBoxPanel.SelectedStores")));
+            this.storeCheckBoxPanel.Size = new System.Drawing.Size(496, 57);
+            this.storeCheckBoxPanel.TabIndex = 1;
             // 
             // DownloadOrdersTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.storeCheckBoxPanel);
             this.Controls.Add(this.taskDescription);
             this.Name = "DownloadOrdersTaskEditor";
-            this.Size = new System.Drawing.Size(397, 26);
+            this.Size = new System.Drawing.Size(513, 89);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -55,5 +66,6 @@
         #endregion
 
         private System.Windows.Forms.Label taskDescription;
+        private UI.StoreCheckBoxPanel storeCheckBoxPanel;
     }
 }

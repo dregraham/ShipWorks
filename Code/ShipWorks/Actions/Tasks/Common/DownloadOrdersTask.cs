@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -16,13 +17,32 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Download orders", "DownloadOrders", ActionTriggerClassifications.Scheduled)]
     public class DownloadOrdersTask : ActionTask
     {
+        private List<long> storeIDs;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DownloadOrdersTask"/> class.
+        /// </summary>
+        public DownloadOrdersTask()
+        {
+            storeIDs = new List<long>();
+        }
+
+        /// <summary>
+        /// Gets or sets the list of store IDs that should have orders downloaded.
+        /// </summary>
+        public IEnumerable<long> StoreIDs
+        {
+            get { return storeIDs; }
+            set { storeIDs = new List<long>(value); }
+        }
+
         /// <summary>
         /// Creates the editor that is used to edit the task.
         /// </summary>
         /// <returns></returns>
         public override ActionTaskEditor CreateEditor()
         {
-            return new DownloadOrdersTaskEditor();
+            return new DownloadOrdersTaskEditor(this);
         }
 
         /// <summary>
@@ -40,19 +60,14 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            ActionEntity action = ActionManager.GetAction(context.Queue.ActionID);
-            if (action != null)
+            List<StoreEntity> storeEntities = new List<StoreEntity>();
+            foreach (long storeId in StoreIDs)
             {
-                List<StoreEntity> storeEntities = new List<StoreEntity>();
-
-                foreach (long storeId in action.StoreLimitedList)
-                {
-                    StoreEntity storeEntity = StoreManager.GetStore(storeId);
-                    storeEntities.Add(storeEntity);
-                }
-
-                DownloadManager.StartDownload(storeEntities, DownloadInitiatedBy.ShipWorks);
+                StoreEntity storeEntity = StoreManager.GetStore(storeId);
+                storeEntities.Add(storeEntity);
             }
-    }
+
+            DownloadManager.StartDownload(storeEntities, DownloadInitiatedBy.ShipWorks);
+        }
     }
 }
