@@ -93,6 +93,16 @@ namespace ShipWorks.Data.Administration
         const string localDbDisplayName = "(Local Only)";
 
         /// <summary>
+        /// The option the user chooses for the first page of the wizard
+        /// </summary>
+        enum ChooseWiselyOption
+        {
+            Connect,
+            Create,
+            Restore
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public DatabaseSetupWizard()
@@ -115,7 +125,7 @@ namespace ShipWorks.Data.Administration
                     {
                         return new XElement("Replay",
                             new XElement("InstanceName", instanceName.Text),
-                            new XElement("Restore", radioRestoreDatabase.Checked));
+                            new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)));
                     });
             Pages.Insert(placeholderIndex, dotNet35Page);
 
@@ -127,7 +137,7 @@ namespace ShipWorks.Data.Administration
                     {
                         return new XElement("Replay",
                             new XElement("InstanceName", instanceName.Text),
-                            new XElement("Restore", radioRestoreDatabase.Checked));
+                            new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)));
                     });
             Pages.Insert(placeholderIndex, windowsInstallerPage);
 
@@ -142,23 +152,27 @@ namespace ShipWorks.Data.Administration
         {
             StartSearchingSqlServers();
 
+            bool useChooseWisely2012 = SqlServerInstaller.IsSqlServer2012Supported;
+
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
+                useChooseWisely2012 = false;
+
                 if (StartupController.StartupArgument.Name == "Upgrade2x")
                 {
                     var setupControls = new List<Control>
                                 {
-                                    radioSetupNewDatabase, pictureBoxSetupNewDatabase, labelSetupNewDatabase,
-                                    radioConnectRunningDatabase, pictureBoxConnectRunningDatabase, labelConnectRunningDatabase
+                                    radioChooseCreate2008, pictureBoxSetupNewDatabase, labelSetupNewDatabase,
+                                    radioChooseConnect2008, pictureBoxConnectRunningDatabase, labelConnectRunningDatabase
                                 };
 
                     var restoreControls = new List<Control>
                                 {
-                                    radioRestoreDatabase, pictureBoxRestoreDatabase, labelRestoreDatabase
+                                    radioChooseRestore2008, pictureBoxRestoreDatabase, labelRestoreDatabase
                                 };
 
-                    int setupOffset = radioConnectRunningDatabase.Top - radioSetupNewDatabase.Top;
-                    int restoreOffset = radioSetupNewDatabase.Top - radioRestoreDatabase.Top;
+                    int setupOffset = radioChooseConnect2008.Top - radioChooseCreate2008.Top;
+                    int restoreOffset = radioChooseCreate2008.Top - radioChooseRestore2008.Top;
 
                     foreach (var control in setupControls)
                     {
@@ -170,12 +184,12 @@ namespace ShipWorks.Data.Administration
                         control.Top += restoreOffset;
                     }
 
-                    radioRestoreDatabase.Checked = true;
-                    radioRestoreDatabase.Text = "Upgrade from a ShipWorks 2 Backup";
+                    radioChooseRestore2008.Checked = true;
+                    radioChooseRestore2008.Text = "Upgrade from a ShipWorks 2 Backup";
                     labelRestoreDatabase.Text = "Select this option to import ShipWorks 2 data without affecting ShipWorks 2.";
 
-                    radioSetupNewDatabase.ForeColor = SystemColors.GrayText;
-                    radioConnectRunningDatabase.ForeColor = SystemColors.GrayText;
+                    radioChooseCreate2008.ForeColor = SystemColors.GrayText;
+                    radioChooseConnect2008.ForeColor = SystemColors.GrayText;
 
                     instanceName.Text = "SHIPWORKS3";
                 }
@@ -185,7 +199,7 @@ namespace ShipWorks.Data.Administration
 
                     if (wasDoingRestore)
                     {
-                        radioRestoreDatabase.Checked = true;
+                        radioChooseRestore2008.Checked = true;
                         MoveNext();
 
                         radioRestoreIntoNewDatabase.Checked = true;
@@ -193,7 +207,7 @@ namespace ShipWorks.Data.Administration
                     }
                     else
                     {
-                        radioSetupNewDatabase.Checked = true;
+                        radioChooseCreate2008.Checked = true;
                         MoveNext();
                     }
 
@@ -211,7 +225,7 @@ namespace ShipWorks.Data.Administration
                         // Reload all the SQL Session from last time
                         sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
                         sqlSession.Configuration.Username = "sa";
-                        sqlSession.Configuration.Password = SecureText.Decrypt((string) afterInstallSuccess.Attribute("password"), "sa");
+                        sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
                         sqlSession.Configuration.WindowsAuth = false;
 
                         // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
@@ -228,41 +242,88 @@ namespace ShipWorks.Data.Administration
                 StartupController.ClearStartupAction();
             }
 
-            if (SqlServerInstaller.IsSqlServer2012Supported)
+            // Setup which first page the user will see
+            if (useChooseWisely2012)
             {
-                panelSetupLegacy.Visible = false;
-                radioSetupNewDatabase.Checked = false;
+                Pages.Remove(wizardPageChooseWisely2008);
             }
             else
             {
-                panelSetup2012.Visible = false;
-                radioConnectToAnotherPC.Checked = false;
+                Pages.Remove(wizardPageChooseWisely2012);
             }
-
-            panelSetupLegacy.Location = panelSetup2012.Location;
         }
 
         #region Setup or Connect
+
+        /// <summary>
+        /// The option the user has choosen on the first page of the wizard.  The reason for all this mess is we use two different layouts, for the same options, depending
+        /// on if the user's machine supports SQL 2012
+        /// </summary>
+        private ChooseWiselyOption ChooseWisely
+        {
+            get
+            {
+                if (Pages.Contains(wizardPageChooseWisely2012))
+                {
+                    if (radioChooseConnect2012.Checked) return ChooseWiselyOption.Connect;
+                    if (radioChooseCreate2012.Checked) return ChooseWiselyOption.Create;
+                    return ChooseWiselyOption.Restore;
+                }
+                else
+                {
+                    if (radioChooseConnect2008.Checked) return ChooseWiselyOption.Connect;
+                    if (radioChooseCreate2008.Checked) return ChooseWiselyOption.Create;
+                    return ChooseWiselyOption.Restore;
+                }
+            }
+            set
+            {
+                if (Pages.Contains(wizardPageChooseWisely2012))
+                {
+                    switch (value)
+                    {
+                        case ChooseWiselyOption.Connect: radioChooseConnect2012.Checked = true; break;
+                        case ChooseWiselyOption.Create: radioChooseCreate2012.Checked = true; break;
+                        default: radioChooseRestore2012.Checked = true; break;
+                    }
+                }
+                else
+                {
+                    switch (value)
+                    {
+                        case ChooseWiselyOption.Connect: radioChooseConnect2008.Checked = true; break;
+                        case ChooseWiselyOption.Create: radioChooseCreate2008.Checked = true; break;
+                        default: radioChooseRestore2008.Checked = true; break;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Stepping next from the first page
         /// </summary>
         private void OnStepNextSetupOrConnect(object sender, WizardStepEventArgs e)
         {
-            if (radioSetupNewDatabase.Checked || radioNewDatabase.Checked)
+            switch (ChooseWisely)
             {
-                e.NextPage = wizardPageChooseSqlServer;
-            }
+                case ChooseWiselyOption.Connect:
+                    {
+                        sqlInstanceChooseDatabase = true;
+                        e.NextPage = wizardPageSelectSqlServerInstance;
+                    }
+                    break;
 
-            else if (radioConnectRunningDatabase.Checked || radioConnectToAnotherPC.Checked)
-            {
-                sqlInstanceChooseDatabase = true;
-                e.NextPage = wizardPageSelectSqlServerInstance;
-            }
+                case ChooseWiselyOption.Create:
+                    {
+                        e.NextPage = wizardPageChooseSqlServer;
+                    }
+                    break;
 
-            else if (radioRestoreDatabase.Checked || radioRestoreBackup.Checked)
-            {
-                e.NextPage = wizardPageRestoreOption;
+                case ChooseWiselyOption.Restore:
+                    {
+                        e.NextPage = wizardPageRestoreOption;
+                    }
+                    break;
             }
         }
 
@@ -271,7 +332,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnClickAnotherPcLabels(object sender, EventArgs e)
         {
-            radioConnectToAnotherPC.Checked = true;
+            radioChooseConnect2012.Checked = true;
         }
 
         #endregion
@@ -839,7 +900,7 @@ namespace ShipWorks.Data.Administration
                 if (!sqlSession.IsSqlServer2008OrLater())
                 {
                     // If trying to create a new database in an existing sql instance
-                    if ((radioRestoreDatabase.Checked || radioRestoreBackup.Checked) || ((radioSetupNewDatabase.Checked || radioNewDatabase.Checked)))
+                    if (ChooseWisely == ChooseWiselyOption.Restore || ChooseWisely == ChooseWiselyOption.Create)
                     {
                         MessageHelper.ShowError(this,
                             "The SQL Server instance you have selected is previous version that " +
@@ -874,7 +935,7 @@ namespace ShipWorks.Data.Administration
                 }
 
                 // Cant restore to a remote server
-                if (radioRestoreDatabase.Checked && !sqlSession.IsLocalServer())
+                if (ChooseWisely == ChooseWiselyOption.Restore && !sqlSession.IsLocalServer())
                 {
                     MessageHelper.ShowInformation(this, "A ShipWorks restore can only be done from the computer that is running SQL Server.");
                     e.NextPage = CurrentPage;
@@ -1089,8 +1150,8 @@ namespace ShipWorks.Data.Administration
                         {
                             return new XElement("Replay",
                                 new XElement("InstanceName", instanceName.Text),
-                                new XElement("Restore", radioRestoreDatabase.Checked),
-                                new XElement("AfterInstallSuccess", new XAttribute("password", SecureText.Encrypt(sqlSession.Configuration.Password, "sa")), true));
+                                new XElement("Restore", (ChooseWisely == ChooseWiselyOption.Restore)),
+                                new XElement("AfterInstallSuccess", true));
                         }));
 
                 MoveNext();
@@ -1185,7 +1246,7 @@ namespace ShipWorks.Data.Administration
                 pendingDatabaseName = sqlSession.Configuration.DatabaseName;
 
                 // Restoring
-                if (radioRestoreDatabase.Checked)
+                if (ChooseWisely == ChooseWiselyOption.Restore)
                 {
                     e.NextPage = wizardPageRestoreLogin;
                 }
