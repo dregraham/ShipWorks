@@ -5,6 +5,9 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
+    /// <summary>
+    /// Teh UI for configuring/editing the settings of a DownloadOrdersTask.
+    /// </summary>
     public partial class DownloadOrdersTaskEditor : ActionTaskEditor
     {
         private readonly DownloadOrdersTask task;

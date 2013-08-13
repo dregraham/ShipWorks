@@ -25,8 +25,7 @@ namespace ShipWorks.Actions.UI
         {
             InitializeComponent();
         }
-
-
+        
         /// <summary>
         /// Load the panel of store checkboxes
         /// </summary>
@@ -68,9 +67,7 @@ namespace ShipWorks.Actions.UI
                 StoreSelectionChanged(this, e);
             }
         }
-
         
-
         /// <summary>
         /// Gets or sets therake build selected stores.
         /// </summary>
