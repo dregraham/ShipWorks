@@ -156,14 +156,7 @@ namespace ShipWorks.Data.Connection
                     throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
                 }
 
-                serverInstance = value;
-
-                // Translate the true localdb connection string coming in to the user-visible clean way we store it
-                if (string.Compare(serverInstance, SqlInstanceUtility.LocalDbDisplayName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    serverInstance = SqlInstanceUtility.LocalDbServerInstance;
-                }
-                
+                serverInstance = value;                
 
                 OnConnectionChanged();
             }

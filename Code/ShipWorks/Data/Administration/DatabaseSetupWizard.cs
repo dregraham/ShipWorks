@@ -29,6 +29,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Templates.Emailing;
 using ShipWorks.Email;
 using Microsoft.Win32;
+using System.Linq;
 using System.Xml.Linq;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -40,6 +41,7 @@ using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
 using Interapptive.Shared.Win32;
 using System.Threading.Tasks;
 using ShipWorks.Properties;
+using Divelements.SandGrid;
 
 namespace ShipWorks.Data.Administration
 {
@@ -54,11 +56,11 @@ namespace ShipWorks.Data.Administration
         // The current state of the SQL Session data
         SqlSession sqlSession = new SqlSession();
 
-        // The session that we are currently testing in the background for succesfully connect
+        // The session and SQL instance that we are currently testing in the background for succesfully connect
         SqlSession connectionSession = null;
+        string lastSelectedSqlInstance;
 
         // Navigation helpers
-        WizardPage pageAfterSqlLogin;
         WindowsInstallerDownloadPage pageFirstPrerequisite;
 
         // The sql installer and file downloader
@@ -69,6 +71,9 @@ namespace ShipWorks.Data.Administration
 
         // The SQL Instance that we have loaded data file location for
         string dataFileSqlInstance = null;
+
+        // Indicates if the SQL login page is also choosing a database (or just selecting a server)
+        bool sqlInstanceChooseDatabase = false;
 
         // True if we have created a database that may need to be dropped
         // if the users cancels or goes back.
@@ -83,6 +88,9 @@ namespace ShipWorks.Data.Administration
 
         // The user that will be used for restoring the db
         long userForRestore;
+
+        // What we display for LocalDB instead of the actual connection string
+        const string localDbDisplayName = "(Local Only)";
 
         /// <summary>
         /// Constructor.
@@ -248,8 +256,8 @@ namespace ShipWorks.Data.Administration
 
             else if (radioConnectRunningDatabase.Checked || radioConnectToAnotherPC.Checked)
             {
+                sqlInstanceChooseDatabase = true;
                 e.NextPage = wizardPageSelectSqlServerInstance;
-                pageAfterSqlLogin = wizardPageChooseDatabase;
             }
 
             else if (radioRestoreDatabase.Checked || radioRestoreBackup.Checked)
@@ -387,8 +395,7 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
-                    pageAfterSqlLogin = wizardPageDatabaseName;
-
+                    sqlInstanceChooseDatabase = false;
                     e.NextPage = wizardPageSelectSqlServerInstance;
                 }
             }
@@ -531,6 +538,11 @@ namespace ShipWorks.Data.Administration
 
             string[] servers = (string[]) e.UserState;
 
+            if (SqlInstanceUtility.IsLocalDbInstalled())
+            {
+                comboSqlServers.Items.Add(localDbDisplayName);
+            }
+
             // Load the list with all servers found on the LAN
             foreach (string server in servers)
             {
@@ -549,16 +561,32 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoSelectSqlInstance(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (!e.FirstTime)
+            if (e.FirstTime)
             {
-                return;
+                gridDatabses.Rows.Clear();
+
+                // Prepopulate the instance box with the current
+                if (SqlSession.IsConfigured)
+                {
+                    comboSqlServers.Text = SqlSession.Current.Configuration.IsLocalDb() ? 
+                        localDbDisplayName : 
+                        SqlSession.Current.Configuration.ServerInstance;
+
+                    OnChangeSelectedInstance(null, EventArgs.Empty);
+                }
             }
 
-            // Prepopulate the instance box with the current
-            if (SqlSession.IsConfigured)
-            {
-                comboSqlServers.Text = SqlSession.Current.Configuration.ServerInstance;
+            labelDatabaseSelect.Visible = sqlInstanceChooseDatabase;
+            gridDatabses.Visible = sqlInstanceChooseDatabase;
+        }
 
+        /// <summary>
+        /// Leaving focus from the SQL instance combo
+        /// </summary>
+        private void OnLeaveSqlInstance(object sender, EventArgs e)
+        {
+            if (lastSelectedSqlInstance != comboSqlServers.Text)
+            {
                 OnChangeSelectedInstance(null, EventArgs.Empty);
             }
         }
@@ -568,6 +596,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnChangeSelectedInstance(object sender, EventArgs e)
         {
+            lastSelectedSqlInstance = comboSqlServers.Text;
+            gridDatabses.Rows.Clear();
+
             linkSqlInstanceAccount.Visible = false;
 
             pictureSqlConnection.Image = Resources.arrows_greengray;
@@ -578,7 +609,7 @@ namespace ShipWorks.Data.Administration
 
             // Create a copy that we can mess around with without affecting the UI session
             connectionSession = new SqlSession(sqlSession);
-            connectionSession.Configuration.ServerInstance = comboSqlServers.Text;
+            connectionSession.Configuration.ServerInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
 
             // Create another variable for closure purposes
             SqlSession backgroundSession = connectionSession;
@@ -646,7 +677,7 @@ namespace ShipWorks.Data.Administration
                     else
                     {
                         SqlSessionConfiguration configuration = t.Result.Item1;
-                        List<ShipWorksDatabaseDetail> databases = t.Result.Item2;
+                        List<SqlDatabaseDetail> databases = t.Result.Item2;
 
                         pictureSqlConnection.Image = Resources.check16;
                         labelSqlConnection.Text = string.Format("Successfully connected using {0} account.", configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
@@ -657,12 +688,111 @@ namespace ShipWorks.Data.Administration
                         sqlSession.Configuration.Username = configuration.Username;
                         sqlSession.Configuration.Password = configuration.Password;
                         sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+
+                        LoadDatabaseList(databases, configuration);
                     }
 
                     linkSqlInstanceAccount.Left = labelSqlConnection.Right;
                     linkSqlInstanceAccount.Visible = !backgroundSession.Configuration.IsLocalDb();
 
                 }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        /// <summary>
+        /// Load the database grid
+        /// </summary>
+        private void LoadDatabaseList(List<SqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
+        {
+            gridDatabses.Rows.Clear();
+
+            // Add a row for each database
+            foreach (SqlDatabaseDetail database in databases.OrderBy(d => d.Name))
+            {
+                string status;
+                string activity = "";
+                string order = "";
+
+                bool isCurrent = SqlSession.IsConfigured &&
+                    SqlSession.Current.Configuration.ServerInstance == configuration.ServerInstance &&
+                    SqlSession.Current.Configuration.DatabaseName == database.Name;
+
+                // If it's the database we are currently connected to
+                if (isCurrent)
+                {
+                    status = "Current";
+                }
+                // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
+                else if (database.Status == SqlDatabaseStatus.ShipWorks)
+                {
+                    if (database.SchemaVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                    {
+                        status = "Newer";
+                    }
+                    else if (database.SchemaVersion < SqlSchemaUpdater.GetRequiredSchemaVersion())
+                    {
+                        status = "Needs Updated";
+                    }
+                    else
+                    {
+                        status = "Ready";
+                    }
+                }
+                // ShipWorks 2
+                else if (database.Status == SqlDatabaseStatus.ShipWorks2x)
+                {
+                    status = "ShipWorks 2";
+                }
+                // Not a ShipWorks database
+                else if (database.Status == SqlDatabaseStatus.NonShipWorks)
+                {
+                    status = "Non-ShipWorks";
+                }
+                // Couldn't connect for some reason
+                else
+                {
+                    status = "Couldn't Connect";
+                }
+
+                // See if we have info on the last logged in user
+                if (!string.IsNullOrWhiteSpace(database.LastUsedBy))
+                {
+                    activity = string.Format("{0}, on {1}", database.LastUsedBy, database.LastUsedOn.ToLocalTime().ToString("MM/dd/yy"));
+                }
+
+                // See if we have info on the most recently created order
+                if (!string.IsNullOrWhiteSpace(database.LastOrderNumber))
+                {
+                    order = string.Format("{0}, from {1}", database.LastOrderNumber, database.LastOrderDate.ToLocalTime().ToString("MM/dd/yy"));
+                }
+
+                string name = database.Name;
+
+                // If it's local db, we special case the naming
+                if (sqlSession.Configuration.IsLocalDb())
+                {
+                    // If this is the default database for this instance of ShipWorks, then just call it default
+                    if (database.Name == ShipWorksDatabaseUtility.LocalDbDatabaseName)
+                    {
+                        name = "(Default)";
+                    }
+                    // If it's a LocalDB, but for another instance of ShipWorks, we don't even show it
+                    else if (ShipWorksDatabaseUtility.IsLocalDbDatabaseName(database.Name))
+                    {
+                        name = null;
+                    }
+                }
+
+                // Only create the row if it wasn't nulled out on purpose to skip showing it
+                if (name != null)
+                {
+                    gridDatabses.Rows.Add(new GridRow(new string[] { name, status, activity, order }) { Tag = database });
+
+                    if (isCurrent)
+                    {
+                        gridDatabses.Rows[gridDatabses.Rows.Count - 1].Selected = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -693,7 +823,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Save the instance
-            sqlSession.Configuration.ServerInstance = comboSqlServers.Text;
+            sqlSession.Configuration.ServerInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
 
             // Ensure the database name is cleared
             sqlSession.Configuration.DatabaseName = "";
@@ -750,9 +880,6 @@ namespace ShipWorks.Data.Administration
                     e.NextPage = CurrentPage;
                     return;
                 }
-
-                // Worked
-                e.NextPage = pageAfterSqlLogin;
             }
             catch (SqlException ex)
             {
@@ -762,110 +889,51 @@ namespace ShipWorks.Data.Administration
                     "Detail: " + ex.Message);
 
                 e.NextPage = CurrentPage;
-            }
-        }
-
-        #endregion
-
-        #region Choose Existing Database
-
-        /// <summary>
-        /// The choose database name page is being shown.
-        /// </summary>
-        private void OnShownChooseDatabase(object sender, EventArgs e)
-        {
-            string previousSelection = (string) databaseNames.SelectedItem;
-            if (previousSelection == null && SqlSession.IsConfigured)
-            {
-                previousSelection = SqlSession.Current.Configuration.DatabaseName;
+                return;
             }
 
-            databaseNames.Items.Clear();
-            
-            try
+            // Connected to SQL Server, now see if we need to validate the database
+            if (sqlInstanceChooseDatabase)
             {
+                if (gridDatabses.SelectedElements.Count == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please select a database before continuing.");
+                    e.NextPage = CurrentPage;
+
+                    return;
+                }
+
+                string database = ((SqlDatabaseDetail) gridDatabses.SelectedElements[0].Tag).Name;
+
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
-                    cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
+                    SqlDatabaseDetail detail = ShipWorksDatabaseUtility.GetDatabaseDetail(database, con);
 
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    if (detail.Status == SqlDatabaseStatus.ShipWorks || detail.Status == SqlDatabaseStatus.ShipWorks2x)
                     {
-                        while (reader.Read())
-                        {
-                            databaseNames.Items.Add((string) reader["name"]);
-                        }
+                        // As long as it's a ShipWorks database, we can upgrade it later if it's out of date
+                        sqlSession.Configuration.DatabaseName = database;
+
+                        // Complete
+                        e.NextPage = wizardPageShipWorksAdmin;
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError(this,
+                            "The selected database is not a database created by ShipWorks, or is not " +
+                            "a database that you have access to.\n\n" +
+                            "ShipWorks can only connect to a valid ShipWorks database.  If you need " +
+                            "to create a new database, you can do so by returning to the beginning of " +
+                            "this wizard.");
+
+                        e.NextPage = CurrentPage;
+                        return;
                     }
                 }
             }
-            catch (SqlException ex)
-            {
-                MessageHelper.ShowError(this,
-                    "There was an error trying to read the database names " +
-                    "from SQL Server instance '" + sqlSession.Configuration.ServerInstance + "'.\n\n" +
-                    "Detail: " + ex.Message);
-            }
-
-            if (databaseNames.Items.Count == 0)
-            {
-                databaseNames.Enabled = false;
-
-                NextEnabled = false;
-                databaseNames.Items.Add("No databases found.");
-            }
             else
             {
-                databaseNames.Enabled = true;
-
-                databaseNames.SelectedItem = previousSelection;
-                if (databaseNames.SelectedIndex < 0)
-                {
-                    databaseNames.SelectedIndex = 0;
-                }
-            }
-        }
-
-        /// <summary>
-        /// User is choosing the database to which to connect.
-        /// </summary>
-        private void OnStepNextChooseDatabase(object sender, WizardStepEventArgs e)
-        {
-            string database = databaseNames.Text;
-
-            try
-            {
-                using (SqlConnection con = sqlSession.OpenConnection())
-                {
-                    // Now we have to make sure we have access to the database they selected
-                    con.ChangeDatabase(database);
-
-                    // Now see if its a valid ShipWorks database
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
-                    cmd.CommandText = "GetSchemaVersion";
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    Version version = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
-
-                    // We get this far, we must be ok
-                    sqlSession.Configuration.DatabaseName = database;
-
-                    // Complete
-                    e.NextPage = wizardPageShipWorksAdmin;
-                }
-            }
-            catch (SqlException ex)
-            {
-                log.Info(string.Format("Failed calling GetSchemaVersion for database '{0}'.", database), ex);
-
-                MessageHelper.ShowError(this,
-                    "The selected database is not a database created by ShipWorks, or is not " +
-                    "a database that you have access to.\n\n" +
-                    "ShipWorks can only connect to a valid ShipWorks database.  If you need " +
-                    "to create a new database, you can do so by returning to the beginning of " +
-                    "this wizard.");
-
-                e.NextPage = CurrentPage;
-                return;
+                e.NextPage = wizardPageDatabaseName;
             }
         }
 

@@ -29,6 +29,7 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseSetupWizard));
             this.wizardPageSetupOrConnect = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSetupLegacy = new System.Windows.Forms.Panel();
@@ -64,6 +65,12 @@ namespace ShipWorks.Data.Administration
             this.radioSqlServerCurrent = new System.Windows.Forms.RadioButton();
             this.labelChooseNewOrExistingSqlServer = new System.Windows.Forms.Label();
             this.wizardPageSelectSqlServerInstance = new ShipWorks.UI.Wizard.WizardPage();
+            this.gridDatabses = new Divelements.SandGrid.SandGrid();
+            this.gridColumnName = new Divelements.SandGrid.GridColumn();
+            this.gridColumnStatus = new Divelements.SandGrid.GridColumn();
+            this.gridColumnStoreType = new Divelements.SandGrid.GridColumn();
+            this.gridColumnLatestOrder = new Divelements.SandGrid.GridColumn();
+            this.labelDatabaseSelect = new System.Windows.Forms.Label();
             this.pictureSqlConnection = new System.Windows.Forms.PictureBox();
             this.panelSqlInstanceHelp = new System.Windows.Forms.Panel();
             this.linkHelpSelectSqlInstance = new ShipWorks.UI.Controls.LinkControl();
@@ -84,9 +91,6 @@ namespace ShipWorks.Data.Administration
             this.labelDataFiles = new System.Windows.Forms.Label();
             this.pathDataFiles = new ShipWorks.UI.Controls.PathTextBox();
             this.browseDataFiles = new System.Windows.Forms.Button();
-            this.wizardPageChooseDatabase = new ShipWorks.UI.Wizard.WizardPage();
-            this.databaseNames = new System.Windows.Forms.ComboBox();
-            this.labelFoundDatabases = new System.Windows.Forms.Label();
             this.wizardPageInstallSqlServer = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSqlServerInstallProgress = new System.Windows.Forms.Panel();
             this.progressPreparing = new System.Windows.Forms.ProgressBar();
@@ -159,7 +163,6 @@ namespace ShipWorks.Data.Administration
             ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).BeginInit();
             this.wizardPageDatabaseName.SuspendLayout();
             this.panelDataFiles.SuspendLayout();
-            this.wizardPageChooseDatabase.SuspendLayout();
             this.wizardPageInstallSqlServer.SuspendLayout();
             this.panelSqlServerInstallProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePreparing)).BeginInit();
@@ -579,6 +582,8 @@ namespace ShipWorks.Data.Administration
             // 
             // wizardPageSelectSqlServerInstance
             // 
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.gridDatabses);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelDatabaseSelect);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.pictureSqlConnection);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.panelSqlInstanceHelp);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelSqlConnection);
@@ -597,6 +602,88 @@ namespace ShipWorks.Data.Administration
             this.wizardPageSelectSqlServerInstance.Title = "Connect to SQL Server";
             this.wizardPageSelectSqlServerInstance.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSelectSqlInstance);
             this.wizardPageSelectSqlServerInstance.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSelectSqlInstance);
+            // 
+            // gridDatabses
+            // 
+            this.gridDatabses.AllowGroupCollapse = true;
+            this.gridDatabses.AllowMultipleSelection = false;
+            this.gridDatabses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridDatabses.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
+            this.gridColumnName,
+            this.gridColumnStatus,
+            this.gridColumnStoreType,
+            this.gridColumnLatestOrder});
+            this.gridDatabses.CommitOnLoseFocus = true;
+            this.gridDatabses.EnableSearching = false;
+            this.gridDatabses.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
+            this.gridDatabses.ImageTextSeparation = 1;
+            this.gridDatabses.Location = new System.Drawing.Point(41, 100);
+            this.gridDatabses.Name = "gridDatabses";
+            this.gridDatabses.Renderer = windowsXPRenderer1;
+            this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
+            this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
+            new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("ShipWorks"),
+                        new Divelements.SandGrid.GridCell("Ready"),
+                        new Divelements.SandGrid.GridCell("Brian, on 07/13/11"),
+                        new Divelements.SandGrid.GridCell("Order #1292, from 07/11/11")})});
+            this.gridDatabses.Size = new System.Drawing.Size(484, 156);
+            this.gridDatabses.TabIndex = 55;
+            this.gridDatabses.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
+            // 
+            // gridColumnName
+            // 
+            this.gridColumnName.AllowReorder = false;
+            this.gridColumnName.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnName.AutoSizeIncludeHeader = true;
+            this.gridColumnName.AutoSortType = Divelements.SandGrid.ColumnAutoSortType.None;
+            this.gridColumnName.Clickable = false;
+            this.gridColumnName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnName.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
+            this.gridColumnName.HeaderText = "Name";
+            this.gridColumnName.MinimumWidth = 75;
+            // 
+            // gridColumnStatus
+            // 
+            this.gridColumnStatus.AllowReorder = false;
+            this.gridColumnStatus.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnStatus.Clickable = false;
+            this.gridColumnStatus.HeaderText = "Status";
+            this.gridColumnStatus.MinimumWidth = 75;
+            // 
+            // gridColumnStoreType
+            // 
+            this.gridColumnStoreType.AllowReorder = false;
+            this.gridColumnStoreType.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnStoreType.Clickable = false;
+            this.gridColumnStoreType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnStoreType.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
+            this.gridColumnStoreType.HeaderText = "Last Activity";
+            this.gridColumnStoreType.MinimumWidth = 75;
+            this.gridColumnStoreType.Width = 113;
+            // 
+            // gridColumnLatestOrder
+            // 
+            this.gridColumnLatestOrder.AllowReorder = false;
+            this.gridColumnLatestOrder.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnLatestOrder.Clickable = false;
+            this.gridColumnLatestOrder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnLatestOrder.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
+            this.gridColumnLatestOrder.HeaderText = "Latest Order";
+            this.gridColumnLatestOrder.MinimumWidth = 75;
+            this.gridColumnLatestOrder.Width = 221;
+            // 
+            // labelDatabaseSelect
+            // 
+            this.labelDatabaseSelect.AutoSize = true;
+            this.labelDatabaseSelect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDatabaseSelect.Location = new System.Drawing.Point(22, 82);
+            this.labelDatabaseSelect.Name = "labelDatabaseSelect";
+            this.labelDatabaseSelect.Size = new System.Drawing.Size(190, 13);
+            this.labelDatabaseSelect.TabIndex = 54;
+            this.labelDatabaseSelect.Text = "Select your ShipWorks database";
             // 
             // pictureSqlConnection
             // 
@@ -625,11 +712,11 @@ namespace ShipWorks.Data.Administration
             this.linkHelpSelectSqlInstance.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkHelpSelectSqlInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkHelpSelectSqlInstance.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.linkHelpSelectSqlInstance.Location = new System.Drawing.Point(75, 1);
+            this.linkHelpSelectSqlInstance.Location = new System.Drawing.Point(66, 1);
             this.linkHelpSelectSqlInstance.Name = "linkHelpSelectSqlInstance";
-            this.linkHelpSelectSqlInstance.Size = new System.Drawing.Size(66, 13);
+            this.linkHelpSelectSqlInstance.Size = new System.Drawing.Size(127, 13);
             this.linkHelpSelectSqlInstance.TabIndex = 49;
-            this.linkHelpSelectSqlInstance.Text = "We can help";
+            this.linkHelpSelectSqlInstance.Text = "Don\'t worry, we can help";
             // 
             // labelSelectSqlInstance2
             // 
@@ -637,9 +724,9 @@ namespace ShipWorks.Data.Administration
             this.labelSelectSqlInstance2.ForeColor = System.Drawing.Color.DimGray;
             this.labelSelectSqlInstance2.Location = new System.Drawing.Point(0, 2);
             this.labelSelectSqlInstance2.Name = "labelSelectSqlInstance2";
-            this.labelSelectSqlInstance2.Size = new System.Drawing.Size(77, 13);
+            this.labelSelectSqlInstance2.Size = new System.Drawing.Size(66, 13);
             this.labelSelectSqlInstance2.TabIndex = 47;
-            this.labelSelectSqlInstance2.Text = "Is it not listed?";
+            this.labelSelectSqlInstance2.Text = "Don\'t see it?";
             // 
             // labelSqlConnection
             // 
@@ -703,7 +790,7 @@ namespace ShipWorks.Data.Administration
             this.comboSqlServers.Size = new System.Drawing.Size(220, 21);
             this.comboSqlServers.TabIndex = 6;
             this.comboSqlServers.SelectedIndexChanged += new System.EventHandler(this.OnChangeSelectedInstance);
-            this.comboSqlServers.Leave += new System.EventHandler(this.OnChangeSelectedInstance);
+            this.comboSqlServers.Leave += new System.EventHandler(this.OnLeaveSqlInstance);
             // 
             // wizardPageDatabaseName
             // 
@@ -810,39 +897,6 @@ namespace ShipWorks.Data.Administration
             this.browseDataFiles.TabIndex = 5;
             this.browseDataFiles.Text = "Browse...";
             this.browseDataFiles.Click += new System.EventHandler(this.OnBrowseDatabaseLocation);
-            // 
-            // wizardPageChooseDatabase
-            // 
-            this.wizardPageChooseDatabase.Controls.Add(this.databaseNames);
-            this.wizardPageChooseDatabase.Controls.Add(this.labelFoundDatabases);
-            this.wizardPageChooseDatabase.Description = "Select the name of your ShipWorks database.";
-            this.wizardPageChooseDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageChooseDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageChooseDatabase.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageChooseDatabase.Name = "wizardPageChooseDatabase";
-            this.wizardPageChooseDatabase.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageChooseDatabase.TabIndex = 0;
-            this.wizardPageChooseDatabase.Title = "Choose Database";
-            this.wizardPageChooseDatabase.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextChooseDatabase);
-            this.wizardPageChooseDatabase.PageShown += new System.EventHandler<ShipWorks.UI.Wizard.WizardPageShownEventArgs>(this.OnShownChooseDatabase);
-            // 
-            // databaseNames
-            // 
-            this.databaseNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.databaseNames.Location = new System.Drawing.Point(41, 37);
-            this.databaseNames.MaxDropDownItems = 16;
-            this.databaseNames.Name = "databaseNames";
-            this.databaseNames.Size = new System.Drawing.Size(224, 21);
-            this.databaseNames.TabIndex = 4;
-            // 
-            // labelFoundDatabases
-            // 
-            this.labelFoundDatabases.Location = new System.Drawing.Point(24, 8);
-            this.labelFoundDatabases.Name = "labelFoundDatabases";
-            this.labelFoundDatabases.Size = new System.Drawing.Size(488, 16);
-            this.labelFoundDatabases.TabIndex = 3;
-            this.labelFoundDatabases.Text = "The following databases were found in SQL Server.  Please select your ShipWorks d" +
-    "atabase.";
             // 
             // wizardPageInstallSqlServer
             // 
@@ -1377,7 +1431,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseSqlServer,
             this.wizardPagePrerequisitePlaceholder,
             this.wizardPageSelectSqlServerInstance,
-            this.wizardPageChooseDatabase,
             this.wizardPageInstallSqlServer,
             this.wizardPageDatabaseName,
             this.wizardPageRestoreLogin,
@@ -1419,7 +1472,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageDatabaseName.PerformLayout();
             this.panelDataFiles.ResumeLayout(false);
             this.panelDataFiles.PerformLayout();
-            this.wizardPageChooseDatabase.ResumeLayout(false);
             this.wizardPageInstallSqlServer.ResumeLayout(false);
             this.panelSqlServerInstallProgress.ResumeLayout(false);
             this.panelSqlServerInstallProgress.PerformLayout();
@@ -1466,9 +1518,6 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.TextBox databaseName;
         private System.Windows.Forms.Label labelDatabaseName;
         private System.Windows.Forms.Label labelEnterDatabaseName;
-        private ShipWorks.UI.Wizard.WizardPage wizardPageChooseDatabase;
-        private System.Windows.Forms.ComboBox databaseNames;
-        private System.Windows.Forms.Label labelFoundDatabases;
         private ShipWorks.UI.Wizard.WizardPage wizardPageInstallSqlServer;
         private System.Windows.Forms.Panel panelSqlServerInstallReady;
         private System.Windows.Forms.Label label21;
@@ -1559,5 +1608,11 @@ namespace ShipWorks.Data.Administration
         private UI.Controls.LinkControl linkSqlInstanceAccount;
         private System.Windows.Forms.Panel panelSqlInstanceHelp;
         private System.Windows.Forms.PictureBox pictureSqlConnection;
+        private Divelements.SandGrid.SandGrid gridDatabses;
+        private Divelements.SandGrid.GridColumn gridColumnName;
+        private Divelements.SandGrid.GridColumn gridColumnStoreType;
+        private Divelements.SandGrid.GridColumn gridColumnLatestOrder;
+        private System.Windows.Forms.Label labelDatabaseSelect;
+        private Divelements.SandGrid.GridColumn gridColumnStatus;
     }
 }

@@ -106,10 +106,10 @@ namespace ShipWorks.Data.Administration
                 Cursor.Current = Cursors.WaitCursor;
 
                 // If we can actually connect to the ShipWorks database, then there is nothing more for this wizard to do
-                if (CanConnectToLocalDb(SqlInstanceUtility.LocalDbDatabaseName))
+                if (CanConnectToLocalDb(ShipWorksDatabaseUtility.LocalDbDatabaseName))
                 {
                     sqlSession.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
-                    sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
+                    sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.LocalDbDatabaseName;
                     sqlSession.SaveAsCurrent();
 
                     e.NextPage = wizardPageFinishExisting;
@@ -226,8 +226,8 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
-                    ShipWorksDatabaseUtility.CreateDatabase(SqlInstanceUtility.LocalDbDatabaseName, con);
-                    sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
+                    ShipWorksDatabaseUtility.CreateDatabase(ShipWorksDatabaseUtility.LocalDbDatabaseName, con);
+                    sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.LocalDbDatabaseName;
 
                     createdDatabase = true;
                 }
@@ -389,7 +389,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                ShipWorksDatabaseUtility.DropDatabase(sqlSession, SqlInstanceUtility.LocalDbDatabaseName);
+                ShipWorksDatabaseUtility.DropDatabase(sqlSession, ShipWorksDatabaseUtility.LocalDbDatabaseName);
 
             }
             catch (SqlException ex)

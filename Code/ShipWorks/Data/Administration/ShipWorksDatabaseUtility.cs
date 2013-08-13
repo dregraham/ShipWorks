@@ -7,6 +7,11 @@ using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using System.IO;
 using ShipWorks.Users.Security;
+using System.Data;
+using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore;
+using Microsoft.Win32;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Data.Administration
 {
@@ -17,6 +22,9 @@ namespace ShipWorks.Data.Administration
     {
         // Used for loading \ executing sql
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Installation");
+
+        // We put the underscore so we can try to not conflict with databases users may end up creating on their own
+        static string localDbBaseName = "_ShipWorks";
 
         /// <summary>
         /// Create a database with the given name in the default SQL server data path
@@ -125,11 +133,131 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Get the database name to use for LocalDb for this instance of ShipWorks
+        /// </summary>
+        public static string LocalDbDatabaseName
+        {
+            get
+            {
+                // This opens up the Current User hive, which
+                // - we know we will have read\write access to
+                // - is fine, b\c we are using implicit LocalDb databases, which are relative to the current user account, so we don't need LocalMachine anyway
+                RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\LocalDB");
+
+                // See if we've already created a database name for this ShipWorks instance
+                string databaseName = registry.GetValue(ShipWorksSession.InstanceID.ToString(), "");
+                if (!string.IsNullOrEmpty(databaseName))
+                {
+                    return databaseName;
+                }
+
+                int largestIndex = -1;
+
+                // Find out all the names that have been used so far
+                foreach (string name in GetLocalDbDatabaseNames())
+                {
+                    int? parsed = null;
+
+                    // Special case for the non-indexed one we store
+                    if (name == localDbBaseName)
+                    {
+                        parsed = 0;
+                    }
+                    else
+                    {
+                        Match match = Regex.Match(name, string.Format(@"^{0}(\d)$", localDbBaseName));
+                        if (match.Success)
+                        {
+                            parsed = int.Parse(match.Groups[1].Value);
+                        }
+                    }
+
+                    if (parsed.HasValue)
+                    {
+                        largestIndex = Math.Max(largestIndex, parsed.Value);
+                    }
+                }
+
+                // Now using the last known largest index, create the name of the database that will now be associated with this path
+                databaseName = string.Format("{0}{1}", localDbBaseName, largestIndex == -1 ? "" : (largestIndex + 1).ToString());
+
+                // Store it so this path is forever more this database name
+                registry.SetValue(ShipWorksSession.InstanceID.ToString(), databaseName);
+
+                return databaseName;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the given name is one we have recorded as a database name we've created in LocalDB
+        /// </summary>
+        public static bool IsLocalDbDatabaseName(string name)
+        {
+            return GetLocalDbDatabaseNames().Contains(name);
+        }
+
+        /// <summary>
+        /// Get the names of all LocalDB databases we have recorded as having created
+        /// </summary>
+        private static List<string> GetLocalDbDatabaseNames()
+        {
+            List<string> names = new List<string>();
+
+            RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\LocalDB");
+
+            using (RegistryKey key = registry.OpenKey(null))
+            {
+                if (key != null)
+                {
+                    foreach (string name in key.GetValueNames())
+                    {
+                        string value = key.GetValue(name) as string;
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            names.Add(value);
+                        }
+                    }
+                }
+            }
+
+            return names;
+        }
+
+        /// <summary>
         /// Get a list of the valid ShipWorks databases from the given connection
         /// </summary>
-        public static List<ShipWorksDatabaseDetail> GetShipWorksDatabases(SqlConnection con)
+        public static List<SqlDatabaseDetail> GetShipWorksDatabases(SqlConnection con)
         {
-            return new List<ShipWorksDatabaseDetail>();
+            SqlCommand cmd = SqlCommandProvider.Create(con);
+            cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
+
+            List<string> names = new List<string>();
+
+            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            {
+                while (reader.Read())
+                {
+                    names.Add((string) reader["name"]);
+                }
+            }
+
+            List<SqlDatabaseDetail> details = new List<SqlDatabaseDetail>();
+
+            // Go through each database loading ShipWorks info about it
+            foreach (string name in names)
+            {
+                details.Add(GetDatabaseDetail(name, con));
+            }
+
+            return details;
+        }
+
+        /// <summary>
+        /// Get detailed information about the given database
+        /// </summary>
+        public static SqlDatabaseDetail GetDatabaseDetail(string database, SqlConnection con)
+        {
+            return SqlDatabaseDetail.Load(database, con);
         }
     }
 }

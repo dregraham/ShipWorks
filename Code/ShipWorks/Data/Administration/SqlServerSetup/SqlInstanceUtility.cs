@@ -29,14 +29,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Get the name of the LocalDB instance we display to users
-        /// </summary>
-        public static string LocalDbDisplayName
-        {
-            get { return "(Local)"; }
-        }
-
-        /// <summary>
         /// The default password ShipWorks uses for sa when it installs new SQL instances
         /// </summary>
         public static string ShipWorksSaPassword
@@ -50,75 +42,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         public static string LocalDbServerInstance
         {
             get { return @"(LocalDB)\V11.0"; }
-        }
-
-        /// <summary>
-        /// Get the database name to use for LocalDb for this instance of ShipWorks
-        /// </summary>
-        public static string LocalDbDatabaseName
-        {
-            get
-            {
-                // This opens up the Current User hive, which
-                // - we know we will have read\write access to
-                // - is fine, b\c we are using implicit LocalDb databases, which are relative to the current user account, so we don't need LocalMachine anyway
-                RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\LocalDB");
-
-                // See if we've already created a database name for this ShipWorks instance
-                string databaseName = registry.GetValue(ShipWorksSession.InstanceID.ToString(), "");
-                if (!string.IsNullOrEmpty(databaseName))
-                {
-                    return databaseName;
-                }
-
-                // We put the underscore so we can try to not conflict with databases users may end up creating on their own
-                string baseName = "_ShipWorks";
-
-                int largestIndex = -1;
-
-                // Find out all the names that have been used so far
-                using (RegistryKey key = registry.OpenKey(null))
-                {
-                    if (key != null)
-                    {
-                        foreach (string name in key.GetValueNames())
-                        {
-                            string value = key.GetValue(name) as string;
-                            if (!string.IsNullOrEmpty(value))
-                            {
-                                int? parsed = null;
-
-                                // Special case for the non-indexed one we store
-                                if (value == baseName)
-                                {
-                                    parsed = 0;
-                                }
-                                else
-                                {
-                                    Match match = Regex.Match(value, string.Format(@"^{0}(\d)$", baseName));
-                                    if (match.Success)
-                                    {
-                                        parsed = int.Parse(match.Groups[1].Value);
-                                    }
-                                }
-
-                                if (parsed.HasValue)
-                                {
-                                    largestIndex = Math.Max(largestIndex, parsed.Value);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Now using the last known largest index, create the name of the database that will now be associated with this path
-                databaseName = string.Format("ShipWorks{0}", largestIndex == -1 ? "" : (largestIndex + 1).ToString());
-
-                // Store it so this path is forever more this database name
-                registry.SetValue(ShipWorksSession.InstanceID.ToString(), databaseName);
-
-                return databaseName;
-            }
         }
 
         /// <summary>
