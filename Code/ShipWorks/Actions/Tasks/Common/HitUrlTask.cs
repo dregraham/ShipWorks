@@ -178,10 +178,18 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     request.Credentials = new NetworkCredential(Username, Password);
                 }
-
+                
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
                 {
-                    request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
+                    try
+                    {
+                        request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        log.Error("Error adding header in HitURLTask", ex);
+                        throw new ActionTaskRunException("Invalid header for HitUrl task.", ex);
+                    }
                 }
 
                 logger.LogRequest(request);
