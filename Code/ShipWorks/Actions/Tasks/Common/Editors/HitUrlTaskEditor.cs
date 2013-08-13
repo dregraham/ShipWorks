@@ -46,11 +46,35 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
 
+            urlTextBox.Validating += OnUrlTextBoxValidating;
+            urlTextBox.Validated += OnUrlTextBoxValidated;
+
+
             if (null != task.HttpHeaders)
                 headersGrid.Values = task.HttpHeaders.Select(x => new KeyValuePair<string, string>(HttpUtility.UrlDecode(x.Key), HttpUtility.UrlDecode(x.Value))).ToList();
 
             UpdateAuthUI();
             UpdateBodyUI();
+        }
+
+        /// <summary>
+        /// Called when [URL text box validated].
+        /// </summary>
+        private void OnUrlTextBoxValidated(object sender, EventArgs e)
+        {
+            errorProvider.SetError(urlTextBox, string.Empty);
+        }
+
+        /// <summary>
+        /// Called when [URL text box validating].
+        /// </summary>
+        private void OnUrlTextBoxValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(urlTextBox.Text))
+            {
+                errorProvider.SetError(urlTextBox, "This value is required.");
+                e.Cancel = true;
+            }
         }
 
         /// <summary>
