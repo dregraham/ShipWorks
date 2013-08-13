@@ -158,7 +158,7 @@
             this.verbLabel.TabIndex = 1;
             this.verbLabel.Text = "GET";
             this.verbLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.verbLabel.Click += new System.EventHandler(this.OnClickVerbLabel);
+            this.verbLabel.Click += new System.EventHandler(this.OnVerbLabelClick);
             // 
             // labelHeaders
             // 
@@ -217,7 +217,7 @@
             this.authLabel.TabIndex = 1;
             this.authLabel.Text = "no";
             this.authLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.authLabel.Click += new System.EventHandler(this.OnClickAuthLabel);
+            this.authLabel.Click += new System.EventHandler(this.OnAuthLabelClick);
             // 
             // authLabelSuffix
             // 

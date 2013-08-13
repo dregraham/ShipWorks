@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Web;
 using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -138,29 +139,36 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void ProcessTemplateResults(TemplateEntity template, IList<TemplateResult> templateResults, ActionStepContext context)
         {
-            if (Verb == HttpVerb.Get)
+            foreach (var templateResult in templateResults)
             {
-                HttpRequestSubmitter request = new HttpTextPostRequestSubmitter("", GetContentType(TemplateOutputFormat.Text));
-                ProcessResult(request);
+                var request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
+                ProcessRequest(request);
+            }
+        }
+
+        /// <summary>
+        /// Run the task
+        /// </summary>
+        public override void Run(List<long> inputKeys, ActionStepContext context)
+        {
+            if (TemplateID == 0)
+            {
+                var request = new HttpVariableRequestSubmitter();
+                ProcessRequest(request);
             }
             else
             {
-                foreach (var templateResult in templateResults)
-                {
-                    HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
-                    ProcessResult(request);
-                }
+                base.Run();                
             }
         }
 
         /// <summary>
         /// Processes the result.
         /// </summary>
-        private void ProcessResult(HttpRequestSubmitter request)
+        private void ProcessRequest(HttpRequestSubmitter request)
         {
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
-
-
+            
             try
             {
                 request.Uri = new Uri(UrlToHit);
@@ -173,7 +181,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
                 {
-                    request.Headers.Add(header.Key, header.Value);
+                    request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
                 }
 
                 logger.LogRequest(request);
@@ -202,7 +210,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 case TemplateOutputFormat.Xml:
                     return "text/xml";
                 case TemplateOutputFormat.Text:
-                    return "text/plain";
+                    return "";
                 default:
                     throw new ArgumentOutOfRangeException("templateOutputFormat", "Invalid template Output Format");
             }
