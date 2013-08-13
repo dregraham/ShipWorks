@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
     public class EmailTaskTest
     {
         [TestMethod]
-        public void DeserializeXml_ShouldDeserializeCorrectly()
+        public void Initialize_DeserializesXmlCorrectly_Test()
         {
             // Create a new purge database task to serialize
             EmailTask initialObject = new EmailTask();

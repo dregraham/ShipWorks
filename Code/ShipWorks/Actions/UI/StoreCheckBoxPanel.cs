@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
+
+namespace ShipWorks.Actions.UI
+{
+    /// <summary>
+    /// A user control for displaying a list of checkboxes for all the stores in the system. 
+    /// </summary>
+    public partial class StoreCheckBoxPanel : UserControl
+    {
+        public event EventHandler StoreSelectionChanged;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreCheckBoxPanel"/> class.
+        /// </summary>
+        public StoreCheckBoxPanel()
+        {
+            InitializeComponent();
+        }
+        
+        /// <summary>
+        /// Load the panel of store checkboxes
+        /// </summary>
+        public void LoadStores()
+        {
+            panelStores.Controls.Clear();
+
+            Point location = new Point(0, 0);
+
+            // Go through all the stores
+            foreach (StoreEntity store in StoreManager.GetAllStores())
+            {
+                CheckBox checkBox = new CheckBox();
+                checkBox.AutoSize = true;
+                checkBox.Location = location;
+                checkBox.Text = store.StoreName;
+                checkBox.Location = location;
+                checkBox.Parent = panelStores;
+                checkBox.Tag = store.StoreID;
+                
+                location.Y = checkBox.Bottom + 4;
+                checkBox.CheckedChanged += OnCheckedChanged;
+            }
+
+            panelStores.Height = location.Y + 4;
+            Height = panelStores.Height + 4;
+        }
+
+        /// <summary>
+        /// Called when a store checkbox is checked/unchecked.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnCheckedChanged(object sender, EventArgs e)
+        {
+            if (StoreSelectionChanged != null)
+            {
+                // Notify interested parties that the list of selected stores has changed
+                StoreSelectionChanged(this, e);
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets therake build selected stores.
+        /// </summary>
+        /// <value>The selected stores.</value>
+        [Browsable(false)]
+        public IEnumerable<StoreEntity> SelectedStores
+        {
+            get
+            {
+                List<StoreEntity> selectedStores = new List<StoreEntity>();
+                foreach (CheckBox checkBox in panelStores.Controls.OfType<CheckBox>().Where(c => c.Checked))
+                {
+                    selectedStores.Add(StoreManager.GetStore((long) checkBox.Tag));
+                }
+
+                return selectedStores;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    foreach (StoreEntity store in value)
+                    {
+                        // Update the state of the checkboxes based on the store list provided
+                        CheckBox storeCheckBox = panelStores.Controls.OfType<CheckBox>().Single(c => (long) c.Tag == store.StoreID);
+                        if (storeCheckBox != null)
+                        {
+                            storeCheckBox.Checked = true;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}

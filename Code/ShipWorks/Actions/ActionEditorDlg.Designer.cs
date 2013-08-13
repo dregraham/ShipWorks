@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionEditorDlg));
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.imageUser = new System.Windows.Forms.PictureBox();
@@ -42,15 +43,14 @@
             this.labelTasksHeader = new System.Windows.Forms.Label();
             this.labelTriggerHeader = new System.Windows.Forms.Label();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
+            this.storeSettings = new System.Windows.Forms.Panel();
+            this.storeCheckBoxPanel = new ShipWorks.Actions.UI.StoreCheckBoxPanel();
+            this.storeLimited = new System.Windows.Forms.CheckBox();
             this.runOnTriggerringComputer = new System.Windows.Forms.RadioButton();
             this.specifyComputerLabels = new System.Windows.Forms.Label();
             this.runOnSpecificComputersList = new ShipWorks.Actions.UI.ComputersComboBox();
             this.runOnSpecificComputers = new System.Windows.Forms.RadioButton();
-            this.panelStores = new System.Windows.Forms.Panel();
-            this.checkBoxSample1 = new System.Windows.Forms.CheckBox();
-            this.checkBoxSample2 = new System.Windows.Forms.CheckBox();
             this.runOnAnyComputer = new System.Windows.Forms.RadioButton();
-            this.storeLimited = new System.Windows.Forms.CheckBox();
             this.enabled = new System.Windows.Forms.CheckBox();
             this.name = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
@@ -58,7 +58,7 @@
             this.optionControl.SuspendLayout();
             this.optionPageAction.SuspendLayout();
             this.optionPageSettings.SuspendLayout();
-            this.panelStores.SuspendLayout();
+            this.storeSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -201,13 +201,12 @@
             // 
             this.optionPageSettings.BackColor = System.Drawing.Color.White;
             this.optionPageSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.optionPageSettings.Controls.Add(this.storeSettings);
             this.optionPageSettings.Controls.Add(this.runOnTriggerringComputer);
             this.optionPageSettings.Controls.Add(this.specifyComputerLabels);
             this.optionPageSettings.Controls.Add(this.runOnSpecificComputersList);
             this.optionPageSettings.Controls.Add(this.runOnSpecificComputers);
-            this.optionPageSettings.Controls.Add(this.panelStores);
             this.optionPageSettings.Controls.Add(this.runOnAnyComputer);
-            this.optionPageSettings.Controls.Add(this.storeLimited);
             this.optionPageSettings.Controls.Add(this.enabled);
             this.optionPageSettings.Location = new System.Drawing.Point(103, 0);
             this.optionPageSettings.Name = "optionPageSettings";
@@ -215,6 +214,34 @@
             this.optionPageSettings.Size = new System.Drawing.Size(537, 431);
             this.optionPageSettings.TabIndex = 4;
             this.optionPageSettings.Text = "Settings";
+            // 
+            // storeSettings
+            // 
+            this.storeSettings.Controls.Add(this.storeCheckBoxPanel);
+            this.storeSettings.Controls.Add(this.storeLimited);
+            this.storeSettings.Location = new System.Drawing.Point(6, 119);
+            this.storeSettings.Name = "storeSettings";
+            this.storeSettings.Size = new System.Drawing.Size(411, 221);
+            this.storeSettings.TabIndex = 9;
+            // 
+            // storeCheckBoxPanel
+            // 
+            this.storeCheckBoxPanel.Location = new System.Drawing.Point(21, 26);
+            this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
+            this.storeCheckBoxPanel.SelectedStores = ((System.Collections.Generic.IEnumerable<ShipWorks.Data.Model.EntityClasses.StoreEntity>)(resources.GetObject("storeCheckBoxPanel.SelectedStores")));
+            this.storeCheckBoxPanel.Size = new System.Drawing.Size(371, 57);
+            this.storeCheckBoxPanel.TabIndex = 4;
+            // 
+            // storeLimited
+            // 
+            this.storeLimited.AutoSize = true;
+            this.storeLimited.Location = new System.Drawing.Point(3, 3);
+            this.storeLimited.Name = "storeLimited";
+            this.storeLimited.Size = new System.Drawing.Size(202, 17);
+            this.storeLimited.TabIndex = 3;
+            this.storeLimited.Text = "Only run the action for these stores:";
+            this.storeLimited.UseVisualStyleBackColor = true;
+            this.storeLimited.CheckedChanged += new System.EventHandler(this.OnChangeLimitStores);
             // 
             // runOnTriggerringComputer
             // 
@@ -257,35 +284,6 @@
             this.runOnSpecificComputers.UseVisualStyleBackColor = true;
             this.runOnSpecificComputers.CheckedChanged += new System.EventHandler(this.OnRunOnSpecificComputersChecked);
             // 
-            // panelStores
-            // 
-            this.panelStores.Controls.Add(this.checkBoxSample1);
-            this.panelStores.Controls.Add(this.checkBoxSample2);
-            this.panelStores.Location = new System.Drawing.Point(24, 158);
-            this.panelStores.Name = "panelStores";
-            this.panelStores.Size = new System.Drawing.Size(488, 45);
-            this.panelStores.TabIndex = 3;
-            // 
-            // checkBoxSample1
-            // 
-            this.checkBoxSample1.AutoSize = true;
-            this.checkBoxSample1.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxSample1.Name = "checkBoxSample1";
-            this.checkBoxSample1.Size = new System.Drawing.Size(82, 17);
-            this.checkBoxSample1.TabIndex = 2;
-            this.checkBoxSample1.Text = "ElectroGear";
-            this.checkBoxSample1.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxSample2
-            // 
-            this.checkBoxSample2.AutoSize = true;
-            this.checkBoxSample2.Location = new System.Drawing.Point(3, 23);
-            this.checkBoxSample2.Name = "checkBoxSample2";
-            this.checkBoxSample2.Size = new System.Drawing.Size(138, 17);
-            this.checkBoxSample2.TabIndex = 1;
-            this.checkBoxSample2.Text = "Liznobber Incorporated";
-            this.checkBoxSample2.UseVisualStyleBackColor = true;
-            // 
             // runOnAnyComputer
             // 
             this.runOnAnyComputer.AutoSize = true;
@@ -297,17 +295,6 @@
             this.runOnAnyComputer.TabStop = true;
             this.runOnAnyComputer.Text = "On any computer";
             this.runOnAnyComputer.UseVisualStyleBackColor = true;
-            // 
-            // storeLimited
-            // 
-            this.storeLimited.AutoSize = true;
-            this.storeLimited.Location = new System.Drawing.Point(6, 138);
-            this.storeLimited.Name = "storeLimited";
-            this.storeLimited.Size = new System.Drawing.Size(202, 17);
-            this.storeLimited.TabIndex = 2;
-            this.storeLimited.Text = "Only run the action for these stores:";
-            this.storeLimited.UseVisualStyleBackColor = true;
-            this.storeLimited.CheckedChanged += new System.EventHandler(this.OnChangeLimitStores);
             // 
             // enabled
             // 
@@ -358,8 +345,8 @@
             this.optionPageAction.PerformLayout();
             this.optionPageSettings.ResumeLayout(false);
             this.optionPageSettings.PerformLayout();
-            this.panelStores.ResumeLayout(false);
-            this.panelStores.PerformLayout();
+            this.storeSettings.ResumeLayout(false);
+            this.storeSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -377,10 +364,6 @@
         private ShipWorks.UI.Controls.OptionPage optionPageAction;
         private ShipWorks.UI.Controls.OptionPage optionPageSettings;
         private System.Windows.Forms.CheckBox enabled;
-        private System.Windows.Forms.Panel panelStores;
-        private System.Windows.Forms.CheckBox checkBoxSample1;
-        private System.Windows.Forms.CheckBox checkBoxSample2;
-        private System.Windows.Forms.CheckBox storeLimited;
         private System.Windows.Forms.ComboBox triggerCombo;
         private System.Windows.Forms.Label labelTriggerHeader;
         private System.Windows.Forms.Panel panelTasks;
@@ -393,5 +376,8 @@
         private UI.ComputersComboBox runOnSpecificComputersList;
         private System.Windows.Forms.Label specifyComputerLabels;
         private System.Windows.Forms.RadioButton runOnTriggerringComputer;
+        private System.Windows.Forms.Panel storeSettings;
+        private UI.StoreCheckBoxPanel storeCheckBoxPanel;
+        private System.Windows.Forms.CheckBox storeLimited;
     }
 }

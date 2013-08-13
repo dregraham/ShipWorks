@@ -110,7 +110,7 @@ namespace ShipWorks.Actions
             // Load the basic settings
             enabled.Checked = action.Enabled;
             storeLimited.Checked = action.StoreLimited;
-            panelStores.Enabled = action.StoreLimited;
+            storeCheckBoxPanel.Enabled = action.StoreLimited;
 
             //Load the computer limited settings
             runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitationType.None;
@@ -120,14 +120,8 @@ namespace ShipWorks.Actions
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
             // Check all the boxes for the stores its limited to
-            foreach (long storeID in action.StoreLimitedList)
-            {
-                CheckBox storeBox = panelStores.Controls.OfType<CheckBox>().SingleOrDefault(c => (long)c.Tag == storeID);
-                if (storeBox != null)
-                {
-                    storeBox.Checked = true;
-                }
-            }
+            List<StoreEntity> stores = action.StoreLimitedList.Select(storeID => StoreManager.GetStore(storeID)).ToList();
+            storeCheckBoxPanel.SelectedStores = stores;
         }
 
         /// <summary>
@@ -135,25 +129,8 @@ namespace ShipWorks.Actions
         /// </summary>
         private void LoadStoresPanel()
         {
-            panelStores.Controls.Clear();
-
-            Point location = new Point(3, 3);
-
-            // Go through all the stores
-            foreach (StoreEntity store in StoreManager.GetAllStores())
-            {
-                CheckBox checkBox = new CheckBox();
-                checkBox.AutoSize = true;
-                checkBox.Location = location;
-                checkBox.Text = store.StoreName;
-                checkBox.Location = location;
-                checkBox.Parent = panelStores;
-                checkBox.Tag = store.StoreID;
-
-                location.Y = checkBox.Bottom + 4;
-            }
-
-            panelStores.Height = location.Y + 4;
+            storeCheckBoxPanel.LoadStores();
+            storeSettings.Height = storeCheckBoxPanel.Bottom + 4;
         }
 
         /// <summary>
@@ -277,6 +254,9 @@ namespace ShipWorks.Actions
             }
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+
+            // Don't show the store settings if the trigger type is a scheduled trigger
+            storeSettings.Visible = trigger.TriggerType != ActionTriggerType.Scheduled;
         }
 
         /// <summary>
@@ -314,7 +294,8 @@ namespace ShipWorks.Actions
         /// </summary>
         private void OnChangeLimitStores(object sender, EventArgs e)
         {
-            panelStores.Enabled = storeLimited.Checked;
+            //panelStores.Enabled = storeLimited.Checked;
+            storeCheckBoxPanel.Enabled = storeLimited.Checked;
         }
 
         /// <summary>
@@ -322,14 +303,7 @@ namespace ShipWorks.Actions
         /// </summary>
         private long[] GenerateStoreLimitedListFromUI()
         {
-            List<long> list = new List<long>();
-
-            foreach (CheckBox storeBox in panelStores.Controls.OfType<CheckBox>().Where(c => c.Checked))
-            {
-                list.Add((long)storeBox.Tag);
-            }
-
-            return list.ToArray();
+            return storeCheckBoxPanel.SelectedStores.Select(s => s.StoreID).ToArray();
         }
 
         /// <summary>

@@ -204,8 +204,6 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public static void StartDownload(ICollection<StoreEntity> stores, DownloadInitiatedBy initiatedBy)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
-
             foreach (StoreEntity store in stores)
             {
                 AddToDownloadedQueue(store, initiatedBy);
@@ -217,8 +215,6 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void AddToDownloadedQueue(StoreEntity store, DownloadInitiatedBy initiatedBy)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
-
             lock (downloadQueueLock)
             {
                 log.InfoFormat("Adding store {0} to download queue.", store.StoreName);
@@ -520,7 +516,7 @@ namespace ShipWorks.Stores.Communication
             DownloadEntity downloadLog = new DownloadEntity();
             downloadLog.StoreID = store.StoreID;
             downloadLog.ComputerID = UserSession.Computer.ComputerID;
-            downloadLog.UserID = UserSession.User.UserID;
+            downloadLog.UserID = initiatedBy == DownloadInitiatedBy.ShipWorks ? SuperUser.Instance.UserID : UserSession.User.UserID;
             downloadLog.InitiatedBy = (int) initiatedBy;
             downloadLog.Started = DateTime.UtcNow;
             downloadLog.Ended = null;
