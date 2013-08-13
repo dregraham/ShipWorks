@@ -9761,6 +9761,7 @@
     <None Include="Resources\client_network1.png" />
     <None Include="Resources\data_gear.png" />
     <None Include="Resources\data_into1.png" />
+    <None Include="Resources\lock_open.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -9772,8 +9773,12 @@
     <None Include="Resources\server_earth.png" />
     <None Include="Resources\server_client.png" />
     <None Include="Resources\server_client1.png" />
+    <None Include="Resources\monitor_preferences.png" />
+    <None Include="Resources\node_add.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
+    <None Include="Resources\plug.png" />
+    <None Include="Resources\satellite_dish_add.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -9806,6 +9811,7 @@
     <None Include="Resources\shoppingcart_full.png" />
     <None Include="Resources\star_green.png" />
     <None Include="Resources\start_shipworks_service.png" />
+    <None Include="Resources\workstation_network.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />

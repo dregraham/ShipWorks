@@ -246,10 +246,20 @@ namespace ShipWorks.Data.Administration
             if (useChooseWisely2012)
             {
                 Pages.Remove(wizardPageChooseWisely2008);
+
+                if (SqlSession.IsConfigured && SqlSession.Current.Configuration.IsLocalDb())
+                {
+                    Pages.Remove(wizardPageChooseWisely2012);
+                }
+                else
+                {
+                    Pages.Remove(wizardPageManageLocalDb);
+                }
             }
             else
             {
                 Pages.Remove(wizardPageChooseWisely2012);
+                Pages.Remove(wizardPageManageLocalDb);
             }
         }
 
@@ -269,32 +279,15 @@ namespace ShipWorks.Data.Administration
                     if (radioChooseCreate2012.Checked) return ChooseWiselyOption.Create;
                     return ChooseWiselyOption.Restore;
                 }
-                else
+                else if (Pages.Contains(wizardPageChooseWisely2008))
                 {
                     if (radioChooseConnect2008.Checked) return ChooseWiselyOption.Connect;
                     if (radioChooseCreate2008.Checked) return ChooseWiselyOption.Create;
                     return ChooseWiselyOption.Restore;
                 }
-            }
-            set
-            {
-                if (Pages.Contains(wizardPageChooseWisely2012))
-                {
-                    switch (value)
-                    {
-                        case ChooseWiselyOption.Connect: radioChooseConnect2012.Checked = true; break;
-                        case ChooseWiselyOption.Create: radioChooseCreate2012.Checked = true; break;
-                        default: radioChooseRestore2012.Checked = true; break;
-                    }
-                }
                 else
                 {
-                    switch (value)
-                    {
-                        case ChooseWiselyOption.Connect: radioChooseConnect2008.Checked = true; break;
-                        case ChooseWiselyOption.Create: radioChooseCreate2008.Checked = true; break;
-                        default: radioChooseRestore2008.Checked = true; break;
-                    }
+                    return ChooseWiselyOption.Connect;
                 }
             }
         }
@@ -333,6 +326,42 @@ namespace ShipWorks.Data.Administration
         private void OnClickAnotherPcLabels(object sender, EventArgs e)
         {
             radioChooseConnect2012.Checked = true;
+        }
+
+        #endregion
+
+        #region Manager Local DB
+
+        /// <summary>
+        /// Makes clicking the picture and label next to the radio check the radio
+        /// </summary>
+        private void OnClickLocalDbEnableRemoteLabel(object sender, EventArgs e)
+        {
+            radioLocalDbEnableRemote.Checked = true;
+        }
+
+        /// <summary>
+        /// Makes clicking the picture and label next to the radio check the radio
+        /// </summary>
+        private void OnClickLocalDbConnectLabel(object sender, EventArgs e)
+        {
+            radioLocalDbConnect.Checked = true;
+        }
+
+        /// <summary>
+        /// Stepping next from the manage local db page
+        /// </summary>
+        private void OnStepNextManagerLocalDb(object sender, WizardStepEventArgs e)
+        {
+            if (radioLocalDbEnableRemote.Checked)
+            {
+                e.NextPage = CurrentPage;
+            }
+            else
+            {
+                sqlInstanceChooseDatabase = true;
+                e.NextPage = wizardPageSelectSqlServerInstance;
+            }
         }
 
         #endregion
