@@ -178,7 +178,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     request.Credentials = new NetworkCredential(Username, Password);
                 }
-                
+
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
                 {
                     try
@@ -197,6 +197,11 @@ namespace ShipWorks.Actions.Tasks.Common
                 IHttpResponseReader httpResponseReader = request.GetResponse();
 
                 logger.LogResponse(httpResponseReader.ReadResult(), "txt");
+            }
+            catch (UriFormatException ex)
+            {
+                log.Error("Error in HitUrl Url format.", ex);
+                throw new ActionTaskRunException("Url not formatted properly.", ex);
             }
             catch (WebException ex)
             {
