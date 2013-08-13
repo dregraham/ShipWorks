@@ -160,24 +160,33 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
 
-            request.Uri = new Uri(UrlToHit);
-            request.Verb = Verb;
 
-            if (UseBasicAuthentication)
+            try
             {
-                request.Credentials = new NetworkCredential(Username, Password);
-            }
+                request.Uri = new Uri(UrlToHit);
+                request.Verb = Verb;
 
-            foreach (KeyValuePair<string, string> header in HttpHeaders)
+                if (UseBasicAuthentication)
+                {
+                    request.Credentials = new NetworkCredential(Username, Password);
+                }
+
+                foreach (KeyValuePair<string, string> header in HttpHeaders)
+                {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+
+                logger.LogRequest(request);
+
+                IHttpResponseReader httpResponseReader = request.GetResponse();
+
+                logger.LogResponse(httpResponseReader.ReadResult(), "txt");
+            }
+            catch (WebException ex)
             {
-                request.Headers.Add(header.Key, header.Value);
+                logger.LogResponse(ex);
+                throw new ActionTaskRunException("Error hitting URL.", ex);
             }
-
-            logger.LogRequest(request);
-
-            IHttpResponseReader httpResponseReader = request.GetResponse();
-
-            logger.LogResponse(httpResponseReader.ReadResult(), "txt");
         }
 
         /// <summary>
