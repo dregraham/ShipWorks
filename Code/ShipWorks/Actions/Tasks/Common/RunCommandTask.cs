@@ -30,6 +30,14 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// Gets the text to use for the input label
+        /// </summary>
+        public override string InputLabel
+        {
+            get { return "Run command using:"; }
+        }
+
+        /// <summary>
         /// Gets or sets the command that should be executed
         /// </summary>
         public string Command { get; set; }
