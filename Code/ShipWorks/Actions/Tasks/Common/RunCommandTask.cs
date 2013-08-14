@@ -179,7 +179,7 @@ namespace ShipWorks.Actions.Tasks.Common
             }
             catch (Exception ex)
             {
-                throw new ActionException("An error ocurred while running the command.", ex);
+                throw new ActionException("An error occurred while running the command.", ex);
             }
             finally
             {
