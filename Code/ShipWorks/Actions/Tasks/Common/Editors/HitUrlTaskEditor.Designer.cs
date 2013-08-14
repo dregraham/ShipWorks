@@ -33,7 +33,7 @@
             System.Windows.Forms.Label requestToLabel;
             System.Windows.Forms.Label sendALabel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             System.Windows.Forms.Label labelHeaders;
             System.Windows.Forms.TableLayoutPanel authPanel;
             System.Windows.Forms.Label authLabelPrefix;
@@ -48,10 +48,10 @@
             this.basicAuthPanel = new System.Windows.Forms.TableLayoutPanel();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.userNameTextBox = new System.Windows.Forms.TextBox();
-            this.asBodyLabel = new System.Windows.Forms.Label();
             this.headersGrid = new ShipWorks.UI.Controls.NameValueGrid();
             this.headersPanel = new System.Windows.Forms.TableLayoutPanel();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.useTemplate = new System.Windows.Forms.CheckBox();
             requestUrlPanel = new System.Windows.Forms.FlowLayoutPanel();
             requestToLabel = new System.Windows.Forms.Label();
             sendALabel = new System.Windows.Forms.Label();
@@ -71,14 +71,14 @@
             // 
             // labelTemplate
             // 
-            this.labelTemplate.Location = new System.Drawing.Point(4, 203);
+            this.labelTemplate.Location = new System.Drawing.Point(29, 226);
             this.labelTemplate.Margin = new System.Windows.Forms.Padding(0);
             this.labelTemplate.Size = new System.Drawing.Size(78, 13);
             this.labelTemplate.Text = "Using template";
             // 
             // templateCombo
             // 
-            this.templateCombo.Location = new System.Drawing.Point(85, 200);
+            this.templateCombo.Location = new System.Drawing.Point(110, 223);
             this.templateCombo.TabIndex = 20;
             // 
             // requestUrlPanel
@@ -158,7 +158,7 @@
             this.urlTextBox.Size = new System.Drawing.Size(370, 21);
             this.urlTextBox.TabIndex = 2;
             this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
-            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             this.urlTextBox.TextChanged += new System.EventHandler(this.OnUrlTextChanged);
             // 
             // verbLabel
@@ -309,17 +309,6 @@
             this.userNameTextBox.TabIndex = 1;
             this.userNameTextBox.TextChanged += new System.EventHandler(this.OnUserNameTextChanged);
             // 
-            // asBodyLabel
-            // 
-            this.asBodyLabel.AutoSize = true;
-            this.asBodyLabel.Location = new System.Drawing.Point(341, 203);
-            this.asBodyLabel.Margin = new System.Windows.Forms.Padding(0);
-            this.asBodyLabel.Name = "asBodyLabel";
-            this.asBodyLabel.Size = new System.Drawing.Size(104, 13);
-            this.asBodyLabel.TabIndex = 0;
-            this.asBodyLabel.Text = "as the request body";
-            this.asBodyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // headersGrid
             // 
             this.headersGrid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -350,25 +339,36 @@
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // useTemplate
+            // 
+            this.useTemplate.AutoSize = true;
+            this.useTemplate.Location = new System.Drawing.Point(7, 200);
+            this.useTemplate.Name = "useTemplate";
+            this.useTemplate.Size = new System.Drawing.Size(167, 17);
+            this.useTemplate.TabIndex = 24;
+            this.useTemplate.Text = "Use template in request body";
+            this.useTemplate.UseVisualStyleBackColor = true;
+            this.useTemplate.CheckedChanged += new System.EventHandler(this.OnUseTemplateCheckedChanged);
+            // 
             // HitUrlTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.Controls.Add(this.useTemplate);
             this.Controls.Add(authPanel);
             this.Controls.Add(this.headersPanel);
-            this.Controls.Add(this.asBodyLabel);
             this.Controls.Add(verbUrlPanel);
             this.Controls.Add(requestUrlPanel);
             this.Name = "HitUrlTaskEditor";
-            this.Size = new System.Drawing.Size(522, 232);
+            this.Size = new System.Drawing.Size(522, 258);
             this.Controls.SetChildIndex(requestUrlPanel, 0);
             this.Controls.SetChildIndex(verbUrlPanel, 0);
-            this.Controls.SetChildIndex(this.asBodyLabel, 0);
             this.Controls.SetChildIndex(this.headersPanel, 0);
             this.Controls.SetChildIndex(this.labelTemplate, 0);
             this.Controls.SetChildIndex(this.templateCombo, 0);
             this.Controls.SetChildIndex(authPanel, 0);
+            this.Controls.SetChildIndex(this.useTemplate, 0);
             verbUrlPanel.ResumeLayout(false);
             verbUrlPanel.PerformLayout();
             authPanel.ResumeLayout(false);
@@ -386,7 +386,6 @@
         #endregion
 
         private System.Windows.Forms.Label verbLabel;
-        private System.Windows.Forms.Label asBodyLabel;
         private Templates.Tokens.TemplateTokenTextBox urlTextBox;
         private ShipWorks.UI.Controls.NameValueGrid headersGrid;
         private System.Windows.Forms.TableLayoutPanel headersPanel;
@@ -396,6 +395,7 @@
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Label urlFormat;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.CheckBox useTemplate;
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Xml.XPath;
 using System.Linq;
@@ -11,7 +12,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
 using log4net;
-using System.Text;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.ApplicationCore.Crashes;
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Actions.Tasks.Common
     public class HitUrlTask : TemplateBasedTask
     {
         // Logger
-        private static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
+        static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
 
         private readonly ApiLogEntry requestLogger;
 
@@ -37,32 +37,56 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
-        public HttpVerb Verb { get; set; }
+        public HttpVerb Verb
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the URL to hit.
         /// </summary>
-        public string UrlToHit { get; set; }
-        
+        public string UrlToHit
+        {
+            get;
+            set;
+        }
+
         /// <summary>
-        /// Gets or sets a value indicating whether to [use basic authentication].
+        /// Gets or sets a value indicating whether [use basic authentication].
         /// </summary>
-        public bool UseBasicAuthentication { get; set; }
+        public bool UseBasicAuthentication
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
-        public string Username { get; set; }
+        public string Username
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password { get; set; }
+        public string Password
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the HTTP headers.
         /// </summary>
-        public KeyValuePair<string, string>[] HttpHeaders { get; set; }
+        public KeyValuePair<string, string>[] HttpHeaders
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets a value indicating whether to postpone running or not.
@@ -81,11 +105,12 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// Create the editor for the settings
+        /// Gets or sets a value indicating whether to use a template in the request.
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
+        public bool UseTemplate
         {
-            return new HitUrlTaskEditor(this);
+            get;
+            set;
         }
 
         /// <summary>
@@ -97,10 +122,10 @@ namespace ShipWorks.Actions.Tasks.Common
 
             XPathNodeIterator headerIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
 
-            List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
+            var headerList = new List<KeyValuePair<string, string>>();
             foreach (XPathNavigator header in headerIterator)
             {
-                string[] keyValue = ((string)header.TypedValue).Split(',');
+                string[] keyValue = ((string) header.TypedValue).Split(',');
 
                 // ignore the first character as it is "["
                 string key = keyValue[0].Substring(1).Trim();
@@ -115,13 +140,21 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// Create the editor for the settings
+        /// </summary>
+        public override ActionTaskEditor CreateEditor()
+        {
+            return new HitUrlTaskEditor(this);
+        }
+
+        /// <summary>
         /// Sends template to URL (or just sends request if no Post Data)
         /// </summary>
         protected override void ProcessTemplateResults(TemplateEntity template, IList<TemplateResult> templateResults, ActionStepContext context)
         {
             foreach (TemplateResult templateResult in templateResults)
             {
-                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
+                var request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
                 ProcessRequest(request, new List<long>());
             }
         }
@@ -131,14 +164,14 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            if (TemplateID == 0)
+            if (!UseTemplate || TemplateID == 0)
             {
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 ProcessRequest(request, inputKeys);
             }
             else
             {
-                base.Run();                
+                base.Run(inputKeys, context);
             }
         }
         

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using System.Web;
+using System.Windows.Forms;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -15,8 +16,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
     public partial class HitUrlTaskEditor : TemplateBasedTaskEditor
     {
         readonly HitUrlTask task;
-        ContextMenuStrip verbMenu;
+
         ContextMenuStrip authMenu;
+
+        ContextMenuStrip verbMenu;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HitUrlTaskEditor"/> class.
@@ -46,12 +49,15 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
 
+            useTemplate.Checked = task.UseTemplate;
+
             urlTextBox.Validating += OnUrlTextBoxValidating;
             urlTextBox.Validated += OnUrlTextBoxValidated;
 
-
             if (null != task.HttpHeaders)
+            {
                 headersGrid.Values = task.HttpHeaders.Select(x => new KeyValuePair<string, string>(HttpUtility.UrlDecode(x.Key), HttpUtility.UrlDecode(x.Value))).ToList();
+            }
 
             UpdateAuthUI();
             UpdateBodyUI();
@@ -60,7 +66,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [URL text box validated].
         /// </summary>
-        private void OnUrlTextBoxValidated(object sender, EventArgs e)
+        void OnUrlTextBoxValidated(object sender, EventArgs e)
         {
             errorProvider.SetError(urlTextBox, string.Empty);
         }
@@ -68,7 +74,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [URL text box validating].
         /// </summary>
-        private void OnUrlTextBoxValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        void OnUrlTextBoxValidating(object sender, CancelEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(urlTextBox.Text))
             {
@@ -125,8 +131,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void OnVerbMenuItemClick(object sender, EventArgs e)
         {
-            var verbMenuItem = (ToolStripMenuItem)sender;
-            var clickedVerb = (HttpVerb)verbMenuItem.Tag;
+            var verbMenuItem = (ToolStripMenuItem) sender;
+            var clickedVerb = (HttpVerb) verbMenuItem.Tag;
 
             if (task.Verb != clickedVerb)
             {
@@ -158,8 +164,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void OnAuthMenuItemClick(object sender, EventArgs e)
         {
-            var authMenuItem = (ToolStripMenuItem)sender;
-            var useBasicAuth = (bool)authMenuItem.Tag;
+            var authMenuItem = (ToolStripMenuItem) sender;
+            var useBasicAuth = (bool) authMenuItem.Tag;
 
             if (task.UseBasicAuthentication != useBasicAuth)
             {
@@ -217,8 +223,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             labelTemplate.Visible = isNotGet;
             templateCombo.Visible = isNotGet;
-            asBodyLabel.Visible = isNotGet;
-            
+            useTemplate.Visible = isNotGet;
+
+            templateCombo.Enabled = useTemplate.Checked;
+
             if (templateCombo.Visible)
             {
                 Height = templateCombo.Bottom + 6;
@@ -228,6 +236,16 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 templateCombo.SelectedTemplate = null;
                 Height = templateCombo.Top - 3;
             }
+        }
+
+        /// <summary>
+        /// Called when [use template checked changed].
+        /// </summary>
+        void OnUseTemplateCheckedChanged(object sender, EventArgs e)
+        {
+            UpdateBodyUI();
+
+            task.UseTemplate = useTemplate.Checked;
         }
     }
 }
