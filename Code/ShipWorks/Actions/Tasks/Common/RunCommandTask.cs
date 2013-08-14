@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using log4net;
 using Microsoft.Web.Services3.Mime;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
@@ -17,6 +18,7 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Run a command", "RunCommand", ActionTriggerClassifications.Scheduled)]
     public class RunCommandTask : ActionTask
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
         /// <summary>
         /// Creates the editor that will be used to modify the task
         /// </summary>
@@ -58,14 +60,66 @@ namespace ShipWorks.Actions.Tasks.Common
         public int CommandTimeoutInMinutes { get; set; }
 
         /// <summary>
+        /// Gets the temporary path to which to save the command
+        /// </summary>
+        private static string GetTempPath()
+        {
+            return DataPath.ShipWorksTemp;
+        }
+
+        /// <summary>
+        /// Gets the command that should be executed
+        /// </summary>
+        /// <param name="inputKeys">List of ids of objects to use for merging tokens</param>
+        /// <returns></returns>
+        private string GetProcessedCommand(IEnumerable<long> inputKeys)
+        {
+            return inputKeys.Select(x => TemplateTokenProcessor.ProcessTokens(Command, x)).Aggregate((x, y) => x + '\n' + y);
+        }
+
+        /// <summary>
+        /// Handle data coming from standard error
+        /// </summary>
+        private static void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                log.Error(e.Data);
+            }
+        }
+
+        /// <summary>
+        /// Handle data coming from standard output
+        /// </summary>
+        private static void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                log.Info(e.Data);
+            }
+        }
+
+        /// <summary>
+        /// Log the command that will be executed
+        /// </summary>
+        /// <param name="command">Contents of the command that will be executed</param>
+        private static void LogCommand(string command)
+        {
+            log.InfoFormat("Command: \n{0}", command);
+        }
+
+        /// <summary>
         /// Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        protected override void Run(List<long> inputKeys)
         {
-            string executionCommand = TemplateTokenProcessor.ProcessTokens(Command, inputKeys);
-            string commandFileName = Path.GetRandomFileName();
-            string commandPath = Path.Combine(DataPath.ShipWorksTemp, commandFileName);
+            string executionCommand = GetProcessedCommand(inputKeys);
+            string commandFileName = Path.GetRandomFileName() + ".bat";
+            string commandPath = Path.Combine(GetTempPath(), commandFileName);
 
+            LogCommand(executionCommand);
+
+            // Save the command as a batch file so we can execute it
             File.WriteAllText(commandPath, executionCommand);
 
             Process process = null;
@@ -79,33 +133,57 @@ namespace ShipWorks.Actions.Tasks.Common
                         CreateNoWindow = true,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
+                        RedirectStandardInput = true,
                         UseShellExecute = false,
-                        WorkingDirectory = DataPath.ShipWorksTemp,
+                        WorkingDirectory = GetTempPath(),
                         FileName = commandPath
                     }
                 };
 
-                //process.OutputDataReceived += (sender, args) =>
+                // Wire up the handlers that will take care of logging output and errors
+                process.OutputDataReceived += ProcessOnOutputDataReceived;
+                process.ErrorDataReceived += ProcessOnErrorDataReceived;
 
+                // Get the time that should be used for timing out the process
+                DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
+
+                process.Start();
+
+                //
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.StandardInput.Close();
 
                 do
                 {
                     if (!process.HasExited)
                     {
+                        if (!process.Responding)
+                        {
+                            log.Warn("Command is not responding");
+                        }
 
+                        if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
+                        {
+                            process.Kill();
+                            throw new TimeoutException(string.Format("The command took longer than {0} minute(s) to execute.", CommandTimeoutInMinutes));
+                        }
                     }
-                } while (!process.WaitForExit(1000));
+                } while (!process.WaitForExit(500));
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (process != null)
                 {
                     process.Close();
                 }
+
+                throw new ActionException("An error ocurred while running the command.", ex);
             }
             finally
             {
-                
+                File.Delete(commandPath);
             }
         }
     }
