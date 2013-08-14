@@ -131,9 +131,6 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            // Make note of the keys being used, so we can use them when processing the request. Not
-            // passing these as a parameter to the method because the 
-
             if (TemplateID == 0)
             {
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
