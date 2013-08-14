@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
 using log4net;
+using System.Text;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -26,93 +27,39 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
-        public HttpVerb Verb
-        {
-            get;
-            set;
-        }
+        public HttpVerb Verb { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to hit.
         /// </summary>
-        public string UrlToHit
-        {
-            get;
-            set;
-        }
-
-
+        public string UrlToHit { get; set; }
+        
         /// <summary>
-        /// The object is being deserialized into its values
+        /// Gets or sets a value indicating whether to [use basic authentication].
         /// </summary>
-        public override void DeserializeXml(XPathNavigator xpath)
-        {
-            base.DeserializeXml(xpath);
-
-            XPathNodeIterator headeriIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
-
-            List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
-            foreach (XPathNavigator header in headeriIterator)
-            {
-                string[] keyValue = ((string)header.TypedValue).Split(',');
-
-                // ignore the first character as it is "["
-                string key = keyValue[0].Substring(1).Trim();
-
-                // ignore the last character as it is "]"
-                string value = keyValue[1].Substring(0, keyValue[1].Length - 1).Trim();
-
-                headerList.Add(new KeyValuePair<string, string>(key,value));
-            }
-
-            HttpHeaders = headerList.ToArray();
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [use basic authentication].
-        /// </summary>
-        public bool UseBasicAuthentication
-        {
-            get;
-            set;
-        }
+        public bool UseBasicAuthentication { get; set; }
 
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
-        public string Username
-        {
-            get;
-            set;
-        }
+        public string Username { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password
-        {
-            get;
-            set;
-        }
+        public string Password { get; set; }
 
         /// <summary>
         /// Gets or sets the HTTP headers.
         /// </summary>
-        public KeyValuePair<string,string>[] HttpHeaders
-        {
-            get;
-            set;
-        }
+        public KeyValuePair<string, string>[] HttpHeaders { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether to postpone running or not.
         /// </summary>
         public override bool EnablePostpone
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
@@ -120,10 +67,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get
-            {
-                return "Using";
-            }
+            get { return "Using"; }
         }
 
         /// <summary>
@@ -135,13 +79,39 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// The object is being deserialized into its values
+        /// </summary>
+        public override void DeserializeXml(XPathNavigator xpath)
+        {
+            base.DeserializeXml(xpath);
+
+            XPathNodeIterator headerIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
+
+            List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
+            foreach (XPathNavigator header in headerIterator)
+            {
+                string[] keyValue = ((string)header.TypedValue).Split(',');
+
+                // ignore the first character as it is "["
+                string key = keyValue[0].Substring(1).Trim();
+
+                // ignore the last character as it is "]"
+                string value = keyValue[1].Substring(0, keyValue[1].Length - 1).Trim();
+
+                headerList.Add(new KeyValuePair<string, string>(key, value));
+            }
+
+            HttpHeaders = headerList.ToArray();
+        }
+
+        /// <summary>
         /// Sends template to URL (or just sends request if no Post Data)
         /// </summary>
         protected override void ProcessTemplateResults(TemplateEntity template, IList<TemplateResult> templateResults, ActionStepContext context)
         {
-            foreach (var templateResult in templateResults)
+            foreach (TemplateResult templateResult in templateResults)
             {
-                var request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
+                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
                 ProcessRequest(request);
             }
         }
@@ -153,7 +123,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             if (TemplateID == 0)
             {
-                var request = new HttpVariableRequestSubmitter();
+                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 ProcessRequest(request);
             }
             else
@@ -174,10 +144,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Uri = new Uri(UrlToHit);
                 request.Verb = Verb;
 
-                if (UseBasicAuthentication)
-                {
-                    request.Credentials = new NetworkCredential(Username, Password);
-                }
+                AddAuthenticationHeader(request);
 
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
                 {
@@ -195,7 +162,6 @@ namespace ShipWorks.Actions.Tasks.Common
                 logger.LogRequest(request);
 
                 IHttpResponseReader httpResponseReader = request.GetResponse();
-
                 logger.LogResponse(httpResponseReader.ReadResult(), "txt");
             }
             catch (UriFormatException ex)
@@ -211,9 +177,26 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// Adds the authentication header to the request if needed.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        private void AddAuthenticationHeader(HttpRequestSubmitter request)
+        {
+            if (UseBasicAuthentication)
+            {
+                // .NET typically waits for a server challenge before sending authorization, so force the authorization headers 
+                //  be sent rather than using a NetworkCredential object
+                string authInfo = string.Format("{0}:{1}", Username, Password);
+                string encodedAuthInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+
+                request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
+            }
+        }
+
+        /// <summary>
         /// Gets the type of the content.
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+        /// <exception cref="System.InvalidOperationException">Invalid template output format</exception>
         private static string GetContentType(TemplateOutputFormat templateOutputFormat)
         {
             switch (templateOutputFormat)
@@ -225,7 +208,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 case TemplateOutputFormat.Text:
                     return "";
                 default:
-                    throw new ArgumentOutOfRangeException("templateOutputFormat", "Invalid template Output Format");
+                    throw new InvalidOperationException("Invalid template output format");
             }
         }
     }
