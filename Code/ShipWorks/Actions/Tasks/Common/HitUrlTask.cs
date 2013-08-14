@@ -122,7 +122,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
             XPathNodeIterator headerIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
 
-            var headerList = new List<KeyValuePair<string, string>>();
+            List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
             foreach (XPathNavigator header in headerIterator)
             {
                 string[] keyValue = ((string) header.TypedValue).Split(',');
@@ -154,7 +154,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             foreach (TemplateResult templateResult in templateResults)
             {
-                var request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
+                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
                 ProcessRequest(request, new List<long>());
             }
         }
@@ -166,8 +166,12 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             if (!UseTemplate || TemplateID == 0)
             {
-                HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                ProcessRequest(request, inputKeys);
+                foreach (long inputKey in inputKeys)
+                {
+                    HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+
+                    ProcessRequest(request, new List<long>(){inputKey});
+                }
             }
             else
             {
