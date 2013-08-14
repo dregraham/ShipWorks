@@ -12,6 +12,7 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
 using log4net;
 using System.Text;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -112,7 +113,7 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (TemplateResult templateResult in templateResults)
             {
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
-                ProcessRequest(request);
+                ProcessRequest(request, new List<long>());
             }
         }
 
@@ -121,10 +122,13 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
+            // Make note of the keys being used, so we can use them when processing the request. Not
+            // passing these as a parameter to the method because the 
+
             if (TemplateID == 0)
             {
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                ProcessRequest(request);
+                ProcessRequest(request, inputKeys);
             }
             else
             {
@@ -132,18 +136,29 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
+
         /// <summary>
-        /// Processes the result.
+        /// Processes the request.
         /// </summary>
-        private void ProcessRequest(HttpRequestSubmitter request)
+        /// <param name="request">The request being submitted.</param>
+        /// <param name="inputKeys">The input keys used for processing tokens in the URL.</param>
+        /// <exception cref="ActionTaskRunException">
+        /// Invalid header for HitUrl task.
+        /// or
+        /// Url not formatted properly.
+        /// or
+        /// Error hitting URL.
+        /// </exception>
+        private void ProcessRequest(HttpRequestSubmitter request, List<long> inputKeys)
         {
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
             
             try
             {
-                request.Uri = new Uri(UrlToHit);
-                request.Verb = Verb;
+                string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
+                request.Uri = new Uri(processedUrl);
 
+                request.Verb = Verb;
                 AddAuthenticationHeader(request);
 
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
