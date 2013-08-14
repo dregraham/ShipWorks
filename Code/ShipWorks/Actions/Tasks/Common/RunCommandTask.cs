@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Web.Services3.Mime;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -51,5 +56,57 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Gets or sets how long to wait before timing out the command
         /// </summary>
         public int CommandTimeoutInMinutes { get; set; }
+
+        /// <summary>
+        /// Run the task
+        /// </summary>
+        public override void Run(List<long> inputKeys, ActionStepContext context)
+        {
+            string executionCommand = TemplateTokenProcessor.ProcessTokens(Command, inputKeys);
+            string commandFileName = Path.GetRandomFileName();
+            string commandPath = Path.Combine(DataPath.ShipWorksTemp, commandFileName);
+
+            File.WriteAllText(commandPath, executionCommand);
+
+            Process process = null;
+
+            try
+            {
+                process = new Process
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        WorkingDirectory = DataPath.ShipWorksTemp,
+                        FileName = commandPath
+                    }
+                };
+
+                //process.OutputDataReceived += (sender, args) =>
+
+
+                do
+                {
+                    if (!process.HasExited)
+                    {
+
+                    }
+                } while (!process.WaitForExit(1000));
+            }
+            catch (Exception)
+            {
+                if (process != null)
+                {
+                    process.Close();
+                }
+            }
+            finally
+            {
+                
+            }
+        }
     }
 }
