@@ -48,10 +48,13 @@
             // 
             // tokenizedExecuteCommand
             // 
-            this.tokenizedExecuteCommand.Location = new System.Drawing.Point(144, 0);
+            this.tokenizedExecuteCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tokenizedExecuteCommand.Location = new System.Drawing.Point(3, 19);
             this.tokenizedExecuteCommand.MaxLength = 32767;
+            this.tokenizedExecuteCommand.Multiline = true;
             this.tokenizedExecuteCommand.Name = "tokenizedExecuteCommand";
-            this.tokenizedExecuteCommand.Size = new System.Drawing.Size(283, 22);
+            this.tokenizedExecuteCommand.Size = new System.Drawing.Size(435, 98);
             this.tokenizedExecuteCommand.TabIndex = 2;
             this.tokenizedExecuteCommand.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
@@ -60,7 +63,7 @@
             this.shouldTimeout.AutoSize = true;
             this.shouldTimeout.Checked = true;
             this.shouldTimeout.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shouldTimeout.Location = new System.Drawing.Point(6, 35);
+            this.shouldTimeout.Location = new System.Drawing.Point(6, 127);
             this.shouldTimeout.Name = "shouldTimeout";
             this.shouldTimeout.Size = new System.Drawing.Size(211, 17);
             this.shouldTimeout.TabIndex = 3;
@@ -71,7 +74,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(264, 36);
+            this.label1.Location = new System.Drawing.Point(264, 128);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 13);
             this.label1.TabIndex = 4;
@@ -79,7 +82,7 @@
             // 
             // timeoutInMinutes
             // 
-            this.timeoutInMinutes.Location = new System.Drawing.Point(216, 31);
+            this.timeoutInMinutes.Location = new System.Drawing.Point(216, 123);
             this.timeoutInMinutes.Maximum = new decimal(new int[] {
             300,
             0,
@@ -105,7 +108,7 @@
             this.Controls.Add(this.tokenizedExecuteCommand);
             this.Controls.Add(this.executeLabel);
             this.Name = "RunCommandTaskEditor";
-            this.Size = new System.Drawing.Size(435, 59);
+            this.Size = new System.Drawing.Size(441, 154);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInMinutes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

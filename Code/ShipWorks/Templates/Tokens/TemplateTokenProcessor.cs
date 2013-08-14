@@ -50,15 +50,15 @@ namespace ShipWorks.Templates.Tokens
         /// <summary>
         /// Process tokens in the token string with the given entity
         /// </summary>
-        public static string ProcessTokens(string tokenText, long entityID)
+        public static string ProcessTokens(string tokenText, long entityID, bool stripNewlines = true)
         {
-            return ProcessTokens(tokenText, new List<long> { entityID });
+            return ProcessTokens(tokenText, new List<long> { entityID }, stripNewlines);
         }
 
         /// <summary>
         /// Process the tokens in the token string for the given entity ID
         /// </summary>
-        public static string ProcessTokens(string tokenText, List<long> idList)
+        public static string ProcessTokens(string tokenText, List<long> idList, bool stripNewlines = true)
         {
             if (!HasTokens(tokenText))
             {
@@ -80,8 +80,11 @@ namespace ShipWorks.Templates.Tokens
 
                 StringBuilder sb = new StringBuilder(result.ReadResult());
 
-                // Return the result, with newlines stripped
-                sb.Replace("\r", "").Replace("\n", "");
+                if (stripNewlines)
+                {
+                    // Return the result, with newlines stripped
+                    sb.Replace("\r", "").Replace("\n", "");
+                }
 
                 return sb.ToString();
             }

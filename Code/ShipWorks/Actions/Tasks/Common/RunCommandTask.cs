@@ -9,6 +9,8 @@ using Microsoft.Web.Services3.Mime;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.ApplicationCore.Logging;
+using System.Threading;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -19,6 +21,10 @@ namespace ShipWorks.Actions.Tasks.Common
     public class RunCommandTask : ActionTask
     {
         static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
+
+        static string commandLogFolder;
+        static int nextRunNumber = 0;
+
         /// <summary>
         /// Creates the editor that will be used to modify the task
         /// </summary>
@@ -67,6 +73,30 @@ namespace ShipWorks.Actions.Tasks.Common
             return DataPath.ShipWorksTemp;
         }
 
+        static string CommandLogFolder
+        {
+            get
+            {
+                if (null == commandLogFolder)
+                {
+                    var descriptor = ActionTaskManager.GetDescriptor(typeof(RunCommandTask));
+
+                    commandLogFolder = Path.Combine(LogSession.LogFolder, descriptor.Identifier);
+
+                    Directory.CreateDirectory(commandLogFolder);
+                }
+
+                return commandLogFolder;
+            }
+        }
+
+        static string GetNextCommandLogPath()
+        {
+            var fileName = string.Format("{0:0000}.txt", Interlocked.Increment(ref nextRunNumber));
+
+            return Path.Combine(CommandLogFolder, fileName);
+        }
+
         /// <summary>
         /// Gets the command that should be executed
         /// </summary>
@@ -74,38 +104,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         private string GetProcessedCommand(IEnumerable<long> inputKeys)
         {
-            return inputKeys.Select(x => TemplateTokenProcessor.ProcessTokens(Command, x)).Aggregate((x, y) => x + '\n' + y);
-        }
-
-        /// <summary>
-        /// Handle data coming from standard error
-        /// </summary>
-        private static void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                log.Error(e.Data);
-            }
-        }
-
-        /// <summary>
-        /// Handle data coming from standard output
-        /// </summary>
-        private static void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                log.Info(e.Data);
-            }
-        }
-
-        /// <summary>
-        /// Log the command that will be executed
-        /// </summary>
-        /// <param name="command">Contents of the command that will be executed</param>
-        private static void LogCommand(string command)
-        {
-            log.InfoFormat("Command: \n{0}", command);
+            return
+                "@echo off" + Environment.NewLine +
+                inputKeys.Select(x => TemplateTokenProcessor.ProcessTokens(Command, x, false)).Aggregate((x, y) => x + Environment.NewLine + y);
         }
 
         /// <summary>
@@ -114,71 +115,70 @@ namespace ShipWorks.Actions.Tasks.Common
         protected override void Run(List<long> inputKeys)
         {
             string executionCommand = GetProcessedCommand(inputKeys);
-            string commandFileName = Path.GetRandomFileName() + ".bat";
+            string commandFileName = Path.GetRandomFileName() + ".cmd";
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
+            string commandLogPath = GetNextCommandLogPath();
 
-            LogCommand(executionCommand);
+            log.InfoFormat("Command: \n{0}", executionCommand);
+            log.InfoFormat("Command output log: {0}", commandLogPath);
 
             // Save the command as a batch file so we can execute it
             File.WriteAllText(commandPath, executionCommand);
 
-            Process process = null;
-
             try
             {
-                process = new Process
+                using (var commandLogWriter = File.CreateText(commandLogPath))
                 {
-                    StartInfo = new ProcessStartInfo()
+                    commandLogWriter.AutoFlush = true;
+
+                    using (var process = new Process())
                     {
-                        CreateNoWindow = true,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        RedirectStandardInput = true,
-                        UseShellExecute = false,
-                        WorkingDirectory = GetTempPath(),
-                        FileName = commandPath
-                    }
-                };
+                        process.StartInfo = new ProcessStartInfo() {
+                            CreateNoWindow = true,
+                            RedirectStandardOutput = true,
+                            RedirectStandardError = true,
+                            RedirectStandardInput = true,
+                            UseShellExecute = false,
+                            WorkingDirectory = GetTempPath(),
+                            FileName = commandPath
+                        };
 
-                // Wire up the handlers that will take care of logging output and errors
-                process.OutputDataReceived += ProcessOnOutputDataReceived;
-                process.ErrorDataReceived += ProcessOnErrorDataReceived;
+                        // Wire up the handlers that will take care of logging output and errors
+                        process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(e.Data);
+                        process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(e.Data);
 
-                // Get the time that should be used for timing out the process
-                DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
+                        process.Start();
 
-                process.Start();
+                        process.BeginOutputReadLine();
+                        process.BeginErrorReadLine();
+                        process.StandardInput.Close();
 
-                //
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                process.StandardInput.Close();
-
-                do
-                {
-                    if (!process.HasExited)
-                    {
-                        if (!process.Responding)
+                        // Get the time that should be used for timing out the process
+                        DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
+                        do
                         {
-                            log.Warn("Command is not responding");
-                        }
+                            if (!process.HasExited)
+                            {
+                                if (!process.Responding)
+                                {
+                                    log.Warn("Command is not responding");
+                                }
 
-                        if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
-                        {
-                            process.Kill();
-                            throw new TimeoutException(string.Format("The command took longer than {0} minute(s) to execute.", CommandTimeoutInMinutes));
-                        }
+                                if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
+                                {
+                                    process.Kill();
+                                    throw new TimeoutException(string.Format("The command took longer than {0} minute(s) to execute.", CommandTimeoutInMinutes));
+                                }
+                            }
+                        } while (!process.WaitForExit(500));
+
+                        // Wait for asynchronous output processing to complete
+                        process.WaitForExit();
                     }
-                } while (!process.WaitForExit(500));
-
+                }
             }
             catch (Exception ex)
             {
-                if (process != null)
-                {
-                    process.Close();
-                }
-
                 throw new ActionException("An error ocurred while running the command.", ex);
             }
             finally
