@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.Xml.XPath;
+using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -13,6 +14,7 @@ using ShipWorks.Templates.Processing;
 using log4net;
 using System.Text;
 using ShipWorks.Templates.Tokens;
+
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -135,8 +137,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 base.Run();                
             }
         }
-
-
+        
         /// <summary>
         /// Processes the request.
         /// </summary>
@@ -159,25 +160,29 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Uri = new Uri(processedUrl);
 
                 request.Verb = Verb;
-                AddAuthenticationHeader(request);
+                request.AllowAutoRedirect = true;
 
-                foreach (KeyValuePair<string, string> header in HttpHeaders)
-                {
-                    try
-                    {
-                        request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        log.Error("Error adding header in HitURLTask", ex);
-                        throw new ActionTaskRunException("Invalid header for HitUrl task.", ex);
-                    }
-                }
+                AddRequestHeaders(request);
 
+                // We want to allow 400 and above errors so we can inspect them for logging and providing a detailed action
+                // message as to why the exception failed
+                IEnumerable<HttpStatusCode> allStatusCodes = Enum.GetValues(typeof(HttpStatusCode)).Cast<HttpStatusCode>();
+                HttpStatusCode[] allowedStatusCodes = allStatusCodes.Where(c => (int)c >= 400).ToArray();
+                request.AllowHttpStatusCodes(allowedStatusCodes);
+
+                // Submit the request, logging both the original request and the response
                 logger.LogRequest(request);
-
                 IHttpResponseReader httpResponseReader = request.GetResponse();
-                logger.LogResponse(httpResponseReader.ReadResult(), "txt");
+                logger.LogResponse(httpResponseReader.ReadResult(), "log");
+
+                if ((int)httpResponseReader.HttpWebResponse.StatusCode >= 400)
+                {
+                    // A bad response was received that should cause the task to fail
+                    log.ErrorFormat("An invalid response was received from the server when submitting the request to {0}: {1} {2}", 
+                        request.Uri.AbsoluteUri, (int)httpResponseReader.HttpWebResponse.StatusCode, httpResponseReader.HttpWebResponse.StatusDescription);
+
+                    throw new ActionTaskRunException(string.Format("An invalid response was received from {0}", request.Uri.AbsoluteUri));
+                }
             }
             catch (UriFormatException ex)
             {
@@ -192,10 +197,10 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// Adds the authentication header to the request if needed.
+        /// Adds the authentication header (if needed) and all other headers to the request.
         /// </summary>
         /// <param name="request">The request.</param>
-        private void AddAuthenticationHeader(HttpRequestSubmitter request)
+        private void AddRequestHeaders(HttpRequestSubmitter request)
         {
             if (UseBasicAuthentication)
             {
@@ -205,6 +210,19 @@ namespace ShipWorks.Actions.Tasks.Common
                 string encodedAuthInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
 
                 request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
+            }
+
+            foreach (KeyValuePair<string, string> header in HttpHeaders)
+            {
+                try
+                {
+                    request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
+                }
+                catch (ArgumentException ex)
+                {
+                    log.Error("Error adding header in HitURLTask", ex);
+                    throw new ActionTaskRunException("Invalid header for HitUrl task.", ex);
+                }
             }
         }
 
