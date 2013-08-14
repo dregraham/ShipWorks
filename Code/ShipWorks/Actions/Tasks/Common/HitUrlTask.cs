@@ -5,7 +5,6 @@ using System.Web;
 using System.Xml.XPath;
 using System.Linq;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +13,7 @@ using ShipWorks.Templates.Processing;
 using log4net;
 using System.Text;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.ApplicationCore.Crashes;
 
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -26,6 +26,13 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
+
+        private readonly ApiLogEntry requestLogger;
+
+        public HitUrlTask()
+        {
+            requestLogger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
+        }
 
         /// <summary>
         /// Gets or sets the verb.
@@ -152,8 +159,6 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </exception>
         private void ProcessRequest(HttpRequestSubmitter request, List<long> inputKeys)
         {
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
-            
             try
             {
                 string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
@@ -171,9 +176,9 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.AllowHttpStatusCodes(allowedStatusCodes);
 
                 // Submit the request, logging both the original request and the response
-                logger.LogRequest(request);
+                LogFormattedRequest(request);
                 IHttpResponseReader httpResponseReader = request.GetResponse();
-                logger.LogResponse(httpResponseReader.ReadResult(), "log");
+                requestLogger.LogResponse(httpResponseReader.ReadResult(), "log");
 
                 if ((int)httpResponseReader.HttpWebResponse.StatusCode >= 400)
                 {
@@ -191,7 +196,14 @@ namespace ShipWorks.Actions.Tasks.Common
             }
             catch (WebException ex)
             {
-                logger.LogResponse(ex);
+                // Leverage the crash submitter to extract and format the exception details, and remove 
+                // any portion of the message that would show the callstack since the log will be in plain 
+                // text to the user
+                string exceptionDetail = CrashSubmitter.GetExceptionDetail(ex);
+                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Callstack:", StringComparison.OrdinalIgnoreCase));
+                
+                requestLogger.LogResponse(message, "log");
+
                 throw new ActionTaskRunException("Error hitting URL.", ex);
             }
         }
@@ -224,6 +236,24 @@ namespace ShipWorks.Actions.Tasks.Common
                     throw new ActionTaskRunException("Invalid header for HitUrl task.", ex);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Formats and logs the request details.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        private void LogFormattedRequest(HttpRequestSubmitter request)
+        {
+            StringBuilder headerText = new StringBuilder();
+            foreach (string key in request.Headers.Keys)
+            {
+                headerText.AppendLine(string.Format("{0}: {1}", key, request.Headers[key]));
+            }
+
+            string postContent = Encoding.Default.GetString(request.GetPostContent());
+            string message = string.Format("{0} {1} {2}{3}{2}{2}{4}", request.Verb.ToString().ToUpper(), request.Uri.AbsoluteUri, Environment.NewLine, headerText, postContent);
+
+            requestLogger.LogRequest(message, "log");
         }
 
         /// <summary>
