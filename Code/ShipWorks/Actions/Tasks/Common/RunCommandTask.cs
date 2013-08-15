@@ -1,15 +1,17 @@
-﻿using System;
+﻿using log4net;
+using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Templates.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Text.RegularExpressions;
 using System.Threading;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Templates.Tokens;
-using log4net;
+
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -19,10 +21,10 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Run a command", "RunCommand")]
     public class RunCommandTask : ActionTask
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
+        static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
 
-        private static string commandLogFolder;
-        private static int nextRunNumber = 0;
+        static string commandLogFolder;
+        static int nextRunNumber = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RunCommandTask"/> class.
@@ -99,9 +101,9 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
-        private static string GetNextCommandLogPath()
+        static string GetNextCommandLogPathWithoutExtension()
         {
-            string fileName = string.Format("{0:0000}.txt", Interlocked.Increment(ref nextRunNumber));
+            var fileName = string.Format("{0:0000}", Interlocked.Increment(ref nextRunNumber));
 
             return Path.Combine(CommandLogFolder, fileName);
         }
@@ -130,6 +132,14 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
+        string PrefixLines(string prefix, string value)
+        {
+            if (null == value)
+                return null;
+
+            return Regex.Replace(value, @"(?m)^(.*)$", prefix + "$1");
+        }
+
         /// <summary>
         /// Run the command for each object
         /// </summary>
@@ -140,17 +150,21 @@ namespace ShipWorks.Actions.Tasks.Common
             string executionCommand = GetProcessedCommand(inputKey);
             string commandFileName = Path.GetRandomFileName() + ".cmd";
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
-            string commandLogPath = GetNextCommandLogPath();
+            string commandLogBasePath = GetNextCommandLogPathWithoutExtension();
 
-            log.InfoFormat("Command: \n{0}", executionCommand);
-            log.InfoFormat("Command output log: {0}", commandLogPath);
+            string commandLogPath = commandLogBasePath + ".command";
+            log.InfoFormat("Command log path: \n{0}", commandLogPath);
 
-            // Save the command as a batch file so we can execute it
+            string outputLogPath = commandLogBasePath + ".output";
+            log.InfoFormat("Output log path: {0}", outputLogPath);
+
+            // Save the command text for both logging and execution
+            File.WriteAllText(commandLogPath, executionCommand);
             File.WriteAllText(commandPath, executionCommand);
 
             try
             {
-                using (StreamWriter commandLogWriter = File.CreateText(commandLogPath))
+                using (var commandLogWriter = File.CreateText(outputLogPath))
                 {
                     commandLogWriter.AutoFlush = true;
 
@@ -168,8 +182,8 @@ namespace ShipWorks.Actions.Tasks.Common
                         };
 
                         // Wire up the handlers that will take care of logging output and errors
-                        process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(e.Data);
-                        process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(e.Data);
+                        process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
+                        process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
 
                         process.Start();
 
