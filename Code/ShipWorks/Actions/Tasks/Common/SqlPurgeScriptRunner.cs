@@ -36,17 +36,21 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
         /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
-        /// <param name="deadlockRetries">Number of times to retry the purge if a sql deadlock is detected.  Pass 0 to not retry.</param>
-        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc, int deadlockRetries)
+        /// <param name="retryAttempts">Number of times to retry the purge if a handleable error is detected.  Pass 0 to not retry.</param>
+        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc, int retryAttempts)
         {
+            // If we detect a deadlock or sql lock, we'll sleep before we try again.
+            // The sleep time will be one second times the sleep multiplier, so that we wait a little longer during each loop.
+            int sleepMultiplier = 1;
+
             // we always want this call to be the deadlock victim
-            using (new SqlDeadlockPriorityScope(-5))
+            using (new SqlDeadlockPriorityScope(-6))
             {
-                using (SqlConnection connection = SqlSession.Current.OpenConnection())
+                while (retryAttempts >= 0)
                 {
-                    while (deadlockRetries >= 0)
+                    retryAttempts--;
+                    using (SqlConnection connection = SqlSession.Current.OpenConnection())
                     {
-                        deadlockRetries--;
                         try
                         {
                             using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
@@ -65,13 +69,12 @@ namespace ShipWorks.Actions.Tasks.Common
                         }
                         catch (SqlLockException ex)
                         {
+                            // Log and try again if within number of tries.
                             log.Warn(ex.Message);
-
-                            // It wasn't a deadlock, so we want to exit the while loop
-                            break;
                         }
                         catch (SqlDeadlockException sqlDeadlockException)
                         {
+                            // Log and try again if within number of tries.
                             log.Warn(sqlDeadlockException);
                         }
                         catch (SqlException exception)
@@ -83,9 +86,14 @@ namespace ShipWorks.Actions.Tasks.Common
                                 throw;
                             }
 
+                            // Log and try again if within number of tries.
                             log.Warn(exception);
                         }
                     }
+
+                    // Sleep to give the other transaction some time to finish.
+                    System.Threading.Thread.Sleep(sleepMultiplier * 1000);
+                    sleepMultiplier++;
                 }
             }
         }
