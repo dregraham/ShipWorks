@@ -126,7 +126,11 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (TemplateResult templateResult in templateResults)
             {
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat)template.OutputFormat));
-                ProcessRequest(request, new List<long>());
+
+                templateResult.XPathSource.Context.ProcessingComplete = false;
+                string url = TemplateTokenProcessor.ProcessTokens(UrlToHit, templateResult.XPathSource);
+
+                ProcessRequest(request, url);
             }
         }
 
@@ -141,7 +145,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-                    ProcessRequest(request, new List<long> { inputKey });
+                    string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
+                    ProcessRequest(request, processedUrl);
                 }
             }
             else
@@ -154,20 +159,17 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Processes the request.
         /// </summary>
         /// <param name="request">The request being submitted.</param>
-        /// <param name="inputKeys">The input keys used for processing tokens in the URL.</param>
+        /// <param name="url">The URL.</param>
         /// <exception cref="ActionTaskRunException">
-        /// Invalid header for HitUrl task.
-        /// or
         /// Url not formatted properly.
         /// or
         /// Error hitting URL.
         /// </exception>
-        private void ProcessRequest(HttpRequestSubmitter request, List<long> inputKeys)
+        private void ProcessRequest(HttpRequestSubmitter request, string url)
         {
             try
             {
-                string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
-                request.Uri = new Uri(processedUrl);
+                request.Uri = new Uri(url);
 
                 request.Verb = Verb;
                 request.AllowAutoRedirect = true;

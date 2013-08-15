@@ -156,7 +156,7 @@ namespace ShipWorks.Templates.Processing
             }
             set
             {
-                if (processingComplete)
+                if (processingComplete && value)
                 {
                     throw new InvalidOperationException("ProcessingComplete has already been marked true.");
                 }
