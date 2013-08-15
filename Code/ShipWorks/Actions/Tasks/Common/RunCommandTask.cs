@@ -1,9 +1,4 @@
-﻿using log4net;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Templates.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +6,11 @@ using System.Linq;
 using System.Management;
 using System.Text.RegularExpressions;
 using System.Threading;
-
+using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Templates.Tokens;
+using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -21,10 +20,10 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Run a command", "RunCommand")]
     public class RunCommandTask : ActionTask
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
+        private static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
 
-        static string commandLogFolder;
-        static int nextRunNumber = 0;
+        private static string commandLogFolder;
+        private static int nextRunNumber = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RunCommandTask"/> class.
@@ -84,14 +83,16 @@ namespace ShipWorks.Actions.Tasks.Common
             return DataPath.ShipWorksTemp;
         }
 
+        /// <summary>
+        /// Gets the command log folder.
+        /// </summary>
         private static string CommandLogFolder
         {
             get
             {
-                if (null == commandLogFolder)
+                if (commandLogFolder == null)
                 {
                     ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(typeof(RunCommandTask));
-
                     commandLogFolder = Path.Combine(LogSession.LogFolder, descriptor.Identifier);
 
                     Directory.CreateDirectory(commandLogFolder);
@@ -101,10 +102,13 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
-        static string GetNextCommandLogPathWithoutExtension()
+        /// <summary>
+        /// Gets the next command log path without extension.
+        /// </summary>
+        /// <returns>The path of the next log file to be written.</returns>
+        private static string GetNextCommandLogPathWithoutExtension()
         {
-            var fileName = string.Format("{0:0000}", Interlocked.Increment(ref nextRunNumber));
-
+            string fileName = string.Format("{0:0000}", Interlocked.Increment(ref nextRunNumber));
             return Path.Combine(CommandLogFolder, fileName);
         }
 
@@ -132,10 +136,15 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
-        static string PrefixLines(string prefix, string value)
+        /// <summary>
+        /// Inserts the given prefix to the value provided.
+        /// </summary>
+        private static string PrefixLines(string prefix, string value)
         {
-            if (null == value)
+            if (value == null)
+            {
                 return null;
+            }
 
             return Regex.Replace(value, @"(?m)^(.*)$", prefix + "$1");
         }
@@ -152,10 +161,10 @@ namespace ShipWorks.Actions.Tasks.Common
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
             string commandLogBasePath = GetNextCommandLogPathWithoutExtension();
 
-            string commandLogPath = commandLogBasePath + ".command.txt";
+            string commandLogPath = commandLogBasePath + ".command.log";
             log.InfoFormat("Command log path: \n{0}", commandLogPath);
 
-            string outputLogPath = commandLogBasePath + ".output.txt";
+            string outputLogPath = commandLogBasePath + ".output.log";
             log.InfoFormat("Output log path: {0}", outputLogPath);
 
             // Save the command text for both logging and execution
@@ -164,7 +173,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
             try
             {
-                using (var commandLogWriter = File.CreateText(outputLogPath))
+                using (StreamWriter commandLogWriter = File.CreateText(outputLogPath))
                 {
                     commandLogWriter.AutoFlush = true;
 
