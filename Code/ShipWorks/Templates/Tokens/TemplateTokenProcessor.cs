@@ -101,6 +101,11 @@ namespace ShipWorks.Templates.Tokens
         /// </summary>
         public static string ProcessTokens(string tokenText, List<long> idList)
         {
+            if (!HasTokens(tokenText))
+            {
+                return tokenText.Replace("{{", "{").Replace("}}", "}");
+            }
+
             TemplateInput input = new TemplateInput(idList, idList, idList.Count > 0 ?
                 TemplateContextTranslator.ResolveContextFromEntityType(EntityUtility.GetEntityType(idList[0])) :
                 TemplateInputContext.Customer);
