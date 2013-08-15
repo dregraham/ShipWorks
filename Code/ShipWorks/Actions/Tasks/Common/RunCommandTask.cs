@@ -152,10 +152,10 @@ namespace ShipWorks.Actions.Tasks.Common
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
             string commandLogBasePath = GetNextCommandLogPathWithoutExtension();
 
-            string commandLogPath = commandLogBasePath + ".command";
+            string commandLogPath = commandLogBasePath + ".command.txt";
             log.InfoFormat("Command log path: \n{0}", commandLogPath);
 
-            string outputLogPath = commandLogBasePath + ".output";
+            string outputLogPath = commandLogBasePath + ".output.txt";
             log.InfoFormat("Output log path: {0}", outputLogPath);
 
             // Save the command text for both logging and execution
