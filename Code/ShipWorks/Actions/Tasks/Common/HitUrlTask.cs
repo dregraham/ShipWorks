@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml.XPath;
-using System.Linq;
 using Interapptive.Shared.Net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
-using log4net;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.ApplicationCore.Crashes;
-
+using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -25,7 +24,7 @@ namespace ShipWorks.Actions.Tasks.Common
     public class HitUrlTask : TemplateBasedTask
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
+        private static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
 
         private readonly ApiLogEntry requestLogger;
 
@@ -37,56 +36,32 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
-        public HttpVerb Verb
-        {
-            get;
-            set;
-        }
+        public HttpVerb Verb { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to hit.
         /// </summary>
-        public string UrlToHit
-        {
-            get;
-            set;
-        }
+        public string UrlToHit { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use basic authentication].
         /// </summary>
-        public bool UseBasicAuthentication
-        {
-            get;
-            set;
-        }
+        public bool UseBasicAuthentication { get; set; }
 
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
-        public string Username
-        {
-            get;
-            set;
-        }
+        public string Username { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password
-        {
-            get;
-            set;
-        }
+        public string Password { get; set; }
 
         /// <summary>
         /// Gets or sets the HTTP headers.
         /// </summary>
-        public KeyValuePair<string, string>[] HttpHeaders
-        {
-            get;
-            set;
-        }
+        public KeyValuePair<string, string>[] HttpHeaders { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether to postpone running or not.
@@ -107,11 +82,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets a value indicating whether to use a template in the request.
         /// </summary>
-        public bool UseTemplate
-        {
-            get;
-            set;
-        }
+        public bool UseTemplate { get; set; }
 
         /// <summary>
         /// The object is being deserialized into its values
@@ -125,7 +96,7 @@ namespace ShipWorks.Actions.Tasks.Common
             List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
             foreach (XPathNavigator header in headerIterator)
             {
-                string[] keyValue = ((string) header.TypedValue).Split(',');
+                string[] keyValue = ((string)header.TypedValue).Split(',');
 
                 // ignore the first character as it is "["
                 string key = keyValue[0].Substring(1).Trim();
@@ -154,7 +125,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             foreach (TemplateResult templateResult in templateResults)
             {
-                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat) template.OutputFormat));
+                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat)template.OutputFormat));
                 ProcessRequest(request, new List<long>());
             }
         }
@@ -170,7 +141,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-                    ProcessRequest(request, new List<long>(){inputKey});
+                    ProcessRequest(request, new List<long> { inputKey });
                 }
             }
             else
@@ -178,7 +149,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 base.Run(inputKeys, context);
             }
         }
-        
+
         /// <summary>
         /// Processes the request.
         /// </summary>
@@ -217,8 +188,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 if ((int)httpResponseReader.HttpWebResponse.StatusCode >= 400)
                 {
                     // A bad response was received that should cause the task to fail
-                    log.ErrorFormat("An invalid response was received from the server when submitting the request to {0}: {1} {2}", 
-                        request.Uri.AbsoluteUri, (int)httpResponseReader.HttpWebResponse.StatusCode, httpResponseReader.HttpWebResponse.StatusDescription);
+                    log.ErrorFormat("An invalid response was received from the server when submitting the request to {0}: {1} {2}",
+                                    request.Uri.AbsoluteUri, (int)httpResponseReader.HttpWebResponse.StatusCode, httpResponseReader.HttpWebResponse.StatusDescription);
 
                     throw new ActionTaskRunException(string.Format("An invalid response was received from {0}", request.Uri.AbsoluteUri));
                 }
@@ -235,7 +206,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 // text to the user
                 string exceptionDetail = CrashSubmitter.GetExceptionDetail(ex);
                 string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Callstack:", StringComparison.OrdinalIgnoreCase));
-                
+
                 requestLogger.LogResponse(message, "log");
 
                 throw new ActionTaskRunException("Error hitting URL.", ex);
@@ -271,7 +242,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 }
             }
         }
-        
+
         /// <summary>
         /// Formats and logs the request details.
         /// </summary>
