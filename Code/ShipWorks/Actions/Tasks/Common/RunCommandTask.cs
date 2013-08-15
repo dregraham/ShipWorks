@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
-using log4net;
+using System.Threading;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Templates.Tokens;
 using ShipWorks.ApplicationCore.Logging;
-using System.Threading;
+using ShipWorks.Templates.Tokens;
+using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -19,10 +19,20 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Run a command", "RunCommand")]
     public class RunCommandTask : ActionTask
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
+        private static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
 
-        static string commandLogFolder;
-        static int nextRunNumber = 0;
+        private static string commandLogFolder;
+        private static int nextRunNumber = 0;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RunCommandTask"/> class.
+        /// </summary>
+        public RunCommandTask()
+        {
+            // Provide a default timeout value that coincides with minimum timeout 
+            // allowed by the task editor
+            CommandTimeoutInMinutes = 1;
+        }
 
         /// <summary>
         /// Creates the editor that will be used to modify the task
@@ -72,13 +82,13 @@ namespace ShipWorks.Actions.Tasks.Common
             return DataPath.ShipWorksTemp;
         }
 
-        static string CommandLogFolder
+        private static string CommandLogFolder
         {
             get
             {
                 if (null == commandLogFolder)
                 {
-                    var descriptor = ActionTaskManager.GetDescriptor(typeof(RunCommandTask));
+                    ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(typeof(RunCommandTask));
 
                     commandLogFolder = Path.Combine(LogSession.LogFolder, descriptor.Identifier);
 
@@ -89,9 +99,9 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
-        static string GetNextCommandLogPath()
+        private static string GetNextCommandLogPath()
         {
-            var fileName = string.Format("{0:0000}.txt", Interlocked.Increment(ref nextRunNumber));
+            string fileName = string.Format("{0:0000}.txt", Interlocked.Increment(ref nextRunNumber));
 
             return Path.Combine(CommandLogFolder, fileName);
         }
@@ -140,11 +150,11 @@ namespace ShipWorks.Actions.Tasks.Common
 
             try
             {
-                using (var commandLogWriter = File.CreateText(commandLogPath))
+                using (StreamWriter commandLogWriter = File.CreateText(commandLogPath))
                 {
                     commandLogWriter.AutoFlush = true;
 
-                    using (var process = new Process())
+                    using (Process process = new Process())
                     {
                         process.StartInfo = new ProcessStartInfo
                         {
@@ -184,8 +194,8 @@ namespace ShipWorks.Actions.Tasks.Common
                                 if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
                                 {
                                     KillProcessTree(process);
-                                    throw new ActionTaskRunException(string.Format("The program took longer than {0} minute{1} to run.", 
-                                        CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
+                                    throw new ActionTaskRunException(string.Format("The program took longer than {0} minute{1} to run.",
+                                                                                   CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
                                 }
                             }
                         } while (!process.WaitForExit(500));
