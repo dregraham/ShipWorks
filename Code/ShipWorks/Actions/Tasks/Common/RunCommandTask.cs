@@ -132,7 +132,7 @@ namespace ShipWorks.Actions.Tasks.Common
             }
         }
 
-        string PrefixLines(string prefix, string value)
+        static string PrefixLines(string prefix, string value)
         {
             if (null == value)
                 return null;
