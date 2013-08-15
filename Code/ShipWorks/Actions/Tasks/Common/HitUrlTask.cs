@@ -174,6 +174,32 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Verb = Verb;
                 request.AllowAutoRedirect = true;
 
+                request.AllowHttpStatusCodes(new[]
+                {
+                    HttpStatusCode.Continue,
+                    HttpStatusCode.SwitchingProtocols,
+                    HttpStatusCode.OK,
+                    HttpStatusCode.Created,
+                    HttpStatusCode.Accepted,
+                    HttpStatusCode.NonAuthoritativeInformation,
+                    HttpStatusCode.NoContent,
+                    HttpStatusCode.ResetContent,
+                    HttpStatusCode.PartialContent,
+                    HttpStatusCode.Ambiguous,
+                    HttpStatusCode.MultipleChoices,
+                    HttpStatusCode.Moved,
+                    HttpStatusCode.MovedPermanently,
+                    HttpStatusCode.Found,
+                    HttpStatusCode.Redirect,
+                    HttpStatusCode.RedirectMethod,
+                    HttpStatusCode.SeeOther,
+                    HttpStatusCode.NotModified,
+                    HttpStatusCode.UseProxy,
+                    HttpStatusCode.Unused,
+                    HttpStatusCode.RedirectKeepVerb,
+                    HttpStatusCode.TemporaryRedirect
+                });
+
                 AddRequestHeaders(request);
 
                 // We want to allow 400 and above errors so we can inspect them for logging and providing a detailed action
