@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Management;
 using log4net;
-using Microsoft.Web.Services3.Mime;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Templates.Tokens;
@@ -100,13 +99,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the command that should be executed
         /// </summary>
-        /// <param name="inputKeys">List of ids of objects to use for merging tokens</param>
+        /// <param name="inputKey">Id of object to use for merging tokens</param>
         /// <returns></returns>
-        private string GetProcessedCommand(IEnumerable<long> inputKeys)
+        private string GetProcessedCommand(long inputKey)
         {
-            return
-                "@echo off" + Environment.NewLine +
-                inputKeys.Select(x => TemplateTokenProcessor.ProcessTokens(Command, x, false)).Aggregate((x, y) => x + Environment.NewLine + y);
+            return "@echo off" + Environment.NewLine + TemplateTokenProcessor.ProcessTokens(Command, inputKey, false);
         }
 
         /// <summary>
@@ -114,7 +111,23 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void Run(List<long> inputKeys)
         {
-            string executionCommand = GetProcessedCommand(inputKeys);
+            // Get the time that should be used for timing out the process
+            DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
+
+            foreach (long key in inputKeys)
+            {
+                RunCommand(key, timeoutDate);
+            }
+        }
+
+        /// <summary>
+        /// Run the command for each object
+        /// </summary>
+        /// <param name="inputKey">Id of the object for which to run the command</param>
+        /// <param name="timeoutDate">Date after which the command should be timed out</param>
+        private void RunCommand(long inputKey, DateTime timeoutDate)
+        {
+            string executionCommand = GetProcessedCommand(inputKey);
             string commandFileName = Path.GetRandomFileName() + ".cmd";
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
             string commandLogPath = GetNextCommandLogPath();
@@ -133,7 +146,8 @@ namespace ShipWorks.Actions.Tasks.Common
 
                     using (var process = new Process())
                     {
-                        process.StartInfo = new ProcessStartInfo() {
+                        process.StartInfo = new ProcessStartInfo
+                        {
                             CreateNoWindow = true,
                             RedirectStandardOutput = true,
                             RedirectStandardError = true,
@@ -149,41 +163,101 @@ namespace ShipWorks.Actions.Tasks.Common
 
                         process.Start();
 
+                        // Start reading the output and error streams
                         process.BeginOutputReadLine();
                         process.BeginErrorReadLine();
                         process.StandardInput.Close();
 
-                        // Get the time that should be used for timing out the process
-                        DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
+                        bool wasResponding = true;
+
                         do
                         {
                             if (!process.HasExited)
                             {
-                                if (!process.Responding)
+                                if (!process.Responding && wasResponding)
                                 {
                                     log.Warn("Command is not responding");
                                 }
 
+                                wasResponding = process.Responding;
+
                                 if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
                                 {
-                                    process.Kill();
-                                    throw new TimeoutException(string.Format("The command took longer than {0} minute(s) to execute.", CommandTimeoutInMinutes));
+                                    KillProcessTree(process);
+                                    throw new ActionTaskRunException(string.Format("The program took longer than {0} minute{1} to run.", 
+                                        CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
                                 }
                             }
                         } while (!process.WaitForExit(500));
 
                         // Wait for asynchronous output processing to complete
                         process.WaitForExit();
+
+                        // Verify that the command completed without errors
+                        if (process.ExitCode > 0)
+                        {
+                            log.ErrorFormat("The command exited with code {0}", process.ExitCode);
+                            throw new ActionTaskRunException("The program failed. See the log for details.");
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new ActionException("An error occurred while running the command.", ex);
             }
             finally
             {
                 File.Delete(commandPath);
+            }
+        }
+
+        /// <summary>
+        /// Recursively kills a process and all of its children
+        /// </summary>
+        /// <param name="process">Process that should be killed</param>
+        private static void KillProcessTree(Process process)
+        {
+            // Kill the process if it's still running
+            if (!process.HasExited)
+            {
+                log.ErrorFormat("Killing process [{0}] {1}", process.Id, process.ProcessName);
+                process.Kill();
+            }
+
+            // Kill the children of the process, if there are any
+            foreach (Process child in GetChildren(process.Id))
+            {
+                KillProcessTree(child);
+            }
+
+            process.WaitForExit(10000);
+        }
+
+        /// <summary>
+        /// Gets the children of the specified process
+        /// </summary>
+        /// <param name="processId">Id of the process for which to retrieve children</param>
+        /// <returns></returns>
+        public static IEnumerable<Process> GetChildren(int processId)
+        {
+            return Process.GetProcesses().Where(x => GetParentProcess(x.Id) == processId);
+        }
+
+        /// <summary>
+        /// Gets the id of the parent process
+        /// </summary>
+        /// <param name="id">Id of the process whose parent we want to find</param>
+        /// <returns></returns>
+        private static int GetParentProcess(int id)
+        {
+            using (ManagementObject mo = new ManagementObject(string.Format("win32_process.handle='{0}'", id)))
+            {
+                try
+                {
+                    mo.Get();
+                    return Convert.ToInt32(mo["ParentProcessId"]);
+                }
+                catch (ManagementException)
+                {
+                    return -1;
+                }
             }
         }
     }
