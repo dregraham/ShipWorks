@@ -174,39 +174,11 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Verb = Verb;
                 request.AllowAutoRedirect = true;
 
-                request.AllowHttpStatusCodes(new[]
-                {
-                    HttpStatusCode.Continue,
-                    HttpStatusCode.SwitchingProtocols,
-                    HttpStatusCode.OK,
-                    HttpStatusCode.Created,
-                    HttpStatusCode.Accepted,
-                    HttpStatusCode.NonAuthoritativeInformation,
-                    HttpStatusCode.NoContent,
-                    HttpStatusCode.ResetContent,
-                    HttpStatusCode.PartialContent,
-                    HttpStatusCode.Ambiguous,
-                    HttpStatusCode.MultipleChoices,
-                    HttpStatusCode.Moved,
-                    HttpStatusCode.MovedPermanently,
-                    HttpStatusCode.Found,
-                    HttpStatusCode.Redirect,
-                    HttpStatusCode.RedirectMethod,
-                    HttpStatusCode.SeeOther,
-                    HttpStatusCode.NotModified,
-                    HttpStatusCode.UseProxy,
-                    HttpStatusCode.Unused,
-                    HttpStatusCode.RedirectKeepVerb,
-                    HttpStatusCode.TemporaryRedirect
-                });
-
                 AddRequestHeaders(request);
 
-                // We want to allow 400 and above errors so we can inspect them for logging and providing a detailed action
-                // message as to why the exception failed
-                IEnumerable<HttpStatusCode> allStatusCodes = Enum.GetValues(typeof(HttpStatusCode)).Cast<HttpStatusCode>();
-                HttpStatusCode[] allowedStatusCodes = allStatusCodes.Where(c => (int)c >= 400).ToArray();
-                request.AllowHttpStatusCodes(allowedStatusCodes);
+                // We want to allow all status codes so we can inspect them ourselves
+                var allStatusCodes = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
+                request.AllowHttpStatusCodes(allStatusCodes);
 
                 // Submit the request, logging both the original request and the response
                 LogFormattedRequest(request);
