@@ -22,8 +22,6 @@ namespace ShipWorks.ApplicationCore.Help
     /// </summary>
     public partial class ShipWorksAboutDlg : Form
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksAboutDlg));
-
         /// <summary>
         /// Constructor
         /// </summary>

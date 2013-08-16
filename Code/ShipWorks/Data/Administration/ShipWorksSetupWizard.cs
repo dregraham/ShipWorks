@@ -74,19 +74,6 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// User wants to run the detailed database setup
-        /// </summary>
-        private void OnLinkDetailedSetup(object sender, EventArgs e)
-        {
-            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
-            {
-                BeginInvoke(new MethodInvoker(Hide));
-
-                DialogResult = dlg.ShowDialog(this);
-            }
-        }
-
-        /// <summary>
         /// Stepping into the Welcome page
         /// </summary>
         private void OnSteppingIntoWelcome(object sender, WizardSteppingIntoEventArgs e)
@@ -99,6 +86,30 @@ namespace ShipWorks.Data.Administration
 
             // See if we are going to require elevation to do what we need to do
             wizardPageWelcome.NextRequiresElevation = (preparationType != ElevatedPreparationType.None);
+
+            // User has to click one of our buttons
+            NextVisible = false;
+        }
+
+        /// <summary>
+        /// Same as moving next
+        /// </summary>
+        private void OnStartFromScratch(object sender, EventArgs e)
+        {
+            MoveNext();
+        }
+
+        /// <summary>
+        /// User wants to run the detailed database setup
+        /// </summary>
+        private void OnOpenDetailedSetup(object sender, EventArgs e)
+        {
+            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+            {
+                BeginInvoke(new MethodInvoker(Hide));
+
+                DialogResult = dlg.ShowDialog(this);
+            }
         }
 
         /// <summary>
@@ -106,6 +117,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
+            // Reset next visibility
+            NextVisible = true;
+
             // If next requires elevation
             if (preparationType != ElevatedPreparationType.None)
             {

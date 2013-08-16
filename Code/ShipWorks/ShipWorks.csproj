@@ -9773,6 +9773,7 @@
     <None Include="Resources\lock_open.png" />
     <None Include="Resources\data_preferences1.png" />
     <None Include="Resources\data.png" />
+    <None Include="Resources\client_network2.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
