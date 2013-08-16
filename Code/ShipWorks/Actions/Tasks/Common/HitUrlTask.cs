@@ -177,8 +177,9 @@ namespace ShipWorks.Actions.Tasks.Common
                 AddRequestHeaders(request);
 
                 // We want to allow all status codes so we can inspect them ourselves
-                var allStatusCodes = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
-                request.AllowHttpStatusCodes(allStatusCodes);
+                HttpStatusCode[] allStatusCodes = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
+                HttpStatusCode[] allowedStatusCodes = allStatusCodes.Where(x => x != HttpStatusCode.Continue).ToArray();
+                request.AllowHttpStatusCodes(allowedStatusCodes);
 
                 // Submit the request, logging both the original request and the response
                 LogFormattedRequest(request);
