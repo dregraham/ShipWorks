@@ -46,11 +46,13 @@ namespace ShipWorks.ApplicationCore.Help
 
             if (SqlSession.IsConfigured)
             {
-                labelDatabase.Text = SqlSession.Current.Configuration.IsLocalDb() ? "Local only" : string.Format("'{0}' on {1}", SqlSession.Current.Configuration.DatabaseName, SqlSession.Current.Configuration.ServerInstance);
+                labelDatabase.Text = SqlSession.Current.Configuration.IsLocalDb() ? "(Default)" : SqlSession.Current.Configuration.DatabaseName;
+                labelSqlInstance.Text = SqlSession.Current.Configuration.IsLocalDb() ? "(Local Only)" : SqlSession.Current.Configuration.ServerInstance;
             }
             else
             {
                 labelDatabase.Text = "(Not connected)";
+                labelSqlInstance.Text = "";
             }
 
             Refresh();
