@@ -209,7 +209,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 requestLogger.LogResponse(message, "log");
 
-                throw new ActionTaskRunException("Error hitting URL.", ex);
+                throw new ActionTaskRunException(string.Format("Web request returned the following error: {0}", ex.Message), ex);
             }
         }
 
