@@ -389,6 +389,12 @@
     <Compile Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.Designer.cs">
       <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.Designer.cs">
+      <DependentUpon>RunCommandTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseType.cs" />
@@ -412,6 +418,7 @@
       <DependentUpon>PrintShipmentsTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\Common\PrintShipmentsTask.cs" />
+    <Compile Include="Actions\Tasks\Common\RunCommandTask.cs" />
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
     <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
     <Compile Include="Actions\Triggers\ScheduledTrigger.cs" />
@@ -5389,6 +5396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.resx">
+      <DependentUpon>RunCommandTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
