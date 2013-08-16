@@ -160,9 +160,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            StartSearchingSqlServers();
+            MessageBox.Show("Pause");
 
-            bool useChooseWisely2012 = SqlServerInstaller.IsSqlServer2012Supported;
+            StartSearchingSqlServers();
 
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
@@ -182,7 +182,12 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
-                    useChooseWisely2012 = false;
+                    Pages.Remove(wizardPageChooseWisely2012);
+                    Pages.Remove(wizardPageManageLocalDb);
+
+                    // We removed the first pages, which the wizard handles after OnLoad finishes - but it hasn't finished (we are still in it), so we have
+                    // to ensure the first page ourself, or MoveNext won't work
+                    SetCurrent(0);
 
                     if (StartupController.StartupArgument.Name == "Upgrade2x")
                     {
@@ -268,25 +273,27 @@ namespace ShipWorks.Data.Administration
 
                 StartupController.ClearStartupAction();
             }
-
-            // Setup which first page the user will see
-            if (useChooseWisely2012)
+            else
             {
-                Pages.Remove(wizardPageChooseWisely2008);
-
-                if (SqlSession.IsConfigured && SqlSession.Current.Configuration.IsLocalDb())
+                // Setup which first page the user will see
+                if (SqlServerInstaller.IsSqlServer2012Supported)
                 {
-                    Pages.Remove(wizardPageChooseWisely2012);
+                    Pages.Remove(wizardPageChooseWisely2008);
+
+                    if (SqlSession.IsConfigured && SqlSession.Current.Configuration.IsLocalDb())
+                    {
+                        Pages.Remove(wizardPageChooseWisely2012);
+                    }
+                    else
+                    {
+                        Pages.Remove(wizardPageManageLocalDb);
+                    }
                 }
                 else
                 {
+                    Pages.Remove(wizardPageChooseWisely2012);
                     Pages.Remove(wizardPageManageLocalDb);
                 }
-            }
-            else
-            {
-                Pages.Remove(wizardPageChooseWisely2012);
-                Pages.Remove(wizardPageManageLocalDb);
             }
         }
 
