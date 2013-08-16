@@ -35,8 +35,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             this.startupArgument = startupArgument;
 
             labelSuccess.Text = string.Format(labelSuccess.Text, productName);
-            Title = string.Format(Title, productName);
-            Description = string.Format(Description, productName);
+            Title = "Reboot Required";
+            Description = "Your computer must be rebooted before continuing.";
         }
 
         /// <summary>

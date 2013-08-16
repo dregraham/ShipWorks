@@ -61,18 +61,24 @@ namespace ShipWorks.Data.Connection
         /// Constructor
         /// </summary>
         public SqlSession()
-            : this(new SqlSessionConfiguration()) { }
+            : this(new SqlSessionConfiguration()) 
+        { 
+        
+        }
 
         /// <summary>
         /// Copy constructor
         /// </summary>
         public SqlSession(SqlSession copy)
-            : this(copy.Configuration) { }
+            : this(copy.Configuration) 
+        { 
+        
+        }
 
         /// <summary>
         /// Constructor with configuration
         /// </summary>
-        SqlSession(SqlSessionConfiguration configuration)
+        public SqlSession(SqlSessionConfiguration configuration)
         {
             this.configuration = new SqlSessionConfiguration(configuration);
 

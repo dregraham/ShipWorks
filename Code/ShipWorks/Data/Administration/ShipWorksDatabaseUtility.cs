@@ -12,6 +12,7 @@ using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
+using ShipWorks.Data.Administration.SqlServerSetup;
 
 namespace ShipWorks.Data.Administration
 {
@@ -59,16 +60,16 @@ namespace ShipWorks.Data.Administration
             // Set the path to Program Files
             createDbSql = createDbSql.Replace("{DBNAME}", name);
             createDbSql = createDbSql.Replace("{FILEPATH}", path);
-            createDbSql = createDbSql.Replace("{FILENAME}", DetermineAvailableFilename(path, name));
+            createDbSql = createDbSql.Replace("{FILENAME}", DetermineAvailableFileName(path, name));
 
             // Create the database
             SqlUtility.ExecuteScriptSql("Create Database", createDbSql, con);
         }
 
         /// <summary>
-        /// Determine the first available name of the file to use for the database, without extension
+        /// Determine the first available name of the file to use for the database, without extension.  This checks to make sure both filename.mdf and filename_log.ldf are available
         /// </summary>
-        private static string DetermineAvailableFilename(string path, string databaseName)
+        public static string DetermineAvailableFileName(string path, string databaseName)
         {
             // First check that just the database name is available
             if (!File.Exists(Path.Combine(path, databaseName + ".mdf")) &&
@@ -145,7 +146,7 @@ namespace ShipWorks.Data.Administration
                 RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\LocalDB");
 
                 // See if we've already created a database name for this ShipWorks instance
-                string databaseName = registry.GetValue(ShipWorksSession.InstanceID.ToString(), "");
+                string databaseName = registry.GetValue(ShipWorksSession.InstanceID.ToString("B"), "");
                 if (!string.IsNullOrEmpty(databaseName))
                 {
                     return databaseName;
@@ -182,7 +183,7 @@ namespace ShipWorks.Data.Administration
                 databaseName = string.Format("{0}{1}", localDbBaseName, largestIndex == -1 ? "" : (largestIndex + 1).ToString());
 
                 // Store it so this path is forever more this database name
-                registry.SetValue(ShipWorksSession.InstanceID.ToString(), databaseName);
+                registry.SetValue(ShipWorksSession.InstanceID.ToString("B"), databaseName);
 
                 return databaseName;
             }
@@ -224,9 +225,41 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Get a list of the valid ShipWorks databases from the given connection
+        /// Get the name of the database that the current session of ShipWorks should connect to in simple\automatic mode.  (The very first ShipWorks
+        /// setup where the user doesn't have any choices).  It may return null if and only if SqlInstanceUtility.AutomaticServerInstance is a valid
+        /// full instance, but there is no database yet created for it related to this ShipWorksSession.
         /// </summary>
-        public static List<SqlDatabaseDetail> GetShipWorksDatabases(SqlConnection con)
+        public static string AutomaticDatabaseName
+        {
+            get
+            {
+                // If the automatic server instance is local db, then we use the local db database name
+                if (SqlInstanceUtility.AutomaticServerInstance == SqlInstanceUtility.LocalDbServerInstance)
+                {
+                    return LocalDbDatabaseName;
+                }
+                else
+                {
+                    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks\Database"))
+                    {
+                        if (key != null)
+                        {
+                            string database = key.GetValue(ShipWorksSession.InstanceID.ToString("B")) as string;
+
+                            // It may be null.  Null indicates to the caller that the full server instance is ready, but no database has been created yet
+                            return database;
+                        }
+                    }
+
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get all of the deails about all of the databases on the instance of the connection
+        /// </summary>
+        public static List<SqlDatabaseDetail> GetDatabaseDetails(SqlConnection con)
         {
             SqlCommand cmd = SqlCommandProvider.Create(con);
             cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";

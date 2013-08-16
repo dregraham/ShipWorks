@@ -10,6 +10,8 @@ using Interapptive.Shared;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Win32;
 using System.Text.RegularExpressions;
+using ShipWorks.Data.Connection;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -42,6 +44,43 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         public static string LocalDbServerInstance
         {
             get { return @"(LocalDB)\V11.0"; }
+        }
+
+        /// <summary>
+        /// Get the server instance that ShipWorks should connect to in simple\automatic mode.  This either returns the LocalDb server instance,
+        /// or the SQL Server instance that was upgraded to from LocalDB
+        /// </summary>
+        public static string AutomaticServerInstance
+        {
+            get
+            {
+                // First, see if there is already an instance name recorded
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks\Database"))
+                {
+                    if (key != null)
+                    {
+                        string value = key.GetValue("Automatic") as string;
+
+                        if (value != null)
+                        {
+                            // Only if it's installed...
+                            if (SqlInstanceUtility.IsSqlInstanceInstalled(value))
+                            {
+                                string serverInstance = Environment.MachineName + "\\" + value;
+
+                                // ... and we can connect to it, do we try to reuse an existing instance
+                                if (SqlInstanceUtility.DetermineCredentials(serverInstance) != null)
+                                {
+                                    return serverInstance;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // If there was no automatic full instance, fallback on the LocalDb server instance
+                return LocalDbServerInstance;
+            }
         }
 
         /// <summary>
@@ -176,6 +215,57 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// See if we can figure out the credentials necessary to connect to the given instance.  If provided, the configuration given in firstTry will be attempted first
+        /// </summary>
+        public static SqlSessionConfiguration DetermineCredentials(string instance, SqlSessionConfiguration firstTry = null)
+        {
+            List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
+
+            // If firstTry was given, use it
+            if (firstTry != null)
+            {
+                configsToTry.Add(new SqlSessionConfiguration(firstTry));
+            }
+
+            // Then we'll try the sa account with the password we create - we know that'd be an admin
+            configsToTry.Add(new SqlSessionConfiguration()
+                {
+                    Username = "sa",
+                    Password = SqlInstanceUtility.ShipWorksSaPassword,
+                    WindowsAuth = false
+                });
+
+
+            // Then we'll try windows auth
+            configsToTry.Add(new SqlSessionConfiguration()
+                {
+                    WindowsAuth = true
+                });
+
+            foreach (SqlSessionConfiguration config in configsToTry)
+            {
+                try
+                {
+                    config.ServerInstance = instance;
+                    config.DatabaseName = "master";
+
+                    SqlSession session = new SqlSession(config);
+                    session.TestConnection();
+
+                    config.DatabaseName = "";
+
+                    return config;
+                }
+                catch (SqlException ex)
+                {
+                    log.Info("Failed to connect.", ex);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

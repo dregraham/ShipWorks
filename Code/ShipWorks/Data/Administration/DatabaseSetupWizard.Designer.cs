@@ -132,7 +132,7 @@ namespace ShipWorks.Data.Administration
             this.label24 = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.databaseLocationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.progressTimer = new System.Windows.Forms.Timer(this.components);
+            this.progressInstallTimer = new System.Windows.Forms.Timer(this.components);
             this.wizardPageChooseWisely2008 = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSetupLegacy = new System.Windows.Forms.Panel();
             this.radioChooseCreate2008 = new System.Windows.Forms.RadioButton();
@@ -154,6 +154,16 @@ namespace ShipWorks.Data.Administration
             this.labelLocalDbConnect2 = new System.Windows.Forms.Label();
             this.pictureLocalDbConnect = new System.Windows.Forms.PictureBox();
             this.radioLocalDbConnect = new System.Windows.Forms.RadioButton();
+            this.wizardPageUpgradeLocalDb = new ShipWorks.UI.Wizard.WizardPage();
+            this.panelUpgradeLocalDb = new System.Windows.Forms.Panel();
+            this.progressUpdgradeLocalDb = new System.Windows.Forms.ProgressBar();
+            this.pictureUpgradeLocalDbStatus = new System.Windows.Forms.PictureBox();
+            this.labelUpgradeLocalDb2 = new System.Windows.Forms.Label();
+            this.pictureUpgrdaeLocalDb = new System.Windows.Forms.PictureBox();
+            this.labelUpgradeLocalDb = new System.Windows.Forms.Label();
+            this.panelUpgradeLocalDbReady = new System.Windows.Forms.Panel();
+            this.labelUpgradeLocalDbReady = new System.Windows.Forms.Label();
+            this.progressLocalDbTimer = new System.Windows.Forms.Timer(this.components);
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -195,6 +205,11 @@ namespace ShipWorks.Data.Administration
             this.wizardPageManageLocalDb.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbEnableRemote)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbConnect)).BeginInit();
+            this.wizardPageUpgradeLocalDb.SuspendLayout();
+            this.panelUpgradeLocalDb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgradeLocalDbStatus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgrdaeLocalDb)).BeginInit();
+            this.panelUpgradeLocalDbReady.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -211,7 +226,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageManageLocalDb);
+            this.mainPanel.Controls.Add(this.wizardPageSelectSqlServerInstance);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -909,10 +924,9 @@ namespace ShipWorks.Data.Administration
             // 
             // labelSetupComplete
             // 
-            this.labelSetupComplete.AutoSize = true;
             this.labelSetupComplete.Location = new System.Drawing.Point(44, 11);
             this.labelSetupComplete.Name = "labelSetupComplete";
-            this.labelSetupComplete.Size = new System.Drawing.Size(163, 13);
+            this.labelSetupComplete.Size = new System.Drawing.Size(476, 82);
             this.labelSetupComplete.TabIndex = 1;
             this.labelSetupComplete.Text = "The database setup is complete.";
             // 
@@ -1317,9 +1331,9 @@ namespace ShipWorks.Data.Administration
             this.databaseLocationBrowserDialog.Description = "Database File Location";
             this.databaseLocationBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
-            // progressTimer
+            // progressInstallTimer
             // 
-            this.progressTimer.Tick += new System.EventHandler(this.OnInstallSqlServerProgressTimer);
+            this.progressInstallTimer.Tick += new System.EventHandler(this.OnInstallSqlServerProgressTimer);
             // 
             // wizardPageChooseWisely2008
             // 
@@ -1463,7 +1477,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageManageLocalDb.Size = new System.Drawing.Size(548, 271);
             this.wizardPageManageLocalDb.TabIndex = 0;
             this.wizardPageManageLocalDb.Title = "Database Setup";
-            this.wizardPageManageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextManagerLocalDb);
+            this.wizardPageManageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextManageLocalDb);
             // 
             // labelLocalDbEnableRemote
             // 
@@ -1561,6 +1575,101 @@ namespace ShipWorks.Data.Administration
             this.radioLocalDbConnect.TabIndex = 45;
             this.radioLocalDbConnect.UseVisualStyleBackColor = true;
             // 
+            // wizardPageUpgradeLocalDb
+            // 
+            this.wizardPageUpgradeLocalDb.Controls.Add(this.panelUpgradeLocalDb);
+            this.wizardPageUpgradeLocalDb.Controls.Add(this.panelUpgradeLocalDbReady);
+            this.wizardPageUpgradeLocalDb.Description = "Enable ShipWorks for remote connections.";
+            this.wizardPageUpgradeLocalDb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageUpgradeLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageUpgradeLocalDb.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageUpgradeLocalDb.Name = "wizardPageUpgradeLocalDb";
+            this.wizardPageUpgradeLocalDb.NextRequiresElevation = true;
+            this.wizardPageUpgradeLocalDb.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageUpgradeLocalDb.TabIndex = 0;
+            this.wizardPageUpgradeLocalDb.Title = "Database Setup";
+            this.wizardPageUpgradeLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextUpgradeLocalDb);
+            this.wizardPageUpgradeLocalDb.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancellUpgradeLocalDb);
+            // 
+            // panelUpgradeLocalDb
+            // 
+            this.panelUpgradeLocalDb.Controls.Add(this.progressUpdgradeLocalDb);
+            this.panelUpgradeLocalDb.Controls.Add(this.pictureUpgradeLocalDbStatus);
+            this.panelUpgradeLocalDb.Controls.Add(this.labelUpgradeLocalDb2);
+            this.panelUpgradeLocalDb.Controls.Add(this.pictureUpgrdaeLocalDb);
+            this.panelUpgradeLocalDb.Controls.Add(this.labelUpgradeLocalDb);
+            this.panelUpgradeLocalDb.Location = new System.Drawing.Point(23, 93);
+            this.panelUpgradeLocalDb.Name = "panelUpgradeLocalDb";
+            this.panelUpgradeLocalDb.Size = new System.Drawing.Size(478, 80);
+            this.panelUpgradeLocalDb.TabIndex = 158;
+            this.panelUpgradeLocalDb.Visible = false;
+            // 
+            // progressUpdgradeLocalDb
+            // 
+            this.progressUpdgradeLocalDb.Location = new System.Drawing.Point(70, 46);
+            this.progressUpdgradeLocalDb.Name = "progressUpdgradeLocalDb";
+            this.progressUpdgradeLocalDb.Size = new System.Drawing.Size(379, 23);
+            this.progressUpdgradeLocalDb.TabIndex = 52;
+            // 
+            // pictureUpgradeLocalDbStatus
+            // 
+            this.pictureUpgradeLocalDbStatus.Image = ((System.Drawing.Image)(resources.GetObject("pictureUpgradeLocalDbStatus.Image")));
+            this.pictureUpgradeLocalDbStatus.Location = new System.Drawing.Point(48, 49);
+            this.pictureUpgradeLocalDbStatus.Name = "pictureUpgradeLocalDbStatus";
+            this.pictureUpgradeLocalDbStatus.Size = new System.Drawing.Size(16, 16);
+            this.pictureUpgradeLocalDbStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureUpgradeLocalDbStatus.TabIndex = 51;
+            this.pictureUpgradeLocalDbStatus.TabStop = false;
+            // 
+            // labelUpgradeLocalDb2
+            // 
+            this.labelUpgradeLocalDb2.AutoSize = true;
+            this.labelUpgradeLocalDb2.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelUpgradeLocalDb2.Location = new System.Drawing.Point(46, 28);
+            this.labelUpgradeLocalDb2.Name = "labelUpgradeLocalDb2";
+            this.labelUpgradeLocalDb2.Size = new System.Drawing.Size(365, 13);
+            this.labelUpgradeLocalDb2.TabIndex = 50;
+            this.labelUpgradeLocalDb2.Text = "ShipWorks is enabling remote connections.  This may take a few minutes...";
+            // 
+            // pictureUpgrdaeLocalDb
+            // 
+            this.pictureUpgrdaeLocalDb.Image = global::ShipWorks.Properties.Resources.gears_preferences;
+            this.pictureUpgrdaeLocalDb.Location = new System.Drawing.Point(9, 10);
+            this.pictureUpgrdaeLocalDb.Name = "pictureUpgrdaeLocalDb";
+            this.pictureUpgrdaeLocalDb.Size = new System.Drawing.Size(32, 32);
+            this.pictureUpgrdaeLocalDb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureUpgrdaeLocalDb.TabIndex = 49;
+            this.pictureUpgrdaeLocalDb.TabStop = false;
+            // 
+            // labelUpgradeLocalDb
+            // 
+            this.labelUpgradeLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUpgradeLocalDb.Location = new System.Drawing.Point(45, 12);
+            this.labelUpgradeLocalDb.Name = "labelUpgradeLocalDb";
+            this.labelUpgradeLocalDb.Size = new System.Drawing.Size(404, 16);
+            this.labelUpgradeLocalDb.TabIndex = 48;
+            this.labelUpgradeLocalDb.Text = "Enabling Remote Connections";
+            // 
+            // panelUpgradeLocalDbReady
+            // 
+            this.panelUpgradeLocalDbReady.Controls.Add(this.labelUpgradeLocalDbReady);
+            this.panelUpgradeLocalDbReady.Location = new System.Drawing.Point(23, 5);
+            this.panelUpgradeLocalDbReady.Name = "panelUpgradeLocalDbReady";
+            this.panelUpgradeLocalDbReady.Size = new System.Drawing.Size(478, 82);
+            this.panelUpgradeLocalDbReady.TabIndex = 157;
+            // 
+            // labelUpgradeLocalDbReady
+            // 
+            this.labelUpgradeLocalDbReady.Location = new System.Drawing.Point(8, 12);
+            this.labelUpgradeLocalDbReady.Name = "labelUpgradeLocalDbReady";
+            this.labelUpgradeLocalDbReady.Size = new System.Drawing.Size(470, 19);
+            this.labelUpgradeLocalDbReady.TabIndex = 2;
+            this.labelUpgradeLocalDbReady.Text = "ShipWorks is ready to be enabled for remote connections. Click Next to begin.\r\n";
+            // 
+            // progressLocalDbTimer
+            // 
+            this.progressLocalDbTimer.Tick += new System.EventHandler(this.OnUpgradeLocalDbProgressTimer);
+            // 
             // DatabaseSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1573,6 +1682,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseWisely2012,
             this.wizardPageChooseWisely2008,
             this.wizardPageManageLocalDb,
+            this.wizardPageUpgradeLocalDb,
             this.wizardPageRestoreOption,
             this.wizardPageChooseSqlServer,
             this.wizardPagePrerequisitePlaceholder,
@@ -1647,6 +1757,12 @@ namespace ShipWorks.Data.Administration
             this.wizardPageManageLocalDb.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbEnableRemote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbConnect)).EndInit();
+            this.wizardPageUpgradeLocalDb.ResumeLayout(false);
+            this.panelUpgradeLocalDb.ResumeLayout(false);
+            this.panelUpgradeLocalDb.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgradeLocalDbStatus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgrdaeLocalDb)).EndInit();
+            this.panelUpgradeLocalDbReady.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1671,7 +1787,6 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label label21;
         private ShipWorks.UI.Wizard.WizardPage wizardPageComplete;
         private System.Windows.Forms.PictureBox iconSetupComplete;
-        private System.Windows.Forms.Label labelSetupComplete;
         private ShipWorks.UI.Wizard.WizardPage wizardPageShipWorksAdmin;
         private System.Windows.Forms.TextBox swEmail;
         private System.Windows.Forms.Label label7;
@@ -1741,7 +1856,7 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label labelPeparingToRun;
         private System.Windows.Forms.PictureBox pictureBoxPreparing;
         private System.Windows.Forms.Label labelPreparing;
-        private System.Windows.Forms.Timer progressTimer;
+        private System.Windows.Forms.Timer progressInstallTimer;
         private UI.Controls.LinkControl linkHelpSelectSqlInstance;
         private System.Windows.Forms.Label labelSelectSqlInstance2;
         private System.Windows.Forms.Label labelSelectSqlInstance;
@@ -1776,5 +1891,16 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label labelLocalDbConnect2;
         private System.Windows.Forms.PictureBox pictureLocalDbConnect;
         private System.Windows.Forms.RadioButton radioLocalDbConnect;
+        private UI.Wizard.WizardPage wizardPageUpgradeLocalDb;
+        private System.Windows.Forms.Panel panelUpgradeLocalDb;
+        private System.Windows.Forms.ProgressBar progressUpdgradeLocalDb;
+        private System.Windows.Forms.PictureBox pictureUpgradeLocalDbStatus;
+        private System.Windows.Forms.Label labelUpgradeLocalDb2;
+        private System.Windows.Forms.PictureBox pictureUpgrdaeLocalDb;
+        private System.Windows.Forms.Label labelUpgradeLocalDb;
+        private System.Windows.Forms.Panel panelUpgradeLocalDbReady;
+        private System.Windows.Forms.Label labelUpgradeLocalDbReady;
+        private System.Windows.Forms.Timer progressLocalDbTimer;
+        private System.Windows.Forms.Label labelSetupComplete;
     }
 }

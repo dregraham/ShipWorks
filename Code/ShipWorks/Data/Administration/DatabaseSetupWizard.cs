@@ -58,13 +58,13 @@ namespace ShipWorks.Data.Administration
 
         // The session and SQL instance that we are currently testing in the background for succesfully connect
         SqlSession connectionSession = null;
-        string lastSelectedSqlInstance;
 
         // Navigation helpers
         WindowsInstallerDownloadPage pageFirstPrerequisite;
 
-        // The sql installer and file downloader
+        // The sql installers
         SqlServerInstaller sqlInstaller;
+        SqlServerInstaller localDbUpgrader;
 
         // List of instances installed during the lifetime of the wizard
         List<string> installedInstances = new List<string>();
@@ -89,6 +89,9 @@ namespace ShipWorks.Data.Administration
         // The user that will be used for restoring the db
         long userForRestore;
 
+        // If we upgrade a LocalDB to a full SQL Server instance, this stores the name of the instance that was created
+        string localDbUpgradedInstance;
+
         // What we display for LocalDB instead of the actual connection string
         const string localDbDisplayName = "(Local Only)";
 
@@ -112,6 +115,10 @@ namespace ShipWorks.Data.Administration
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += new EventHandler(OnInstallerSqlServerExited);
+
+            localDbUpgrader = new SqlServerInstaller();
+            localDbUpgrader.InitializeForCurrentSqlSession();
+            localDbUpgrader.Exited += new EventHandler(OnUpgradeLocalDbExited);
 
             // Remove the placeholder...
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
@@ -143,6 +150,9 @@ namespace ShipWorks.Data.Administration
 
             // The first prereq is Windows installer 4.5 which then chains to .net 3.5
             pageFirstPrerequisite = windowsInstallerPage;
+
+            // Event not available in the designer
+            comboSqlServers.MouseWheel += new MouseEventHandler(OnSqlServerMouseWheel);
         }
 
         /// <summary>
@@ -156,86 +166,103 @@ namespace ShipWorks.Data.Administration
 
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
-                useChooseWisely2012 = false;
-
-                if (StartupController.StartupArgument.Name == "Upgrade2x")
+                var afterLocalDbUpgrade = StartupController.StartupArgument.Element("LocalDbUpgrade");
+                if (afterLocalDbUpgrade != null && (bool) afterLocalDbUpgrade)
                 {
-                    var setupControls = new List<Control>
-                                {
-                                    radioChooseCreate2008, pictureBoxSetupNewDatabase, labelSetupNewDatabase,
-                                    radioChooseConnect2008, pictureBoxConnectRunningDatabase, labelConnectRunningDatabase
-                                };
+                    Pages.Remove(wizardPageChooseWisely2008);
+                    Pages.Remove(wizardPageChooseWisely2012);
 
-                    var restoreControls = new List<Control>
-                                {
-                                    radioChooseRestore2008, pictureBoxRestoreDatabase, labelRestoreDatabase
-                                };
+                    // We removed the first pages, which the wizard handles after OnLoad finishes - but it hasn't finished (we are still in it), so we have
+                    // to ensure the first page ourself, or MoveNext won't work
+                    SetCurrent(0);
 
-                    int setupOffset = radioChooseConnect2008.Top - radioChooseCreate2008.Top;
-                    int restoreOffset = radioChooseCreate2008.Top - radioChooseRestore2008.Top;
+                    radioLocalDbEnableRemote.Checked = true;
 
-                    foreach (var control in setupControls)
-                    {
-                        control.Top += setupOffset;
-                    }
-
-                    foreach (var control in restoreControls)
-                    {
-                        control.Top += restoreOffset;
-                    }
-
-                    radioChooseRestore2008.Checked = true;
-                    radioChooseRestore2008.Text = "Upgrade from a ShipWorks 2 Backup";
-                    labelRestoreDatabase.Text = "Select this option to import ShipWorks 2 data without affecting ShipWorks 2.";
-
-                    radioChooseCreate2008.ForeColor = SystemColors.GrayText;
-                    radioChooseConnect2008.ForeColor = SystemColors.GrayText;
-
-                    instanceName.Text = "SHIPWORKS3";
+                    MoveNext();
                 }
                 else
                 {
-                    bool wasDoingRestore = (bool) StartupController.StartupArgument.Element("Restore");
+                    useChooseWisely2012 = false;
 
-                    if (wasDoingRestore)
+                    if (StartupController.StartupArgument.Name == "Upgrade2x")
                     {
-                        radioChooseRestore2008.Checked = true;
-                        MoveNext();
+                        var setupControls = new List<Control>
+                                    {
+                                        radioChooseCreate2008, pictureBoxSetupNewDatabase, labelSetupNewDatabase,
+                                        radioChooseConnect2008, pictureBoxConnectRunningDatabase, labelConnectRunningDatabase
+                                    };
 
-                        radioRestoreIntoNewDatabase.Checked = true;
-                        MoveNext();
+                        var restoreControls = new List<Control>
+                                    {
+                                        radioChooseRestore2008, pictureBoxRestoreDatabase, labelRestoreDatabase
+                                    };
+
+                        int setupOffset = radioChooseConnect2008.Top - radioChooseCreate2008.Top;
+                        int restoreOffset = radioChooseCreate2008.Top - radioChooseRestore2008.Top;
+
+                        foreach (var control in setupControls)
+                        {
+                            control.Top += setupOffset;
+                        }
+
+                        foreach (var control in restoreControls)
+                        {
+                            control.Top += restoreOffset;
+                        }
+
+                        radioChooseRestore2008.Checked = true;
+                        radioChooseRestore2008.Text = "Upgrade from a ShipWorks 2 Backup";
+                        labelRestoreDatabase.Text = "Select this option to import ShipWorks 2 data without affecting ShipWorks 2.";
+
+                        radioChooseCreate2008.ForeColor = SystemColors.GrayText;
+                        radioChooseConnect2008.ForeColor = SystemColors.GrayText;
+
+                        instanceName.Text = "SHIPWORKS3";
                     }
                     else
                     {
-                        radioChooseCreate2008.Checked = true;
-                        MoveNext();
-                    }
+                        bool wasDoingRestore = (bool) StartupController.StartupArgument.Element("Restore");
 
-                    radioInstallSqlServer.Checked = true;
-                    instanceName.Text = (string) StartupController.StartupArgument.Element("InstanceName");
-
-                    // If we are here after rebooting from a successful install that needed a reboot, fastforward past the install page
-                    var afterInstallSuccess = StartupController.StartupArgument.Element("AfterInstallSuccess");
-                    if (afterInstallSuccess != null && (bool) afterInstallSuccess)
-                    {
-                        log.InfoFormat("Replaying SQL Install Success after reboot.");
-
-                        installedInstances.Add(instanceName.Text);
-
-                        // Reload all the SQL Session from last time
-                        sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
-                        sqlSession.Configuration.Username = "sa";
-                        sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
-                        sqlSession.Configuration.WindowsAuth = false;
-
-                        // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
-                        // a reboot was required (which is why we are here now)
-                        using (SqlConnection con = sqlSession.OpenConnection())
+                        if (wasDoingRestore)
                         {
-                            SqlUtility.EnableClr(con);
+                            radioChooseRestore2008.Checked = true;
+                            MoveNext();
+
+                            radioRestoreIntoNewDatabase.Checked = true;
+                            MoveNext();
+                        }
+                        else
+                        {
+                            radioChooseCreate2008.Checked = true;
+                            MoveNext();
                         }
 
-                        MoveNext();
+                        radioInstallSqlServer.Checked = true;
+                        instanceName.Text = (string) StartupController.StartupArgument.Element("InstanceName");
+
+                        // If we are here after rebooting from a successful install that needed a reboot, fastforward past the install page
+                        var afterInstallSuccess = StartupController.StartupArgument.Element("AfterInstallSuccess");
+                        if (afterInstallSuccess != null && (bool) afterInstallSuccess)
+                        {
+                            log.InfoFormat("Replaying SQL Install Success after reboot.");
+
+                            installedInstances.Add(instanceName.Text);
+
+                            // Reload all the SQL Session from last time
+                            sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + instanceName.Text;
+                            sqlSession.Configuration.Username = "sa";
+                            sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
+                            sqlSession.Configuration.WindowsAuth = false;
+
+                            // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
+                            // a reboot was required (which is why we are here now)
+                            using (SqlConnection con = sqlSession.OpenConnection())
+                            {
+                                SqlUtility.EnableClr(con);
+                            }
+
+                            MoveNext();
+                        }
                     }
                 }
 
@@ -330,7 +357,7 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region Manager Local DB
+        #region Manage Local DB
 
         /// <summary>
         /// Makes clicking the picture and label next to the radio check the radio
@@ -351,16 +378,185 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping next from the manage local db page
         /// </summary>
-        private void OnStepNextManagerLocalDb(object sender, WizardStepEventArgs e)
+        private void OnStepNextManageLocalDb(object sender, WizardStepEventArgs e)
         {
-            if (radioLocalDbEnableRemote.Checked)
-            {
-                e.NextPage = CurrentPage;
-            }
-            else
+            if (radioLocalDbConnect.Checked)
             {
                 sqlInstanceChooseDatabase = true;
                 e.NextPage = wizardPageSelectSqlServerInstance;
+            }
+        }
+
+        #endregion
+
+        #region Upgrade Local DB
+
+        /// <summary>
+        /// Upgrade the Local DB in order to enable remote connections
+        /// </summary>
+        private void OnStepNextUpgradeLocalDb(object sender, WizardStepEventArgs e)
+        {
+            // If it was installed, but needs a reboot, move to the last page (which will now be the reboot page)
+            if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            {
+                e.NextPage = Pages[Pages.Count - 1];
+                return;
+            }
+
+            // If its installed now, we are ok to move on.
+            if (localDbUpgradedInstance != null && SqlInstanceUtility.IsSqlInstanceInstalled(localDbUpgradedInstance))
+            {
+                labelSetupComplete.Text = "Remote connections are now enabled.";
+
+                e.NextPage = wizardPageComplete;
+                return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Bring the upgrading message up and diable and the browsing buttons
+            panelUpgradeLocalDb.Location = panelUpgradeLocalDbReady.Location;
+            panelUpgradeLocalDb.Visible = true;
+            panelUpgradeLocalDbReady.Visible = false;
+            NextEnabled = false;
+            BackEnabled = false;
+
+            // Stay on this page
+            e.NextPage = CurrentPage;
+
+            try
+            {
+                localDbUpgradedInstance = localDbUpgrader.UpgradeLocalDb();
+
+                progressUpdgradeLocalDb.Value = 0;
+                progressLocalDbTimer.Start();
+                progressLocalDbTimer.Tag = null;
+            }
+            catch (Win32Exception ex)
+            {
+                if (ex.NativeErrorCode == 1602 || ex.NativeErrorCode == 1603 || ex.NativeErrorCode == 1223)
+                {
+                    MessageHelper.ShowInformation(this, "You must click 'Yes' when asked to allow ShipWorks to make changes to your computer.");
+                }
+                else
+                {
+                    MessageHelper.ShowError(this, "An error occurred while enabling remote connections:\n\n" + ex.Message);
+                }
+
+                // Reset the gui
+                panelUpgradeLocalDb.Visible = false;
+                panelUpgradeLocalDbReady.Visible = true;
+                NextEnabled = true;
+                BackEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Simple UI timer we use to keep the progress of SQL Server install aproximated
+        /// </summary>
+        void OnUpgradeLocalDbProgressTimer(object sender, EventArgs e)
+        {
+            FileInfo fileInfo = new FileInfo(localDbUpgrader.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install));
+            long expectedFileSize = localDbUpgrader.GetInstallerFileLength(SqlServerInstallerPurpose.Install);
+
+            // Not downloaded at all
+            if (!fileInfo.Exists)
+            {
+                progressPreparing.Value = 0;
+            }
+            // In the process of downloading
+            else if (fileInfo.Length < expectedFileSize)
+            {
+                progressUpdgradeLocalDb.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
+
+                log.InfoFormat("Updated value to {0}.  ({1} of {2})", progressUpdgradeLocalDb.Value, fileInfo.Length, expectedFileSize);
+            }
+            // Fully downloaded
+            else
+            {
+                Stopwatch elapsed = progressLocalDbTimer.Tag as Stopwatch;
+                if (elapsed == null)
+                {
+                    elapsed = Stopwatch.StartNew();
+                    progressLocalDbTimer.Tag = elapsed;
+                }
+
+                // Download counts as 33%.  After that, installing counts all the way up to 100, and we progress it assuming it will take 5 minutes
+                progressUpdgradeLocalDb.Value = Math.Min(98, 33 + (int) ((elapsed.Elapsed.TotalSeconds / 300.0) * 0.66 * 100));
+
+                log.InfoFormat("Installing - updated progress to {0}", progressUpdgradeLocalDb.Value);
+            }
+        }
+
+        /// <summary>
+        /// The upgrade local db background process has completed.
+        /// </summary>
+        private void OnUpgradeLocalDbExited(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new EventHandler(OnUpgradeLocalDbExited), new object[] { sender, e });
+                return;
+            }
+
+            progressLocalDbTimer.Stop();
+
+            // If it was successful, we should now be able to connect.
+            if (localDbUpgrader.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(localDbUpgradedInstance))
+            {
+                sqlSession.Configuration.Username = "sa";
+                sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
+                sqlSession.Configuration.WindowsAuth = false;
+                sqlSession.Configuration.ServerInstance = Environment.MachineName + "\\" + localDbUpgradedInstance;
+                sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.AutomaticDatabaseName;
+
+                installedInstances.Add(localDbUpgradedInstance);
+
+                // Since we installed it, we can do this without asking
+                using (SqlConnection con = sqlSession.OpenConnection())
+                {
+                    SqlUtility.EnableClr(con);
+                }
+
+                MoveNext();
+            }
+            else if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            {
+                Pages.Add(new RebootRequiredPage(
+                    "some prerequisites",
+                    StartupAction.OpenDatabaseSetup,
+                    () =>
+                    {
+                        return new XElement("Replay",
+                            new XElement("InstanceName", localDbUpgradedInstance),
+                            new XElement("LocalDbUpgrade", true));
+                    }));
+
+                MoveNext();
+            }
+            else
+            {
+                MessageHelper.ShowError(this,
+                    "Remote connections could not be enabled.\n\n" + SqlServerInstaller.FormatReturnCode(localDbUpgrader.LastExitCode));
+
+                NextEnabled = true;
+                BackEnabled = true;
+            }
+
+            // Reset the gui
+            panelUpgradeLocalDb.Visible = false;
+            panelUpgradeLocalDbReady.Visible = true;
+        }
+
+        /// <summary>
+        /// User trying to cancel the upgrade of Local DB
+        /// </summary>
+        private void OnCancellUpgradeLocalDb(object sender, CancelEventArgs e)
+        {
+            if (!NextEnabled)
+            {
+                MessageHelper.ShowMessage(this, "Please wait for ShipWorks to finish enabling remote connections.");
+                e.Cancel = true;
             }
         }
 
@@ -589,6 +785,8 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void StartSearchingSqlServers()
         {
+            gridDatabses.Rows.Clear();
+
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
             worker.WorkerSupportsCancellation = true;
@@ -613,7 +811,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         void OnFoundSqlServerInstances(object sender, ProgressChangedEventArgs e)
         {
-            // If we have closed, stop counting
+            // If we have closed, don't go on
             if (TopLevelControl == null || !TopLevelControl.Visible)
             {
                 ((BackgroundWorker) sender).CancelAsync();
@@ -653,8 +851,6 @@ namespace ShipWorks.Data.Administration
         {
             if (e.FirstTime)
             {
-                gridDatabses.Rows.Clear();
-
                 // Prepopulate the instance box with the current
                 if (SqlSession.IsConfigured)
                 {
@@ -671,22 +867,66 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Wheel scrolling on the SQL Server combo
+        /// </summary>
+        private void OnSqlServerMouseWheel(object sender, MouseEventArgs e)
+        {
+            // If the combo isn't dropped down, don't scroll, as that pisses off users
+            if (!comboSqlServers.DroppedDown)
+            {
+                ((HandledMouseEventArgs) e).Handled = true;
+            }
+        }
+
+
+        /// <summary>
         /// Leaving focus from the SQL instance combo
         /// </summary>
         private void OnLeaveSqlInstance(object sender, EventArgs e)
         {
-            if (lastSelectedSqlInstance != comboSqlServers.Text)
-            {
-                OnChangeSelectedInstance(null, EventArgs.Empty);
-            }
+            OnChangeSelectedInstance(null, EventArgs.Empty);
         }
 
         /// <summary>
-        /// The selected SQL Server instance has changed
+        /// Custom command key procesing for hitting enter in the combo box
         /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (comboSqlServers.Focused && keyData == Keys.Return)
+            {
+                OnChangeSelectedInstance(null, EventArgs.Empty);
+                return true;
+            }
+            else
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
+         }
+
+        /// <summary>
+        /// The selected SQL Server instance has changed
+        /// </summa
         private void OnChangeSelectedInstance(object sender, EventArgs e)
         {
-            lastSelectedSqlInstance = comboSqlServers.Text;
+            string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;;
+
+            // If we are already conected to or connecting to this exact session, then forget it.
+            if (connectionSession != null)
+            {
+                if ((connectionSession.Configuration.ServerInstance == selectedInstance) &&
+                    (
+                        connectionSession.Configuration.WindowsAuth == sqlSession.Configuration.WindowsAuth ||
+                        (
+                            connectionSession.Configuration.Username == sqlSession.Configuration.Username &&
+                            connectionSession.Configuration.Password == sqlSession.Configuration.Password
+                        )
+                    )
+                   )
+                {
+                    return;
+                }
+            }
+
             gridDatabses.Rows.Clear();
 
             linkSqlInstanceAccount.Visible = false;
@@ -699,7 +939,7 @@ namespace ShipWorks.Data.Administration
 
             // Create a copy that we can mess around with without affecting the UI session
             connectionSession = new SqlSession(sqlSession);
-            connectionSession.Configuration.ServerInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
+            connectionSession.Configuration.ServerInstance = selectedInstance;
 
             // Create another variable for closure purposes
             SqlSession backgroundSession = connectionSession;
@@ -707,45 +947,19 @@ namespace ShipWorks.Data.Administration
             // Start the background task to try to log in and figure out the background databases...
             var task = Task.Factory.StartNew(() =>
                 {
-                    backgroundSession.Configuration.DatabaseName = "master";
+                    SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, backgroundSession.Configuration);
 
-                    // First we try the session as it is...
-
-                    // Then we'll try the sa account with the password we create - we know that'd be an admin
-                    SqlSession saSession = new SqlSession(backgroundSession);
-                    saSession.Configuration.Username = "sa";
-                    saSession.Configuration.Password = SqlInstanceUtility.LocalDbServerInstance;
-                    saSession.Configuration.WindowsAuth = false;
-
-                    // Then we'll try windows auth
-                    SqlSession windowsSession = new SqlSession(backgroundSession);
-                    windowsSession.Configuration.WindowsAuth = true;
-
-                    List<SqlSession> sessionsToTry = new List<SqlSession> 
-                        {
-                            backgroundSession,
-                            saSession,
-                            windowsSession
-                        };
-
-                    foreach (SqlSession session in sessionsToTry)
+                    if (configuration != null)
                     {
-                        try
+                        using (SqlConnection con = new SqlSession(configuration).OpenConnection())
                         {
-                            session.TestConnection();
-
-                            using (SqlConnection con = session.OpenConnection())
-                            {
-                                return Tuple.Create(session.Configuration, ShipWorksDatabaseUtility.GetShipWorksDatabases(con));
-                            }
-                        }
-                        catch (SqlException ex)
-                        {
-                            log.Info("Failed to connect.", ex);
+                            return Tuple.Create(configuration, ShipWorksDatabaseUtility.GetDatabaseDetails(con));
                         }
                     }
-
-                    return null;
+                    else
+                    {
+                        return null;
+                    }
                 });
 
             task.ContinueWith(t =>
@@ -1080,8 +1294,8 @@ namespace ShipWorks.Data.Administration
                 sqlInstaller.InstallSqlServer(instanceName.Text, SqlInstanceUtility.ShipWorksSaPassword);
 
                 progressPreparing.Value = 0;
-                progressTimer.Start();
-                progressTimer.Tag = null;
+                progressInstallTimer.Start();
+                progressInstallTimer.Tag = null;
             }
             catch (Win32Exception ex)
             {
@@ -1125,15 +1339,15 @@ namespace ShipWorks.Data.Administration
             // Fully downloaded
             else
             {
-                Stopwatch elapsed = progressTimer.Tag as Stopwatch;
+                Stopwatch elapsed = progressInstallTimer.Tag as Stopwatch;
                 if (elapsed == null)
                 {
                     elapsed = Stopwatch.StartNew();
-                    progressTimer.Tag = elapsed;
+                    progressInstallTimer.Tag = elapsed;
                 }
 
                 // Download counts as 33%.  After that, installing counts all the way up to 100, and we progress it assuming it will take 5 minutes
-                progressPreparing.Value = 33 + (int) ((elapsed.Elapsed.TotalSeconds / 300.0) * 0.66 * 100);
+                progressPreparing.Value = Math.Min(98, 33 + (int) ((elapsed.Elapsed.TotalSeconds / 300.0) * 0.66 * 100));
 
                 log.InfoFormat("Installing - updated progress to {0}", progressPreparing.Value);
             }
@@ -1150,7 +1364,7 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
-            progressTimer.Stop();
+            progressInstallTimer.Stop();
 
             // If it was successful, we should now be able to connect.
             if (sqlInstaller.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))

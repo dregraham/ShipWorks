@@ -37,7 +37,7 @@
             this.linkDetailedSetup = new ShipWorks.UI.Controls.LinkControl();
             this.labelWelcomeAdvanced = new System.Windows.Forms.Label();
             this.pictureBoxCubes = new System.Windows.Forms.PictureBox();
-            this.wizardPageLocalDb = new ShipWorks.UI.Wizard.WizardPage();
+            this.wizardPagePrepare = new ShipWorks.UI.Wizard.WizardPage();
             this.progressPreparing = new System.Windows.Forms.ProgressBar();
             this.picturePreparing = new System.Windows.Forms.PictureBox();
             this.labelPeparingToRun = new System.Windows.Forms.Label();
@@ -47,7 +47,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.progressTimer = new System.Windows.Forms.Timer(this.components);
+            this.localDbProgressTimer = new System.Windows.Forms.Timer(this.components);
             this.wizardPageUser = new ShipWorks.UI.Wizard.WizardPage();
             this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
@@ -65,7 +65,7 @@
             this.topPanel.SuspendLayout();
             this.wizardPageWelcome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCubes)).BeginInit();
-            this.wizardPageLocalDb.SuspendLayout();
+            this.wizardPagePrepare.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePreparing)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreparing)).BeginInit();
             this.wizardPageFinishExisting.SuspendLayout();
@@ -88,7 +88,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageLocalDb);
+            this.mainPanel.Controls.Add(this.wizardPageUser);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -191,24 +191,24 @@
             this.pictureBoxCubes.TabIndex = 43;
             this.pictureBoxCubes.TabStop = false;
             // 
-            // wizardPageLocalDb
+            // wizardPagePrepare
             // 
-            this.wizardPageLocalDb.Controls.Add(this.progressPreparing);
-            this.wizardPageLocalDb.Controls.Add(this.picturePreparing);
-            this.wizardPageLocalDb.Controls.Add(this.labelPeparingToRun);
-            this.wizardPageLocalDb.Controls.Add(this.pictureBoxPreparing);
-            this.wizardPageLocalDb.Controls.Add(this.labelPreparing);
-            this.wizardPageLocalDb.Description = "ShipWorks needs to prepare your system.";
-            this.wizardPageLocalDb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageLocalDb.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageLocalDb.Name = "wizardPageLocalDb";
-            this.wizardPageLocalDb.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageLocalDb.TabIndex = 0;
-            this.wizardPageLocalDb.Title = "ShipWorks Setup";
-            this.wizardPageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInstallLocalDb);
-            this.wizardPageLocalDb.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoInstallLocalDb);
-            this.wizardPageLocalDb.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancellInstallLocalDb);
+            this.wizardPagePrepare.Controls.Add(this.progressPreparing);
+            this.wizardPagePrepare.Controls.Add(this.picturePreparing);
+            this.wizardPagePrepare.Controls.Add(this.labelPeparingToRun);
+            this.wizardPagePrepare.Controls.Add(this.pictureBoxPreparing);
+            this.wizardPagePrepare.Controls.Add(this.labelPreparing);
+            this.wizardPagePrepare.Description = "ShipWorks needs to prepare your system.";
+            this.wizardPagePrepare.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPagePrepare.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPagePrepare.Location = new System.Drawing.Point(0, 0);
+            this.wizardPagePrepare.Name = "wizardPagePrepare";
+            this.wizardPagePrepare.Size = new System.Drawing.Size(548, 271);
+            this.wizardPagePrepare.TabIndex = 0;
+            this.wizardPagePrepare.Title = "ShipWorks Setup";
+            this.wizardPagePrepare.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPrepareAutomaticDatabase);
+            this.wizardPagePrepare.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoPrepareAutomaticDatabase);
+            this.wizardPagePrepare.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancelPrepareAutomaticDatabase);
             // 
             // progressPreparing
             // 
@@ -301,9 +301,9 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // progressTimer
+            // localDbProgressTimer
             // 
-            this.progressTimer.Tick += new System.EventHandler(this.OnLocalDbProgressTimer);
+            this.localDbProgressTimer.Tick += new System.EventHandler(this.OnLocalDbProgressTimer);
             // 
             // wizardPageUser
             // 
@@ -331,7 +331,7 @@
             // helpUserEmail
             // 
             this.helpUserEmail.Caption = "Your email address will be used to send you a new password if its forgotten.";
-            this.helpUserEmail.Location = new System.Drawing.Point(413, 64);
+            this.helpUserEmail.Location = new System.Drawing.Point(401, 64);
             this.helpUserEmail.Name = "helpUserEmail";
             this.helpUserEmail.Size = new System.Drawing.Size(12, 12);
             this.helpUserEmail.TabIndex = 195;
@@ -434,7 +434,7 @@
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageWelcome,
-            this.wizardPageLocalDb,
+            this.wizardPagePrepare,
             this.wizardPageUser,
             this.wizardPageFinishExisting});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -447,8 +447,8 @@
             this.wizardPageWelcome.ResumeLayout(false);
             this.wizardPageWelcome.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCubes)).EndInit();
-            this.wizardPageLocalDb.ResumeLayout(false);
-            this.wizardPageLocalDb.PerformLayout();
+            this.wizardPagePrepare.ResumeLayout(false);
+            this.wizardPagePrepare.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePreparing)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreparing)).EndInit();
             this.wizardPageFinishExisting.ResumeLayout(false);
@@ -470,14 +470,14 @@
         private UI.Controls.LinkControl linkDetailedSetup;
         private System.Windows.Forms.Label labelWelcomeAdvanced;
         private System.Windows.Forms.PictureBox pictureBoxCubes;
-        private UI.Wizard.WizardPage wizardPageLocalDb;
+        private UI.Wizard.WizardPage wizardPagePrepare;
         private System.Windows.Forms.ProgressBar progressPreparing;
         private System.Windows.Forms.PictureBox picturePreparing;
         private System.Windows.Forms.Label labelPeparingToRun;
         private System.Windows.Forms.PictureBox pictureBoxPreparing;
         private System.Windows.Forms.Label labelPreparing;
         private UI.Wizard.WizardPage wizardPageFinishExisting;
-        private System.Windows.Forms.Timer progressTimer;
+        private System.Windows.Forms.Timer localDbProgressTimer;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
