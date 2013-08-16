@@ -1344,6 +1344,57 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Open the window showing the details of the current database connection
+        /// </summary>
+        private void OnDatabaseDetails(object sender, EventArgs e)
+        {
+            ConnectionSensitiveScope scope = null;
+
+            bool needLogon = false;
+
+            try
+            {
+                // If its LocalDb, then the details dlg give the opportunity to enable remote conections - and for that we need to be in scope
+                if (SqlSession.IsConfigured && SqlSession.Current.Configuration.IsLocalDb())
+                {
+                    scope = new ConnectionSensitiveScope("change database settings", this);
+
+                    if (!scope.Acquired)
+                    {
+                        return;
+                    }
+
+                    // In case we end up changing databases, save before that happens
+                    if (UserSession.IsLoggedOn)
+                    {
+                        SaveCurrentUserSettings();
+                    }
+                }
+
+                using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg())
+                {
+                    dlg.ShowDialog(this);
+
+                    needLogon = dlg.RemoteConnectionsEnabled;
+                }
+            }
+            finally
+            {
+                if (scope != null)
+                {
+                    scope.Dispose();
+                }
+            }
+
+            // This is down here so its outside of the scope.  The Database setup can sometimes exit due to needing the machine
+            // to reboot before SW can continue.  If this is the case, the SQL Session won't be setup yet, and we can't initiate logon.
+            if (needLogon && SqlSession.IsConfigured)
+            {
+                InitiateLogon();
+            }
+        }
+
+        /// <summary>
         /// Setup the database
         /// </summary>
         private void OnSetupDatabase(object sender, EventArgs e)

@@ -923,6 +923,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap data {
+            get {
+                object obj = ResourceManager.GetObject("data", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap data_disk16 {
             get {
                 object obj = ResourceManager.GetObject("data_disk16", resourceCulture);
@@ -1006,6 +1016,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap data_preferences {
             get {
                 object obj = ResourceManager.GetObject("data_preferences", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap data_preferences1 {
+            get {
+                object obj = ResourceManager.GetObject("data_preferences1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

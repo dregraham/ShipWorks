@@ -1487,7 +1487,7 @@ namespace ShipWorks.Data.Administration
             this.labelLocalDbEnableRemote.Name = "labelLocalDbEnableRemote";
             this.labelLocalDbEnableRemote.Size = new System.Drawing.Size(250, 13);
             this.labelLocalDbEnableRemote.TabIndex = 53;
-            this.labelLocalDbEnableRemote.Text = "Enable remote connections from other PC\'s";
+            this.labelLocalDbEnableRemote.Text = "Enable support for remote connections from other PC\'s";
             // 
             // labelLocalDbEnableRemote2
             // 
@@ -1496,7 +1496,7 @@ namespace ShipWorks.Data.Administration
             this.labelLocalDbEnableRemote2.Name = "labelLocalDbEnableRemote2";
             this.labelLocalDbEnableRemote2.Size = new System.Drawing.Size(406, 17);
             this.labelLocalDbEnableRemote2.TabIndex = 51;
-            this.labelLocalDbEnableRemote2.Text = "Trying to connect other ShipWorks PC\'s to this one? You\'re in the right place.";
+            this.labelLocalDbEnableRemote2.Text = "Need to connect other ShipWorks PC\'s to this one? You\'re in the right place.";
             this.labelLocalDbEnableRemote2.Click += new System.EventHandler(this.OnClickLocalDbEnableRemoteLabel);
             // 
             // pictureLocalDbEnableRemote
@@ -1629,7 +1629,7 @@ namespace ShipWorks.Data.Administration
             this.labelUpgradeLocalDb2.Name = "labelUpgradeLocalDb2";
             this.labelUpgradeLocalDb2.Size = new System.Drawing.Size(365, 13);
             this.labelUpgradeLocalDb2.TabIndex = 50;
-            this.labelUpgradeLocalDb2.Text = "ShipWorks is enabling remote connections.  This may take a few minutes...";
+            this.labelUpgradeLocalDb2.Text = "ShipWorks is enabling support for remote connections.  This may take a few minutes...";
             // 
             // pictureUpgrdaeLocalDb
             // 

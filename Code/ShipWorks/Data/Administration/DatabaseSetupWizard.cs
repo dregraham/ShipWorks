@@ -92,8 +92,20 @@ namespace ShipWorks.Data.Administration
         // If we upgrade a LocalDB to a full SQL Server instance, this stores the name of the instance that was created
         string localDbUpgradedInstance;
 
+        // Allows consumers to control what the wizard allows the user to do
+        SetupMode setupMode = SetupMode.Default;
+
         // What we display for LocalDB instead of the actual connection string
         const string localDbDisplayName = "(Local Only)";
+
+        /// <summary>
+        /// Let's consumers control what the user is allowed to do in the wizard
+        /// </summary>
+        public enum SetupMode
+        {
+            Default,
+            EnableRemoteConnections
+        }
 
         /// <summary>
         /// The option the user chooses for the first page of the wizard
@@ -109,8 +121,19 @@ namespace ShipWorks.Data.Administration
         /// Constructor.
         /// </summary>
         public DatabaseSetupWizard()
+            : this(SetupMode.Default)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public DatabaseSetupWizard(SetupMode setupMode)
         {
             InitializeComponent();
+
+            this.setupMode = setupMode;
 
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
@@ -160,8 +183,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            MessageBox.Show("Pause");
-
             StartSearchingSqlServers();
 
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
@@ -272,6 +293,13 @@ namespace ShipWorks.Data.Administration
                 }
 
                 StartupController.ClearStartupAction();
+            }
+            else if (setupMode == SetupMode.EnableRemoteConnections)
+            {
+                // We just have to remove the first three pages so the only option is to do the LocalDb upgrade
+                Pages.Remove(wizardPageChooseWisely2012);
+                Pages.Remove(wizardPageChooseWisely2008);
+                Pages.Remove(wizardPageManageLocalDb);
             }
             else
             {
@@ -413,7 +441,7 @@ namespace ShipWorks.Data.Administration
             // If its installed now, we are ok to move on.
             if (localDbUpgradedInstance != null && SqlInstanceUtility.IsSqlInstanceInstalled(localDbUpgradedInstance))
             {
-                labelSetupComplete.Text = "Remote connections are now enabled.";
+                labelSetupComplete.Text = "Remote connections are now supported.";
 
                 e.NextPage = wizardPageComplete;
                 return;
@@ -447,7 +475,7 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
-                    MessageHelper.ShowError(this, "An error occurred while enabling remote connections:\n\n" + ex.Message);
+                    MessageHelper.ShowError(this, "An error occurred while enabling support for remote connections:\n\n" + ex.Message);
                 }
 
                 // Reset the gui
@@ -544,7 +572,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "Remote connections could not be enabled.\n\n" + SqlServerInstaller.FormatReturnCode(localDbUpgrader.LastExitCode));
+                    "Support for remote connections could not be enabled.\n\n" + SqlServerInstaller.FormatReturnCode(localDbUpgrader.LastExitCode));
 
                 NextEnabled = true;
                 BackEnabled = true;
@@ -562,7 +590,7 @@ namespace ShipWorks.Data.Administration
         {
             if (!NextEnabled)
             {
-                MessageHelper.ShowMessage(this, "Please wait for ShipWorks to finish enabling remote connections.");
+                MessageHelper.ShowMessage(this, "Please wait for ShipWorks to finish enabling support for remote connections.");
                 e.Cancel = true;
             }
         }
