@@ -121,6 +121,15 @@ Source: {#AppArtifacts}\Common.Logging.Log4Net1210.dll; DestDir: {app}; Flags: o
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 
+#ifdef IncludeSymbols
+    Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    Source: {#AppArtifacts}\ShipWorks.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    Source: {#AppArtifacts}\ShipWorks.Data.Model.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    Source: {#AppArtifacts}\ShipWorks.Data.Adapter.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    Source: {#AppArtifacts}\ShipWorks.SqlServer.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+#endif
+
 
 [Tasks]
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:
