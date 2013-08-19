@@ -89,10 +89,5 @@ namespace ShipWorks.ApplicationCore.Services.UI
                 entityGrid.UpdateGridRows();
             }
         }
-
-        void OnEditGridSettings(object sender, EventArgs e)
-        {
-            entityGrid.ShowColumnEditorDialog();
-        }
     }
 }

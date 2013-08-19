@@ -37,21 +37,19 @@
             this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.panelTools = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
-            this.labelGridSettings = new System.Windows.Forms.Label();
             closeButton = new System.Windows.Forms.Button();
             labelHeader1 = new System.Windows.Forms.Label();
             labelHeader2 = new System.Windows.Forms.Label();
             labelHeader3 = new System.Windows.Forms.Label();
             this.panelGridArea.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelTools)).BeginInit();
-            this.panelTools.SuspendLayout();
             this.SuspendLayout();
             // 
             // closeButton
             // 
             closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            closeButton.Location = new System.Drawing.Point(595, 344);
+            closeButton.Location = new System.Drawing.Point(597, 344);
             closeButton.Name = "closeButton";
             closeButton.Size = new System.Drawing.Size(75, 23);
             closeButton.TabIndex = 6;
@@ -103,7 +101,7 @@
             this.panelGridArea.Controls.Add(this.panelTools);
             this.panelGridArea.Location = new System.Drawing.Point(12, 42);
             this.panelGridArea.Name = "panelGridArea";
-            this.panelGridArea.Size = new System.Drawing.Size(658, 290);
+            this.panelGridArea.Size = new System.Drawing.Size(660, 290);
             this.panelGridArea.TabIndex = 7;
             // 
             // entityGrid
@@ -120,7 +118,7 @@
             this.entityGrid.Renderer = windowsXPRenderer1;
             this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.entityGrid.ShadeAlternateRows = true;
-            this.entityGrid.Size = new System.Drawing.Size(654, 259);
+            this.entityGrid.Size = new System.Drawing.Size(656, 259);
             this.entityGrid.StretchPrimaryGrid = false;
             this.entityGrid.TabIndex = 0;
             // 
@@ -130,41 +128,25 @@
             this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 259);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(654, 1);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(656, 1);
             this.kryptonBorderEdge.TabIndex = 2;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // panelTools
             // 
-            this.panelTools.Controls.Add(this.labelGridSettings);
             this.panelTools.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelTools.Location = new System.Drawing.Point(0, 260);
             this.panelTools.Name = "panelTools";
             this.panelTools.PanelBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderColumnSheet;
-            this.panelTools.Size = new System.Drawing.Size(654, 26);
+            this.panelTools.Size = new System.Drawing.Size(656, 26);
             this.panelTools.TabIndex = 1;
-            // 
-            // labelGridSettings
-            // 
-            this.labelGridSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelGridSettings.AutoSize = true;
-            this.labelGridSettings.BackColor = System.Drawing.Color.Transparent;
-            this.labelGridSettings.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labelGridSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelGridSettings.ForeColor = System.Drawing.Color.Blue;
-            this.labelGridSettings.Location = new System.Drawing.Point(581, 6);
-            this.labelGridSettings.Name = "labelGridSettings";
-            this.labelGridSettings.Size = new System.Drawing.Size(68, 13);
-            this.labelGridSettings.TabIndex = 0;
-            this.labelGridSettings.Text = "Grid Settings";
-            this.labelGridSettings.Click += new System.EventHandler(this.OnEditGridSettings);
             // 
             // ServiceStatusDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = closeButton;
-            this.ClientSize = new System.Drawing.Size(682, 379);
+            this.ClientSize = new System.Drawing.Size(684, 379);
             this.Controls.Add(labelHeader3);
             this.Controls.Add(labelHeader2);
             this.Controls.Add(labelHeader1);
@@ -173,6 +155,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "ServiceStatusDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -182,8 +165,6 @@
             this.panelGridArea.ResumeLayout(false);
             this.panelGridArea.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelTools)).EndInit();
-            this.panelTools.ResumeLayout(false);
-            this.panelTools.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,6 +176,5 @@
         private Data.Grid.Paging.PagedEntityGrid entityGrid;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private ComponentFactory.Krypton.Toolkit.KryptonPanel panelTools;
-        private System.Windows.Forms.Label labelGridSettings;
     }
 }
