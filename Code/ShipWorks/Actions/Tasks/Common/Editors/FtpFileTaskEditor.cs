@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.FileTransfer;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -32,45 +33,29 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             InitializeComponent();
 
-            tokenizedFtpFolderFilename.TextChanged += OnTokenizedFtpFolderTextChanged;
+            tokenizedFtpFolder.TextChanged += OnTokenizedFtpFolderTextChanged;
+            tokenizedFtpFilename.TextChanged += OnTokenizedFtpFilenameTextChanged;
 
             this.task = task;
 
-            LoadFtpAccount();
+            LoadSettings();
         }
 
         /// <summary>
-        /// Load the ftp account
+        /// Load the task settings
         /// </summary>
-        public void LoadFtpAccount()
+        public void LoadSettings()
         {
-            if (task.FtpAccountID != null)
+            if (task.FtpAccountID != null) 
             {
                 ftpAccount = FtpAccountManager.GetAccount(task.FtpAccountID.Value);
             }
 
             UpdateAccountUI();
 
-            tokenizedFtpFolderFilename.Text = task.FtpFolder;
-
+            tokenizedFtpFolder.Text = task.FtpFolder;
+            tokenizedFtpFilename.Text = task.FtpFileName;
         }
-
-        ///// <summary>
-        ///// Save the settings from the control into the store
-        ///// </summary>
-        //public bool SaveToEntity(GenericFileStoreEntity store)
-        //{
-        //    if (store.FtpAccountID == null)
-        //    {
-        //        MessageHelper.ShowInformation(this, "Please configure the FTP account that will be monitored for files.");
-        //        return false;
-        //    }
-
-        //    store.FtpFolder = ftpFolder.Text;
-
-        //    return actionsControl.SaveToEntity(store, store.FtpFolder);
-        //}
-
 
         /// <summary>
         /// Configure the FTP account connection
@@ -86,7 +71,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                     {
                         FtpAccountManager.CheckForChangesNeeded();
                         ftpAccount = wizard.FtpAccount;
-                        tokenizedFtpFolderFilename.Text = wizard.InitialFolder;
+                        tokenizedFtpFolder.Text = wizard.InitialFolder;
                         
                         // Update the store to use this new account
                         task.FtpAccountID = ftpAccount.FtpAccountID;
@@ -121,14 +106,14 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 {
                     if (ftpFolderBrowserDlg.ShowDialog(this) == DialogResult.OK)
                     {
-                        tokenizedFtpFolderFilename.Text = ftpFolderBrowserDlg.SelectedFolder;
+                        tokenizedFtpFolder.Text = ftpFolderBrowserDlg.SelectedFolder;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Update the description text and UI stuff of the email account
+        /// Update the description text and UI stuff of the ftp account
         /// </summary>
         private void UpdateAccountUI()
         {
@@ -143,13 +128,23 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Called when [tokenized execute command text changed] to update the command property of the task.
+        /// Called when tokenizedFtpFolder text changed to update the FtpFolder property of the task.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnTokenizedFtpFolderTextChanged(object sender, EventArgs e)
         {
-            task.FtpFolder = tokenizedFtpFolderFilename.Text;
+            task.FtpFolder = tokenizedFtpFolder.Text;
+        }
+
+        /// <summary>
+        /// Called when tokenizedFtpFilename text changed to update the FtpFileName property of the task.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnTokenizedFtpFilenameTextChanged(object sender, EventArgs e)
+        {
+            task.FtpFileName = tokenizedFtpFilename.Text;
         }
     }
 }
