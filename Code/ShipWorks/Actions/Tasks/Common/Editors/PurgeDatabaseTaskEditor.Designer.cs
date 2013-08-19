@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.timeoutPurgeCheckbox = new System.Windows.Forms.CheckBox();
             this.timeoutHoursLabel = new System.Windows.Forms.Label();
             this.timeoutInHours = new System.Windows.Forms.NumericUpDown();
@@ -42,6 +43,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
+            this.purgeToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
@@ -127,9 +129,11 @@
             this.email.AutoSize = true;
             this.email.Location = new System.Drawing.Point(21, 67);
             this.email.Name = "email";
-            this.email.Size = new System.Drawing.Size(50, 17);
+            this.email.Size = new System.Drawing.Size(92, 17);
             this.email.TabIndex = 3;
-            this.email.Text = "Email";
+            this.email.Text = "Email Content";
+            this.purgeToolTip.SetToolTip(this.email, "The message body is the only thing that will be deleted. You will still be able t" +
+        "o see if an email was sent, when, to whom, and the subject line.");
             this.email.UseVisualStyleBackColor = true;
             // 
             // audit
@@ -137,9 +141,9 @@
             this.audit.AutoSize = true;
             this.audit.Location = new System.Drawing.Point(21, 21);
             this.audit.Name = "audit";
-            this.audit.Size = new System.Drawing.Size(74, 17);
+            this.audit.Size = new System.Drawing.Size(88, 17);
             this.audit.TabIndex = 1;
-            this.audit.Text = "Audit Trail";
+            this.audit.Text = "Audit History";
             this.audit.UseVisualStyleBackColor = true;
             // 
             // printJobs
@@ -147,9 +151,11 @@
             this.printJobs.AutoSize = true;
             this.printJobs.Location = new System.Drawing.Point(21, 113);
             this.printJobs.Name = "printJobs";
-            this.printJobs.Size = new System.Drawing.Size(73, 17);
+            this.printJobs.Size = new System.Drawing.Size(110, 17);
             this.printJobs.TabIndex = 5;
-            this.printJobs.Text = "Print Jobs";
+            this.printJobs.Text = "Print Job Content";
+            this.purgeToolTip.SetToolTip(this.printJobs, "The content of the print job is the only thing that will deleted. You will still " +
+        "be able to see your print history and filter against it.\r\n");
             this.printJobs.UseVisualStyleBackColor = true;
             // 
             // labels
@@ -157,9 +163,11 @@
             this.labels.AutoSize = true;
             this.labels.Location = new System.Drawing.Point(21, 90);
             this.labels.Name = "labels";
-            this.labels.Size = new System.Drawing.Size(56, 17);
+            this.labels.Size = new System.Drawing.Size(132, 17);
             this.labels.TabIndex = 4;
-            this.labels.Text = "Labels";
+            this.labels.Text = "Shipping Label Images";
+            this.purgeToolTip.SetToolTip(this.labels, "This only deletes the actual label image. The shipment settings, tracking number," +
+        " and all other information is preserved.");
             this.labels.UseVisualStyleBackColor = true;
             // 
             // downloads
@@ -167,9 +175,11 @@
             this.downloads.AutoSize = true;
             this.downloads.Location = new System.Drawing.Point(21, 44);
             this.downloads.Name = "downloads";
-            this.downloads.Size = new System.Drawing.Size(115, 17);
+            this.downloads.Size = new System.Drawing.Size(110, 17);
             this.downloads.TabIndex = 2;
-            this.downloads.Text = "Download Records";
+            this.downloads.Text = "Download History";
+            this.purgeToolTip.SetToolTip(this.downloads, "This does not delete any of your orders, just the log of when they were downloade" +
+        "d.");
             this.downloads.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -247,5 +257,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
+        private System.Windows.Forms.ToolTip purgeToolTip;
     }
 }
