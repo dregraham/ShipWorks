@@ -45,6 +45,7 @@
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
             this.purgeToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.retentionHeading = new System.Windows.Forms.Label();
+            this.timeoutHelp = new ShipWorks.UI.Controls.InfoTip();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
@@ -224,10 +225,20 @@
             this.retentionHeading.TabIndex = 20;
             this.retentionHeading.Text = "How far back to start";
             // 
+            // timeoutHelp
+            // 
+            this.timeoutHelp.Caption = "Deletion will pick up where it left off the next time it runs.";
+            this.timeoutHelp.Location = new System.Drawing.Point(294, 201);
+            this.timeoutHelp.Name = "timeoutHelp";
+            this.timeoutHelp.Size = new System.Drawing.Size(12, 12);
+            this.timeoutHelp.TabIndex = 21;
+            this.timeoutHelp.Title = "";
+            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.timeoutHelp);
             this.Controls.Add(this.retentionHeading);
             this.Controls.Add(this.reclaimDiskSpaceCheckbox);
             this.Controls.Add(this.label2);
@@ -271,5 +282,6 @@
         private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
         private System.Windows.Forms.ToolTip purgeToolTip;
         private System.Windows.Forms.Label retentionHeading;
+        private ShipWorks.UI.Controls.InfoTip timeoutHelp;
     }
 }

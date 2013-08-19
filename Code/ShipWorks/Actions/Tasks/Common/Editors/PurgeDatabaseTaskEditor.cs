@@ -128,19 +128,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnReclaimDiskSpaceCheckedChanged(object sender, EventArgs e)
         {
             task.ReclaimDiskSpace = reclaimDiskSpaceCheckbox.Checked;
-        }
-       
-        /// <summary>
-        /// Toggle the selection status of all the purge tasks
-        /// </summary>
-        /// <param name="value">Value that should be set for all purge selections</param>
-        private void TogglePurgeTasks(bool value)
-        {
-            audit.Checked = value;
-            downloads.Checked = value;
-            email.Checked = value;
-            labels.Checked = value;
-            printJobs.Checked = value;
-        }
+        }       
     }
 }
