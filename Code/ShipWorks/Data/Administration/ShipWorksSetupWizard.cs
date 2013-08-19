@@ -85,7 +85,7 @@ namespace ShipWorks.Data.Administration
             preparationType = DetermineElevationPreparationType();
 
             // See if we are going to require elevation to do what we need to do
-            wizardPageWelcome.NextRequiresElevation = (preparationType != ElevatedPreparationType.None);
+            startFromScratch.ShowShield = (preparationType != ElevatedPreparationType.None);
 
             // User has to click one of our buttons
             NextVisible = false;
@@ -213,16 +213,12 @@ namespace ShipWorks.Data.Administration
             else if (fileInfo.Length < expectedFileSize)
             {
                 progressPreparing.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
-
-                log.InfoFormat("Updated value to {0}.  ({1} of {2})", progressPreparing.Value, fileInfo.Length, expectedFileSize);
             }
             // Fully downloaded
             else
             {
                 // Download counts as 33%, the installation phase increments by 1 each 1/10th second (it installs that fast)
                 progressPreparing.Value = Math.Max(33, Math.Min(progressPreparing.Value + 1, 90));
-
-                log.InfoFormat("Installing - updated progress to {0}", progressPreparing.Value);
             }
         }
 

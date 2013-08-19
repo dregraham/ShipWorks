@@ -432,7 +432,7 @@ namespace ShipWorks.Data.Administration
         private void OnStepNextUpgradeLocalDb(object sender, WizardStepEventArgs e)
         {
             // If it was installed, but needs a reboot, move to the last page (which will now be the reboot page)
-            if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired || SqlServerInstaller.IsErrorCodeRebootRequiredBeforeInstall(localDbUpgrader.LastExitCode))
             {
                 e.NextPage = Pages[Pages.Count - 1];
                 return;
@@ -503,8 +503,6 @@ namespace ShipWorks.Data.Administration
             else if (fileInfo.Length < expectedFileSize)
             {
                 progressUpdgradeLocalDb.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
-
-                log.InfoFormat("Updated value to {0}.  ({1} of {2})", progressUpdgradeLocalDb.Value, fileInfo.Length, expectedFileSize);
             }
             // Fully downloaded
             else
@@ -518,8 +516,6 @@ namespace ShipWorks.Data.Administration
 
                 // Download counts as 33%.  After that, installing counts all the way up to 100, and we progress it assuming it will take 5 minutes
                 progressUpdgradeLocalDb.Value = Math.Min(98, 33 + (int) ((elapsed.Elapsed.TotalSeconds / 300.0) * 0.66 * 100));
-
-                log.InfoFormat("Installing - updated progress to {0}", progressUpdgradeLocalDb.Value);
             }
         }
 
@@ -555,7 +551,7 @@ namespace ShipWorks.Data.Administration
 
                 MoveNext();
             }
-            else if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            else if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired || SqlServerInstaller.IsErrorCodeRebootRequiredBeforeInstall(localDbUpgrader.LastExitCode))
             {
                 Pages.Add(new RebootRequiredPage(
                     "some prerequisites",
@@ -1368,8 +1364,6 @@ namespace ShipWorks.Data.Administration
             else if (fileInfo.Length < expectedFileSize)
             {
                 progressPreparing.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
-
-                log.InfoFormat("Updated value to {0}.  ({1} of {2})", progressPreparing.Value, fileInfo.Length, expectedFileSize);
             }
             // Fully downloaded
             else
@@ -1383,8 +1377,6 @@ namespace ShipWorks.Data.Administration
 
                 // Download counts as 33%.  After that, installing counts all the way up to 100, and we progress it assuming it will take 5 minutes
                 progressPreparing.Value = Math.Min(98, 33 + (int) ((elapsed.Elapsed.TotalSeconds / 300.0) * 0.66 * 100));
-
-                log.InfoFormat("Installing - updated progress to {0}", progressPreparing.Value);
             }
         }
 

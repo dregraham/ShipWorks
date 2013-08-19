@@ -209,7 +209,7 @@
             // pictureBoxCubes
             // 
             this.pictureBoxCubes.Image = global::ShipWorks.Properties.Resources.sw_cubes_big;
-            this.pictureBoxCubes.Location = new System.Drawing.Point(43, 11);
+            this.pictureBoxCubes.Location = new System.Drawing.Point(40, 12);
             this.pictureBoxCubes.Name = "pictureBoxCubes";
             this.pictureBoxCubes.Size = new System.Drawing.Size(54, 50);
             this.pictureBoxCubes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;

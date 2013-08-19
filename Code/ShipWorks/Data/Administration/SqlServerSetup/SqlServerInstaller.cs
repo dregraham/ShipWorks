@@ -599,8 +599,11 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 DatabaseFileInfo fileInfo;
 
                 // Old LocalDb session
-                SqlSession localDbSession = new SqlSession();
-                localDbSession.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
+                SqlSession localDbSession = SqlSession.Current;
+                if (localDbSession.Configuration.ServerInstance != SqlInstanceUtility.LocalDbServerInstance)
+                {
+                    throw new InvalidOperationException("Cannot upgrade a non-LocalDb server instance.");
+                }
 
                 // New upgraded session
                 SqlSession newSession = new SqlSession(SqlInstanceUtility.DetermineCredentials(serverInstance));
@@ -609,7 +612,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 log.InfoFormat("Detaching mdf-ldf from LocalDB");
                 using (SqlConnection con = localDbSession.OpenConnection())
                 {
-                    fileInfo = DetachDatabase(ShipWorksDatabaseUtility.LocalDbDatabaseName, con);
+                    fileInfo = DetachDatabase(localDbSession.Configuration.DatabaseName, con);
                 }
 
                 // Path where the db files are moving
@@ -1546,6 +1549,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     throw new CommandLineCommandArgumentException(CommandName, "action", "The required 'action' parameter was not specified.");
                 }
 
+                // Normally this happens as a part of app startup, but not when running command line.
+                SqlSession.Initialize();
+
                 try
                 {
                     switch (action)
@@ -1560,8 +1566,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                                 log.InfoFormat("Processing request to upgrade SQL Sever");
 
-                                // Normally this happens as a part of app startup, but not when running command line.
-                                SqlSession.Initialize();
 
                                 // We need to initialize an installer to get the correct installer package exe's
                                 SqlServerInstaller installer = new SqlServerInstaller();
