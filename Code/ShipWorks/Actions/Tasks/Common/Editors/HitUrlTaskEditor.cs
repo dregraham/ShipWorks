@@ -7,6 +7,7 @@ using System.Web;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -49,7 +50,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
 
-            useTemplate.Checked = task.UseTemplate;
+            useTemplate.Checked = task.RequestMethodType== HitUrlRequestMethodType.UseTemplate;
+            singleRequest.Checked = task.RequestMethodType == HitUrlRequestMethodType.SingleRequest;
+            oneRequestPerFilterResult.Checked = task.RequestMethodType == HitUrlRequestMethodType.OneRequestPerFilterResult;
 
             urlTextBox.Validating += OnUrlTextBoxValidating;
             urlTextBox.Validated += OnUrlTextBoxValidated;
@@ -241,11 +244,22 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [use template checked changed].
         /// </summary>
-        void OnUseTemplateCheckedChanged(object sender, EventArgs e)
+        void OnRequestMethodChanged(object sender, EventArgs e)
         {
             UpdateBodyUI();
 
-            task.UseTemplate = useTemplate.Checked;
+            if (useTemplate.Checked)
+            {
+                task.RequestMethodType = HitUrlRequestMethodType.UseTemplate;
+            }
+            else if (singleRequest.Checked)
+            {
+                task.RequestMethodType = HitUrlRequestMethodType.SingleRequest;
+            }
+            else
+            {
+                task.RequestMethodType = HitUrlRequestMethodType.OneRequestPerFilterResult;
+            }
         }
     }
 }

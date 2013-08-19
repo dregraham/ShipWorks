@@ -7,6 +7,7 @@ using System.Web;
 using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -82,7 +83,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets a value indicating whether to use a template in the request.
         /// </summary>
-        public bool UseTemplate { get; set; }
+        public HitUrlRequestMethodType RequestMethodType { get; set; }
 
         /// <summary>
         /// The object is being deserialized into its values
@@ -139,19 +140,38 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            if (!UseTemplate || TemplateID == 0)
-            {
-                foreach (long inputKey in inputKeys)
-                {
-                    HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-                    string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
-                    ProcessRequest(request, processedUrl);
-                }
-            }
-            else
+            switch (RequestMethodType)
             {
-                base.Run(inputKeys, context);
+                case HitUrlRequestMethodType.OneRequestPerFilterResult:
+                    foreach (long inputKey in inputKeys)
+                    {
+                        string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
+                        ProcessRequest(request, processedUrl);
+                    }
+
+                    break;
+
+                case HitUrlRequestMethodType.SingleRequest:
+
+                    string singleRequestProcessedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
+                    ProcessRequest(request, singleRequestProcessedUrl);
+                    
+                    break;
+
+                case HitUrlRequestMethodType.UseTemplate:
+                    if (TemplateID == 0)
+                    {
+                        throw new ActionTaskRunException("No template selected.");
+                    }
+                    
+                    base.Run(inputKeys, context);
+                    
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Unknown Request Method Type in Run command.");
             }
         }
 
@@ -251,9 +271,12 @@ namespace ShipWorks.Actions.Tasks.Common
         private void LogFormattedRequest(HttpRequestSubmitter request)
         {
             StringBuilder headerText = new StringBuilder();
+
             foreach (string key in request.Headers.Keys)
             {
-                headerText.AppendLine(string.Format("{0}: {1}", key, request.Headers[key]));
+                string value = request.Headers[key];
+
+                headerText.AppendLine(string.Format("{0}: {1}", key, value));
             }
 
             string postContent = Encoding.Default.GetString(request.GetPostContent());

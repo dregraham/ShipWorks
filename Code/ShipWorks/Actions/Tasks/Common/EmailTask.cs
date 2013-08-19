@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using log4net;
 using ShipWorks.Templates;
 using ShipWorks.Data.Model.EntityClasses;
