@@ -158,7 +158,7 @@ namespace Interapptive.Shared.Net
                         case "connection":
                             webRequest.Connection = value;
                             break;
-                        case "except":
+                        case "expect":
                             webRequest.Expect = value;
                             break;
                         case "date":
