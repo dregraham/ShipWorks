@@ -44,6 +44,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
             this.purgeToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.retentionHeading = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
@@ -51,7 +52,7 @@
             // timeoutPurgeCheckbox
             // 
             this.timeoutPurgeCheckbox.AutoSize = true;
-            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 184);
+            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 199);
             this.timeoutPurgeCheckbox.Name = "timeoutPurgeCheckbox";
             this.timeoutPurgeCheckbox.Size = new System.Drawing.Size(185, 17);
             this.timeoutPurgeCheckbox.TabIndex = 10;
@@ -61,7 +62,7 @@
             // timeoutHoursLabel
             // 
             this.timeoutHoursLabel.AutoSize = true;
-            this.timeoutHoursLabel.Location = new System.Drawing.Point(259, 185);
+            this.timeoutHoursLabel.Location = new System.Drawing.Point(258, 200);
             this.timeoutHoursLabel.Name = "timeoutHoursLabel";
             this.timeoutHoursLabel.Size = new System.Drawing.Size(38, 13);
             this.timeoutHoursLabel.TabIndex = 12;
@@ -69,7 +70,7 @@
             // 
             // timeoutInHours
             // 
-            this.timeoutInHours.Location = new System.Drawing.Point(206, 183);
+            this.timeoutInHours.Location = new System.Drawing.Point(206, 198);
             this.timeoutInHours.Minimum = new decimal(new int[] {
             1,
             0,
@@ -87,7 +88,7 @@
             // labelCleanup
             // 
             this.labelCleanup.AutoSize = true;
-            this.labelCleanup.Location = new System.Drawing.Point(18, 159);
+            this.labelCleanup.Location = new System.Drawing.Point(18, 20);
             this.labelCleanup.Name = "labelCleanup";
             this.labelCleanup.Size = new System.Drawing.Size(129, 13);
             this.labelCleanup.TabIndex = 7;
@@ -95,7 +96,7 @@
             // 
             // retentionPeriodInDays
             // 
-            this.retentionPeriodInDays.Location = new System.Drawing.Point(149, 157);
+            this.retentionPeriodInDays.Location = new System.Drawing.Point(149, 20);
             this.retentionPeriodInDays.Maximum = new decimal(new int[] {
             2000,
             0,
@@ -118,7 +119,7 @@
             // retentionDaysLabel
             // 
             this.retentionDaysLabel.AutoSize = true;
-            this.retentionDaysLabel.Location = new System.Drawing.Point(202, 159);
+            this.retentionDaysLabel.Location = new System.Drawing.Point(202, 20);
             this.retentionDaysLabel.Name = "retentionDaysLabel";
             this.retentionDaysLabel.Size = new System.Drawing.Size(34, 13);
             this.retentionDaysLabel.TabIndex = 9;
@@ -127,7 +128,7 @@
             // email
             // 
             this.email.AutoSize = true;
-            this.email.Location = new System.Drawing.Point(21, 67);
+            this.email.Location = new System.Drawing.Point(21, 109);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(92, 17);
             this.email.TabIndex = 3;
@@ -139,7 +140,7 @@
             // audit
             // 
             this.audit.AutoSize = true;
-            this.audit.Location = new System.Drawing.Point(21, 21);
+            this.audit.Location = new System.Drawing.Point(21, 63);
             this.audit.Name = "audit";
             this.audit.Size = new System.Drawing.Size(88, 17);
             this.audit.TabIndex = 1;
@@ -149,7 +150,7 @@
             // printJobs
             // 
             this.printJobs.AutoSize = true;
-            this.printJobs.Location = new System.Drawing.Point(21, 113);
+            this.printJobs.Location = new System.Drawing.Point(21, 155);
             this.printJobs.Name = "printJobs";
             this.printJobs.Size = new System.Drawing.Size(110, 17);
             this.printJobs.TabIndex = 5;
@@ -161,7 +162,7 @@
             // labels
             // 
             this.labels.AutoSize = true;
-            this.labels.Location = new System.Drawing.Point(21, 90);
+            this.labels.Location = new System.Drawing.Point(21, 132);
             this.labels.Name = "labels";
             this.labels.Size = new System.Drawing.Size(132, 17);
             this.labels.TabIndex = 4;
@@ -173,7 +174,7 @@
             // downloads
             // 
             this.downloads.AutoSize = true;
-            this.downloads.Location = new System.Drawing.Point(21, 44);
+            this.downloads.Location = new System.Drawing.Point(21, 86);
             this.downloads.Name = "downloads";
             this.downloads.Size = new System.Drawing.Size(110, 17);
             this.downloads.TabIndex = 2;
@@ -186,7 +187,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(3, 42);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(98, 13);
             this.label1.TabIndex = 0;
@@ -196,7 +197,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 137);
+            this.label2.Location = new System.Drawing.Point(3, 179);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 6;
@@ -205,7 +206,7 @@
             // reclaimDiskSpaceCheckbox
             // 
             this.reclaimDiskSpaceCheckbox.AutoSize = true;
-            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 207);
+            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 223);
             this.reclaimDiskSpaceCheckbox.Name = "reclaimDiskSpaceCheckbox";
             this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(114, 17);
             this.reclaimDiskSpaceCheckbox.TabIndex = 19;
@@ -213,10 +214,21 @@
             this.reclaimDiskSpaceCheckbox.UseVisualStyleBackColor = true;
             this.reclaimDiskSpaceCheckbox.CheckedChanged += new System.EventHandler(this.OnReclaimDiskSpaceCheckedChanged);
             // 
+            // retentionHeading
+            // 
+            this.retentionHeading.AutoSize = true;
+            this.retentionHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.retentionHeading.Location = new System.Drawing.Point(3, 0);
+            this.retentionHeading.Name = "retentionHeading";
+            this.retentionHeading.Size = new System.Drawing.Size(126, 13);
+            this.retentionHeading.TabIndex = 20;
+            this.retentionHeading.Text = "How far back to start";
+            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.retentionHeading);
             this.Controls.Add(this.reclaimDiskSpaceCheckbox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -232,7 +244,7 @@
             this.Controls.Add(this.timeoutHoursLabel);
             this.Controls.Add(this.timeoutInHours);
             this.Name = "PurgeDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(318, 230);
+            this.Size = new System.Drawing.Size(318, 249);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).EndInit();
@@ -258,5 +270,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
         private System.Windows.Forms.ToolTip purgeToolTip;
+        private System.Windows.Forms.Label retentionHeading;
     }
 }
