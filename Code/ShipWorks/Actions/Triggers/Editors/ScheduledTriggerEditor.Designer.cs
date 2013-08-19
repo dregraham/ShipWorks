@@ -86,7 +86,7 @@
             // startDateTimeLabel
             // 
             this.startDateTimeLabel.AutoSize = true;
-            this.startDateTimeLabel.Location = new System.Drawing.Point(0, 29);
+            this.startDateTimeLabel.Location = new System.Drawing.Point(3, 29);
             this.startDateTimeLabel.Name = "startDateTimeLabel";
             this.startDateTimeLabel.Size = new System.Drawing.Size(35, 13);
             this.startDateTimeLabel.TabIndex = 37;
