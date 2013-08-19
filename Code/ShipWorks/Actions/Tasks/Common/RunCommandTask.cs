@@ -45,11 +45,11 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// This task requires input
+        /// This task can use input
         /// </summary>
-        public override bool RequiresInput
+        public override ActionTaskInputRequirement RequiresInput
         {
-            get { return true; }
+            get { return ActionTaskInputRequirement.Optional; }
         }
 
         /// <summary>

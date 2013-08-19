@@ -48,9 +48,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Indicates if the task requires input to function.  Such as the contents of a filter, or the item that caused the action.
         /// </summary>
-        public override bool RequiresInput
+        public override ActionTaskInputRequirement RequiresInput
         {
-            get { return false; }
+            get { return ActionTaskInputRequirement.None; }
         }
 
         /// <summary>
