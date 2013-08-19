@@ -1,21 +1,155 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.FileTransfer;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    /// <summary>
-    /// Allows user to edit all information needed for the FtpFileTask
-    /// </summary>
-    public class FtpFileTaskEditor:TemplateBasedTaskEditor
+    public partial class FtpFileTaskEditor : TemplateBasedTaskEditor
     {
-        private FtpFileTask ftpFileTask;
+        private readonly FtpFileTask task;
+        FtpAccountEntity ftpAccount = null;
 
-        public FtpFileTaskEditor(FtpFileTask ftpFileTask)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FtpFileTaskEditor"/> class.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        public FtpFileTaskEditor(FtpFileTask task) : base(task)
         {
-            // TODO: Complete member initialization
-            this.ftpFileTask = ftpFileTask;
+            if (task == null)
+            {
+                throw new ArgumentNullException("task");
+            }
+
+            InitializeComponent();
+
+            tokenizedFtpFolderFilename.TextChanged += OnTokenizedFtpFolderTextChanged;
+
+            this.task = task;
+
+            LoadFtpAccount();
+        }
+
+        /// <summary>
+        /// Load the ftp account
+        /// </summary>
+        public void LoadFtpAccount()
+        {
+            if (task.FtpAccountID != null)
+            {
+                ftpAccount = FtpAccountManager.GetAccount(task.FtpAccountID.Value);
+            }
+
+            UpdateAccountUI();
+
+            tokenizedFtpFolderFilename.Text = task.FtpFolder;
+
+        }
+
+        ///// <summary>
+        ///// Save the settings from the control into the store
+        ///// </summary>
+        //public bool SaveToEntity(GenericFileStoreEntity store)
+        //{
+        //    if (store.FtpAccountID == null)
+        //    {
+        //        MessageHelper.ShowInformation(this, "Please configure the FTP account that will be monitored for files.");
+        //        return false;
+        //    }
+
+        //    store.FtpFolder = ftpFolder.Text;
+
+        //    return actionsControl.SaveToEntity(store, store.FtpFolder);
+        //}
+
+
+        /// <summary>
+        /// Configure the FTP account connection
+        /// </summary>
+        private void OnConfigureFtp(object sender, EventArgs e)
+        {
+            // If there is no account, this button is acting as the "new" button
+            if (ftpAccount == null)
+            {
+                using (AddFtpAccountWizard wizard = new AddFtpAccountWizard(true))
+                {
+                    if (wizard.ShowDialog(this) == DialogResult.OK)
+                    {
+                        FtpAccountManager.CheckForChangesNeeded();
+                        ftpAccount = wizard.FtpAccount;
+                        tokenizedFtpFolderFilename.Text = wizard.InitialFolder;
+                        
+                        // Update the store to use this new account
+                        task.FtpAccountID = ftpAccount.FtpAccountID;
+
+                        // We own this account
+                        ftpAccount.InternalOwnerID = null;
+                        SqlAdapter.Default.SaveAndRefetch(ftpAccount);
+
+                        UpdateAccountUI();
+                    }
+                }
+            }
+            else
+            {
+                using (FtpAccountEditorDlg dlg = new FtpAccountEditorDlg(ftpAccount))
+                {
+                    dlg.ShowDialog(this);
+
+                    UpdateAccountUI();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Browse the FTP server
+        /// </summary>
+        private void OnBrowseFtp(object sender, EventArgs e)
+        {
+            if (ftpAccount != null)
+            {
+                using (FtpFolderBrowserDlg ftpFolderBrowserDlg = new FtpFolderBrowserDlg(ftpAccount, ""))
+                {
+                    if (ftpFolderBrowserDlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        tokenizedFtpFolderFilename.Text = ftpFolderBrowserDlg.SelectedFolder;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update the description text and UI stuff of the email account
+        /// </summary>
+        private void UpdateAccountUI()
+        {
+            if (ftpAccount == null)
+            {
+                ftpHost.Text = "";
+            }
+            else
+            {
+                ftpHost.Text = ftpAccount.Host;
+            }
+        }
+
+        /// <summary>
+        /// Called when [tokenized execute command text changed] to update the command property of the task.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnTokenizedFtpFolderTextChanged(object sender, EventArgs e)
+        {
+            task.FtpFolder = tokenizedFtpFolderFilename.Text;
         }
     }
 }

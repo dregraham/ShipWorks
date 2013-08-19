@@ -17,13 +17,13 @@ namespace ShipWorks.Actions.Tasks.Common
     public class FtpFileTask : TemplateBasedTask
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(EmailTask));
+        static readonly ILog log = LogManager.GetLogger(typeof(FtpFileTask));
 
         /// <summary>
         /// Gets or sets the FTP account unique identifier.
         /// </summary>
 
-        public int FtpAccountID { get; set; }
+        public long? FtpAccountID { get; set; }
         
         /// <summary>
         /// Gets or sets the FTP folder.
@@ -35,6 +35,18 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public string FtpFileName { get; set; }
 
+
+        /// <summary>
+        /// The label that goes before what the data source for the task should be.
+        /// </summary>
+        public override string InputLabel
+        {
+            get
+            {
+                return "Ftp file using:";
+            }
+        }
+		
         /// <summary>
         /// Gets a value indicating whether to postpone running or not.
         /// </summary>
