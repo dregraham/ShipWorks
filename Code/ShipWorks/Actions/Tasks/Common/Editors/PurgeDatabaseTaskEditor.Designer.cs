@@ -41,20 +41,15 @@
             this.downloads = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.allStoresLabel = new System.Windows.Forms.Label();
-            this.allStoresImage = new System.Windows.Forms.PictureBox();
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
-            this.selectAllLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.selectNoneLinkLabel = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.allStoresImage)).BeginInit();
             this.SuspendLayout();
             // 
             // timeoutPurgeCheckbox
             // 
             this.timeoutPurgeCheckbox.AutoSize = true;
-            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(18, 207);
+            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 184);
             this.timeoutPurgeCheckbox.Name = "timeoutPurgeCheckbox";
             this.timeoutPurgeCheckbox.Size = new System.Drawing.Size(185, 17);
             this.timeoutPurgeCheckbox.TabIndex = 10;
@@ -64,7 +59,7 @@
             // timeoutHoursLabel
             // 
             this.timeoutHoursLabel.AutoSize = true;
-            this.timeoutHoursLabel.Location = new System.Drawing.Point(256, 208);
+            this.timeoutHoursLabel.Location = new System.Drawing.Point(259, 185);
             this.timeoutHoursLabel.Name = "timeoutHoursLabel";
             this.timeoutHoursLabel.Size = new System.Drawing.Size(38, 13);
             this.timeoutHoursLabel.TabIndex = 12;
@@ -72,7 +67,7 @@
             // 
             // timeoutInHours
             // 
-            this.timeoutInHours.Location = new System.Drawing.Point(203, 206);
+            this.timeoutInHours.Location = new System.Drawing.Point(206, 183);
             this.timeoutInHours.Minimum = new decimal(new int[] {
             1,
             0,
@@ -90,7 +85,7 @@
             // labelCleanup
             // 
             this.labelCleanup.AutoSize = true;
-            this.labelCleanup.Location = new System.Drawing.Point(15, 182);
+            this.labelCleanup.Location = new System.Drawing.Point(18, 159);
             this.labelCleanup.Name = "labelCleanup";
             this.labelCleanup.Size = new System.Drawing.Size(129, 13);
             this.labelCleanup.TabIndex = 7;
@@ -98,7 +93,7 @@
             // 
             // retentionPeriodInDays
             // 
-            this.retentionPeriodInDays.Location = new System.Drawing.Point(146, 180);
+            this.retentionPeriodInDays.Location = new System.Drawing.Point(149, 157);
             this.retentionPeriodInDays.Maximum = new decimal(new int[] {
             2000,
             0,
@@ -121,7 +116,7 @@
             // retentionDaysLabel
             // 
             this.retentionDaysLabel.AutoSize = true;
-            this.retentionDaysLabel.Location = new System.Drawing.Point(199, 182);
+            this.retentionDaysLabel.Location = new System.Drawing.Point(202, 159);
             this.retentionDaysLabel.Name = "retentionDaysLabel";
             this.retentionDaysLabel.Size = new System.Drawing.Size(34, 13);
             this.retentionDaysLabel.TabIndex = 9;
@@ -130,7 +125,7 @@
             // email
             // 
             this.email.AutoSize = true;
-            this.email.Location = new System.Drawing.Point(18, 90);
+            this.email.Location = new System.Drawing.Point(21, 67);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(50, 17);
             this.email.TabIndex = 3;
@@ -140,7 +135,7 @@
             // audit
             // 
             this.audit.AutoSize = true;
-            this.audit.Location = new System.Drawing.Point(18, 44);
+            this.audit.Location = new System.Drawing.Point(21, 21);
             this.audit.Name = "audit";
             this.audit.Size = new System.Drawing.Size(74, 17);
             this.audit.TabIndex = 1;
@@ -150,7 +145,7 @@
             // printJobs
             // 
             this.printJobs.AutoSize = true;
-            this.printJobs.Location = new System.Drawing.Point(18, 136);
+            this.printJobs.Location = new System.Drawing.Point(21, 113);
             this.printJobs.Name = "printJobs";
             this.printJobs.Size = new System.Drawing.Size(73, 17);
             this.printJobs.TabIndex = 5;
@@ -160,7 +155,7 @@
             // labels
             // 
             this.labels.AutoSize = true;
-            this.labels.Location = new System.Drawing.Point(18, 113);
+            this.labels.Location = new System.Drawing.Point(21, 90);
             this.labels.Name = "labels";
             this.labels.Size = new System.Drawing.Size(56, 17);
             this.labels.TabIndex = 4;
@@ -170,7 +165,7 @@
             // downloads
             // 
             this.downloads.AutoSize = true;
-            this.downloads.Location = new System.Drawing.Point(18, 67);
+            this.downloads.Location = new System.Drawing.Point(21, 44);
             this.downloads.Name = "downloads";
             this.downloads.Size = new System.Drawing.Size(115, 17);
             this.downloads.TabIndex = 2;
@@ -181,7 +176,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(0, 28);
+            this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(98, 13);
             this.label1.TabIndex = 0;
@@ -191,36 +186,16 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(0, 160);
+            this.label2.Location = new System.Drawing.Point(3, 137);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "Options";
             // 
-            // allStoresLabel
-            // 
-            this.allStoresLabel.AutoSize = true;
-            this.allStoresLabel.Location = new System.Drawing.Point(19, 4);
-            this.allStoresLabel.Name = "allStoresLabel";
-            this.allStoresLabel.Size = new System.Drawing.Size(125, 13);
-            this.allStoresLabel.TabIndex = 18;
-            this.allStoresLabel.Text = "This will affect all stores.";
-            this.allStoresLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // allStoresImage
-            // 
-            this.allStoresImage.Image = global::ShipWorks.Properties.Resources.information16;
-            this.allStoresImage.Location = new System.Drawing.Point(3, 3);
-            this.allStoresImage.Name = "allStoresImage";
-            this.allStoresImage.Size = new System.Drawing.Size(16, 16);
-            this.allStoresImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.allStoresImage.TabIndex = 17;
-            this.allStoresImage.TabStop = false;
-            // 
             // reclaimDiskSpaceCheckbox
             // 
             this.reclaimDiskSpaceCheckbox.AutoSize = true;
-            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(18, 230);
+            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 207);
             this.reclaimDiskSpaceCheckbox.Name = "reclaimDiskSpaceCheckbox";
             this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(114, 17);
             this.reclaimDiskSpaceCheckbox.TabIndex = 19;
@@ -228,37 +203,11 @@
             this.reclaimDiskSpaceCheckbox.UseVisualStyleBackColor = true;
             this.reclaimDiskSpaceCheckbox.CheckedChanged += new System.EventHandler(this.OnReclaimDiskSpaceCheckedChanged);
             // 
-            // selectAllLinkLabel
-            // 
-            this.selectAllLinkLabel.AutoSize = true;
-            this.selectAllLinkLabel.Location = new System.Drawing.Point(104, 28);
-            this.selectAllLinkLabel.Name = "selectAllLinkLabel";
-            this.selectAllLinkLabel.Size = new System.Drawing.Size(49, 13);
-            this.selectAllLinkLabel.TabIndex = 20;
-            this.selectAllLinkLabel.TabStop = true;
-            this.selectAllLinkLabel.Text = "Select all";
-            this.selectAllLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnSelectAllLinkClicked);
-            // 
-            // selectNoneLinkLabel
-            // 
-            this.selectNoneLinkLabel.AutoSize = true;
-            this.selectNoneLinkLabel.Location = new System.Drawing.Point(160, 28);
-            this.selectNoneLinkLabel.Name = "selectNoneLinkLabel";
-            this.selectNoneLinkLabel.Size = new System.Drawing.Size(63, 13);
-            this.selectNoneLinkLabel.TabIndex = 21;
-            this.selectNoneLinkLabel.TabStop = true;
-            this.selectNoneLinkLabel.Text = "Select none";
-            this.selectNoneLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnSelectNoneLinkClicked);
-            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.selectNoneLinkLabel);
-            this.Controls.Add(this.selectAllLinkLabel);
             this.Controls.Add(this.reclaimDiskSpaceCheckbox);
-            this.Controls.Add(this.allStoresLabel);
-            this.Controls.Add(this.allStoresImage);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.downloads);
@@ -273,11 +222,10 @@
             this.Controls.Add(this.timeoutHoursLabel);
             this.Controls.Add(this.timeoutInHours);
             this.Name = "PurgeDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(318, 249);
+            this.Size = new System.Drawing.Size(318, 230);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.allStoresImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -298,10 +246,6 @@
         private System.Windows.Forms.CheckBox downloads;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label allStoresLabel;
-        private System.Windows.Forms.PictureBox allStoresImage;
         private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
-        private System.Windows.Forms.LinkLabel selectAllLinkLabel;
-        private System.Windows.Forms.LinkLabel selectNoneLinkLabel;
     }
 }
