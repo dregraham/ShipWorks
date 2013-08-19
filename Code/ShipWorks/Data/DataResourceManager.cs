@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
 using System.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.SqlServer.Common.Data;
 using log4net;
 using System.Diagnostics;
 using Interapptive.Shared;
@@ -379,20 +384,29 @@ namespace ShipWorks.Data
             try
             {
                 // we always want this call to be the deadlock victim
-                using (SqlDeadlockPriorityScope priorityScope = new SqlDeadlockPriorityScope(-5))
+                using (new SqlDeadlockPriorityScope(-5))
                 {
-                    using (SqlAdapter adapter = new SqlAdapter())
+                    using (SqlConnection connection = SqlSession.Current.OpenConnection())
                     {
-                        adapter.CommandTimeOut = (int)TimeSpan.FromMinutes(15).TotalSeconds;
+                        try
+                        {
+                            string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
 
-                        // DELETE Resource WHERE ResourceID NOT IN (SELECT ObjectID FROM ObjectReference)
-                        adapter.DeleteEntitiesDirectly(typeof(ResourceEntity),
-                            new RelationPredicateBucket(
-                                new FieldCompareSetPredicate(
-                                    ResourceFields.ResourceID, null,
-                                    ObjectReferenceFields.ObjectID, null,
-                                    SetOperator.In, null,
-                                    true)));
+                            using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
+                            {
+                                command.CommandType = CommandType.StoredProcedure;
+                                // Disable the command timeout since the scripts should take care of timing themselves out
+                                command.CommandTimeout = (int)TimeSpan.FromMinutes(15).TotalSeconds;
+                                command.Parameters.AddWithValue("@earliestRetentionDateInUtc", DateTime.UtcNow);
+                                command.Parameters.AddWithValue("@latestExecutionTimeInUtc", DateTime.UtcNow.AddMinutes(15));
+
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        catch (SqlLockException ex)
+                        {
+                            log.Warn(ex.Message);
+                        }
                     }
                 }
             }

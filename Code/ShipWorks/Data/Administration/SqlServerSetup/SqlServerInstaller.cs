@@ -533,6 +533,251 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             Environment.ExitCode = exitCode;
         }
 
+        /// <summary>
+        /// "Upgrade" a LocalDB instance to a full instance of SQL Server.  This is done by installing a full instance, and migrating the data files to it.
+        /// </summary>
+        public string UpgradeLocalDb()
+        {
+            log.Info("Launching external process to elevate permissions to upgrade SQL server Local DB.");
+            lastExitCode = 0;
+
+            string instanceName = DetermineLocalDbUpgradedInstanceName();
+
+            // We need to launch the process to elevate ourselves.
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, string.Format("/command:sqlserver -action=upgradelocaldb -instance=\"{0}\"", instanceName));
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.EnableRaisingEvents = true;
+            process.Exited += new EventHandler(OnInstallerExited);
+
+            // Elevate for vista
+            if (MyComputer.IsWindowsVistaOrHigher)
+            {
+                process.StartInfo.Verb = "runas";
+            }
+
+            process.Start();
+
+            return instanceName;
+        }
+
+        /// <summary>
+        /// The actual installation that occurs in a seperate elevated process
+        /// </summary>
+        private void UpgradeLocalDbInternal(string instanceName)
+        {
+            string serverInstance = Environment.MachineName + "\\" + instanceName;
+
+            int exitCode = 0;
+
+            try
+            {
+                // If this instance is already installed, then we are reusing an existing instance.  If it's not, we need to install it now
+                if (!SqlInstanceUtility.IsSqlInstanceInstalled(instanceName))
+                {
+                    // Go ahead and do the full install
+                    InstallSqlServerInternal(instanceName, SqlInstanceUtility.ShipWorksSaPassword);
+
+                    // Record this as our upgraded SQL Server.  It may not have even worked - that's ok. B\c when we come back through again, we won't be able to connect,
+                    // and we'll use another name.
+                    using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))
+                    {
+                        key.SetValue("Automatic", instanceName);
+                    }
+
+                    // If that wasn't succesfull, go ahead and punt now
+                    if (Environment.ExitCode != 0)
+                    {
+                        return;
+                    }
+                }
+
+                //
+                // At this point, SQL Server should be succesfully installed and running.  Now we need to move the mdf\ldf
+                //
+
+                DatabaseFileInfo fileInfo;
+
+                // Old LocalDb session
+                SqlSession localDbSession = SqlSession.Current;
+                if (localDbSession.Configuration.ServerInstance != SqlInstanceUtility.LocalDbServerInstance)
+                {
+                    throw new InvalidOperationException("Cannot upgrade a non-LocalDb server instance.");
+                }
+
+                // New upgraded session
+                SqlSession newSession = new SqlSession(SqlInstanceUtility.DetermineCredentials(serverInstance));
+
+                // Detatch the database from LocalDb
+                log.InfoFormat("Detaching mdf-ldf from LocalDB");
+                using (SqlConnection con = localDbSession.OpenConnection())
+                {
+                    fileInfo = DetachDatabase(localDbSession.Configuration.DatabaseName, con);
+                }
+
+                // Path where the db files are moving
+                string newFilePath;
+
+                // Figure out the path where they are going to go
+                using (SqlConnection con = newSession.OpenConnection())
+                {
+                    newFilePath = SqlUtility.GetMasterDataFilePath(con);
+                }
+
+                // Get the next available database name to use
+                string databaseName = AssignAutomaticDatabaseNameInternal();
+
+                // If it returned nul, there was an error and Environment.ExitCode is already set.
+                if (databaseName == null)
+                {
+                    return;
+                }
+
+                // Determine what filename is available in the new folder.  Most likely there won't be a conflict, but this ensures it
+                string dataFileBase = ShipWorksDatabaseUtility.DetermineAvailableFileName(newFilePath, databaseName);
+
+                string targetMdf = Path.Combine(newFilePath, dataFileBase + ".mdf");
+                string targetLdf = Path.Combine(newFilePath, dataFileBase + "_log.ldf");
+
+                // Physically move the files
+                File.Move(fileInfo.DataFile, targetMdf);
+                File.Move(fileInfo.LogFile, targetLdf);
+
+                log.InfoFormat("Attaching database {0} into newly installed SQL instance.", fileInfo.Database);
+
+                // Now we attach the db files into the full instance
+                using (SqlConnection con = newSession.OpenConnection())
+                {
+                    SqlCommandProvider.ExecuteNonQuery(con, string.Format(
+                                    @"CREATE DATABASE {0} 
+	                                ON (FILENAME = '{1}'),
+	                                   (FILENAME = '{2}')
+	                                FOR ATTACH", databaseName, targetMdf, targetLdf));
+                }
+            }
+            catch (Win32Exception ex)
+            {
+                log.Error("Error upgrading local DB", ex);
+                exitCode = ex.ErrorCode;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error installing sql server", ex);
+                exitCode = unknownException;
+            }
+
+            Environment.ExitCode = exitCode;
+        }
+
+        /// <summary>
+        /// Get the instance name that will be used (or has already been used) for the LocalDB upgraded SQL Server instance
+        /// </summary>
+        private string DetermineLocalDbUpgradedInstanceName()
+        {
+            // See what the automatic instance is considered to be now
+            string automaticInstance = SqlInstanceUtility.AutomaticServerInstance;
+
+            // If its LocalDB, then we need to generate a new instance name to be used for the full version to upgrade local db to
+            if (automaticInstance == SqlInstanceUtility.LocalDbServerInstance)
+            {
+                // Now, figure out what the instance name will be
+                string baseName = "ShipWorks";
+                string instanceName = baseName;
+
+                int index = 1;
+
+                while (SqlInstanceUtility.IsSqlInstanceInstalled(instanceName))
+                {
+                    instanceName = string.Format("{0}{1}", baseName, index++);
+                }
+
+                return instanceName;
+            }
+            else
+            {
+                // we must have already upgraded it to full sql server in the past - just use it
+                return SqlInstanceUtility.ExtractInstanceName(automaticInstance);
+            }
+        }
+
+        /// <summary>
+        /// Assign the automatic database name to use for the automatic full server instance that LocalDb was upgraded to
+        /// </summary>
+        public void AssignAutomaticDatabaseName()
+        {
+            log.Info("Launching external process to elevate permissions to assign the automatic database name.");
+            lastExitCode = 0;
+
+            // We need to launch the process to elevate ourselves.
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, "/command:sqlserver -action=assignautomaticdbname");
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.EnableRaisingEvents = true;
+            process.Exited += new EventHandler(OnInstallerExited);
+
+            // Elevate for vista
+            if (MyComputer.IsWindowsVistaOrHigher)
+            {
+                process.StartInfo.Verb = "runas";
+            }
+
+            process.Start();
+        }
+
+        /// <summary>
+        /// Excecutes in an elevated process to assign the name to use for the database in the full version of sql server that LocalDb was upgraded to
+        /// </summary>
+        private string AssignAutomaticDatabaseNameInternal()
+        {
+            int exitCode = 0;
+
+            try
+            {
+                // At this point, the AutomaticServerInstance has to be created
+                if (SqlInstanceUtility.AutomaticServerInstance == SqlInstanceUtility.LocalDbServerInstance)
+                {
+                    throw new InvalidOperationException("Automatic instance should be created already.");
+                }
+
+                SqlSession session = new SqlSession(SqlInstanceUtility.DetermineCredentials(SqlInstanceUtility.AutomaticServerInstance));
+
+                string baseName = "ShipWorks";
+                string databaseName = baseName;
+
+                using (SqlConnection con = session.OpenConnection())
+                {
+                    List<string> existingNames = ShipWorksDatabaseUtility.GetDatabaseDetails(con).Select(d => d.Name).ToList();
+
+                    int index = 1;
+                    while (existingNames.Contains(databaseName))
+                    {
+                        databaseName = string.Format("{0}{1}", baseName, index++);
+                    }
+
+                    // Now record that this is the database that is to be used for full instances for this path by default
+                    using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))
+                    {
+                        key.SetValue(ShipWorksSession.InstanceID.ToString("B"), databaseName);
+                    }
+
+                    return databaseName;
+                }
+            }
+            catch (Win32Exception ex)
+            {
+                log.Error("Error upgrading local DB", ex);
+                exitCode = ex.ErrorCode;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error installing sql server", ex);
+                exitCode = unknownException;
+            }
+
+            Environment.ExitCode = exitCode;
+            return null;
+        }
+
         #endregion
 
         #region Upgrading
@@ -900,13 +1145,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             if (!alreadyInstalled)
             {
-#if DEBUG
-                if (File.Exists(@"C:\msderebootbefore"))
-                {
-                    Environment.ExitCode = 0x1BC2;
-                    return false;
-                }
-#endif
                 string saPassword = needOverrideSa ? "temporary" : sqlSession.Configuration.Password;
                 string args = GetInstallArgs(instance, saPassword, true);
 
@@ -918,13 +1156,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 process.Start();
                 process.WaitForExit();
 
-#if DEBUG
-                if (File.Exists(@"C:\msderebootafter"))
-                {
-                    Environment.ExitCode = ExitCodeSuccessRebootRequired;
-                    return false;
-                }
-#endif
                 if (process.ExitCode != 0)
                 {
                     log.InfoFormat("SQL Server failed to install for reason: '{0}'", process.ExitCode);
@@ -948,7 +1179,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             log.InfoFormat("SQL 08 upgrade completed.");
-
 
             // Make sure its running and accepting connections before moving on
             ConnectUntilSuccess(copySession, TimeSpan.FromSeconds(15));
@@ -1081,49 +1311,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 // Go through each user database...
                 foreach (string database in databaseNames.Rows.Cast<DataRow>().Select(r => (string) r[0]))
                 {
-                    // sp_helpfile acts on the current database
-                    con.ChangeDatabase(database);
-
-                    // We should use sys.database_files... but, this is MSDE... it doesn't exist!
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
-                    cmd.CommandText = "EXEC sp_helpfile";
-
-                    DatabaseFileInfo databaseInfo = new DatabaseFileInfo() { Database = database };
-
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
-                    {
-                        while (reader.Read())
-                        {
-                            string file = ((string) reader["filename"]).Trim();
-
-                            if (file.ToLower().EndsWith("mdf"))
-                            {
-                                databaseInfo.DataFile = file;
-                            }
-
-                            if (file.ToLower().EndsWith("ldf"))
-                            {
-                                databaseInfo.LogFile = file;
-                            }
-                        }
-                    }
-
-                    log.InfoFormat("Detaching database '{0}' ('{1}', '{2}')", databaseInfo.Database, databaseInfo.DataFile, databaseInfo.LogFile);
-
-                    if (databaseInfo.DataFile == null || databaseInfo.LogFile == null)
-                    {
-                        throw new FileNotFoundException("Could not locate physical database files.");
-                    }
-
-                    // Make sure nobody else is on this database right now, so that detach will work
-                    SqlUtility.SetSingleUser(con);
-                    
-                    // Have to get out of the db to detach
-                    con.ChangeDatabase("master");
-
-                    SqlCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
-
-                    databaseFiles.Add(databaseInfo);
+                    databaseFiles.Add(DetachDatabase(database, con));
                 }
             }
 
@@ -1271,6 +1459,58 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
         #endregion
 
+        #region Common and Command Line
+
+        /// <summary>
+        /// Detach the database found on the given connection, and return the physical file information about it
+        /// </summary>
+        private static DatabaseFileInfo DetachDatabase(string database, SqlConnection con)
+        {
+            // sp_helpfile acts on the current database
+            con.ChangeDatabase(database);
+
+            // We should use sys.database_files... but, this may be MSDE... it may not exist!
+            SqlCommand cmd = SqlCommandProvider.Create(con);
+            cmd.CommandText = "EXEC sp_helpfile";
+
+            DatabaseFileInfo databaseInfo = new DatabaseFileInfo() { Database = database };
+
+            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            {
+                while (reader.Read())
+                {
+                    string file = ((string) reader["filename"]).Trim();
+
+                    if (file.ToLower().EndsWith("mdf"))
+                    {
+                        databaseInfo.DataFile = file;
+                    }
+
+                    if (file.ToLower().EndsWith("ldf"))
+                    {
+                        databaseInfo.LogFile = file;
+                    }
+                }
+            }
+
+            log.InfoFormat("Detaching database '{0}' ('{1}', '{2}')", databaseInfo.Database, databaseInfo.DataFile, databaseInfo.LogFile);
+
+            if (databaseInfo.DataFile == null || databaseInfo.LogFile == null)
+            {
+                throw new FileNotFoundException("Could not locate physical database files.");
+            }
+
+            // Make sure nobody else is on this database right now, so that detach will work
+            SqlUtility.SetSingleUser(con);
+
+            // Have to get out of the db to detach
+            con.ChangeDatabase("master");
+
+            SqlCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
+
+            return databaseInfo;
+        }
+
         /// <summary>
         /// Handle commands comming in from the command line for sql server
         /// </summary>
@@ -1309,6 +1549,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     throw new CommandLineCommandArgumentException(CommandName, "action", "The required 'action' parameter was not specified.");
                 }
 
+                // Normally this happens as a part of app startup, but not when running command line.
+                SqlSession.Initialize();
+
                 try
                 {
                     switch (action)
@@ -1323,8 +1566,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                                 log.InfoFormat("Processing request to upgrade SQL Sever");
 
-                                // Normally this happens as a part of app startup, but not when running command line.
-                                SqlSession.Initialize();
 
                                 // We need to initialize an installer to get the correct installer package exe's
                                 SqlServerInstaller installer = new SqlServerInstaller();
@@ -1371,6 +1612,35 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                                 break;
                             }
 
+                        case "upgradelocaldb":
+                            {
+                                log.InfoFormat("Processing request to upgrade local db. {0}", instance);
+
+                                if (instance == null)
+                                {
+                                    throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
+                                }
+
+                                // We need to initialize an installer to get the correct installer package exe's
+                                SqlServerInstaller installer = new SqlServerInstaller();
+                                installer.InitializeForCurrentSqlSession();
+                                installer.UpgradeLocalDbInternal(instance);
+
+                                break;
+                            }
+
+                        case "assignautomaticdbname":
+                            {
+                                log.InfoFormat("Processing request to assign automatic database name.");
+
+                                // We need to initialize an installer to get the correct installer package exe's
+                                SqlServerInstaller installer = new SqlServerInstaller();
+                                installer.InitializeForCurrentSqlSession();
+                                installer.AssignAutomaticDatabaseNameInternal();
+
+                                break;
+                            }
+
                         default:
                             {
                                 throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
@@ -1384,5 +1654,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 }
             }
         }
+
+        #endregion
     }
 }

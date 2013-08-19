@@ -56,9 +56,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// This task does not require any input to run.
         /// </summary>
-        public override bool RequiresInput
+        public override ActionTaskInputRequirement RequiresInput
         {
-            get { return false; }
+            get { return ActionTaskInputRequirement.None; }
         }
 
         /// <summary>
@@ -121,7 +121,14 @@ namespace ShipWorks.Actions.Tasks.Common
 
             Dictionary<PurgeDatabaseType, Exception> exceptions = new Dictionary<PurgeDatabaseType, Exception>();
 
-            IEnumerable<PurgeDatabaseType> purges = purgeOrder.Intersect(Purges);
+            List<PurgeDatabaseType> purges = purgeOrder.Intersect(Purges).ToList();
+
+            // If we try to do any purges, add the deletion of abandoned resources last.
+            if (purges.Any())
+            {
+                purges.Insert(purges.Count, PurgeDatabaseType.AbandonedResources);
+            }
+
             foreach (PurgeDatabaseType purge in purges)
             {
                 // Stop executing if we've been running longer than the time the user has allowed.
@@ -136,7 +143,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, earliestRetentionDateInUtc);
                 try
                 {
-                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, CanTimeout ? sqlStopExecutionAfter : (DateTime?)null);
+                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, CanTimeout ? sqlStopExecutionAfter : (DateTime?)null, 5);
                     log.InfoFormat("Finished {0} successfully.", scriptName);
                 }
                 catch (DbException ex)
@@ -146,12 +153,6 @@ namespace ShipWorks.Actions.Tasks.Common
                     exceptions.Add(purge, ex);
                     log.InfoFormat("Error running purge: {0}.", ex.Message);
                 }
-            }
-
-            if (purges.Any() && (!CanTimeout || localStopExecutionAfter < dateProvider.UtcNow))
-            {
-                // Resources may have been orphaned during the purge, so ask they be deleted.
-                scriptRunner.PurgeAbandonedResources();
             }
 
             try

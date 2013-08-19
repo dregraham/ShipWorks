@@ -185,3 +185,4 @@ Code/ShipWorks.Native/x64
 /Backup2
 LLBLGen/ShipWorks[0-9]*.lgp
 InstallUtil.InstallLog
+Build/InnoSetup.iss

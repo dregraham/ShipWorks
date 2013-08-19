@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -98,9 +99,9 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Indicates if the task requires input to function.  Such as the contents of a filter, or the item that caused the action.
         /// </summary>
-        public virtual bool RequiresInput
+        public virtual ActionTaskInputRequirement RequiresInput
         {
-            get { return true; }
+            get { return ActionTaskInputRequirement.Required; }
         }
 
         /// <summary>
@@ -110,9 +111,9 @@ namespace ShipWorks.Actions.Tasks
         {
             get
             {
-                if (RequiresInput)
+                if (RequiresInput != ActionTaskInputRequirement.None)
                 {
-                    throw new NotImplementedException("Must be overridden by derived class when input is required.");
+                    throw new NotImplementedException("Must be overridden by derived class when input is required or optional.");
                 }
 
                 return string.Empty;

@@ -256,6 +256,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         private static string GetEtsyCarrierCode(ShipmentEntity shipment)
         {
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
 
             switch (type)

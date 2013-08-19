@@ -19,17 +19,12 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
         /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
-        void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc);
+        /// <param name="retryAttempts">Number of times to retry the purge if a handleable error is detected.  Pass 0 to not retry.</param>
+        void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc, int retryAttempts);
 
         /// <summary>
         /// Connects to the database and attempts to shrink the database.
         /// </summary>
         void ShrinkDatabase();
-
-        /// <summary>
-        /// Makes a call to DataResourceManager.DeleteAbandonedResourceData() to delete any abandoned Resource rows.
-        /// This is a wrapper method for testing purposes.
-        /// </summary>
-        void PurgeAbandonedResources();
     }
 }

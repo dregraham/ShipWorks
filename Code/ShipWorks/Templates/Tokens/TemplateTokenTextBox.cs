@@ -244,10 +244,7 @@ namespace ShipWorks.Templates.Tokens
             set
             {
                 tokenTextBox.Multiline = value;
-
-                // NOTE: Uncomment KryptonTextBox ever gets fixed to look prettier with scrollbars on
-                // tokenTextBox.ScrollBars = value ? ScrollBars.Vertical : ScrollBars.None;
-
+                tokenTextBox.ScrollBars = value ? ScrollBars.Vertical : ScrollBars.None;
                 tokenTextBox.AcceptsReturn = value;
             }
         }

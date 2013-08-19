@@ -602,7 +602,7 @@ namespace ShipWorks.Data.Administration
                     if (!SqlUtility.DoesDatabaseExist(con, database.DatabaseName))
                     {
                         log.InfoFormat("Creating new blank database to restore into");
-                        SqlDatabaseCreator.CreateDatabase(database.DatabaseName, con);
+                        ShipWorksDatabaseUtility.CreateDatabase(database.DatabaseName, con);
                     }
                 }
 

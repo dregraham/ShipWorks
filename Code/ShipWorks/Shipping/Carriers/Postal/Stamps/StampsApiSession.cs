@@ -934,12 +934,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USASC });
                 }
-
-                // Add in the hidden postage option (but not supported for envelopes)
-                if (shipment.Postal.Stamps.HidePostage && shipment.Postal.PackagingType != (int) PostalPackagingType.Envelope)
-                {
-                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.SCAHP });
-                }
             }
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
@@ -955,6 +949,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USASR });
                 }
+            }
+
+            // Add in the hidden postage option (but not supported for envelopes)
+            if (shipment.Postal.Stamps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
+            {
+                addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.SCAHP });
             }
 
             if (addOns.Count > 0)

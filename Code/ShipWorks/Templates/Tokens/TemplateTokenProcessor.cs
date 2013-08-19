@@ -50,15 +50,15 @@ namespace ShipWorks.Templates.Tokens
         /// <summary>
         /// Process tokens in the token string with the given entity
         /// </summary>
-        public static string ProcessTokens(string tokenText, long entityID)
+        public static string ProcessTokens(string tokenText, long entityID, bool stripNewLines = true)
         {
-            return ProcessTokens(tokenText, new List<long> { entityID });
+            return ProcessTokens(tokenText, new List<long> { entityID }, stripNewLines);
         }
 
         /// <summary>
         /// Process the tokens in the token string for the given Template Input
         /// </summary>
-        public static string ProcessTokens(string tokenText, TemplateXPathNavigator xpath)
+        public static string ProcessTokens(string tokenText, TemplateXPathNavigator xpath, bool stripNewLines = true)
         {
             if (!HasTokens(tokenText))
             {
@@ -73,8 +73,11 @@ namespace ShipWorks.Templates.Tokens
 
                 StringBuilder sb = new StringBuilder(result.ReadResult());
 
-                // Return the result, with newlines stripped
-                sb.Replace("\r", "").Replace("\n", "");
+                if (stripNewLines)
+                {
+                    // Return the result, with newlines stripped
+                    sb.Replace("\r", "").Replace("\n", "");
+                }
 
                 return sb.ToString();
             }
@@ -99,7 +102,7 @@ namespace ShipWorks.Templates.Tokens
         /// <summary>
         /// Process the tokens in the token string for the given entity ID
         /// </summary>
-        public static string ProcessTokens(string tokenText, List<long> idList)
+        public static string ProcessTokens(string tokenText, List<long> idList, bool stripNewLines = true)
         {
             if (!HasTokens(tokenText))
             {
@@ -114,7 +117,7 @@ namespace ShipWorks.Templates.Tokens
 
             TemplateXPathNavigator xpath = new TemplateXPathNavigator(context);
 
-            return ProcessTokens(tokenText, xpath);
+            return ProcessTokens(tokenText, xpath, stripNewLines);
         }
 
         /// <summary>

@@ -10,6 +10,8 @@ using Interapptive.Shared;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Win32;
 using System.Text.RegularExpressions;
+using ShipWorks.Data.Connection;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -29,14 +31,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Get the name of the LocalDB instance we display to users
-        /// </summary>
-        public static string LocalDbDisplayName
-        {
-            get { return "(Local)"; }
-        }
-
-        /// <summary>
         /// The default password ShipWorks uses for sa when it installs new SQL instances
         /// </summary>
         public static string ShipWorksSaPassword
@@ -53,71 +47,39 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Get the database name to use for LocalDb for this instance of ShipWorks
+        /// Get the server instance that ShipWorks should connect to in simple\automatic mode.  This either returns the LocalDb server instance,
+        /// or the SQL Server instance that was upgraded to from LocalDB
         /// </summary>
-        public static string LocalDbDatabaseName
+        public static string AutomaticServerInstance
         {
             get
             {
-                // This opens up the Current User hive, which
-                // - we know we will have read\write access to
-                // - is fine, b\c we are using implicit LocalDb databases, which are relative to the current user account, so we don't need LocalMachine anyway
-                RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\LocalDB");
-
-                // See if we've already created a database name for this ShipWorks instance
-                string databaseName = registry.GetValue(ShipWorksSession.InstanceID.ToString(), "");
-                if (!string.IsNullOrEmpty(databaseName))
-                {
-                    return databaseName;
-                }
-
-                // We put the underscore so we can try to not conflict with databases users may end up creating on their own
-                string baseName = "_ShipWorks";
-
-                int largestIndex = -1;
-
-                // Find out all the names that have been used so far
-                using (RegistryKey key = registry.OpenKey(null))
+                // First, see if there is already an instance name recorded
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks\Database"))
                 {
                     if (key != null)
                     {
-                        foreach (string name in key.GetValueNames())
+                        string value = key.GetValue("Automatic") as string;
+
+                        if (value != null)
                         {
-                            string value = key.GetValue(name) as string;
-                            if (!string.IsNullOrEmpty(value))
+                            // Only if it's installed...
+                            if (SqlInstanceUtility.IsSqlInstanceInstalled(value))
                             {
-                                int? parsed = null;
+                                string serverInstance = Environment.MachineName + "\\" + value;
 
-                                // Special case for the non-indexed one we store
-                                if (value == baseName)
+                                // ... and we can connect to it, do we try to reuse an existing instance
+                                if (SqlInstanceUtility.DetermineCredentials(serverInstance) != null)
                                 {
-                                    parsed = 0;
-                                }
-                                else
-                                {
-                                    Match match = Regex.Match(value, string.Format(@"^{0}(\d)$", baseName));
-                                    if (match.Success)
-                                    {
-                                        parsed = int.Parse(match.Groups[1].Value);
-                                    }
-                                }
-
-                                if (parsed.HasValue)
-                                {
-                                    largestIndex = Math.Max(largestIndex, parsed.Value);
+                                    return serverInstance;
                                 }
                             }
                         }
                     }
                 }
 
-                // Now using the last known largest index, create the name of the database that will now be associated with this path
-                databaseName = string.Format("ShipWorks{0}", largestIndex == -1 ? "" : (largestIndex + 1).ToString());
-
-                // Store it so this path is forever more this database name
-                registry.SetValue(ShipWorksSession.InstanceID.ToString(), databaseName);
-
-                return databaseName;
+                // If there was no automatic full instance, fallback on the LocalDb server instance
+                return LocalDbServerInstance;
             }
         }
 
@@ -253,6 +215,57 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// See if we can figure out the credentials necessary to connect to the given instance.  If provided, the configuration given in firstTry will be attempted first
+        /// </summary>
+        public static SqlSessionConfiguration DetermineCredentials(string instance, SqlSessionConfiguration firstTry = null)
+        {
+            List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
+
+            // If firstTry was given, use it
+            if (firstTry != null)
+            {
+                configsToTry.Add(new SqlSessionConfiguration(firstTry));
+            }
+
+            // Then we'll try the sa account with the password we create - we know that'd be an admin
+            configsToTry.Add(new SqlSessionConfiguration()
+                {
+                    Username = "sa",
+                    Password = SqlInstanceUtility.ShipWorksSaPassword,
+                    WindowsAuth = false
+                });
+
+
+            // Then we'll try windows auth
+            configsToTry.Add(new SqlSessionConfiguration()
+                {
+                    WindowsAuth = true
+                });
+
+            foreach (SqlSessionConfiguration config in configsToTry)
+            {
+                try
+                {
+                    config.ServerInstance = instance;
+                    config.DatabaseName = "master";
+
+                    SqlSession session = new SqlSession(config);
+                    session.TestConnection();
+
+                    config.DatabaseName = "";
+
+                    return config;
+                }
+                catch (SqlException ex)
+                {
+                    log.Info("Failed to connect.", ex);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -56,11 +56,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Backing up the database does not require input
         /// </summary>
-        public override bool RequiresInput
+        public override ActionTaskInputRequirement RequiresInput
         {
             get
             {
-                return false;
+                return ActionTaskInputRequirement.None;
             }
         }
 

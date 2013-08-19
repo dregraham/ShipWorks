@@ -29,27 +29,18 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseSetupWizard));
-            this.wizardPageSetupOrConnect = new ShipWorks.UI.Wizard.WizardPage();
-            this.panelSetupLegacy = new System.Windows.Forms.Panel();
-            this.radioSetupNewDatabase = new System.Windows.Forms.RadioButton();
-            this.labelRestoreDatabase = new System.Windows.Forms.Label();
-            this.radioConnectRunningDatabase = new System.Windows.Forms.RadioButton();
-            this.pictureBoxRestoreDatabase = new System.Windows.Forms.PictureBox();
-            this.radioRestoreDatabase = new System.Windows.Forms.RadioButton();
-            this.labelConnectRunningDatabase = new System.Windows.Forms.Label();
-            this.pictureBoxSetupNewDatabase = new System.Windows.Forms.PictureBox();
-            this.pictureBoxConnectRunningDatabase = new System.Windows.Forms.PictureBox();
-            this.labelSetupNewDatabase = new System.Windows.Forms.Label();
+            this.wizardPageChooseWisely2012 = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSetup2012 = new System.Windows.Forms.Panel();
             this.linkEnableRemoteConnections = new ShipWorks.UI.Controls.LinkControl();
             this.labelGeek = new System.Windows.Forms.Label();
             this.labelConnectToAnotherPC = new System.Windows.Forms.Label();
             this.labelAnotherPC = new System.Windows.Forms.Label();
             this.pictureBoxAnotherPC = new System.Windows.Forms.PictureBox();
-            this.radioRestoreBackup = new System.Windows.Forms.RadioButton();
-            this.radioConnectToAnotherPC = new System.Windows.Forms.RadioButton();
-            this.radioNewDatabase = new System.Windows.Forms.RadioButton();
+            this.radioChooseRestore2012 = new System.Windows.Forms.RadioButton();
+            this.radioChooseConnect2012 = new System.Windows.Forms.RadioButton();
+            this.radioChooseCreate2012 = new System.Windows.Forms.RadioButton();
             this.wizardPageChooseSqlServer = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSqlInstanceInstall = new System.Windows.Forms.Panel();
             this.radioInstallSqlServer = new System.Windows.Forms.RadioButton();
@@ -64,22 +55,22 @@ namespace ShipWorks.Data.Administration
             this.radioSqlServerCurrent = new System.Windows.Forms.RadioButton();
             this.labelChooseNewOrExistingSqlServer = new System.Windows.Forms.Label();
             this.wizardPageSelectSqlServerInstance = new ShipWorks.UI.Wizard.WizardPage();
+            this.gridDatabses = new Divelements.SandGrid.SandGrid();
+            this.gridColumnName = new Divelements.SandGrid.GridColumn();
+            this.gridColumnStatus = new Divelements.SandGrid.GridColumn();
+            this.gridColumnStoreType = new Divelements.SandGrid.GridColumn();
+            this.gridColumnLatestOrder = new Divelements.SandGrid.GridColumn();
+            this.labelDatabaseSelect = new System.Windows.Forms.Label();
+            this.pictureSqlConnection = new System.Windows.Forms.PictureBox();
+            this.panelSqlInstanceHelp = new System.Windows.Forms.Panel();
+            this.linkHelpSelectSqlInstance = new ShipWorks.UI.Controls.LinkControl();
+            this.labelSelectSqlInstance2 = new System.Windows.Forms.Label();
+            this.labelSqlConnection = new System.Windows.Forms.Label();
+            this.linkSqlInstanceAccount = new ShipWorks.UI.Controls.LinkControl();
+            this.labelSelectSqlInstance = new System.Windows.Forms.Label();
             this.labelServerSearching = new System.Windows.Forms.Label();
             this.pictureServerSearching = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.labelFoundInstanceTroubleshooting = new System.Windows.Forms.Label();
             this.comboSqlServers = new System.Windows.Forms.ComboBox();
-            this.labelFoundInstances = new System.Windows.Forms.Label();
-            this.wizardPageLoginSqlServer = new ShipWorks.UI.Wizard.WizardPage();
-            this.password = new System.Windows.Forms.TextBox();
-            this.username = new System.Windows.Forms.TextBox();
-            this.labelConnectUsing = new System.Windows.Forms.Label();
-            this.labelNeedLoginInfo = new System.Windows.Forms.Label();
-            this.labelWindowsAuthDescription = new System.Windows.Forms.Label();
-            this.labelPassword = new System.Windows.Forms.Label();
-            this.labelUsername = new System.Windows.Forms.Label();
-            this.sqlServerAuth = new System.Windows.Forms.RadioButton();
-            this.windowsAuth = new System.Windows.Forms.RadioButton();
             this.wizardPageDatabaseName = new ShipWorks.UI.Wizard.WizardPage();
             this.linkChooseDataLocation = new ShipWorks.UI.Controls.LinkControl();
             this.infoTipDatabaseName = new ShipWorks.UI.Controls.InfoTip();
@@ -90,9 +81,6 @@ namespace ShipWorks.Data.Administration
             this.labelDataFiles = new System.Windows.Forms.Label();
             this.pathDataFiles = new ShipWorks.UI.Controls.PathTextBox();
             this.browseDataFiles = new System.Windows.Forms.Button();
-            this.wizardPageChooseDatabase = new ShipWorks.UI.Wizard.WizardPage();
-            this.databaseNames = new System.Windows.Forms.ComboBox();
-            this.labelFoundDatabases = new System.Windows.Forms.Label();
             this.wizardPageInstallSqlServer = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSqlServerInstallProgress = new System.Windows.Forms.Panel();
             this.progressPreparing = new System.Windows.Forms.ProgressBar();
@@ -144,15 +132,42 @@ namespace ShipWorks.Data.Administration
             this.label24 = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.databaseLocationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.progressTimer = new System.Windows.Forms.Timer(this.components);
+            this.progressInstallTimer = new System.Windows.Forms.Timer(this.components);
+            this.wizardPageChooseWisely2008 = new ShipWorks.UI.Wizard.WizardPage();
+            this.panelSetupLegacy = new System.Windows.Forms.Panel();
+            this.radioChooseCreate2008 = new System.Windows.Forms.RadioButton();
+            this.labelRestoreDatabase = new System.Windows.Forms.Label();
+            this.radioChooseConnect2008 = new System.Windows.Forms.RadioButton();
+            this.pictureBoxRestoreDatabase = new System.Windows.Forms.PictureBox();
+            this.radioChooseRestore2008 = new System.Windows.Forms.RadioButton();
+            this.labelConnectRunningDatabase = new System.Windows.Forms.Label();
+            this.pictureBoxSetupNewDatabase = new System.Windows.Forms.PictureBox();
+            this.pictureBoxConnectRunningDatabase = new System.Windows.Forms.PictureBox();
+            this.labelSetupNewDatabase = new System.Windows.Forms.Label();
+            this.wizardPageManageLocalDb = new ShipWorks.UI.Wizard.WizardPage();
+            this.labelLocalDbEnableRemote = new System.Windows.Forms.Label();
+            this.labelLocalDbEnableRemote2 = new System.Windows.Forms.Label();
+            this.pictureLocalDbEnableRemote = new System.Windows.Forms.PictureBox();
+            this.radioLocalDbEnableRemote = new System.Windows.Forms.RadioButton();
+            this.linkConnectHelp2 = new ShipWorks.UI.Controls.LinkControl();
+            this.labelLocalDbConnect = new System.Windows.Forms.Label();
+            this.labelLocalDbConnect2 = new System.Windows.Forms.Label();
+            this.pictureLocalDbConnect = new System.Windows.Forms.PictureBox();
+            this.radioLocalDbConnect = new System.Windows.Forms.RadioButton();
+            this.wizardPageUpgradeLocalDb = new ShipWorks.UI.Wizard.WizardPage();
+            this.panelUpgradeLocalDb = new System.Windows.Forms.Panel();
+            this.progressUpdgradeLocalDb = new System.Windows.Forms.ProgressBar();
+            this.pictureUpgradeLocalDbStatus = new System.Windows.Forms.PictureBox();
+            this.labelUpgradeLocalDb2 = new System.Windows.Forms.Label();
+            this.pictureUpgrdaeLocalDb = new System.Windows.Forms.PictureBox();
+            this.labelUpgradeLocalDb = new System.Windows.Forms.Label();
+            this.panelUpgradeLocalDbReady = new System.Windows.Forms.Panel();
+            this.labelUpgradeLocalDbReady = new System.Windows.Forms.Label();
+            this.progressLocalDbTimer = new System.Windows.Forms.Timer(this.components);
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
-            this.wizardPageSetupOrConnect.SuspendLayout();
-            this.panelSetupLegacy.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRestoreDatabase)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSetupNewDatabase)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConnectRunningDatabase)).BeginInit();
+            this.wizardPageChooseWisely2012.SuspendLayout();
             this.panelSetup2012.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAnotherPC)).BeginInit();
             this.wizardPageChooseSqlServer.SuspendLayout();
@@ -160,11 +175,11 @@ namespace ShipWorks.Data.Administration
             this.panelSqlInstanceRunning.SuspendLayout();
             this.panelSqlInstanceCurrent.SuspendLayout();
             this.wizardPageSelectSqlServerInstance.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureSqlConnection)).BeginInit();
+            this.panelSqlInstanceHelp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).BeginInit();
-            this.wizardPageLoginSqlServer.SuspendLayout();
             this.wizardPageDatabaseName.SuspendLayout();
             this.panelDataFiles.SuspendLayout();
-            this.wizardPageChooseDatabase.SuspendLayout();
             this.wizardPageInstallSqlServer.SuspendLayout();
             this.panelSqlServerInstallProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePreparing)).BeginInit();
@@ -182,6 +197,19 @@ namespace ShipWorks.Data.Administration
             ((System.ComponentModel.ISupportInitialize)(this.headerImage)).BeginInit();
             this.wizardPagePrerequisitePlaceholder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            this.wizardPageChooseWisely2008.SuspendLayout();
+            this.panelSetupLegacy.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRestoreDatabase)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSetupNewDatabase)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConnectRunningDatabase)).BeginInit();
+            this.wizardPageManageLocalDb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbEnableRemote)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbConnect)).BeginInit();
+            this.wizardPageUpgradeLocalDb.SuspendLayout();
+            this.panelUpgradeLocalDb.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgradeLocalDbStatus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgrdaeLocalDb)).BeginInit();
+            this.panelUpgradeLocalDbReady.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -198,7 +226,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageLoginSqlServer);
+            this.mainPanel.Controls.Add(this.wizardPageManageLocalDb);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -217,129 +245,18 @@ namespace ShipWorks.Data.Administration
             // 
             this.topPanel.Size = new System.Drawing.Size(548, 56);
             // 
-            // wizardPageSetupOrConnect
+            // wizardPageChooseWisely2012
             // 
-            this.wizardPageSetupOrConnect.Controls.Add(this.panelSetupLegacy);
-            this.wizardPageSetupOrConnect.Controls.Add(this.panelSetup2012);
-            this.wizardPageSetupOrConnect.Description = "Setup or connect to a ShipWorks database.";
-            this.wizardPageSetupOrConnect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageSetupOrConnect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageSetupOrConnect.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageSetupOrConnect.Name = "wizardPageSetupOrConnect";
-            this.wizardPageSetupOrConnect.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageSetupOrConnect.TabIndex = 0;
-            this.wizardPageSetupOrConnect.Title = "Database Setup";
-            this.wizardPageSetupOrConnect.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSetupOrConnect);
-            // 
-            // panelSetupLegacy
-            // 
-            this.panelSetupLegacy.Controls.Add(this.radioSetupNewDatabase);
-            this.panelSetupLegacy.Controls.Add(this.labelRestoreDatabase);
-            this.panelSetupLegacy.Controls.Add(this.radioConnectRunningDatabase);
-            this.panelSetupLegacy.Controls.Add(this.pictureBoxRestoreDatabase);
-            this.panelSetupLegacy.Controls.Add(this.radioRestoreDatabase);
-            this.panelSetupLegacy.Controls.Add(this.labelConnectRunningDatabase);
-            this.panelSetupLegacy.Controls.Add(this.pictureBoxSetupNewDatabase);
-            this.panelSetupLegacy.Controls.Add(this.pictureBoxConnectRunningDatabase);
-            this.panelSetupLegacy.Controls.Add(this.labelSetupNewDatabase);
-            this.panelSetupLegacy.Location = new System.Drawing.Point(253, 49);
-            this.panelSetupLegacy.Name = "panelSetupLegacy";
-            this.panelSetupLegacy.Size = new System.Drawing.Size(513, 210);
-            this.panelSetupLegacy.TabIndex = 10;
-            // 
-            // radioSetupNewDatabase
-            // 
-            this.radioSetupNewDatabase.AutoSize = true;
-            this.radioSetupNewDatabase.Checked = true;
-            this.radioSetupNewDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSetupNewDatabase.Location = new System.Drawing.Point(3, 6);
-            this.radioSetupNewDatabase.Name = "radioSetupNewDatabase";
-            this.radioSetupNewDatabase.Size = new System.Drawing.Size(196, 17);
-            this.radioSetupNewDatabase.TabIndex = 1;
-            this.radioSetupNewDatabase.TabStop = true;
-            this.radioSetupNewDatabase.Text = "Setup ShipWorks from scratch";
-            this.radioSetupNewDatabase.UseVisualStyleBackColor = true;
-            // 
-            // labelRestoreDatabase
-            // 
-            this.labelRestoreDatabase.ForeColor = System.Drawing.Color.DimGray;
-            this.labelRestoreDatabase.Location = new System.Drawing.Point(57, 156);
-            this.labelRestoreDatabase.Name = "labelRestoreDatabase";
-            this.labelRestoreDatabase.Size = new System.Drawing.Size(406, 15);
-            this.labelRestoreDatabase.TabIndex = 6;
-            this.labelRestoreDatabase.Text = "Select this option to load a database from a ShipWorks backup.";
-            // 
-            // radioConnectRunningDatabase
-            // 
-            this.radioConnectRunningDatabase.AutoSize = true;
-            this.radioConnectRunningDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioConnectRunningDatabase.Location = new System.Drawing.Point(3, 67);
-            this.radioConnectRunningDatabase.Name = "radioConnectRunningDatabase";
-            this.radioConnectRunningDatabase.Size = new System.Drawing.Size(231, 17);
-            this.radioConnectRunningDatabase.TabIndex = 3;
-            this.radioConnectRunningDatabase.Text = "Connect to ShipWorks on another PC";
-            this.radioConnectRunningDatabase.UseVisualStyleBackColor = true;
-            // 
-            // pictureBoxRestoreDatabase
-            // 
-            this.pictureBoxRestoreDatabase.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxRestoreDatabase.Image")));
-            this.pictureBoxRestoreDatabase.Location = new System.Drawing.Point(19, 149);
-            this.pictureBoxRestoreDatabase.Name = "pictureBoxRestoreDatabase";
-            this.pictureBoxRestoreDatabase.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxRestoreDatabase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxRestoreDatabase.TabIndex = 9;
-            this.pictureBoxRestoreDatabase.TabStop = false;
-            // 
-            // radioRestoreDatabase
-            // 
-            this.radioRestoreDatabase.AutoSize = true;
-            this.radioRestoreDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioRestoreDatabase.Location = new System.Drawing.Point(3, 130);
-            this.radioRestoreDatabase.Name = "radioRestoreDatabase";
-            this.radioRestoreDatabase.Size = new System.Drawing.Size(187, 17);
-            this.radioRestoreDatabase.TabIndex = 5;
-            this.radioRestoreDatabase.Text = "Restore a ShipWorks backup";
-            this.radioRestoreDatabase.UseVisualStyleBackColor = true;
-            // 
-            // labelConnectRunningDatabase
-            // 
-            this.labelConnectRunningDatabase.ForeColor = System.Drawing.Color.DimGray;
-            this.labelConnectRunningDatabase.Location = new System.Drawing.Point(57, 89);
-            this.labelConnectRunningDatabase.Name = "labelConnectRunningDatabase";
-            this.labelConnectRunningDatabase.Size = new System.Drawing.Size(406, 36);
-            this.labelConnectRunningDatabase.TabIndex = 4;
-            this.labelConnectRunningDatabase.Text = "Select this option to connect to a ShipWorks database that is already running on " +
-    "this computer or another computer.";
-            // 
-            // pictureBoxSetupNewDatabase
-            // 
-            this.pictureBoxSetupNewDatabase.Image = global::ShipWorks.Properties.Resources.workstation1;
-            this.pictureBoxSetupNewDatabase.Location = new System.Drawing.Point(19, 25);
-            this.pictureBoxSetupNewDatabase.Name = "pictureBoxSetupNewDatabase";
-            this.pictureBoxSetupNewDatabase.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxSetupNewDatabase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxSetupNewDatabase.TabIndex = 5;
-            this.pictureBoxSetupNewDatabase.TabStop = false;
-            // 
-            // pictureBoxConnectRunningDatabase
-            // 
-            this.pictureBoxConnectRunningDatabase.Image = global::ShipWorks.Properties.Resources.client_network1;
-            this.pictureBoxConnectRunningDatabase.Location = new System.Drawing.Point(19, 86);
-            this.pictureBoxConnectRunningDatabase.Name = "pictureBoxConnectRunningDatabase";
-            this.pictureBoxConnectRunningDatabase.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxConnectRunningDatabase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxConnectRunningDatabase.TabIndex = 7;
-            this.pictureBoxConnectRunningDatabase.TabStop = false;
-            // 
-            // labelSetupNewDatabase
-            // 
-            this.labelSetupNewDatabase.AutoSize = true;
-            this.labelSetupNewDatabase.ForeColor = System.Drawing.Color.DimGray;
-            this.labelSetupNewDatabase.Location = new System.Drawing.Point(57, 33);
-            this.labelSetupNewDatabase.Name = "labelSetupNewDatabase";
-            this.labelSetupNewDatabase.Size = new System.Drawing.Size(299, 13);
-            this.labelSetupNewDatabase.TabIndex = 2;
-            this.labelSetupNewDatabase.Text = "Select this option if this is your first time installing ShipWorks.";
+            this.wizardPageChooseWisely2012.Controls.Add(this.panelSetup2012);
+            this.wizardPageChooseWisely2012.Description = "Setup or connect to a ShipWorks database.";
+            this.wizardPageChooseWisely2012.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageChooseWisely2012.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageChooseWisely2012.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageChooseWisely2012.Name = "wizardPageChooseWisely2012";
+            this.wizardPageChooseWisely2012.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageChooseWisely2012.TabIndex = 0;
+            this.wizardPageChooseWisely2012.Title = "Database Setup";
+            this.wizardPageChooseWisely2012.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSetupOrConnect);
             // 
             // panelSetup2012
             // 
@@ -348,9 +265,9 @@ namespace ShipWorks.Data.Administration
             this.panelSetup2012.Controls.Add(this.labelConnectToAnotherPC);
             this.panelSetup2012.Controls.Add(this.labelAnotherPC);
             this.panelSetup2012.Controls.Add(this.pictureBoxAnotherPC);
-            this.panelSetup2012.Controls.Add(this.radioRestoreBackup);
-            this.panelSetup2012.Controls.Add(this.radioConnectToAnotherPC);
-            this.panelSetup2012.Controls.Add(this.radioNewDatabase);
+            this.panelSetup2012.Controls.Add(this.radioChooseRestore2012);
+            this.panelSetup2012.Controls.Add(this.radioChooseConnect2012);
+            this.panelSetup2012.Controls.Add(this.radioChooseCreate2012);
             this.panelSetup2012.Location = new System.Drawing.Point(22, 3);
             this.panelSetup2012.Name = "panelSetup2012";
             this.panelSetup2012.Size = new System.Drawing.Size(482, 222);
@@ -364,9 +281,9 @@ namespace ShipWorks.Data.Administration
             this.linkEnableRemoteConnections.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.linkEnableRemoteConnections.Location = new System.Drawing.Point(79, 43);
             this.linkEnableRemoteConnections.Name = "linkEnableRemoteConnections";
-            this.linkEnableRemoteConnections.Size = new System.Drawing.Size(65, 13);
+            this.linkEnableRemoteConnections.Size = new System.Drawing.Size(270, 13);
             this.linkEnableRemoteConnections.TabIndex = 44;
-            this.linkEnableRemoteConnections.Text = "(Learn how)";
+            this.linkEnableRemoteConnections.Text = "(But first, make sure it\'s ready for remote connections)";
             // 
             // labelGeek
             // 
@@ -395,12 +312,12 @@ namespace ShipWorks.Data.Administration
             this.labelAnotherPC.Name = "labelAnotherPC";
             this.labelAnotherPC.Size = new System.Drawing.Size(406, 17);
             this.labelAnotherPC.TabIndex = 39;
-            this.labelAnotherPC.Text = "Make sure ShipWorks on your other PC is ready for remote connections.";
+            this.labelAnotherPC.Text = "Is ShipWorks already installed on another PC? Let\'s get you connected.";
             this.labelAnotherPC.Click += new System.EventHandler(this.OnClickAnotherPcLabels);
             // 
             // pictureBoxAnotherPC
             // 
-            this.pictureBoxAnotherPC.Image = global::ShipWorks.Properties.Resources.client_network1;
+            this.pictureBoxAnotherPC.Image = global::ShipWorks.Properties.Resources.server_to_client;
             this.pictureBoxAnotherPC.Location = new System.Drawing.Point(43, 25);
             this.pictureBoxAnotherPC.Name = "pictureBoxAnotherPC";
             this.pictureBoxAnotherPC.Size = new System.Drawing.Size(32, 32);
@@ -409,39 +326,39 @@ namespace ShipWorks.Data.Administration
             this.pictureBoxAnotherPC.TabStop = false;
             this.pictureBoxAnotherPC.Click += new System.EventHandler(this.OnClickAnotherPcLabels);
             // 
-            // radioRestoreBackup
+            // radioChooseRestore2012
             // 
-            this.radioRestoreBackup.AutoSize = true;
-            this.radioRestoreBackup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioRestoreBackup.Location = new System.Drawing.Point(22, 118);
-            this.radioRestoreBackup.Name = "radioRestoreBackup";
-            this.radioRestoreBackup.Size = new System.Drawing.Size(210, 17);
-            this.radioRestoreBackup.TabIndex = 40;
-            this.radioRestoreBackup.Text = "Restore a ShipWorks database backup";
-            this.radioRestoreBackup.UseVisualStyleBackColor = true;
+            this.radioChooseRestore2012.AutoSize = true;
+            this.radioChooseRestore2012.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioChooseRestore2012.Location = new System.Drawing.Point(22, 118);
+            this.radioChooseRestore2012.Name = "radioChooseRestore2012";
+            this.radioChooseRestore2012.Size = new System.Drawing.Size(210, 17);
+            this.radioChooseRestore2012.TabIndex = 40;
+            this.radioChooseRestore2012.Text = "Restore a ShipWorks database backup";
+            this.radioChooseRestore2012.UseVisualStyleBackColor = true;
             // 
-            // radioConnectToAnotherPC
+            // radioChooseConnect2012
             // 
-            this.radioConnectToAnotherPC.AutoSize = true;
-            this.radioConnectToAnotherPC.Checked = true;
-            this.radioConnectToAnotherPC.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioConnectToAnotherPC.Location = new System.Drawing.Point(22, 32);
-            this.radioConnectToAnotherPC.Name = "radioConnectToAnotherPC";
-            this.radioConnectToAnotherPC.Size = new System.Drawing.Size(14, 13);
-            this.radioConnectToAnotherPC.TabIndex = 38;
-            this.radioConnectToAnotherPC.TabStop = true;
-            this.radioConnectToAnotherPC.UseVisualStyleBackColor = true;
+            this.radioChooseConnect2012.AutoSize = true;
+            this.radioChooseConnect2012.Checked = true;
+            this.radioChooseConnect2012.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioChooseConnect2012.Location = new System.Drawing.Point(22, 32);
+            this.radioChooseConnect2012.Name = "radioChooseConnect2012";
+            this.radioChooseConnect2012.Size = new System.Drawing.Size(14, 13);
+            this.radioChooseConnect2012.TabIndex = 38;
+            this.radioChooseConnect2012.TabStop = true;
+            this.radioChooseConnect2012.UseVisualStyleBackColor = true;
             // 
-            // radioNewDatabase
+            // radioChooseCreate2012
             // 
-            this.radioNewDatabase.AutoSize = true;
-            this.radioNewDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioNewDatabase.Location = new System.Drawing.Point(22, 94);
-            this.radioNewDatabase.Name = "radioNewDatabase";
-            this.radioNewDatabase.Size = new System.Drawing.Size(186, 17);
-            this.radioNewDatabase.TabIndex = 37;
-            this.radioNewDatabase.Text = "Setup a new ShipWorks database";
-            this.radioNewDatabase.UseVisualStyleBackColor = true;
+            this.radioChooseCreate2012.AutoSize = true;
+            this.radioChooseCreate2012.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioChooseCreate2012.Location = new System.Drawing.Point(22, 94);
+            this.radioChooseCreate2012.Name = "radioChooseCreate2012";
+            this.radioChooseCreate2012.Size = new System.Drawing.Size(186, 17);
+            this.radioChooseCreate2012.TabIndex = 37;
+            this.radioChooseCreate2012.Text = "Setup a new ShipWorks database";
+            this.radioChooseCreate2012.UseVisualStyleBackColor = true;
             // 
             // wizardPageChooseSqlServer
             // 
@@ -584,12 +501,16 @@ namespace ShipWorks.Data.Administration
             // 
             // wizardPageSelectSqlServerInstance
             // 
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.gridDatabses);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelDatabaseSelect);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.pictureSqlConnection);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.panelSqlInstanceHelp);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelSqlConnection);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.linkSqlInstanceAccount);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelSelectSqlInstance);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelServerSearching);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.pictureServerSearching);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.label1);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelFoundInstanceTroubleshooting);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.comboSqlServers);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelFoundInstances);
             this.wizardPageSelectSqlServerInstance.Description = "Select a running instance of Microsoft SQL Server.";
             this.wizardPageSelectSqlServerInstance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageSelectSqlServerInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -599,161 +520,196 @@ namespace ShipWorks.Data.Administration
             this.wizardPageSelectSqlServerInstance.TabIndex = 0;
             this.wizardPageSelectSqlServerInstance.Title = "Connect to SQL Server";
             this.wizardPageSelectSqlServerInstance.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSelectSqlInstance);
+            this.wizardPageSelectSqlServerInstance.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSelectSqlInstance);
+            // 
+            // gridDatabses
+            // 
+            this.gridDatabses.AllowGroupCollapse = true;
+            this.gridDatabses.AllowMultipleSelection = false;
+            this.gridDatabses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridDatabses.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
+            this.gridColumnName,
+            this.gridColumnStatus,
+            this.gridColumnStoreType,
+            this.gridColumnLatestOrder});
+            this.gridDatabses.CommitOnLoseFocus = true;
+            this.gridDatabses.EnableSearching = false;
+            this.gridDatabses.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
+            this.gridDatabses.ImageTextSeparation = 1;
+            this.gridDatabses.Location = new System.Drawing.Point(41, 100);
+            this.gridDatabses.Name = "gridDatabses";
+            this.gridDatabses.Renderer = windowsXPRenderer1;
+            this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
+            this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
+            new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("ShipWorks"),
+                        new Divelements.SandGrid.GridCell("Ready"),
+                        new Divelements.SandGrid.GridCell("Brian, on 07/13/11"),
+                        new Divelements.SandGrid.GridCell("Order #1292, from 07/11/11")})});
+            this.gridDatabses.Size = new System.Drawing.Size(484, 156);
+            this.gridDatabses.TabIndex = 55;
+            this.gridDatabses.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
+            // 
+            // gridColumnName
+            // 
+            this.gridColumnName.AllowReorder = false;
+            this.gridColumnName.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnName.AutoSizeIncludeHeader = true;
+            this.gridColumnName.AutoSortType = Divelements.SandGrid.ColumnAutoSortType.None;
+            this.gridColumnName.Clickable = false;
+            this.gridColumnName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnName.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
+            this.gridColumnName.HeaderText = "Name";
+            this.gridColumnName.MinimumWidth = 75;
+            // 
+            // gridColumnStatus
+            // 
+            this.gridColumnStatus.AllowReorder = false;
+            this.gridColumnStatus.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnStatus.Clickable = false;
+            this.gridColumnStatus.HeaderText = "Status";
+            this.gridColumnStatus.MinimumWidth = 75;
+            // 
+            // gridColumnStoreType
+            // 
+            this.gridColumnStoreType.AllowReorder = false;
+            this.gridColumnStoreType.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnStoreType.Clickable = false;
+            this.gridColumnStoreType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnStoreType.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
+            this.gridColumnStoreType.HeaderText = "Last Activity";
+            this.gridColumnStoreType.MinimumWidth = 75;
+            this.gridColumnStoreType.Width = 113;
+            // 
+            // gridColumnLatestOrder
+            // 
+            this.gridColumnLatestOrder.AllowReorder = false;
+            this.gridColumnLatestOrder.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnLatestOrder.Clickable = false;
+            this.gridColumnLatestOrder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnLatestOrder.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
+            this.gridColumnLatestOrder.HeaderText = "Latest Order";
+            this.gridColumnLatestOrder.MinimumWidth = 75;
+            this.gridColumnLatestOrder.Width = 221;
+            // 
+            // labelDatabaseSelect
+            // 
+            this.labelDatabaseSelect.AutoSize = true;
+            this.labelDatabaseSelect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDatabaseSelect.Location = new System.Drawing.Point(22, 82);
+            this.labelDatabaseSelect.Name = "labelDatabaseSelect";
+            this.labelDatabaseSelect.Size = new System.Drawing.Size(190, 13);
+            this.labelDatabaseSelect.TabIndex = 54;
+            this.labelDatabaseSelect.Text = "Select your ShipWorks database";
+            // 
+            // pictureSqlConnection
+            // 
+            this.pictureSqlConnection.Image = global::ShipWorks.Properties.Resources.arrows_greengray;
+            this.pictureSqlConnection.Location = new System.Drawing.Point(41, 54);
+            this.pictureSqlConnection.Name = "pictureSqlConnection";
+            this.pictureSqlConnection.Size = new System.Drawing.Size(16, 16);
+            this.pictureSqlConnection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureSqlConnection.TabIndex = 53;
+            this.pictureSqlConnection.TabStop = false;
+            this.pictureSqlConnection.Visible = false;
+            // 
+            // panelSqlInstanceHelp
+            // 
+            this.panelSqlInstanceHelp.Controls.Add(this.linkHelpSelectSqlInstance);
+            this.panelSqlInstanceHelp.Controls.Add(this.labelSelectSqlInstance2);
+            this.panelSqlInstanceHelp.Location = new System.Drawing.Point(269, 5);
+            this.panelSqlInstanceHelp.Name = "panelSqlInstanceHelp";
+            this.panelSqlInstanceHelp.Size = new System.Drawing.Size(256, 20);
+            this.panelSqlInstanceHelp.TabIndex = 52;
+            this.panelSqlInstanceHelp.Visible = false;
+            // 
+            // linkHelpSelectSqlInstance
+            // 
+            this.linkHelpSelectSqlInstance.AutoSize = true;
+            this.linkHelpSelectSqlInstance.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkHelpSelectSqlInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkHelpSelectSqlInstance.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.linkHelpSelectSqlInstance.Location = new System.Drawing.Point(66, 1);
+            this.linkHelpSelectSqlInstance.Name = "linkHelpSelectSqlInstance";
+            this.linkHelpSelectSqlInstance.Size = new System.Drawing.Size(127, 13);
+            this.linkHelpSelectSqlInstance.TabIndex = 49;
+            this.linkHelpSelectSqlInstance.Text = "Don\'t worry, we can help";
+            // 
+            // labelSelectSqlInstance2
+            // 
+            this.labelSelectSqlInstance2.AutoSize = true;
+            this.labelSelectSqlInstance2.ForeColor = System.Drawing.Color.DimGray;
+            this.labelSelectSqlInstance2.Location = new System.Drawing.Point(0, 2);
+            this.labelSelectSqlInstance2.Name = "labelSelectSqlInstance2";
+            this.labelSelectSqlInstance2.Size = new System.Drawing.Size(66, 13);
+            this.labelSelectSqlInstance2.TabIndex = 47;
+            this.labelSelectSqlInstance2.Text = "Don\'t see it?";
+            // 
+            // labelSqlConnection
+            // 
+            this.labelSqlConnection.AutoSize = true;
+            this.labelSqlConnection.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelSqlConnection.Location = new System.Drawing.Point(58, 56);
+            this.labelSqlConnection.Name = "labelSqlConnection";
+            this.labelSqlConnection.Size = new System.Drawing.Size(262, 13);
+            this.labelSqlConnection.TabIndex = 51;
+            this.labelSqlConnection.Text = "Successfully connected using your Windows account.";
+            this.labelSqlConnection.Visible = false;
+            // 
+            // linkSqlInstanceAccount
+            // 
+            this.linkSqlInstanceAccount.AutoSize = true;
+            this.linkSqlInstanceAccount.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkSqlInstanceAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkSqlInstanceAccount.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.linkSqlInstanceAccount.Location = new System.Drawing.Point(319, 56);
+            this.linkSqlInstanceAccount.Name = "linkSqlInstanceAccount";
+            this.linkSqlInstanceAccount.Size = new System.Drawing.Size(137, 13);
+            this.linkSqlInstanceAccount.TabIndex = 50;
+            this.linkSqlInstanceAccount.Text = "Change the account to use";
+            this.linkSqlInstanceAccount.Visible = false;
+            this.linkSqlInstanceAccount.Click += new System.EventHandler(this.OnChangeSqlInstanceAccount);
+            // 
+            // labelSelectSqlInstance
+            // 
+            this.labelSelectSqlInstance.AutoSize = true;
+            this.labelSelectSqlInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSelectSqlInstance.Location = new System.Drawing.Point(22, 6);
+            this.labelSelectSqlInstance.Name = "labelSelectSqlInstance";
+            this.labelSelectSqlInstance.Size = new System.Drawing.Size(193, 13);
+            this.labelSelectSqlInstance.TabIndex = 46;
+            this.labelSelectSqlInstance.Text = "Where is your database running?";
             // 
             // labelServerSearching
             // 
             this.labelServerSearching.AutoSize = true;
             this.labelServerSearching.ForeColor = System.Drawing.Color.DimGray;
-            this.labelServerSearching.Location = new System.Drawing.Point(286, 49);
+            this.labelServerSearching.Location = new System.Drawing.Point(287, 33);
             this.labelServerSearching.Name = "labelServerSearching";
-            this.labelServerSearching.Size = new System.Drawing.Size(66, 13);
+            this.labelServerSearching.Size = new System.Drawing.Size(133, 13);
             this.labelServerSearching.TabIndex = 11;
-            this.labelServerSearching.Text = "Searching...";
+            this.labelServerSearching.Text = "Searching your network...";
             // 
             // pictureServerSearching
             // 
             this.pictureServerSearching.Image = ((System.Drawing.Image)(resources.GetObject("pictureServerSearching.Image")));
-            this.pictureServerSearching.Location = new System.Drawing.Point(268, 47);
+            this.pictureServerSearching.Location = new System.Drawing.Point(269, 31);
             this.pictureServerSearching.Name = "pictureServerSearching";
             this.pictureServerSearching.Size = new System.Drawing.Size(16, 16);
             this.pictureServerSearching.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureServerSearching.TabIndex = 10;
             this.pictureServerSearching.TabStop = false;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(24, 135);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(33, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Note";
-            // 
-            // labelFoundInstanceTroubleshooting
-            // 
-            this.labelFoundInstanceTroubleshooting.ForeColor = System.Drawing.Color.DimGray;
-            this.labelFoundInstanceTroubleshooting.Location = new System.Drawing.Point(37, 159);
-            this.labelFoundInstanceTroubleshooting.Name = "labelFoundInstanceTroubleshooting";
-            this.labelFoundInstanceTroubleshooting.Size = new System.Drawing.Size(448, 80);
-            this.labelFoundInstanceTroubleshooting.TabIndex = 8;
-            this.labelFoundInstanceTroubleshooting.Text = resources.GetString("labelFoundInstanceTroubleshooting.Text");
-            // 
             // comboSqlServers
             // 
-            this.comboSqlServers.Location = new System.Drawing.Point(40, 45);
+            this.comboSqlServers.Location = new System.Drawing.Point(41, 29);
             this.comboSqlServers.Name = "comboSqlServers";
             this.comboSqlServers.Size = new System.Drawing.Size(220, 21);
             this.comboSqlServers.TabIndex = 6;
-            // 
-            // labelFoundInstances
-            // 
-            this.labelFoundInstances.Location = new System.Drawing.Point(24, 8);
-            this.labelFoundInstances.Name = "labelFoundInstances";
-            this.labelFoundInstances.Size = new System.Drawing.Size(487, 36);
-            this.labelFoundInstances.TabIndex = 1;
-            this.labelFoundInstances.Text = "The following SQL Server installations were found on your network.  Please select" +
-    " the one to use for your ShipWorks database.\r\n";
-            // 
-            // wizardPageLoginSqlServer
-            // 
-            this.wizardPageLoginSqlServer.Controls.Add(this.password);
-            this.wizardPageLoginSqlServer.Controls.Add(this.username);
-            this.wizardPageLoginSqlServer.Controls.Add(this.labelConnectUsing);
-            this.wizardPageLoginSqlServer.Controls.Add(this.labelNeedLoginInfo);
-            this.wizardPageLoginSqlServer.Controls.Add(this.labelWindowsAuthDescription);
-            this.wizardPageLoginSqlServer.Controls.Add(this.labelPassword);
-            this.wizardPageLoginSqlServer.Controls.Add(this.labelUsername);
-            this.wizardPageLoginSqlServer.Controls.Add(this.sqlServerAuth);
-            this.wizardPageLoginSqlServer.Controls.Add(this.windowsAuth);
-            this.wizardPageLoginSqlServer.Description = "Enter the login information you use for SQL Server.";
-            this.wizardPageLoginSqlServer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageLoginSqlServer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageLoginSqlServer.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageLoginSqlServer.Name = "wizardPageLoginSqlServer";
-            this.wizardPageLoginSqlServer.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageLoginSqlServer.TabIndex = 0;
-            this.wizardPageLoginSqlServer.Title = "SQL Server Login";
-            this.wizardPageLoginSqlServer.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSqlLogin);
-            // 
-            // password
-            // 
-            this.password.Location = new System.Drawing.Point(114, 106);
-            this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(128, 21);
-            this.password.TabIndex = 31;
-            this.password.UseSystemPasswordChar = true;
-            // 
-            // username
-            // 
-            this.username.Location = new System.Drawing.Point(114, 80);
-            this.username.Name = "username";
-            this.username.Size = new System.Drawing.Size(128, 21);
-            this.username.TabIndex = 30;
-            // 
-            // labelConnectUsing
-            // 
-            this.labelConnectUsing.Location = new System.Drawing.Point(26, 34);
-            this.labelConnectUsing.Name = "labelConnectUsing";
-            this.labelConnectUsing.Size = new System.Drawing.Size(100, 23);
-            this.labelConnectUsing.TabIndex = 29;
-            this.labelConnectUsing.Text = "Connect using:";
-            // 
-            // labelNeedLoginInfo
-            // 
-            this.labelNeedLoginInfo.Location = new System.Drawing.Point(24, 8);
-            this.labelNeedLoginInfo.Name = "labelNeedLoginInfo";
-            this.labelNeedLoginInfo.Size = new System.Drawing.Size(470, 22);
-            this.labelNeedLoginInfo.TabIndex = 28;
-            this.labelNeedLoginInfo.Text = "ShipWorks must now connect to your SQL Server instance and needs your login infor" +
-    "mation.";
-            // 
-            // labelWindowsAuthDescription
-            // 
-            this.labelWindowsAuthDescription.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWindowsAuthDescription.Location = new System.Drawing.Point(58, 165);
-            this.labelWindowsAuthDescription.Name = "labelWindowsAuthDescription";
-            this.labelWindowsAuthDescription.Size = new System.Drawing.Size(401, 28);
-            this.labelWindowsAuthDescription.TabIndex = 27;
-            this.labelWindowsAuthDescription.Text = "You must be currently logged in as Windows user that has access to SQL Server.";
-            // 
-            // labelPassword
-            // 
-            this.labelPassword.Location = new System.Drawing.Point(56, 108);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(100, 18);
-            this.labelPassword.TabIndex = 26;
-            this.labelPassword.Text = "Password:";
-            // 
-            // labelUsername
-            // 
-            this.labelUsername.Location = new System.Drawing.Point(56, 82);
-            this.labelUsername.Name = "labelUsername";
-            this.labelUsername.Size = new System.Drawing.Size(100, 23);
-            this.labelUsername.TabIndex = 25;
-            this.labelUsername.Text = "Username:";
-            // 
-            // sqlServerAuth
-            // 
-            this.sqlServerAuth.Checked = true;
-            this.sqlServerAuth.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sqlServerAuth.Location = new System.Drawing.Point(40, 54);
-            this.sqlServerAuth.Name = "sqlServerAuth";
-            this.sqlServerAuth.Size = new System.Drawing.Size(236, 24);
-            this.sqlServerAuth.TabIndex = 24;
-            this.sqlServerAuth.TabStop = true;
-            this.sqlServerAuth.Text = "SQL Server authentication";
-            this.sqlServerAuth.CheckedChanged += new System.EventHandler(this.OnChangeLoginMethod);
-            // 
-            // windowsAuth
-            // 
-            this.windowsAuth.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.windowsAuth.Location = new System.Drawing.Point(40, 142);
-            this.windowsAuth.Name = "windowsAuth";
-            this.windowsAuth.Size = new System.Drawing.Size(228, 24);
-            this.windowsAuth.TabIndex = 23;
-            this.windowsAuth.Text = "Windows authentication";
-            this.windowsAuth.CheckedChanged += new System.EventHandler(this.OnChangeLoginMethod);
+            this.comboSqlServers.SelectedIndexChanged += new System.EventHandler(this.OnChangeSelectedInstance);
+            this.comboSqlServers.Leave += new System.EventHandler(this.OnLeaveSqlInstance);
             // 
             // wizardPageDatabaseName
             // 
@@ -860,39 +816,6 @@ namespace ShipWorks.Data.Administration
             this.browseDataFiles.TabIndex = 5;
             this.browseDataFiles.Text = "Browse...";
             this.browseDataFiles.Click += new System.EventHandler(this.OnBrowseDatabaseLocation);
-            // 
-            // wizardPageChooseDatabase
-            // 
-            this.wizardPageChooseDatabase.Controls.Add(this.databaseNames);
-            this.wizardPageChooseDatabase.Controls.Add(this.labelFoundDatabases);
-            this.wizardPageChooseDatabase.Description = "Select the name of your ShipWorks database.";
-            this.wizardPageChooseDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageChooseDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageChooseDatabase.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageChooseDatabase.Name = "wizardPageChooseDatabase";
-            this.wizardPageChooseDatabase.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageChooseDatabase.TabIndex = 0;
-            this.wizardPageChooseDatabase.Title = "Choose Database";
-            this.wizardPageChooseDatabase.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextChooseDatabase);
-            this.wizardPageChooseDatabase.PageShown += new System.EventHandler<ShipWorks.UI.Wizard.WizardPageShownEventArgs>(this.OnShownChooseDatabase);
-            // 
-            // databaseNames
-            // 
-            this.databaseNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.databaseNames.Location = new System.Drawing.Point(41, 37);
-            this.databaseNames.MaxDropDownItems = 16;
-            this.databaseNames.Name = "databaseNames";
-            this.databaseNames.Size = new System.Drawing.Size(224, 21);
-            this.databaseNames.TabIndex = 4;
-            // 
-            // labelFoundDatabases
-            // 
-            this.labelFoundDatabases.Location = new System.Drawing.Point(24, 8);
-            this.labelFoundDatabases.Name = "labelFoundDatabases";
-            this.labelFoundDatabases.Size = new System.Drawing.Size(488, 16);
-            this.labelFoundDatabases.TabIndex = 3;
-            this.labelFoundDatabases.Text = "The following databases were found in SQL Server.  Please select your ShipWorks d" +
-    "atabase.";
             // 
             // wizardPageInstallSqlServer
             // 
@@ -1001,10 +924,9 @@ namespace ShipWorks.Data.Administration
             // 
             // labelSetupComplete
             // 
-            this.labelSetupComplete.AutoSize = true;
             this.labelSetupComplete.Location = new System.Drawing.Point(44, 11);
             this.labelSetupComplete.Name = "labelSetupComplete";
-            this.labelSetupComplete.Size = new System.Drawing.Size(163, 13);
+            this.labelSetupComplete.Size = new System.Drawing.Size(476, 82);
             this.labelSetupComplete.TabIndex = 1;
             this.labelSetupComplete.Text = "The database setup is complete.";
             // 
@@ -1409,9 +1331,345 @@ namespace ShipWorks.Data.Administration
             this.databaseLocationBrowserDialog.Description = "Database File Location";
             this.databaseLocationBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
-            // progressTimer
+            // progressInstallTimer
             // 
-            this.progressTimer.Tick += new System.EventHandler(this.OnInstallSqlServerProgressTimer);
+            this.progressInstallTimer.Tick += new System.EventHandler(this.OnInstallSqlServerProgressTimer);
+            // 
+            // wizardPageChooseWisely2008
+            // 
+            this.wizardPageChooseWisely2008.Controls.Add(this.panelSetupLegacy);
+            this.wizardPageChooseWisely2008.Description = "Setup or connect to a ShipWorks database.";
+            this.wizardPageChooseWisely2008.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageChooseWisely2008.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageChooseWisely2008.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageChooseWisely2008.Name = "wizardPageChooseWisely2008";
+            this.wizardPageChooseWisely2008.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageChooseWisely2008.TabIndex = 0;
+            this.wizardPageChooseWisely2008.Title = "Database Setup";
+            this.wizardPageChooseWisely2008.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSetupOrConnect);
+            // 
+            // panelSetupLegacy
+            // 
+            this.panelSetupLegacy.Controls.Add(this.radioChooseCreate2008);
+            this.panelSetupLegacy.Controls.Add(this.labelRestoreDatabase);
+            this.panelSetupLegacy.Controls.Add(this.radioChooseConnect2008);
+            this.panelSetupLegacy.Controls.Add(this.pictureBoxRestoreDatabase);
+            this.panelSetupLegacy.Controls.Add(this.radioChooseRestore2008);
+            this.panelSetupLegacy.Controls.Add(this.labelConnectRunningDatabase);
+            this.panelSetupLegacy.Controls.Add(this.pictureBoxSetupNewDatabase);
+            this.panelSetupLegacy.Controls.Add(this.pictureBoxConnectRunningDatabase);
+            this.panelSetupLegacy.Controls.Add(this.labelSetupNewDatabase);
+            this.panelSetupLegacy.Location = new System.Drawing.Point(23, 4);
+            this.panelSetupLegacy.Name = "panelSetupLegacy";
+            this.panelSetupLegacy.Size = new System.Drawing.Size(499, 210);
+            this.panelSetupLegacy.TabIndex = 11;
+            // 
+            // radioChooseCreate2008
+            // 
+            this.radioChooseCreate2008.AutoSize = true;
+            this.radioChooseCreate2008.Checked = true;
+            this.radioChooseCreate2008.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioChooseCreate2008.Location = new System.Drawing.Point(3, 6);
+            this.radioChooseCreate2008.Name = "radioChooseCreate2008";
+            this.radioChooseCreate2008.Size = new System.Drawing.Size(196, 17);
+            this.radioChooseCreate2008.TabIndex = 1;
+            this.radioChooseCreate2008.TabStop = true;
+            this.radioChooseCreate2008.Text = "Setup ShipWorks from scratch";
+            this.radioChooseCreate2008.UseVisualStyleBackColor = true;
+            // 
+            // labelRestoreDatabase
+            // 
+            this.labelRestoreDatabase.ForeColor = System.Drawing.Color.DimGray;
+            this.labelRestoreDatabase.Location = new System.Drawing.Point(57, 156);
+            this.labelRestoreDatabase.Name = "labelRestoreDatabase";
+            this.labelRestoreDatabase.Size = new System.Drawing.Size(406, 15);
+            this.labelRestoreDatabase.TabIndex = 6;
+            this.labelRestoreDatabase.Text = "Select this option to load a database from a ShipWorks backup.";
+            // 
+            // radioChooseConnect2008
+            // 
+            this.radioChooseConnect2008.AutoSize = true;
+            this.radioChooseConnect2008.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioChooseConnect2008.Location = new System.Drawing.Point(3, 67);
+            this.radioChooseConnect2008.Name = "radioChooseConnect2008";
+            this.radioChooseConnect2008.Size = new System.Drawing.Size(231, 17);
+            this.radioChooseConnect2008.TabIndex = 3;
+            this.radioChooseConnect2008.Text = "Connect to ShipWorks on another PC";
+            this.radioChooseConnect2008.UseVisualStyleBackColor = true;
+            // 
+            // pictureBoxRestoreDatabase
+            // 
+            this.pictureBoxRestoreDatabase.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxRestoreDatabase.Image")));
+            this.pictureBoxRestoreDatabase.Location = new System.Drawing.Point(19, 149);
+            this.pictureBoxRestoreDatabase.Name = "pictureBoxRestoreDatabase";
+            this.pictureBoxRestoreDatabase.Size = new System.Drawing.Size(32, 32);
+            this.pictureBoxRestoreDatabase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxRestoreDatabase.TabIndex = 9;
+            this.pictureBoxRestoreDatabase.TabStop = false;
+            // 
+            // radioChooseRestore2008
+            // 
+            this.radioChooseRestore2008.AutoSize = true;
+            this.radioChooseRestore2008.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioChooseRestore2008.Location = new System.Drawing.Point(3, 130);
+            this.radioChooseRestore2008.Name = "radioChooseRestore2008";
+            this.radioChooseRestore2008.Size = new System.Drawing.Size(187, 17);
+            this.radioChooseRestore2008.TabIndex = 5;
+            this.radioChooseRestore2008.Text = "Restore a ShipWorks backup";
+            this.radioChooseRestore2008.UseVisualStyleBackColor = true;
+            // 
+            // labelConnectRunningDatabase
+            // 
+            this.labelConnectRunningDatabase.ForeColor = System.Drawing.Color.DimGray;
+            this.labelConnectRunningDatabase.Location = new System.Drawing.Point(57, 89);
+            this.labelConnectRunningDatabase.Name = "labelConnectRunningDatabase";
+            this.labelConnectRunningDatabase.Size = new System.Drawing.Size(406, 36);
+            this.labelConnectRunningDatabase.TabIndex = 4;
+            this.labelConnectRunningDatabase.Text = "Select this option to connect to a ShipWorks database that is already running on " +
+    "this computer or another computer.";
+            // 
+            // pictureBoxSetupNewDatabase
+            // 
+            this.pictureBoxSetupNewDatabase.Image = global::ShipWorks.Properties.Resources.box_software1;
+            this.pictureBoxSetupNewDatabase.Location = new System.Drawing.Point(19, 25);
+            this.pictureBoxSetupNewDatabase.Name = "pictureBoxSetupNewDatabase";
+            this.pictureBoxSetupNewDatabase.Size = new System.Drawing.Size(32, 32);
+            this.pictureBoxSetupNewDatabase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxSetupNewDatabase.TabIndex = 5;
+            this.pictureBoxSetupNewDatabase.TabStop = false;
+            // 
+            // pictureBoxConnectRunningDatabase
+            // 
+            this.pictureBoxConnectRunningDatabase.Image = global::ShipWorks.Properties.Resources.server_to_client;
+            this.pictureBoxConnectRunningDatabase.Location = new System.Drawing.Point(19, 86);
+            this.pictureBoxConnectRunningDatabase.Name = "pictureBoxConnectRunningDatabase";
+            this.pictureBoxConnectRunningDatabase.Size = new System.Drawing.Size(32, 32);
+            this.pictureBoxConnectRunningDatabase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxConnectRunningDatabase.TabIndex = 7;
+            this.pictureBoxConnectRunningDatabase.TabStop = false;
+            // 
+            // labelSetupNewDatabase
+            // 
+            this.labelSetupNewDatabase.AutoSize = true;
+            this.labelSetupNewDatabase.ForeColor = System.Drawing.Color.DimGray;
+            this.labelSetupNewDatabase.Location = new System.Drawing.Point(57, 33);
+            this.labelSetupNewDatabase.Name = "labelSetupNewDatabase";
+            this.labelSetupNewDatabase.Size = new System.Drawing.Size(299, 13);
+            this.labelSetupNewDatabase.TabIndex = 2;
+            this.labelSetupNewDatabase.Text = "Select this option if this is your first time installing ShipWorks.";
+            // 
+            // wizardPageManageLocalDb
+            // 
+            this.wizardPageManageLocalDb.Controls.Add(this.labelLocalDbEnableRemote);
+            this.wizardPageManageLocalDb.Controls.Add(this.labelLocalDbEnableRemote2);
+            this.wizardPageManageLocalDb.Controls.Add(this.pictureLocalDbEnableRemote);
+            this.wizardPageManageLocalDb.Controls.Add(this.radioLocalDbEnableRemote);
+            this.wizardPageManageLocalDb.Controls.Add(this.linkConnectHelp2);
+            this.wizardPageManageLocalDb.Controls.Add(this.labelLocalDbConnect);
+            this.wizardPageManageLocalDb.Controls.Add(this.labelLocalDbConnect2);
+            this.wizardPageManageLocalDb.Controls.Add(this.pictureLocalDbConnect);
+            this.wizardPageManageLocalDb.Controls.Add(this.radioLocalDbConnect);
+            this.wizardPageManageLocalDb.Description = "Configure your ShipWorks database.";
+            this.wizardPageManageLocalDb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageManageLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageManageLocalDb.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageManageLocalDb.Name = "wizardPageManageLocalDb";
+            this.wizardPageManageLocalDb.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageManageLocalDb.TabIndex = 0;
+            this.wizardPageManageLocalDb.Title = "Database Setup";
+            this.wizardPageManageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextManageLocalDb);
+            // 
+            // labelLocalDbEnableRemote
+            // 
+            this.labelLocalDbEnableRemote.AutoSize = true;
+            this.labelLocalDbEnableRemote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLocalDbEnableRemote.Location = new System.Drawing.Point(24, 80);
+            this.labelLocalDbEnableRemote.Name = "labelLocalDbEnableRemote";
+            this.labelLocalDbEnableRemote.Size = new System.Drawing.Size(316, 13);
+            this.labelLocalDbEnableRemote.TabIndex = 53;
+            this.labelLocalDbEnableRemote.Text = "Enable support for remote connections from other PC\'s";
+            // 
+            // labelLocalDbEnableRemote2
+            // 
+            this.labelLocalDbEnableRemote2.ForeColor = System.Drawing.Color.DimGray;
+            this.labelLocalDbEnableRemote2.Location = new System.Drawing.Point(100, 108);
+            this.labelLocalDbEnableRemote2.Name = "labelLocalDbEnableRemote2";
+            this.labelLocalDbEnableRemote2.Size = new System.Drawing.Size(406, 17);
+            this.labelLocalDbEnableRemote2.TabIndex = 51;
+            this.labelLocalDbEnableRemote2.Text = "Need to connect other ShipWorks PC\'s to this one? You\'re in the right place.";
+            this.labelLocalDbEnableRemote2.Click += new System.EventHandler(this.OnClickLocalDbEnableRemoteLabel);
+            // 
+            // pictureLocalDbEnableRemote
+            // 
+            this.pictureLocalDbEnableRemote.Image = global::ShipWorks.Properties.Resources.clients;
+            this.pictureLocalDbEnableRemote.Location = new System.Drawing.Point(64, 101);
+            this.pictureLocalDbEnableRemote.Name = "pictureLocalDbEnableRemote";
+            this.pictureLocalDbEnableRemote.Size = new System.Drawing.Size(32, 32);
+            this.pictureLocalDbEnableRemote.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureLocalDbEnableRemote.TabIndex = 52;
+            this.pictureLocalDbEnableRemote.TabStop = false;
+            this.pictureLocalDbEnableRemote.Click += new System.EventHandler(this.OnClickLocalDbEnableRemoteLabel);
+            // 
+            // radioLocalDbEnableRemote
+            // 
+            this.radioLocalDbEnableRemote.AutoSize = true;
+            this.radioLocalDbEnableRemote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioLocalDbEnableRemote.Location = new System.Drawing.Point(43, 108);
+            this.radioLocalDbEnableRemote.Name = "radioLocalDbEnableRemote";
+            this.radioLocalDbEnableRemote.Size = new System.Drawing.Size(14, 13);
+            this.radioLocalDbEnableRemote.TabIndex = 50;
+            this.radioLocalDbEnableRemote.UseVisualStyleBackColor = true;
+            // 
+            // linkConnectHelp2
+            // 
+            this.linkConnectHelp2.AutoSize = true;
+            this.linkConnectHelp2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkConnectHelp2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkConnectHelp2.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.linkConnectHelp2.Location = new System.Drawing.Point(100, 46);
+            this.linkConnectHelp2.Name = "linkConnectHelp2";
+            this.linkConnectHelp2.Size = new System.Drawing.Size(270, 13);
+            this.linkConnectHelp2.TabIndex = 49;
+            this.linkConnectHelp2.Text = "(But first, make sure it\'s ready for remote connections)";
+            // 
+            // labelLocalDbConnect
+            // 
+            this.labelLocalDbConnect.AutoSize = true;
+            this.labelLocalDbConnect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLocalDbConnect.Location = new System.Drawing.Point(24, 7);
+            this.labelLocalDbConnect.Name = "labelLocalDbConnect";
+            this.labelLocalDbConnect.Size = new System.Drawing.Size(259, 13);
+            this.labelLocalDbConnect.TabIndex = 48;
+            this.labelLocalDbConnect.Text = "Connect to ShipWorks running on another PC";
+            // 
+            // labelLocalDbConnect2
+            // 
+            this.labelLocalDbConnect2.ForeColor = System.Drawing.Color.DimGray;
+            this.labelLocalDbConnect2.Location = new System.Drawing.Point(100, 29);
+            this.labelLocalDbConnect2.Name = "labelLocalDbConnect2";
+            this.labelLocalDbConnect2.Size = new System.Drawing.Size(406, 17);
+            this.labelLocalDbConnect2.TabIndex = 46;
+            this.labelLocalDbConnect2.Text = "Is ShipWorks already installed on another PC? Let\'s get you connected.";
+            this.labelLocalDbConnect2.Click += new System.EventHandler(this.OnClickLocalDbConnectLabel);
+            // 
+            // pictureLocalDbConnect
+            // 
+            this.pictureLocalDbConnect.Image = global::ShipWorks.Properties.Resources.server_to_client;
+            this.pictureLocalDbConnect.Location = new System.Drawing.Point(64, 28);
+            this.pictureLocalDbConnect.Name = "pictureLocalDbConnect";
+            this.pictureLocalDbConnect.Size = new System.Drawing.Size(32, 32);
+            this.pictureLocalDbConnect.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureLocalDbConnect.TabIndex = 47;
+            this.pictureLocalDbConnect.TabStop = false;
+            this.pictureLocalDbConnect.Click += new System.EventHandler(this.OnClickLocalDbConnectLabel);
+            // 
+            // radioLocalDbConnect
+            // 
+            this.radioLocalDbConnect.AutoSize = true;
+            this.radioLocalDbConnect.Checked = true;
+            this.radioLocalDbConnect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioLocalDbConnect.Location = new System.Drawing.Point(43, 35);
+            this.radioLocalDbConnect.Name = "radioLocalDbConnect";
+            this.radioLocalDbConnect.Size = new System.Drawing.Size(14, 13);
+            this.radioLocalDbConnect.TabIndex = 45;
+            this.radioLocalDbConnect.TabStop = true;
+            this.radioLocalDbConnect.UseVisualStyleBackColor = true;
+            // 
+            // wizardPageUpgradeLocalDb
+            // 
+            this.wizardPageUpgradeLocalDb.Controls.Add(this.panelUpgradeLocalDb);
+            this.wizardPageUpgradeLocalDb.Controls.Add(this.panelUpgradeLocalDbReady);
+            this.wizardPageUpgradeLocalDb.Description = "Enable ShipWorks for remote connections.";
+            this.wizardPageUpgradeLocalDb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageUpgradeLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageUpgradeLocalDb.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageUpgradeLocalDb.Name = "wizardPageUpgradeLocalDb";
+            this.wizardPageUpgradeLocalDb.NextRequiresElevation = true;
+            this.wizardPageUpgradeLocalDb.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageUpgradeLocalDb.TabIndex = 0;
+            this.wizardPageUpgradeLocalDb.Title = "Database Setup";
+            this.wizardPageUpgradeLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextUpgradeLocalDb);
+            this.wizardPageUpgradeLocalDb.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancellUpgradeLocalDb);
+            // 
+            // panelUpgradeLocalDb
+            // 
+            this.panelUpgradeLocalDb.Controls.Add(this.progressUpdgradeLocalDb);
+            this.panelUpgradeLocalDb.Controls.Add(this.pictureUpgradeLocalDbStatus);
+            this.panelUpgradeLocalDb.Controls.Add(this.labelUpgradeLocalDb2);
+            this.panelUpgradeLocalDb.Controls.Add(this.pictureUpgrdaeLocalDb);
+            this.panelUpgradeLocalDb.Controls.Add(this.labelUpgradeLocalDb);
+            this.panelUpgradeLocalDb.Location = new System.Drawing.Point(23, 93);
+            this.panelUpgradeLocalDb.Name = "panelUpgradeLocalDb";
+            this.panelUpgradeLocalDb.Size = new System.Drawing.Size(478, 80);
+            this.panelUpgradeLocalDb.TabIndex = 158;
+            this.panelUpgradeLocalDb.Visible = false;
+            // 
+            // progressUpdgradeLocalDb
+            // 
+            this.progressUpdgradeLocalDb.Location = new System.Drawing.Point(70, 46);
+            this.progressUpdgradeLocalDb.Name = "progressUpdgradeLocalDb";
+            this.progressUpdgradeLocalDb.Size = new System.Drawing.Size(379, 23);
+            this.progressUpdgradeLocalDb.TabIndex = 52;
+            // 
+            // pictureUpgradeLocalDbStatus
+            // 
+            this.pictureUpgradeLocalDbStatus.Image = ((System.Drawing.Image)(resources.GetObject("pictureUpgradeLocalDbStatus.Image")));
+            this.pictureUpgradeLocalDbStatus.Location = new System.Drawing.Point(48, 49);
+            this.pictureUpgradeLocalDbStatus.Name = "pictureUpgradeLocalDbStatus";
+            this.pictureUpgradeLocalDbStatus.Size = new System.Drawing.Size(16, 16);
+            this.pictureUpgradeLocalDbStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureUpgradeLocalDbStatus.TabIndex = 51;
+            this.pictureUpgradeLocalDbStatus.TabStop = false;
+            // 
+            // labelUpgradeLocalDb2
+            // 
+            this.labelUpgradeLocalDb2.AutoSize = true;
+            this.labelUpgradeLocalDb2.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelUpgradeLocalDb2.Location = new System.Drawing.Point(46, 28);
+            this.labelUpgradeLocalDb2.Name = "labelUpgradeLocalDb2";
+            this.labelUpgradeLocalDb2.Size = new System.Drawing.Size(422, 13);
+            this.labelUpgradeLocalDb2.TabIndex = 50;
+            this.labelUpgradeLocalDb2.Text = "ShipWorks is enabling support for remote connections.  This may take a few minute" +
+    "s...";
+            // 
+            // pictureUpgrdaeLocalDb
+            // 
+            this.pictureUpgrdaeLocalDb.Image = global::ShipWorks.Properties.Resources.gears_preferences;
+            this.pictureUpgrdaeLocalDb.Location = new System.Drawing.Point(9, 10);
+            this.pictureUpgrdaeLocalDb.Name = "pictureUpgrdaeLocalDb";
+            this.pictureUpgrdaeLocalDb.Size = new System.Drawing.Size(32, 32);
+            this.pictureUpgrdaeLocalDb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureUpgrdaeLocalDb.TabIndex = 49;
+            this.pictureUpgrdaeLocalDb.TabStop = false;
+            // 
+            // labelUpgradeLocalDb
+            // 
+            this.labelUpgradeLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUpgradeLocalDb.Location = new System.Drawing.Point(45, 12);
+            this.labelUpgradeLocalDb.Name = "labelUpgradeLocalDb";
+            this.labelUpgradeLocalDb.Size = new System.Drawing.Size(404, 16);
+            this.labelUpgradeLocalDb.TabIndex = 48;
+            this.labelUpgradeLocalDb.Text = "Enabling Remote Connections";
+            // 
+            // panelUpgradeLocalDbReady
+            // 
+            this.panelUpgradeLocalDbReady.Controls.Add(this.labelUpgradeLocalDbReady);
+            this.panelUpgradeLocalDbReady.Location = new System.Drawing.Point(23, 5);
+            this.panelUpgradeLocalDbReady.Name = "panelUpgradeLocalDbReady";
+            this.panelUpgradeLocalDbReady.Size = new System.Drawing.Size(478, 82);
+            this.panelUpgradeLocalDbReady.TabIndex = 157;
+            // 
+            // labelUpgradeLocalDbReady
+            // 
+            this.labelUpgradeLocalDbReady.Location = new System.Drawing.Point(8, 12);
+            this.labelUpgradeLocalDbReady.Name = "labelUpgradeLocalDbReady";
+            this.labelUpgradeLocalDbReady.Size = new System.Drawing.Size(470, 19);
+            this.labelUpgradeLocalDbReady.TabIndex = 2;
+            this.labelUpgradeLocalDbReady.Text = "ShipWorks is ready to be enabled for remote connections. Click Next to begin.\r\n";
+            // 
+            // progressLocalDbTimer
+            // 
+            this.progressLocalDbTimer.Tick += new System.EventHandler(this.OnUpgradeLocalDbProgressTimer);
             // 
             // DatabaseSetupWizard
             // 
@@ -1422,13 +1680,14 @@ namespace ShipWorks.Data.Administration
             this.Name = "DatabaseSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
-            this.wizardPageSetupOrConnect,
+            this.wizardPageChooseWisely2012,
+            this.wizardPageChooseWisely2008,
+            this.wizardPageManageLocalDb,
+            this.wizardPageUpgradeLocalDb,
             this.wizardPageRestoreOption,
             this.wizardPageChooseSqlServer,
             this.wizardPagePrerequisitePlaceholder,
             this.wizardPageSelectSqlServerInstance,
-            this.wizardPageLoginSqlServer,
-            this.wizardPageChooseDatabase,
             this.wizardPageInstallSqlServer,
             this.wizardPageDatabaseName,
             this.wizardPageRestoreLogin,
@@ -1443,12 +1702,7 @@ namespace ShipWorks.Data.Administration
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
-            this.wizardPageSetupOrConnect.ResumeLayout(false);
-            this.panelSetupLegacy.ResumeLayout(false);
-            this.panelSetupLegacy.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRestoreDatabase)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSetupNewDatabase)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConnectRunningDatabase)).EndInit();
+            this.wizardPageChooseWisely2012.ResumeLayout(false);
             this.panelSetup2012.ResumeLayout(false);
             this.panelSetup2012.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAnotherPC)).EndInit();
@@ -1462,14 +1716,14 @@ namespace ShipWorks.Data.Administration
             this.panelSqlInstanceCurrent.PerformLayout();
             this.wizardPageSelectSqlServerInstance.ResumeLayout(false);
             this.wizardPageSelectSqlServerInstance.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureSqlConnection)).EndInit();
+            this.panelSqlInstanceHelp.ResumeLayout(false);
+            this.panelSqlInstanceHelp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).EndInit();
-            this.wizardPageLoginSqlServer.ResumeLayout(false);
-            this.wizardPageLoginSqlServer.PerformLayout();
             this.wizardPageDatabaseName.ResumeLayout(false);
             this.wizardPageDatabaseName.PerformLayout();
             this.panelDataFiles.ResumeLayout(false);
             this.panelDataFiles.PerformLayout();
-            this.wizardPageChooseDatabase.ResumeLayout(false);
             this.wizardPageInstallSqlServer.ResumeLayout(false);
             this.panelSqlServerInstallProgress.ResumeLayout(false);
             this.panelSqlServerInstallProgress.PerformLayout();
@@ -1494,56 +1748,46 @@ namespace ShipWorks.Data.Administration
             this.wizardPagePrerequisitePlaceholder.ResumeLayout(false);
             this.wizardPagePrerequisitePlaceholder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            this.wizardPageChooseWisely2008.ResumeLayout(false);
+            this.panelSetupLegacy.ResumeLayout(false);
+            this.panelSetupLegacy.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRestoreDatabase)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSetupNewDatabase)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxConnectRunningDatabase)).EndInit();
+            this.wizardPageManageLocalDb.ResumeLayout(false);
+            this.wizardPageManageLocalDb.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbEnableRemote)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureLocalDbConnect)).EndInit();
+            this.wizardPageUpgradeLocalDb.ResumeLayout(false);
+            this.panelUpgradeLocalDb.ResumeLayout(false);
+            this.panelUpgradeLocalDb.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgradeLocalDbStatus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureUpgrdaeLocalDb)).EndInit();
+            this.panelUpgradeLocalDbReady.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ShipWorks.UI.Wizard.WizardPage wizardPageSetupOrConnect;
+        private ShipWorks.UI.Wizard.WizardPage wizardPageChooseWisely2012;
         private ShipWorks.UI.Wizard.WizardPage wizardPageChooseSqlServer;
-        private System.Windows.Forms.RadioButton radioSetupNewDatabase;
-        private System.Windows.Forms.RadioButton radioRestoreDatabase;
-        private System.Windows.Forms.RadioButton radioConnectRunningDatabase;
         private System.Windows.Forms.Label labelChooseNewOrExistingSqlServer;
         private System.Windows.Forms.RadioButton radioInstallSqlServer;
         private System.Windows.Forms.TextBox instanceName;
         private System.Windows.Forms.Label labelInstanceName;
         private System.Windows.Forms.RadioButton radioSqlServerCurrent;
         private ShipWorks.UI.Wizard.WizardPage wizardPageSelectSqlServerInstance;
-        private System.Windows.Forms.Label labelFoundInstances;
         private System.Windows.Forms.ComboBox comboSqlServers;
-        private System.Windows.Forms.Label labelFoundInstanceTroubleshooting;
-        private ShipWorks.UI.Wizard.WizardPage wizardPageLoginSqlServer;
-        private System.Windows.Forms.TextBox password;
-        private System.Windows.Forms.TextBox username;
-        private System.Windows.Forms.Label labelConnectUsing;
-        private System.Windows.Forms.Label labelNeedLoginInfo;
-        private System.Windows.Forms.Label labelWindowsAuthDescription;
-        private System.Windows.Forms.Label labelPassword;
-        private System.Windows.Forms.Label labelUsername;
-        private System.Windows.Forms.RadioButton sqlServerAuth;
-        private System.Windows.Forms.RadioButton windowsAuth;
         private ShipWorks.UI.Wizard.WizardPage wizardPageDatabaseName;
         private System.Windows.Forms.TextBox databaseName;
         private System.Windows.Forms.Label labelDatabaseName;
         private System.Windows.Forms.Label labelEnterDatabaseName;
-        private ShipWorks.UI.Wizard.WizardPage wizardPageChooseDatabase;
-        private System.Windows.Forms.ComboBox databaseNames;
-        private System.Windows.Forms.Label labelFoundDatabases;
         private ShipWorks.UI.Wizard.WizardPage wizardPageInstallSqlServer;
         private System.Windows.Forms.Panel panelSqlServerInstallReady;
         private System.Windows.Forms.Label label21;
         private ShipWorks.UI.Wizard.WizardPage wizardPageComplete;
         private System.Windows.Forms.PictureBox iconSetupComplete;
-        private System.Windows.Forms.Label labelSetupComplete;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBoxSetupNewDatabase;
-        private System.Windows.Forms.Label labelSetupNewDatabase;
-        private System.Windows.Forms.Label labelConnectRunningDatabase;
-        private System.Windows.Forms.PictureBox pictureBoxConnectRunningDatabase;
-        private System.Windows.Forms.Label labelRestoreDatabase;
-        private System.Windows.Forms.PictureBox pictureBoxRestoreDatabase;
         private ShipWorks.UI.Wizard.WizardPage wizardPageShipWorksAdmin;
         private System.Windows.Forms.TextBox swEmail;
         private System.Windows.Forms.Label label7;
@@ -1586,16 +1830,12 @@ namespace ShipWorks.Data.Administration
         private UI.Controls.InfoTip infoTip1;
         private UI.Controls.InfoTip infoTipDatabaseName;
         private UI.Controls.InfoTip helpUserEmail;
-        private System.Windows.Forms.Panel panelSetupLegacy;
         private System.Windows.Forms.Panel panelSetup2012;
         private UI.Controls.LinkControl linkEnableRemoteConnections;
-        private System.Windows.Forms.Label labelGeek;
         private System.Windows.Forms.Label labelConnectToAnotherPC;
         private System.Windows.Forms.Label labelAnotherPC;
         private System.Windows.Forms.PictureBox pictureBoxAnotherPC;
-        private System.Windows.Forms.RadioButton radioRestoreBackup;
-        private System.Windows.Forms.RadioButton radioConnectToAnotherPC;
-        private System.Windows.Forms.RadioButton radioNewDatabase;
+        private System.Windows.Forms.RadioButton radioChooseConnect2012;
         private System.Windows.Forms.Panel panelSqlInstanceCurrent;
         private System.Windows.Forms.Panel panelSqlInstanceRunning;
         private System.Windows.Forms.Label labelSqlServerRunning3;
@@ -1614,6 +1854,54 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label labelPeparingToRun;
         private System.Windows.Forms.PictureBox pictureBoxPreparing;
         private System.Windows.Forms.Label labelPreparing;
-        private System.Windows.Forms.Timer progressTimer;
+        private System.Windows.Forms.Timer progressInstallTimer;
+        private UI.Controls.LinkControl linkHelpSelectSqlInstance;
+        private System.Windows.Forms.Label labelSelectSqlInstance2;
+        private System.Windows.Forms.Label labelSelectSqlInstance;
+        private System.Windows.Forms.Label labelSqlConnection;
+        private UI.Controls.LinkControl linkSqlInstanceAccount;
+        private System.Windows.Forms.Panel panelSqlInstanceHelp;
+        private System.Windows.Forms.PictureBox pictureSqlConnection;
+        private Divelements.SandGrid.SandGrid gridDatabses;
+        private Divelements.SandGrid.GridColumn gridColumnName;
+        private Divelements.SandGrid.GridColumn gridColumnStoreType;
+        private Divelements.SandGrid.GridColumn gridColumnLatestOrder;
+        private System.Windows.Forms.Label labelDatabaseSelect;
+        private Divelements.SandGrid.GridColumn gridColumnStatus;
+        private UI.Wizard.WizardPage wizardPageChooseWisely2008;
+        private System.Windows.Forms.Panel panelSetupLegacy;
+        private System.Windows.Forms.RadioButton radioChooseCreate2008;
+        private System.Windows.Forms.Label labelRestoreDatabase;
+        private System.Windows.Forms.RadioButton radioChooseConnect2008;
+        private System.Windows.Forms.PictureBox pictureBoxRestoreDatabase;
+        private System.Windows.Forms.RadioButton radioChooseRestore2008;
+        private System.Windows.Forms.Label labelConnectRunningDatabase;
+        private System.Windows.Forms.PictureBox pictureBoxSetupNewDatabase;
+        private System.Windows.Forms.PictureBox pictureBoxConnectRunningDatabase;
+        private System.Windows.Forms.Label labelSetupNewDatabase;
+        private UI.Wizard.WizardPage wizardPageManageLocalDb;
+        private System.Windows.Forms.Label labelLocalDbEnableRemote;
+        private System.Windows.Forms.Label labelLocalDbEnableRemote2;
+        private System.Windows.Forms.PictureBox pictureLocalDbEnableRemote;
+        private System.Windows.Forms.RadioButton radioLocalDbEnableRemote;
+        private UI.Controls.LinkControl linkConnectHelp2;
+        private System.Windows.Forms.Label labelLocalDbConnect;
+        private System.Windows.Forms.Label labelLocalDbConnect2;
+        private System.Windows.Forms.PictureBox pictureLocalDbConnect;
+        private System.Windows.Forms.RadioButton radioLocalDbConnect;
+        private UI.Wizard.WizardPage wizardPageUpgradeLocalDb;
+        private System.Windows.Forms.Panel panelUpgradeLocalDb;
+        private System.Windows.Forms.ProgressBar progressUpdgradeLocalDb;
+        private System.Windows.Forms.PictureBox pictureUpgradeLocalDbStatus;
+        private System.Windows.Forms.Label labelUpgradeLocalDb2;
+        private System.Windows.Forms.PictureBox pictureUpgrdaeLocalDb;
+        private System.Windows.Forms.Label labelUpgradeLocalDb;
+        private System.Windows.Forms.Panel panelUpgradeLocalDbReady;
+        private System.Windows.Forms.Label labelUpgradeLocalDbReady;
+        private System.Windows.Forms.Timer progressLocalDbTimer;
+        private System.Windows.Forms.Label labelSetupComplete;
+        private System.Windows.Forms.Label labelGeek;
+        private System.Windows.Forms.RadioButton radioChooseRestore2012;
+        private System.Windows.Forms.RadioButton radioChooseCreate2012;
     }
 }

@@ -170,8 +170,8 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private void UpdateControlLayout()
         {
-            panelInputSource.Visible = task.RequiresInput;
-            panelTaskSettings.Top = task.RequiresInput ? panelInputSource.Bottom : panelInputSource.Top;
+            panelInputSource.Visible = task.RequiresInput != ActionTaskInputRequirement.None;
+            panelTaskSettings.Top = panelInputSource.Visible ? panelInputSource.Bottom : panelInputSource.Top;
 
             flowInfoControl.UpdateInfoDisplay(task, trigger, allBubbles);
             flowInfoControl.Top = panelTaskSettings.Bottom;
@@ -277,7 +277,7 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private EntityType? GetEffectiveInputEntityType()
         {
-            if (!task.RequiresInput)
+            if (task.RequiresInput != ActionTaskInputRequirement.None)
             {
                 return null;
             }
@@ -346,21 +346,33 @@ namespace ShipWorks.Actions.Tasks
 
             if (trigger.TriggeringEntityType != null)
             {
-                ToolStripMenuItem specificItem = new ToolStripMenuItem(GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType));
-                specificItem.Click += new EventHandler(OnChangeInputSource);
-                specificItem.Tag = ActionTaskInputSource.TriggeringRecord;
-                inputSourceMenu.Items.Add(specificItem);
+                AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType));
             }
 
-            ToolStripMenuItem filterItem = new ToolStripMenuItem(GetInputFilterOption(task.InputEntityType));
-            filterItem.Click += new EventHandler(OnChangeInputSource);
-            filterItem.Tag = ActionTaskInputSource.FilterContents;
-            inputSourceMenu.Items.Add(filterItem);
+            AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
 
+            if (task.RequiresInput == ActionTaskInputRequirement.Optional)
+            {
+                AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "Nothing");
+            }
+            
             labelInput.Text = task.InputLabel;
             inputSourceLink.Left = labelInput.Right;
 
             SelectInputSource((ActionTaskInputSource) task.Entity.InputSource);
+        }
+
+        /// <summary>
+        /// Adds an input source to the itemSourceMenu
+        /// </summary>
+        /// <param name="inputSource">Type of input source</param>
+        /// <param name="label">Label to display on the menu for this item</param>
+        private void AddInputSourceMenuItem(ActionTaskInputSource inputSource, string label)
+        {
+            ToolStripMenuItem item = new ToolStripMenuItem(label);
+            item.Click += OnChangeInputSource;
+            item.Tag = inputSource;
+            inputSourceMenu.Items.Add(item);  
         }
         
         /// <summary>

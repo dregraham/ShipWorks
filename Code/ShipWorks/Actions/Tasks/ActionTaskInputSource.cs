@@ -13,6 +13,11 @@ namespace ShipWorks.Actions.Tasks
     public enum ActionTaskInputSource
     {
         /// <summary>
+        /// No data should be fed into the task
+        /// </summary>
+        Nothing = -1,
+
+        /// <summary>
         /// The data is the record\row that triggered the action
         /// </summary>
         TriggeringRecord = 0,

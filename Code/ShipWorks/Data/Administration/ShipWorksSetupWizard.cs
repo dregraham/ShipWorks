@@ -37,6 +37,30 @@ namespace ShipWorks.Data.Administration
         // Indicates if this session of the wizard has created the database
         bool createdDatabase = false;
 
+        // How we need to elevate
+        ElevatedPreparationType preparationType = ElevatedPreparationType.None;
+
+        /// <summary>
+        /// What we need to do from elevation
+        /// </summary>
+        enum ElevatedPreparationType
+        {
+            /// <summary>
+            /// Nothing to do from elevation - but we may still need to create an actual database
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// Install LocalDb
+            /// </summary>
+            InstallLocalDb,
+
+            /// <summary>
+            /// LocalDb has been upgraded to the full version of SQL Server at some point, but we still need to assign a database name for this ShipWorks session
+            /// </summary>
+            AssignFullDatabaseName
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -46,20 +70,7 @@ namespace ShipWorks.Data.Administration
 
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
-            sqlInstaller.Exited += new EventHandler(OnInstallerLocalDbExited);
-        }
-
-        /// <summary>
-        /// User wants to run the detailed database setup
-        /// </summary>
-        private void OnLinkDetailedSetup(object sender, EventArgs e)
-        {
-            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
-            {
-                BeginInvoke(new MethodInvoker(Hide));
-
-                DialogResult = dlg.ShowDialog(this);
-            }
+            sqlInstaller.Exited += new EventHandler(OnPrepareAutomaticDatabaseExited);
         }
 
         /// <summary>
@@ -70,8 +81,35 @@ namespace ShipWorks.Data.Administration
             // If we're stepping back into this, clean up anything we've done so far
             DropPendingDatabase();
 
-            // As long as we can connect to master, we know we don't need to actually install LocalDB, which means we don't need to elevate
-            wizardPageWelcome.NextRequiresElevation = !CanConnectToLocalDb("master");
+            // Determine what we need to do from the elevation
+            preparationType = DetermineElevationPreparationType();
+
+            // See if we are going to require elevation to do what we need to do
+            startFromScratch.ShowShield = (preparationType != ElevatedPreparationType.None);
+
+            // User has to click one of our buttons
+            NextVisible = false;
+        }
+
+        /// <summary>
+        /// Same as moving next
+        /// </summary>
+        private void OnStartFromScratch(object sender, EventArgs e)
+        {
+            MoveNext();
+        }
+
+        /// <summary>
+        /// User wants to run the detailed database setup
+        /// </summary>
+        private void OnOpenDetailedSetup(object sender, EventArgs e)
+        {
+            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+            {
+                BeginInvoke(new MethodInvoker(Hide));
+
+                DialogResult = dlg.ShowDialog(this);
+            }
         }
 
         /// <summary>
@@ -79,12 +117,22 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            // If next requires elevation, it means we need to install localdb
-            if (wizardPageWelcome.NextRequiresElevation)
+            // Reset next visibility
+            NextVisible = true;
+
+            // If next requires elevation
+            if (preparationType != ElevatedPreparationType.None)
             {
                 try
                 {
-                    sqlInstaller.InstallLocalDb();
+                    if (preparationType == ElevatedPreparationType.InstallLocalDb)
+                    {
+                        sqlInstaller.InstallLocalDb();
+                    }
+                    else
+                    {
+                        sqlInstaller.AssignAutomaticDatabaseName();
+                    }
                 }
                 catch (Win32Exception ex)
                 {
@@ -100,16 +148,16 @@ namespace ShipWorks.Data.Administration
                     e.NextPage = CurrentPage;
                 }
             }
-            // If it doesn't require elevation, it's already installed - but we aren't sure if the ShipWorks database actually exists or not
+            // If it doesn't require elevation, SQL Server is ready to go - but we aren't sure if the ShipWorks database actually exists or not
             else
             {
                 Cursor.Current = Cursors.WaitCursor;
 
                 // If we can actually connect to the ShipWorks database, then there is nothing more for this wizard to do
-                if (CanConnectToLocalDb(SqlInstanceUtility.LocalDbDatabaseName))
+                if (CanConnectToAutomaticDatabase())
                 {
-                    sqlSession.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
-                    sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
+                    sqlSession.Configuration.ServerInstance = SqlInstanceUtility.AutomaticServerInstance;
+                    sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.AutomaticDatabaseName;
                     sqlSession.SaveAsCurrent();
 
                     e.NextPage = wizardPageFinishExisting;
@@ -118,9 +166,9 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Stepping into the install SQL Server page
+        /// Stepping into the prepare automatic database page
         /// </summary>
-        private void OnSteppingIntoInstallLocalDb(object sender, WizardSteppingIntoEventArgs e)
+        private void OnSteppingIntoPrepareAutomaticDatabase(object sender, WizardSteppingIntoEventArgs e)
         {
             // We shouldn't get here stepping forward, since the StepNext of welcome would have advanced
             // to the finish, but we could get here while stepping back.
@@ -135,13 +183,13 @@ namespace ShipWorks.Data.Administration
 
             progressPreparing.Value = 0;
 
-            // If elevation is required, we are going to be installing LocalDB in the background, so start the timer that will monitor that progress.
-            if (wizardPageWelcome.NextRequiresElevation)
+            // If we are going to be installing LocalDB in the background, start the timer that will monitor that progress.
+            if (preparationType == ElevatedPreparationType.InstallLocalDb)
             {
-                progressTimer.Start();
+                localDbProgressTimer.Start();
             }
             // Otherwise, we just need to go ahead and create the database right now
-            else
+            else if (preparationType == ElevatedPreparationType.None)
             {
                 MethodInvoker invoker = new MethodInvoker(CreateDatabase);
                 invoker.BeginInvoke(CreateDatabaseComplete, invoker);
@@ -165,34 +213,30 @@ namespace ShipWorks.Data.Administration
             else if (fileInfo.Length < expectedFileSize)
             {
                 progressPreparing.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
-
-                log.InfoFormat("Updated value to {0}.  ({1} of {2})", progressPreparing.Value, fileInfo.Length, expectedFileSize);
             }
             // Fully downloaded
             else
             {
                 // Download counts as 33%, the installation phase increments by 1 each 1/10th second (it installs that fast)
                 progressPreparing.Value = Math.Max(33, Math.Min(progressPreparing.Value + 1, 90));
-
-                log.InfoFormat("Installing - updated progress to {0}", progressPreparing.Value);
             }
         }
 
         /// <summary>
-        /// The Sql Server installation has completed.
+        /// The elevated preparations are coplete
         /// </summary>
-        private void OnInstallerLocalDbExited(object sender, EventArgs e)
+        private void OnPrepareAutomaticDatabaseExited(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler(OnInstallerLocalDbExited), new object[] { sender, e });
+                BeginInvoke(new EventHandler(OnPrepareAutomaticDatabaseExited), new object[] { sender, e });
                 return;
             }
 
-            progressTimer.Stop();
+            localDbProgressTimer.Stop();
 
             // If it was successful, we should now be able to connect.
-            if (sqlInstaller.LastExitCode == 0 && SqlInstanceUtility.IsLocalDbInstalled())
+            if (sqlInstaller.LastExitCode == 0)
             {
                 MethodInvoker invoker = new MethodInvoker(CreateDatabase);
                 invoker.BeginInvoke(CreateDatabaseComplete, invoker);
@@ -200,18 +244,18 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "ShipWorks was unable to install the database on your computer.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
+                    "ShipWorks was unable to prepare your computer.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
 
                 MoveBack();
             }
         }
 
         /// <summary>
-        /// Create the ShipWorks database within LocalDB
+        /// Create the ShipWorks database within automatic server instance
         /// </summary>
         private void CreateDatabase()
         {
-            sqlSession.Configuration.ServerInstance = SqlInstanceUtility.LocalDbServerInstance;
+            sqlSession.Configuration.CopyFrom(SqlInstanceUtility.DetermineCredentials(SqlInstanceUtility.AutomaticServerInstance));
             sqlSession.Configuration.DatabaseName = "";
 
             try
@@ -226,8 +270,8 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
-                    SqlDatabaseCreator.CreateDatabase(SqlInstanceUtility.LocalDbDatabaseName, con);
-                    sqlSession.Configuration.DatabaseName = SqlInstanceUtility.LocalDbDatabaseName;
+                    ShipWorksDatabaseUtility.CreateDatabase(ShipWorksDatabaseUtility.AutomaticDatabaseName, con);
+                    sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.AutomaticDatabaseName;
 
                     createdDatabase = true;
                 }
@@ -239,7 +283,7 @@ namespace ShipWorks.Data.Administration
 
                 using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                 {
-                    SqlDatabaseCreator.CreateSchemaAndData();
+                    ShipWorksDatabaseUtility.CreateSchemaAndData();
                 }
 
                 Invoke((MethodInvoker) delegate { progressPreparing.Value = 100; });
@@ -284,14 +328,14 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Stepping next from the install LocalDb page
+        /// Stepping next from the preparation page
         /// </summary>
-        private void OnStepNextInstallLocalDb(object sender, WizardStepEventArgs e)
+        private void OnStepNextPrepareAutomaticDatabase(object sender, WizardStepEventArgs e)
         {
-            // LocalDB should now be fully installed and ready to go
+            // Database should have been created if we were on that page
             if (!createdDatabase)
             {
-                throw new InvalidOperationException("We shouldn't be moving next from this page if we weren't the ones to install it.");
+                throw new InvalidOperationException("We shouldn't be moving next from this page if we didn't create a database - we should have skipped it");
             }
         }
 
@@ -359,6 +403,43 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Determines what, if anything, we need to do from background elevation
+        /// </summary>
+        private ElevatedPreparationType DetermineElevationPreparationType()
+        {
+            // If the instance we are connecting to is LocalDb, then we just need to know if we can connect to LocalDb at all.  Even if we have to create
+            // a database, we do that without elevation.
+            if (SqlInstanceUtility.AutomaticServerInstance == SqlInstanceUtility.LocalDbServerInstance)
+            {
+                return CanConnectToLocalDb("master") ? ElevatedPreparationType.None : ElevatedPreparationType.InstallLocalDb;
+            }
+            else
+            {
+                string database = ShipWorksDatabaseUtility.AutomaticDatabaseName;
+
+                // If the automatic name doesn't exist yet, then we need elevation to assign it, as that goes into HKLM
+                return (database == null) ? ElevatedPreparationType.AssignFullDatabaseName : ElevatedPreparationType.None;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if we can fully connect to the automatic database
+        /// </summary>
+        private bool CanConnectToAutomaticDatabase()
+        {
+            SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(SqlInstanceUtility.AutomaticServerInstance);
+            if (configuration == null)
+            {
+                return false;
+            }
+
+            SqlSession session = new SqlSession(configuration);
+            session.Configuration.DatabaseName = ShipWorksDatabaseUtility.AutomaticDatabaseName;
+
+            return session.CanConnect();
+        }
+
+        /// <summary>
         /// Indicates if the LocalDB is installed and able to connect to the given database
         /// </summary>
         public static bool CanConnectToLocalDb(string database)
@@ -377,8 +458,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Drop the database that we created due to the use going back or cancelling
-        /// the wizard.
+        /// Drop the database that we created due to the use going back or cancelling the wizard.
         /// </summary>
         private void DropPendingDatabase()
         {
@@ -389,7 +469,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                SqlDatabaseCreator.DropDatabase(sqlSession, SqlInstanceUtility.LocalDbDatabaseName);
+                ShipWorksDatabaseUtility.DropDatabase(sqlSession, ShipWorksDatabaseUtility.AutomaticDatabaseName);
 
             }
             catch (SqlException ex)
@@ -402,9 +482,9 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Cancell the installation of sql server
+        /// Cancel the install \ preparation of the automatic sql server database
         /// </summary>
-        private void OnCancellInstallLocalDb(object sender, CancelEventArgs e)
+        private void OnCancelPrepareAutomaticDatabase(object sender, CancelEventArgs e)
         {
             if (!NextEnabled)
             {

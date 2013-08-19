@@ -36,26 +36,64 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
         /// Anything older will be purged</param>
         /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
-        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc)
+        /// <param name="retryAttempts">Number of times to retry the purge if a handleable error is detected.  Pass 0 to not retry.</param>
+        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc, int retryAttempts)
         {
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
-            {
-                try
-                {
-                    using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        // Disable the command timeout since the scripts should take care of timing themselves out
-                        command.CommandTimeout = 0;
-                        command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
-                        command.Parameters.AddWithValue("@latestExecutionTimeInUtc", (object)stopExecutionAfterUtc ?? DBNull.Value);
+            // If we detect a deadlock or sql lock, we'll sleep before we try again.
+            // The sleep time will be one second times the sleep multiplier, so that we wait a little longer during each loop.
+            int sleepMultiplier = 1;
 
-                        command.ExecuteNonQuery();
-                    }
-                }
-                catch (SqlLockException ex)
+            // we always want this call to be the deadlock victim
+            using (new SqlDeadlockPriorityScope(-6))
+            {
+                while (retryAttempts >= 0)
                 {
-                    log.Warn(ex.Message);
+                    retryAttempts--;
+                    using (SqlConnection connection = SqlSession.Current.OpenConnection())
+                    {
+                        try
+                        {
+                            using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
+                            {
+                                command.CommandType = CommandType.StoredProcedure;
+                                // Disable the command timeout since the scripts should take care of timing themselves out
+                                command.CommandTimeout = 0;
+                                command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
+                                command.Parameters.AddWithValue("@latestExecutionTimeInUtc", (object) stopExecutionAfterUtc ?? DBNull.Value);
+
+                                command.ExecuteNonQuery();
+                            }
+
+                            // No errors, so just break out of the while loop
+                            break;
+                        }
+                        catch (SqlLockException ex)
+                        {
+                            // Log and try again if within number of tries.
+                            log.Warn(ex.Message);
+                        }
+                        catch (SqlDeadlockException sqlDeadlockException)
+                        {
+                            // Log and try again if within number of tries.
+                            log.Warn(sqlDeadlockException);
+                        }
+                        catch (SqlException exception)
+                        {
+                            // Number = 1205 is a deadlock.  If we aren't a deadlock, rethrow.  
+                            // Otherwise, log and try again if appropriate.
+                            if (exception.Number != 1205)
+                            {
+                                throw;
+                            }
+
+                            // Log and try again if within number of tries.
+                            log.Warn(exception);
+                        }
+                    }
+
+                    // Sleep to give the other transaction some time to finish.
+                    System.Threading.Thread.Sleep(sleepMultiplier * 1000);
+                    sleepMultiplier++;
                 }
             }
         }
@@ -66,15 +104,6 @@ namespace ShipWorks.Actions.Tasks.Common
         public void ShrinkDatabase()
         {
             SqlShrinkDatabase.ShrinkDatabase();
-        }
-
-        /// <summary>
-        /// Makes a call to DataResourceManager.DeleteAbandonedResourceData() to delete any abandoned Resource rows.
-        /// This is a wrapper method for testing purposes.
-        /// </summary>
-        public void PurgeAbandonedResources()
-        {
-            DataResourceManager.DeleteAbandonedResourceData();
         }
     }
 }

@@ -114,6 +114,7 @@
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
     <Compile Include="Actions\Tasks\ActionTaskDescriptorTest.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\HitUrlTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />

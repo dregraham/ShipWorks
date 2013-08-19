@@ -493,7 +493,8 @@ namespace ShipWorks.Actions
                             List<long> inputKeys = GetStepInputKeys(step, actionTask, queue.ObjectID);
 
                             // Run the task.  If it requires input, and there is no input, don't even try to run it
-                            if (actionTask.RequiresInput && inputKeys.Count == 0)
+                            if ((actionTask.RequiresInput != ActionTaskInputRequirement.None && inputKeys.Count == 0) &&
+                                    (ActionTaskInputSource)step.InputSource != ActionTaskInputSource.Nothing)
                             {
                                 log.WarnFormat("ActionStep - Skipping due to no input");
                             }
@@ -773,15 +774,15 @@ namespace ShipWorks.Actions
         /// </summary>
         private static List<long> GetStepInputKeys(ActionQueueStepEntity step, ActionTask actionTask, long? objectID)
         {
+            ActionTaskInputSource inputSource = (ActionTaskInputSource) step.InputSource;
+
             List<long> input = new List<long>();
 
             // We need to create the base object so we can know if it needs input
-            if (!actionTask.RequiresInput)
+            if (actionTask.RequiresInput == ActionTaskInputRequirement.None || inputSource == ActionTaskInputSource.Nothing)
             {
                 return input;
             }
-
-            ActionTaskInputSource inputSource = (ActionTaskInputSource) step.InputSource;
 
             // Use the ObjectID as the input
             if (inputSource == ActionTaskInputSource.TriggeringRecord)
