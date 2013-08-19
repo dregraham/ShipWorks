@@ -12261,3 +12261,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ShipWorks", Scope = "member", Target = "ShipWorks.Data.Administration.DatabaseDetailsDlg.#InitializeComponent()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "non-LocalDb", Scope = "member", Target = "ShipWorks.Data.Administration.SqlServerSetup.SqlServerInstaller.#UpgradeLocalDbInternal(System.String)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Data.Administration.ShipWorksSetupWizard.#log")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.Editors.FtpFileTaskEditor.#ftpFileTask")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.FtpFileTask.#log")]
