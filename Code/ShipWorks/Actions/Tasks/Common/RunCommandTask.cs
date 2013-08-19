@@ -119,20 +119,37 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         private string GetProcessedCommand(long inputKey)
         {
-            return "@echo off" + Environment.NewLine + TemplateTokenProcessor.ProcessTokens(Command, inputKey, false);
+            return TurnOffEcho(TemplateTokenProcessor.ProcessTokens(Command, inputKey, false));
+        }
+
+        /// <summary>
+        /// Gets the command with echo turned off
+        /// </summary>
+        /// <param name="command">Command to suppress echo</param>
+        /// <returns></returns>
+        private static string TurnOffEcho(string command)
+        {
+            return "@echo off" + Environment.NewLine + command;
         }
 
         /// <summary>
         /// Run the task
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        public override void Run(List<long> inputKeys, ActionStepContext context)
         {
             // Get the time that should be used for timing out the process
             DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
 
-            foreach (long key in inputKeys)
+            if ((ActionTaskInputSource) context.Step.InputSource == ActionTaskInputSource.Nothing)
             {
-                RunCommand(key, timeoutDate);
+                RunCommand(TurnOffEcho(Command), timeoutDate);
+            }
+            else
+            {
+                foreach (long key in inputKeys)
+                {
+                    RunCommand(GetProcessedCommand(key), timeoutDate);
+                }   
             }
         }
 
@@ -152,11 +169,10 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Run the command for each object
         /// </summary>
-        /// <param name="inputKey">Id of the object for which to run the command</param>
+        /// <param name="executionCommand">Command that should be executed</param>
         /// <param name="timeoutDate">Date after which the command should be timed out</param>
-        private void RunCommand(long inputKey, DateTime timeoutDate)
+        private void RunCommand(string executionCommand, DateTime timeoutDate)
         {
-            string executionCommand = GetProcessedCommand(inputKey);
             string commandFileName = Path.GetRandomFileName() + ".cmd";
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
             string commandLogBasePath = GetNextCommandLogPathWithoutExtension();
