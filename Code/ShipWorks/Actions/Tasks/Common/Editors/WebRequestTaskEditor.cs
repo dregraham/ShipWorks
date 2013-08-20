@@ -51,9 +51,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
 
-            oneRequestPerTemplateResult.Checked = task.RequestCardinality== WebRequestCardinality.OneRequestPerTemplateResult;
-            singleRequest.Checked = task.RequestCardinality == WebRequestCardinality.SingleRequest;
+            oneRequestPerTemplateResult.Checked = task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult;
             oneRequestPerFilterResult.Checked = task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult;
+            singleRequest.Checked = task.RequestCardinality == WebRequestCardinality.SingleRequest;
 
             urlTextBox.Validating += OnUrlTextBoxValidating;
             urlTextBox.Validated += OnUrlTextBoxValidated;

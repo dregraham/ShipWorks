@@ -148,38 +148,48 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+            var inputSource = (ActionTaskInputSource)context.Step.InputSource;
 
             switch (RequestCardinality)
             {
+                case WebRequestCardinality.SingleRequest:
+                {
+                    string processedUrl =
+                        inputSource == ActionTaskInputSource.Nothing
+                            ? UrlToHit
+                            : TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
+
+                    ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
+                    break;
+                }
+
                 case WebRequestCardinality.OneRequestPerFilterResult:
+                {
+                    if (inputSource != ActionTaskInputSource.FilterContents)
+                        throw new ActionTaskRunException("The task input is not a filter.");
+
                     foreach (long inputKey in inputKeys)
                     {
                         string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
-                        ProcessRequest(request, processedUrl);
+                        ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
                     }
-
                     break;
-
-                case WebRequestCardinality.SingleRequest:
-
-                    string singleRequestProcessedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
-                    ProcessRequest(request, singleRequestProcessedUrl);
-                    
-                    break;
+                }
 
                 case WebRequestCardinality.OneRequestPerTemplateResult:
+                {
                     if (TemplateID == 0)
-                    {
-                        throw new ActionTaskRunException("No template selected.");
-                    }
-                    
+                        throw new ActionTaskRunException("No template is selected.");
+
+                    if (inputSource == ActionTaskInputSource.Nothing)
+                        throw new ActionTaskRunException("The task has no input to use for the template.");
+
                     base.Run(inputKeys, context);
-                    
                     break;
+                }
 
                 default:
-                    throw new InvalidOperationException("Unknown Request Method Type in Run command.");
+                    throw new ActionTaskRunException("The request configuration is invalid.");
             }
         }
 
