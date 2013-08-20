@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Actions;
@@ -29,13 +30,9 @@ namespace ShipWorks.Shipping.Settings
             string identifier = GetIdentifier(code, "Print");
 
             // By default auto-printing is enabled
-            bool enabled = true;
+            bool enabled = (code != ShipmentTypeCode.UpsWorldShip);
 
             // But for WorldShip its a special case where its not
-            if (code == ShipmentTypeCode.UpsWorldShip)
-            {
-                enabled = false;
-            }
 
             return CreateAction("Print labels", CreateProcessedTrigger(code), typeof(PrintShipmentsTask), code, identifier, enabled, true, null);
         }

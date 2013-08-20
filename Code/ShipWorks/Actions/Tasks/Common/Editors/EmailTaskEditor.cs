@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model;
 

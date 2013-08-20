@@ -382,6 +382,14 @@
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\ActionTriggerClassifications.cs" />
+    <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
+    <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.Designer.cs">
+      <DependentUpon>WebRequestTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\ActionTaskInputRequirement.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.cs">
@@ -390,15 +398,22 @@
     <Compile Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.Designer.cs">
       <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\FtpFileTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\FtpFileTaskEditor.Designer.cs">
+      <DependentUpon>FtpFileTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.Designer.cs">
       <DependentUpon>RunCommandTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\FtpFileTask.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
-    <Compile Include="Actions\Tasks\Common\PurgeDatabaseType.cs" />
+    <Compile Include="Actions\Tasks\Common\Enums\PurgeDatabaseType.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2039,6 +2054,7 @@
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceChoiceOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceOutline.cs" />
     <Compile Include="Templates\Tokens\ITokenSuggestionFactory.cs" />
+    <Compile Include="Templates\Tokens\TokenSelectionMode.cs" />
     <Compile Include="UI\Controls\DecimalTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2284,6 +2300,9 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClient.cs" />
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
+    <Compile Include="UI\Controls\NameValueGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2927,7 +2946,7 @@
     <Compile Include="Actions\Tasks\Common\Editors\EmailTaskEditor.Designer.cs">
       <DependentUpon>EmailTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\Tasks\Common\EmailDelayType.cs" />
+    <Compile Include="Actions\Tasks\Common\Enums\EmailDelayType.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTask.cs" />
     <Compile Include="Actions\Tasks\Common\TemplateBasedTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\PlaySoundTaskEditor.cs">
@@ -5399,11 +5418,17 @@
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.resx">
       <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\FtpFileTaskEditor.resx">
+      <DependentUpon>FtpFileTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.resx">
       <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.resx">
+      <DependentUpon>WebRequestTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.resx">
       <DependentUpon>RunCommandTaskEditor.cs</DependentUpon>
@@ -11593,7 +11618,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

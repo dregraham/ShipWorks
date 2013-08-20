@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net;
+using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Xml.Serialization;
-using System.Xml;
 
 namespace Interapptive.Shared.Net
 {
@@ -13,34 +12,34 @@ namespace Interapptive.Shared.Net
     /// </summary>
     public abstract class HttpRequestSubmitter
     {
-        Uri uri;
-        ICredentials credentials;
+        private Uri uri;
+        private ICredentials credentials;
 
         // The verb being sent
-        HttpVerb requestVerb = HttpVerb.Post;
+        private HttpVerb requestVerb = HttpVerb.Post;
 
         // Timeout
-        TimeSpan timeout = TimeSpan.FromSeconds(90);
+        private TimeSpan timeout = TimeSpan.FromSeconds(90);
 
         // Send the Expect:100-continue header, default to .NET default
-        bool expect100Continue = true;
+        private bool expect100Continue = true;
 
         // Allow .NET to handle redirect errors by automatically re-requesting.  default to the .NET default of True
-        bool allowAutoRedirect = true;
+        private bool allowAutoRedirect = true;
 
         // HTTP KeepAlive, defaulting to the .NET default
-        bool keepAlive = true;
+        private bool keepAlive = true;
 
         /// <summary>
         /// The ContentType to specify in the request
         /// </summary>
-        string contentType;
+        private string contentType;
 
         // http headers to add to the request
-        WebHeaderCollection headers = new WebHeaderCollection();
+        private WebHeaderCollection headers = new WebHeaderCollection();
 
         // HttpStatusCodes which will be treated as "OK" when responses are received, no exception will be thrown
-        List<HttpStatusCode> allowableStatusCodes = new List<HttpStatusCode>();
+        private List<HttpStatusCode> allowableStatusCodes = new List<HttpStatusCode>();
 
         /// <summary>
         /// The headers to add to the request
@@ -96,9 +95,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         protected HttpRequestSubmitter()
             : this(HttpVerb.Post)
-        {
-
-        }
+        {}
 
         /// <summary>
         /// Constructor for specifying the request verb
@@ -140,7 +137,7 @@ namespace Interapptive.Shared.Net
 
             // Set credentials and timeout
             webRequest.Credentials = credentials;
-            webRequest.Timeout = (int) Timeout.TotalMilliseconds;
+            webRequest.Timeout = (int)Timeout.TotalMilliseconds;
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
 
@@ -148,7 +145,45 @@ namespace Interapptive.Shared.Net
             {
                 foreach (string headerName in headers)
                 {
-                    webRequest.Headers.Add(headerName, headers[headerName]);
+                    string value = headers[headerName];
+
+                    switch (headerName.ToLowerInvariant())
+                    {
+                        case "content-type":
+                            webRequest.ContentType = value;
+                            break;
+                        case "accept":
+                            webRequest.Accept = value;
+                            break;
+                        case "connection":
+                            webRequest.Connection = value;
+                            break;
+                        case "expect":
+                            webRequest.Expect = value;
+                            break;
+                        case "date":
+                            webRequest.Date = GetDateValue(value);
+                            break;
+                        case "host":
+                            webRequest.Host = value;
+                            break;
+                        case "if-modified-since":
+                            webRequest.IfModifiedSince = GetDateValue(value);
+                            break;
+                        case "range":
+                        case "content-length":
+                        case "te":
+                            throw new WebException(String.Format("{0} is not a supported header", headerName));
+                        case "referer":
+                            webRequest.Referer = value;
+                            break;
+                        case "user-agent":
+                            webRequest.UserAgent = value;
+                            break;
+                        default:
+                            webRequest.Headers.Add(headerName, value);
+                            break;
+                    }
                 }
             }
 
@@ -167,7 +202,7 @@ namespace Interapptive.Shared.Net
             {
                 RequestSubmitting(this, new HttpRequestSubmittingEventArgs(webRequest));
             }
-            
+
             // If not Get, then send the post data
             if (Verb != HttpVerb.Get)
             {
@@ -189,7 +224,7 @@ namespace Interapptive.Shared.Net
 
             try
             {
-                webResponse = (HttpWebResponse) webRequest.GetResponse();
+                webResponse = (HttpWebResponse)webRequest.GetResponse();
             }
             catch (WebException ex)
             {
@@ -207,7 +242,7 @@ namespace Interapptive.Shared.Net
             }
 
             // Check for OK
-            if (webResponse.StatusCode != HttpStatusCode.OK && 
+            if (webResponse.StatusCode != HttpStatusCode.OK &&
                 !allowableStatusCodes.Contains(webResponse.StatusCode))
             {
                 string statusDescription = webResponse.StatusDescription;
@@ -217,6 +252,21 @@ namespace Interapptive.Shared.Net
             }
 
             return new HttpResponseReader(webRequest, webResponse);
+        }
+
+        /// <summary>
+        /// Gets the date value.
+        /// </summary>
+        /// <exception cref="System.Net.WebException">Date header not in valid format.</exception>
+        private static DateTime GetDateValue(string value)
+        {
+            DateTime dateForHeader;
+
+            if (!DateTime.TryParse(value, out dateForHeader))
+            {
+                throw new WebException("Date header not in valid format.");
+            }
+            return dateForHeader;
         }
 
         /// <summary>

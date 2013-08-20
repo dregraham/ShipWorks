@@ -56,9 +56,9 @@ namespace ShipWorks.Templates.Tokens
         }
 
         /// <summary>
-        /// Process the tokens in the token string for the given entity ID
+        /// Process the tokens in the token string for the given Template Input
         /// </summary>
-        public static string ProcessTokens(string tokenText, List<long> idList, bool stripNewLines = true)
+        public static string ProcessTokens(string tokenText, TemplateXPathNavigator xpath, bool stripNewLines = true)
         {
             if (!HasTokens(tokenText))
             {
@@ -69,13 +69,6 @@ namespace ShipWorks.Templates.Tokens
             {
                 TemplateXsl templateXsl = TemplateXslProvider.FromToken(tokenText);
 
-                TemplateInput input = new TemplateInput(idList, idList, idList.Count > 0 ?
-                    TemplateContextTranslator.ResolveContextFromEntityType(EntityUtility.GetEntityType(idList[0])) : 
-                    TemplateInputContext.Customer);
-
-                TemplateTranslationContext context = new TemplateTranslationContext(null, input, new ProgressItem(""));
-
-                TemplateXPathNavigator xpath = new TemplateXPathNavigator(context);
                 TemplateResult result = templateXsl.Transform(xpath);
 
                 StringBuilder sb = new StringBuilder(result.ReadResult());
@@ -104,6 +97,27 @@ namespace ShipWorks.Templates.Tokens
 
                 throw new TemplateTokenException(string.Format("There was a problem with one of your tokens:\n\nToken:\n{0}{1}\n\nError:\n{2}", tokenText, converted, ex.Message), ex);
             }
+        }
+
+        /// <summary>
+        /// Process the tokens in the token string for the given entity ID
+        /// </summary>
+        public static string ProcessTokens(string tokenText, List<long> idList, bool stripNewLines = true)
+        {
+            if (!HasTokens(tokenText))
+            {
+                return tokenText.Replace("{{", "{").Replace("}}", "}");
+            }
+
+            TemplateInput input = new TemplateInput(idList, idList, idList.Count > 0 ?
+                TemplateContextTranslator.ResolveContextFromEntityType(EntityUtility.GetEntityType(idList[0])) :
+                TemplateInputContext.Customer);
+
+            TemplateTranslationContext context = new TemplateTranslationContext(null, input, new ProgressItem(""));
+
+            TemplateXPathNavigator xpath = new TemplateXPathNavigator(context);
+
+            return ProcessTokens(tokenText, xpath, stripNewLines);
         }
 
         /// <summary>
