@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
@@ -51,20 +52,30 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
                     
                     // We need to launch the process to elevate ourselves.  We'll just do it this way for XP too for code path
                     // simplification.
-                    Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo("sc", string.Format("start {0}", service.ServiceName));
-                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-
-                    // Elevate for vista
-                    if (MyComputer.IsWindowsVistaOrHigher)
+                    using (Process process = new Process())
                     {
-                        process.StartInfo.Verb = "runas";
+                        process.StartInfo = new ProcessStartInfo("sc", "start " + service.ServiceName);
+                        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+                        // Elevate for vista
+                        if (MyComputer.IsWindowsVistaOrHigher)
+                        {
+                            process.StartInfo.Verb = "runas";
+                        }
+
+                        process.Start();
+                        process.WaitForExit(timeoutMilliseconds);
                     }
-
-                    process.Start();
-                    process.WaitForExit(15000);
-
+                    
                     controller.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                }
+            }
+            catch (Win32Exception ex)
+            {
+                // The user canceled the UAC prompt
+                if (!ex.Message.Contains("cancel"))
+                {
+                    throw;
                 }
             }
             catch (Exception ex)

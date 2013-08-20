@@ -27,6 +27,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
     {
         static readonly Guid gridSettingsKey = new Guid("{53EE16A4-9315-4D22-B768-58613546476B}");
 
+        private bool startingService;
         EntityCacheEntityProvider entityProvider;
 
 
@@ -72,6 +73,9 @@ namespace ShipWorks.ApplicationCore.Services.UI
             entityGrid.GridCellLinkClicked += OnGridCellLinkClicked;
         }
 
+        /// <summary>
+        /// The start link was clicked on the grid
+        /// </summary>
         private void OnGridCellLinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
             EntityGridRow row = e.Row;
@@ -86,29 +90,9 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
             if (action == GridLinkAction.Start)
             {
+                startingService = true;
                 UpdateStartingServiceUI(false);
-
-                Task startProcessTask = new Task(() =>
-                    {
-                        DefaultServiceHostFactory serviceHost = new DefaultServiceHostFactory();
-
-                        try
-                        {
-                            serviceHost.GetHostFor(ShipWorksServiceBase.GetService(ShipWorksServiceType.Scheduler)).Run();
-                        }
-                        catch (Win32Exception ex)
-                        {
-                            // The user canceled the UAC prompt
-                            if (!ex.Message.Contains("cancel"))
-                            {
-                                throw;
-                            }
-                        }
-                        
-                        UpdateStartingServiceUI(true);
-                    }
-                );
-                startProcessTask.Start();
+                ShipWorksServiceBase.RunAllInBackground();
             }
         }
 
@@ -118,17 +102,6 @@ namespace ShipWorks.ApplicationCore.Services.UI
         /// <param name="isComplete">Is the process just starting or is it finished?</param>
         private void UpdateStartingServiceUI(bool isComplete)
         {
-            if (entityGrid.InvokeRequired)
-            {
-                entityGrid.Invoke((MethodInvoker) (() => UpdateStartingServiceUI(isComplete)));
-                return;
-            }
-
-            if (isComplete)
-            {
-                entityGrid.UpdateGridRows();
-            }
-
             entityGrid.Enabled = isComplete;
             startingServicePanel.Visible = !isComplete;
         }
@@ -159,6 +132,12 @@ namespace ShipWorks.ApplicationCore.Services.UI
             else
             {
                 entityGrid.UpdateGridRows();
+            }
+
+            if (startingService)
+            {
+                UpdateStartingServiceUI(true);
+                startingService = false;
             }
         }
     }
