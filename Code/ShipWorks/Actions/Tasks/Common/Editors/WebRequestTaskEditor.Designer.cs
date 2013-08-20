@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    partial class HitUrlTaskEditor
+    partial class WebRequestTaskEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -33,14 +33,14 @@
             System.Windows.Forms.Label requestToLabel;
             System.Windows.Forms.Label sendALabel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             System.Windows.Forms.Label labelHeaders;
             System.Windows.Forms.TableLayoutPanel authPanel;
             System.Windows.Forms.Label authLabelPrefix;
             System.Windows.Forms.Label authLabelSuffix;
             System.Windows.Forms.Label basicAuthUserLabel;
             System.Windows.Forms.Label basicAuthPasswordLabel;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HitUrlTaskEditor));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebRequestTaskEditor));
             this.urlFormat = new System.Windows.Forms.Label();
             this.urlTextBox = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.verbLabel = new System.Windows.Forms.Label();
@@ -53,7 +53,7 @@
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.oneRequestPerFilterResult = new System.Windows.Forms.RadioButton();
             this.singleRequest = new System.Windows.Forms.RadioButton();
-            this.useTemplate = new System.Windows.Forms.RadioButton();
+            this.oneRequestPerTemplateResult = new System.Windows.Forms.RadioButton();
             requestUrlPanel = new System.Windows.Forms.FlowLayoutPanel();
             requestToLabel = new System.Windows.Forms.Label();
             sendALabel = new System.Windows.Forms.Label();
@@ -73,14 +73,14 @@
             // 
             // labelTemplate
             // 
-            this.labelTemplate.Location = new System.Drawing.Point(29, 288);
+            this.labelTemplate.Location = new System.Drawing.Point(29, 285);
             this.labelTemplate.Margin = new System.Windows.Forms.Padding(0);
             this.labelTemplate.Size = new System.Drawing.Size(78, 13);
             this.labelTemplate.Text = "Using template";
             // 
             // templateCombo
             // 
-            this.templateCombo.Location = new System.Drawing.Point(110, 285);
+            this.templateCombo.Location = new System.Drawing.Point(110, 282);
             this.templateCombo.TabIndex = 20;
             // 
             // requestUrlPanel
@@ -160,7 +160,7 @@
             this.urlTextBox.Size = new System.Drawing.Size(370, 21);
             this.urlTextBox.TabIndex = 2;
             this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
-            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
             this.urlTextBox.TextChanged += new System.EventHandler(this.OnUrlTextChanged);
             // 
             // verbLabel
@@ -341,60 +341,60 @@
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // multiRequest
+            // oneRequestPerFilterResult
             // 
             this.oneRequestPerFilterResult.AutoSize = true;
-            this.oneRequestPerFilterResult.Location = new System.Drawing.Point(7, 239);
-            this.oneRequestPerFilterResult.Name = "multiRequest";
+            this.oneRequestPerFilterResult.Location = new System.Drawing.Point(7, 236);
+            this.oneRequestPerFilterResult.Name = "oneRequestPerFilterResult";
             this.oneRequestPerFilterResult.Size = new System.Drawing.Size(167, 17);
             this.oneRequestPerFilterResult.TabIndex = 26;
             this.oneRequestPerFilterResult.Text = "Send request per item in filter";
             this.oneRequestPerFilterResult.UseVisualStyleBackColor = true;
-            this.oneRequestPerFilterResult.CheckedChanged += new System.EventHandler(this.OnRequestMethodChanged);
+            this.oneRequestPerFilterResult.CheckedChanged += new System.EventHandler(this.OnCardinalityCheckedChanged);
             // 
             // singleRequest
             // 
             this.singleRequest.AutoSize = true;
             this.singleRequest.Checked = true;
-            this.singleRequest.Location = new System.Drawing.Point(7, 216);
+            this.singleRequest.Location = new System.Drawing.Point(7, 212);
             this.singleRequest.Name = "singleRequest";
             this.singleRequest.Size = new System.Drawing.Size(119, 17);
             this.singleRequest.TabIndex = 27;
             this.singleRequest.TabStop = true;
             this.singleRequest.Text = "Send single request";
             this.singleRequest.UseVisualStyleBackColor = true;
-            this.singleRequest.CheckedChanged += new System.EventHandler(this.OnRequestMethodChanged);
+            this.singleRequest.CheckedChanged += new System.EventHandler(this.OnCardinalityCheckedChanged);
             // 
-            // useTemplate
+            // oneRequestPerTemplateResult
             // 
-            this.useTemplate.AutoSize = true;
-            this.useTemplate.Location = new System.Drawing.Point(7, 262);
-            this.useTemplate.Name = "useTemplate";
-            this.useTemplate.Size = new System.Drawing.Size(334, 17);
-            this.useTemplate.TabIndex = 25;
-            this.useTemplate.Text = "Use template in request body - Send request per template result";
-            this.useTemplate.UseVisualStyleBackColor = true;
-            this.useTemplate.CheckedChanged += new System.EventHandler(this.OnRequestMethodChanged);
+            this.oneRequestPerTemplateResult.AutoSize = true;
+            this.oneRequestPerTemplateResult.Location = new System.Drawing.Point(7, 260);
+            this.oneRequestPerTemplateResult.Name = "oneRequestPerTemplateResult";
+            this.oneRequestPerTemplateResult.Size = new System.Drawing.Size(283, 17);
+            this.oneRequestPerTemplateResult.TabIndex = 25;
+            this.oneRequestPerTemplateResult.Text = "Send request per template result as the request body";
+            this.oneRequestPerTemplateResult.UseVisualStyleBackColor = true;
+            this.oneRequestPerTemplateResult.CheckedChanged += new System.EventHandler(this.OnCardinalityCheckedChanged);
             // 
-            // HitUrlTaskEditor
+            // WebRequestTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.Controls.Add(this.singleRequest);
             this.Controls.Add(this.oneRequestPerFilterResult);
-            this.Controls.Add(this.useTemplate);
+            this.Controls.Add(this.oneRequestPerTemplateResult);
             this.Controls.Add(authPanel);
             this.Controls.Add(this.headersPanel);
             this.Controls.Add(verbUrlPanel);
             this.Controls.Add(requestUrlPanel);
-            this.Name = "HitUrlTaskEditor";
-            this.Size = new System.Drawing.Size(522, 319);
+            this.Name = "WebRequestTaskEditor";
+            this.Size = new System.Drawing.Size(522, 313);
             this.Controls.SetChildIndex(requestUrlPanel, 0);
             this.Controls.SetChildIndex(verbUrlPanel, 0);
             this.Controls.SetChildIndex(this.headersPanel, 0);
             this.Controls.SetChildIndex(authPanel, 0);
-            this.Controls.SetChildIndex(this.useTemplate, 0);
+            this.Controls.SetChildIndex(this.oneRequestPerTemplateResult, 0);
             this.Controls.SetChildIndex(this.oneRequestPerFilterResult, 0);
             this.Controls.SetChildIndex(this.singleRequest, 0);
             this.Controls.SetChildIndex(this.labelTemplate, 0);
@@ -427,7 +427,7 @@
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.RadioButton singleRequest;
         private System.Windows.Forms.RadioButton oneRequestPerFilterResult;
-        private System.Windows.Forms.RadioButton useTemplate;
+        private System.Windows.Forms.RadioButton oneRequestPerTemplateResult;
 
     }
 }

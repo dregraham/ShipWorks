@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Web;
-using System.Xml.XPath;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
+using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.ApplicationCore.Crashes;
@@ -14,24 +8,30 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Tokens;
-using log4net;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Xml.XPath;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
     /// Task to hit a URL.
     /// </summary>
-    [ActionTask("Hit URL", "HitUrl")]
-    public class HitUrlTask : TemplateBasedTask
+    [ActionTask("Send web request", "WebRequest")]
+    public class WebRequestTask : TemplateBasedTask
     {
         // Logger
-        private static readonly ILog log = LogManager.GetLogger(typeof(HitUrlTask));
+        private static readonly ILog log = LogManager.GetLogger(typeof(WebRequestTask));
 
         private readonly ApiLogEntry requestLogger;
 
-        public HitUrlTask()
+        public WebRequestTask()
         {
-            requestLogger = new ApiLogEntry(ApiLogSource.HitUrlTask, "HitUrlTask");
+            requestLogger = new ApiLogEntry(ApiLogSource.WebRequestTask, "WebRequestTask");
         }
 
         /// <summary>
@@ -81,9 +81,17 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to use a template in the request.
+        /// Gets the input requirement for this task type (Optional).
         /// </summary>
-        public HitUrlRequestMethodType RequestMethodType { get; set; }
+        public override ActionTaskInputRequirement RequiresInput
+        {
+            get { return ActionTaskInputRequirement.Optional; }
+        }
+
+        /// <summary>
+        /// Gets or sets the web request cardinality.
+        /// </summary>
+        public WebRequestCardinality RequestCardinality { get; set; }
 
         /// <summary>
         /// The object is being deserialized into its values
@@ -116,7 +124,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
-            return new HitUrlTaskEditor(this);
+            return new WebRequestTaskEditor(this);
         }
 
         /// <summary>
@@ -142,9 +150,9 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-            switch (RequestMethodType)
+            switch (RequestCardinality)
             {
-                case HitUrlRequestMethodType.OneRequestPerFilterResult:
+                case WebRequestCardinality.OneRequestPerFilterResult:
                     foreach (long inputKey in inputKeys)
                     {
                         string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
@@ -153,14 +161,14 @@ namespace ShipWorks.Actions.Tasks.Common
 
                     break;
 
-                case HitUrlRequestMethodType.SingleRequest:
+                case WebRequestCardinality.SingleRequest:
 
                     string singleRequestProcessedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
                     ProcessRequest(request, singleRequestProcessedUrl);
                     
                     break;
 
-                case HitUrlRequestMethodType.UseTemplate:
+                case WebRequestCardinality.OneRequestPerTemplateResult:
                     if (TemplateID == 0)
                     {
                         throw new ActionTaskRunException("No template selected.");
@@ -217,7 +225,7 @@ namespace ShipWorks.Actions.Tasks.Common
             }
             catch (UriFormatException ex)
             {
-                log.Error("Error in HitUrl Url format.", ex);
+                log.Error("Error in WebRequest Url format.", ex);
                 throw new ActionTaskRunException("Url not formatted properly.", ex);
             }
             catch (WebException ex)
@@ -258,8 +266,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 }
                 catch (ArgumentException ex)
                 {
-                    log.Error("Error adding header in HitURLTask", ex);
-                    throw new ActionTaskRunException("Invalid header for HitUrl task.", ex);
+                    log.Error("Error adding header in WebRequestTask", ex);
+                    throw new ActionTaskRunException("Invalid header for WebRequest task.", ex);
                 }
             }
         }

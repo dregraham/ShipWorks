@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Actions.Tasks.Common;
+using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
     [TestClass]
-    public class HitUrlTaskTest
+    public class WebRequestTaskTests
     {
-
-        HitUrlTask testObject;
+        WebRequestTask testObject;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            testObject = new HitUrlTask()
+            testObject = new WebRequestTask()
             {
                 HttpHeaders = new[]
                 {
@@ -38,16 +34,15 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             string serializedObject = testObject.SerializeSettings();
 
-            HitUrlTask deserailzedObject = new HitUrlTask();
-            deserailzedObject.Initialize(serializedObject);
+            var deserializedObject = new WebRequestTask();
+            deserializedObject.Initialize(serializedObject);
 
-            Assert.AreEqual(true,deserailzedObject.UseBasicAuthentication);
-            Assert.AreEqual("user",deserailzedObject.Username);
-            Assert.AreEqual("2nd",deserailzedObject.HttpHeaders[1].Value);
-            Assert.AreEqual("second", deserailzedObject.HttpHeaders[1].Key);
+            Assert.AreEqual(true, deserializedObject.UseBasicAuthentication);
+            Assert.AreEqual("user", deserializedObject.Username);
+            Assert.AreEqual("2nd", deserializedObject.HttpHeaders[1].Value);
+            Assert.AreEqual("second", deserializedObject.HttpHeaders[1].Key);
 
-            Assert.AreEqual(HttpVerb.Get,deserailzedObject.Verb);
-
+            Assert.AreEqual(HttpVerb.Get, deserializedObject.Verb);
         }
     }
 }

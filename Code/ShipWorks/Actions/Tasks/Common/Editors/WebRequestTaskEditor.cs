@@ -1,31 +1,32 @@
-﻿using System;
+﻿using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common.Enums;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Windows.Forms;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
     /// <summary>
-    /// Holds all information needed for the HitUrlTaskEditor
+    /// Holds all information needed for the WebRequestTaskEditor
     /// </summary>
-    public partial class HitUrlTaskEditor : TemplateBasedTaskEditor
+    public partial class WebRequestTaskEditor : TemplateBasedTaskEditor
     {
-        readonly HitUrlTask task;
-
-        ContextMenuStrip authMenu;
+        readonly WebRequestTask task;
 
         ContextMenuStrip verbMenu;
+        ContextMenuStrip authMenu;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HitUrlTaskEditor"/> class.
+        /// Initializes a new instance of the <see cref="WebRequestTaskEditor"/> class.
         /// </summary>
-        public HitUrlTaskEditor(HitUrlTask task)
+        public WebRequestTaskEditor(WebRequestTask task)
             : base(task)
         {
             this.task = task;
@@ -50,9 +51,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
 
-            useTemplate.Checked = task.RequestMethodType== HitUrlRequestMethodType.UseTemplate;
-            singleRequest.Checked = task.RequestMethodType == HitUrlRequestMethodType.SingleRequest;
-            oneRequestPerFilterResult.Checked = task.RequestMethodType == HitUrlRequestMethodType.OneRequestPerFilterResult;
+            oneRequestPerTemplateResult.Checked = task.RequestCardinality== WebRequestCardinality.OneRequestPerTemplateResult;
+            singleRequest.Checked = task.RequestCardinality == WebRequestCardinality.SingleRequest;
+            oneRequestPerFilterResult.Checked = task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult;
 
             urlTextBox.Validating += OnUrlTextBoxValidating;
             urlTextBox.Validated += OnUrlTextBoxValidated;
@@ -63,6 +64,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             }
 
             UpdateAuthUI();
+            UpdateBodyUI();
+        }
+
+        public override void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
+        {
             UpdateBodyUI();
         }
 
@@ -222,44 +228,54 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void UpdateBodyUI()
         {
-            bool isNotGet = task.Verb != HttpVerb.Get;
+            var inputSource = (ActionTaskInputSource)task.Entity.InputSource;
 
-            labelTemplate.Visible = isNotGet;
-            templateCombo.Visible = isNotGet;
-            useTemplate.Visible = isNotGet;
+            oneRequestPerFilterResult.Enabled =
+                inputSource == ActionTaskInputSource.FilterContents;
 
-            templateCombo.Enabled = useTemplate.Checked;
+            oneRequestPerTemplateResult.Enabled =
+                inputSource != ActionTaskInputSource.Nothing &&
+                task.Verb != HttpVerb.Get;
 
-            if (templateCombo.Visible)
+            if (oneRequestPerTemplateResult.Checked && !oneRequestPerTemplateResult.Enabled)
             {
-                Height = templateCombo.Bottom + 6;
+                oneRequestPerFilterResult.Checked = true;
             }
-            else
+
+            if (oneRequestPerFilterResult.Checked && !oneRequestPerFilterResult.Enabled)
+            {
+                singleRequest.Checked = true;
+            }
+
+            labelTemplate.Enabled =
+            templateCombo.Enabled =
+                oneRequestPerTemplateResult.Checked;
+
+            if(!oneRequestPerTemplateResult.Checked)
             {
                 templateCombo.SelectedTemplate = null;
-                Height = templateCombo.Top - 3;
             }
         }
 
         /// <summary>
-        /// Called when [use template checked changed].
+        /// Called when a cardinality radio button checked state changes.
         /// </summary>
-        void OnRequestMethodChanged(object sender, EventArgs e)
+        void OnCardinalityCheckedChanged(object sender, EventArgs e)
         {
-            UpdateBodyUI();
-
-            if (useTemplate.Checked)
+            if (oneRequestPerTemplateResult.Checked)
             {
-                task.RequestMethodType = HitUrlRequestMethodType.UseTemplate;
+                task.RequestCardinality = WebRequestCardinality.OneRequestPerTemplateResult;
             }
-            else if (singleRequest.Checked)
+            else if (oneRequestPerFilterResult.Checked)
             {
-                task.RequestMethodType = HitUrlRequestMethodType.SingleRequest;
+                task.RequestCardinality = WebRequestCardinality.OneRequestPerFilterResult;
             }
             else
             {
-                task.RequestMethodType = HitUrlRequestMethodType.OneRequestPerFilterResult;
+                task.RequestCardinality = WebRequestCardinality.SingleRequest;
             }
+
+            UpdateBodyUI();
         }
     }
 }
