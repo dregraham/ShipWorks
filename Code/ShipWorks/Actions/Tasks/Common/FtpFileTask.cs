@@ -13,7 +13,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for ftping a chosen template
     /// </summary>
-    [ActionTask("Ftp", "Ftp")]
+    [ActionTask("Transfer file(s)", "Ftp")]
     public class FtpFileTask : TemplateBasedTask
     {
         // Logger
@@ -43,7 +43,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return "Ftp file using:";
+                return "Ftp file(s) using:";
             }
         }
 		

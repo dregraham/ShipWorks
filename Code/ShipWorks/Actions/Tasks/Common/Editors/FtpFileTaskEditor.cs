@@ -42,6 +42,27 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load" /> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            ftpHost.Validating += OnFtpHostValidating;
+            ftpHost.Validated += OnFieldValidated;
+
+            tokenizedFtpFilename.Validating += OnFtpFilenameValidating;
+            tokenizedFtpFilename.Validated += OnFieldValidated;
+
+            tokenizedFtpFolder.Validating += OnFtpFolderValidating;
+            tokenizedFtpFolder.Validated += OnFieldValidated;
+
+            templateCombo.Validating += OnTemplateSelectionValidating;
+            templateCombo.Validated += OnFieldValidated;
+        }
+
+        /// <summary>
         /// Load the task settings
         /// </summary>
         public void LoadSettings()
@@ -145,6 +166,62 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnTokenizedFtpFilenameTextChanged(object sender, EventArgs e)
         {
             task.FtpFileName = tokenizedFtpFilename.Text;
+        }
+
+        /// <summary>
+        /// Called when Ftp host validating.
+        /// </summary>
+        void OnFtpHostValidating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ftpHost.Text))
+            {
+                errorProvider.SetError(ftpHost, "Please configure an FTP Server.");
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when Ftp folder validating.
+        /// </summary>
+        void OnFtpFolderValidating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
+            {
+                errorProvider.SetError(tokenizedFtpFolder, "Please enter a folder in which to place files on the FTP Server.");
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when Ftp filename validating.
+        /// </summary>
+        void OnFtpFilenameValidating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
+            {
+                errorProvider.SetError(tokenizedFtpFilename, "Please enter a filename in which data will be saved on the FTP Server.");
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when template selection is validating.
+        /// </summary>
+        void OnTemplateSelectionValidating(object sender, CancelEventArgs e)
+        {
+            if (templateCombo.SelectedTemplate == null)
+            {
+                errorProvider.SetError(templateCombo, "Please select a template.");
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// On a successful validation, set the error to blank so that it removes the error icon.
+        /// </summary>
+        private void OnFieldValidated(object sender, EventArgs e)
+        {
+            errorProvider.SetError((Control)sender, string.Empty);
         }
     }
 }
