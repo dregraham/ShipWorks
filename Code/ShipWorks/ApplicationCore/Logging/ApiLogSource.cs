@@ -45,6 +45,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Newegg,
         BuyDotCom,
         Sears,
+        WebRequestTask,
 
         [ApiPrivateLogSource]
         UspsNoPostage,

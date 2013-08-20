@@ -55,8 +55,8 @@ namespace ShipWorks.Actions.Tasks.Common
 
             try
             {
-                // Stanard\thermal templates just get executed right away, nothing to wait for
-                if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
+                // Postponement disabled or Stanard\thermal templates just get executed right away, nothing to wait for
+                if (!EnablePostpone || template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
                 {
                     ProcessTemplateResults(
                         template,
@@ -146,6 +146,18 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get { return templateID; }
             set { templateID = value; }
+        }
+
+
+        /// <summary>
+        /// Gets a value indicating whether to postpone running or not.
+        /// </summary>
+        public virtual bool EnablePostpone
+        {
+            get
+            {
+                return true;
+            }
         }
 
         /// <summary>

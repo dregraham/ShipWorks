@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tokenTextBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            this.toeknOptionsDropdown = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
+            this.tokenOptionsDropdown = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.editToken = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToken = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +41,7 @@
             // 
             this.tokenTextBox.AllowButtonSpecToolTips = true;
             this.tokenTextBox.ButtonSpecs.AddRange(new ComponentFactory.Krypton.Toolkit.ButtonSpecAny[] {
-            this.toeknOptionsDropdown,
+            this.tokenOptionsDropdown,
             this.editToken});
             this.tokenTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tokenTextBox.Location = new System.Drawing.Point(0, 0);
@@ -54,26 +54,35 @@
             this.tokenTextBox.StateCommon.Content.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tokenTextBox.TabIndex = 221;
             // 
-            // toeknOptionsDropdown
+            // tokenOptionsDropdown
             // 
-            this.toeknOptionsDropdown.ContextMenuStrip = this.contextMenuStrip;
-            this.toeknOptionsDropdown.ExtraText = "";
-            this.toeknOptionsDropdown.Image = null;
-            this.toeknOptionsDropdown.Style = ComponentFactory.Krypton.Toolkit.PaletteButtonStyle.Standalone;
-            this.toeknOptionsDropdown.Text = "";
-            this.toeknOptionsDropdown.ToolTipBody = "Inserts a token into the token text box.  If text is selected, \r\nthe selection wi" +
+            this.tokenOptionsDropdown.ContextMenuStrip = this.contextMenuStrip;
+            this.tokenOptionsDropdown.ExtraText = "";
+            this.tokenOptionsDropdown.Image = null;
+            this.tokenOptionsDropdown.Style = ComponentFactory.Krypton.Toolkit.PaletteButtonStyle.Standalone;
+            this.tokenOptionsDropdown.Text = "";
+            this.tokenOptionsDropdown.ToolTipBody = "Inserts a token into the token text box.  If text is selected, \r\nthe selection wi" +
     "ll be replaced with the inserted token.";
-            this.toeknOptionsDropdown.ToolTipStyle = ComponentFactory.Krypton.Toolkit.LabelStyle.SuperTip;
-            this.toeknOptionsDropdown.ToolTipTitle = "Insert Token";
-            this.toeknOptionsDropdown.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.DropDown;
-            this.toeknOptionsDropdown.UniqueName = "D87DA930376E4CAAD87DA930376E4CAA";
+            this.tokenOptionsDropdown.ToolTipStyle = ComponentFactory.Krypton.Toolkit.LabelStyle.SuperTip;
+            this.tokenOptionsDropdown.ToolTipTitle = "Insert Token";
+            this.tokenOptionsDropdown.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.DropDown;
+            this.tokenOptionsDropdown.UniqueName = "D87DA930376E4CAAD87DA930376E4CAA";
+            this.tokenOptionsDropdown.Click += new System.EventHandler(this.OnClickTokenOptionsDropdown);
             // 
             // contextMenuStrip
             // 
+            this.contextMenuStrip.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.Size = new System.Drawing.Size(181, 26);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
+            this.toolStripMenuItem1.ToolTipText = "53213";
             // 
             // editToken
             // 
@@ -86,13 +95,6 @@
             this.editToken.ToolTipTitle = "Token Editor";
             this.editToken.UniqueName = "34527D302837489A34527D302837489A";
             this.editToken.Click += new System.EventHandler(this.OnEditToken);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
-            this.toolStripMenuItem1.ToolTipText = "53213";
             // 
             // TemplateTokenTextBox
             // 
@@ -111,7 +113,7 @@
         #endregion
 
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox tokenTextBox;
-        private ComponentFactory.Krypton.Toolkit.ButtonSpecAny toeknOptionsDropdown;
+        private ComponentFactory.Krypton.Toolkit.ButtonSpecAny tokenOptionsDropdown;
         private ComponentFactory.Krypton.Toolkit.ButtonSpecAny editToken;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;

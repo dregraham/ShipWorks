@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Quartz;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
