@@ -33,7 +33,7 @@
             System.Windows.Forms.Label requestToLabel;
             System.Windows.Forms.Label sendALabel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             System.Windows.Forms.Label labelHeaders;
             System.Windows.Forms.TableLayoutPanel authPanel;
             System.Windows.Forms.Label authLabelPrefix;
@@ -144,11 +144,12 @@
             // urlFormat
             // 
             this.urlFormat.AutoSize = true;
+            this.urlFormat.Font = new System.Drawing.Font("Tahoma", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.urlFormat.Location = new System.Drawing.Point(126, 27);
             this.urlFormat.Name = "urlFormat";
-            this.urlFormat.Size = new System.Drawing.Size(384, 13);
+            this.urlFormat.Size = new System.Drawing.Size(296, 11);
             this.urlFormat.TabIndex = 24;
-            this.urlFormat.Text = "http://www.shipworks.com/shipworks/savings.php?orderid={//Order/Number}";
+            this.urlFormat.Text = "e.g. http://www.shipworks.com/orders.php?orderid={//Order/Number}";
             // 
             // urlTextBox
             // 
@@ -160,7 +161,7 @@
             this.urlTextBox.Size = new System.Drawing.Size(370, 21);
             this.urlTextBox.TabIndex = 2;
             this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
-            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
+            this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             this.urlTextBox.TextChanged += new System.EventHandler(this.OnUrlTextChanged);
             // 
             // verbLabel
