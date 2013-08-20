@@ -137,7 +137,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         private static FileLogWriter GetFtpLogWriter()
         {
-            string logDirectoryPath = (string.Format("{0}\\FtpFileTask", LogSession.LogFolder));
+            string logDirectoryPath = (string.Format("{0}\\TransferFilesTask", LogSession.LogFolder));
             if (!Directory.Exists(logDirectoryPath))
             {
                 Directory.CreateDirectory(logDirectoryPath);
