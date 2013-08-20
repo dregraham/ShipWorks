@@ -398,12 +398,19 @@
     <Compile Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.Designer.cs">
       <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\FtpFileTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\FtpFileTaskEditor.Designer.cs">
+      <DependentUpon>FtpFileTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Actions\Tasks\Common\Editors\RunCommandTaskEditor.Designer.cs">
       <DependentUpon>RunCommandTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\FtpFileTask.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTask.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\PurgeDatabaseType.cs" />
@@ -5410,6 +5417,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\DownloadOrdersTaskEditor.resx">
       <DependentUpon>DownloadOrdersTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\FtpFileTaskEditor.resx">
+      <DependentUpon>FtpFileTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\PurgeDatabaseTaskEditor.resx">
       <DependentUpon>PurgeDatabaseTaskEditor.cs</DependentUpon>
