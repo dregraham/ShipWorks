@@ -92,6 +92,16 @@ namespace ShipWorks.Actions.Tasks.Common
             SaveTemplateResultsToTempFile(template, templateResults);
 
             UploadFiles();
+
+            DeleteTempFiles();
+        }
+
+        /// <summary>
+        /// Deletes the temporary files.
+        /// </summary>
+        private void DeleteTempFiles()
+        {
+            Directory.Delete(rootTempFileName, true);
         }
 
         /// <summary>
