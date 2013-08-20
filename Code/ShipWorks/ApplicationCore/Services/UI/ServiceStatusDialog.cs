@@ -5,8 +5,10 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Data.Caching;
+using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.Definitions;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,8 +50,8 @@ namespace ShipWorks.ApplicationCore.Services.UI
             prefetch.Add(ServiceStatusEntity.PrefetchPathComputer);
 
             entityProvider = new EntityCacheEntityProvider(EntityType.ServiceStatusEntity, prefetch);
-            entityProvider.EntityChangesDetected += new EntityCacheChangeMonitoredChangedEventHandler(OnEntityProviderChangeDetected);
-            
+            entityProvider.EntityChangesDetected += OnEntityProviderChangeDetected;
+
             //Prepare for paging
             entityGrid.InitializeGrid();
 
@@ -62,6 +64,26 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
             //Open the data
             entityGrid.OpenGateway(new QueryableEntityGateway(entityProvider, new RelationPredicateBucket()));
+
+            entityGrid.GridCellLinkClicked += OnGridCellLinkClicked;
+        }
+
+        private void OnGridCellLinkClicked(object sender, GridHyperlinkClickEventArgs e)
+        {
+            EntityGridRow row = e.Row;
+
+            if (row.EntityID == null)
+            {
+                MessageHelper.ShowMessage(this, "The data is not yet loaded.");
+                return;
+            }
+
+            GridLinkAction action = (GridLinkAction)((GridActionDisplayType)e.Column.DisplayType).ActionData;
+
+            if (action == GridLinkAction.Start)
+            {
+                // Start the service
+            }
         }
 
         void InitializeDefaultGridLayout(GridColumnLayout layout)
