@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
@@ -46,7 +47,23 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
                 {
                     TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
-                    controller.Start();
+                    log.Info("Launching external process to elevate permissions to start service.");
+                    
+                    // We need to launch the process to elevate ourselves.  We'll just do it this way for XP too for code path
+                    // simplification.
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo("sc", string.Format("start {0}", service.ServiceName));
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+                    // Elevate for vista
+                    if (MyComputer.IsWindowsVistaOrHigher)
+                    {
+                        process.StartInfo.Verb = "runas";
+                    }
+
+                    process.Start();
+                    process.WaitForExit(15000);
+
                     controller.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 }
             }

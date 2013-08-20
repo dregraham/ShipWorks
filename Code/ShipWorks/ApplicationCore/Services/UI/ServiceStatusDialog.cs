@@ -1,9 +1,11 @@
-﻿using ComponentFactory.Krypton.Toolkit;
+﻿using System.Threading.Tasks;
+using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.Services.Hosting;
 using ShipWorks.Data.Caching;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Columns;
@@ -42,6 +44,8 @@ namespace ShipWorks.ApplicationCore.Services.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            
+            startingServicePanel.Visible = false;
 
             entityGrid.PrimaryGrid.NewRowType = typeof(ServiceGridRow);
 
@@ -82,10 +86,57 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
             if (action == GridLinkAction.Start)
             {
-                // Start the service
+                UpdateStartingServiceUI(false);
+
+                Task startProcessTask = new Task(() =>
+                    {
+                        DefaultServiceHostFactory serviceHost = new DefaultServiceHostFactory();
+
+                        try
+                        {
+                            serviceHost.GetHostFor(ShipWorksServiceBase.GetService(ShipWorksServiceType.Scheduler)).Run();
+                        }
+                        catch (Win32Exception ex)
+                        {
+                            // The user canceled the UAC prompt
+                            if (!ex.Message.Contains("cancel"))
+                            {
+                                throw;
+                            }
+                        }
+                        
+                        UpdateStartingServiceUI(true);
+                    }
+                );
+                startProcessTask.Start();
             }
         }
 
+        /// <summary>
+        /// Show or hide the ui that lets the user know that the service is starting
+        /// </summary>
+        /// <param name="isComplete">Is the process just starting or is it finished?</param>
+        private void UpdateStartingServiceUI(bool isComplete)
+        {
+            if (entityGrid.InvokeRequired)
+            {
+                entityGrid.Invoke((MethodInvoker) (() => UpdateStartingServiceUI(isComplete)));
+                return;
+            }
+
+            if (isComplete)
+            {
+                entityGrid.UpdateGridRows();
+            }
+
+            entityGrid.Enabled = isComplete;
+            startingServicePanel.Visible = !isComplete;
+        }
+
+        /// <summary>
+        /// Set up the default grid layout
+        /// </summary>
+        /// <param name="layout"></param>
         void InitializeDefaultGridLayout(GridColumnLayout layout)
         {
             layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[ServiceStatusFields.ComputerID].ColumnGuid;
@@ -96,7 +147,6 @@ namespace ShipWorks.ApplicationCore.Services.UI
         {
             entityProvider.Dispose();
         }
-
 
         void OnEntityProviderChangeDetected(object sender, EntityCacheChangeMonitoredChangedEventArgs e)
         {
