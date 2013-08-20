@@ -246,7 +246,7 @@
             // runOnTriggerringComputer
             // 
             this.runOnTriggerringComputer.AutoSize = true;
-            this.runOnTriggerringComputer.Location = new System.Drawing.Point(27, 70);
+            this.runOnTriggerringComputer.Location = new System.Drawing.Point(27, 48);
             this.runOnTriggerringComputer.Name = "runOnTriggerringComputer";
             this.runOnTriggerringComputer.Size = new System.Drawing.Size(220, 17);
             this.runOnTriggerringComputer.TabIndex = 8;
@@ -288,7 +288,7 @@
             // 
             this.runOnAnyComputer.AutoSize = true;
             this.runOnAnyComputer.Checked = true;
-            this.runOnAnyComputer.Location = new System.Drawing.Point(27, 48);
+            this.runOnAnyComputer.Location = new System.Drawing.Point(27, 70);
             this.runOnAnyComputer.Name = "runOnAnyComputer";
             this.runOnAnyComputer.Size = new System.Drawing.Size(108, 17);
             this.runOnAnyComputer.TabIndex = 5;

@@ -440,7 +440,7 @@ namespace ShipWorks.Actions
             {
                 MessageHelper.ShowError(this,
                     string.Format(
-                        "The task '{0}' can only be configured from a computer running the database.",
+                        "The task '{0}' can only be configured from the computer running the database.",
                         ActionTaskManager.GetDescriptor(task.GetType()).BaseName));
                 return false;
             }
@@ -464,7 +464,7 @@ namespace ShipWorks.Actions
             {
                 ActiveControl = runOnTriggerringComputer;
                 optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowMessage(this, "A scheduled action cannot be set to run on the triggering computer.");
+                MessageHelper.ShowError(this, "A scheduled action cannot be set to run on the triggering computer.");
                 return;
             }
 

@@ -50,9 +50,9 @@
             this.labelNotice.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelNotice.Location = new System.Drawing.Point(96, 24);
             this.labelNotice.Name = "labelNotice";
-            this.labelNotice.Size = new System.Drawing.Size(338, 13);
+            this.labelNotice.Size = new System.Drawing.Size(355, 13);
             this.labelNotice.TabIndex = 5;
-            this.labelNotice.Text = "(The date and time of the backup will be added to the backup name.)";
+            this.labelNotice.Text = "(The date and time of the backup will be added to the backup file name.)";
             // 
             // browse
             // 
@@ -85,11 +85,11 @@
             // labelPrefix
             // 
             this.labelPrefix.AutoSize = true;
-            this.labelPrefix.Location = new System.Drawing.Point(19, 3);
+            this.labelPrefix.Location = new System.Drawing.Point(3, 3);
             this.labelPrefix.Name = "labelPrefix";
-            this.labelPrefix.Size = new System.Drawing.Size(74, 13);
+            this.labelPrefix.Size = new System.Drawing.Size(91, 13);
             this.labelPrefix.TabIndex = 10;
-            this.labelPrefix.Text = "Backup name:";
+            this.labelPrefix.Text = "Backup file name:";
             this.labelPrefix.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textPrefix
