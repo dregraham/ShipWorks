@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using Rebex;
 using Rebex.Net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.FileTransfer;
 using ShipWorks.Templates;
@@ -19,6 +22,8 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Transfer file(s)", "Ftp")]
     public class FtpFileTask : TemplateBasedTask
     {
+        static int logIndex;
+
         /// <summary>
         /// The base temporary file name
         /// </summary>
@@ -105,6 +110,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 FtpAccountEntity ftpAccountEntity = FtpAccountManager.GetAccount(FtpAccountID.Value);
                 Ftp ftp = FtpUtility.LogonToFtp(ftpAccountEntity);
 
+                ftp.LogWriter = GetFtpLogWriter();
+
                 ftp.PutFiles(string.Format("{0}\\*", rootTempFileName), "/", FtpBatchTransferOptions.Recursive, FtpActionOnExistingFiles.OverwriteAll);
             }
             catch (FtpBatchTransferException ex)
@@ -112,6 +119,22 @@ namespace ShipWorks.Actions.Tasks.Common
                 log.Error("Error transferring File", ex);
                 throw new ActionTaskRunException(String.Format("Error uploading file. Ftp returned error: {0}", ex.Message));
             }
+        }
+
+        /// <summary>
+        /// Gets the FTP log writer.
+        /// </summary>
+        /// <returns></returns>
+        private static FileLogWriter GetFtpLogWriter()
+        {
+            string logDirectoryPath = (string.Format("{0}\\FtpFileTask", LogSession.LogFolder));
+            if (!Directory.Exists(logDirectoryPath))
+            {
+                Directory.CreateDirectory(logDirectoryPath);
+            }
+            FileLogWriter ftpLogWriter = new FileLogWriter(string.Format("{0}\\{1} - Log.txt", logDirectoryPath, logIndex.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')), LogLevel.Debug);
+            logIndex++;
+            return ftpLogWriter;
         }
 
         /// <summary>
