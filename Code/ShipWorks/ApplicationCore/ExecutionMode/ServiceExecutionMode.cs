@@ -125,7 +125,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        /// <exception cref="System.Exception">This is a test to try to submit a crash report while running ShipWorks as a background process.</exception>
         public void Execute()
         {
             log.Info("Running as a service.");
