@@ -37,8 +37,8 @@
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.panelTools = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.startingServicePanel = new System.Windows.Forms.Panel();
-            this.startingServiceLabel = new System.Windows.Forms.Label();
             this.startingServiceImage = new System.Windows.Forms.PictureBox();
+            this.startingServiceLabel = new System.Windows.Forms.Label();
             this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
             closeButton = new System.Windows.Forms.Button();
             labelHeader1 = new System.Windows.Forms.Label();
@@ -54,7 +54,7 @@
             // 
             closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            closeButton.Location = new System.Drawing.Point(597, 344);
+            closeButton.Location = new System.Drawing.Point(640, 344);
             closeButton.Name = "closeButton";
             closeButton.Size = new System.Drawing.Size(75, 23);
             closeButton.TabIndex = 6;
@@ -106,7 +106,7 @@
             this.panelGridArea.Controls.Add(this.panelTools);
             this.panelGridArea.Location = new System.Drawing.Point(12, 42);
             this.panelGridArea.Name = "panelGridArea";
-            this.panelGridArea.Size = new System.Drawing.Size(660, 290);
+            this.panelGridArea.Size = new System.Drawing.Size(703, 290);
             this.panelGridArea.TabIndex = 7;
             // 
             // kryptonBorderEdge
@@ -115,7 +115,7 @@
             this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 259);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(656, 1);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(699, 1);
             this.kryptonBorderEdge.TabIndex = 2;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -125,7 +125,7 @@
             this.panelTools.Location = new System.Drawing.Point(0, 260);
             this.panelTools.Name = "panelTools";
             this.panelTools.PanelBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderColumnSheet;
-            this.panelTools.Size = new System.Drawing.Size(656, 26);
+            this.panelTools.Size = new System.Drawing.Size(699, 26);
             this.panelTools.TabIndex = 1;
             // 
             // startingServicePanel
@@ -138,15 +138,6 @@
             this.startingServicePanel.Size = new System.Drawing.Size(220, 39);
             this.startingServicePanel.TabIndex = 11;
             // 
-            // startingServiceLabel
-            // 
-            this.startingServiceLabel.AutoSize = true;
-            this.startingServiceLabel.Location = new System.Drawing.Point(46, 12);
-            this.startingServiceLabel.Name = "startingServiceLabel";
-            this.startingServiceLabel.Size = new System.Drawing.Size(155, 13);
-            this.startingServiceLabel.TabIndex = 0;
-            this.startingServiceLabel.Text = "Starting service, please wait...";
-            // 
             // startingServiceImage
             // 
             this.startingServiceImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -158,6 +149,15 @@
             this.startingServiceImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.startingServiceImage.TabIndex = 6;
             this.startingServiceImage.TabStop = false;
+            // 
+            // startingServiceLabel
+            // 
+            this.startingServiceLabel.AutoSize = true;
+            this.startingServiceLabel.Location = new System.Drawing.Point(46, 12);
+            this.startingServiceLabel.Name = "startingServiceLabel";
+            this.startingServiceLabel.Size = new System.Drawing.Size(155, 13);
+            this.startingServiceLabel.TabIndex = 0;
+            this.startingServiceLabel.Text = "Starting service, please wait...";
             // 
             // entityGrid
             // 
@@ -173,7 +173,7 @@
             this.entityGrid.Renderer = windowsXPRenderer1;
             this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.entityGrid.ShadeAlternateRows = true;
-            this.entityGrid.Size = new System.Drawing.Size(656, 259);
+            this.entityGrid.Size = new System.Drawing.Size(699, 259);
             this.entityGrid.StretchPrimaryGrid = false;
             this.entityGrid.TabIndex = 0;
             // 
@@ -182,7 +182,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = closeButton;
-            this.ClientSize = new System.Drawing.Size(684, 379);
+            this.ClientSize = new System.Drawing.Size(727, 379);
             this.Controls.Add(this.startingServicePanel);
             this.Controls.Add(labelHeader3);
             this.Controls.Add(labelHeader2);
