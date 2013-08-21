@@ -63,12 +63,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         string installPackageExe = null;
         string upgradePackageExe = null;
 
-        class DatabaseFileInfo
-        {
-            public string Database { get; set; }
-            public string DataFile { get; set; }
-            public string LogFile { get; set; }
-        }
 
         class DatabaseLoginInfo
         {
@@ -612,7 +606,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 log.InfoFormat("Detaching mdf-ldf from LocalDB");
                 using (SqlConnection con = localDbSession.OpenConnection())
                 {
-                    fileInfo = DetachDatabase(localDbSession.Configuration.DatabaseName, con);
+                    fileInfo = ShipWorksDatabaseUtility.DetachDatabase(localDbSession.Configuration.DatabaseName, con);
                 }
 
                 // Path where the db files are moving
@@ -1302,7 +1296,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 // Go through each user database...
                 foreach (string database in databaseNames.Rows.Cast<DataRow>().Select(r => (string) r[0]))
                 {
-                    databaseFiles.Add(DetachDatabase(database, con));
+                    databaseFiles.Add(ShipWorksDatabaseUtility.DetachDatabase(database, con));
                 }
             }
 
@@ -1451,56 +1445,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         #endregion
 
         #region Common and Command Line
-
-        /// <summary>
-        /// Detach the database found on the given connection, and return the physical file information about it
-        /// </summary>
-        private static DatabaseFileInfo DetachDatabase(string database, SqlConnection con)
-        {
-            // sp_helpfile acts on the current database
-            con.ChangeDatabase(database);
-
-            // We should use sys.database_files... but, this may be MSDE... it may not exist!
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandText = "EXEC sp_helpfile";
-
-            DatabaseFileInfo databaseInfo = new DatabaseFileInfo() { Database = database };
-
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
-            {
-                while (reader.Read())
-                {
-                    string file = ((string) reader["filename"]).Trim();
-
-                    if (file.ToLower().EndsWith("mdf"))
-                    {
-                        databaseInfo.DataFile = file;
-                    }
-
-                    if (file.ToLower().EndsWith("ldf"))
-                    {
-                        databaseInfo.LogFile = file;
-                    }
-                }
-            }
-
-            log.InfoFormat("Detaching database '{0}' ('{1}', '{2}')", databaseInfo.Database, databaseInfo.DataFile, databaseInfo.LogFile);
-
-            if (databaseInfo.DataFile == null || databaseInfo.LogFile == null)
-            {
-                throw new FileNotFoundException("Could not locate physical database files.");
-            }
-
-            // Make sure nobody else is on this database right now, so that detach will work
-            SqlUtility.SetSingleUser(con);
-
-            // Have to get out of the db to detach
-            con.ChangeDatabase("master");
-
-            SqlCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
-
-            return databaseInfo;
-        }
 
         /// <summary>
         /// Handle commands comming in from the command line for sql server

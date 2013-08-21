@@ -131,7 +131,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Root of all ShipWorks settings that are specific to the current intall path of shipworks.
         /// </summary>
-        private static string InstanceRoot
+        public static string InstanceRoot
         {
             get
             {

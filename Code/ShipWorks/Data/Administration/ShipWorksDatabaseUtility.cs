@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using ShipWorks.Data.Administration.SqlServerSetup;
+using log4net;
 
 namespace ShipWorks.Data.Administration
 {
@@ -21,6 +22,8 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public static class ShipWorksDatabaseUtility
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksDatabaseUtility));
+
         // Used for loading \ executing sql
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Installation");
 
@@ -310,6 +313,56 @@ namespace ShipWorks.Data.Administration
             }
 
             return databaseName;
+        }
+
+        /// <summary>
+        /// Detach the database found on the given connection, and return the physical file information about it
+        /// </summary>
+        public static DatabaseFileInfo DetachDatabase(string database, SqlConnection con)
+        {
+            // sp_helpfile acts on the current database
+            con.ChangeDatabase(database);
+
+            // We should use sys.database_files... but, this may be MSDE... it may not exist!
+            SqlCommand cmd = SqlCommandProvider.Create(con);
+            cmd.CommandText = "EXEC sp_helpfile";
+
+            DatabaseFileInfo databaseInfo = new DatabaseFileInfo() { Database = database };
+
+            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            {
+                while (reader.Read())
+                {
+                    string file = ((string) reader["filename"]).Trim();
+
+                    if (file.ToLower().EndsWith("mdf"))
+                    {
+                        databaseInfo.DataFile = file;
+                    }
+
+                    if (file.ToLower().EndsWith("ldf"))
+                    {
+                        databaseInfo.LogFile = file;
+                    }
+                }
+            }
+
+            log.InfoFormat("Detaching database '{0}' ('{1}', '{2}')", databaseInfo.Database, databaseInfo.DataFile, databaseInfo.LogFile);
+
+            if (databaseInfo.DataFile == null || databaseInfo.LogFile == null)
+            {
+                throw new FileNotFoundException("Could not locate physical database files.");
+            }
+
+            // Make sure nobody else is on this database right now, so that detach will work
+            SqlUtility.SetSingleUser(con);
+
+            // Have to get out of the db to detach
+            con.ChangeDatabase("master");
+
+            SqlCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
+
+            return databaseInfo;
         }
     }
 }

@@ -136,7 +136,6 @@ Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additi
 
 [Icons]
 Name: {group}\ShipWorks 3; Filename: {app}\ShipWorks.exe; IconIndex: 0
-Name: {group}\Advanced\Launch ShipWorks Background Process; Filename: {app}\ShipWorks.exe; Parameters:"/service=scheduler";
 Name: {userdesktop}\ShipWorks 3; Filename: {app}\ShipWorks.exe; Tasks: desktopicon
 
 [_ISTool]
@@ -146,11 +145,14 @@ EnableISX=true
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: ComputerID; ValueData: {code:GetGuid}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks\Instances; ValueType: string; ValueName: {app}; ValueData: {code:GetAppID}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID};
-Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler; Check: ShipWorksVersionDoesNotHaveScheduler;
+Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler;
 
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: NotNeedRestart
+
+[UninstallRun]
+Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall";
 
 [Dirs]
 Name: {app}
@@ -185,15 +187,11 @@ begin
 	    appPath := ExpandConstant('{app}');
 
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks\Instances' , appPath, instanceID)
-		then begin
-			// MsgBox('Found instanceID at appPath: ' + appPath + ' Using: ' + instanceID, mbInformation, MB_OK);
-	
+		then begin	
 			Result := instanceID;
 		end
 		else
-		begin
-			// MsgBox('Did not find instanceID at appPath: ' + appPath + ' Using: ' + newAppID, mbInformation, MB_OK);
-			
+		begin		
 			Result := newAppID;
 		end;
 		
@@ -201,16 +199,10 @@ begin
     
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks', 'LastInstalledInstanceID', instanceID)
 		then begin
-		
-			// MsgBox('Using last instanceID: ' + instanceID, mbInformation, MB_OK);
-			
 			Result := instanceID;
 		end
 		else
-		begin
-		
-			// MsgBox('Using new instanceID: ' + newAppID, mbInformation, MB_OK);
-			
+		begin			
 			Result := newAppID;
 		end;
     end;
@@ -241,50 +233,33 @@ end;
 //----------------------------------------------------------------
 function ShipWorksVersionHasScheduler(): Boolean;
 var
-	VersionFound: string;	
-    IntMinorVersion: Integer;
-    StringMinorVersion: string;
-    MinorVersionEndPosition: Integer;
+    version: TWindowsVersion;
 	TargetExe: string;
 begin
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-	if FileExists(TargetExe) then
-	{
-		GetVersionNumbersString(TargetExe, VersionFound);
-	}
+	if (FileExists(TargetExe)) 
+    then begin
 
-    if Pos('3.', VersionFound) <> 1 Then
-    begin
-        Result := false;
-    end
-    else
-    begin
-        // Gets Everything after 3.
-        StringMinorVersion := copy (VersionFound, 3, 100 );
-        
-        // Gets the position of the . at the end of the minor version.
-        MinorVersionEndPosition := Pos('.', StringMinorVersion);
-        
-        // Gets just the minor version
-        StringMinorVersion := copy(StringMinorVersion, 1, MinorVersionEndPosition - 1);
-        
-        //Converts minor version into an int
-        IntMinorVersion:= StrToInt(StringMinorVersion);
-        
-		MsgBox(StringMinorVersion, mbInformation, MB_OK);
+        GetWindowsVersionEx(version);
 
-        //If minor version is greater than 4, this is true.
-        Result := IntMinorVersion > 4;
-    end
-end;
+        if (
+            (version.Major > 3) or
+            ((version.Major = 3) and (version.Minor > 4)) or
 
-//----------------------------------------------------------------
-// Returns inverse of ShipWorksVersionHasScheduler. Used when registerring scheduler
-//----------------------------------------------------------------
-function ShipWorksVersionDoesNotHaveScheduler() : Boolean;
-begin
-	Result := not(ShipWorksVersionHasScheduler());
+            // Special case for internal builds
+            ((version.Major = 0) and (version.Minor = 0))
+           )
+
+        then begin
+            Result := true;
+        end;
+	end
+	else
+	begin			
+		Result := false;
+	end;
+
 end;
 
 //----------------------------------------------------------------
@@ -323,7 +298,6 @@ var
 	TargetExe: string;
 	VersionFound: string;
 	SchemaFound: Integer;
-	ServiceStarted: Integer;
 begin
 
 	Result := True;
@@ -352,9 +326,8 @@ begin
 		else if (Pos('3.', VersionFound) = 1)
 		then begin
 
-			// See if a DB upgrade will be required.  /getactualschemaid is an Alpha way of doing it... we can get rid of it
-			// once final is ready
-		    if Exec(ExpandConstant(TargetExe), '/getactualschemaid /command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+			// See if a DB upgrade will be required.
+		    if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
 		    then begin
 
 				if ((SchemaFound > 0) and ({#RequiredSchemaID} > SchemaFound))
@@ -373,12 +346,6 @@ begin
 
 			end;
 
-			// Sorry for double negative
-			if Result AND ShipWorksVersionHasScheduler()
-			then begin
-				Exec(ExpandConstant(TargetExe), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, ServiceStarted)
-			end;
-
 		end;
 	end;
 
@@ -389,6 +356,8 @@ end;
 // script handler.
 //----------------------------------------------------------------
 function NextButtonClick(CurPage: Integer): Boolean;
+var
+	serviceWasStopped: Integer;
 begin
 
 	Result := True;
@@ -402,6 +371,15 @@ begin
 	then begin
 		Result := CheckUpgradeIssues();
 	end;
+
+    if (CurPage = wpReady)
+    then begin
+
+		if (ShipWorksVersionHasScheduler())
+		then begin
+			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+		end;
+    end;
 
 end;
 
@@ -425,23 +403,3 @@ end;
 
 // In case we need to see if anything went wrong
 #call SaveToFile('InnoSetup.iss')
-
-//----------------------------------------------------------------
-// Called by Inno when the uninstall step changes.
-// Used to stop services before file removal.
-//----------------------------------------------------------------
-procedure CurUninstallStepChanged(curUninstallStep: TUninstallStep);
-var
-	appExe: String;
-	resultCode: Integer;
-begin
-	if curUninstallStep = usUninstall then
-	begin
-		appExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-
-		Exec(appExe, '/cmd:uninstallservices /all', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
-
-		// Wait for up to 3 minutes for all service processes to exit.
-		DelayDeleteFile(appExe, 720);
-	end;
-end;
