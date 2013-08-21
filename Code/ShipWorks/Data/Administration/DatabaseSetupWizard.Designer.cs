@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseSetupWizard));
             this.wizardPageChooseWisely2012 = new ShipWorks.UI.Wizard.WizardPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -221,7 +221,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageChooseWisely2012);
+            this.mainPanel.Controls.Add(this.wizardPageComplete);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -257,7 +257,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseWisely2012.Name = "wizardPageChooseWisely2012";
             this.wizardPageChooseWisely2012.Size = new System.Drawing.Size(548, 271);
             this.wizardPageChooseWisely2012.TabIndex = 0;
-            this.wizardPageChooseWisely2012.Title = "Database Setup";
+            this.wizardPageChooseWisely2012.Title = "Database Configuration";
             this.wizardPageChooseWisely2012.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSetupOrConnect);
             // 
             // label1
@@ -299,7 +299,7 @@ namespace ShipWorks.Data.Administration
             this.labelAnotherPC.Name = "labelAnotherPC";
             this.labelAnotherPC.Size = new System.Drawing.Size(406, 17);
             this.labelAnotherPC.TabIndex = 49;
-            this.labelAnotherPC.Text = "Is ShipWorks already installed on another PC? Let\'s get you connected.";
+            this.labelAnotherPC.Text = "Is ShipWorks already on another PC? Let\'s get you connected.";
             // 
             // pictureBoxAnotherPC
             // 
@@ -361,7 +361,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseSqlServer.Name = "wizardPageChooseSqlServer";
             this.wizardPageChooseSqlServer.Size = new System.Drawing.Size(548, 271);
             this.wizardPageChooseSqlServer.TabIndex = 0;
-            this.wizardPageChooseSqlServer.Title = "Database Setup";
+            this.wizardPageChooseSqlServer.Title = "Database Configuration";
             this.wizardPageChooseSqlServer.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewOrExistingSqlServer);
             this.wizardPageChooseSqlServer.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoNewOrExistingSqlServer);
             // 
@@ -499,14 +499,14 @@ namespace ShipWorks.Data.Administration
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelServerSearching);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.pictureServerSearching);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.comboSqlServers);
-            this.wizardPageSelectSqlServerInstance.Description = "Select a running instance of Microsoft SQL Server.";
+            this.wizardPageSelectSqlServerInstance.Description = "Choose a running database to connect to.";
             this.wizardPageSelectSqlServerInstance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageSelectSqlServerInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageSelectSqlServerInstance.Location = new System.Drawing.Point(0, 0);
             this.wizardPageSelectSqlServerInstance.Name = "wizardPageSelectSqlServerInstance";
             this.wizardPageSelectSqlServerInstance.Size = new System.Drawing.Size(548, 271);
             this.wizardPageSelectSqlServerInstance.TabIndex = 0;
-            this.wizardPageSelectSqlServerInstance.Title = "Connect to SQL Server";
+            this.wizardPageSelectSqlServerInstance.Title = "Connect to ShipWorks";
             this.wizardPageSelectSqlServerInstance.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSelectSqlInstance);
             this.wizardPageSelectSqlServerInstance.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSelectSqlInstance);
             // 
@@ -529,7 +529,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabses.ImageTextSeparation = 1;
             this.gridDatabses.Location = new System.Drawing.Point(41, 100);
             this.gridDatabses.Name = "gridDatabses";
-            this.gridDatabses.Renderer = windowsXPRenderer1;
+            this.gridDatabses.Renderer = windowsXPRenderer2;
             this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
             this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
@@ -908,7 +908,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageComplete.Name = "wizardPageComplete";
             this.wizardPageComplete.Size = new System.Drawing.Size(548, 271);
             this.wizardPageComplete.TabIndex = 0;
-            this.wizardPageComplete.Title = "Database Setup Complete";
+            this.wizardPageComplete.Title = "Database Configuration Complete";
             this.wizardPageComplete.PageShown += new System.EventHandler<ShipWorks.UI.Wizard.WizardPageShownEventArgs>(this.OnShownComplete);
             // 
             // labelSetupComplete
@@ -917,7 +917,7 @@ namespace ShipWorks.Data.Administration
             this.labelSetupComplete.Name = "labelSetupComplete";
             this.labelSetupComplete.Size = new System.Drawing.Size(476, 82);
             this.labelSetupComplete.TabIndex = 1;
-            this.labelSetupComplete.Text = "The database setup is complete.";
+            this.labelSetupComplete.Text = "The database configuration is complete.";
             // 
             // iconSetupComplete
             // 
@@ -1342,7 +1342,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseWisely2008.Name = "wizardPageChooseWisely2008";
             this.wizardPageChooseWisely2008.Size = new System.Drawing.Size(548, 271);
             this.wizardPageChooseWisely2008.TabIndex = 0;
-            this.wizardPageChooseWisely2008.Title = "Database Setup";
+            this.wizardPageChooseWisely2008.Title = "Database Configuration";
             this.wizardPageChooseWisely2008.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSetupOrConnect);
             // 
             // radioChooseCreate2008
@@ -1456,7 +1456,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageManageLocalDb.Name = "wizardPageManageLocalDb";
             this.wizardPageManageLocalDb.Size = new System.Drawing.Size(548, 271);
             this.wizardPageManageLocalDb.TabIndex = 0;
-            this.wizardPageManageLocalDb.Title = "Database Setup";
+            this.wizardPageManageLocalDb.Title = "Database Configuration";
             this.wizardPageManageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextManageLocalDb);
             // 
             // label2
@@ -1516,7 +1516,7 @@ namespace ShipWorks.Data.Administration
             this.labelLocalDbConnect2.Name = "labelLocalDbConnect2";
             this.labelLocalDbConnect2.Size = new System.Drawing.Size(406, 17);
             this.labelLocalDbConnect2.TabIndex = 46;
-            this.labelLocalDbConnect2.Text = "Is ShipWorks already installed on another PC? Let\'s get you connected.";
+            this.labelLocalDbConnect2.Text = "Is ShipWorks installed on another PC? Let\'s get you connected.";
             // 
             // pictureLocalDbConnect
             // 
@@ -1553,7 +1553,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageUpgradeLocalDb.NextRequiresElevation = true;
             this.wizardPageUpgradeLocalDb.Size = new System.Drawing.Size(548, 271);
             this.wizardPageUpgradeLocalDb.TabIndex = 0;
-            this.wizardPageUpgradeLocalDb.Title = "Database Setup";
+            this.wizardPageUpgradeLocalDb.Title = "Database Configuration";
             this.wizardPageUpgradeLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextUpgradeLocalDb);
             this.wizardPageUpgradeLocalDb.Cancelling += new System.ComponentModel.CancelEventHandler(this.OnCancellUpgradeLocalDb);
             // 
@@ -1641,6 +1641,7 @@ namespace ShipWorks.Data.Administration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(548, 378);
+            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(554, 406);
             this.Name = "DatabaseSetupWizard";
