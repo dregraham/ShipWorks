@@ -1448,7 +1448,7 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region Create Database
+        #region Database Name
 
         /// <summary>
         /// Stepping into the page for creating a shipworks database
@@ -1461,14 +1461,24 @@ namespace ShipWorks.Data.Administration
                 DropPendingDatabase();
             }
 
-            // See if we need to load up where the data files will go
+            // See if the server had changed...
             if (dataFileSqlInstance != sqlSession.Configuration.ServerInstance)
             {
+                Cursor.Current = Cursors.WaitCursor; 
+
                 linkChooseDataLocation.Visible = true;
                 panelDataFiles.Visible = false;
 
+                panelDatabaseGivenName.Visible = true;
+                panelDatabaseChooseName.Visible = false;
+
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
+                    givenDatabaseName.Text = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
+                    databaseName.Text = givenDatabaseName.Text;
+
+                    linkEditGivenDatabaseName.Left = givenDatabaseName.Right + 1;
+
                     pathDataFiles.Text = SqlUtility.GetMasterDataFilePath(con);
                 }
 
@@ -1571,6 +1581,16 @@ namespace ShipWorks.Data.Administration
 
             pendingDatabaseCreated = false;
             pendingDatabaseName = "";
+        }
+
+        /// <summary>
+        /// User wants to edit the database name we assigned
+        /// </summary>
+        private void OnLinkEditDatabaseName(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            panelDatabaseChooseName.Top = panelDatabaseGivenName.Top;
+            panelDatabaseGivenName.Visible = false;
+            panelDatabaseChooseName.Visible = true;
         }
 
         /// <summary>

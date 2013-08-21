@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseSetupWizard));
             this.wizardPageChooseWisely2012 = new ShipWorks.UI.Wizard.WizardPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -71,15 +71,19 @@ namespace ShipWorks.Data.Administration
             this.pictureServerSearching = new System.Windows.Forms.PictureBox();
             this.comboSqlServers = new System.Windows.Forms.ComboBox();
             this.wizardPageDatabaseName = new ShipWorks.UI.Wizard.WizardPage();
-            this.linkChooseDataLocation = new ShipWorks.UI.Controls.LinkControl();
-            this.infoTipDatabaseName = new ShipWorks.UI.Controls.InfoTip();
-            this.databaseName = new System.Windows.Forms.TextBox();
-            this.labelDatabaseName = new System.Windows.Forms.Label();
+            this.panelDatabaseGivenName = new System.Windows.Forms.Panel();
+            this.linkEditGivenDatabaseName = new System.Windows.Forms.LinkLabel();
+            this.givenDatabaseName = new System.Windows.Forms.Label();
+            this.labelGivenDatabaseName = new System.Windows.Forms.Label();
+            this.panelDatabaseChooseName = new System.Windows.Forms.Panel();
             this.labelEnterDatabaseName = new System.Windows.Forms.Label();
+            this.linkChooseDataLocation = new ShipWorks.UI.Controls.LinkControl();
             this.panelDataFiles = new System.Windows.Forms.Panel();
-            this.labelDataFiles = new System.Windows.Forms.Label();
             this.pathDataFiles = new ShipWorks.UI.Controls.PathTextBox();
             this.browseDataFiles = new System.Windows.Forms.Button();
+            this.labelDataFiles = new System.Windows.Forms.Label();
+            this.databaseName = new System.Windows.Forms.TextBox();
+            this.labelDatabaseName = new System.Windows.Forms.Label();
             this.wizardPageInstallSqlServer = new ShipWorks.UI.Wizard.WizardPage();
             this.panelSqlServerInstallProgress = new System.Windows.Forms.Panel();
             this.progressPreparing = new System.Windows.Forms.ProgressBar();
@@ -175,6 +179,8 @@ namespace ShipWorks.Data.Administration
             this.panelSqlInstanceHelp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).BeginInit();
             this.wizardPageDatabaseName.SuspendLayout();
+            this.panelDatabaseGivenName.SuspendLayout();
+            this.panelDatabaseChooseName.SuspendLayout();
             this.panelDataFiles.SuspendLayout();
             this.wizardPageInstallSqlServer.SuspendLayout();
             this.panelSqlServerInstallProgress.SuspendLayout();
@@ -221,7 +227,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageComplete);
+            this.mainPanel.Controls.Add(this.wizardPageDatabaseName);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -529,7 +535,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabses.ImageTextSeparation = 1;
             this.gridDatabses.Location = new System.Drawing.Point(41, 100);
             this.gridDatabses.Name = "gridDatabses";
-            this.gridDatabses.Renderer = windowsXPRenderer2;
+            this.gridDatabses.Renderer = windowsXPRenderer1;
             this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
             this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
@@ -702,13 +708,9 @@ namespace ShipWorks.Data.Administration
             // 
             // wizardPageDatabaseName
             // 
-            this.wizardPageDatabaseName.Controls.Add(this.linkChooseDataLocation);
-            this.wizardPageDatabaseName.Controls.Add(this.infoTipDatabaseName);
-            this.wizardPageDatabaseName.Controls.Add(this.databaseName);
-            this.wizardPageDatabaseName.Controls.Add(this.labelDatabaseName);
-            this.wizardPageDatabaseName.Controls.Add(this.labelEnterDatabaseName);
-            this.wizardPageDatabaseName.Controls.Add(this.panelDataFiles);
-            this.wizardPageDatabaseName.Description = "Choose the name of the ShipWorks database.";
+            this.wizardPageDatabaseName.Controls.Add(this.panelDatabaseGivenName);
+            this.wizardPageDatabaseName.Controls.Add(this.panelDatabaseChooseName);
+            this.wizardPageDatabaseName.Description = "Confirm the name of the ShipWorks database.";
             this.wizardPageDatabaseName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageDatabaseName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageDatabaseName.Location = new System.Drawing.Point(0, 0);
@@ -719,72 +721,91 @@ namespace ShipWorks.Data.Administration
             this.wizardPageDatabaseName.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCreateDatabase);
             this.wizardPageDatabaseName.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoCreateDatabase);
             // 
+            // panelDatabaseGivenName
+            // 
+            this.panelDatabaseGivenName.Controls.Add(this.linkEditGivenDatabaseName);
+            this.panelDatabaseGivenName.Controls.Add(this.givenDatabaseName);
+            this.panelDatabaseGivenName.Controls.Add(this.labelGivenDatabaseName);
+            this.panelDatabaseGivenName.Location = new System.Drawing.Point(3, 8);
+            this.panelDatabaseGivenName.Name = "panelDatabaseGivenName";
+            this.panelDatabaseGivenName.Size = new System.Drawing.Size(533, 20);
+            this.panelDatabaseGivenName.TabIndex = 46;
+            // 
+            // linkEditGivenDatabaseName
+            // 
+            this.linkEditGivenDatabaseName.AutoSize = true;
+            this.linkEditGivenDatabaseName.LinkColor = System.Drawing.Color.CornflowerBlue;
+            this.linkEditGivenDatabaseName.Location = new System.Drawing.Point(276, 0);
+            this.linkEditGivenDatabaseName.Name = "linkEditGivenDatabaseName";
+            this.linkEditGivenDatabaseName.Size = new System.Drawing.Size(33, 13);
+            this.linkEditGivenDatabaseName.TabIndex = 2;
+            this.linkEditGivenDatabaseName.TabStop = true;
+            this.linkEditGivenDatabaseName.Text = "(Edit)";
+            this.linkEditGivenDatabaseName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLinkEditDatabaseName);
+            // 
+            // givenDatabaseName
+            // 
+            this.givenDatabaseName.AutoSize = true;
+            this.givenDatabaseName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.givenDatabaseName.Location = new System.Drawing.Point(188, 0);
+            this.givenDatabaseName.Name = "givenDatabaseName";
+            this.givenDatabaseName.Size = new System.Drawing.Size(88, 13);
+            this.givenDatabaseName.TabIndex = 1;
+            this.givenDatabaseName.Text = "ShipWorks123";
+            // 
+            // labelGivenDatabaseName
+            // 
+            this.labelGivenDatabaseName.AutoSize = true;
+            this.labelGivenDatabaseName.Location = new System.Drawing.Point(23, 0);
+            this.labelGivenDatabaseName.Name = "labelGivenDatabaseName";
+            this.labelGivenDatabaseName.Size = new System.Drawing.Size(165, 13);
+            this.labelGivenDatabaseName.TabIndex = 0;
+            this.labelGivenDatabaseName.Text = "Your new database name will be:";
+            // 
+            // panelDatabaseChooseName
+            // 
+            this.panelDatabaseChooseName.Controls.Add(this.labelEnterDatabaseName);
+            this.panelDatabaseChooseName.Controls.Add(this.linkChooseDataLocation);
+            this.panelDatabaseChooseName.Controls.Add(this.panelDataFiles);
+            this.panelDatabaseChooseName.Controls.Add(this.databaseName);
+            this.panelDatabaseChooseName.Controls.Add(this.labelDatabaseName);
+            this.panelDatabaseChooseName.Location = new System.Drawing.Point(3, 44);
+            this.panelDatabaseChooseName.Name = "panelDatabaseChooseName";
+            this.panelDatabaseChooseName.Size = new System.Drawing.Size(533, 107);
+            this.panelDatabaseChooseName.TabIndex = 45;
+            this.panelDatabaseChooseName.Visible = false;
+            // 
+            // labelEnterDatabaseName
+            // 
+            this.labelEnterDatabaseName.Location = new System.Drawing.Point(23, 0);
+            this.labelEnterDatabaseName.Name = "labelEnterDatabaseName";
+            this.labelEnterDatabaseName.Size = new System.Drawing.Size(348, 18);
+            this.labelEnterDatabaseName.TabIndex = 5;
+            this.labelEnterDatabaseName.Text = "Enter the name of the ShipWorks database to be created:";
+            // 
             // linkChooseDataLocation
             // 
             this.linkChooseDataLocation.AutoSize = true;
             this.linkChooseDataLocation.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkChooseDataLocation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkChooseDataLocation.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.linkChooseDataLocation.Location = new System.Drawing.Point(123, 55);
+            this.linkChooseDataLocation.Location = new System.Drawing.Point(122, 47);
             this.linkChooseDataLocation.Name = "linkChooseDataLocation";
             this.linkChooseDataLocation.Size = new System.Drawing.Size(214, 13);
             this.linkChooseDataLocation.TabIndex = 43;
             this.linkChooseDataLocation.Text = "Let me choose the location of the data files";
             this.linkChooseDataLocation.Click += new System.EventHandler(this.OnChooseDataFileLocation);
             // 
-            // infoTipDatabaseName
-            // 
-            this.infoTipDatabaseName.Caption = "Multiple databases can be created in a single instance of Microsoft SQL Server 20" +
-    "05.  Each database must have a unique name that is used to connect to it.";
-            this.infoTipDatabaseName.Location = new System.Drawing.Point(262, 34);
-            this.infoTipDatabaseName.Name = "infoTipDatabaseName";
-            this.infoTipDatabaseName.Size = new System.Drawing.Size(12, 12);
-            this.infoTipDatabaseName.TabIndex = 9;
-            this.infoTipDatabaseName.Title = "Database Name";
-            // 
-            // databaseName
-            // 
-            this.databaseName.Location = new System.Drawing.Point(124, 30);
-            this.databaseName.Name = "databaseName";
-            this.databaseName.Size = new System.Drawing.Size(132, 21);
-            this.databaseName.TabIndex = 7;
-            this.databaseName.Text = "ShipWorks";
-            // 
-            // labelDatabaseName
-            // 
-            this.labelDatabaseName.Location = new System.Drawing.Point(36, 32);
-            this.labelDatabaseName.Name = "labelDatabaseName";
-            this.labelDatabaseName.Size = new System.Drawing.Size(100, 23);
-            this.labelDatabaseName.TabIndex = 6;
-            this.labelDatabaseName.Text = "Database name:";
-            // 
-            // labelEnterDatabaseName
-            // 
-            this.labelEnterDatabaseName.Location = new System.Drawing.Point(24, 8);
-            this.labelEnterDatabaseName.Name = "labelEnterDatabaseName";
-            this.labelEnterDatabaseName.Size = new System.Drawing.Size(348, 18);
-            this.labelEnterDatabaseName.TabIndex = 5;
-            this.labelEnterDatabaseName.Text = "Enter the name of the ShipWorks database to be created:";
-            // 
             // panelDataFiles
             // 
-            this.panelDataFiles.Controls.Add(this.labelDataFiles);
             this.panelDataFiles.Controls.Add(this.pathDataFiles);
             this.panelDataFiles.Controls.Add(this.browseDataFiles);
-            this.panelDataFiles.Location = new System.Drawing.Point(3, 53);
+            this.panelDataFiles.Controls.Add(this.labelDataFiles);
+            this.panelDataFiles.Location = new System.Drawing.Point(2, 45);
             this.panelDataFiles.Name = "panelDataFiles";
             this.panelDataFiles.Size = new System.Drawing.Size(517, 59);
             this.panelDataFiles.TabIndex = 44;
             this.panelDataFiles.Visible = false;
-            // 
-            // labelDataFiles
-            // 
-            this.labelDataFiles.AutoSize = true;
-            this.labelDataFiles.Location = new System.Drawing.Point(45, 9);
-            this.labelDataFiles.Name = "labelDataFiles";
-            this.labelDataFiles.Size = new System.Drawing.Size(74, 13);
-            this.labelDataFiles.TabIndex = 7;
-            this.labelDataFiles.Text = "Data location:";
             // 
             // pathDataFiles
             // 
@@ -805,6 +826,31 @@ namespace ShipWorks.Data.Administration
             this.browseDataFiles.TabIndex = 5;
             this.browseDataFiles.Text = "Browse...";
             this.browseDataFiles.Click += new System.EventHandler(this.OnBrowseDatabaseLocation);
+            // 
+            // labelDataFiles
+            // 
+            this.labelDataFiles.AutoSize = true;
+            this.labelDataFiles.Location = new System.Drawing.Point(45, 9);
+            this.labelDataFiles.Name = "labelDataFiles";
+            this.labelDataFiles.Size = new System.Drawing.Size(74, 13);
+            this.labelDataFiles.TabIndex = 7;
+            this.labelDataFiles.Text = "Data location:";
+            // 
+            // databaseName
+            // 
+            this.databaseName.Location = new System.Drawing.Point(123, 22);
+            this.databaseName.Name = "databaseName";
+            this.databaseName.Size = new System.Drawing.Size(132, 21);
+            this.databaseName.TabIndex = 7;
+            this.databaseName.Text = "ShipWorks";
+            // 
+            // labelDatabaseName
+            // 
+            this.labelDatabaseName.Location = new System.Drawing.Point(35, 24);
+            this.labelDatabaseName.Name = "labelDatabaseName";
+            this.labelDatabaseName.Size = new System.Drawing.Size(100, 23);
+            this.labelDatabaseName.TabIndex = 6;
+            this.labelDatabaseName.Text = "Database name:";
             // 
             // wizardPageInstallSqlServer
             // 
@@ -1641,7 +1687,6 @@ namespace ShipWorks.Data.Administration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(548, 378);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(554, 406);
             this.Name = "DatabaseSetupWizard";
@@ -1687,7 +1732,10 @@ namespace ShipWorks.Data.Administration
             this.panelSqlInstanceHelp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).EndInit();
             this.wizardPageDatabaseName.ResumeLayout(false);
-            this.wizardPageDatabaseName.PerformLayout();
+            this.panelDatabaseGivenName.ResumeLayout(false);
+            this.panelDatabaseGivenName.PerformLayout();
+            this.panelDatabaseChooseName.ResumeLayout(false);
+            this.panelDatabaseChooseName.PerformLayout();
             this.panelDataFiles.ResumeLayout(false);
             this.panelDataFiles.PerformLayout();
             this.wizardPageInstallSqlServer.ResumeLayout(false);
@@ -1793,7 +1841,6 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label label24;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.InfoTip infoTip1;
-        private UI.Controls.InfoTip infoTipDatabaseName;
         private UI.Controls.InfoTip helpUserEmail;
         private System.Windows.Forms.Panel panelSqlInstanceCurrent;
         private System.Windows.Forms.Panel panelSqlInstanceRunning;
@@ -1865,5 +1912,10 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.PictureBox pictureBoxSetupNewDatabase;
         private System.Windows.Forms.PictureBox pictureBoxConnectRunningDatabase;
         private System.Windows.Forms.Label labelSetupNewDatabase;
+        private System.Windows.Forms.Panel panelDatabaseChooseName;
+        private System.Windows.Forms.Panel panelDatabaseGivenName;
+        private System.Windows.Forms.LinkLabel linkEditGivenDatabaseName;
+        private System.Windows.Forms.Label givenDatabaseName;
+        private System.Windows.Forms.Label labelGivenDatabaseName;
     }
 }

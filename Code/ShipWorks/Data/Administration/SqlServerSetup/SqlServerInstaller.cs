@@ -741,18 +741,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 SqlSession session = new SqlSession(SqlInstanceUtility.DetermineCredentials(SqlInstanceUtility.AutomaticServerInstance));
 
-                string baseName = "ShipWorks";
-                string databaseName = baseName;
-
                 using (SqlConnection con = session.OpenConnection())
                 {
-                    List<string> existingNames = ShipWorksDatabaseUtility.GetDatabaseDetails(con).Select(d => d.Name).ToList();
-
-                    int index = 1;
-                    while (existingNames.Contains(databaseName))
-                    {
-                        databaseName = string.Format("{0}{1}", baseName, index++);
-                    }
+                    string databaseName = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
 
                     // Now record that this is the database that is to be used for full instances for this path by default
                     using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"Software\Interapptive\ShipWorks\Database"))

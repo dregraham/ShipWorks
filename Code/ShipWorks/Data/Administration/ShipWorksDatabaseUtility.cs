@@ -292,5 +292,24 @@ namespace ShipWorks.Data.Administration
         {
             return SqlDatabaseDetail.Load(database, con);
         }
+
+        /// <summary>
+        /// Get the first available database name that doesn't conflict with any other databases on the server reprsented by the given connection
+        /// </summary>
+        public static string GetFirstAvailableDatabaseName(SqlConnection con)
+        {
+            string baseName = "ShipWorks";
+            string databaseName = baseName;
+
+            List<string> existingNames = ShipWorksDatabaseUtility.GetDatabaseDetails(con).Select(d => d.Name).ToList();
+
+            int index = 1;
+            while (existingNames.Contains(databaseName))
+            {
+                databaseName = string.Format("{0}{1}", baseName, index++);
+            }
+
+            return databaseName;
+        }
     }
 }
