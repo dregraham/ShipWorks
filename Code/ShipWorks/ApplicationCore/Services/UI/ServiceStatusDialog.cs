@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
@@ -19,6 +20,7 @@ using ShipWorks.UI.Utility;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ShipWorks.Users;
 
 
 namespace ShipWorks.ApplicationCore.Services.UI
@@ -29,6 +31,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
         private bool startingService;
         EntityCacheEntityProvider entityProvider;
+        private Timer startingServiceTimer;
 
 
         public ServiceStatusDialog()
@@ -78,14 +81,6 @@ namespace ShipWorks.ApplicationCore.Services.UI
         /// </summary>
         private void OnGridCellLinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
-            EntityGridRow row = e.Row;
-
-            if (row.EntityID == null)
-            {
-                MessageHelper.ShowMessage(this, "The data is not yet loaded.");
-                return;
-            }
-
             GridLinkAction action = (GridLinkAction)((GridActionDisplayType)e.Column.DisplayType).ActionData;
 
             if (action == GridLinkAction.Start)
@@ -93,7 +88,18 @@ namespace ShipWorks.ApplicationCore.Services.UI
                 startingService = true;
                 UpdateStartingServiceUI(false);
                 ShipWorksServiceBase.RunAllInBackground();
+                startingServiceTimer = new Timer { Interval = 30000, Enabled = true };
+                startingServiceTimer.Tick += StartingServiceTimerOnTick;
             }
+        }
+
+        /// <summary>
+        /// The start service timer elapsed, which means the service failed to start
+        /// </summary>
+        private void StartingServiceTimerOnTick(object sender, EventArgs e)
+        {
+            UpdateStartingServiceUI(true);
+            MessageBox.Show("The service was not able to start.", "ShipWorks", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>
@@ -102,6 +108,14 @@ namespace ShipWorks.ApplicationCore.Services.UI
         /// <param name="isComplete">Is the process just starting or is it finished?</param>
         private void UpdateStartingServiceUI(bool isComplete)
         {
+            // We need to get rid of the timer if the startup is complete
+            if (isComplete)
+            {
+                startingServiceTimer.Tick -= StartingServiceTimerOnTick;
+                startingServiceTimer.Dispose();
+                startingServiceTimer = null;
+            }
+            
             entityGrid.Enabled = isComplete;
             startingServicePanel.Visible = !isComplete;
         }
@@ -116,11 +130,23 @@ namespace ShipWorks.ApplicationCore.Services.UI
             layout.DefaultSortOrder = ListSortDirection.Ascending;
         }
 
+        /// <summary>
+        /// The form has been closed
+        /// </summary>
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
+            if (startingServiceTimer != null)
+            {
+                startingServiceTimer.Tick -= StartingServiceTimerOnTick;
+                startingServiceTimer.Dispose();
+            }
+            
             entityProvider.Dispose();
         }
 
+        /// <summary>
+        /// A service has changed
+        /// </summary>
         void OnEntityProviderChangeDetected(object sender, EntityCacheChangeMonitoredChangedEventArgs e)
         {
             ServiceStatusManager.CheckForChangesNeeded();
@@ -134,10 +160,16 @@ namespace ShipWorks.ApplicationCore.Services.UI
                 entityGrid.UpdateGridRows();
             }
 
+            // If a service is starting, see if it has started successfully
             if (startingService)
             {
-                UpdateStartingServiceUI(true);
-                startingService = false;
+                ServiceStatusEntity service = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ShipWorksServiceType.Scheduler);
+
+                if (service.GetStatus() == ServiceStatus.Running)
+                {
+                    UpdateStartingServiceUI(true);
+                    startingService = false;  
+                }
             }
         }
     }
