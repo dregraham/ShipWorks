@@ -62,12 +62,32 @@ namespace ShipWorks.Shipping
                     requiresCustoms = true;
                 }
 
-                // Foreign US territories
+                // Foreign US territories requiring customs forms - http://pe.usps.com/text/dmm300/608.htm
                 if (shipment.ShipPostalCode.StartsWith("96910") ||
+                    shipment.ShipPostalCode.StartsWith("96912") ||
+                    shipment.ShipPostalCode.StartsWith("96913") ||
+                    shipment.ShipPostalCode.StartsWith("96915") ||
+                    shipment.ShipPostalCode.StartsWith("96916") ||
+                    shipment.ShipPostalCode.StartsWith("96917") ||
+                    shipment.ShipPostalCode.StartsWith("96919") ||
+                    shipment.ShipPostalCode.StartsWith("96921") ||
+                    shipment.ShipPostalCode.StartsWith("96923") ||
+                    shipment.ShipPostalCode.StartsWith("96928") ||
+                    shipment.ShipPostalCode.StartsWith("96929") ||
+                    shipment.ShipPostalCode.StartsWith("96931") ||
+                    shipment.ShipPostalCode.StartsWith("96932") ||
+                    shipment.ShipPostalCode.StartsWith("96939") ||
+                    shipment.ShipPostalCode.StartsWith("96940") ||
+                    shipment.ShipPostalCode.StartsWith("96941") ||
+                    shipment.ShipPostalCode.StartsWith("96942") ||
+                    shipment.ShipPostalCode.StartsWith("96943") ||
+                    shipment.ShipPostalCode.StartsWith("96944") || 
                     shipment.ShipPostalCode.StartsWith("96950") ||
+                    shipment.ShipPostalCode.StartsWith("96951") ||
+                    shipment.ShipPostalCode.StartsWith("96952") ||
                     shipment.ShipPostalCode.StartsWith("96960") ||
                     shipment.ShipPostalCode.StartsWith("96970") ||
-                    shipment.ShipPostalCode.StartsWith("96799"))
+                    shipment.ShipPostalCode.StartsWith("96799")) 
                 {
                     requiresCustoms = true;
                 }
@@ -75,17 +95,6 @@ namespace ShipWorks.Shipping
 
             if (shipment.OriginCountryCode == "US")
             {
-                if (!PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
-                {
-                    if (shipment.ShipCountryCode != "GU")
-                    {
-                        // Even though Guam is USPS domestic services, it still requires customs. We don't need
-                        // customs when shipping with USPS to a domestic country that is not Guam, so flip this
-                        // back to false (because it was set to true by IsDomestic method due to origin country
-                        // and ship country differ)
-                        requiresCustoms = false;
-                    }
-                }
                 // i-Parcel allows customers to upload their SKUs and customs info, so we don't need to enter it in ShipWorks
                 // So Customs is never required.
                 if (ShipmentTypeManager.IsiParcel((ShipmentTypeCode) shipment.ShipmentType))
