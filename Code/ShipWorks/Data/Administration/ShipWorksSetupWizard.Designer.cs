@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShipWorksSetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
-            this.label3 = new System.Windows.Forms.Label();
             this.startFromScratch = new ShipWorks.UI.Controls.ShieldButton();
             this.detailedSetup = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -113,7 +112,6 @@
             // 
             // wizardPageWelcome
             // 
-            this.wizardPageWelcome.Controls.Add(this.label3);
             this.wizardPageWelcome.Controls.Add(this.startFromScratch);
             this.wizardPageWelcome.Controls.Add(this.detailedSetup);
             this.wizardPageWelcome.Controls.Add(this.pictureBox2);
@@ -133,41 +131,31 @@
             this.wizardPageWelcome.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
             this.wizardPageWelcome.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label3.Location = new System.Drawing.Point(106, 130);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(221, 13);
-            this.label3.TabIndex = 55;
-            this.label3.Text = "(Or do anything else that\'s not from scratch)";
-            // 
             // startFromScratch
             // 
             this.startFromScratch.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.startFromScratch.Location = new System.Drawing.Point(103, 33);
+            this.startFromScratch.Location = new System.Drawing.Point(103, 36);
             this.startFromScratch.Name = "startFromScratch";
             this.startFromScratch.Size = new System.Drawing.Size(165, 23);
-            this.startFromScratch.TabIndex = 54;
+            this.startFromScratch.TabIndex = 1;
             this.startFromScratch.Text = "Start from scratch >";
             this.startFromScratch.UseVisualStyleBackColor = true;
             this.startFromScratch.Click += new System.EventHandler(this.OnStartFromScratch);
             // 
             // detailedSetup
             // 
-            this.detailedSetup.Location = new System.Drawing.Point(105, 103);
+            this.detailedSetup.Location = new System.Drawing.Point(105, 107);
             this.detailedSetup.Name = "detailedSetup";
             this.detailedSetup.Size = new System.Drawing.Size(163, 23);
-            this.detailedSetup.TabIndex = 52;
-            this.detailedSetup.Text = "Connect to my ShipWorks >";
+            this.detailedSetup.TabIndex = 3;
+            this.detailedSetup.Text = "Get connected >";
             this.detailedSetup.UseVisualStyleBackColor = true;
             this.detailedSetup.Click += new System.EventHandler(this.OnOpenDetailedSetup);
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::ShipWorks.Properties.Resources.client_network2;
-            this.pictureBox2.Location = new System.Drawing.Point(43, 81);
+            this.pictureBox2.Image = global::ShipWorks.Properties.Resources.workplace_add;
+            this.pictureBox2.Location = new System.Drawing.Point(43, 85);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(48, 48);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -180,7 +168,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(106, 70);
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(106, 73);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(342, 1);
             this.kryptonBorderEdge.TabIndex = 50;
@@ -190,29 +178,29 @@
             // 
             this.labelWelcomeGlad.AutoSize = true;
             this.labelWelcomeGlad.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelWelcomeGlad.Location = new System.Drawing.Point(103, 14);
+            this.labelWelcomeGlad.Location = new System.Drawing.Point(103, 17);
             this.labelWelcomeGlad.Name = "labelWelcomeGlad";
             this.labelWelcomeGlad.Size = new System.Drawing.Size(237, 13);
-            this.labelWelcomeGlad.TabIndex = 46;
+            this.labelWelcomeGlad.TabIndex = 0;
             this.labelWelcomeGlad.Text = "Are you totally brand new to ShipWorks?";
             // 
             // labelWelcomeAdvanced
             // 
             this.labelWelcomeAdvanced.AutoSize = true;
             this.labelWelcomeAdvanced.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelWelcomeAdvanced.Location = new System.Drawing.Point(103, 85);
+            this.labelWelcomeAdvanced.Location = new System.Drawing.Point(103, 89);
             this.labelWelcomeAdvanced.Name = "labelWelcomeAdvanced";
-            this.labelWelcomeAdvanced.Size = new System.Drawing.Size(266, 13);
-            this.labelWelcomeAdvanced.TabIndex = 44;
-            this.labelWelcomeAdvanced.Text = "Is ShipWorks already installed on another PC?";
+            this.labelWelcomeAdvanced.Size = new System.Drawing.Size(239, 13);
+            this.labelWelcomeAdvanced.TabIndex = 2;
+            this.labelWelcomeAdvanced.Text = "Have you already been using ShipWorks?";
             // 
             // pictureBoxCubes
             // 
             this.pictureBoxCubes.Image = global::ShipWorks.Properties.Resources.sw_cubes_big;
-            this.pictureBoxCubes.Location = new System.Drawing.Point(40, 12);
+            this.pictureBoxCubes.Location = new System.Drawing.Point(41, 14);
             this.pictureBoxCubes.Name = "pictureBoxCubes";
-            this.pictureBoxCubes.Size = new System.Drawing.Size(54, 50);
-            this.pictureBoxCubes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxCubes.Size = new System.Drawing.Size(50, 48);
+            this.pictureBoxCubes.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxCubes.TabIndex = 43;
             this.pictureBoxCubes.TabStop = false;
             // 
@@ -458,10 +446,10 @@
             this.Name = "ShipWorksSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
-            ((ShipWorks.UI.Wizard.WizardPage)(this.wizardPageWelcome)),
-            ((ShipWorks.UI.Wizard.WizardPage)(this.wizardPagePrepare)),
-            ((ShipWorks.UI.Wizard.WizardPage)(this.wizardPageUser)),
-            ((ShipWorks.UI.Wizard.WizardPage)(this.wizardPageFinishExisting))});
+            this.wizardPageWelcome,
+            this.wizardPagePrepare,
+            this.wizardPageUser,
+            this.wizardPageFinishExisting});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnClosed);
@@ -520,6 +508,5 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private UI.Controls.ShieldButton startFromScratch;
         private System.Windows.Forms.Button detailedSetup;
-        private System.Windows.Forms.Label label3;
     }
 }

@@ -383,32 +383,22 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Click on the labels for Another PC
+        /// Show advanced options on the choose wisely page
         /// </summary>
-        private void OnClickAnotherPcLabels(object sender, EventArgs e)
+        private void OnChooseWiselyAdvancedOptions(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            radioChooseConnect2012.Checked = true;
+            linkLabelAdvancedOptions.Visible = false;
+
+            radioChooseCreate2012.Visible = true;
+            radioChooseCreate2012.Top = linkLabelAdvancedOptions.Top;
+
+            radioChooseRestore2012.Visible = true;
+            radioChooseRestore2012.Top = radioChooseCreate2012.Top + 26;
         }
 
         #endregion
 
         #region Manage Local DB
-
-        /// <summary>
-        /// Makes clicking the picture and label next to the radio check the radio
-        /// </summary>
-        private void OnClickLocalDbEnableRemoteLabel(object sender, EventArgs e)
-        {
-            radioLocalDbEnableRemote.Checked = true;
-        }
-
-        /// <summary>
-        /// Makes clicking the picture and label next to the radio check the radio
-        /// </summary>
-        private void OnClickLocalDbConnectLabel(object sender, EventArgs e)
-        {
-            radioLocalDbConnect.Checked = true;
-        }
 
         /// <summary>
         /// Stepping next from the manage local db page
@@ -959,6 +949,7 @@ namespace ShipWorks.Data.Administration
             }
 
             gridDatabses.Rows.Clear();
+            gridDatabses.EmptyText = string.Format("Connecting to databases on '{0}'...", comboSqlServers.Text);
 
             linkSqlInstanceAccount.Visible = false;
 
@@ -1008,6 +999,7 @@ namespace ShipWorks.Data.Administration
                         pictureSqlConnection.Image = Resources.warning16;
                         labelSqlConnection.Text = "ShipWorks could not connect to the selected database server.";
                         linkSqlInstanceAccount.Text = "Try changing the account";
+                        gridDatabses.EmptyText = "";
                     }
                     else
                     {
@@ -1017,6 +1009,8 @@ namespace ShipWorks.Data.Administration
                         pictureSqlConnection.Image = Resources.check16;
                         labelSqlConnection.Text = string.Format("Successfully connected using {0} account.", configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
                         linkSqlInstanceAccount.Text = "Change";
+                        gridDatabses.EmptyText = "No databases were found.";
+
 
                         // Save the credentials
                         sqlSession.Configuration.ServerInstance = configuration.ServerInstance;
@@ -1054,7 +1048,7 @@ namespace ShipWorks.Data.Administration
                 // If it's the database we are currently connected to
                 if (isCurrent)
                 {
-                    status = "Current";
+                    status = "(Active)";
                 }
                 // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
                 else if (database.Status == SqlDatabaseStatus.ShipWorks)
@@ -1065,7 +1059,7 @@ namespace ShipWorks.Data.Administration
                     }
                     else if (database.SchemaVersion < SqlSchemaUpdater.GetRequiredSchemaVersion())
                     {
-                        status = "Needs Updated";
+                        status = "Out of Date";
                     }
                     else
                     {
