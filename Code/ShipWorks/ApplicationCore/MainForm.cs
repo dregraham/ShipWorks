@@ -294,12 +294,23 @@ namespace ShipWorks
         /// </summary>
         private bool OpenDatabaseConfiguration()
         {
-            // If we aren't configured and 2012 is supported, open the fast track setup wizard
-            if (!SqlSession.IsConfigured && SqlServerInstaller.IsSqlServer2012Supported)
+            // If we aren't configured at all
+            if (!SqlSession.IsConfigured)
             {
-                using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                if (SqlServerInstaller.IsSqlServer2012Supported)
                 {
-                    return wizard.ShowDialog(this) == DialogResult.OK;
+                    using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                    {
+                        return wizard.ShowDialog(this) == DialogResult.OK;
+                    }
+                }
+                else
+                {
+                    using (DatabaseSetupWizard wizard = new DatabaseSetupWizard())
+                    {
+                        return wizard.ShowDialog(this) == DialogResult.OK;
+                    }
                 }
             }
             // Otherwise, we use our normal database setup wizard

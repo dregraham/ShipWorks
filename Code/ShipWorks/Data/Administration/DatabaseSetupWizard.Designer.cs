@@ -227,7 +227,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageDatabaseName);
+            this.mainPanel.Controls.Add(this.wizardPageChooseSqlServer);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom

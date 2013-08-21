@@ -57,8 +57,8 @@ namespace ShipWorks.Data.Administration
             }
             else
             {
-                labelDatabase.Text = "(Not connected)";
-                labelSqlInstance.Text = "";
+                labelSqlInstance.Text = "(Not connected)";
+                labelDatabase.Text = "";
                 labelLoggedInAs.Text = "";
                 labelRemoteConnections.Text = "";
                 linkEnableRemoteConnections.Visible = false;

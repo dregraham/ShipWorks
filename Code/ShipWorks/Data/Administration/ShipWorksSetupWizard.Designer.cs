@@ -190,9 +190,9 @@
             this.labelWelcomeAdvanced.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWelcomeAdvanced.Location = new System.Drawing.Point(103, 89);
             this.labelWelcomeAdvanced.Name = "labelWelcomeAdvanced";
-            this.labelWelcomeAdvanced.Size = new System.Drawing.Size(239, 13);
+            this.labelWelcomeAdvanced.Size = new System.Drawing.Size(184, 13);
             this.labelWelcomeAdvanced.TabIndex = 2;
-            this.labelWelcomeAdvanced.Text = "Have you already been using ShipWorks?";
+            this.labelWelcomeAdvanced.Text = "Do you already use ShipWorks?";
             // 
             // pictureBoxCubes
             // 

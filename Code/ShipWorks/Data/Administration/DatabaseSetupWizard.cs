@@ -638,8 +638,17 @@ namespace ShipWorks.Data.Administration
             if (SqlSession.IsConfigured)
             {
                 radioSqlServerCurrent.Checked = true;
+                radioSqlServerCurrent.Text = "Use the current instance of Microsoft SQL Server";
 
                 labelSqlServerCurrentName.Text = string.Format("({0})", SqlSession.Current.Configuration.IsLocalDb() ? "Local only" : SqlSession.Current.Configuration.ServerInstance);
+            }
+            // Or if the ShipWorks instance has been installed at some point, default to that
+            else if (SqlInstanceUtility.IsSqlInstanceInstalled("SHIPWORKS"))
+            {
+                radioSqlServerCurrent.Checked = true;
+                radioSqlServerCurrent.Text = "Use the installed instance of Microsoft SQL Server";
+
+                labelSqlServerCurrentName.Text = string.Format("({0}\\{1})", Environment.MachineName, "SHIPWORKS");
             }
             // Otherwise, current isn't an option, and installing a new one is the first option
             else
@@ -693,10 +702,35 @@ namespace ShipWorks.Data.Administration
 
                 if (radioSqlServerCurrent.Checked)
                 {
-                    sqlSession.Configuration.ServerInstance = SqlSession.Current.Configuration.ServerInstance;
-                    sqlSession.Configuration.Username = SqlSession.Current.Configuration.Username;
-                    sqlSession.Configuration.Password = SqlSession.Current.Configuration.Password;
-                    sqlSession.Configuration.WindowsAuth = SqlSession.Current.Configuration.WindowsAuth;
+                    SqlSessionConfiguration newConfiguration;
+
+                    // If it was configured, we are using the current
+                    if (SqlSession.IsConfigured)
+                    {
+                        newConfiguration = SqlSession.Current.Configuration;
+                    }
+                    // Otherwise we are defaulting to "SHIPWORKS"
+                    else
+                    {
+                        try
+                        {
+                            Cursor.Current = Cursors.WaitCursor;
+
+                            newConfiguration = SqlInstanceUtility.DetermineCredentials(Environment.MachineName + "\\SHIPWORKS");
+                        }
+                        catch (SqlException ex)
+                        {
+                            MessageHelper.ShowError(this, "ShipWorks could not connect to the selected instance.\n\n" + ex.Message);
+
+                            e.NextPage = CurrentPage;
+                            return;
+                        }
+                    }
+
+                    sqlSession.Configuration.ServerInstance = newConfiguration.ServerInstance;
+                    sqlSession.Configuration.Username = newConfiguration.Username;
+                    sqlSession.Configuration.Password = newConfiguration.Password;
+                    sqlSession.Configuration.WindowsAuth = newConfiguration.WindowsAuth;
 
                     e.NextPage = wizardPageDatabaseName;
                 }
