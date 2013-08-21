@@ -36,6 +36,8 @@ public partial class StoredProcedures
         get
         {
             return @"
+SET NOCOUNT ON;
+
 DECLARE @PrintImageResourceID BIGINT, 
         @PrintReferenceKey    VARCHAR(250), 
         @ImageData            VARBINARY(MAX), 
