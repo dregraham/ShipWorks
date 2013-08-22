@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Carriers.Api;
+﻿using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
@@ -11,15 +12,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request
     {
         private readonly IUpsServiceGateway serviceGateway;
         private readonly ICarrierResponseFactory responseFactory;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsOpenAccountRequest" /> class.
         /// </summary>
+        /// <param name="manipulators"></param>
         /// <param name="serviceGateway">The service gateway.</param>
         /// <param name="responseFactory">The response factory.</param>
         /// <param name="request">The request.</param>
-        public UpsOpenAccountRequest(IUpsServiceGateway serviceGateway, ICarrierResponseFactory responseFactory, OpenAccountRequest request)
-            : base(null,null)
+        public UpsOpenAccountRequest(IEnumerable<ICarrierRequestManipulator> manipulators, IUpsServiceGateway serviceGateway, ICarrierResponseFactory responseFactory, OpenAccountRequest request)
+            : base(manipulators, null)
         {
             this.serviceGateway = serviceGateway;
             this.responseFactory = responseFactory;
@@ -43,6 +45,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request
         /// <returns>An ICarrierResponse containing the carrier-specific results of the request.</returns>
         public override ICarrierResponse Submit()
         {
+            ApplyManipulators();
+
             // The request is ready to be sent to UPS; we're sure the native request will be a OpenAccountResponse 
             // (since we assigned it as such in the constructor) so we can safely cast it here
             OpenAccountResponse nativeResponse = serviceGateway.OpenAccount(NativeRequest as OpenAccountRequest);

@@ -15,11 +15,6 @@ namespace Interapptive.Shared.Net
     {
         static readonly ILog log = LogManager.GetLogger(typeof(JsonException));
 
-        public JsonException()
-        {
-
-        }
-
         public JsonException(string message)
             : base(message)
         {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
@@ -24,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
 
         private Mock<ICarrierRequestManipulator> firstManipulator;
         private Mock<ICarrierRequestManipulator> secondManipulator;
-
+        private List<ICarrierRequestManipulator> requestManipulators;
 
         [TestInitialize]
         public void Initialize()
@@ -43,14 +39,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
             secondManipulator = new Mock<ICarrierRequestManipulator>();
             secondManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
 
-            testObject = new UpsOpenAccountRequest(upsService.Object, responseFactory.Object, new OpenAccountRequest());
+            requestManipulators = new List<ICarrierRequestManipulator>() { firstManipulator.Object, secondManipulator.Object };
+
+            testObject = new UpsOpenAccountRequest(requestManipulators, upsService.Object, responseFactory.Object, new OpenAccountRequest());
         }
 
         [TestMethod]
         public void CarrierAccountEntity_IsNull_Test()
         {
             Assert.IsNull(testObject.CarrierAccountEntity as UpsAccountEntity);
-        }        
+        }
+
+        [TestMethod]
+        public void Submit_ManipulatorsExecuted()
+        {
+            ICarrierResponse response = testObject.Submit();
+
+            firstManipulator.Verify(s => s.Manipulate(testObject), Times.Once());
+            secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
+        }
 
         [TestMethod]
         public void Submit_DelegatesToUpsOpenAccountService_Test()
@@ -71,6 +78,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
             // Verify the response is created via the response factory using the test object
             responseFactory.Verify(f => f.CreateSubscriptionResponse(It.IsAny<OpenAccountResponse>(), testObject), Times.Once());
         }
-
     }
 }

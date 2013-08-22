@@ -170,7 +170,6 @@
             this.panelNewOrExisting.Name = "panelNewOrExisting";
             this.panelNewOrExisting.Size = new System.Drawing.Size(458, 66);
             this.panelNewOrExisting.TabIndex = 6;
-            this.panelNewOrExisting.Visible = false;
             // 
             // existingAccount
             // 
@@ -200,9 +199,9 @@
             this.labelWelcome1.Name = "labelWelcome1";
             this.labelWelcome1.Size = new System.Drawing.Size(516, 42);
             this.labelWelcome1.TabIndex = 0;
-            this.labelWelcome1.Text = "This wizard will assist you in registering your UPS account for use with ShipWor" +
-    "ks. This enables you to begin shipping, tracking, and printing UPS labels direct" +
-    "ly from ShipWorks.";
+            this.labelWelcome1.Text = "This wizard will assist you in registering your UPS account for use with ShipWork" +
+    "s. This enables you to begin shipping, tracking, and printing UPS labels directl" +
+    "y from ShipWorks.";
             // 
             // wizardPageLicense
             // 

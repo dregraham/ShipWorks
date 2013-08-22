@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         private const string accessLicenseNumber = "AB9B05D34FF5EAC0";
 
-        private const string userName = "shipworks_api";
-        private const string password = "x98&$opiLhJK";
+        private const string userName = "shipworks3";
+        private const string password = "Z59$sBXsTcYk";
 
 
         /// <summary>

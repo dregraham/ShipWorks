@@ -279,6 +279,7 @@
     <Compile Include="Net\HttpVerb.cs" />
     <Compile Include="Net\IHttpRequestSubmitterFactory.cs" />
     <Compile Include="Net\IHttpResponseReader.cs" />
+    <Compile Include="Net\INetworkUtility.cs" />
     <Compile Include="Net\InvalidSoapException.cs" />
     <Compile Include="Net\JsonException.cs">
       <SubType>Code</SubType>
@@ -286,6 +287,8 @@
     <Compile Include="Net\JsonExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Net\NetworkException.cs" />
+    <Compile Include="Net\NetworkUtility.cs" />
     <Compile Include="Net\PortListener.cs" />
     <Compile Include="Net\OAuth\OAuth.cs" />
     <Compile Include="Net\OAuth\Pair.cs" />
