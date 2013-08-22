@@ -60,6 +60,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
 
             // For syntax editor
             SemanticParserService.Start();
+
+            // Register some idle cleanup work.
+            DataResourceManager.RegisterResourceCacheCleanup();
+            DataPath.RegisterTempFolderCleanup();
+            LogSession.RegisterLogCleanup();
         }
     }
 }

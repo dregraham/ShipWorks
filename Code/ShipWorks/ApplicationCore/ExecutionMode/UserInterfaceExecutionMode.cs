@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
+using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 using ShipWorks.ApplicationCore.Interaction;
