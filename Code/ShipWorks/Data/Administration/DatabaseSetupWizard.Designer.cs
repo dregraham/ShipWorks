@@ -1533,7 +1533,7 @@ namespace ShipWorks.Data.Administration
             this.labelLocalDbEnableRemote2.Name = "labelLocalDbEnableRemote2";
             this.labelLocalDbEnableRemote2.Size = new System.Drawing.Size(406, 17);
             this.labelLocalDbEnableRemote2.TabIndex = 51;
-            this.labelLocalDbEnableRemote2.Text = "Need to connect other ShipWorks PC\'s to this one? This is for you.";
+            this.labelLocalDbEnableRemote2.Text = "Need to connect other ShipWorks PCs to this one? This is for you.";
             // 
             // pictureLocalDbEnableRemote
             // 

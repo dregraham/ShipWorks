@@ -117,9 +117,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            // Reset next visibility
-            NextVisible = true;
-
             // If next requires elevation
             if (preparationType != ElevatedPreparationType.None)
             {
@@ -162,6 +159,12 @@ namespace ShipWorks.Data.Administration
 
                     e.NextPage = wizardPageFinishExisting;
                 }
+            }
+
+            // Reset next visibility
+            if (e.NextPage != CurrentPage)
+            {
+                NextVisible = true;
             }
         }
 

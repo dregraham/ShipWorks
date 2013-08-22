@@ -31,8 +31,8 @@ AppPublisherURL=http://www.shipworks.com
 AppSupportURL=http://www.shipworks.com
 AppUpdatesURL=http://www.shipworks.com
 AppMutex={{AX70DA71-2A39-4f8c-8F97-7F5348493F57}
-DefaultDirName={pf}\ShipWorks3
-DefaultGroupName=ShipWorks 3
+DefaultDirName={pf}\ShipWorks
+DefaultGroupName=ShipWorks
 LicenseFile=License.rtf
 MinVersion=4.0.950,4.0.1381
 PrivilegesRequired=none
@@ -135,8 +135,8 @@ Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overw
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:
 
 [Icons]
-Name: {group}\ShipWorks 3; Filename: {app}\ShipWorks.exe; IconIndex: 0
-Name: {userdesktop}\ShipWorks 3; Filename: {app}\ShipWorks.exe; Tasks: desktopicon
+Name: {group}\ShipWorks; Filename: {app}\ShipWorks.exe; IconIndex: 0
+Name: {userdesktop}\ShipWorks; Filename: {app}\ShipWorks.exe; Tasks: desktopicon
 
 [_ISTool]
 EnableISX=true
@@ -149,14 +149,14 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: NotNeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
 
 [UninstallRun]
 Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall";
 
 [Dirs]
 Name: {app}
-Name: {commonappdata}\Interapptive; Permissions: everyone-modify
+Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not CommonAppDataExists;
 
 [Code]
 //----------------------------------------------------------------
@@ -255,6 +255,23 @@ begin
             Result := true;
         end;
 	end
+	else
+	begin			
+		Result := false;
+	end;
+
+end;
+
+//----------------------------------------------------------------
+// Indicates if the ShipWorks common app data folder already exists
+//----------------------------------------------------------------
+function CommonAppDataExists(): Boolean;
+begin
+
+	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive')) 
+    then begin
+        Result := true;
+    end
 	else
 	begin			
 		Result := false;
@@ -379,7 +396,14 @@ begin
 		then begin
 			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
 		end;
-    end;
+
+        if IsTaskSelected('desktopicon') 
+        then begin
+            // We now call it just ShipWorks instead of ShipWorks 3
+            DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
+        end;    
+  
+  end;
 
 end;
 
@@ -390,15 +414,6 @@ end;
 function NeedRestart(): Boolean;
 begin
 	Result := DotNetNeedsReboot;
-end;
-
-//----------------------------------------------------------------
-// Called by Inno to see if it should restart.  We will determine
-// this depending on what the dotnet and mdac installs said.
-//----------------------------------------------------------------
-function NotNeedRestart(): Boolean;
-begin
-	Result := not(DotNetNeedsReboot);
 end;
 
 // In case we need to see if anything went wrong
