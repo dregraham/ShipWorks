@@ -56,6 +56,13 @@ namespace ShipWorks.Data
         /// </summary>
         static DataResourceManager()
         {
+        }
+
+        /// <summary>
+        /// Provide methhod for background process to register thread to clean up resource cache
+        /// </summary>
+        public static void RegisterResourceCacheCleanup()
+        {
             IdleWatcher.RegisterDatabaseIndependentWork("ResouceCacheCleanup", CleanupThread, TimeSpan.FromHours(2));
         }
 

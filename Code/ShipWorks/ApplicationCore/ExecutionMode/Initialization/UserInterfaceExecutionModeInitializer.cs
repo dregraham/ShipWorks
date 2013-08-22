@@ -62,9 +62,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
             SemanticParserService.Start();
 
             // Register some idle cleanup work.
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedFilterCounts", FilterContentManager.DeleteAbandonedFilterCounts, "doing maintenance", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedQuickFilters", QuickFilterHelper.DeleteAbandonedFilters, "doing maintenance", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedResources", DataResourceManager.DeleteAbandonedResourceData, "cleaning up resources", TimeSpan.FromHours(2));
+            DataResourceManager.RegisterResourceCacheCleanup();
+            DataPath.RegisterTempFolderCleanup();
+            LogSession.RegisterLogCleanup();
         }
     }
 }
