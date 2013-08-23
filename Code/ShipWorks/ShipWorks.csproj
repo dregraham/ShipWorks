@@ -1541,6 +1541,12 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsContractService.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServicePackageTypeSetting.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsContactInfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsContactInfoControl.Designer.cs">
+      <DependentUpon>UpsContactInfoControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\WorldShip\AlternateTrackingLoaded.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipContractServicesControl.cs">
       <SubType>UserControl</SubType>
@@ -6643,6 +6649,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsInvoiceAuthorizationControl.resx">
       <DependentUpon>UpsInvoiceAuthorizationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\UpsContactInfoControl.resx">
+      <DependentUpon>UpsContactInfoControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\WorldShip\WorldShipContractServicesControl.resx">
       <DependentUpon>WorldShipContractServicesControl.cs</DependentUpon>
