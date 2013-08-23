@@ -21,7 +21,7 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseDetailsDlg));
 
         // Indicates if remote connections were enabled while the window was open
-        bool remoteConnectionsEnabled = false;
+        bool databaseConfigurationChanged = false;
 
         /// <summary>
         /// Constructor
@@ -57,8 +57,8 @@ namespace ShipWorks.Data.Administration
             }
             else
             {
-                labelDatabase.Text = "(Not connected)";
-                labelSqlInstance.Text = "";
+                labelSqlInstance.Text = "(Not connected)";
+                labelDatabase.Text = "";
                 labelLoggedInAs.Text = "";
                 labelRemoteConnections.Text = "";
                 linkEnableRemoteConnections.Visible = false;
@@ -69,11 +69,11 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Indicates if remote connections were enabled while the window was open
+        /// Indicates if the database configuration has changed while open
         /// </summary>
-        public bool RemoteConnectionsEnabled
+        public bool DatabaseConfigurationChanged
         {
-            get { return remoteConnectionsEnabled; }
+            get { return databaseConfigurationChanged; }
         }
 
         /// <summary>
@@ -144,7 +144,23 @@ namespace ShipWorks.Data.Administration
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    remoteConnectionsEnabled = true;
+                    databaseConfigurationChanged = true;
+
+                    DialogResult = DialogResult.OK;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Configure the database
+        /// </summary>
+        private void OnConfigureDatabase(object sender, EventArgs e)
+        {
+            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    databaseConfigurationChanged = true;
 
                     DialogResult = DialogResult.OK;
                 }

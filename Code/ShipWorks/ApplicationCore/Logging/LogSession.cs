@@ -70,12 +70,16 @@ namespace ShipWorks.ApplicationCore.Logging
             logOptions = LoadLogOptions();
             ApplyLogOptions();
 
+            CommonLogging.LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
+        }
+
+        /// <summary>
+        /// Provide methhod for background process to register thread to clean up logs
+        /// </summary>
+        public static void RegisterLogCleanup()
+        {
             // Check on idle to see if an logs are old enough to delete.  Run at most once an hour.
             IdleWatcher.RegisterDatabaseIndependentWork("LogCleanup", CleanupThread, TimeSpan.FromHours(1));
-
-
-            CommonLogging.LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
-            
         }
 
         /// <summary>

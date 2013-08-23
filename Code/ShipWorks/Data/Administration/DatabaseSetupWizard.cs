@@ -383,32 +383,22 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Click on the labels for Another PC
+        /// Show advanced options on the choose wisely page
         /// </summary>
-        private void OnClickAnotherPcLabels(object sender, EventArgs e)
+        private void OnChooseWiselyAdvancedOptions(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            radioChooseConnect2012.Checked = true;
+            linkLabelAdvancedOptions.Visible = false;
+
+            radioChooseCreate2012.Visible = true;
+            radioChooseCreate2012.Top = linkLabelAdvancedOptions.Top;
+
+            radioChooseRestore2012.Visible = true;
+            radioChooseRestore2012.Top = radioChooseCreate2012.Top + 26;
         }
 
         #endregion
 
         #region Manage Local DB
-
-        /// <summary>
-        /// Makes clicking the picture and label next to the radio check the radio
-        /// </summary>
-        private void OnClickLocalDbEnableRemoteLabel(object sender, EventArgs e)
-        {
-            radioLocalDbEnableRemote.Checked = true;
-        }
-
-        /// <summary>
-        /// Makes clicking the picture and label next to the radio check the radio
-        /// </summary>
-        private void OnClickLocalDbConnectLabel(object sender, EventArgs e)
-        {
-            radioLocalDbConnect.Checked = true;
-        }
 
         /// <summary>
         /// Stepping next from the manage local db page
@@ -648,8 +638,17 @@ namespace ShipWorks.Data.Administration
             if (SqlSession.IsConfigured)
             {
                 radioSqlServerCurrent.Checked = true;
+                radioSqlServerCurrent.Text = "Use the current instance of Microsoft SQL Server";
 
                 labelSqlServerCurrentName.Text = string.Format("({0})", SqlSession.Current.Configuration.IsLocalDb() ? "Local only" : SqlSession.Current.Configuration.ServerInstance);
+            }
+            // Or if the ShipWorks instance has been installed at some point, default to that
+            else if (SqlInstanceUtility.IsSqlInstanceInstalled("SHIPWORKS"))
+            {
+                radioSqlServerCurrent.Checked = true;
+                radioSqlServerCurrent.Text = "Use the installed instance of Microsoft SQL Server";
+
+                labelSqlServerCurrentName.Text = string.Format("({0}\\{1})", Environment.MachineName, "SHIPWORKS");
             }
             // Otherwise, current isn't an option, and installing a new one is the first option
             else
@@ -703,10 +702,35 @@ namespace ShipWorks.Data.Administration
 
                 if (radioSqlServerCurrent.Checked)
                 {
-                    sqlSession.Configuration.ServerInstance = SqlSession.Current.Configuration.ServerInstance;
-                    sqlSession.Configuration.Username = SqlSession.Current.Configuration.Username;
-                    sqlSession.Configuration.Password = SqlSession.Current.Configuration.Password;
-                    sqlSession.Configuration.WindowsAuth = SqlSession.Current.Configuration.WindowsAuth;
+                    SqlSessionConfiguration newConfiguration;
+
+                    // If it was configured, we are using the current
+                    if (SqlSession.IsConfigured)
+                    {
+                        newConfiguration = SqlSession.Current.Configuration;
+                    }
+                    // Otherwise we are defaulting to "SHIPWORKS"
+                    else
+                    {
+                        try
+                        {
+                            Cursor.Current = Cursors.WaitCursor;
+
+                            newConfiguration = SqlInstanceUtility.DetermineCredentials(Environment.MachineName + "\\SHIPWORKS");
+                        }
+                        catch (SqlException ex)
+                        {
+                            MessageHelper.ShowError(this, "ShipWorks could not connect to the selected instance.\n\n" + ex.Message);
+
+                            e.NextPage = CurrentPage;
+                            return;
+                        }
+                    }
+
+                    sqlSession.Configuration.ServerInstance = newConfiguration.ServerInstance;
+                    sqlSession.Configuration.Username = newConfiguration.Username;
+                    sqlSession.Configuration.Password = newConfiguration.Password;
+                    sqlSession.Configuration.WindowsAuth = newConfiguration.WindowsAuth;
 
                     e.NextPage = wizardPageDatabaseName;
                 }
@@ -959,6 +983,7 @@ namespace ShipWorks.Data.Administration
             }
 
             gridDatabses.Rows.Clear();
+            gridDatabses.EmptyText = string.Format("Connecting to databases on '{0}'...", comboSqlServers.Text);
 
             linkSqlInstanceAccount.Visible = false;
 
@@ -1008,6 +1033,7 @@ namespace ShipWorks.Data.Administration
                         pictureSqlConnection.Image = Resources.warning16;
                         labelSqlConnection.Text = "ShipWorks could not connect to the selected database server.";
                         linkSqlInstanceAccount.Text = "Try changing the account";
+                        gridDatabses.EmptyText = "";
                     }
                     else
                     {
@@ -1017,6 +1043,8 @@ namespace ShipWorks.Data.Administration
                         pictureSqlConnection.Image = Resources.check16;
                         labelSqlConnection.Text = string.Format("Successfully connected using {0} account.", configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
                         linkSqlInstanceAccount.Text = "Change";
+                        gridDatabses.EmptyText = "No databases were found.";
+
 
                         // Save the credentials
                         sqlSession.Configuration.ServerInstance = configuration.ServerInstance;
@@ -1054,7 +1082,7 @@ namespace ShipWorks.Data.Administration
                 // If it's the database we are currently connected to
                 if (isCurrent)
                 {
-                    status = "Current";
+                    status = "(Active)";
                 }
                 // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
                 else if (database.Status == SqlDatabaseStatus.ShipWorks)
@@ -1065,7 +1093,7 @@ namespace ShipWorks.Data.Administration
                     }
                     else if (database.SchemaVersion < SqlSchemaUpdater.GetRequiredSchemaVersion())
                     {
-                        status = "Needs Updated";
+                        status = "Out of Date";
                     }
                     else
                     {
@@ -1454,7 +1482,7 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region Create Database
+        #region Database Name
 
         /// <summary>
         /// Stepping into the page for creating a shipworks database
@@ -1467,14 +1495,24 @@ namespace ShipWorks.Data.Administration
                 DropPendingDatabase();
             }
 
-            // See if we need to load up where the data files will go
+            // See if the server had changed...
             if (dataFileSqlInstance != sqlSession.Configuration.ServerInstance)
             {
+                Cursor.Current = Cursors.WaitCursor; 
+
                 linkChooseDataLocation.Visible = true;
                 panelDataFiles.Visible = false;
 
+                panelDatabaseGivenName.Visible = true;
+                panelDatabaseChooseName.Visible = false;
+
                 using (SqlConnection con = sqlSession.OpenConnection())
                 {
+                    givenDatabaseName.Text = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
+                    databaseName.Text = givenDatabaseName.Text;
+
+                    linkEditGivenDatabaseName.Left = givenDatabaseName.Right + 1;
+
                     pathDataFiles.Text = SqlUtility.GetMasterDataFilePath(con);
                 }
 
@@ -1577,6 +1615,16 @@ namespace ShipWorks.Data.Administration
 
             pendingDatabaseCreated = false;
             pendingDatabaseName = "";
+        }
+
+        /// <summary>
+        /// User wants to edit the database name we assigned
+        /// </summary>
+        private void OnLinkEditDatabaseName(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            panelDatabaseChooseName.Top = panelDatabaseGivenName.Top;
+            panelDatabaseGivenName.Visible = false;
+            panelDatabaseChooseName.Visible = true;
         }
 
         /// <summary>

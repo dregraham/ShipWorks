@@ -57,7 +57,13 @@ namespace ShipWorks.ApplicationCore
 
             // Create the file that ensures the temp folder doesn't get deleted by another ShipWorks while we are running.
             tempFolderLockFile = File.Create(Path.Combine(ShipWorksTemp, tempFolderLockName), 1024, FileOptions.DeleteOnClose);
+        }
 
+        /// <summary>
+        /// Provide methhod for background process to register thread to clean up temp folder
+        /// </summary>
+        public static void RegisterTempFolderCleanup()
+        {
             // Listen for idle to know when to cleanup the temp folder.
             IdleWatcher.RegisterDatabaseIndependentWork("TempFolderCleanup", CleanupThread, TimeSpan.FromHours(2));
         }
@@ -131,7 +137,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Root of all ShipWorks settings that are specific to the current intall path of shipworks.
         /// </summary>
-        private static string InstanceRoot
+        public static string InstanceRoot
         {
             get
             {

@@ -276,7 +276,7 @@ namespace ShipWorks
             {
                 log.InfoFormat("SqlSession not configured; showing welcome.");
 
-                OpenShipWorksSetup();
+                OpenDatabaseConfiguration();
             }
 
             // If its still not setup, dont go on
@@ -290,24 +290,37 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Open the appropriate ShipWorks setup \ database setup window based on the current state of the system
+        /// Open the appropriate database configuration window based on the current state of the system
         /// </summary>
-        private bool OpenShipWorksSetup()
+        private bool OpenDatabaseConfiguration()
         {
-            // If we aren't configured and 2012 is supported, open the fast track setup wizard
-            if (!SqlSession.IsConfigured && SqlServerInstaller.IsSqlServer2012Supported)
+            // If we aren't configured at all
+            if (!SqlSession.IsConfigured)
             {
-                using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                if (SqlServerInstaller.IsSqlServer2012Supported)
                 {
-                    return wizard.ShowDialog(this) == DialogResult.OK;
+                    using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                    {
+                        return wizard.ShowDialog(this) == DialogResult.OK;
+                    }
+                }
+                else
+                {
+                    using (DatabaseSetupWizard wizard = new DatabaseSetupWizard())
+                    {
+                        return wizard.ShowDialog(this) == DialogResult.OK;
+                    }
                 }
             }
             // Otherwise, we use our normal database setup wizard
             else
             {
-                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg())
                 {
-                    return dlg.ShowDialog(this) == DialogResult.OK;
+                    dlg.ShowDialog(this);
+
+                    return dlg.DatabaseConfigurationChanged;
                 }
             }
         }
@@ -1344,60 +1357,9 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Open the window showing the details of the current database connection
+        /// Open the database configuration window
         /// </summary>
-        private void OnDatabaseDetails(object sender, EventArgs e)
-        {
-            ConnectionSensitiveScope scope = null;
-
-            bool needLogon = false;
-
-            try
-            {
-                // If its LocalDb, then the details dlg give the opportunity to enable remote conections - and for that we need to be in scope
-                if (SqlSession.IsConfigured && SqlSession.Current.Configuration.IsLocalDb())
-                {
-                    scope = new ConnectionSensitiveScope("change database settings", this);
-
-                    if (!scope.Acquired)
-                    {
-                        return;
-                    }
-
-                    // In case we end up changing databases, save before that happens
-                    if (UserSession.IsLoggedOn)
-                    {
-                        SaveCurrentUserSettings();
-                    }
-                }
-
-                using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg())
-                {
-                    dlg.ShowDialog(this);
-
-                    needLogon = dlg.RemoteConnectionsEnabled;
-                }
-            }
-            finally
-            {
-                if (scope != null)
-                {
-                    scope.Dispose();
-                }
-            }
-
-            // This is down here so its outside of the scope.  The Database setup can sometimes exit due to needing the machine
-            // to reboot before SW can continue.  If this is the case, the SQL Session won't be setup yet, and we can't initiate logon.
-            if (needLogon && SqlSession.IsConfigured)
-            {
-                InitiateLogon();
-            }
-        }
-
-        /// <summary>
-        /// Setup the database
-        /// </summary>
-        private void OnSetupDatabase(object sender, EventArgs e)
+        private void OnDatabaseConfiguration(object sender, EventArgs e)
         {
             bool needLogon = false;
 
@@ -1414,7 +1376,7 @@ namespace ShipWorks
                     SaveCurrentUserSettings();
                 }
 
-                if (OpenShipWorksSetup() || scope.DatabaseRestoreInitiated)
+                if (OpenDatabaseConfiguration() || scope.DatabaseRestoreInitiated)
                 {
                     needLogon = true;
 

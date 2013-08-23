@@ -5,6 +5,7 @@
 	TaskIdentifier = 'EtsyShipmentUploadTask'
 	where TaskSettings.value('(/Settings/Comment/@value)[1]', 'varchar(max)') = '{//ServiceUsed} - {//TrackingNumber}'
 	AND TaskSettings.exist('(/Settings/StoreID/@value)[1]') = 1
+	AND ActionTask.TaskIdentifier = 'EtsyUploadTask'
 	
 	UPDATE a
 	SET a.TaskSummary = 'EtsyShipmentUploadTask'

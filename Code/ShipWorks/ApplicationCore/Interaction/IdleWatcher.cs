@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using log4net;
 using System.Threading;
 using ThreadTimer = System.Threading.Timer;
@@ -140,8 +141,7 @@ namespace ShipWorks.ApplicationCore.Interaction
                 {
                     if (databaseDependent)
                     {
-                        if (!UserSession.IsLoggedOn || 
-                            ConnectionSensitiveScope.IsActive ||
+                        if (ConnectionSensitiveScope.IsActive ||
                             ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
                         {
                             return false;
@@ -189,8 +189,10 @@ namespace ShipWorks.ApplicationCore.Interaction
             /// </summary>
             public void Run()
             {
+                bool isUiExecutionMode = Program.ExecutionMode is UserInterfaceExecutionMode;
+
                 // If its DB dependant, we have to register with the app busy manager, which has to be done through the UI
-                if (databaseDependent && Program.MainForm.InvokeRequired)
+                if (databaseDependent && isUiExecutionMode && Program.MainForm.InvokeRequired)
                 {
                     lock (isPendingInvokeLock)
                     {

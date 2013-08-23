@@ -50,7 +50,7 @@ namespace ShipWorks.UI.Controls
             using (RibbonRenderer renderer = AppearanceHelper.CreateRibbonRenderer())
             {
                 // Draw the background
-                using (SolidBrush backBrush = new SolidBrush(renderer.ColorTable.PopupHeading))
+                using (SolidBrush backBrush = new SolidBrush(Color.FromArgb(238, 238, 238)))
                 {
                     e.Graphics.FillRectangle(backBrush, e.ClipRectangle);
                 }
@@ -61,7 +61,7 @@ namespace ShipWorks.UI.Controls
                     e.Graphics.DrawLine(pen, 0, Height - 1, Width, Height - 1);
                 }
 
-                using (RenderingContext context = AppearanceHelper.CreateRibbonRenderingContext(e.Graphics, renderer, Font, false, renderer.ColorTable.RibbonText, renderer.ColorTable.RibbonDisabledText))
+                using (RenderingContext context = AppearanceHelper.CreateRibbonRenderingContext(e.Graphics, renderer, Font, false, Color.FromArgb(90, 90, 90), renderer.ColorTable.RibbonDisabledText))
                 {
                     using (Font boldFont = new Font(Font, FontStyle.Bold))
                     {

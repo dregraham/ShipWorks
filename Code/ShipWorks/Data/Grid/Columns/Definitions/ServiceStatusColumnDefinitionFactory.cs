@@ -7,6 +7,7 @@ using ShipWorks.Data.Grid.Columns.SortProviders;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Users;
 
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
@@ -51,10 +52,35 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{50003D6C-4082-4E52-9E23-F72E2CFBA924}", true, 
                     new GridDateDisplayType { UseDescriptiveDates = true }.Decorate(new GridServiceStopTimeDecorator()),
                     "Last Stopped", DateTimeUtility.ParseEnUS("03/16/2012 7:41 PM").ToUniversalTime(),
-                    ServiceStatusFields.LastStopDateTime) { DefaultWidth = 125 }
+                    ServiceStatusFields.LastStopDateTime) { DefaultWidth = 125 },
+
+                new GridColumnDefinition("{AD6840FF-2D93-49EC-AB63-A621161285CA}", true,
+                    new GridActionDisplayType(DisplayStartServiceLabel, GridLinkAction.Start), 
+                    "Start", "Start",
+                    new GridColumnFunctionValueProvider(x => x),
+                    null)
+                    { 
+                        DefaultWidth = 31
+                    }
             };
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Displays the start link text based on input
+        /// </summary>
+        /// <param name="arg">Input on which to base whether the start link should be shown</param>
+        /// <returns></returns>
+        private static string DisplayStartServiceLabel(object arg)
+        {
+            var service = arg as ServiceStatusEntity;
+
+            return service != null &&
+                   Equals(service.Computer, UserSession.Computer) &&
+                   service.GetStatus() != ServiceStatus.Running
+                       ? "Start"
+                       : "";
         }
     }
 }

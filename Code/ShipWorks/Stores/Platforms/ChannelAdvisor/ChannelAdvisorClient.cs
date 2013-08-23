@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
@@ -476,6 +477,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                                         OrderFields.OrderNumber == order.OrderID &
                                         OrderFields.OnlineLastModified == (order.LastUpdateDate ?? order.OrderTimeGMT) &
                                         OrderFields.IsManual == false);
+        }
+        
+        /// <summary>
+        /// Sets the order as exported on Channel Advisor.
+        /// </summary>
+        public void SetOrdersExportStatus(IEnumerable<string> clientOrderIdentifiers)
+        {
+            using (caOrderService.OrderService service = CreateOrderService("OrderExportStatus"))
+            {
+                service.APICredentialsValue = GetOrderCredentials();
+
+                try
+                {
+                    service.SetOrdersExportStatus(store.AccountKey, clientOrderIdentifiers.ToArray(), true);
+                }
+                catch (Exception ex)
+                {
+                    throw WebHelper.TranslateWebException(ex, typeof(ChannelAdvisorException));
+                }
+            }
         }
 
         /// <summary>

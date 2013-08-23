@@ -455,6 +455,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
@@ -565,6 +566,7 @@
     <Compile Include="Data\Administration\DatabaseDetailsDlg.Designer.cs">
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Administration\DatabaseFileInfo.cs" />
     <Compile Include="Data\Administration\SqlDatabaseDetail.cs" />
     <Compile Include="Data\Administration\ShipWorksSetupWizard.cs">
       <SubType>Form</SubType>
@@ -9854,6 +9856,7 @@
     <None Include="Resources\star_green.png" />
     <None Include="Resources\start_shipworks_service.png" />
     <None Include="Resources\workstation_network.png" />
+    <None Include="Resources\workplace_add.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
