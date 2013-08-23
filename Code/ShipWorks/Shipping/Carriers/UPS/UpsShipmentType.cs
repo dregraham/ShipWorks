@@ -33,6 +33,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Stores;
 using log4net;
 using log4net.Repository.Hierarchy;
+using System.Globalization;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -689,7 +690,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                         RateResult rateResult = new RateResult(
                             (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
-                            GetServiceTransitDays(service, transitTimes), 
+                            GetServiceTransitDays(service, transitTimes) + " " + GetServiceEstimatedArrivalTime(service, transitTimes), 
                             serviceRate.Amount,
                             service);
 
@@ -737,12 +738,32 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             if (transitTime != null)
             {
-                return ((int) (transitTime.ArrivalDate.Date - DateTime.Now.Date).TotalDays).ToString();
+                return ((int) (transitTime.ArrivalDate.Date - DateTime.Now.Date).TotalDays).ToString(CultureInfo.InvariantCulture);
             }
             else
             {
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Gets the service estimated arrival time for the given service type if it's available.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <param name="transitTimes">The transit times.</param>
+        /// <returns>A string value of the arrival time in the format of "DayOfWeek h:mm tt" (e.g. Friday 4:00 PM)</returns>
+        private string GetServiceEstimatedArrivalTime(UpsServiceType service, List<UpsTransitTime> transitTimes)
+        {
+            UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
+            string arrivalInfo = string.Empty;
+
+            if (transitTime != null)
+            {
+                DateTime localArrival = transitTime.ArrivalDate.ToLocalTime();
+                arrivalInfo = string.Format("({0} {1})", localArrival.DayOfWeek.ToString(), localArrival.ToString("h:mm tt"));
+            }
+
+            return arrivalInfo;
         }
 
         /// <summary>
