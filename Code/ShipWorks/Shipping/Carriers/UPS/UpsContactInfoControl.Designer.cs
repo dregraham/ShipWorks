@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
             System.Windows.Forms.Label nameLabel;
             System.Windows.Forms.Label phoneLabel;
             System.Windows.Forms.Label phoneExtensionLabel;
+            ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.phoneNumberTextBox = new System.Windows.Forms.TextBox();
             this.phoneExtensionTextBox = new System.Windows.Forms.TextBox();
@@ -39,7 +41,9 @@
             nameLabel = new System.Windows.Forms.Label();
             phoneLabel = new System.Windows.Forms.Label();
             phoneExtensionLabel = new System.Windows.Forms.Label();
+            fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             tableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
@@ -76,15 +80,6 @@
             nameLabel.Text = "Contact Name:";
             nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // nameTextBox
-            // 
-            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            tableLayoutPanel.SetColumnSpan(this.nameTextBox, 4);
-            this.nameTextBox.Location = new System.Drawing.Point(90, 5);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(261, 20);
-            this.nameTextBox.TabIndex = 1;
-            // 
             // phoneLabel
             // 
             phoneLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -96,24 +91,6 @@
             phoneLabel.Text = "Phone Number:";
             phoneLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // phoneNumberTextBox
-            // 
-            this.phoneNumberTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.phoneNumberTextBox.Location = new System.Drawing.Point(90, 36);
-            this.phoneNumberTextBox.Name = "phoneNumberTextBox";
-            this.phoneNumberTextBox.Size = new System.Drawing.Size(116, 20);
-            this.phoneNumberTextBox.TabIndex = 1;
-            this.phoneNumberTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // phoneExtensionTextBox
-            // 
-            this.phoneExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.phoneExtensionTextBox.Location = new System.Drawing.Point(236, 36);
-            this.phoneExtensionTextBox.MinimumSize = new System.Drawing.Size(30, 4);
-            this.phoneExtensionTextBox.Name = "phoneExtensionTextBox";
-            this.phoneExtensionTextBox.Size = new System.Drawing.Size(43, 20);
-            this.phoneExtensionTextBox.TabIndex = 1;
-            // 
             // phoneExtensionLabel
             // 
             phoneExtensionLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -124,6 +101,36 @@
             phoneExtensionLabel.Text = "x";
             phoneExtensionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // nameTextBox
+            // 
+            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            tableLayoutPanel.SetColumnSpan(this.nameTextBox, 4);
+            this.nameTextBox.Location = new System.Drawing.Point(90, 5);
+            fieldLengthProvider.SetMaxLengthSource(this.nameTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactName);
+            this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.Size = new System.Drawing.Size(261, 20);
+            this.nameTextBox.TabIndex = 1;
+            // 
+            // phoneNumberTextBox
+            // 
+            this.phoneNumberTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.phoneNumberTextBox.Location = new System.Drawing.Point(90, 36);
+            fieldLengthProvider.SetMaxLengthSource(this.phoneNumberTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactPhoneNumber);
+            this.phoneNumberTextBox.Name = "phoneNumberTextBox";
+            this.phoneNumberTextBox.Size = new System.Drawing.Size(116, 20);
+            this.phoneNumberTextBox.TabIndex = 1;
+            this.phoneNumberTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // phoneExtensionTextBox
+            // 
+            this.phoneExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.phoneExtensionTextBox.Location = new System.Drawing.Point(236, 36);
+            fieldLengthProvider.SetMaxLengthSource(this.phoneExtensionTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactPhoneExtension);
+            this.phoneExtensionTextBox.MinimumSize = new System.Drawing.Size(30, 4);
+            this.phoneExtensionTextBox.Name = "phoneExtensionTextBox";
+            this.phoneExtensionTextBox.Size = new System.Drawing.Size(43, 20);
+            this.phoneExtensionTextBox.TabIndex = 1;
+            // 
             // UpsContactInfoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,6 +140,7 @@
             this.Size = new System.Drawing.Size(354, 62);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
