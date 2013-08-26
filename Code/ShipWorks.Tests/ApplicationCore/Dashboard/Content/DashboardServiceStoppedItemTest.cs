@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_CanUserDismiss_Test()
         {
-            testObject = new DashboardSchedulerServiceStoppedItem(new List<ServiceStatusEntity>());
+            testObject = new DashboardSchedulerServiceStoppedItem();
 
             testObject.Initialize(new DashboardBar());
 
@@ -24,49 +24,27 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         [TestMethod]
         public void Initialize_PrimaryText_Test()
         {
-            testObject = new DashboardSchedulerServiceStoppedItem(new List<ServiceStatusEntity>());
+            testObject = new DashboardSchedulerServiceStoppedItem();
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.AreEqual("Schedulers", testObject.DashboardBar.PrimaryText);
+            Assert.AreEqual("Actions", testObject.DashboardBar.PrimaryText);
         }
 
         [TestMethod]
-        public void Initialize_SecondaryText_WhenMoreThanOneSchedulers_Test()
+        public void Initialize_SecondaryText_Test()
         {
-            List<ServiceStatusEntity> schedulerEntities = new List<ServiceStatusEntity>
-            {
-                new ServiceStatusEntity(),
-                new ServiceStatusEntity(),
-                new ServiceStatusEntity()
-            };
-                
-            testObject = new DashboardSchedulerServiceStoppedItem(schedulerEntities);
+            testObject = new DashboardSchedulerServiceStoppedItem();
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.AreEqual("There are 3 required ShipWorks scheduling services not running.", testObject.DashboardBar.SecondaryText);
+            Assert.AreEqual("A required ShipWorks action scheduler is not running.", testObject.DashboardBar.SecondaryText);
         }
-
-        [TestMethod]
-        public void Initialize_SecondaryText_WhenOneSchedulerTest()
-        {
-            List<ServiceStatusEntity> schedulerEntities = new List<ServiceStatusEntity>
-            {
-                new ServiceStatusEntity()
-            };
-
-            testObject = new DashboardSchedulerServiceStoppedItem(schedulerEntities);
-
-            testObject.Initialize(new DashboardBar());
-
-            Assert.AreEqual("There is 1 required ShipWorks scheduling service not running.", testObject.DashboardBar.SecondaryText);
-        }
-
+        
         [TestMethod]
         public void Initialize_ImageIsNotNull_Test()
         {
-            testObject = new DashboardSchedulerServiceStoppedItem(new List<ServiceStatusEntity>());
+            testObject = new DashboardSchedulerServiceStoppedItem();
 
             testObject.Initialize(new DashboardBar());
 

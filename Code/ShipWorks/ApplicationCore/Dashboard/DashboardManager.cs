@@ -486,7 +486,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // If the message is already there we don't have to do anything
             if (!existingDashboardItems.Any() && stoppedSchedulerServices.Count > 0)
             {
-                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
                 AddDashboardItem(item);
             }
             else if (existingDashboardItems.Any() && stoppedSchedulerServices.Count == 0)
@@ -504,13 +504,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 // There are existing service dashboard items AND the number of stopped services has changed, so remove
                 // the current dashboard item and add the new one.
                 existingDashboardItems.ForEach(RemoveDashboardItem);
-
-                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
-
-                //// It's no longer active, so we've got to get rid of it.
-                //RemoveDashboardItem(item);
-
-                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
+                
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
                 AddDashboardItem(item);
             }
         }

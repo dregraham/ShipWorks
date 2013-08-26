@@ -39,9 +39,6 @@ namespace ShipWorks.ApplicationCore.Services.UI
             InitializeComponent();
 
             WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
-
-            new ThemedBorderProvider(panelGridArea);
-            panelTools.StateNormal.Draw = ThemeInformation.VisualStylesEnabled ? InheritBool.True : InheritBool.False;
         }
 
 
@@ -50,9 +47,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
             base.OnLoad(e);
             
             startingServicePanel.Visible = false;
-
-            entityGrid.PrimaryGrid.NewRowType = typeof(ServiceGridRow);
-
+            
             //Service status includes computer info too
             PrefetchPath2 prefetch = new PrefetchPath2(EntityType.ServiceStatusEntity);
             prefetch.Add(ServiceStatusEntity.PrefetchPathComputer);

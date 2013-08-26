@@ -37,13 +37,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnFieldValueProvider(ServiceStatusFields.ComputerID),
                     new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ServiceStatusFields.ComputerID, JoinHint.Right))
                     { DefaultWidth = 140 },
-
-                new GridColumnDefinition("{367F6C99-2563-4DA4-B307-7F8C8892937A}", true,
-                    new GridEnumDisplayType<ShipWorksServiceType>(EnumSortMethod.Value),
-                    "Service Type", "Sample Service",
-                    ServiceStatusFields.ServiceType)
-                    { DefaultWidth = 140 },
-
+                    
                 new GridColumnDefinition("{D5FCAF56-6931-4AA3-AD2D-3CCFB1D66098}", true, 
                     new GridDateDisplayType { UseDescriptiveDates = true },
                     "Last Started", DateTimeUtility.ParseEnUS("03/04/2012 1:30 PM").ToUniversalTime(),
@@ -59,9 +53,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     "Start", "Start",
                     new GridColumnFunctionValueProvider(x => x),
                     null)
-                    { 
-                        DefaultWidth = 31
-                    }
+                    { DefaultWidth = 35 }
             };
 
             return definitions;

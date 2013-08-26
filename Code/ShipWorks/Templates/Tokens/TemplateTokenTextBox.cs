@@ -256,6 +256,9 @@ namespace ShipWorks.Templates.Tokens
             set { tokenTextBox.MaxLength = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to [show token options].
+        /// </summary>
         [DefaultValue(true)]
         public bool ShowTokenOptions
         {

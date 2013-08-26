@@ -559,7 +559,6 @@
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
-    <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
     <Compile Include="Data\Administration\DatabaseDetailsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
