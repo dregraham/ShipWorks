@@ -8436,6 +8436,20 @@ namespace ShipWorks.Data.Model
 		DimsWeight,
 		///<summary>DimsAddWeight. </summary>
 		DimsAddWeight,
+		///<summary>AdditionalHandlingEnabled. </summary>
+		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationName. </summary>
+		VerbalConfirmationName,
+		///<summary>VerbalConfirmationPhone. </summary>
+		VerbalConfirmationPhone,
+		///<summary>VerbalConfirmationPhoneExtension. </summary>
+		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceRegulationSet. </summary>
+		DryIceRegulationSet,
+		///<summary>DryIceWeight. </summary>
+		DryIceWeight,
+		///<summary>DryIceIsForMedicalUse. </summary>
+		DryIceIsForMedicalUse,
 		/// <summary></summary>
 		AmountOfFields
 	}

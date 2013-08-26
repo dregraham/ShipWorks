@@ -64,11 +64,21 @@ GO
 ALTER TABLE [dbo].[UpsPackage] ADD CONSTRAINT [FK_UpsPackage_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 
-
-
 PRINT N'Altering [dbo].[WorldShipPackage]'
 GO
 ALTER TABLE [dbo].[WorldShipPackage] ADD
+[AdditionalHandlingEnabled] [bit] NULL,
+[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceRegulationSet] [int] NULL,
+[DryIceWeight] [float] NULL,
+[DryIceIsForMedicalUse] [bit] NULL
+GO
+
+PRINT N'Altering [dbo].[UpsProfilePackage]'
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] ADD
 [AdditionalHandlingEnabled] [bit] NULL,
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

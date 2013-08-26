@@ -3135,7 +3135,14 @@ CREATE TABLE [dbo].[UpsProfilePackage]
 [DimsWidth] [float] NULL,
 [DimsHeight] [float] NULL,
 [DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL
+[DimsAddWeight] [bit] NULL,
+[AdditionalHandlingEnabled] [bit] NULL,
+[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceRegulationSet] [int] NULL,
+[DryIceWeight] [float] NULL,
+[DryIceIsForMedicalUse] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfilePackage] on [dbo].[UpsProfilePackage]'

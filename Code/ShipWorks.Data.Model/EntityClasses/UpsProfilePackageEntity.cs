@@ -492,6 +492,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AdditionalHandlingEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationPhone", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationPhoneExtension", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceRegulationSet", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceIsForMedicalUse", fieldHashtable);
 		}
 		#endregion
 
@@ -708,6 +729,83 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DimsAddWeight, false); }
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.DimsAddWeight, value); }
+		}
+
+		/// <summary> The AdditionalHandlingEnabled property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."AdditionalHandlingEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> AdditionalHandlingEnabled
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, value); }
+		}
+
+		/// <summary> The VerbalConfirmationName property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String VerbalConfirmationName
+		{
+			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationName, true); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationName, value); }
+		}
+
+		/// <summary> The VerbalConfirmationPhone property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationPhone"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String VerbalConfirmationPhone
+		{
+			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhone, true); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhone, value); }
+		}
+
+		/// <summary> The VerbalConfirmationPhoneExtension property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationPhoneExtension"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 4<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String VerbalConfirmationPhoneExtension
+		{
+			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, true); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, value); }
+		}
+
+		/// <summary> The DryIceRegulationSet property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceRegulationSet"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> DryIceRegulationSet
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)UpsProfilePackageFieldIndex.DryIceRegulationSet, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceRegulationSet, value); }
+		}
+
+		/// <summary> The DryIceWeight property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Double> DryIceWeight
+		{
+			get { return (Nullable<System.Double>)GetValue((int)UpsProfilePackageFieldIndex.DryIceWeight, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceWeight, value); }
+		}
+
+		/// <summary> The DryIceIsForMedicalUse property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceIsForMedicalUse"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> DryIceIsForMedicalUse
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, value); }
 		}
 
 
