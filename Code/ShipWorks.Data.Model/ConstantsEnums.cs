@@ -8832,6 +8832,20 @@ namespace ShipWorks.Data.Model
 		Qvn3Email,
 		///<summary>ShipperRelease. </summary>
 		ShipperRelease,
+		///<summary>AdditionalHandlingEnabled. </summary>
+		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationName. </summary>
+		VerbalConfirmationName,
+		///<summary>VerbalConfirmationPhone. </summary>
+		VerbalConfirmationPhone,
+		///<summary>VerbalConfirmationPhoneExtension. </summary>
+		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceRegulationSet. </summary>
+		DryIceRegulationSet,
+		///<summary>DryIceWeight. </summary>
+		DryIceWeight,
+		///<summary>DryIceIsForMedicalUse. </summary>
+		DryIceIsForMedicalUse,
 		/// <summary></summary>
 		AmountOfFields
 	}

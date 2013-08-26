@@ -567,6 +567,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipperRelease", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AdditionalHandlingEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationPhone", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationPhoneExtension", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceRegulationSet", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceIsForMedicalUse", fieldHashtable);
 		}
 		#endregion
 
@@ -1058,6 +1079,83 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.ShipperRelease, true); }
 			set	{ SetValue((int)WorldShipPackageFieldIndex.ShipperRelease, value); }
+		}
+
+		/// <summary> The AdditionalHandlingEnabled property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."AdditionalHandlingEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> AdditionalHandlingEnabled
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)WorldShipPackageFieldIndex.AdditionalHandlingEnabled, false); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.AdditionalHandlingEnabled, value); }
+		}
+
+		/// <summary> The VerbalConfirmationName property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."VerbalConfirmationName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String VerbalConfirmationName
+		{
+			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationName, true); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationName, value); }
+		}
+
+		/// <summary> The VerbalConfirmationPhone property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."VerbalConfirmationPhone"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String VerbalConfirmationPhone
+		{
+			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationPhone, true); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationPhone, value); }
+		}
+
+		/// <summary> The VerbalConfirmationPhoneExtension property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."VerbalConfirmationPhoneExtension"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 4<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String VerbalConfirmationPhoneExtension
+		{
+			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationPhoneExtension, true); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationPhoneExtension, value); }
+		}
+
+		/// <summary> The DryIceRegulationSet property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceRegulationSet"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> DryIceRegulationSet
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)WorldShipPackageFieldIndex.DryIceRegulationSet, false); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceRegulationSet, value); }
+		}
+
+		/// <summary> The DryIceWeight property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Double> DryIceWeight
+		{
+			get { return (Nullable<System.Double>)GetValue((int)WorldShipPackageFieldIndex.DryIceWeight, false); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceWeight, value); }
+		}
+
+		/// <summary> The DryIceIsForMedicalUse property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceIsForMedicalUse"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> DryIceIsForMedicalUse
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)WorldShipPackageFieldIndex.DryIceIsForMedicalUse, false); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceIsForMedicalUse, value); }
 		}
 
 

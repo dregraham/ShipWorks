@@ -18652,6 +18652,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.ShipperRelease);}
 		}
+		/// <summary>Creates a new WorldShipPackageEntity.AdditionalHandlingEnabled field instance</summary>
+		public static EntityField2 AdditionalHandlingEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.AdditionalHandlingEnabled);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationName field instance</summary>
+		public static EntityField2 VerbalConfirmationName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationName);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationPhone field instance</summary>
+		public static EntityField2 VerbalConfirmationPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationPhone);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationPhoneExtension field instance</summary>
+		public static EntityField2 VerbalConfirmationPhoneExtension
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationPhoneExtension);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceRegulationSet field instance</summary>
+		public static EntityField2 DryIceRegulationSet
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceRegulationSet);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceWeight field instance</summary>
+		public static EntityField2 DryIceWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceWeight);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceIsForMedicalUse field instance</summary>
+		public static EntityField2 DryIceIsForMedicalUse
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceIsForMedicalUse);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WorldShipProcessedEntity</summary>

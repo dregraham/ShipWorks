@@ -2655,6 +2655,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WorldShipPackageEntity", "Qvn3ContactName", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.Qvn3ContactName, 35, 0, 0);
 			base.AddElementFieldInfo("WorldShipPackageEntity", "Qvn3Email", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.Qvn3Email, 100, 0, 0);
 			base.AddElementFieldInfo("WorldShipPackageEntity", "ShipperRelease", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.ShipperRelease, 1, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "AdditionalHandlingEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)WorldShipPackageFieldIndex.AdditionalHandlingEnabled, 0, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "VerbalConfirmationName", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.VerbalConfirmationName, 35, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "VerbalConfirmationPhone", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.VerbalConfirmationPhone, 15, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "VerbalConfirmationPhoneExtension", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.VerbalConfirmationPhoneExtension, 4, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceRegulationSet", typeof(Nullable<System.Int32>), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceRegulationSet, 0, 0, 10);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceWeight, 0, 0, 38);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceIsForMedicalUse", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceIsForMedicalUse, 0, 0, 0);
 		}
 		/// <summary>Inits WorldShipProcessedEntity's FieldInfo objects</summary>
 		private void InitWorldShipProcessedEntityInfos()

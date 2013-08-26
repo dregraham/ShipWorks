@@ -131,7 +131,14 @@ CREATE TABLE [dbo].[WorldShipPackage]
 [Qvn3ShipNotify] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Qvn3ContactName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Qvn3Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ShipperRelease] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ShipperRelease] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[AdditionalHandlingEnabled] [bit] NULL,
+[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceRegulationSet] [int] NULL,
+[DryIceWeight] [float] NULL,
+[DryIceIsForMedicalUse] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
