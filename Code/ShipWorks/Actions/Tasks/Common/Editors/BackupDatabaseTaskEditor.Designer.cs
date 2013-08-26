@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.labelNotice = new System.Windows.Forms.Label();
             this.browse = new System.Windows.Forms.Button();
             this.backupPath = new System.Windows.Forms.TextBox();
@@ -39,9 +38,7 @@
             this.lableBackups = new System.Windows.Forms.Label();
             this.checkboxLimitBackupsRetained = new System.Windows.Forms.CheckBox();
             this.labelCleanup = new System.Windows.Forms.Label();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // labelNotice
@@ -75,11 +72,11 @@
             // labelPath
             // 
             this.labelPath.AutoSize = true;
-            this.labelPath.Location = new System.Drawing.Point(3, 48);
+            this.labelPath.Location = new System.Drawing.Point(18, 48);
             this.labelPath.Name = "labelPath";
-            this.labelPath.Size = new System.Drawing.Size(90, 13);
+            this.labelPath.Size = new System.Drawing.Size(76, 13);
             this.labelPath.TabIndex = 7;
-            this.labelPath.Text = "Store backups in:";
+            this.labelPath.Text = "Backup folder:";
             this.labelPath.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelPrefix
@@ -101,7 +98,7 @@
             // 
             // numericBackupCount
             // 
-            this.numericBackupCount.Location = new System.Drawing.Point(253, 71);
+            this.numericBackupCount.Location = new System.Drawing.Point(212, 71);
             this.numericBackupCount.Minimum = new decimal(new int[] {
             1,
             0,
@@ -119,35 +116,31 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(306, 73);
+            this.lableBackups.Location = new System.Drawing.Point(265, 73);
             this.lableBackups.Name = "lableBackups";
-            this.lableBackups.Size = new System.Drawing.Size(110, 13);
+            this.lableBackups.Size = new System.Drawing.Size(102, 13);
             this.lableBackups.TabIndex = 14;
-            this.lableBackups.Text = "successful backup(s).";
+            this.lableBackups.Text = "successful backups.";
             // 
             // checkboxLimitBackupsRetained
             // 
             this.checkboxLimitBackupsRetained.AutoSize = true;
             this.checkboxLimitBackupsRetained.Location = new System.Drawing.Point(99, 72);
             this.checkboxLimitBackupsRetained.Name = "checkboxLimitBackupsRetained";
-            this.checkboxLimitBackupsRetained.Size = new System.Drawing.Size(153, 17);
+            this.checkboxLimitBackupsRetained.Size = new System.Drawing.Size(113, 17);
             this.checkboxLimitBackupsRetained.TabIndex = 15;
-            this.checkboxLimitBackupsRetained.Text = "Only keep the most recent";
+            this.checkboxLimitBackupsRetained.Text = "Only keep the last";
             this.checkboxLimitBackupsRetained.UseVisualStyleBackColor = true;
             // 
             // labelCleanup
             // 
             this.labelCleanup.AutoSize = true;
-            this.labelCleanup.Location = new System.Drawing.Point(35, 73);
+            this.labelCleanup.Location = new System.Drawing.Point(36, 73);
             this.labelCleanup.Name = "labelCleanup";
             this.labelCleanup.Size = new System.Drawing.Size(58, 13);
             this.labelCleanup.TabIndex = 16;
             this.labelCleanup.Text = "Retention:";
             this.labelCleanup.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
             // 
             // BackupDatabaseTaskEditor
             // 
@@ -168,7 +161,6 @@
             this.Size = new System.Drawing.Size(456, 99);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,7 +178,6 @@
         private System.Windows.Forms.Label lableBackups;
         private System.Windows.Forms.CheckBox checkboxLimitBackupsRetained;
         private System.Windows.Forms.Label labelCleanup;
-        private System.Windows.Forms.ErrorProvider errorProvider;
 
     }
 }
