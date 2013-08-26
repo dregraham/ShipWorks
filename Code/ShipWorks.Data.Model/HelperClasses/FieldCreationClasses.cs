@@ -17632,6 +17632,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationPhoneExtension);}
 		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceEnabled field instance</summary>
+		public static EntityField2 DryIceEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceEnabled);}
+		}
 		/// <summary>Creates a new UpsPackageEntity.DryIceRegulationSet field instance</summary>
 		public static EntityField2 DryIceRegulationSet
 		{
@@ -17861,6 +17866,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 VerbalConfirmationPhoneExtension
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceEnabled field instance</summary>
+		public static EntityField2 DryIceEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceEnabled);}
 		}
 		/// <summary>Creates a new UpsProfilePackageEntity.DryIceRegulationSet field instance</summary>
 		public static EntityField2 DryIceRegulationSet

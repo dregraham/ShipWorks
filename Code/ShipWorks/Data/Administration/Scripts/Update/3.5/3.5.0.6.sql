@@ -35,6 +35,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_UpsPackage]
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DryIceEnabled] [bit] NOT NULL,
 [DryIceRegulationSet] [int] NOT NULL,
 [DryIceWeight] [float] NOT NULL,
 [DryIceIsForMedicalUse] [bit] NOT NULL
@@ -42,7 +43,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_UpsPackage]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UpsPackage] ON
 GO
-INSERT INTO [dbo].[tmp_rg_xx_UpsPackage]([UpsPackageID], [ShipmentID], [PackagingType], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [Insurance], [InsuranceValue], [InsurancePennyOne], [DeclaredValue], [TrackingNumber], [UspsTrackingNumber], [AdditionalHandlingEnabled], [VerbalConfirmationName], [VerbalConfirmationPhone], [VerbalConfirmationPhoneExtension], [DryIceRegulationSet], [DryIceWeight], [DryIceIsForMedicalUse]) SELECT [UpsPackageID], [ShipmentID], [PackagingType], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [Insurance], [InsuranceValue], [InsurancePennyOne], [DeclaredValue], [TrackingNumber], [UspsTrackingNumber], 0, '', '', '', 0, 0, 0 FROM [dbo].[UpsPackage]
+INSERT INTO [dbo].[tmp_rg_xx_UpsPackage]([UpsPackageID], [ShipmentID], [PackagingType], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [Insurance], [InsuranceValue], [InsurancePennyOne], [DeclaredValue], [TrackingNumber], [UspsTrackingNumber], [AdditionalHandlingEnabled], [VerbalConfirmationName], [VerbalConfirmationPhone], [VerbalConfirmationPhoneExtension], [DryIceEnabled], [DryIceRegulationSet], [DryIceWeight], [DryIceIsForMedicalUse]) SELECT [UpsPackageID], [ShipmentID], [PackagingType], [Weight], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [Insurance], [InsuranceValue], [InsurancePennyOne], [DeclaredValue], [TrackingNumber], [UspsTrackingNumber], 0, '', '', '', 0, 0, 0, 0 FROM [dbo].[UpsPackage]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UpsPackage] OFF
 GO
@@ -83,6 +84,7 @@ ALTER TABLE [dbo].[UpsProfilePackage] ADD
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceEnabled] [bit] NULL,
 [DryIceRegulationSet] [int] NULL,
 [DryIceWeight] [float] NULL,
 [DryIceIsForMedicalUse] [bit] NULL

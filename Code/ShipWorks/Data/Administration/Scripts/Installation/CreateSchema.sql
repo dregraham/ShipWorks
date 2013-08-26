@@ -3076,6 +3076,7 @@ CREATE TABLE [dbo].[UpsPackage]
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DryIceEnabled] [bit] NOT NULL,
 [DryIceRegulationSet] [int] NOT NULL,
 [DryIceWeight] [float] NOT NULL,
 [DryIceIsForMedicalUse] [bit] NOT NULL
@@ -3140,6 +3141,7 @@ CREATE TABLE [dbo].[UpsProfilePackage]
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceEnabled] [bit] NULL,
 [DryIceRegulationSet] [int] NULL,
 [DryIceWeight] [float] NULL,
 [DryIceIsForMedicalUse] [bit] NULL

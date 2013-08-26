@@ -506,6 +506,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("VerbalConfirmationPhoneExtension", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("DryIceEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("DryIceRegulationSet", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -773,6 +776,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, true); }
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, value); }
+		}
+
+		/// <summary> The DryIceEnabled property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> DryIceEnabled
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, value); }
 		}
 
 		/// <summary> The DryIceRegulationSet property of the Entity UpsProfilePackage<br/><br/>

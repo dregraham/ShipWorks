@@ -8334,6 +8334,8 @@ namespace ShipWorks.Data.Model
 		VerbalConfirmationPhone,
 		///<summary>VerbalConfirmationPhoneExtension. </summary>
 		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceEnabled. </summary>
+		DryIceEnabled,
 		///<summary>DryIceRegulationSet. </summary>
 		DryIceRegulationSet,
 		///<summary>DryIceWeight. </summary>
@@ -8444,6 +8446,8 @@ namespace ShipWorks.Data.Model
 		VerbalConfirmationPhone,
 		///<summary>VerbalConfirmationPhoneExtension. </summary>
 		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceEnabled. </summary>
+		DryIceEnabled,
 		///<summary>DryIceRegulationSet. </summary>
 		DryIceRegulationSet,
 		///<summary>DryIceWeight. </summary>
