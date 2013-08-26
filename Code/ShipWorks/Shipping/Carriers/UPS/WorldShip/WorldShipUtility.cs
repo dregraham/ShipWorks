@@ -293,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             // International Invoice
-            if (!isDomestic && ups.CommercialInvoice)
+            if (!isDomestic && ups.CommercialPaperlessInvoice)
             {
                 worldship.InvoiceTermsOfSale = UpsApiShipClient.GetTermsOfShipmentApiCode((UpsTermsOfSale) ups.CommercialInvoiceTermsOfSale);
                 worldship.InvoiceReasonForExport = GetReasonForExportCode((UpsExportReason) ups.CommercialInvoicePurpose);

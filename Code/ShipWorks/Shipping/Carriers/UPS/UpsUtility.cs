@@ -76,6 +76,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             package.TrackingNumber = "";
             package.UspsTrackingNumber = "";
 
+            package.AdditionalHandlingEnabled = false;
+
+            package.DryIceEnabled = false;
+            package.DryIceIsForMedicalUse = false;
+            package.DryIceRegulationSet = 0;
+            package.DryIceWeight = 0;
+
+            package.VerbalConfirmationName = string.Empty;
+            package.VerbalConfirmationPhone = string.Empty;
+            package.VerbalConfirmationPhoneExtension = string.Empty;
+
             return package;
         }
 

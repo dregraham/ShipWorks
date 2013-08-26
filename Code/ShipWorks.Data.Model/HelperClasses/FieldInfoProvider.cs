@@ -2482,9 +2482,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsProfileEntity", "ReturnContents", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ReturnContents, 300, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "Endorsement", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.Endorsement, 0, 0, 10);
 			base.AddElementFieldInfo("UpsProfileEntity", "Subclassification", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.Subclassification, 0, 0, 10);
-			base.AddElementFieldInfo("UpsProfileEntity", "PaperlessInternational", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.PaperlessInternational, 0, 0, 0);
+			base.AddElementFieldInfo("UpsProfileEntity", "PaperlessAdditionalDocumentation", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.PaperlessAdditionalDocumentation, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "ShipperRelease", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.ShipperRelease, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "CarbonNeutral", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.CarbonNeutral, 0, 0, 0);
+			base.AddElementFieldInfo("UpsProfileEntity", "CommercialPaperlessInvoice", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.CommercialPaperlessInvoice, 0, 0, 0);
 		}
 		/// <summary>Inits UpsProfilePackageEntity's FieldInfo objects</summary>
 		private void InitUpsProfilePackageEntityInfos()
@@ -2534,7 +2535,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsShipmentEntity", "EmailNotifyMessage", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.EmailNotifyMessage, 120, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CustomsDocumentsOnly", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.CustomsDocumentsOnly, 0, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CustomsDescription", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.CustomsDescription, 150, 0, 0);
-			base.AddElementFieldInfo("UpsShipmentEntity", "CommercialInvoice", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.CommercialInvoice, 0, 0, 0);
+			base.AddElementFieldInfo("UpsShipmentEntity", "CommercialPaperlessInvoice", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.CommercialPaperlessInvoice, 0, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CommercialInvoiceTermsOfSale", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.CommercialInvoiceTermsOfSale, 0, 0, 10);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CommercialInvoicePurpose", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.CommercialInvoicePurpose, 0, 0, 10);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CommercialInvoiceComments", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.CommercialInvoiceComments, 200, 0, 0);
@@ -2550,7 +2551,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsShipmentEntity", "UspsTrackingNumber", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.UspsTrackingNumber, 50, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "Endorsement", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.Endorsement, 0, 0, 10);
 			base.AddElementFieldInfo("UpsShipmentEntity", "Subclassification", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.Subclassification, 0, 0, 10);
-			base.AddElementFieldInfo("UpsShipmentEntity", "PaperlessInternational", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.PaperlessInternational, 0, 0, 0);
+			base.AddElementFieldInfo("UpsShipmentEntity", "PaperlessAdditionalDocumentation", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.PaperlessAdditionalDocumentation, 0, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipperRelease", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipperRelease, 0, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CarbonNeutral", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.CarbonNeutral, 0, 0, 0);
 		}

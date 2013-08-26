@@ -17777,10 +17777,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Subclassification);}
 		}
-		/// <summary>Creates a new UpsProfileEntity.PaperlessInternational field instance</summary>
-		public static EntityField2 PaperlessInternational
+		/// <summary>Creates a new UpsProfileEntity.PaperlessAdditionalDocumentation field instance</summary>
+		public static EntityField2 PaperlessAdditionalDocumentation
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.PaperlessInternational);}
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.PaperlessAdditionalDocumentation);}
 		}
 		/// <summary>Creates a new UpsProfileEntity.ShipperRelease field instance</summary>
 		public static EntityField2 ShipperRelease
@@ -17791,6 +17791,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CarbonNeutral
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CarbonNeutral);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.CommercialPaperlessInvoice field instance</summary>
+		public static EntityField2 CommercialPaperlessInvoice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CommercialPaperlessInvoice);}
 		}
 	}
 
@@ -18007,10 +18012,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CustomsDescription);}
 		}
-		/// <summary>Creates a new UpsShipmentEntity.CommercialInvoice field instance</summary>
-		public static EntityField2 CommercialInvoice
+		/// <summary>Creates a new UpsShipmentEntity.CommercialPaperlessInvoice field instance</summary>
+		public static EntityField2 CommercialPaperlessInvoice
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CommercialInvoice);}
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CommercialPaperlessInvoice);}
 		}
 		/// <summary>Creates a new UpsShipmentEntity.CommercialInvoiceTermsOfSale field instance</summary>
 		public static EntityField2 CommercialInvoiceTermsOfSale
@@ -18087,10 +18092,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Subclassification);}
 		}
-		/// <summary>Creates a new UpsShipmentEntity.PaperlessInternational field instance</summary>
-		public static EntityField2 PaperlessInternational
+		/// <summary>Creates a new UpsShipmentEntity.PaperlessAdditionalDocumentation field instance</summary>
+		public static EntityField2 PaperlessAdditionalDocumentation
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.PaperlessInternational);}
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.PaperlessAdditionalDocumentation);}
 		}
 		/// <summary>Creates a new UpsShipmentEntity.ShipperRelease field instance</summary>
 		public static EntityField2 ShipperRelease

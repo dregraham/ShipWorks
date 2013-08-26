@@ -562,13 +562,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Subclassification", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("PaperlessInternational", fieldHashtable);
+			_fieldsCustomProperties.Add("PaperlessAdditionalDocumentation", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipperRelease", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CarbonNeutral", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CommercialPaperlessInvoice", fieldHashtable);
 		}
 		#endregion
 
@@ -952,15 +955,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UpsProfileFieldIndex.Subclassification, value); }
 		}
 
-		/// <summary> The PaperlessInternational property of the Entity UpsProfile<br/><br/>
+		/// <summary> The PaperlessAdditionalDocumentation property of the Entity UpsProfile<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UpsProfile"."PaperlessInternational"<br/>
+		/// <remarks>Mapped on  table field: "UpsProfile"."PaperlessAdditionalDocumentation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> PaperlessInternational
+		public virtual Nullable<System.Boolean> PaperlessAdditionalDocumentation
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.PaperlessInternational, false); }
-			set	{ SetValue((int)UpsProfileFieldIndex.PaperlessInternational, value); }
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.PaperlessAdditionalDocumentation, false); }
+			set	{ SetValue((int)UpsProfileFieldIndex.PaperlessAdditionalDocumentation, value); }
 		}
 
 		/// <summary> The ShipperRelease property of the Entity UpsProfile<br/><br/>
@@ -983,6 +986,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.CarbonNeutral, false); }
 			set	{ SetValue((int)UpsProfileFieldIndex.CarbonNeutral, value); }
+		}
+
+		/// <summary> The CommercialPaperlessInvoice property of the Entity UpsProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."CommercialPaperlessInvoice"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> CommercialPaperlessInvoice
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.CommercialPaperlessInvoice, false); }
+			set	{ SetValue((int)UpsProfileFieldIndex.CommercialPaperlessInvoice, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsProfilePackageEntity' which are related to this entity via a relation of type '1:n'.

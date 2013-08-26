@@ -8401,12 +8401,14 @@ namespace ShipWorks.Data.Model
 		Endorsement,
 		///<summary>Subclassification. </summary>
 		Subclassification,
-		///<summary>PaperlessInternational. </summary>
-		PaperlessInternational,
+		///<summary>PaperlessAdditionalDocumentation. </summary>
+		PaperlessAdditionalDocumentation,
 		///<summary>ShipperRelease. </summary>
 		ShipperRelease,
 		///<summary>CarbonNeutral. </summary>
 		CarbonNeutral,
+		///<summary>CommercialPaperlessInvoice. </summary>
+		CommercialPaperlessInvoice,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8511,8 +8513,8 @@ namespace ShipWorks.Data.Model
 		CustomsDocumentsOnly,
 		///<summary>CustomsDescription. </summary>
 		CustomsDescription,
-		///<summary>CommercialInvoice. </summary>
-		CommercialInvoice,
+		///<summary>CommercialPaperlessInvoice. </summary>
+		CommercialPaperlessInvoice,
 		///<summary>CommercialInvoiceTermsOfSale. </summary>
 		CommercialInvoiceTermsOfSale,
 		///<summary>CommercialInvoicePurpose. </summary>
@@ -8543,8 +8545,8 @@ namespace ShipWorks.Data.Model
 		Endorsement,
 		///<summary>Subclassification. </summary>
 		Subclassification,
-		///<summary>PaperlessInternational. </summary>
-		PaperlessInternational,
+		///<summary>PaperlessAdditionalDocumentation. </summary>
+		PaperlessAdditionalDocumentation,
 		///<summary>ShipperRelease. </summary>
 		ShipperRelease,
 		///<summary>CarbonNeutral. </summary>

@@ -48,17 +48,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             documentsOnly.CheckedChanged -= new EventHandler(OnChangeDocumentsOnly);
 
             // Hide commercial invoice if SurePost.
-            sectionCommercialInvoice.Visible = (!LoadedShipments.Any(s => s.Ups != null && UpsUtility.IsUpsSurePostService((UpsServiceType) s.Ups.Service)));
+            sectionInvoicing.Visible = (!LoadedShipments.Any(s => s.Ups != null && UpsUtility.IsUpsSurePostService((UpsServiceType) s.Ups.Service)));
 
             using (MultiValueScope scope = new MultiValueScope())
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
                     documentsOnly.ApplyMultiCheck(shipment.Ups.CustomsDocumentsOnly);
-                    paperless.ApplyMultiCheck(shipment.Ups.PaperlessInternational);
+                    extraDocuments.ApplyMultiCheck(shipment.Ups.PaperlessAdditionalDocumentation);
                     descriptionOfGoods.ApplyMultiText(shipment.Ups.CustomsDescription);
 
-                    commercialInvoice.ApplyMultiCheck(shipment.Ups.CommercialInvoice);
+                    usePaperlessInvoice.ApplyMultiCheck(shipment.Ups.CommercialPaperlessInvoice);
                     ciTermsOfSale.ApplyMultiValue((UpsTermsOfSale) shipment.Ups.CommercialInvoiceTermsOfSale);
                     ciPurpose.ApplyMultiValue((UpsExportReason) shipment.Ups.CommercialInvoicePurpose);
                     ciComments.ApplyMultiText(shipment.Ups.CommercialInvoiceComments);
@@ -72,6 +72,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             OnChangeDocumentsOnly(documentsOnly, EventArgs.Empty);
 
             documentsOnly.CheckedChanged += new EventHandler(OnChangeDocumentsOnly);
+
+            // Update the use paperless invoicing controls' enabled state
+            OnUsePaperlessInvoiceCheckedChanged(usePaperlessInvoice, EventArgs.Empty);
         }
 
         /// <summary>
@@ -101,10 +104,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 documentsOnly.ReadMultiCheck(c => shipment.Ups.CustomsDocumentsOnly = c);
-                paperless.ReadMultiCheck(c => shipment.Ups.PaperlessInternational = c);
+                extraDocuments.ReadMultiCheck(c => shipment.Ups.PaperlessAdditionalDocumentation = c);
                 descriptionOfGoods.ReadMultiText(t => shipment.Ups.CustomsDescription = t);
 
-                commercialInvoice.ReadMultiCheck(c => shipment.Ups.CommercialInvoice = c);
+                usePaperlessInvoice.ReadMultiCheck(c => shipment.Ups.CommercialPaperlessInvoice = c);
                 ciTermsOfSale.ReadMultiValue(v => shipment.Ups.CommercialInvoiceTermsOfSale = (int) v);
                 ciPurpose.ReadMultiValue(v => shipment.Ups.CommercialInvoicePurpose = (int) v);
                 ciComments.ReadMultiText(t => shipment.Ups.CommercialInvoiceComments = t);
@@ -113,5 +116,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ciAdditional.ReadMultiAmount(a => shipment.Ups.CommercialInvoiceOther = a);
             }
         }
+
+        /// <summary>
+        /// Fires when the invoice use paperless invoice check box changes state.  Updates it's sub children's enabled state.
+        /// </summary>
+        private void OnUsePaperlessInvoiceCheckedChanged(object sender, EventArgs e)
+        {
+            extraDocuments.Enabled = usePaperlessInvoice.Checked;
+            ciTermsOfSale.Enabled = usePaperlessInvoice.Checked;
+            ciPurpose.Enabled = usePaperlessInvoice.Checked;
+            ciComments.Enabled = usePaperlessInvoice.Checked;
+            ciFreight.Enabled = usePaperlessInvoice.Checked;
+            ciInsurance.Enabled = usePaperlessInvoice.Checked;
+            ciAdditional.Enabled = usePaperlessInvoice.Checked;
+        }
+
     }
 }

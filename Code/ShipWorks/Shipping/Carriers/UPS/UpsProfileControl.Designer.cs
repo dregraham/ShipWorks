@@ -104,6 +104,18 @@
             this.payorType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPayor = new System.Windows.Forms.Label();
             this.groupOptions = new System.Windows.Forms.GroupBox();
+            this.usePaperlessInvoice = new System.Windows.Forms.CheckBox();
+            this.usePaperlessInvoiceLabel = new System.Windows.Forms.Label();
+            this.usePaperlessInvoiceState = new System.Windows.Forms.CheckBox();
+            this.carbonNeutral = new System.Windows.Forms.CheckBox();
+            this.carbonNeutralLabel = new System.Windows.Forms.Label();
+            this.carbonNeutralState = new System.Windows.Forms.CheckBox();
+            this.extraDocuments = new System.Windows.Forms.CheckBox();
+            this.extraDocumentsLabel = new System.Windows.Forms.Label();
+            this.extraDocumentsState = new System.Windows.Forms.CheckBox();
+            this.shipperRelease = new System.Windows.Forms.CheckBox();
+            this.shipperReleaseLabel = new System.Windows.Forms.Label();
+            this.shipperReleaseState = new System.Windows.Forms.CheckBox();
             this.reference2State = new System.Windows.Forms.CheckBox();
             this.uspsEndorsementState = new System.Windows.Forms.CheckBox();
             this.referenceNumber2 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
@@ -147,15 +159,6 @@
             this.packagesState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.shipperRelease = new System.Windows.Forms.CheckBox();
-            this.shipperReleaseLabel = new System.Windows.Forms.Label();
-            this.shipperReleaseState = new System.Windows.Forms.CheckBox();
-            this.paperless = new System.Windows.Forms.CheckBox();
-            this.paperlessLabel = new System.Windows.Forms.Label();
-            this.paperlessState = new System.Windows.Forms.CheckBox();
-            this.carbonNeutral = new System.Windows.Forms.CheckBox();
-            this.carbonNeutralLabel = new System.Windows.Forms.Label();
-            this.carbonNeutralState = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.surePostGroup.SuspendLayout();
@@ -210,7 +213,7 @@
             this.surePostGroup.Controls.Add(this.kryptonBorderEdge9);
             this.surePostGroup.Controls.Add(this.surePostClassification);
             this.surePostGroup.Controls.Add(this.labelSurePostClassification);
-            this.surePostGroup.Location = new System.Drawing.Point(6, 1112);
+            this.surePostGroup.Location = new System.Drawing.Point(6, 1127);
             this.surePostGroup.Name = "surePostGroup";
             this.surePostGroup.Size = new System.Drawing.Size(405, 59);
             this.surePostGroup.TabIndex = 11;
@@ -268,7 +271,7 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(6, 222);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(363, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(345, 82);
             this.groupInsurance.TabIndex = 10;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -316,7 +319,7 @@
             this.returnGroup.Controls.Add(this.returnServiceState);
             this.returnGroup.Controls.Add(this.returnContentsState);
             this.returnGroup.Controls.Add(this.kryptonBorderEdge8);
-            this.returnGroup.Location = new System.Drawing.Point(6, 977);
+            this.returnGroup.Location = new System.Drawing.Point(6, 992);
             this.returnGroup.Name = "returnGroup";
             this.returnGroup.Size = new System.Drawing.Size(405, 130);
             this.returnGroup.TabIndex = 7;
@@ -328,7 +331,7 @@
             this.returnShipment.AutoSize = true;
             this.returnShipment.Location = new System.Drawing.Point(78, 25);
             this.returnShipment.Name = "returnShipment";
-            this.returnShipment.Size = new System.Drawing.Size(140, 17);
+            this.returnShipment.Size = new System.Drawing.Size(143, 17);
             this.returnShipment.TabIndex = 99;
             this.returnShipment.Text = "This is a return shipment";
             this.returnShipment.UseVisualStyleBackColor = true;
@@ -479,7 +482,7 @@
             this.groupEmail.Controls.Add(this.labelEmailAddress);
             this.groupEmail.Controls.Add(this.labelEmailInfo);
             this.groupEmail.Controls.Add(this.picturEmailInfo);
-            this.groupEmail.Location = new System.Drawing.Point(6, 671);
+            this.groupEmail.Location = new System.Drawing.Point(6, 686);
             this.groupEmail.Name = "groupEmail";
             this.groupEmail.Size = new System.Drawing.Size(405, 299);
             this.groupEmail.TabIndex = 6;
@@ -852,7 +855,7 @@
             this.groupBilling.Controls.Add(this.payorTypeState);
             this.groupBilling.Controls.Add(this.payorType);
             this.groupBilling.Controls.Add(this.labelPayor);
-            this.groupBilling.Location = new System.Drawing.Point(6, 530);
+            this.groupBilling.Location = new System.Drawing.Point(6, 545);
             this.groupBilling.Name = "groupBilling";
             this.groupBilling.Size = new System.Drawing.Size(405, 132);
             this.groupBilling.TabIndex = 5;
@@ -973,12 +976,15 @@
             // 
             this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupOptions.Controls.Add(this.usePaperlessInvoice);
+            this.groupOptions.Controls.Add(this.usePaperlessInvoiceLabel);
+            this.groupOptions.Controls.Add(this.usePaperlessInvoiceState);
             this.groupOptions.Controls.Add(this.carbonNeutral);
             this.groupOptions.Controls.Add(this.carbonNeutralLabel);
             this.groupOptions.Controls.Add(this.carbonNeutralState);
-            this.groupOptions.Controls.Add(this.paperless);
-            this.groupOptions.Controls.Add(this.paperlessLabel);
-            this.groupOptions.Controls.Add(this.paperlessState);
+            this.groupOptions.Controls.Add(this.extraDocuments);
+            this.groupOptions.Controls.Add(this.extraDocumentsLabel);
+            this.groupOptions.Controls.Add(this.extraDocumentsState);
             this.groupOptions.Controls.Add(this.shipperRelease);
             this.groupOptions.Controls.Add(this.shipperReleaseLabel);
             this.groupOptions.Controls.Add(this.shipperReleaseState);
@@ -997,10 +1003,138 @@
             this.groupOptions.Controls.Add(this.labelReference);
             this.groupOptions.Location = new System.Drawing.Point(6, 313);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(384, 208);
+            this.groupOptions.Size = new System.Drawing.Size(366, 230);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
+            // 
+            // usePaperlessInvoice
+            // 
+            this.usePaperlessInvoice.AutoSize = true;
+            this.usePaperlessInvoice.Location = new System.Drawing.Point(159, 156);
+            this.usePaperlessInvoice.Name = "usePaperlessInvoice";
+            this.usePaperlessInvoice.Size = new System.Drawing.Size(129, 17);
+            this.usePaperlessInvoice.TabIndex = 111;
+            this.usePaperlessInvoice.Text = "Use paperless invoice";
+            this.usePaperlessInvoice.UseVisualStyleBackColor = true;
+            // 
+            // usePaperlessInvoiceLabel
+            // 
+            this.usePaperlessInvoiceLabel.AutoSize = true;
+            this.usePaperlessInvoiceLabel.BackColor = System.Drawing.Color.Transparent;
+            this.usePaperlessInvoiceLabel.Location = new System.Drawing.Point(58, 157);
+            this.usePaperlessInvoiceLabel.Name = "usePaperlessInvoiceLabel";
+            this.usePaperlessInvoiceLabel.Size = new System.Drawing.Size(95, 13);
+            this.usePaperlessInvoiceLabel.TabIndex = 112;
+            this.usePaperlessInvoiceLabel.Text = "Paperless Invoice:";
+            // 
+            // usePaperlessInvoiceState
+            // 
+            this.usePaperlessInvoiceState.AutoSize = true;
+            this.usePaperlessInvoiceState.Checked = true;
+            this.usePaperlessInvoiceState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.usePaperlessInvoiceState.Location = new System.Drawing.Point(9, 157);
+            this.usePaperlessInvoiceState.Name = "usePaperlessInvoiceState";
+            this.usePaperlessInvoiceState.Size = new System.Drawing.Size(15, 14);
+            this.usePaperlessInvoiceState.TabIndex = 110;
+            this.usePaperlessInvoiceState.Tag = "";
+            this.usePaperlessInvoiceState.UseVisualStyleBackColor = true;
+            // 
+            // carbonNeutral
+            // 
+            this.carbonNeutral.AutoSize = true;
+            this.carbonNeutral.Location = new System.Drawing.Point(159, 207);
+            this.carbonNeutral.Name = "carbonNeutral";
+            this.carbonNeutral.Size = new System.Drawing.Size(99, 17);
+            this.carbonNeutral.TabIndex = 108;
+            this.carbonNeutral.Text = "Carbon Neutral";
+            this.carbonNeutral.UseVisualStyleBackColor = true;
+            // 
+            // carbonNeutralLabel
+            // 
+            this.carbonNeutralLabel.AutoSize = true;
+            this.carbonNeutralLabel.BackColor = System.Drawing.Color.Transparent;
+            this.carbonNeutralLabel.Location = new System.Drawing.Point(69, 208);
+            this.carbonNeutralLabel.Name = "carbonNeutralLabel";
+            this.carbonNeutralLabel.Size = new System.Drawing.Size(84, 13);
+            this.carbonNeutralLabel.TabIndex = 109;
+            this.carbonNeutralLabel.Text = "Carbon Neutral:";
+            // 
+            // carbonNeutralState
+            // 
+            this.carbonNeutralState.AutoSize = true;
+            this.carbonNeutralState.Checked = true;
+            this.carbonNeutralState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.carbonNeutralState.Location = new System.Drawing.Point(9, 208);
+            this.carbonNeutralState.Name = "carbonNeutralState";
+            this.carbonNeutralState.Size = new System.Drawing.Size(15, 14);
+            this.carbonNeutralState.TabIndex = 107;
+            this.carbonNeutralState.Tag = "";
+            this.carbonNeutralState.UseVisualStyleBackColor = true;
+            // 
+            // extraDocuments
+            // 
+            this.extraDocuments.AutoSize = true;
+            this.extraDocuments.Location = new System.Drawing.Point(159, 181);
+            this.extraDocuments.Name = "extraDocuments";
+            this.extraDocuments.Size = new System.Drawing.Size(159, 17);
+            this.extraDocuments.TabIndex = 105;
+            this.extraDocuments.Text = "Additional paper documents";
+            this.extraDocuments.UseVisualStyleBackColor = true;
+            // 
+            // extraDocumentsLabel
+            // 
+            this.extraDocumentsLabel.AutoSize = true;
+            this.extraDocumentsLabel.BackColor = System.Drawing.Color.Transparent;
+            this.extraDocumentsLabel.Location = new System.Drawing.Point(61, 182);
+            this.extraDocumentsLabel.Name = "extraDocumentsLabel";
+            this.extraDocumentsLabel.Size = new System.Drawing.Size(92, 13);
+            this.extraDocumentsLabel.TabIndex = 106;
+            this.extraDocumentsLabel.Text = "Extra documents:";
+            // 
+            // extraDocumentsState
+            // 
+            this.extraDocumentsState.AutoSize = true;
+            this.extraDocumentsState.Checked = true;
+            this.extraDocumentsState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.extraDocumentsState.Location = new System.Drawing.Point(9, 182);
+            this.extraDocumentsState.Name = "extraDocumentsState";
+            this.extraDocumentsState.Size = new System.Drawing.Size(15, 14);
+            this.extraDocumentsState.TabIndex = 104;
+            this.extraDocumentsState.Tag = "";
+            this.extraDocumentsState.UseVisualStyleBackColor = true;
+            // 
+            // shipperRelease
+            // 
+            this.shipperRelease.AutoSize = true;
+            this.shipperRelease.Location = new System.Drawing.Point(159, 131);
+            this.shipperRelease.Name = "shipperRelease";
+            this.shipperRelease.Size = new System.Drawing.Size(103, 17);
+            this.shipperRelease.TabIndex = 102;
+            this.shipperRelease.Text = "Shipper Release";
+            this.shipperRelease.UseVisualStyleBackColor = true;
+            // 
+            // shipperReleaseLabel
+            // 
+            this.shipperReleaseLabel.AutoSize = true;
+            this.shipperReleaseLabel.BackColor = System.Drawing.Color.Transparent;
+            this.shipperReleaseLabel.Location = new System.Drawing.Point(65, 132);
+            this.shipperReleaseLabel.Name = "shipperReleaseLabel";
+            this.shipperReleaseLabel.Size = new System.Drawing.Size(88, 13);
+            this.shipperReleaseLabel.TabIndex = 103;
+            this.shipperReleaseLabel.Text = "Shipper Release:";
+            // 
+            // shipperReleaseState
+            // 
+            this.shipperReleaseState.AutoSize = true;
+            this.shipperReleaseState.Checked = true;
+            this.shipperReleaseState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.shipperReleaseState.Location = new System.Drawing.Point(9, 132);
+            this.shipperReleaseState.Name = "shipperReleaseState";
+            this.shipperReleaseState.Size = new System.Drawing.Size(15, 14);
+            this.shipperReleaseState.TabIndex = 101;
+            this.shipperReleaseState.Tag = "";
+            this.shipperReleaseState.UseVisualStyleBackColor = true;
             // 
             // reference2State
             // 
@@ -1063,7 +1197,7 @@
             this.kryptonBorderEdge4.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge4.Location = new System.Drawing.Point(29, 19);
             this.kryptonBorderEdge4.Name = "kryptonBorderEdge4";
-            this.kryptonBorderEdge4.Size = new System.Drawing.Size(1, 177);
+            this.kryptonBorderEdge4.Size = new System.Drawing.Size(1, 199);
             this.kryptonBorderEdge4.TabIndex = 74;
             this.kryptonBorderEdge4.Text = "kryptonBorderEdge1";
             // 
@@ -1150,7 +1284,7 @@
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 85);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(363, 52);
+            this.groupTo.Size = new System.Drawing.Size(345, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1210,7 +1344,7 @@
             this.groupShipment.Controls.Add(this.serviceState);
             this.groupShipment.Location = new System.Drawing.Point(6, 142);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(363, 73);
+            this.groupShipment.Size = new System.Drawing.Size(345, 73);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -1220,7 +1354,7 @@
             this.saturdayDelivery.AutoSize = true;
             this.saturdayDelivery.Location = new System.Drawing.Point(110, 44);
             this.saturdayDelivery.Name = "saturdayDelivery";
-            this.saturdayDelivery.Size = new System.Drawing.Size(109, 17);
+            this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
             this.saturdayDelivery.TabIndex = 3;
             this.saturdayDelivery.Text = "Saturday Delivery";
             this.saturdayDelivery.UseVisualStyleBackColor = true;
@@ -1304,7 +1438,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(363, 77);
+            this.groupBoxFrom.Size = new System.Drawing.Size(345, 77);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
@@ -1487,102 +1621,6 @@
             this.kryptonBorderEdge7.TabIndex = 18;
             this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
             // 
-            // shipperRelease
-            // 
-            this.shipperRelease.AutoSize = true;
-            this.shipperRelease.Location = new System.Drawing.Point(159, 131);
-            this.shipperRelease.Name = "shipperRelease";
-            this.shipperRelease.Size = new System.Drawing.Size(103, 17);
-            this.shipperRelease.TabIndex = 102;
-            this.shipperRelease.Text = "Shipper Release";
-            this.shipperRelease.UseVisualStyleBackColor = true;
-            // 
-            // shipperReleaseLabel
-            // 
-            this.shipperReleaseLabel.AutoSize = true;
-            this.shipperReleaseLabel.BackColor = System.Drawing.Color.Transparent;
-            this.shipperReleaseLabel.Location = new System.Drawing.Point(65, 132);
-            this.shipperReleaseLabel.Name = "shipperReleaseLabel";
-            this.shipperReleaseLabel.Size = new System.Drawing.Size(88, 13);
-            this.shipperReleaseLabel.TabIndex = 103;
-            this.shipperReleaseLabel.Text = "Shipper Release:";
-            // 
-            // shipperReleaseState
-            // 
-            this.shipperReleaseState.AutoSize = true;
-            this.shipperReleaseState.Checked = true;
-            this.shipperReleaseState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shipperReleaseState.Location = new System.Drawing.Point(9, 132);
-            this.shipperReleaseState.Name = "shipperReleaseState";
-            this.shipperReleaseState.Size = new System.Drawing.Size(15, 14);
-            this.shipperReleaseState.TabIndex = 101;
-            this.shipperReleaseState.Tag = "";
-            this.shipperReleaseState.UseVisualStyleBackColor = true;
-            // 
-            // paperless
-            // 
-            this.paperless.AutoSize = true;
-            this.paperless.Location = new System.Drawing.Point(159, 156);
-            this.paperless.Name = "paperless";
-            this.paperless.Size = new System.Drawing.Size(212, 17);
-            this.paperless.TabIndex = 105;
-            this.paperless.Text = "Paperless International Documentation";
-            this.paperless.UseVisualStyleBackColor = true;
-            // 
-            // paperlessLabel
-            // 
-            this.paperlessLabel.AutoSize = true;
-            this.paperlessLabel.BackColor = System.Drawing.Color.Transparent;
-            this.paperlessLabel.Location = new System.Drawing.Point(96, 157);
-            this.paperlessLabel.Name = "paperlessLabel";
-            this.paperlessLabel.Size = new System.Drawing.Size(57, 13);
-            this.paperlessLabel.TabIndex = 106;
-            this.paperlessLabel.Text = "Paperless:";
-            // 
-            // paperlessState
-            // 
-            this.paperlessState.AutoSize = true;
-            this.paperlessState.Checked = true;
-            this.paperlessState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.paperlessState.Location = new System.Drawing.Point(9, 157);
-            this.paperlessState.Name = "paperlessState";
-            this.paperlessState.Size = new System.Drawing.Size(15, 14);
-            this.paperlessState.TabIndex = 104;
-            this.paperlessState.Tag = "";
-            this.paperlessState.UseVisualStyleBackColor = true;
-            // 
-            // carbonNeutral
-            // 
-            this.carbonNeutral.AutoSize = true;
-            this.carbonNeutral.Location = new System.Drawing.Point(159, 181);
-            this.carbonNeutral.Name = "carbonNeutral";
-            this.carbonNeutral.Size = new System.Drawing.Size(99, 17);
-            this.carbonNeutral.TabIndex = 108;
-            this.carbonNeutral.Text = "Carbon Neutral";
-            this.carbonNeutral.UseVisualStyleBackColor = true;
-            // 
-            // carbonNeutralLabel
-            // 
-            this.carbonNeutralLabel.AutoSize = true;
-            this.carbonNeutralLabel.BackColor = System.Drawing.Color.Transparent;
-            this.carbonNeutralLabel.Location = new System.Drawing.Point(69, 182);
-            this.carbonNeutralLabel.Name = "carbonNeutralLabel";
-            this.carbonNeutralLabel.Size = new System.Drawing.Size(84, 13);
-            this.carbonNeutralLabel.TabIndex = 109;
-            this.carbonNeutralLabel.Text = "Carbon Neutral:";
-            // 
-            // carbonNeutralState
-            // 
-            this.carbonNeutralState.AutoSize = true;
-            this.carbonNeutralState.Checked = true;
-            this.carbonNeutralState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.carbonNeutralState.Location = new System.Drawing.Point(9, 182);
-            this.carbonNeutralState.Name = "carbonNeutralState";
-            this.carbonNeutralState.Size = new System.Drawing.Size(15, 14);
-            this.carbonNeutralState.TabIndex = 107;
-            this.carbonNeutralState.Tag = "";
-            this.carbonNeutralState.UseVisualStyleBackColor = true;
-            // 
             // UpsProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1736,14 +1774,17 @@
         private System.Windows.Forms.Label labelUspsEndorsement;
         private System.Windows.Forms.Label labelSurePostClassification;
         private UI.Controls.MultiValueComboBox uspsEndorsement;
-        private System.Windows.Forms.CheckBox paperless;
-        private System.Windows.Forms.Label paperlessLabel;
-        private System.Windows.Forms.CheckBox paperlessState;
+        private System.Windows.Forms.CheckBox extraDocuments;
+        private System.Windows.Forms.Label extraDocumentsLabel;
+        private System.Windows.Forms.CheckBox extraDocumentsState;
         private System.Windows.Forms.CheckBox shipperRelease;
         private System.Windows.Forms.Label shipperReleaseLabel;
         private System.Windows.Forms.CheckBox shipperReleaseState;
         private System.Windows.Forms.CheckBox carbonNeutral;
         private System.Windows.Forms.Label carbonNeutralLabel;
         private System.Windows.Forms.CheckBox carbonNeutralState;
+        private System.Windows.Forms.CheckBox usePaperlessInvoice;
+        private System.Windows.Forms.Label usePaperlessInvoiceLabel;
+        private System.Windows.Forms.CheckBox usePaperlessInvoiceState;
     }
 }

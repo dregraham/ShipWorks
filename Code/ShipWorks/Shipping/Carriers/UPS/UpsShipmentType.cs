@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.CustomsDocumentsOnly = false;
             shipment.Ups.CustomsDescription = "Goods";
 
-            shipment.Ups.CommercialInvoice = false;
+            shipment.Ups.CommercialPaperlessInvoice = false;
             shipment.Ups.CommercialInvoiceTermsOfSale = (int) UpsTermsOfSale.NotSpecified;
             shipment.Ups.CommercialInvoicePurpose = (int) UpsExportReason.Sale;
             shipment.Ups.CommercialInvoiceComments = "";
@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.Endorsement = 0;
             shipment.Ups.Subclassification = 0;
 
-            shipment.Ups.PaperlessInternational = false;
+            shipment.Ups.PaperlessAdditionalDocumentation = false;
             shipment.Ups.ShipperRelease = false;
             shipment.Ups.CarbonNeutral = false;
 
@@ -279,7 +279,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.Subclassification = 0;
 
             profile.Ups.ShipperRelease = false;
-            profile.Ups.PaperlessInternational = false;
+            profile.Ups.CommercialPaperlessInvoice = false;
+            profile.Ups.PaperlessAdditionalDocumentation = false;
             profile.Ups.CarbonNeutral = false;
         }
 
@@ -399,7 +400,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.Subclassification, ups, UpsShipmentFields.Subclassification);
             ShippingProfileUtility.ApplyProfileValue(source.Endorsement, ups, UpsShipmentFields.Endorsement);
 
-            ShippingProfileUtility.ApplyProfileValue(source.PaperlessInternational, ups, UpsShipmentFields.PaperlessInternational);
+            ShippingProfileUtility.ApplyProfileValue(source.PaperlessAdditionalDocumentation, ups, UpsShipmentFields.PaperlessAdditionalDocumentation);
+            ShippingProfileUtility.ApplyProfileValue(source.CommercialPaperlessInvoice, ups, UpsShipmentFields.CommercialPaperlessInvoice);
             ShippingProfileUtility.ApplyProfileValue(source.ShipperRelease, ups, UpsShipmentFields.ShipperRelease);
             ShippingProfileUtility.ApplyProfileValue(source.CarbonNeutral, ups, UpsShipmentFields.CarbonNeutral);
 
