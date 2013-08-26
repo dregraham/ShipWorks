@@ -256,6 +256,13 @@ namespace ShipWorks.Templates.Tokens
             set { tokenTextBox.MaxLength = value; }
         }
 
+        [DefaultValue(true)]
+        public bool ShowTokenOptions
+        {
+            get { return tokenOptionsDropdown.Visible; }
+            set { tokenOptionsDropdown.Visible = value; }
+        }
+
         /// <summary>
         /// Update the token suggestions menu based on the selected usage
         /// </summary>

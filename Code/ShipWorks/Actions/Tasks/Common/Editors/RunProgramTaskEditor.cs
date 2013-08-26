@@ -9,15 +9,15 @@ using System.Windows.Forms;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    public partial class RunCommandTaskEditor : ActionTaskEditor
+    public partial class RunProgramTaskEditor : ActionTaskEditor
     {
-        private readonly RunCommandTask task;
+        private readonly RunProgramTask task;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RunCommandTaskEditor"/> class.
+        /// Initializes a new instance of the <see cref="RunProgramTaskEditor"/> class.
         /// </summary>
         /// <param name="task">The task.</param>
-        public RunCommandTaskEditor(RunCommandTask task)
+        public RunProgramTaskEditor(RunProgramTask task)
         {
             if (task == null)
             {
@@ -30,7 +30,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             tokenizedExecuteCommand.Text = task.Command;
             shouldTimeout.Checked = task.ShouldStopCommandOnTimeout;
             timeoutInMinutes.Value = task.CommandTimeoutInMinutes;
-
+            
             tokenizedExecuteCommand.TextChanged += OnTokenizedExecuteCommandTextChanged;
         }
 
