@@ -29,39 +29,31 @@
         private void InitializeComponent()
         {
             this.labelRegulationSet = new System.Windows.Forms.Label();
-            this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.labelWeight = new System.Windows.Forms.Label();
             this.medicalUse = new System.Windows.Forms.CheckBox();
-            this.regulationSet = new System.Windows.Forms.ComboBox();
+            this.regulationSet = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelDryIce = new System.Windows.Forms.Label();
+            this.containsDryIce = new System.Windows.Forms.CheckBox();
+            this.panelDryIceDetails = new System.Windows.Forms.Panel();
+            this.weight = new ShipWorks.UI.Controls.WeightControl();
+            this.panelDryIceDetails.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelRegulationSet
             // 
             this.labelRegulationSet.AutoSize = true;
-            this.labelRegulationSet.Location = new System.Drawing.Point(3, 5);
+            this.labelRegulationSet.Location = new System.Drawing.Point(42, 3);
             this.labelRegulationSet.Name = "labelRegulationSet";
             this.labelRegulationSet.Size = new System.Drawing.Size(80, 13);
             this.labelRegulationSet.TabIndex = 0;
             this.labelRegulationSet.Text = "Regulation Set:";
             this.labelRegulationSet.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // weight
-            // 
-            this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.weight.Location = new System.Drawing.Point(89, 29);
-            this.weight.Name = "weight";
-            this.weight.RangeMax = 1000D;
-            this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(218, 21);
-            this.weight.TabIndex = 5;
-            this.weight.Weight = 0D;
-            // 
             // labelWeight
             // 
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(39, 32);
+            this.labelWeight.Location = new System.Drawing.Point(78, 31);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(44, 13);
             this.labelWeight.TabIndex = 4;
@@ -70,7 +62,7 @@
             // medicalUse
             // 
             this.medicalUse.AutoSize = true;
-            this.medicalUse.Location = new System.Drawing.Point(227, 4);
+            this.medicalUse.Location = new System.Drawing.Point(258, 2);
             this.medicalUse.Name = "medicalUse";
             this.medicalUse.Size = new System.Drawing.Size(85, 17);
             this.medicalUse.TabIndex = 7;
@@ -79,25 +71,72 @@
             // 
             // regulationSet
             // 
+            this.regulationSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.regulationSet.FormattingEnabled = true;
-            this.regulationSet.Location = new System.Drawing.Point(89, 2);
+            this.regulationSet.Location = new System.Drawing.Point(128, 0);
             this.regulationSet.Name = "regulationSet";
+            this.regulationSet.PromptText = "(Multiple Values)";
             this.regulationSet.Size = new System.Drawing.Size(121, 21);
             this.regulationSet.TabIndex = 8;
             this.regulationSet.SelectedIndexChanged += new System.EventHandler(this.OnRegulationSetChanged);
+            // 
+            // labelDryIce
+            // 
+            this.labelDryIce.AutoSize = true;
+            this.labelDryIce.Location = new System.Drawing.Point(3, 4);
+            this.labelDryIce.Name = "labelDryIce";
+            this.labelDryIce.Size = new System.Drawing.Size(44, 13);
+            this.labelDryIce.TabIndex = 9;
+            this.labelDryIce.Text = "Dry Ice:";
+            this.labelDryIce.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // containsDryIce
+            // 
+            this.containsDryIce.AutoSize = true;
+            this.containsDryIce.Location = new System.Drawing.Point(53, 3);
+            this.containsDryIce.Name = "containsDryIce";
+            this.containsDryIce.Size = new System.Drawing.Size(146, 17);
+            this.containsDryIce.TabIndex = 10;
+            this.containsDryIce.Text = "Package contains dry ice";
+            this.containsDryIce.UseVisualStyleBackColor = true;
+            this.containsDryIce.CheckedChanged += new System.EventHandler(this.OnContainsDryIceChanged);
+            // 
+            // panelDryIceDetails
+            // 
+            this.panelDryIceDetails.Controls.Add(this.regulationSet);
+            this.panelDryIceDetails.Controls.Add(this.labelRegulationSet);
+            this.panelDryIceDetails.Controls.Add(this.labelWeight);
+            this.panelDryIceDetails.Controls.Add(this.weight);
+            this.panelDryIceDetails.Controls.Add(this.medicalUse);
+            this.panelDryIceDetails.Location = new System.Drawing.Point(9, 26);
+            this.panelDryIceDetails.Name = "panelDryIceDetails";
+            this.panelDryIceDetails.Size = new System.Drawing.Size(339, 51);
+            this.panelDryIceDetails.TabIndex = 11;
+            // 
+            // weight
+            // 
+            this.weight.BackColor = System.Drawing.Color.Transparent;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(128, 27);
+            this.weight.Name = "weight";
+            this.weight.RangeMax = 1000D;
+            this.weight.RangeMin = 0D;
+            this.weight.Size = new System.Drawing.Size(218, 21);
+            this.weight.TabIndex = 5;
+            this.weight.Weight = 0D;
             // 
             // UpsDryIceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.regulationSet);
-            this.Controls.Add(this.medicalUse);
-            this.Controls.Add(this.weight);
-            this.Controls.Add(this.labelWeight);
-            this.Controls.Add(this.labelRegulationSet);
+            this.Controls.Add(this.panelDryIceDetails);
+            this.Controls.Add(this.containsDryIce);
+            this.Controls.Add(this.labelDryIce);
             this.Name = "UpsDryIceControl";
-            this.Size = new System.Drawing.Size(318, 56);
+            this.Size = new System.Drawing.Size(348, 80);
             this.Load += new System.EventHandler(this.OnLoad);
+            this.panelDryIceDetails.ResumeLayout(false);
+            this.panelDryIceDetails.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,6 +148,9 @@
         private UI.Controls.WeightControl weight;
         private System.Windows.Forms.Label labelWeight;
         private System.Windows.Forms.CheckBox medicalUse;
-        private System.Windows.Forms.ComboBox regulationSet;
+        private ShipWorks.UI.Controls.MultiValueComboBox regulationSet;
+        private System.Windows.Forms.Label labelDryIce;
+        private System.Windows.Forms.CheckBox containsDryIce;
+        private System.Windows.Forms.Panel panelDryIceDetails;
     }
 }

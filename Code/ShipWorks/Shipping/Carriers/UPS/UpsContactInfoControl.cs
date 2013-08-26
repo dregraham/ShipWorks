@@ -1,4 +1,7 @@
 ﻿using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -40,6 +43,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get { return phoneExtensionTextBox.Text; }
             set { phoneExtensionTextBox.Text = value; }
+        }
+
+        /// <summary>
+        /// Reads values from the control into the package
+        /// </summary>
+        /// <param name="package">Package into which values will be read</param>
+        public void ReadInto(UpsPackageEntity package)
+        {
+            package.VerbalConfirmationName = ContactName;
+            package.VerbalConfirmationPhone = PhoneNumber;
+            package.VerbalConfirmationPhoneExtension = PhoneExtension;
+        }
+
+        /// <summary>
+        /// Applies package values into the controls
+        /// </summary>
+        /// <param name="package">Package from which values will be applied</param>
+        public void ApplyFrom(UpsPackageEntity package)
+        {
+            ContactName = package.VerbalConfirmationName;
+            PhoneNumber = package.VerbalConfirmationPhone;
+            PhoneExtension = package.VerbalConfirmationPhoneExtension;
         }
     }
 }

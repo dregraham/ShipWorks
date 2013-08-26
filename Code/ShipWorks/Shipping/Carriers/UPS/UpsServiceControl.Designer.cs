@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.UPS
+﻿using ShipWorks.UI.Controls;
+
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     partial class UpsServiceControl
     {
@@ -29,8 +31,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -117,6 +119,8 @@
             this.sectionSurePost = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.surePostClassification = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelClassification = new System.Windows.Forms.Label();
+            this.otherPackageDetails = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.packageDetailsControl = new ShipWorks.Shipping.Carriers.UPS.UpsPackageDetailControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -157,12 +161,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionSurePost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionSurePost.ContentPanel)).BeginInit();
             this.sectionSurePost.ContentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.otherPackageDetails)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.otherPackageDetails.ContentPanel)).BeginInit();
+            this.otherPackageDetails.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sectionRecipient
             // 
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
-            this.sectionRecipient.Size = new System.Drawing.Size(519, 24);
+            this.sectionRecipient.Size = new System.Drawing.Size(485, 24);
             this.sectionRecipient.TabIndex = 1;
             // 
             // personControl
@@ -171,8 +178,8 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 607);
-            this.sectionReturns.Size = new System.Drawing.Size(519, 24);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 636);
+            this.sectionReturns.Size = new System.Drawing.Size(485, 24);
             // 
             // sectionShipment
             // 
@@ -187,7 +194,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.packageControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.Location = new System.Drawing.Point(3, 92);
-            this.sectionShipment.Size = new System.Drawing.Size(519, 365);
+            this.sectionShipment.Size = new System.Drawing.Size(485, 365);
             // 
             // sectionFrom
             // 
@@ -205,7 +212,7 @@
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
-            this.sectionFrom.Size = new System.Drawing.Size(519, 24);
+            this.sectionFrom.Size = new System.Drawing.Size(485, 24);
             this.sectionFrom.TabIndex = 0;
             // 
             // originControl
@@ -227,7 +234,7 @@
             this.originControl.Location = new System.Drawing.Point(3, 54);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(380, 403);
+            this.originControl.Size = new System.Drawing.Size(346, 403);
             this.originControl.TabIndex = 8;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -241,7 +248,7 @@
             this.panelTop.Controls.Add(this.upsAccount);
             this.panelTop.Location = new System.Drawing.Point(3, 3);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(523, 50);
+            this.panelTop.Size = new System.Drawing.Size(489, 50);
             this.panelTop.TabIndex = 9;
             // 
             // label2
@@ -273,7 +280,7 @@
             this.upsAccount.Location = new System.Drawing.Point(79, 25);
             this.upsAccount.Name = "upsAccount";
             this.upsAccount.PromptText = "(Multiple Values)";
-            this.upsAccount.Size = new System.Drawing.Size(254, 21);
+            this.upsAccount.Size = new System.Drawing.Size(220, 21);
             this.upsAccount.TabIndex = 3;
             this.upsAccount.SelectedIndexChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -292,7 +299,7 @@
             this.sectionRates.Name = "sectionRates";
             this.sectionRates.SectionName = "Rates";
             this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
-            this.sectionRates.Size = new System.Drawing.Size(519, 24);
+            this.sectionRates.Size = new System.Drawing.Size(485, 24);
             this.sectionRates.TabIndex = 2;
             // 
             // rateControl
@@ -301,7 +308,7 @@
             this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rateControl.Location = new System.Drawing.Point(0, 0);
             this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(515, 0);
+            this.rateControl.Size = new System.Drawing.Size(481, 0);
             this.rateControl.TabIndex = 3;
             this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
             // 
@@ -354,7 +361,7 @@
             this.packageControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.packageControl.Location = new System.Drawing.Point(3, 61);
             this.packageControl.Name = "packageControl";
-            this.packageControl.Size = new System.Drawing.Size(777, 275);
+            this.packageControl.Size = new System.Drawing.Size(1394, 275);
             this.packageControl.TabIndex = 3;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.PackageCountChanged += new System.EventHandler(this.OnPackageCountChanged);
@@ -407,11 +414,11 @@
             this.sectionCod.ContentPanel.Controls.Add(this.codAmount);
             this.sectionCod.ExpandedHeight = 117;
             this.sectionCod.ExtraText = "";
-            this.sectionCod.Location = new System.Drawing.Point(3, 549);
+            this.sectionCod.Location = new System.Drawing.Point(3, 578);
             this.sectionCod.Name = "sectionCod";
             this.sectionCod.SectionName = "C.O.D.";
             this.sectionCod.SettingsKey = "{640124b8-f610-4488-b282-7e2c36618b81}";
-            this.sectionCod.Size = new System.Drawing.Size(519, 24);
+            this.sectionCod.Size = new System.Drawing.Size(485, 24);
             this.sectionCod.TabIndex = 9;
             // 
             // codPaymentType
@@ -480,11 +487,11 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.confirmationAndReferenceFlowPanel);
             this.sectionOptions.ExpandedHeight = 275;
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 462);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 491);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options & Reference";
             this.sectionOptions.SettingsKey = "{e3c1d665-00e2-42af-a748-99bc1fc7a387}";
-            this.sectionOptions.Size = new System.Drawing.Size(519, 24);
+            this.sectionOptions.Size = new System.Drawing.Size(485, 24);
             this.sectionOptions.TabIndex = 6;
             // 
             // confirmationAndReferenceFlowPanel
@@ -596,7 +603,7 @@
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(210, 21);
             this.referenceNumber.TabIndex = 79;
-            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelReference
             // 
@@ -637,7 +644,7 @@
             this.reference2Number.Name = "reference2Number";
             this.reference2Number.Size = new System.Drawing.Size(210, 21);
             this.reference2Number.TabIndex = 77;
-            this.reference2Number.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            this.reference2Number.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // label3
             // 
@@ -724,11 +731,11 @@
             this.sectionBilling.ContentPanel.Controls.Add(this.labelPayor);
             this.sectionBilling.ExpandedHeight = 155;
             this.sectionBilling.ExtraText = "";
-            this.sectionBilling.Location = new System.Drawing.Point(3, 491);
+            this.sectionBilling.Location = new System.Drawing.Point(3, 520);
             this.sectionBilling.Name = "sectionBilling";
             this.sectionBilling.SectionName = "Billing";
             this.sectionBilling.SettingsKey = "{7ec15092-b2c0-4faf-9ce3-27d6bb912fba}";
-            this.sectionBilling.Size = new System.Drawing.Size(519, 24);
+            this.sectionBilling.Size = new System.Drawing.Size(485, 24);
             this.sectionBilling.TabIndex = 7;
             // 
             // panelPayorThirdParty
@@ -857,11 +864,11 @@
             this.sectionEmail.ContentPanel.Controls.Add(this.picturEmailInfo);
             this.sectionEmail.ExpandedHeight = 317;
             this.sectionEmail.ExtraText = "";
-            this.sectionEmail.Location = new System.Drawing.Point(3, 520);
+            this.sectionEmail.Location = new System.Drawing.Point(3, 549);
             this.sectionEmail.Name = "sectionEmail";
             this.sectionEmail.SectionName = "Quantum View Notify";
             this.sectionEmail.SettingsKey = "{a71bde8e-f7e1-49ce-8e13-635a44b963b2}";
-            this.sectionEmail.Size = new System.Drawing.Size(519, 24);
+            this.sectionEmail.Size = new System.Drawing.Size(485, 24);
             this.sectionEmail.TabIndex = 8;
             // 
             // emailSubject
@@ -931,7 +938,7 @@
             this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(12, 138);
             this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
-            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(359, 1);
+            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(325, 1);
             this.kryptonBorderEdgeEmail2.TabIndex = 76;
             this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
@@ -1011,7 +1018,7 @@
             this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(11, 61);
             this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
-            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(359, 1);
+            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(325, 1);
             this.kryptonBorderEdgeEmail.TabIndex = 68;
             this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
@@ -1148,11 +1155,11 @@
             this.sectionSurePost.ContentPanel.Controls.Add(this.labelClassification);
             this.sectionSurePost.ExpandedHeight = 67;
             this.sectionSurePost.ExtraText = "";
-            this.sectionSurePost.Location = new System.Drawing.Point(3, 578);
+            this.sectionSurePost.Location = new System.Drawing.Point(3, 607);
             this.sectionSurePost.Name = "sectionSurePost";
             this.sectionSurePost.SectionName = "SurePost";
             this.sectionSurePost.SettingsKey = "{b36e5a50-de19-4dcf-b42f-81399e8f1137}";
-            this.sectionSurePost.Size = new System.Drawing.Size(519, 24);
+            this.sectionSurePost.Size = new System.Drawing.Size(485, 24);
             this.sectionSurePost.TabIndex = 10;
             this.sectionSurePost.Visible = false;
             // 
@@ -1176,6 +1183,33 @@
             this.labelClassification.TabIndex = 4;
             this.labelClassification.Text = "Classification:";
             // 
+            // otherPackageDetails
+            // 
+            this.otherPackageDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.otherPackageDetails.Collapsed = true;
+            // 
+            // otherPackageDetails.ContentPanel
+            // 
+            this.otherPackageDetails.ContentPanel.Controls.Add(this.packageDetailsControl);
+            this.otherPackageDetails.ExpandedHeight = 231;
+            this.otherPackageDetails.ExtraText = "";
+            this.otherPackageDetails.Location = new System.Drawing.Point(3, 462);
+            this.otherPackageDetails.Name = "otherPackageDetails";
+            this.otherPackageDetails.SectionName = "Other Package Details";
+            this.otherPackageDetails.SettingsKey = "d02b34e0-adb3-44fc-880d-da164c96a155";
+            this.otherPackageDetails.Size = new System.Drawing.Size(485, 24);
+            this.otherPackageDetails.TabIndex = 0;
+            // 
+            // packageDetailsControl
+            // 
+            this.packageDetailsControl.BackColor = System.Drawing.Color.White;
+            this.packageDetailsControl.Location = new System.Drawing.Point(1, 3);
+            this.packageDetailsControl.Name = "packageDetailsControl";
+            this.packageDetailsControl.Size = new System.Drawing.Size(431, 181);
+            this.packageDetailsControl.TabIndex = 0;
+            this.packageDetailsControl.SizeChanged += new System.EventHandler(this.OnPackageDetailsControlSizeChanged);
+            // 
             // UpsServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1183,19 +1217,21 @@
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
             this.Controls.Add(this.sectionRates);
+            this.Controls.Add(this.otherPackageDetails);
             this.Controls.Add(this.sectionOptions);
             this.Controls.Add(this.sectionBilling);
             this.Controls.Add(this.sectionEmail);
             this.Controls.Add(this.sectionCod);
             this.Controls.Add(this.sectionSurePost);
             this.Name = "UpsServiceControl";
-            this.Size = new System.Drawing.Size(525, 1299);
+            this.Size = new System.Drawing.Size(491, 1299);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionSurePost, 0);
             this.Controls.SetChildIndex(this.sectionCod, 0);
             this.Controls.SetChildIndex(this.sectionEmail, 0);
             this.Controls.SetChildIndex(this.sectionBilling, 0);
             this.Controls.SetChildIndex(this.sectionOptions, 0);
+            this.Controls.SetChildIndex(this.otherPackageDetails, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
@@ -1255,6 +1291,9 @@
             this.sectionSurePost.ContentPanel.ResumeLayout(false);
             this.sectionSurePost.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionSurePost)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.otherPackageDetails.ContentPanel)).EndInit();
+            this.otherPackageDetails.ContentPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.otherPackageDetails)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1347,5 +1386,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox shipperRelease;
         private System.Windows.Forms.CheckBox carbonNeutral;
+        private ShipWorks.UI.Controls.CollapsibleGroupControl otherPackageDetails;
+        private UpsPackageDetailControl packageDetailsControl;
     }
 }

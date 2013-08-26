@@ -1055,7 +1055,9 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.Designer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.Designer.cs">
+      <DependentUpon>FedExPackageDetailControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExPackagePriorityAlertsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1485,6 +1487,12 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsInvoiceAuthorizationControl.Designer.cs">
       <DependentUpon>UpsInvoiceAuthorizationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsPackageDetailControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsPackageDetailControl.Designer.cs">
+      <DependentUpon>UpsPackageDetailControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceGateway.cs" />
@@ -6652,6 +6660,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsContactInfoControl.resx">
       <DependentUpon>UpsContactInfoControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\UpsPackageDetailControl.resx">
+      <DependentUpon>UpsPackageDetailControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\WorldShip\WorldShipContractServicesControl.resx">
       <DependentUpon>WorldShipContractServicesControl.cs</DependentUpon>
