@@ -9,10 +9,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
     public partial class UpsPickupScheduleControl : UserControl
     {
-
         private const string timeFormat = "HHmmss";
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpsPickupScheduleControl" /> class.
+        ///     Initializes a new instance of the <see cref="UpsPickupScheduleControl" /> class.
         /// </summary>
         public UpsPickupScheduleControl()
         {
@@ -23,16 +23,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
-        /// Called when [time changed].
+        ///     Called when [time changed].
         /// </summary>
         private void OnTimeChanged(object sender, EventArgs e)
         {
-            DateTimePicker dateTimePicker = (DateTimePicker) sender;
+            var dateTimePicker = (DateTimePicker)sender;
 
-            var diff = dateTimePicker.Value.TimeOfDay.Minutes % 15;
+            int diff = dateTimePicker.Value.TimeOfDay.Minutes%15;
             if (diff > 7)
             {
-                dateTimePicker.Value = dateTimePicker.Value.AddMinutes(-1 * diff);
+                dateTimePicker.Value = dateTimePicker.Value.AddMinutes(-1*diff);
             }
             else if (diff != 0)
             {
@@ -41,45 +41,73 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
-        /// Called when [changed pickup option].
+        ///     Called when [changed pickup option].
         /// </summary>
         private void OnChangedPickupOption(object sender, EventArgs e)
         {
-            // Show pickup date panel if PickupOption is any daily pickup option (01,07,99,02)
-            pickupDateTimePanel.Visible = (UpsPickupOption) pickupOption.SelectedValue != UpsPickupOption.NoScheduledPickup;
+            pickupDateTimePanel.Visible = IsPickupOptionRequired();
 
             // Shop if pickup option is day specific pickup (99)
-            pickUpDay.Visible = (UpsPickupOption) pickupOption.SelectedValue == UpsPickupOption.DaySpecificPickup;
+            pickUpDay.Visible = (UpsPickupOption)pickupOption.SelectedValue == UpsPickupOption.DaySpecificPickup;
         }
 
         /// <summary>
-        /// Saves to request.
+        ///     Pickup Option Required if PickupOption is any daily pickup option (01,07,99,02)
+        /// </summary>
+        /// <returns></returns>
+        private bool IsPickupOptionRequired()
+        {
+            return (UpsPickupOption)pickupOption.SelectedValue != UpsPickupOption.NoScheduledPickup;
+        }
+
+        /// <summary>
+        ///     Saves to request.
         /// </summary>
         public void SaveToRequest(OpenAccountRequest request)
         {
-            if (request.PickupInformation==null)
-            {
-                request.PickupInformation=new PickupInformationType();
-            }
+            ValidatePickupTime();
+
+            // Clear out existing pickup time info.
+            request.PickupInformation = new PickupInformationType();
 
             AddDays(request);
 
             request.PickupInformation.PickupOption = new CodeOnlyType
             {
-                Code = EnumHelper.GetApiValue((UpsPickupOption) pickupOption.SelectedValue)
+                Code = EnumHelper.GetApiValue((UpsPickupOption)pickupOption.SelectedValue)
             };
 
             AddDailyPickupOptions(request);
         }
 
         /// <summary>
-        /// Adds the daily pickup options.
+        ///     Validates the pickup time.
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private void ValidatePickupTime()
+        {
+            if (IsPickupOptionRequired())
+            {
+                if (earliestPickup.Value >= preferredPickup.Value)
+                {
+                    throw new UpsOpenAccountException("Earliest Pickup time must be before the Preferred Pickup time.");
+                }
+                if (latestPickup.Value <= preferredPickup.Value)
+                {
+                    throw new UpsOpenAccountException("Latest Pickup time must be after the Preferred Pickup time.");
+                }
+            }
+        }
+
+
+        /// <summary>
+        ///     Adds the daily pickup options.
         /// </summary>
         private void AddDailyPickupOptions(OpenAccountRequest request)
         {
-            if ((UpsPickupOption) pickupOption.SelectedValue != UpsPickupOption.NoScheduledPickup)
+            if ((UpsPickupOption)pickupOption.SelectedValue != UpsPickupOption.NoScheduledPickup)
             {
-                request.PickupInformation.PickupLocation = EnumHelper.GetApiValue((UpsPickupLocation) pickupLocation.SelectedValue);
+                request.PickupInformation.PickupLocation = EnumHelper.GetApiValue((UpsPickupLocation)pickupLocation.SelectedValue);
 
                 request.PickupInformation.EarliestPickupTime = earliestPickup.Value.ToString(timeFormat);
                 request.PickupInformation.PreferredPickupTime = preferredPickup.Value.ToString(timeFormat);
@@ -90,14 +118,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
-        /// Adds the days.
+        ///     Adds the days.
         /// </summary>
         /// <exception cref="UpsOpenAccountException">Please select a day.</exception>
         private void AddDays(OpenAccountRequest request)
         {
-            if ((UpsPickupOption) pickupOption.SelectedValue == UpsPickupOption.DaySpecificPickup)
+            if ((UpsPickupOption)pickupOption.SelectedValue == UpsPickupOption.DaySpecificPickup)
             {
-                List<string> pickupDays = new List<string>();
+                var pickupDays = new List<string>();
 
                 AddDay(monday, "01", pickupDays);
                 AddDay(tuesday, "02", pickupDays);
@@ -115,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
-        /// Adds the day.
+        ///     Adds the day.
         /// </summary>
         private static void AddDay(CheckBox dayComboBox, string dayCode, ICollection<string> pickupDays)
         {

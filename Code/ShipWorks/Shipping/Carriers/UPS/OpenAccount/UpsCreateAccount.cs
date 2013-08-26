@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             }
             catch (UpsOpenAccountSoapException ex)
             {
-                MessageHelper.ShowError(this, ex.Message);
+                MessageHelper.ShowError(this, string.Format("Ups returned the following error: {0}", ex.Message));
             }
             catch (UpsOpenAccountException ex)
             {
