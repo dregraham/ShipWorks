@@ -330,9 +330,9 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.UpsQvnMessage: return UpsShipmentFields.EmailNotifyMessage;
                 case EntityFieldLengthSource.UpsCustomsDescription: return UpsShipmentFields.CustomsDescription;
                 case EntityFieldLengthSource.UpsCommercialInvoiceComments: return UpsShipmentFields.CommercialInvoiceComments;
-                case EntityFieldLengthSource.UpsContactName: break;//TODO - UpsShipmentFields.ContactName
-                case EntityFieldLengthSource.UpsContactPhoneNumber: break;//TODO - UpsShipmentFields.ContactPhoneNumber
-                case EntityFieldLengthSource.UpsContactPhoneExtension: break;//TODO - UpsShipmentFields.ContactPhoneExtension
+                case EntityFieldLengthSource.UpsContactName: return UpsPackageFields.VerbalConfirmationName;
+                case EntityFieldLengthSource.UpsContactPhoneNumber: return UpsPackageFields.VerbalConfirmationPhone;
+                case EntityFieldLengthSource.UpsContactPhoneExtension: return UpsPackageFields.VerbalConfirmationPhoneExtension;
 
                 case EntityFieldLengthSource.FedExAccountNumber: return FedExAccountFields.AccountNumber;
                 case EntityFieldLengthSource.FedExAccountDescription: return FedExAccountFields.Description;
