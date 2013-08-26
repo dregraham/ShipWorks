@@ -523,12 +523,14 @@ namespace ShipWorks.Actions
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).IsAllowedForTrigger(actionTriggerType)).ToList();
                 if (invalidTasks.Any())
                 {
-                    string invalidTasksMsg = string.Join<string>(", ", invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName));
+                    var invalidTaskNames = invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
 
-                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} not allowed for use with '{3}'", 
-                        invalidTasks.Count == 1 ? "" : "s", 
+                    string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
+
+                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} cannot be used with '{3}'.",
+                        invalidTaskNames.Count() == 1 ? "" : "s", 
                         invalidTasksMsg,
-                        invalidTasks.Count == 1 ? "is" : "are", 
+                        invalidTaskNames.Count() == 1 ? "is" : "are", 
                         EnumHelper.GetDescription(actionTriggerType)));
                     return;
                 }
