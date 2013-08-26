@@ -1,6 +1,8 @@
 ﻿using System.Xml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
 {
@@ -65,6 +67,46 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             {
                 // Element just needs to be present
                 xmlWriter.WriteElementString("ShipperReleaseIndicator", string.Empty);
+            }
+
+            // Verbal confirmation
+            if (!upsShipment.Shipment.ReturnShipment)
+            {
+                xmlWriter.WriteStartElement("VerbalConfirmation");
+                xmlWriter.WriteStartElement("ContactInfo");
+
+                xmlWriter.WriteElementString("Name", package.VerbalConfirmationName);
+
+                xmlWriter.WriteStartElement("Phone");
+                xmlWriter.WriteElementString("Number", package.VerbalConfirmationPhone);
+                xmlWriter.WriteElementString("Extension", package.VerbalConfirmationPhoneExtension);
+                xmlWriter.WriteEndElement();
+
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
+            }
+
+            // Dry ice
+            if (package.DryIceEnabled)
+            {
+                double dryIceWeightInLbs = WeightUtility.Convert(servicePackageSettings.WeightUnitOfMeasure, WeightUnitOfMeasure.Pounds, package.DryIceWeight);
+
+                xmlWriter.WriteStartElement("DryIce");
+                xmlWriter.WriteElementString("RegulationSet", EnumHelper.GetApiValue((UpsDryIceRegulationSet)package.DryIceRegulationSet));
+
+                xmlWriter.WriteStartElement("DryIceWeight");
+                xmlWriter.WriteStartElement("UnitOfMeasurement");
+                xmlWriter.WriteElementString("Code", "LBS");
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteElementString("Weight", dryIceWeightInLbs.ToString("##0.0"));
+                xmlWriter.WriteEndElement();
+
+                if (package.DryIceRegulationSet == (int)UpsDryIceRegulationSet.Cfr && package.DryIceIsForMedicalUse)
+                {
+                    xmlWriter.WriteElementString("MedicalUseIndicator", null);
+                }
+
+                xmlWriter.WriteEndElement();
             }
 
             // End service options
