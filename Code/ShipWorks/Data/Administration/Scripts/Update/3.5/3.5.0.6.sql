@@ -68,13 +68,13 @@ GO
 PRINT N'Altering [dbo].[WorldShipPackage]'
 GO
 ALTER TABLE [dbo].[WorldShipPackage] ADD
-[AdditionalHandlingEnabled] [bit] NULL,
-[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceRegulationSet] [int] NULL,
+[AdditionalHandlingEnabled] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationContactName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VerbalConfirmationTelephone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceRegulationSet] [nvarchar] (5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DryIceWeight] [float] NULL,
-[DryIceIsForMedicalUse] [bit] NULL
+[DryIceMedicalPurpose] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 GO
 
 PRINT N'Altering [dbo].[UpsProfilePackage]'

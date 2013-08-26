@@ -8852,18 +8852,18 @@ namespace ShipWorks.Data.Model
 		ShipperRelease,
 		///<summary>AdditionalHandlingEnabled. </summary>
 		AdditionalHandlingEnabled,
-		///<summary>VerbalConfirmationName. </summary>
-		VerbalConfirmationName,
-		///<summary>VerbalConfirmationPhone. </summary>
-		VerbalConfirmationPhone,
-		///<summary>VerbalConfirmationPhoneExtension. </summary>
-		VerbalConfirmationPhoneExtension,
+		///<summary>VerbalConfirmationOption. </summary>
+		VerbalConfirmationOption,
+		///<summary>VerbalConfirmationContactName. </summary>
+		VerbalConfirmationContactName,
+		///<summary>VerbalConfirmationTelephone. </summary>
+		VerbalConfirmationTelephone,
 		///<summary>DryIceRegulationSet. </summary>
 		DryIceRegulationSet,
 		///<summary>DryIceWeight. </summary>
 		DryIceWeight,
-		///<summary>DryIceIsForMedicalUse. </summary>
-		DryIceIsForMedicalUse,
+		///<summary>DryIceMedicalPurpose. </summary>
+		DryIceMedicalPurpose,
 		/// <summary></summary>
 		AmountOfFields
 	}

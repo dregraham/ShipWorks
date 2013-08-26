@@ -18702,20 +18702,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.AdditionalHandlingEnabled);}
 		}
-		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationName field instance</summary>
-		public static EntityField2 VerbalConfirmationName
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationOption field instance</summary>
+		public static EntityField2 VerbalConfirmationOption
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationName);}
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationOption);}
 		}
-		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationPhone field instance</summary>
-		public static EntityField2 VerbalConfirmationPhone
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationContactName field instance</summary>
+		public static EntityField2 VerbalConfirmationContactName
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationPhone);}
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationContactName);}
 		}
-		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationPhoneExtension field instance</summary>
-		public static EntityField2 VerbalConfirmationPhoneExtension
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationTelephone field instance</summary>
+		public static EntityField2 VerbalConfirmationTelephone
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationPhoneExtension);}
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationTelephone);}
 		}
 		/// <summary>Creates a new WorldShipPackageEntity.DryIceRegulationSet field instance</summary>
 		public static EntityField2 DryIceRegulationSet
@@ -18727,10 +18727,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceWeight);}
 		}
-		/// <summary>Creates a new WorldShipPackageEntity.DryIceIsForMedicalUse field instance</summary>
-		public static EntityField2 DryIceIsForMedicalUse
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceMedicalPurpose field instance</summary>
+		public static EntityField2 DryIceMedicalPurpose
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceIsForMedicalUse);}
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceMedicalPurpose);}
 		}
 	}
 
