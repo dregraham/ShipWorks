@@ -15,10 +15,14 @@ using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
+    /// <summary>
+    /// Task editor for Upload using FTP task
+    /// </summary>
     public partial class FtpFileTaskEditor : TemplateBasedTaskEditor
     {
         private readonly FtpFileTask task;
         FtpAccountEntity ftpAccount = null;
+        private string errorMessage = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FtpFileTaskEditor"/> class.
@@ -49,17 +53,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             base.OnLoad(e);
 
-            ftpHost.Validating += OnFtpHostValidating;
-            ftpHost.Validated += OnFieldValidated;
-
-            tokenizedFtpFilename.Validating += OnFtpFilenameValidating;
-            tokenizedFtpFilename.Validated += OnFieldValidated;
-
-            tokenizedFtpFolder.Validating += OnFtpFolderValidating;
-            tokenizedFtpFolder.Validated += OnFieldValidated;
-
-            templateCombo.Validating += OnTemplateSelectionValidating;
-            templateCombo.Validated += OnFieldValidated;
+            // Wire up the user control validating event so we can make sure the user has entered valid data.
+            this.Validating += OnFtpFileTaskEditorValidating;
         }
 
         /// <summary>
@@ -123,7 +118,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             if (ftpAccount != null)
             {
-                using (FtpFolderBrowserDlg ftpFolderBrowserDlg = new FtpFolderBrowserDlg(ftpAccount, ""))
+                using (FtpFolderBrowserDlg ftpFolderBrowserDlg = new FtpFolderBrowserDlg(ftpAccount, tokenizedFtpFolder.Text))
                 {
                     if (ftpFolderBrowserDlg.ShowDialog(this) == DialogResult.OK)
                     {
@@ -141,18 +136,18 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             if (ftpAccount == null)
             {
                 ftpHost.Text = "";
+                browseFtpFolder.Enabled = false;
             }
             else
             {
                 ftpHost.Text = ftpAccount.Host;
+                browseFtpFolder.Enabled = true;
             }
         }
 
         /// <summary>
         /// Called when tokenizedFtpFolder text changed to update the FtpFolder property of the task.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnTokenizedFtpFolderTextChanged(object sender, EventArgs e)
         {
             task.FtpFolder = tokenizedFtpFolder.Text;
@@ -161,67 +156,47 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when tokenizedFtpFilename text changed to update the FtpFileName property of the task.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnTokenizedFtpFilenameTextChanged(object sender, EventArgs e)
         {
             task.FtpFileName = tokenizedFtpFilename.Text;
         }
 
         /// <summary>
-        /// Called when Ftp host validating.
+        /// On "OK", validate the fields.
         /// </summary>
-        void OnFtpHostValidating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(ftpHost.Text))
-            {
-                errorProvider.SetError(ftpHost, "Please configure an FTP Server.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when Ftp folder validating.
-        /// </summary>
-        void OnFtpFolderValidating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
-            {
-                errorProvider.SetError(tokenizedFtpFolder, "Please enter a folder in which to place files on the FTP Server.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when Ftp filename validating.
-        /// </summary>
-        void OnFtpFilenameValidating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
-            {
-                errorProvider.SetError(tokenizedFtpFilename, "Please enter a filename in which data will be saved on the FTP Server.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when template selection is validating.
-        /// </summary>
-        void OnTemplateSelectionValidating(object sender, CancelEventArgs e)
+        void OnFtpFileTaskEditorValidating(object sender, CancelEventArgs e)
         {
             if (templateCombo.SelectedTemplate == null)
             {
-                errorProvider.SetError(templateCombo, "Please select a template.");
+                errorMessage += string.Format("Please select a template.{0}", Environment.NewLine);
                 e.Cancel = true;
             }
-        }
 
-        /// <summary>
-        /// On a successful validation, set the error to blank so that it removes the error icon.
-        /// </summary>
-        private void OnFieldValidated(object sender, EventArgs e)
-        {
-            errorProvider.SetError((Control)sender, string.Empty);
+            if (string.IsNullOrWhiteSpace(ftpHost.Text))
+            {
+                errorMessage += string.Format("Please configure an FTP server.{0}", Environment.NewLine);
+                e.Cancel = true;
+            }
+
+            if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
+            {
+                errorMessage += string.Format("Please enter a folder in which to place files on the FTP server.{0}", Environment.NewLine);
+                e.Cancel = true;
+            }
+
+            if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
+            {
+                errorMessage += string.Format("Please enter a filename in which data will be saved on the FTP server.{0}", Environment.NewLine);
+                e.Cancel = true;
+            }
+
+            // If there was an error, show the user 
+            if (e.Cancel)
+            {
+                MessageHelper.ShowError(this, errorMessage);
+            }
+
+            errorMessage = string.Empty;
         }
     }
 }
