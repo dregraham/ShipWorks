@@ -17612,6 +17612,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.UspsTrackingNumber);}
 		}
+		/// <summary>Creates a new UpsPackageEntity.AdditionalHandlingEnabled field instance</summary>
+		public static EntityField2 AdditionalHandlingEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.AdditionalHandlingEnabled);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationName field instance</summary>
+		public static EntityField2 VerbalConfirmationName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationName);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationPhone field instance</summary>
+		public static EntityField2 VerbalConfirmationPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationPhone);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationPhoneExtension field instance</summary>
+		public static EntityField2 VerbalConfirmationPhoneExtension
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationPhoneExtension);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceRegulationSet field instance</summary>
+		public static EntityField2 DryIceRegulationSet
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceRegulationSet);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceWeight field instance</summary>
+		public static EntityField2 DryIceWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceWeight);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceIsForMedicalUse field instance</summary>
+		public static EntityField2 DryIceIsForMedicalUse
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceIsForMedicalUse);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfileEntity</summary>

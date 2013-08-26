@@ -8326,6 +8326,20 @@ namespace ShipWorks.Data.Model
 		TrackingNumber,
 		///<summary>UspsTrackingNumber. </summary>
 		UspsTrackingNumber,
+		///<summary>AdditionalHandlingEnabled. </summary>
+		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationName. </summary>
+		VerbalConfirmationName,
+		///<summary>VerbalConfirmationPhone. </summary>
+		VerbalConfirmationPhone,
+		///<summary>VerbalConfirmationPhoneExtension. </summary>
+		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceRegulationSet. </summary>
+		DryIceRegulationSet,
+		///<summary>DryIceWeight. </summary>
+		DryIceWeight,
+		///<summary>DryIceIsForMedicalUse. </summary>
+		DryIceIsForMedicalUse,
 		/// <summary></summary>
 		AmountOfFields
 	}

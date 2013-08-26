@@ -510,6 +510,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UspsTrackingNumber", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AdditionalHandlingEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationPhone", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationPhoneExtension", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceRegulationSet", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceIsForMedicalUse", fieldHashtable);
 		}
 		#endregion
 
@@ -792,6 +813,83 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsPackageFieldIndex.UspsTrackingNumber, true); }
 			set	{ SetValue((int)UpsPackageFieldIndex.UspsTrackingNumber, value); }
+		}
+
+		/// <summary> The AdditionalHandlingEnabled property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."AdditionalHandlingEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AdditionalHandlingEnabled
+		{
+			get { return (System.Boolean)GetValue((int)UpsPackageFieldIndex.AdditionalHandlingEnabled, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.AdditionalHandlingEnabled, value); }
+		}
+
+		/// <summary> The VerbalConfirmationName property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."VerbalConfirmationName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String VerbalConfirmationName
+		{
+			get { return (System.String)GetValue((int)UpsPackageFieldIndex.VerbalConfirmationName, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.VerbalConfirmationName, value); }
+		}
+
+		/// <summary> The VerbalConfirmationPhone property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."VerbalConfirmationPhone"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String VerbalConfirmationPhone
+		{
+			get { return (System.String)GetValue((int)UpsPackageFieldIndex.VerbalConfirmationPhone, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.VerbalConfirmationPhone, value); }
+		}
+
+		/// <summary> The VerbalConfirmationPhoneExtension property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."VerbalConfirmationPhoneExtension"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 4<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String VerbalConfirmationPhoneExtension
+		{
+			get { return (System.String)GetValue((int)UpsPackageFieldIndex.VerbalConfirmationPhoneExtension, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.VerbalConfirmationPhoneExtension, value); }
+		}
+
+		/// <summary> The DryIceRegulationSet property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."DryIceRegulationSet"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 DryIceRegulationSet
+		{
+			get { return (System.Int32)GetValue((int)UpsPackageFieldIndex.DryIceRegulationSet, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.DryIceRegulationSet, value); }
+		}
+
+		/// <summary> The DryIceWeight property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."DryIceWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Double DryIceWeight
+		{
+			get { return (System.Double)GetValue((int)UpsPackageFieldIndex.DryIceWeight, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.DryIceWeight, value); }
+		}
+
+		/// <summary> The DryIceIsForMedicalUse property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."DryIceIsForMedicalUse"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean DryIceIsForMedicalUse
+		{
+			get { return (System.Boolean)GetValue((int)UpsPackageFieldIndex.DryIceIsForMedicalUse, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.DryIceIsForMedicalUse, value); }
 		}
 
 

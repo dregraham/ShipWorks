@@ -3044,6 +3044,7 @@ PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
 GO
 ALTER TABLE [dbo].[UpsShipment] ADD CONSTRAINT [PK_UpsShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
+
 PRINT N'Creating [dbo].[UpsPackage]'
 GO
 CREATE TABLE [dbo].[UpsPackage]
@@ -3063,7 +3064,14 @@ CREATE TABLE [dbo].[UpsPackage]
 [InsurancePennyOne] [bit] NOT NULL,
 [DeclaredValue] [money] NOT NULL,
 [TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UspsTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[UspsTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AdditionalHandlingEnabled] [bit] NOT NULL,
+[VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DryIceRegulationSet] [int] NOT NULL,
+[DryIceWeight] [float] NOT NULL,
+[DryIceIsForMedicalUse] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsPackage] on [dbo].[UpsPackage]'
