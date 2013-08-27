@@ -30,6 +30,7 @@ using ShipWorks.Stores.Platforms;
 using Interapptive.Shared.Net;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
+using ShipWorks.ApplicationCore.Services;
 
 namespace ShipWorks.ApplicationCore.Dashboard
 {
@@ -480,7 +481,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private static void CheckForSchedulerServiceStoppedChanges()
         {
             // Check the database for any changes
-            List<ServiceStatusEntity> stoppedSchedulerServices = SchedulerServiceMessageManager.StoppedServices;
+            List<ServiceStatusEntity> stoppedSchedulerServices = ServiceStatusManager.GetComputersRequiringShipWorksService();
             List<DashboardSchedulerServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardSchedulerServiceStoppedItem>().ToList<DashboardSchedulerServiceStoppedItem>();
 
             // If the message is already there we don't have to do anything
@@ -518,7 +519,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // Check the database for any changes
             ServerMessageManager.CheckDatabaseForChanges();
 
-            // Active messages are those that have not in some way been dismissed, and match the criteria of the current user and stoers.
+            // Active messages are those that have not in some way been dismissed, and match the criteria of the current user and stores.
             List<ServerMessageEntity> activeMessages = ServerMessageManager.ActiveMessages.ToList();
 
             // Now we can get the list of messages that we need to display
