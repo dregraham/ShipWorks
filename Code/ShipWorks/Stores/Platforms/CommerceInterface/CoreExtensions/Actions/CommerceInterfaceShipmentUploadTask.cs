@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment deails to CommerceInterface
     /// </summary>
-    [ActionTask("Upload shipment details", "CommerceInterfaceShipmentUpload")]
+    [ActionTask("Upload shipment details", "CommerceInterfaceShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class CommerceInterfaceShipmentUploadTask : StoreInstanceTaskBase
     {
         // status code to update on the order

@@ -26,6 +26,8 @@ using Interapptive.Shared.UI;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Printing;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using SandMenu = Divelements.SandRibbon.Menu;
 
 namespace ShipWorks.Actions
 {
@@ -138,25 +140,37 @@ namespace ShipWorks.Actions
         /// </summary>
         private void CreateAddTaskMenu()
         {
-            addTask.ContextMenuStrip = ActionTaskManager.CreateTasksMenu();
+            addTask.SplitSandPopupMenu = ActionTaskManager.CreateTasksMenu();
 
-            HookAddTaskEvents(addTask.ContextMenuStrip.Items);
+            HookAddTaskEvents(addTask.SplitSandPopupMenu.Items);
         }
 
         /// <summary>
         /// Hookup event listeners for each MenuItem in the menu
         /// </summary>
-        private void HookAddTaskEvents(ToolStripItemCollection items)
+        private void HookAddTaskEvents(Divelements.SandRibbon.WidgetCollection items)
         {
-            foreach (ToolStripMenuItem menuItem in items.OfType<ToolStripMenuItem>())
+            foreach (Divelements.SandRibbon.WidgetBase item in items)
             {
-                if (menuItem.DropDownItems.Count == 0)
+                SandMenuItem menuItem = item as SandMenuItem;
+                if (menuItem != null)
                 {
-                    menuItem.Click += new EventHandler(OnAddTask);
+                    if (menuItem.Items.Count > 0)
+                    {
+                        HookAddTaskEvents(menuItem.Items);
+                    }
+                    else
+                    {
+                        menuItem.Activate += new EventHandler(OnAddTask);
+                    }
                 }
                 else
                 {
-                    HookAddTaskEvents(menuItem.DropDownItems);
+                    SandMenu menu = item as SandMenu;
+                    if (menu != null)
+                    {
+                        HookAddTaskEvents(menu.Items);
+                    }
                 }
             }
         }
@@ -311,7 +325,7 @@ namespace ShipWorks.Actions
         /// </summary>
         void OnAddTask(object sender, EventArgs e)
         {
-            ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((ToolStripMenuItem) sender).Tag;
+            ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((SandMenuItem) sender).Tag;
             ActionTask task = binding.CreateInstance();
 
             // Cancel adding the task if it cannot currently be selected

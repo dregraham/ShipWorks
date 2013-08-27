@@ -18,7 +18,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for printing with a chosen template
     /// </summary>
-    [ActionTask("Email", "Email")]
+    [ActionTask("Email", "Email", ActionTaskCategory.Output)]
     public class EmailTask : TemplateBasedTask
     {
         // Logger

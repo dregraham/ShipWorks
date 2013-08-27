@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to an Infopia Store
     /// </summary>
-    [ActionTask("Upload shipment details", "InfopiaShipmentUpload")]
+    [ActionTask("Upload shipment details", "InfopiaShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class InfopiaShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

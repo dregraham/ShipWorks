@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to a ProStores Store
     /// </summary>
-    [ActionTask("Upload shipment details", "ProStoresShipmentUpload")]
+    [ActionTask("Upload shipment details", "ProStoresShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class ProStoresShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

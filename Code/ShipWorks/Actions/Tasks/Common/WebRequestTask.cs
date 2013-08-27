@@ -21,7 +21,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task to hit a URL.
     /// </summary>
-    [ActionTask("Send web request", "WebRequest")]
+    [ActionTask("Send web request", "WebRequest", ActionTaskCategory.External)]
     public class WebRequestTask : TemplateBasedTask
     {
         // Logger

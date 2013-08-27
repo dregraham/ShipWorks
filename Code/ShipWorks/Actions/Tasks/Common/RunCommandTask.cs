@@ -17,7 +17,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for running a command
     /// </summary>
-    [ActionTask("Run a command", "RunCommand")]
+    [ActionTask("Run a command", "RunCommand", ActionTaskCategory.External)]
     public class RunCommandTask : ActionTask
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));

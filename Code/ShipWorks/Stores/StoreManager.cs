@@ -37,6 +37,9 @@ namespace ShipWorks.Stores
         static List<StoreType> uniqueStoreTypes;
         static List<StoreType> instanceStoreTypes;
 
+        // Same as above, but restriced to store types that have stores that are enabled
+        static List<StoreType> uniqueStoreTypesEnabled;
+
         // Increments every time there is a change
         static int version = 0;
 
@@ -98,6 +101,11 @@ namespace ShipWorks.Stores
                         // Now we need to update what the current active tables are
                         UpdateInheritanceActiveTables();
                     }
+
+                    List<StoreEntity> enabledStores = GetEnabledStores();
+
+                    // Save the ones that actually have stores that are enabled
+                    uniqueStoreTypesEnabled = uniqueStoreTypes.Where(t => enabledStores.Any(s => s.TypeCode == (int) t.TypeCode)).ToList();
                 }
 
                 if (changes)
@@ -162,11 +170,26 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
+        /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
+        /// </summary>
+        public static List<StoreEntity> GetEnabledStores()
+        {
+            return GetAllStores().Where(s => s.Enabled).ToList();
+        }
+
+        /// <summary>
         /// Get a collection of each store type in use by the current database. These are just a distinct list of the non-instanced types... with no stores attached.
         /// </summary>
-        public static IList<StoreType> GetUniqueStoreTypes()
+        public static IList<StoreType> GetUniqueStoreTypes(bool enabledOnly = false)
         {
-            return uniqueStoreTypes.AsReadOnly();
+            if (enabledOnly)
+            {
+                return uniqueStoreTypesEnabled.AsReadOnly();
+            }
+            else
+            {
+                return uniqueStoreTypes.AsReadOnly();
+            }
         }
 
         /// <summary>

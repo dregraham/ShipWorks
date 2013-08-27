@@ -14,7 +14,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for deleting/purging old data.
     /// </summary>
-    [ActionTask("Delete old data", "PurgeDatabase", ActionTriggerClassifications.Scheduled)]
+    [ActionTask("Delete old data", "PurgeDatabase", ActionTaskCategory.Administration, ActionTriggerClassifications.Scheduled)]
     public class PurgeDatabaseTask : ActionTask
     {
         // Logger

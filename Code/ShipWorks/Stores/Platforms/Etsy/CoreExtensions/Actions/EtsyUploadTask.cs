@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment detials to Etsy
     /// </summary>
-    [ActionTask("Update online status", "EtsyUploadTask")]
+    [ActionTask("Update online status", "EtsyUploadTask", ActionTaskCategory.UpdateOnline)]
     public class EtsyUploadTask : StoreInstanceTaskBase
     {
         string comment = "{//ServiceUsed} - {//TrackingNumber}";

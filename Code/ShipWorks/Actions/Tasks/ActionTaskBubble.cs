@@ -65,7 +65,7 @@ namespace ShipWorks.Actions.Tasks
             toolStrip.Renderer = new NoBorderToolStripRenderer();
 
             // Load the ComboBox with the available task options
-            taskTypes.DropDownMenu = ActionTaskManager.CreateTasksMenu();
+            taskTypes.DropDownSandPopupMenu = ActionTaskManager.CreateTasksMenu();
             taskTypes.SelectedMenuObject = ActionTaskManager.GetBinding(task);
             taskTypes.DisplayValueProvider = (object tag) => { return ((ActionTaskDescriptorBinding) tag).FullName; };
 

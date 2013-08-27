@@ -7,6 +7,9 @@ using System.ComponentModel;
 using Interapptive.Shared;
 using System.Drawing;
 using Interapptive.Shared.Win32;
+using SandContextPopup = Divelements.SandRibbon.ContextPopup;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using SandMenu = Divelements.SandRibbon.Menu;
 
 namespace ShipWorks.UI.Controls
 {
@@ -16,6 +19,7 @@ namespace ShipWorks.UI.Controls
     public class MenuComboBox : ComboBox
     {
         ContextMenuStrip contextMenu = null;
+        SandContextPopup sandPopup = null;
 
         object selectedMenuObject = null;
 
@@ -55,8 +59,11 @@ namespace ShipWorks.UI.Controls
             set { contextMenu = value; }
         }
 
+        /// <summary>
+        /// Sets a ContextMenuStrip as the drop down
+        /// </summary>
         [DefaultValue(null)]
-        public ContextMenuStrip DropDownMenu
+        public ContextMenuStrip DropDownContextMenu
         {
             get 
             { 
@@ -69,16 +76,45 @@ namespace ShipWorks.UI.Controls
                     return;
                 }
 
-                if (contextMenu != null)
-                {
-                    UnhookEvents(contextMenu.Items);
-                }
+                UnhookEvents();
 
+                sandPopup = null;
                 contextMenu = value;
 
                 if (contextMenu != null)
                 {
                     HookEvents(contextMenu.Items);
+                }
+
+                UpdateDisplayText();
+            }
+        }
+
+        /// <summary>
+        /// Sets a SandGrid popup menu as a dropdown
+        /// </summary>
+        [DefaultValue(null)]
+        public SandContextPopup DropDownSandPopupMenu
+        {
+            get
+            {
+                return sandPopup;
+            }
+            set
+            {
+                if (sandPopup == value)
+                {
+                    return;
+                }
+
+                UnhookEvents();
+
+                contextMenu = null;
+                sandPopup = value;
+
+                if (sandPopup != null)
+                {
+                    HookEvents(sandPopup.Items);
                 }
 
                 UpdateDisplayText();
@@ -137,13 +173,97 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Hook all of the events for the all of the items recursively
+        /// </summary>
+        private void HookEvents(Divelements.SandRibbon.WidgetCollection items)
+        {
+            foreach (Divelements.SandRibbon.WidgetBase item in items)
+            {
+                SandMenuItem menuItem = item as SandMenuItem;
+                if (menuItem != null)
+                {
+                    if (menuItem.Items.Count > 0)
+                    {
+                        HookEvents(menuItem.Items);
+                    }
+                    else
+                    {
+                        menuItem.Activate += new EventHandler(OnMenuItemClicked);
+                    }
+                }
+                else
+                {
+                    SandMenu menu = item as SandMenu;
+                    if (menu != null)
+                    {
+                        HookEvents(menu.Items);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Unhook all of the events for all of the items recursively
+        /// </summary>
+        private void UnhookEvents(Divelements.SandRibbon.WidgetCollection items)
+        {
+            foreach (Divelements.SandRibbon.WidgetBase item in items)
+            {
+                SandMenuItem menuItem = item as SandMenuItem;
+                if (menuItem != null)
+                {
+                    if (menuItem.Items.Count > 0)
+                    {
+                        UnhookEvents(menuItem.Items);
+                    }
+                    else
+                    {
+                        menuItem.Activate -= new EventHandler(OnMenuItemClicked);
+                    }
+                }
+                else
+                {
+                    SandMenu menu = item as SandMenu;
+                    if (menu != null)
+                    {
+                        UnhookEvents(menu.Items);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Unhook all events we are currently hooked for
+        /// </summary>
+        private void UnhookEvents()
+        {
+            if (contextMenu != null)
+            {
+                UnhookEvents(contextMenu.Items);
+            }
+
+            if (sandPopup != null)
+            {
+                UnhookEvents(sandPopup.Items);
+            }
+        }
+
+        /// <summary>
         /// A menu item has been selected
         /// </summary>
         void OnMenuItemClicked(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem != null)
+            {
+                SelectedMenuObject = menuItem.Tag;
+            }
 
-            SelectedMenuObject = menuItem.Tag;
+            SandMenuItem sandItem = sender as SandMenuItem;
+            if (sandItem != null)
+            {
+                SelectedMenuObject = sandItem.Tag;
+            }
         }
 
         /// <summary>
@@ -219,6 +339,16 @@ namespace ShipWorks.UI.Controls
                 }
             }
 
+            if (sandPopup != null)
+            {
+                SandMenuItem foundItem = FindMenuItemTag(sandPopup.Items, tag);
+
+                if (foundItem != null)
+                {
+                    return foundItem.Text;
+                }
+            }
+
             return tag.ToString();
         }
 
@@ -250,6 +380,49 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Find the menu item whose tag represents the given value
+        /// </summary>
+        private SandMenuItem FindMenuItemTag(Divelements.SandRibbon.WidgetCollection items, object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            foreach (Divelements.SandRibbon.WidgetBase item in items)
+            {
+                SandMenuItem menuItem = item as SandMenuItem;
+                if (menuItem != null)
+                {
+                    if (menuItem.Tag != null && menuItem.Tag.Equals(value))
+                    {
+                        return menuItem;
+                    }
+
+                    SandMenuItem childFound = FindMenuItemTag(menuItem.Items, value);
+                    if (childFound != null)
+                    {
+                        return childFound;
+                    }
+                }
+                else
+                {
+                    SandMenu menu = item as SandMenu;
+                    if (menu != null)
+                    {
+                        SandMenuItem childFound = FindMenuItemTag(menu.Items, value);
+                        if (childFound != null)
+                        {
+                            return childFound;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Intercept the mouse down
         /// </summary>
         protected override void WndProc(ref Message m)
@@ -257,7 +430,7 @@ namespace ShipWorks.UI.Controls
             // On mouse down, we show our color chooser
             if (m.Msg == NativeMethods.WM_LBUTTONDOWN || m.Msg == NativeMethods.WM_LBUTTONDBLCLK)
             {
-                if (contextMenu == null)
+                if (contextMenu == null && sandPopup == null)
                 {
                     throw new InvalidOperationException("The DropDownMenu property has not been initialized.");
                 }
@@ -267,8 +440,16 @@ namespace ShipWorks.UI.Controls
                     Focus();
                 }
 
-                Point location = Parent.PointToScreen(new Point(Left, Bottom));
-                contextMenu.Show(location);
+
+                if (contextMenu != null)
+                {
+                    Point location = Parent.PointToScreen(new Point(Left, Bottom));
+                    contextMenu.Show(location);
+                }
+                else
+                {
+                    sandPopup.ShowStandalone(this, new Point(0, Height), false);
+                }
             }
 
             else

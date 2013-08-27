@@ -18,6 +18,7 @@ namespace ShipWorks.Actions.Tasks
         Type type;
         string baseName;
         string identifier;
+        ActionTaskCategory category;
         ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace ShipWorks.Actions.Tasks
             ActionTaskAttribute attribute = (ActionTaskAttribute) Attribute.GetCustomAttribute(type, typeof(ActionTaskAttribute));
             this.baseName = attribute.DisplayName;
             this.identifier = attribute.Identifier;
+            this.category = attribute.Category;
             this.allowedActionTriggerClassifications = attribute.AllowedActionTriggerClassifications;
         }
 
@@ -100,6 +102,17 @@ namespace ShipWorks.Actions.Tasks
         }
 
         /// <summary>
+        /// Get the task category - used for UI display purposes
+        /// </summary>
+        public ActionTaskCategory Category
+        {
+            get
+            {
+                return category;
+            }
+        }
+
+        /// <summary>
         /// The CLR type of the action.
         /// </summary>
         public Type SystemType
@@ -111,8 +124,7 @@ namespace ShipWorks.Actions.Tasks
         }
 
         /// <summary>
-        /// If this task is allowed to be added to an Action that is of Scheduled type.  For example, "Play a Sound" is not allowed
-        /// as the sound will not be heard when run as a service.
+        /// If this task is allowed to be added to an Action that is of Scheduled type.
         /// </summary>
         public ActionTriggerClassifications TriggerClassifications
         {

@@ -10,6 +10,11 @@ using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Tasks.Common;
 using Interapptive.Shared.Utility;
+using SandContextPopup = Divelements.SandRibbon.ContextPopup;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using SandMenu = Divelements.SandRibbon.Menu;
+using SandHeading = Divelements.SandRibbon.PopupHeading;
+using System.Drawing;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -89,7 +94,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Create a menu that can be used to select task types
         /// </summary>
-        public static ContextMenuStrip CreateTasksMenu()
+        public static SandContextPopup CreateTasksMenu()
         {
             List<ActionTaskDescriptorBinding> commonBindings = new List<ActionTaskDescriptorBinding>();
             Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap = new Dictionary<StoreTypeCode, DescriptorStoreInfo>();
@@ -104,7 +109,7 @@ namespace ShipWorks.Actions.Tasks
                 if (instanceTask != null)
                 {
                     // Go through each store to see which ones this instance task supports
-                    foreach (StoreEntity store in StoreManager.GetAllStores())
+                    foreach (StoreEntity store in StoreManager.GetEnabledStores())
                     {
                         if (instanceTask.SupportsStore(store))
                         {
@@ -138,7 +143,7 @@ namespace ShipWorks.Actions.Tasks
                     if (typeTask != null)
                     {
                         // Go through each store type to see what the task supports
-                        foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())
+                        foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes(true))
                         {
                             if (typeTask.SupportsType(storeType))
                             {
@@ -171,32 +176,53 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Create the menu based on the given bindings data
         /// </summary>
-        private static ContextMenuStrip CrateTasksMenu(List<ActionTaskDescriptorBinding> commonBindings, Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap)
+        private static SandContextPopup CrateTasksMenu(List<ActionTaskDescriptorBinding> commonBindings, Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap)
         {
-            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            SandContextPopup contextMenu = new SandContextPopup();
+            contextMenu.Font = new System.Drawing.Font("Tahoma", 8.25f);
 
-            // Add all the common bindings first
-            foreach (ActionTaskDescriptorBinding binding in commonBindings)
+            // Add all the common bindings first, ordered by the numeric value of the category
+            foreach (var categoryGroup in commonBindings.GroupBy(b => b.Category).OrderBy(g => (int) g.Key))
             {
-                ToolStripMenuItem menuItem = new ToolStripMenuItem(binding.BaseName);
-                menuItem.Tag = binding;
+                // Category name goes as the heading
+                SandHeading heading = new SandHeading() { Text = EnumHelper.GetDescription(categoryGroup.Key) };
+                contextMenu.Items.Add(heading);
 
-                contextMenu.Items.Add(menuItem);
+                SandMenu menu = new SandMenu();
+                contextMenu.Items.Add(menu);
+
+                // Add all the items in the category, sorted by name
+                foreach (ActionTaskDescriptorBinding binding in categoryGroup.OrderBy(b => b.FullName))
+                {
+                    SandMenuItem menuItem = new SandMenuItem(binding.BaseName);
+                    menuItem.Tag = binding;
+
+                    menu.Items.Add(menuItem);
+                }
+
+                // Figure out where to insert Update Online
+                if ((int) ActionTaskCategory.UpdateOnline == (int) categoryGroup.Key + 1)
+                {
+                    AddUpdateOnlineTasksMenu(contextMenu, storeBindingsMap);
+                }
             }
 
-            bool addedRootInstanceSep = false;
+            return contextMenu;
+        }
 
+        /// <summary>
+        /// Add the 'Update Online' section of the tasks menu
+        /// </summary>
+        private static void AddUpdateOnlineTasksMenu(SandContextPopup contextMenu, Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap)
+        {
             // Indiciates if the commands from each storetype should be put under a sub-menu of that type code.
             // First of all, there has to be more than one store type
             // Secondly, there has to be at least one set of "Common" commands.  If they are all instance commands,
             // then they'll just all be listed under their store instance name.
-            bool useStoreTypeRoot = StoreManager.GetUniqueStoreTypes().Count > 1 && storeBindingsMap.Values.Sum(c => c.StoreTypeBindings.Count) > 0;
+            bool useStoreTypeRoot = StoreManager.GetUniqueStoreTypes(true).Count > 1 && storeBindingsMap.Values.Sum(c => c.StoreTypeBindings.Count) > 0;
 
-            // If there are going to be common commands such that we use the storetype root, then we'll need a sep
-            if (useStoreTypeRoot)
-            {
-                contextMenu.Items.Add(new ToolStripSeparator());
-            }
+            // Menu that will contain all our stores
+            SandMenu storeMenu = new SandMenu();
 
             // Add in all the commands
             foreach (KeyValuePair<StoreTypeCode, DescriptorStoreInfo> entry in storeBindingsMap)
@@ -204,34 +230,35 @@ namespace ShipWorks.Actions.Tasks
                 DescriptorStoreInfo storeInfo = entry.Value;
 
                 // Determine the parent of the commands
-                ToolStripItemCollection parentItems;
+                SandMenu parentMenu;
 
                 if (useStoreTypeRoot)
                 {
-                    ToolStripMenuItem parent = new ToolStripMenuItem(StoreTypeManager.GetType(entry.Key).StoreTypeName);
-                    contextMenu.Items.Add(parent);
+                    SandMenuItem typeRootItem = new SandMenuItem(StoreTypeManager.GetType(entry.Key).StoreTypeName);
+                    storeMenu.Items.Add(typeRootItem);
 
-                    parentItems = parent.DropDownItems;
+                    parentMenu = new SandMenu();
+                    typeRootItem.Items.Add(parentMenu);
                 }
                 else
                 {
-                    parentItems = contextMenu.Items;
+                    parentMenu = storeMenu;
                 }
 
                 // Add the common commands
                 foreach (ActionTaskDescriptorBinding binding in storeInfo.StoreTypeBindings.OrderBy(b => b.BaseName))
                 {
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem(binding.BaseName);
+                    SandMenuItem menuItem = new SandMenuItem(binding.BaseName);
                     menuItem.Tag = binding;
 
-                    parentItems.Add(menuItem);
+                    parentMenu.Items.Add(menuItem);
                 }
 
                 // If there is more than one store in
                 bool instanceInSubMenu = false;
 
                 // If all instance stuff is going at the root, and there is more than one store, then instance commands need to be in an instance menu
-                if (!useStoreTypeRoot && storeInfo.StoreInstanceBindings.Count > 0 && StoreManager.GetAllStores().Count > 1)
+                if (!useStoreTypeRoot && storeInfo.StoreInstanceBindings.Count > 0 && StoreManager.GetEnabledStores().Count > 1)
                 {
                     instanceInSubMenu = true;
                 }
@@ -242,86 +269,48 @@ namespace ShipWorks.Actions.Tasks
                     instanceInSubMenu = true;
                 }
 
-                if (useStoreTypeRoot && instanceInSubMenu)
-                {
-                    parentItems.Add(new ToolStripSeparator());
-                }
-
-                if (!useStoreTypeRoot && instanceInSubMenu && !addedRootInstanceSep)
-                {
-                    addedRootInstanceSep = true;
-                    parentItems.Add(new ToolStripSeparator());
-                }
-
                 // Add the instance commands
                 foreach (KeyValuePair<long, List<ActionTaskDescriptorBinding>> instanceEntry in storeInfo.StoreInstanceBindings)
                 {
-                    ToolStripItemCollection instanceItems;
+                    SandMenu instanceParent;
 
                     if (instanceInSubMenu)
                     {
-                        ToolStripMenuItem instanceRoot = new ToolStripMenuItem(StoreManager.GetStore(instanceEntry.Key).StoreName);
-                        parentItems.Add(instanceRoot);
+                        SandMenuItem instanceRootItem = new SandMenuItem(StoreManager.GetStore(instanceEntry.Key).StoreName);
+                        parentMenu.Items.Add(instanceRootItem);
 
-                        instanceItems = instanceRoot.DropDownItems;
+                        // If there are common commands, and instance commands are in a submenu, add a separator
+                        if (useStoreTypeRoot)
+                        {
+                            instanceRootItem.GroupName = "Group";
+                        }
+
+                        instanceParent = new SandMenu();
+                        instanceRootItem.Items.Add(instanceParent);
                     }
                     else
                     {
-                        instanceItems = parentItems;
+                        instanceParent = parentMenu;
                     }
 
                     // Add the bindings
                     foreach (ActionTaskDescriptorBinding binding in instanceEntry.Value.OrderBy(b => b.BaseName))
                     {
-                        ToolStripMenuItem menuItem = new ToolStripMenuItem(binding.BaseName);
+                        SandMenuItem menuItem = new SandMenuItem(binding.BaseName);
                         menuItem.Tag = binding;
 
-                        instanceItems.Add(menuItem);
+                        instanceParent.Items.Add(menuItem);
                     }
                 }
             }
 
-            SortMenuItems(contextMenu.Items);
-
-            return contextMenu;
-        }
-
-        /// <summary>
-        /// Sort the items, separating the sort groups based on separators
-        /// </summary>
-        private static void SortMenuItems(ToolStripItemCollection items)
-        {
-            List<List<ToolStripItem>> itemGroups = new List<List<ToolStripItem>>();
-            itemGroups.Add(new List<ToolStripItem>());
-
-            foreach (ToolStripItem item in items)
+            // If the store menu actually has something, add it in
+            if (storeMenu.Items.Count > 0)
             {
-                ToolStripSeparator sep = item as ToolStripSeparator;
-                if (sep != null)
-                {
-                    itemGroups.Add(new List<ToolStripItem>());
-                }
-                else
-                {
-                    itemGroups[itemGroups.Count - 1].Add(item);
-                }
-            }
+                SandHeading heading = new SandHeading() { Text = EnumHelper.GetDescription(ActionTaskCategory.UpdateOnline) };
+                contextMenu.Items.Add(heading);
 
-            items.Clear();
-
-            foreach (List<ToolStripItem> group in itemGroups)
-            {
-                if (items.Count > 0)
-                {
-                    items.Add(new ToolStripSeparator());
-                }
-
-                items.AddRange(group.OrderBy(i => i.Text).ToArray());
-            }
-
-            foreach (ToolStripMenuItem item in items.OfType<ToolStripMenuItem>())
-            {
-                SortMenuItems(item.DropDownItems);
+                contextMenu.Items.Add(storeMenu);
             }
         }
 

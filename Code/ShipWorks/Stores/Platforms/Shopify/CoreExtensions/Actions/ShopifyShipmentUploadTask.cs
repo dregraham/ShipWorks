@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment detials to Shopify
     /// </summary>
-    [ActionTask("Upload shipment details", "ShopifyShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "ShopifyShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class ShopifyShipmentUploadTask : StoreInstanceTaskBase
     {
         /// <summary>

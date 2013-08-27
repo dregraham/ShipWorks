@@ -2228,7 +2228,7 @@ namespace ShipWorks
         /// </summary>
         private void UpdateDownloadButtonForStores()
         {
-            List<StoreEntity> stores = StoreManager.GetAllStores().Where(s => s.Enabled && ComputerDownloadPolicy.Load(s).IsThisComputerAllowed).ToList();
+            List<StoreEntity> stores = StoreManager.GetEnabledStores().Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed).ToList();
 
             // Only enabled if more than one store
             buttonDownload.Enabled = stores.Count > 0;

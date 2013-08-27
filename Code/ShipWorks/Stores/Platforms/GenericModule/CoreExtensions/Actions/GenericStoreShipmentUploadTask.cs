@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to a Generic Store
     /// </summary>
-    [ActionTask("Upload shipment details", "GenericStoreShipmentUpload")]
+    [ActionTask("Upload shipment details", "GenericStoreShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class GenericStoreShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>
@@ -27,6 +27,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions
         public override bool SupportsType(StoreType storeType)
         {
             if (!(storeType is GenericModuleStoreType))
+            {
+                return false;
+            }
+
+            // We don't support this for generic store derivates that provide their own implementation
+            if (storeType.TypeCode == Stores.StoreTypeCode.Magento)
             {
                 return false;
             }

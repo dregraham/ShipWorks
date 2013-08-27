@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to BigCommerce
     /// </summary>
-    [ActionTask("Upload shipment details", "BigCommerceShipmentUpload")]
+    [ActionTask("Upload shipment details", "BigCommerceShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class BigCommerceShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

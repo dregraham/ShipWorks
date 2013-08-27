@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to Buy.com
     /// </summary>
-    [ActionTask("Upload shipment details", "BuyDotComShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "BuyDotComShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class BuyDotComShipmentUploadTask : StoreInstanceTaskBase
     {
 

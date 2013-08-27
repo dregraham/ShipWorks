@@ -12,7 +12,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for saving with a chosen template
     /// </summary>
-    [ActionTask("Save a file", "Save File")]
+    [ActionTask("Save a file", "Save File", ActionTaskCategory.Output)]
     public class SaveFileTask : TemplateBasedTask
     {
         // Logger

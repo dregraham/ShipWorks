@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to NetworkSolutions
     /// </summary>
-    [ActionTask("Upload shipment details", "NetworkSolutionsShipmentUpload")]
+    [ActionTask("Upload shipment details", "NetworkSolutionsShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class NetworkSolutionsShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

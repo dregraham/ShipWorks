@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to a yahoo Store
     /// </summary>
-    [ActionTask("Upload shipment details", "YahooShipmentUpload")]
+    [ActionTask("Upload shipment details", "YahooShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class YahooShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>
