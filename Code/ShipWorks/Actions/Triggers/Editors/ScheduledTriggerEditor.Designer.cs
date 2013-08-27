@@ -43,7 +43,7 @@
             this.actionScheduleTypeLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.actionScheduleTypeLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.actionScheduleTypeLink.ForeColor = System.Drawing.Color.Blue;
-            this.actionScheduleTypeLink.Location = new System.Drawing.Point(80, 4);
+            this.actionScheduleTypeLink.Location = new System.Drawing.Point(83, 4);
             this.actionScheduleTypeLink.Name = "actionScheduleTypeLink";
             this.actionScheduleTypeLink.Size = new System.Drawing.Size(50, 13);
             this.actionScheduleTypeLink.TabIndex = 3;
@@ -54,7 +54,7 @@
             // 
             this.labelTriggerHeader.AutoSize = true;
             this.labelTriggerHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTriggerHeader.Location = new System.Drawing.Point(0, 4);
+            this.labelTriggerHeader.Location = new System.Drawing.Point(3, 4);
             this.labelTriggerHeader.Name = "labelTriggerHeader";
             this.labelTriggerHeader.Size = new System.Drawing.Size(82, 13);
             this.labelTriggerHeader.TabIndex = 13;
