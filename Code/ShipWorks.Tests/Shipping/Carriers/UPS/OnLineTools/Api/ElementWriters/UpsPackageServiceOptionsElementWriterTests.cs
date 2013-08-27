@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Enums;
+﻿using System.Diagnostics;
+using Interapptive.Shared.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -26,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         {
             shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
             package = shipment.Packages.AddNew();
-            packageSetting = new UpsServicePackageTypeSetting(UpsServiceType.UpsStandard, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Kilograms, 0, 1000, 10, false);
+            packageSetting = new UpsServicePackageTypeSetting(UpsServiceType.UpsStandard, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Kilograms, 0, 1000, 10, false, false, false);
         }
 
         protected XElement WriteServiceOptionsElement()
@@ -58,6 +59,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [TestMethod]
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationName_WhenVerbalConfirmationEnabledIsFalse_Test()
+        {
+            package.VerbalConfirmationEnabled = false;
+            package.VerbalConfirmationName = "Angus Bludgeonfordshire";
+
+            XElement element = WriteServiceOptionsElement();
+
+            var names =
+                ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Name/text()"))
+                    .Cast<XText>().Select(x => x.Value).ToList();
+
+            CollectionAssert.DoesNotContain(names, package.VerbalConfirmationName);
+        }
+
+        [TestMethod]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneNumber_Test()
         {
             package.VerbalConfirmationEnabled = true;
@@ -73,6 +89,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [TestMethod]
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneNumber_WhenVerbalConfirmationEnabledIsFalse_Test()
+        {
+            package.VerbalConfirmationEnabled = false;
+            package.VerbalConfirmationPhone = "(555) 867-5309";
+
+            XElement element = WriteServiceOptionsElement();
+
+            var phoneNumbers =
+                ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Phone/Number/text()"))
+                    .Cast<XText>().Select(x => x.Value).ToList();
+
+            Debug.Assert(phoneNumbers.Count == 0, "The phone number was written, even though VerbalConfirmationEnabled is false.");
+        }
+
+        [TestMethod]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneExtension_Test()
         {
             package.VerbalConfirmationEnabled = true;
@@ -85,6 +116,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                     .Cast<XText>().Select(x => x.Value).ToList();
 
             CollectionAssert.AreEqual(new[] { package.VerbalConfirmationPhoneExtension }, phoneExtensions);
+        }
+
+        [TestMethod]
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneExtension_WhenVerbalConfirmationEnabledIsFalse_Test()
+        {
+            package.VerbalConfirmationEnabled = false;
+            package.VerbalConfirmationPhoneExtension = "1228";
+
+            XElement element = WriteServiceOptionsElement();
+
+            var phoneExtensions =
+                ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Phone/Extension/text()"))
+                    .Cast<XText>().Select(x => x.Value).ToList();
+
+            Debug.Assert(phoneExtensions.Count == 0, "The phone extension was written, even though VerbalConfirmationEnabled is false.");
         }
 
         [TestMethod]
