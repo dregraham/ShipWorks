@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.verbalConfirmationState = new System.Windows.Forms.CheckBox();
+            this.dryIceState = new System.Windows.Forms.CheckBox();
+            this.dryIceControl = new ShipWorks.Shipping.Carriers.UPS.UpsDryIceControl();
+            this.verbalConfirmationControl = new System.Windows.Forms.CheckBox();
+            this.labelVerbalConfirmation = new System.Windows.Forms.Label();
+            this.additionalHandling = new System.Windows.Forms.CheckBox();
+            this.labelAdditionalHandling = new System.Windows.Forms.Label();
+            this.additionalHandlingState = new System.Windows.Forms.CheckBox();
             this.labelPackaging = new System.Windows.Forms.Label();
             this.packagingType = new System.Windows.Forms.ComboBox();
             this.packagingState = new System.Windows.Forms.CheckBox();
@@ -44,6 +52,14 @@
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.verbalConfirmationState);
+            this.groupBox.Controls.Add(this.dryIceState);
+            this.groupBox.Controls.Add(this.dryIceControl);
+            this.groupBox.Controls.Add(this.verbalConfirmationControl);
+            this.groupBox.Controls.Add(this.labelVerbalConfirmation);
+            this.groupBox.Controls.Add(this.additionalHandling);
+            this.groupBox.Controls.Add(this.labelAdditionalHandling);
+            this.groupBox.Controls.Add(this.additionalHandlingState);
             this.groupBox.Controls.Add(this.labelPackaging);
             this.groupBox.Controls.Add(this.packagingType);
             this.groupBox.Controls.Add(this.packagingState);
@@ -57,16 +73,100 @@
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox.Location = new System.Drawing.Point(0, 0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(405, 164);
+            this.groupBox.Size = new System.Drawing.Size(441, 297);
             this.groupBox.TabIndex = 1;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Package {0}";
+            // 
+            // verbalConfirmationState
+            // 
+            this.verbalConfirmationState.AutoSize = true;
+            this.verbalConfirmationState.Checked = true;
+            this.verbalConfirmationState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.verbalConfirmationState.Location = new System.Drawing.Point(8, 260);
+            this.verbalConfirmationState.Name = "verbalConfirmationState";
+            this.verbalConfirmationState.Size = new System.Drawing.Size(15, 14);
+            this.verbalConfirmationState.TabIndex = 95;
+            this.verbalConfirmationState.Tag = "";
+            this.verbalConfirmationState.UseVisualStyleBackColor = true;
+            // 
+            // dryIceState
+            // 
+            this.dryIceState.AutoSize = true;
+            this.dryIceState.Checked = true;
+            this.dryIceState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dryIceState.Location = new System.Drawing.Point(8, 175);
+            this.dryIceState.Name = "dryIceState";
+            this.dryIceState.Size = new System.Drawing.Size(15, 14);
+            this.dryIceState.TabIndex = 94;
+            this.dryIceState.Tag = "";
+            this.dryIceState.UseVisualStyleBackColor = true;
+            // 
+            // dryIceControl
+            // 
+            this.dryIceControl.Location = new System.Drawing.Point(90, 173);
+            this.dryIceControl.Name = "dryIceControl";
+            this.dryIceControl.Size = new System.Drawing.Size(348, 80);
+            this.dryIceControl.State = false;
+            this.dryIceControl.TabIndex = 93;
+            // 
+            // verbalConfirmationControl
+            // 
+            this.verbalConfirmationControl.AutoSize = true;
+            this.verbalConfirmationControl.Location = new System.Drawing.Point(143, 259);
+            this.verbalConfirmationControl.Name = "verbalConfirmationControl";
+            this.verbalConfirmationControl.Size = new System.Drawing.Size(120, 17);
+            this.verbalConfirmationControl.TabIndex = 92;
+            this.verbalConfirmationControl.Text = "Verbal Confirmation";
+            this.verbalConfirmationControl.UseVisualStyleBackColor = true;
+            // 
+            // labelVerbalConfirmation
+            // 
+            this.labelVerbalConfirmation.AutoSize = true;
+            this.labelVerbalConfirmation.Location = new System.Drawing.Point(32, 260);
+            this.labelVerbalConfirmation.Name = "labelVerbalConfirmation";
+            this.labelVerbalConfirmation.Size = new System.Drawing.Size(105, 13);
+            this.labelVerbalConfirmation.TabIndex = 91;
+            this.labelVerbalConfirmation.Text = "Verbal Confirmation:";
+            this.labelVerbalConfirmation.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // additionalHandling
+            // 
+            this.additionalHandling.AutoSize = true;
+            this.additionalHandling.Location = new System.Drawing.Point(143, 154);
+            this.additionalHandling.Name = "additionalHandling";
+            this.additionalHandling.Size = new System.Drawing.Size(117, 17);
+            this.additionalHandling.TabIndex = 90;
+            this.additionalHandling.Text = "Additional Handling";
+            this.additionalHandling.UseVisualStyleBackColor = true;
+            // 
+            // labelAdditionalHandling
+            // 
+            this.labelAdditionalHandling.AutoSize = true;
+            this.labelAdditionalHandling.Location = new System.Drawing.Point(35, 155);
+            this.labelAdditionalHandling.Name = "labelAdditionalHandling";
+            this.labelAdditionalHandling.Size = new System.Drawing.Size(102, 13);
+            this.labelAdditionalHandling.TabIndex = 89;
+            this.labelAdditionalHandling.Text = "Additional Handling:";
+            this.labelAdditionalHandling.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // additionalHandlingState
+            // 
+            this.additionalHandlingState.AutoSize = true;
+            this.additionalHandlingState.Checked = true;
+            this.additionalHandlingState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.additionalHandlingState.Location = new System.Drawing.Point(8, 155);
+            this.additionalHandlingState.Name = "additionalHandlingState";
+            this.additionalHandlingState.Size = new System.Drawing.Size(15, 14);
+            this.additionalHandlingState.TabIndex = 87;
+            this.additionalHandlingState.Tag = "";
+            this.additionalHandlingState.UseVisualStyleBackColor = true;
             // 
             // labelPackaging
             // 
             this.labelPackaging.AutoSize = true;
             this.labelPackaging.BackColor = System.Drawing.Color.Transparent;
-            this.labelPackaging.Location = new System.Drawing.Point(64, 24);
+            this.labelPackaging.Location = new System.Drawing.Point(78, 24);
             this.labelPackaging.Name = "labelPackaging";
             this.labelPackaging.Size = new System.Drawing.Size(59, 13);
             this.labelPackaging.TabIndex = 86;
@@ -76,7 +176,7 @@
             // 
             this.packagingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.packagingType.FormattingEnabled = true;
-            this.packagingType.Location = new System.Drawing.Point(129, 21);
+            this.packagingType.Location = new System.Drawing.Point(143, 21);
             this.packagingType.Name = "packagingType";
             this.packagingType.Size = new System.Drawing.Size(145, 21);
             this.packagingType.TabIndex = 1;
@@ -95,13 +195,13 @@
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(28, 22);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 127);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 260);
             this.kryptonBorderEdge.TabIndex = 83;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -132,20 +232,20 @@
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.weight.Location = new System.Drawing.Point(130, 49);
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(144, 49);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300;
-            this.weight.RangeMin = 0;
+            this.weight.RangeMax = 300D;
+            this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(218, 21);
             this.weight.TabIndex = 3;
-            this.weight.Weight = 0;
+            this.weight.Weight = 0D;
             // 
             // labelWeight
             // 
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(78, 52);
+            this.labelWeight.Location = new System.Drawing.Point(92, 52);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 75;
@@ -155,7 +255,7 @@
             // 
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
-            this.labelDimensions.Location = new System.Drawing.Point(59, 80);
+            this.labelDimensions.Location = new System.Drawing.Point(73, 80);
             this.labelDimensions.Name = "labelDimensions";
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 77;
@@ -165,8 +265,8 @@
             // 
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(126, 74);
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(140, 74);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 5;
@@ -177,9 +277,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.groupBox);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsProfilePackageControl";
-            this.Size = new System.Drawing.Size(405, 164);
+            this.Size = new System.Drawing.Size(441, 297);
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -199,5 +299,13 @@
         private System.Windows.Forms.ComboBox packagingType;
         private System.Windows.Forms.CheckBox packagingState;
         private System.Windows.Forms.Label labelPackaging;
+        private System.Windows.Forms.CheckBox additionalHandlingState;
+        private System.Windows.Forms.CheckBox verbalConfirmationControl;
+        private System.Windows.Forms.Label labelVerbalConfirmation;
+        private System.Windows.Forms.CheckBox additionalHandling;
+        private System.Windows.Forms.Label labelAdditionalHandling;
+        private System.Windows.Forms.CheckBox verbalConfirmationState;
+        private System.Windows.Forms.CheckBox dryIceState;
+        private UpsDryIceControl dryIceControl;
     }
 }
