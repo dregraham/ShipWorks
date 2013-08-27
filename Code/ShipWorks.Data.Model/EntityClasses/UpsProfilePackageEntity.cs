@@ -506,9 +506,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("VerbalConfirmationPhoneExtension", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DryIceEnabled", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DryIceRegulationSet", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -516,6 +513,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DryIceIsForMedicalUse", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VerbalConfirmationEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -778,17 +781,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, value); }
 		}
 
-		/// <summary> The DryIceEnabled property of the Entity UpsProfilePackage<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceEnabled"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DryIceEnabled
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, false); }
-			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, value); }
-		}
-
 		/// <summary> The DryIceRegulationSet property of the Entity UpsProfilePackage<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceRegulationSet"<br/>
@@ -820,6 +812,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, false); }
 			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, value); }
+		}
+
+		/// <summary> The DryIceEnabled property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."DryIceEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> DryIceEnabled
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.DryIceEnabled, value); }
+		}
+
+		/// <summary> The VerbalConfirmationEnabled property of the Entity UpsProfilePackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfilePackage"."VerbalConfirmationEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> VerbalConfirmationEnabled
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, false); }
+			set	{ SetValue((int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, value); }
 		}
 
 

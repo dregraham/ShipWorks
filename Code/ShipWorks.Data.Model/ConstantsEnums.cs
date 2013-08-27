@@ -8328,6 +8328,8 @@ namespace ShipWorks.Data.Model
 		UspsTrackingNumber,
 		///<summary>AdditionalHandlingEnabled. </summary>
 		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationEnabled. </summary>
+		VerbalConfirmationEnabled,
 		///<summary>VerbalConfirmationName. </summary>
 		VerbalConfirmationName,
 		///<summary>VerbalConfirmationPhone. </summary>
@@ -8448,14 +8450,16 @@ namespace ShipWorks.Data.Model
 		VerbalConfirmationPhone,
 		///<summary>VerbalConfirmationPhoneExtension. </summary>
 		VerbalConfirmationPhoneExtension,
-		///<summary>DryIceEnabled. </summary>
-		DryIceEnabled,
 		///<summary>DryIceRegulationSet. </summary>
 		DryIceRegulationSet,
 		///<summary>DryIceWeight. </summary>
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
+		///<summary>DryIceEnabled. </summary>
+		DryIceEnabled,
+		///<summary>VerbalConfirmationEnabled. </summary>
+		VerbalConfirmationEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8866,6 +8870,10 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceMedicalPurpose. </summary>
 		DryIceMedicalPurpose,
+		///<summary>DryIceOption. </summary>
+		DryIceOption,
+		///<summary>DryIceWeightUnitOfMeasure. </summary>
+		DryIceWeightUnitOfMeasure,
 		/// <summary></summary>
 		AmountOfFields
 	}

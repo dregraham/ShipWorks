@@ -45,6 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         [TestMethod]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationName_Test()
         {
+            package.VerbalConfirmationEnabled = true;
             package.VerbalConfirmationName = "Angus Bludgeonfordshire";
 
             XElement element = WriteServiceOptionsElement();
@@ -59,6 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         [TestMethod]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneNumber_Test()
         {
+            package.VerbalConfirmationEnabled = true;
             package.VerbalConfirmationPhone = "(555) 867-5309";
 
             XElement element = WriteServiceOptionsElement();
@@ -73,6 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         [TestMethod]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneExtension_Test()
         {
+            package.VerbalConfirmationEnabled = true;
             package.VerbalConfirmationPhoneExtension = "1228";
 
             XElement element = WriteServiceOptionsElement();
@@ -87,7 +90,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         [TestMethod]
         public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenShipmentIsReturn_Test()
         {
+            package.VerbalConfirmationEnabled = true;
             shipment.Shipment.ReturnShipment = true;
+            package.VerbalConfirmationName = "Samuel David James Rutherford III, Esq.";
+
+            XElement element = WriteServiceOptionsElement();
+
+            var confirmations =
+                ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation"))
+                    .Cast<XElement>().ToList();
+
+            Assert.AreEqual(0, confirmations.Count);
+        }
+
+        [TestMethod]
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenVerbalConfirmationEnabledIsFalse_Test()
+        {
+            package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationName = "Samuel David James Rutherford III, Esq.";
 
             XElement element = WriteServiceOptionsElement();

@@ -2447,6 +2447,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsPackageEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)UpsPackageFieldIndex.TrackingNumber, 50, 0, 0);
 			base.AddElementFieldInfo("UpsPackageEntity", "UspsTrackingNumber", typeof(System.String), false, false, false, false,  (int)UpsPackageFieldIndex.UspsTrackingNumber, 50, 0, 0);
 			base.AddElementFieldInfo("UpsPackageEntity", "AdditionalHandlingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsPackageFieldIndex.AdditionalHandlingEnabled, 0, 0, 0);
+			base.AddElementFieldInfo("UpsPackageEntity", "VerbalConfirmationEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsPackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("UpsPackageEntity", "VerbalConfirmationName", typeof(System.String), false, false, false, false,  (int)UpsPackageFieldIndex.VerbalConfirmationName, 35, 0, 0);
 			base.AddElementFieldInfo("UpsPackageEntity", "VerbalConfirmationPhone", typeof(System.String), false, false, false, false,  (int)UpsPackageFieldIndex.VerbalConfirmationPhone, 15, 0, 0);
 			base.AddElementFieldInfo("UpsPackageEntity", "VerbalConfirmationPhoneExtension", typeof(System.String), false, false, false, false,  (int)UpsPackageFieldIndex.VerbalConfirmationPhoneExtension, 4, 0, 0);
@@ -2504,10 +2505,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationName", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationName, 35, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationPhone", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationPhone, 15, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, 4, 0, 0);
-			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceRegulationSet", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceRegulationSet, 0, 0, 10);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceWeight, 0, 0, 38);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceIsForMedicalUse", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, 0, 0, 0);
+			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceEnabled, 0, 0, 0);
+			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
 		}
 		/// <summary>Inits UpsShipmentEntity's FieldInfo objects</summary>
 		private void InitUpsShipmentEntityInfos()
@@ -2672,6 +2674,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceRegulationSet", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceRegulationSet, 5, 0, 0);
 			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceWeight, 0, 0, 38);
 			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceMedicalPurpose", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceMedicalPurpose, 1, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceOption", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceOption, 1, 0, 0);
+			base.AddElementFieldInfo("WorldShipPackageEntity", "DryIceWeightUnitOfMeasure", typeof(System.String), false, false, false, true,  (int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, 10, 0, 0);
 		}
 		/// <summary>Inits WorldShipProcessedEntity's FieldInfo objects</summary>
 		private void InitWorldShipProcessedEntityInfos()

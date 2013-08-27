@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             }
 
             // Verbal confirmation
-            if (!upsShipment.Shipment.ReturnShipment)
+            if (package.VerbalConfirmationEnabled && !upsShipment.Shipment.ReturnShipment)
             {
                 xmlWriter.WriteStartElement("VerbalConfirmation");
                 xmlWriter.WriteStartElement("ContactInfo");

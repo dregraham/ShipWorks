@@ -83,6 +83,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             package.DryIceRegulationSet = 0;
             package.DryIceWeight = 0;
 
+            package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationName = string.Empty;
             package.VerbalConfirmationPhone = string.Empty;
             package.VerbalConfirmationPhoneExtension = string.Empty;

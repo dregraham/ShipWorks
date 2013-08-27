@@ -138,7 +138,9 @@ CREATE TABLE [dbo].[WorldShipPackage]
 [VerbalConfirmationTelephone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DryIceRegulationSet] [nvarchar] (5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DryIceWeight] [float] NULL,
-[DryIceMedicalPurpose] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[DryIceMedicalPurpose] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DryIceWeightUnitOfMeasure] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
@@ -3026,7 +3028,7 @@ CREATE TABLE [dbo].[UpsShipment]
 [EmailNotifyMessage] [nvarchar] (120) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsDocumentsOnly] [bit] NOT NULL,
 [CustomsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CommercialInvoice] [bit] NOT NULL,
+[CommercialPaperlessInvoice] [bit] NOT NULL,
 [CommercialInvoiceTermsOfSale] [int] NOT NULL,
 [CommercialInvoicePurpose] [int] NOT NULL,
 [CommercialInvoiceComments] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -3042,7 +3044,7 @@ CREATE TABLE [dbo].[UpsShipment]
 [UspsTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Endorsement] [int] NOT NULL,
 [Subclassification] [int] NOT NULL,
-[PaperlessInternational] [bit] NOT NULL,
+[PaperlessAdditionalDocumentation] [bit] NOT NULL,
 [ShipperRelease] [bit] NOT NULL,
 [CarbonNeutral] [bit] NOT NULL
 )
@@ -3073,6 +3075,7 @@ CREATE TABLE [dbo].[UpsPackage]
 [TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AdditionalHandlingEnabled] [bit] NOT NULL,
+[VerbalConfirmationEnabled] [bit] NOT NULL,
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -3114,9 +3117,10 @@ CREATE TABLE [dbo].[UpsProfile]
 [ReturnContents] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Endorsement] [int] NULL,
 [Subclassification] [int] NULL,
-[PaperlessInternational] [bit] NULL,
+[PaperlessAdditionalDocumentation] [bit] NULL,
 [ShipperRelease] [bit] NULL,
-[CarbonNeutral] [bit] NULL
+[CarbonNeutral] [bit] NULL,
+[CommercialPaperlessInvoice] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfile] on [dbo].[UpsProfile]'
@@ -3138,6 +3142,7 @@ CREATE TABLE [dbo].[UpsProfilePackage]
 [DimsWeight] [float] NULL,
 [DimsAddWeight] [bit] NULL,
 [AdditionalHandlingEnabled] [bit] NULL,
+[VerbalConfirmationEnabled] [bit] NULL,
 [VerbalConfirmationName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VerbalConfirmationPhoneExtension] [nvarchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -5175,7 +5180,7 @@ EXEC sp_addextendedproperty N'AuditName', N'COD', 'SCHEMA', N'dbo', 'TABLE', N'U
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'CodPaymentType'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'CommercialInvoice'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'CommercialPaperlessInvoice'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'CommercialInvoiceComments'
 GO

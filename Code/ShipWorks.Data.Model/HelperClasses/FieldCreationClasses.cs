@@ -17617,6 +17617,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.AdditionalHandlingEnabled);}
 		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationEnabled field instance</summary>
+		public static EntityField2 VerbalConfirmationEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationEnabled);}
+		}
 		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationName field instance</summary>
 		public static EntityField2 VerbalConfirmationName
 		{
@@ -17872,11 +17877,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension);}
 		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DryIceEnabled field instance</summary>
-		public static EntityField2 DryIceEnabled
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceEnabled);}
-		}
 		/// <summary>Creates a new UpsProfilePackageEntity.DryIceRegulationSet field instance</summary>
 		public static EntityField2 DryIceRegulationSet
 		{
@@ -17891,6 +17891,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceIsForMedicalUse
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceIsForMedicalUse);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceEnabled field instance</summary>
+		public static EntityField2 DryIceEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceEnabled);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationEnabled field instance</summary>
+		public static EntityField2 VerbalConfirmationEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationEnabled);}
 		}
 	}
 
@@ -18736,6 +18746,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceMedicalPurpose
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceMedicalPurpose);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceOption field instance</summary>
+		public static EntityField2 DryIceOption
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceOption);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceWeightUnitOfMeasure field instance</summary>
+		public static EntityField2 DryIceWeightUnitOfMeasure
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure);}
 		}
 	}
 

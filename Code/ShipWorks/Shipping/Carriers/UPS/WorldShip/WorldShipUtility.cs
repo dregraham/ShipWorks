@@ -620,6 +620,68 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             worldshipPackage.ShipperRelease = ups.ShipperRelease ? "Y" : "N";
 
+
+            // TODO: For testing, delete these!
+            package.AdditionalHandlingEnabled = true;
+            package.DryIceEnabled = false;
+            package.DryIceIsForMedicalUse = true;
+            package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Iata;
+            package.DryIceWeight = 4;
+            package.VerbalConfirmationEnabled = true;
+            package.VerbalConfirmationName = "Verbconf Name";
+            package.VerbalConfirmationPhone = "314-555-1212";
+            package.VerbalConfirmationPhoneExtension = "x1234";
+
+
+            worldshipPackage.AdditionalHandlingEnabled = package.AdditionalHandlingEnabled ? "Y" : "N";
+
+            if (package.DryIceEnabled && package.VerbalConfirmationEnabled)
+            {
+                throw new UpsException("Dry Ice and Verbal Confirmation are not allowed on the same shipment.");
+            }
+
+            if (package.DryIceEnabled && package.AdditionalHandlingEnabled)
+            {
+                throw new UpsException("Dry Ice and Additional Handling are not allowed on the same shipment.");
+            }
+
+            if (package.DryIceEnabled)
+            {
+                worldshipPackage.DryIceWeight = package.DryIceWeight;
+                if (upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Ounces)
+                {
+                    worldshipPackage.DryIceWeight = worldshipPackage.DryIceWeight * 16;
+                }
+
+                UpsDryIceRegulationSet upsDryIceRegulationSet = (UpsDryIceRegulationSet) package.DryIceRegulationSet;
+                switch (upsDryIceRegulationSet)
+                {
+                    case UpsDryIceRegulationSet.Cfr:
+                        worldshipPackage.DryIceRegulationSet = "49CFR";
+                        break;
+                    case UpsDryIceRegulationSet.Iata:
+                        worldshipPackage.DryIceRegulationSet = "IATA";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(string.Format("The Dry Ice Regulation Set '{0}' is unknown.", EnumHelper.GetDescription(upsDryIceRegulationSet)));
+                }
+
+                worldshipPackage.DryIceMedicalPurpose = package.DryIceIsForMedicalUse ? "Y" : "N";
+            }
+
+            if (package.VerbalConfirmationEnabled)
+            {
+                worldshipPackage.VerbalConfirmationOption = "Y";
+                worldshipPackage.VerbalConfirmationContactName = package.VerbalConfirmationName;
+                
+                // WorldShip imports correctly when all non-numerics are removed from the concatenated phone number.
+                Regex onlyNumbers = new Regex("[^.0-9]");
+                string worldShipPhone = onlyNumbers.Replace(package.VerbalConfirmationPhone, string.Empty);
+                worldShipPhone += onlyNumbers.Replace(package.VerbalConfirmationPhoneExtension, string.Empty);
+
+                worldshipPackage.VerbalConfirmationTelephone = worldShipPhone;
+            }
+
             adapter.SaveAndRefetch(worldshipPackage);
         }
 

@@ -588,6 +588,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DryIceMedicalPurpose", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceOption", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DryIceWeightUnitOfMeasure", fieldHashtable);
 		}
 		#endregion
 
@@ -1156,6 +1162,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceMedicalPurpose, true); }
 			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceMedicalPurpose, value); }
+		}
+
+		/// <summary> The DryIceOption property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceOption"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String DryIceOption
+		{
+			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceOption, true); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceOption, value); }
+		}
+
+		/// <summary> The DryIceWeightUnitOfMeasure property of the Entity WorldShipPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceWeightUnitOfMeasure"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String DryIceWeightUnitOfMeasure
+		{
+			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, true); }
+			set	{ SetValue((int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, value); }
 		}
 
 

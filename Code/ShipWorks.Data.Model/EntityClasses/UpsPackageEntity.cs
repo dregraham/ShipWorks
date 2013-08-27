@@ -515,6 +515,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AdditionalHandlingEnabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("VerbalConfirmationEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("VerbalConfirmationName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -827,6 +830,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UpsPackageFieldIndex.AdditionalHandlingEnabled, true); }
 			set	{ SetValue((int)UpsPackageFieldIndex.AdditionalHandlingEnabled, value); }
+		}
+
+		/// <summary> The VerbalConfirmationEnabled property of the Entity UpsPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsPackage"."VerbalConfirmationEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean VerbalConfirmationEnabled
+		{
+			get { return (System.Boolean)GetValue((int)UpsPackageFieldIndex.VerbalConfirmationEnabled, true); }
+			set	{ SetValue((int)UpsPackageFieldIndex.VerbalConfirmationEnabled, value); }
 		}
 
 		/// <summary> The VerbalConfirmationName property of the Entity UpsPackage<br/><br/>
