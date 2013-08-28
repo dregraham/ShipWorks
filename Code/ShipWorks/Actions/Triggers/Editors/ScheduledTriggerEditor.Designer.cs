@@ -34,6 +34,13 @@
             this.startTime = new System.Windows.Forms.DateTimePicker();
             this.startDateTimeLabel = new System.Windows.Forms.Label();
             this.startDate = new System.Windows.Forms.DateTimePicker();
+            this.endsLabel = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.endsOnTime = new System.Windows.Forms.DateTimePicker();
+            this.endsOnDate = new System.Windows.Forms.DateTimePicker();
+            this.endsOnRadioButton = new System.Windows.Forms.RadioButton();
+            this.endsNeverRadioButton = new System.Windows.Forms.RadioButton();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // actionScheduleTypeLink
@@ -64,7 +71,7 @@
             // 
             this.recurringSettingsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.recurringSettingsGroup.Location = new System.Drawing.Point(0, 50);
+            this.recurringSettingsGroup.Location = new System.Drawing.Point(0, 94);
             this.recurringSettingsGroup.Name = "recurringSettingsGroup";
             this.recurringSettingsGroup.Padding = new System.Windows.Forms.Padding(0);
             this.recurringSettingsGroup.Size = new System.Drawing.Size(403, 14);
@@ -101,10 +108,76 @@
             this.startDate.TabIndex = 36;
             this.startDate.ValueChanged += new System.EventHandler(this.OnStartDateTimeChanged);
             // 
+            // endsLabel
+            // 
+            this.endsLabel.AutoSize = true;
+            this.endsLabel.Location = new System.Drawing.Point(9, 51);
+            this.endsLabel.Name = "endsLabel";
+            this.endsLabel.Size = new System.Drawing.Size(29, 13);
+            this.endsLabel.TabIndex = 39;
+            this.endsLabel.Text = "End:";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.endsOnTime);
+            this.panel1.Controls.Add(this.endsOnDate);
+            this.panel1.Controls.Add(this.endsOnRadioButton);
+            this.panel1.Controls.Add(this.endsNeverRadioButton);
+            this.panel1.Location = new System.Drawing.Point(38, 46);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(264, 49);
+            this.panel1.TabIndex = 41;
+            // 
+            // endsOnTime
+            // 
+            this.endsOnTime.CustomFormat = "h:mm tt";
+            this.endsOnTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.endsOnTime.Location = new System.Drawing.Point(152, 24);
+            this.endsOnTime.Name = "endsOnTime";
+            this.endsOnTime.ShowUpDown = true;
+            this.endsOnTime.Size = new System.Drawing.Size(101, 21);
+            this.endsOnTime.TabIndex = 44;
+            this.endsOnTime.ValueChanged += new System.EventHandler(this.OnEndDateTimeChanged);
+            // 
+            // endsOnDate
+            // 
+            this.endsOnDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.endsOnDate.Location = new System.Drawing.Point(48, 24);
+            this.endsOnDate.Name = "endsOnDate";
+            this.endsOnDate.Size = new System.Drawing.Size(98, 21);
+            this.endsOnDate.TabIndex = 43;
+            this.endsOnDate.ValueChanged += new System.EventHandler(this.OnEndDateTimeChanged);
+            // 
+            // endsOnRadioButton
+            // 
+            this.endsOnRadioButton.AutoSize = true;
+            this.endsOnRadioButton.Location = new System.Drawing.Point(3, 28);
+            this.endsOnRadioButton.Name = "endsOnRadioButton";
+            this.endsOnRadioButton.Size = new System.Drawing.Size(39, 17);
+            this.endsOnRadioButton.TabIndex = 42;
+            this.endsOnRadioButton.TabStop = true;
+            this.endsOnRadioButton.Text = "On";
+            this.endsOnRadioButton.UseVisualStyleBackColor = true;
+            this.endsOnRadioButton.CheckedChanged += new System.EventHandler(this.OnEndsRadioButtonsCheckedChanged);
+            // 
+            // endsNeverRadioButton
+            // 
+            this.endsNeverRadioButton.AutoSize = true;
+            this.endsNeverRadioButton.Location = new System.Drawing.Point(3, 3);
+            this.endsNeverRadioButton.Name = "endsNeverRadioButton";
+            this.endsNeverRadioButton.Size = new System.Drawing.Size(54, 17);
+            this.endsNeverRadioButton.TabIndex = 41;
+            this.endsNeverRadioButton.TabStop = true;
+            this.endsNeverRadioButton.Text = "Never";
+            this.endsNeverRadioButton.UseVisualStyleBackColor = true;
+            this.endsNeverRadioButton.CheckedChanged += new System.EventHandler(this.OnEndsRadioButtonsCheckedChanged);
+            // 
             // ScheduledTriggerEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.endsLabel);
             this.Controls.Add(this.startTime);
             this.Controls.Add(this.startDateTimeLabel);
             this.Controls.Add(this.startDate);
@@ -112,8 +185,10 @@
             this.Controls.Add(this.labelTriggerHeader);
             this.Controls.Add(this.actionScheduleTypeLink);
             this.Name = "ScheduledTriggerEditor";
-            this.Size = new System.Drawing.Size(403, 76);
+            this.Size = new System.Drawing.Size(403, 115);
             this.Load += new System.EventHandler(this.OnLoad);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -127,5 +202,11 @@
         private System.Windows.Forms.DateTimePicker startTime;
         private System.Windows.Forms.Label startDateTimeLabel;
         private System.Windows.Forms.DateTimePicker startDate;
+        private System.Windows.Forms.Label endsLabel;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.DateTimePicker endsOnTime;
+        private System.Windows.Forms.DateTimePicker endsOnDate;
+        private System.Windows.Forms.RadioButton endsOnRadioButton;
+        private System.Windows.Forms.RadioButton endsNeverRadioButton;
     }
 }

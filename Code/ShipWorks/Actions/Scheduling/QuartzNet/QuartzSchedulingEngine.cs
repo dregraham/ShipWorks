@@ -3,6 +3,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Globalization;
@@ -85,11 +86,20 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
 
                 var adaptedSchedule = scheduleAdapter.Adapt(schedule);
 
-                var trigger = (IOperableTrigger)TriggerBuilder.Create()
+                // Create a trigger builder based on common properties
+                TriggerBuilder triggerBuilder = TriggerBuilder.Create()
                     .WithIdentity(job.Key.Name)
                     .StartAt(schedule.StartDateTimeInUtc)
-                    .WithSchedule(adaptedSchedule.ScheduleBuilder)
-                    .Build();
+                    .WithSchedule(adaptedSchedule.ScheduleBuilder);
+
+                // If the scheduler should end at a specific time, add the end date and time
+                if (schedule.EndsOnType == ActionEndsOnType.SpecificDateTime)
+                {
+                    triggerBuilder.EndAt(schedule.EndDateTimeInUtc);
+                }
+
+                // Build the trigger
+                IOperableTrigger trigger = (IOperableTrigger) triggerBuilder.Build();
 
                 if (!TriggerUtils.ComputeFireTimes(trigger, adaptedSchedule.Calendar, 1).Any())
                     throw new SchedulingException("Based on the configured schedule, the action will never execute.");

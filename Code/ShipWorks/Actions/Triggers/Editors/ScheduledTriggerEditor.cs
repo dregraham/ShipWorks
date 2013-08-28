@@ -9,6 +9,9 @@ using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Actions.Triggers.Editors
 {
+    /// <summary>
+    /// Editor for scheduled triggers
+    /// </summary>
     public partial class ScheduledTriggerEditor : ActionTriggerEditor
     {
         private readonly ScheduledTrigger trigger;
@@ -39,10 +42,33 @@ namespace ShipWorks.Actions.Triggers.Editors
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnLoad(object sender, EventArgs e)
         {
-            DateTime localTime = trigger.Schedule.StartDateTimeInUtc.ToLocalTime();
+            DateTime localStartTime = trigger.Schedule.StartDateTimeInUtc.ToLocalTime();
+            
+            startDate.Value = localStartTime.Date;
+            startTime.Value = localStartTime;
 
-            startDate.Value = localTime.Date;
-            startTime.Value = localTime;
+            if (trigger.Schedule.EndsOnType == ActionEndsOnType.SpecificDateTime)
+            {
+                endsNeverRadioButton.Checked = false;
+                endsOnRadioButton.Checked = true;
+                endsOnDate.Enabled = true;
+                endsOnTime.Enabled = true;
+
+                if (trigger.Schedule.EndDateTimeInUtc.HasValue)
+                {
+                    DateTime localEndTime = trigger.Schedule.EndDateTimeInUtc.Value.ToLocalTime();
+
+                    endsOnDate.Value = localEndTime;
+                    endsOnTime.Value = localEndTime;
+                }
+            }
+            else
+            {
+                endsNeverRadioButton.Checked = true;
+                endsOnRadioButton.Checked = false;
+                endsOnDate.Enabled = false;
+                endsOnTime.Enabled = false;
+            }
 
             UpdateScheduledTriggerOptions();
         }
@@ -125,15 +151,34 @@ namespace ShipWorks.Actions.Triggers.Editors
                 var oldSchedule = trigger.Schedule;
                 trigger.Schedule = ActionScheduleFactory.CreateActionSchedule(actionScheduleType);
                 trigger.Schedule.StartDateTimeInUtc = oldSchedule.StartDateTimeInUtc;
+                trigger.Schedule.EndDateTimeInUtc = oldSchedule.EndDateTimeInUtc;
+                trigger.Schedule.EndsOnType = oldSchedule.EndsOnType;
                 SelectInputSource(actionScheduleType);
+            }
+        }
+
+        /// <summary>
+        /// Updates the ends on controls based on radio selected
+        /// </summary>
+        void OnEndsRadioButtonsCheckedChanged(object sender, EventArgs e)
+        {
+            if (endsOnRadioButton.Checked)
+            {
+                trigger.Schedule.EndsOnType = ActionEndsOnType.SpecificDateTime;
+                endsOnDate.Enabled = true;
+                endsOnTime.Enabled = true;
+            }
+            else
+            {
+                trigger.Schedule.EndsOnType = ActionEndsOnType.Never;
+                endsOnDate.Enabled = false;
+                endsOnTime.Enabled = false;
             }
         }
 
         /// <summary>
         /// Called when [start date time changed].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnStartDateTimeChanged(object sender, EventArgs e)
         {
             // Separate controls are used to capture date/time - combine them to obtain the date and
@@ -142,6 +187,19 @@ namespace ShipWorks.Actions.Triggers.Editors
 
             // Deduct the seconds, so the trigger is set at the top of the minute (i.e. 12:41:00 AM instead of 12:41:43 AM)
             trigger.Schedule.StartDateTimeInUtc = trigger.Schedule.StartDateTimeInUtc.AddSeconds(-trigger.Schedule.StartDateTimeInUtc.Second);
+        }
+
+        /// <summary>
+        /// Called when end date/time changed.
+        /// </summary>
+        private void OnEndDateTimeChanged(object sender, EventArgs e)
+        {
+            // Separate controls are used to capture ends on date/time - combine them to obtain the date and
+            // use the UTC date since this getting assigned back to the trigger
+            DateTime endDateTime = endsOnDate.Value.Date.Add(endsOnTime.Value.TimeOfDay).ToUniversalTime();
+
+            // Add a second, so the trigger can run at the last second if needed.
+            trigger.Schedule.EndDateTimeInUtc = endDateTime.AddSeconds(1);
         }
     }
 }
