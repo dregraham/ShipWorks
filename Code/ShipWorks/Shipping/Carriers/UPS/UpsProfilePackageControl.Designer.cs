@@ -47,11 +47,13 @@
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelDimensions = new System.Windows.Forms.Label();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
+            this.verbalConfirmationDetails = new ShipWorks.Shipping.Carriers.UPS.UpsContactInfoControl();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.verbalConfirmationDetails);
             this.groupBox.Controls.Add(this.verbalConfirmationState);
             this.groupBox.Controls.Add(this.dryIceState);
             this.groupBox.Controls.Add(this.dryIceControl);
@@ -73,7 +75,7 @@
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox.Location = new System.Drawing.Point(0, 0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(441, 297);
+            this.groupBox.Size = new System.Drawing.Size(441, 360);
             this.groupBox.TabIndex = 1;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Package {0}";
@@ -201,7 +203,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(28, 22);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 260);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 323);
             this.kryptonBorderEdge.TabIndex = 83;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -271,6 +273,16 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 5;
             // 
+            // verbalConfirmationDetails
+            // 
+            this.verbalConfirmationDetails.ContactName = "";
+            this.verbalConfirmationDetails.Location = new System.Drawing.Point(54, 282);
+            this.verbalConfirmationDetails.Name = "verbalConfirmationDetails";
+            this.verbalConfirmationDetails.PhoneExtension = "";
+            this.verbalConfirmationDetails.PhoneNumber = "";
+            this.verbalConfirmationDetails.Size = new System.Drawing.Size(354, 62);
+            this.verbalConfirmationDetails.TabIndex = 96;
+            // 
             // UpsProfilePackageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,7 +291,7 @@
             this.Controls.Add(this.groupBox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsProfilePackageControl";
-            this.Size = new System.Drawing.Size(441, 297);
+            this.Size = new System.Drawing.Size(441, 360);
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -307,5 +319,6 @@
         private System.Windows.Forms.CheckBox verbalConfirmationState;
         private System.Windows.Forms.CheckBox dryIceState;
         private UpsDryIceControl dryIceControl;
+        private UpsContactInfoControl verbalConfirmationDetails;
     }
 }
