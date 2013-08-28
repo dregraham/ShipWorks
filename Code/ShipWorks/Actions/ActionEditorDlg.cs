@@ -77,6 +77,7 @@ namespace ShipWorks.Actions
             // Initialize the trigger combo
             EnumHelper.BindComboBox<ActionTriggerType>(triggerCombo);
             triggerCombo.SelectedValue = (ActionTriggerType) action.TriggerType;
+            UpdateTriggeringComputerUI((ActionTriggerType)action.TriggerType);
 
             // Create the trigger settings instance and it's editor
             originalTrigger = ActionManager.LoadTrigger(action);
@@ -172,7 +173,32 @@ namespace ShipWorks.Actions
             trigger = ActionTriggerFactory.CreateTrigger(triggerType, null);
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
+            UpdateTriggeringComputerUI(triggerType);
+
             CreateTriggerEditor();
+        }
+
+        /// <summary>
+        /// Updates the text and appearance of the runOnTriggeringComputer radio button based
+        /// on the action trigger type.
+        /// </summary>
+        private void UpdateTriggeringComputerUI(ActionTriggerType triggerType)
+        {
+            // Disable the triggering computer option - triggering computer is not a valid option 
+            // when the trigger is based on a scheduled
+            runOnTriggerringComputer.Enabled = triggerType != ActionTriggerType.Scheduled;
+
+            if (triggerType == ActionTriggerType.Scheduled)
+            {
+                // Since it's not really a valid use case and should be disabled, just the default/generic text for this 
+                runOnTriggerringComputer.Text = string.Format("On the computer that triggers the action");
+            }
+            else
+            {
+                // Dynamically update the text so that it contains contextual information regarding
+                // what the triggering computer will actually be
+                runOnTriggerringComputer.Text = string.Format("On the computer where {0}", EnumHelper.GetDescription(triggerType).ToLower());
+            }
         }
 
         /// <summary>
@@ -218,7 +244,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Layout and upate all the task bubbles to reflect their appropriate indexes
+        /// Layout and update all the task bubbles to reflect their appropriate indexes
         /// </summary>
         private void UpdateTaskBubbles()
         {
@@ -250,8 +276,9 @@ namespace ShipWorks.Actions
             {
                 runOnSpecificComputers.Enabled = true;
                 runOnAnyComputer.Enabled = true;
-                runOnTriggerringComputer.Enabled = true;
             }
+            
+            UpdateTriggeringComputerUI(trigger.TriggerType);
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
