@@ -491,7 +491,7 @@ namespace ShipWorks.Actions
             {
                 ActiveControl = runOnTriggerringComputer;
                 optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowError(this, "A scheduled action cannot be set to run on the triggering computer.");
+                MessageHelper.ShowError(this, "Since a scheduled action is not initiated by any particular computer, you cannot choose the option for running the action on the computer that triggered the action.");
                 return;
             }
 
