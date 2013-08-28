@@ -9,15 +9,15 @@ using System.Windows.Forms;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    public partial class RunProgramTaskEditor : ActionTaskEditor
+    public partial class RunCommandTaskEditor : ActionTaskEditor
     {
-        private readonly RunProgramTask task;
+        private readonly RunCommandTask task;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RunProgramTaskEditor"/> class.
+        /// Initializes a new instance of the <see cref="RunCommandTaskEditor"/> class.
         /// </summary>
         /// <param name="task">The task.</param>
-        public RunProgramTaskEditor(RunProgramTask task)
+        public RunCommandTaskEditor(RunCommandTask task)
         {
             if (task == null)
             {

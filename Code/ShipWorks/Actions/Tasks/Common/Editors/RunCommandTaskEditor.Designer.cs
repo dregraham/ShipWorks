@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Actions.Tasks.Common.Editors
 {
-    partial class RunProgramTaskEditor
+    partial class RunCommandTaskEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.executeLabel = new System.Windows.Forms.Label();
             this.tokenizedExecuteCommand = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.shouldTimeout = new System.Windows.Forms.CheckBox();
@@ -57,7 +57,7 @@
             this.tokenizedExecuteCommand.ShowTokenOptions = false;
             this.tokenizedExecuteCommand.Size = new System.Drawing.Size(435, 98);
             this.tokenizedExecuteCommand.TabIndex = 2;
-            this.tokenizedExecuteCommand.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            this.tokenizedExecuteCommand.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // shouldTimeout
             // 
@@ -75,7 +75,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(262, 128);
+            this.label1.Location = new System.Drawing.Point(243, 128);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 13);
             this.label1.TabIndex = 4;
@@ -83,7 +83,7 @@
             // 
             // timeoutInMinutes
             // 
-            this.timeoutInMinutes.Location = new System.Drawing.Point(214, 126);
+            this.timeoutInMinutes.Location = new System.Drawing.Point(200, 126);
             this.timeoutInMinutes.Maximum = new decimal(new int[] {
             300,
             0,
@@ -104,7 +104,7 @@
             0});
             this.timeoutInMinutes.ValueChanged += new System.EventHandler(this.OnTimeoutValueChanged);
             // 
-            // RunProgramTaskEditor
+            // RunCommandTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -113,7 +113,7 @@
             this.Controls.Add(this.shouldTimeout);
             this.Controls.Add(this.tokenizedExecuteCommand);
             this.Controls.Add(this.executeLabel);
-            this.Name = "RunProgramTaskEditor";
+            this.Name = "RunCommandTaskEditor";
             this.Size = new System.Drawing.Size(441, 154);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInMinutes)).EndInit();
             this.ResumeLayout(false);

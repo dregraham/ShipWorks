@@ -17,18 +17,18 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for running a program
     /// </summary>
-    [ActionTask("Run a program", "RunProgram")]
-    public class RunProgramTask : ActionTask
+    [ActionTask("Run a command", "RunCommand")]
+    public class RunCommandTask : ActionTask
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(RunProgramTask));
+        private static readonly ILog log = LogManager.GetLogger(typeof(RunCommandTask));
 
         private static string commandLogFolder;
         private static int nextRunNumber = 0;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RunProgramTask"/> class.
+        /// Initializes a new instance of the <see cref="RunCommandTask"/> class.
         /// </summary>
-        public RunProgramTask()
+        public RunCommandTask()
         {
             // Provide a default timeout value that coincides with minimum timeout 
             // allowed by the task editor
@@ -41,7 +41,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         public override ActionTaskEditor CreateEditor()
         {
-            return new RunProgramTaskEditor(this);
+            return new RunCommandTaskEditor(this);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 if (commandLogFolder == null)
                 {
-                    ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(typeof(RunProgramTask));
+                    ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(typeof(RunCommandTask));
                     commandLogFolder = Path.Combine(LogSession.LogFolder, descriptor.Identifier);
 
                     Directory.CreateDirectory(commandLogFolder);
