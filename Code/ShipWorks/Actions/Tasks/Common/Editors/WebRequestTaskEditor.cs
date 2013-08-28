@@ -22,6 +22,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
         ContextMenuStrip verbMenu;
         ContextMenuStrip authMenu;
+        ContextMenuStrip cardinalityMenu;
+
+        ToolStripMenuItem singleRequestMenuItem;
+        ToolStripMenuItem oneRequestPerFilterResultMenuItem;
+        ToolStripMenuItem oneRequestPerTemplateResultMenuItem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestTaskEditor"/> class.
@@ -44,16 +49,13 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             CreateVerbMenu();
             CreateAuthMenu();
+            CreateCardinalityMenu();
 
             verbLabel.Text = EnumHelper.GetDescription(task.Verb);
             urlTextBox.Text = task.UrlToHit;
             authLabel.Text = task.UseBasicAuthentication ? "basic" : "no";
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
-
-            oneRequestPerTemplateResult.Checked = task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult;
-            oneRequestPerFilterResult.Checked = task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult;
-            singleRequest.Checked = task.RequestCardinality == WebRequestCardinality.SingleRequest;
 
             urlTextBox.Validating += OnUrlTextBoxValidating;
             urlTextBox.Validated += OnUrlTextBoxValidated;
@@ -69,6 +71,16 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
         public override void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
         {
+            var entityDescription = ActionTaskBubble.GetTriggeringEntityDescription(inputType) ?? "entry";
+
+            oneRequestPerFilterResultMenuItem.Text =
+                string.Format(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerFilterResult), entityDescription);
+
+            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult)
+            {
+                cardinalityLabel.Text = oneRequestPerFilterResultMenuItem.Text;
+            }
+
             UpdateBodyUI();
         }
 
@@ -125,6 +137,29 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             basicMenuItem.Click += OnAuthMenuItemClick;
             basicMenuItem.Tag = true;
             authMenu.Items.Add(basicMenuItem);
+        }
+
+        /// <summary>
+        /// Creates the cardinality menu.
+        /// </summary>
+        void CreateCardinalityMenu()
+        {
+            cardinalityMenu = new ContextMenuStrip();
+
+            this.singleRequestMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(WebRequestCardinality.SingleRequest));
+            singleRequestMenuItem.Click += OnCardinalityMenuItemClick;
+            singleRequestMenuItem.Tag = WebRequestCardinality.SingleRequest;
+            cardinalityMenu.Items.Add(singleRequestMenuItem);
+
+            this.oneRequestPerFilterResultMenuItem = new ToolStripMenuItem();
+            oneRequestPerFilterResultMenuItem.Click += OnCardinalityMenuItemClick;
+            oneRequestPerFilterResultMenuItem.Tag = WebRequestCardinality.OneRequestPerFilterResult;
+            cardinalityMenu.Items.Add(oneRequestPerFilterResultMenuItem);
+
+            this.oneRequestPerTemplateResultMenuItem = new ToolStripMenuItem();
+            oneRequestPerTemplateResultMenuItem.Click += OnCardinalityMenuItemClick;
+            oneRequestPerTemplateResultMenuItem.Tag = WebRequestCardinality.OneRequestPerTemplateResult;
+            cardinalityMenu.Items.Add(oneRequestPerTemplateResultMenuItem);
         }
 
         /// <summary>
@@ -230,52 +265,88 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             var inputSource = (ActionTaskInputSource)task.Entity.InputSource;
 
-            oneRequestPerFilterResult.Enabled =
+            oneRequestPerFilterResultMenuItem.Available =
                 inputSource == ActionTaskInputSource.FilterContents;
 
-            oneRequestPerTemplateResult.Enabled =
+            oneRequestPerTemplateResultMenuItem.Available =
                 inputSource != ActionTaskInputSource.Nothing &&
                 task.Verb != HttpVerb.Get;
 
-            if (oneRequestPerTemplateResult.Checked && !oneRequestPerTemplateResult.Enabled)
+            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult && !oneRequestPerTemplateResultMenuItem.Available)
             {
-                oneRequestPerFilterResult.Checked = true;
+                oneRequestPerFilterResultMenuItem.PerformClick();
             }
 
-            if (oneRequestPerFilterResult.Checked && !oneRequestPerFilterResult.Enabled)
+            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult && !oneRequestPerFilterResultMenuItem.Available)
             {
-                singleRequest.Checked = true;
+                singleRequestMenuItem.PerformClick();
             }
 
-            labelTemplate.Enabled =
-            templateCombo.Enabled =
-                oneRequestPerTemplateResult.Checked;
+            labelTemplate.Visible =
+            templateCombo.Visible =
+                (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult);
 
-            if(!oneRequestPerTemplateResult.Checked)
+            if (task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult)
             {
                 templateCombo.SelectedTemplate = null;
             }
         }
 
         /// <summary>
-        /// Called when a cardinality radio button checked state changes.
+        /// Manually sizes and aligns the controls affected by the verb text size.
         /// </summary>
-        void OnCardinalityCheckedChanged(object sender, EventArgs e)
+        void OnVerbLabelSizeChanged(object sender, EventArgs e)
         {
-            if (oneRequestPerTemplateResult.Checked)
-            {
-                task.RequestCardinality = WebRequestCardinality.OneRequestPerTemplateResult;
-            }
-            else if (oneRequestPerFilterResult.Checked)
-            {
-                task.RequestCardinality = WebRequestCardinality.OneRequestPerFilterResult;
-            }
-            else
-            {
-                task.RequestCardinality = WebRequestCardinality.SingleRequest;
-            }
+            requestToLabel.Left = verbLabel.Right - 3;
+            verbPanel.Width = requestToLabel.Right - 2;
+        }
 
-            UpdateBodyUI();
+        /// <summary>
+        /// Manually sizes and aligns the controls affected by the auth text size.
+        /// </summary>
+        void OnAuthLabelSizeChanged(object sender, EventArgs e)
+        {
+            authLabelSuffix.Left = authLabel.Right - 3;
+            authTypePanel.Width = authLabelSuffix.Right - 3;
+        }
+
+        /// <summary>
+        /// Updates the controls displaying the verb text.
+        /// </summary>
+        void OnVerbLabelTextChanged(object sender, EventArgs e)
+        {
+            oneRequestPerTemplateResultMenuItem.Text =
+                string.Format(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerTemplateResult), verbLabel.Text);
+
+            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult)
+            {
+                cardinalityLabel.Text = oneRequestPerTemplateResultMenuItem.Text;
+            }
+        }
+
+        /// <summary>
+        /// Shows the cardinality (a request per...) menu.
+        /// </summary>
+        void OnCardinalityLabelClick(object sender, EventArgs e)
+        {
+            cardinalityMenu.Show(cardinalityLabel.Parent.PointToScreen(new Point(cardinalityLabel.Left, cardinalityLabel.Bottom)));
+        }
+
+        /// <summary>
+        /// Called when a cardinality menu item is clicked.
+        /// </summary>
+        void OnCardinalityMenuItemClick(object sender, EventArgs e)
+        {
+            var cardinalityMenuItem = (ToolStripMenuItem)sender;
+            var clickedCardinality = (WebRequestCardinality)cardinalityMenuItem.Tag;
+
+            if (task.RequestCardinality != clickedCardinality)
+            {
+                task.RequestCardinality = clickedCardinality;
+                cardinalityLabel.Text = cardinalityMenuItem.Text;
+
+                UpdateBodyUI();
+            }
         }
     }
 }
