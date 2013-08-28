@@ -31,7 +31,7 @@
             System.Windows.Forms.Button closeButton;
             System.Windows.Forms.Label labelHeader;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServiceStatusDialog));
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.startingServicePanel = new System.Windows.Forms.Panel();
             this.startingServiceImage = new System.Windows.Forms.PictureBox();
             this.startingServiceLabel = new System.Windows.Forms.Label();
@@ -55,12 +55,11 @@
             // 
             // labelHeader
             // 
-            labelHeader.AutoSize = true;
             labelHeader.FlatStyle = System.Windows.Forms.FlatStyle.System;
             labelHeader.Location = new System.Drawing.Point(12, 9);
             labelHeader.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             labelHeader.Name = "labelHeader";
-            labelHeader.Size = new System.Drawing.Size(687, 52);
+            labelHeader.Size = new System.Drawing.Size(563, 52);
             labelHeader.TabIndex = 8;
             labelHeader.Text = resources.GetString("labelHeader.Text");
             // 
@@ -105,13 +104,13 @@
             this.entityGrid.EnableSearching = false;
             this.entityGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
             this.entityGrid.LiveResize = false;
-            this.entityGrid.Location = new System.Drawing.Point(12, 52);
+            this.entityGrid.Location = new System.Drawing.Point(12, 64);
             this.entityGrid.Name = "entityGrid";
             this.entityGrid.NullRepresentation = "";
-            this.entityGrid.Renderer = windowsXPRenderer2;
+            this.entityGrid.Renderer = windowsXPRenderer1;
             this.entityGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.entityGrid.ShadeAlternateRows = true;
-            this.entityGrid.Size = new System.Drawing.Size(554, 169);
+            this.entityGrid.Size = new System.Drawing.Size(554, 157);
             this.entityGrid.StretchPrimaryGrid = false;
             this.entityGrid.TabIndex = 0;
             // 
@@ -139,7 +138,6 @@
             this.startingServicePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.startingServiceImage)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

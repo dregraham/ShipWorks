@@ -481,33 +481,19 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private static void CheckForSchedulerServiceStoppedChanges()
         {
             // Check the database for any changes
-            List<ServiceStatusEntity> stoppedSchedulerServices = ServiceStatusManager.GetComputersRequiringShipWorksService();
+            bool areAnyRequiredSchedulersStopped = ServiceStatusManager.GetComputersRequiringShipWorksService().Any();
             List<DashboardSchedulerServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardSchedulerServiceStoppedItem>().ToList<DashboardSchedulerServiceStoppedItem>();
 
             // If the message is already there we don't have to do anything
-            if (!existingDashboardItems.Any() && stoppedSchedulerServices.Count > 0)
+            if (!existingDashboardItems.Any() && areAnyRequiredSchedulersStopped)
             {
                 DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
                 AddDashboardItem(item);
             }
-            else if (existingDashboardItems.Any() && stoppedSchedulerServices.Count == 0)
+            else if (existingDashboardItems.Any() && !areAnyRequiredSchedulersStopped)
             {
                 // The stopped services are now running, so remove the stopped dashboard item.
-                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
-                
                 existingDashboardItems.ForEach(RemoveDashboardItem);
-
-                //// It's no longer active, so we've got to get rid of it.
-                //RemoveDashboardItem(item);
-            }
-            else if (stoppedSchedulerServices.Count > 0)
-            {
-                // There are existing service dashboard items AND the number of stopped services has changed, so remove
-                // the current dashboard item and add the new one.
-                existingDashboardItems.ForEach(RemoveDashboardItem);
-                
-                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
-                AddDashboardItem(item);
             }
         }
 
