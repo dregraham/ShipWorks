@@ -77,7 +77,6 @@ namespace ShipWorks.Actions
             // Initialize the trigger combo
             EnumHelper.BindComboBox<ActionTriggerType>(triggerCombo);
             triggerCombo.SelectedValue = (ActionTriggerType) action.TriggerType;
-            UpdateTriggeringComputerUI((ActionTriggerType)action.TriggerType);
 
             // Create the trigger settings instance and it's editor
             originalTrigger = ActionManager.LoadTrigger(action);
@@ -489,10 +488,11 @@ namespace ShipWorks.Actions
 
             if (((ActionTriggerType)triggerCombo.SelectedValue) == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
             {
-                ActiveControl = runOnTriggerringComputer;
-                optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowError(this, "Since a scheduled action is not initiated by any particular computer, you cannot choose the option for running the action on the computer that triggered the action.");
-                return;
+                // When the option to run on the triggering computer is selected and wit the Schedule trigger, just change 
+                // this to run on any computer for now with the thought process being that we don't to put another step 
+                // for the user to complete when creating a scheduled action
+                runOnTriggerringComputer.Checked = false;
+                runOnAnyComputer.Checked = true;
             }
 
             Cursor.Current = Cursors.WaitCursor;
