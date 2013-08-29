@@ -57,9 +57,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             cardinalityLabel.Text = EnumHelper.GetDescription(task.RequestCardinality);
             verbLabel.Text = EnumHelper.GetDescription(task.Verb);
             urlTextBox.Text = task.UrlToHit;
+
+            // We want to get the decrypted password method here instead of using the EncryptedPassword 
+            // property to avoid to having it encrypted twice when the task is saved again.
             authLabel.Text = task.UseBasicAuthentication ? "basic" : "no";
             userNameTextBox.Text = task.Username;
-            passwordTextBox.Text = task.Password;
+            passwordTextBox.Text = task.GetDecryptedPassword();
 
             if (null != task.HttpHeaders)
             {
@@ -181,7 +184,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Called when [click auth label].
+        /// Called when the auth label is clicked.
         /// </summary>
         void OnAuthLabelClick(object sender, EventArgs e)
         {
@@ -218,7 +221,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void OnPasswordTextChanged(object sender, EventArgs e)
         {
-            task.Password = passwordTextBox.Text;
+            task.SetPassword(passwordTextBox.Text);
         }
 
         /// <summary>

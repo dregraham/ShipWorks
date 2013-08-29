@@ -15,6 +15,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml.XPath;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -29,9 +30,15 @@ namespace ShipWorks.Actions.Tasks.Common
 
         private readonly ApiLogEntry requestLogger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebRequestTask"/> class.
+        /// </summary>
         public WebRequestTask()
         {
             requestLogger = new ApiLogEntry(ApiLogSource.WebRequestTask, "WebRequestTask");
+
+            Username = string.Empty;
+            EncryptedPassword = string.Empty;
         }
 
         /// <summary>
@@ -50,14 +57,19 @@ namespace ShipWorks.Actions.Tasks.Common
         public bool UseBasicAuthentication { get; set; }
 
         /// <summary>
-        /// Gets or sets the username.
+        /// Gets or sets the user name.
         /// </summary>
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        /// Gets the password in encrypted format. The getter is public so the value gets serialized, but the
+        /// setter is private, so the deserialization process can set the raw, encrypted value and so consumers
+        /// cannot directly encrypt the password themselves. 
+        /// 
+        /// It would probably be worth looking into having a separate Password class to manage this at
+        /// some point to avoid having to maintain the separate states...
         /// </summary>
-        public string Password { get; set; }
+        public string EncryptedPassword { get; private set; }       
 
         /// <summary>
         /// Gets or sets the HTTP headers.
@@ -81,17 +93,39 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// Gets or sets the web request cardinality.
+        /// </summary>
+        public WebRequestCardinality RequestCardinality { get; set; }
+        
+        /// <summary>
+        /// Uses the plain text password to encrypt and set the value backing the 
+        /// Password property. 
+        /// </summary>
+        /// <param name="plainTextPassword">The plain text password.</param>
+        public void SetPassword(string plainTextPassword)
+        {
+            // This was added, so the various consumers (e.g. the web request editor, 
+            // serialization/deserialization, etc.) of this operations on this task
+            // don't have to try to maintain whether the password is encrypted or not.            
+            EncryptedPassword = SecureText.Encrypt(plainTextPassword, Username);
+        }
+
+        /// <summary>
+        /// Gets the decrypted password. The separate, private Password property is only here
+        /// so the task settings get serialized.
+        /// </summary>
+        public string GetDecryptedPassword()
+        {
+            return SecureText.Decrypt(EncryptedPassword, Username);
+        }
+
+        /// <summary>
         /// Gets the input requirement for this task type (Optional).
         /// </summary>
         public override ActionTaskInputRequirement RequiresInput
         {
             get { return ActionTaskInputRequirement.Optional; }
         }
-
-        /// <summary>
-        /// Gets or sets the web request cardinality.
-        /// </summary>
-        public WebRequestCardinality RequestCardinality { get; set; }
 
         /// <summary>
         /// The object is being deserialized into its values
@@ -241,10 +275,10 @@ namespace ShipWorks.Actions.Tasks.Common
             catch (WebException ex)
             {
                 // Leverage the crash submitter to extract and format the exception details, and remove 
-                // any portion of the message that would show the callstack since the log will be in plain 
+                // any portion of the message that would show the call stack since the log will be in plain 
                 // text to the user
                 string exceptionDetail = CrashSubmitter.GetExceptionDetail(ex);
-                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Callstack:", StringComparison.OrdinalIgnoreCase));
+                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Call stack:", StringComparison.OrdinalIgnoreCase));
 
                 requestLogger.LogResponse(message, "log");
 
@@ -262,7 +296,7 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 // .NET typically waits for a server challenge before sending authorization, so force the authorization headers 
                 //  be sent rather than using a NetworkCredential object
-                string authInfo = string.Format("{0}:{1}", Username, Password);
+                string authInfo = string.Format("{0}:{1}", Username, GetDecryptedPassword());
                 string encodedAuthInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
 
                 request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);

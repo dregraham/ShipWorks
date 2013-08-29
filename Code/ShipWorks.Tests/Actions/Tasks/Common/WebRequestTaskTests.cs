@@ -23,10 +23,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 },
                 UseBasicAuthentication = true,
                 Username = "user",
-                Password = "pw",
                 UrlToHit = "http://www.shipworks.com",
                 Verb = HttpVerb.Get
             };
+
+            testObject.SetPassword("password");
         }
 
         [TestMethod]
