@@ -100,9 +100,11 @@ namespace ShipWorks.Actions.Triggers.Editors
             // Update the displayed text
             actionScheduleTypeLink.Text = EnumHelper.GetDescription(actionScheduleType);
 
-            if (actionScheduleType != ActionScheduleType.OneTime)
+            bool isRecurringAction = actionScheduleType != ActionScheduleType.OneTime;
+
+            if (isRecurringAction)
             {
-                UserControl actionScheduleEditor = (UserControl)trigger.Schedule.CreateEditor();
+                UserControl actionScheduleEditor = trigger.Schedule.CreateEditor();
                 actionScheduleEditor.Location = new Point(5, 10);
 
                 DisposeRecurringSettingsGroupControls();
@@ -113,9 +115,13 @@ namespace ShipWorks.Actions.Triggers.Editors
             }
             else
             {
-                this.Height = recurringSettingsGroup.Top;
+                this.Height = panel1.Top;
                 DisposeRecurringSettingsGroupControls();
             }
+
+            // Hide or display the 'ends' UI if the trigger type is one-time
+            endsLabel.Visible = isRecurringAction;
+            panel1.Visible = isRecurringAction;
 
             recurringSettingsGroup.Visible = recurringSettingsGroup.Controls.Count > 0;
         }
