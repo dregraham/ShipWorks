@@ -46,7 +46,7 @@ namespace ShipWorks.Actions.Scheduling
                 // New jobs/actions cannot be scheduled to occur in the past
                 if (schedule.StartDateTimeInUtc <= DateTime.UtcNow && schedule.ScheduleType == ActionScheduleType.OneTime)
                 {
-                    throw new SchedulingException("The start date must be in the future when scheduling a new action.");
+                    throw new SchedulingException("The start date must be in the future when saving a scheduled one time action.");
                 }
             }
 
