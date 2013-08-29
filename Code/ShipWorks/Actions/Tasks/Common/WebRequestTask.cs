@@ -101,7 +101,6 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Uses the plain text password to encrypt and set the value backing the 
         /// Password property. 
         /// </summary>
-        /// <param name="plainTextPassword">The plain text password.</param>
         public void SetPassword(string plainTextPassword)
         {
             // This was added, so the various consumers (e.g. the web request editor, 

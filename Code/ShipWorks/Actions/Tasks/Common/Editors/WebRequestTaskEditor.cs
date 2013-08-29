@@ -1,15 +1,14 @@
-﻿using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Actions.Tasks.Common.Enums;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.Data.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common.Enums;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -18,18 +17,18 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
     /// </summary>
     public partial class WebRequestTaskEditor : TemplateBasedTaskEditor
     {
-        readonly WebRequestTask task;
+        private readonly WebRequestTask task;
 
-        ContextMenuStrip verbMenu;
-        ContextMenuStrip authMenu;
-        ContextMenuStrip cardinalityMenu;
+        private ContextMenuStrip verbMenu;
+        private ContextMenuStrip authMenu;
+        private ContextMenuStrip cardinalityMenu;
 
-        ToolStripMenuItem getMenuItem;
-        ToolStripMenuItem postMenuItem;
+        private ToolStripMenuItem getMenuItem;
+        private ToolStripMenuItem postMenuItem;
 
-        ToolStripMenuItem singleRequestMenuItem;
-        ToolStripMenuItem oneRequestPerFilterResultMenuItem;
-        ToolStripMenuItem oneRequestPerTemplateResultMenuItem;
+        private ToolStripMenuItem singleRequestMenuItem;
+        private ToolStripMenuItem oneRequestPerFilterResultMenuItem;
+        private ToolStripMenuItem oneRequestPerTemplateResultMenuItem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestTaskEditor"/> class.
@@ -73,9 +72,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             UpdateBodyUI();
         }
 
+        /// <summary>
+        /// Allows derived editors to update themselves based on the current trigger
+        /// </summary>
         public override void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
         {
-            var entityDescription = ActionTaskBubble.GetTriggeringEntityDescription(inputType) ?? "entry";
+            string entityDescription = ActionTaskBubble.GetTriggeringEntityDescription(inputType) ?? "entry";
 
             oneRequestPerFilterResultMenuItem.Text =
                 string.Format(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerFilterResult), entityDescription);
@@ -91,7 +93,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Creates the verb menu.
         /// </summary>
-        void CreateVerbMenu()
+        private void CreateVerbMenu()
         {
             verbMenu = new ContextMenuStrip();
 
@@ -105,7 +107,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             postMenuItem.Tag = HttpVerb.Post;
             verbMenu.Items.Add(postMenuItem);
 
-            var putMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Put));
+            ToolStripMenuItem putMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Put));
             putMenuItem.Click += OnVerbMenuItemClick;
             putMenuItem.Tag = HttpVerb.Put;
             verbMenu.Items.Add(putMenuItem);
@@ -114,16 +116,16 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Creates the auth menu.
         /// </summary>
-        void CreateAuthMenu()
+        private void CreateAuthMenu()
         {
             authMenu = new ContextMenuStrip();
 
-            var noMenuItem = new ToolStripMenuItem("no");
+            ToolStripMenuItem noMenuItem = new ToolStripMenuItem("no");
             noMenuItem.Click += OnAuthMenuItemClick;
             noMenuItem.Tag = false;
             authMenu.Items.Add(noMenuItem);
 
-            var basicMenuItem = new ToolStripMenuItem("basic");
+            ToolStripMenuItem basicMenuItem = new ToolStripMenuItem("basic");
             basicMenuItem.Click += OnAuthMenuItemClick;
             basicMenuItem.Tag = true;
             authMenu.Items.Add(basicMenuItem);
@@ -132,7 +134,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Creates the cardinality menu.
         /// </summary>
-        void CreateCardinalityMenu()
+        private void CreateCardinalityMenu()
         {
             cardinalityMenu = new ContextMenuStrip();
 
@@ -155,7 +157,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [click verb label].
         /// </summary>
-        void OnVerbLabelClick(object sender, EventArgs e)
+        private void OnVerbLabelClick(object sender, EventArgs e)
         {
             verbMenu.Show(verbLabel.Parent.PointToScreen(new Point(verbLabel.Left, verbLabel.Bottom)));
         }
@@ -163,10 +165,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [click verb menu item].
         /// </summary>
-        void OnVerbMenuItemClick(object sender, EventArgs e)
+        private void OnVerbMenuItemClick(object sender, EventArgs e)
         {
-            var verbMenuItem = (ToolStripMenuItem) sender;
-            var clickedVerb = (HttpVerb) verbMenuItem.Tag;
+            ToolStripMenuItem verbMenuItem = (ToolStripMenuItem)sender;
+            HttpVerb clickedVerb = (HttpVerb)verbMenuItem.Tag;
 
             if (task.Verb != clickedVerb)
             {
@@ -178,7 +180,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [URL text changed].
         /// </summary>
-        void OnUrlTextChanged(object sender, EventArgs e)
+        private void OnUrlTextChanged(object sender, EventArgs e)
         {
             task.Url = urlTextBox.Text;
         }
@@ -186,7 +188,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when the auth label is clicked.
         /// </summary>
-        void OnAuthLabelClick(object sender, EventArgs e)
+        private void OnAuthLabelClick(object sender, EventArgs e)
         {
             authMenu.Show(authLabel.Parent.PointToScreen(new Point(authLabel.Left, authLabel.Bottom)));
         }
@@ -194,10 +196,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [click auth menu item].
         /// </summary>
-        void OnAuthMenuItemClick(object sender, EventArgs e)
+        private void OnAuthMenuItemClick(object sender, EventArgs e)
         {
-            var authMenuItem = (ToolStripMenuItem) sender;
-            var useBasicAuth = (bool) authMenuItem.Tag;
+            ToolStripMenuItem authMenuItem = (ToolStripMenuItem)sender;
+            bool useBasicAuth = (bool)authMenuItem.Tag;
 
             if (task.UseBasicAuthentication != useBasicAuth)
             {
@@ -211,7 +213,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [user name text changed].
         /// </summary>
-        void OnUserNameTextChanged(object sender, EventArgs e)
+        private void OnUserNameTextChanged(object sender, EventArgs e)
         {
             task.Username = userNameTextBox.Text;
         }
@@ -219,7 +221,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [password text changed].
         /// </summary>
-        void OnPasswordTextChanged(object sender, EventArgs e)
+        private void OnPasswordTextChanged(object sender, EventArgs e)
         {
             task.SetPassword(passwordTextBox.Text);
         }
@@ -227,7 +229,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Updates the auth UI.
         /// </summary>
-        void UpdateAuthUI()
+        private void UpdateAuthUI()
         {
             basicAuthPanel.Visible = task.UseBasicAuthentication;
 
@@ -241,7 +243,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when [headers grid data changed].
         /// </summary>
-        void OnHeadersGridDataChanged(object sender, EventArgs e)
+        private void OnHeadersGridDataChanged(object sender, EventArgs e)
         {
             task.HttpHeaders = headersGrid.Values.Select(x => new KeyValuePair<string, string>(HttpUtility.UrlEncode(x.Key), HttpUtility.UrlEncode(x.Value))).ToArray();
         }
@@ -249,10 +251,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Updates the body UI.
         /// </summary>
-        void UpdateBodyUI()
+        private void UpdateBodyUI()
         {
             // Update cardinality menu items and selection
-            var inputSource = (ActionTaskInputSource)task.Entity.InputSource;
+            ActionTaskInputSource inputSource = (ActionTaskInputSource)task.Entity.InputSource;
 
             oneRequestPerFilterResultMenuItem.Available =
                 inputSource == ActionTaskInputSource.FilterContents;
@@ -286,7 +288,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             getMenuItem.Available =
                 task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult;
 
-            if(task.Verb == HttpVerb.Get && !getMenuItem.Available)
+            if (task.Verb == HttpVerb.Get && !getMenuItem.Available)
             {
                 postMenuItem.PerformClick();
             }
@@ -295,7 +297,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Manually sizes and aligns the controls affected by the verb text size.
         /// </summary>
-        void OnVerbLabelSizeChanged(object sender, EventArgs e)
+        private void OnVerbLabelSizeChanged(object sender, EventArgs e)
         {
             requestToLabel.Left = verbLabel.Right - 3;
             verbPanel.Width = requestToLabel.Right - 2;
@@ -304,7 +306,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Manually sizes and aligns the controls affected by the auth text size.
         /// </summary>
-        void OnAuthLabelSizeChanged(object sender, EventArgs e)
+        private void OnAuthLabelSizeChanged(object sender, EventArgs e)
         {
             authLabelSuffix.Left = authLabel.Right - 3;
             authTypePanel.Width = authLabelSuffix.Right - 3;
@@ -313,7 +315,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Shows the cardinality (a request per...) menu.
         /// </summary>
-        void OnCardinalityLabelClick(object sender, EventArgs e)
+        private void OnCardinalityLabelClick(object sender, EventArgs e)
         {
             cardinalityMenu.Show(cardinalityLabel.Parent.PointToScreen(new Point(cardinalityLabel.Left, cardinalityLabel.Bottom)));
         }
@@ -321,10 +323,10 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when a cardinality menu item is clicked.
         /// </summary>
-        void OnCardinalityMenuItemClick(object sender, EventArgs e)
+        private void OnCardinalityMenuItemClick(object sender, EventArgs e)
         {
-            var cardinalityMenuItem = (ToolStripMenuItem)sender;
-            var clickedCardinality = (WebRequestCardinality)cardinalityMenuItem.Tag;
+            ToolStripMenuItem cardinalityMenuItem = (ToolStripMenuItem)sender;
+            WebRequestCardinality clickedCardinality = (WebRequestCardinality)cardinalityMenuItem.Tag;
 
             if (task.RequestCardinality != clickedCardinality)
             {
