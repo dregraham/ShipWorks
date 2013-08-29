@@ -56,7 +56,7 @@
             // timeoutPurgeCheckbox
             // 
             this.timeoutPurgeCheckbox.AutoSize = true;
-            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 199);
+            this.timeoutPurgeCheckbox.Location = new System.Drawing.Point(21, 205);
             this.timeoutPurgeCheckbox.Name = "timeoutPurgeCheckbox";
             this.timeoutPurgeCheckbox.Size = new System.Drawing.Size(185, 17);
             this.timeoutPurgeCheckbox.TabIndex = 10;
@@ -66,7 +66,7 @@
             // timeoutHoursLabel
             // 
             this.timeoutHoursLabel.AutoSize = true;
-            this.timeoutHoursLabel.Location = new System.Drawing.Point(258, 200);
+            this.timeoutHoursLabel.Location = new System.Drawing.Point(258, 206);
             this.timeoutHoursLabel.Name = "timeoutHoursLabel";
             this.timeoutHoursLabel.Size = new System.Drawing.Size(38, 13);
             this.timeoutHoursLabel.TabIndex = 12;
@@ -74,7 +74,7 @@
             // 
             // timeoutInHours
             // 
-            this.timeoutInHours.Location = new System.Drawing.Point(206, 198);
+            this.timeoutInHours.Location = new System.Drawing.Point(206, 204);
             this.timeoutInHours.Minimum = new decimal(new int[] {
             1,
             0,
@@ -123,7 +123,7 @@
             // email
             // 
             this.email.AutoSize = true;
-            this.email.Location = new System.Drawing.Point(21, 109);
+            this.email.Location = new System.Drawing.Point(21, 115);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(92, 17);
             this.email.TabIndex = 3;
@@ -135,7 +135,7 @@
             // audit
             // 
             this.audit.AutoSize = true;
-            this.audit.Location = new System.Drawing.Point(21, 63);
+            this.audit.Location = new System.Drawing.Point(21, 69);
             this.audit.Name = "audit";
             this.audit.Size = new System.Drawing.Size(88, 17);
             this.audit.TabIndex = 1;
@@ -145,7 +145,7 @@
             // printJobs
             // 
             this.printJobs.AutoSize = true;
-            this.printJobs.Location = new System.Drawing.Point(21, 155);
+            this.printJobs.Location = new System.Drawing.Point(21, 161);
             this.printJobs.Name = "printJobs";
             this.printJobs.Size = new System.Drawing.Size(110, 17);
             this.printJobs.TabIndex = 5;
@@ -157,7 +157,7 @@
             // labels
             // 
             this.labels.AutoSize = true;
-            this.labels.Location = new System.Drawing.Point(21, 132);
+            this.labels.Location = new System.Drawing.Point(21, 138);
             this.labels.Name = "labels";
             this.labels.Size = new System.Drawing.Size(132, 17);
             this.labels.TabIndex = 4;
@@ -169,7 +169,7 @@
             // downloads
             // 
             this.downloads.AutoSize = true;
-            this.downloads.Location = new System.Drawing.Point(21, 86);
+            this.downloads.Location = new System.Drawing.Point(21, 92);
             this.downloads.Name = "downloads";
             this.downloads.Size = new System.Drawing.Size(110, 17);
             this.downloads.TabIndex = 2;
@@ -180,7 +180,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 42);
+            this.label1.Location = new System.Drawing.Point(3, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 0;
@@ -191,7 +191,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 179);
+            this.label2.Location = new System.Drawing.Point(3, 185);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 6;
@@ -200,7 +200,7 @@
             // reclaimDiskSpaceCheckbox
             // 
             this.reclaimDiskSpaceCheckbox.AutoSize = true;
-            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 223);
+            this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 229);
             this.reclaimDiskSpaceCheckbox.Name = "reclaimDiskSpaceCheckbox";
             this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(114, 17);
             this.reclaimDiskSpaceCheckbox.TabIndex = 19;
@@ -221,7 +221,7 @@
             // timeoutHelp
             // 
             this.timeoutHelp.Caption = "Deletion will pick up where it left off the next time it runs.";
-            this.timeoutHelp.Location = new System.Drawing.Point(294, 201);
+            this.timeoutHelp.Location = new System.Drawing.Point(294, 207);
             this.timeoutHelp.Name = "timeoutHelp";
             this.timeoutHelp.Size = new System.Drawing.Size(12, 12);
             this.timeoutHelp.TabIndex = 21;
@@ -231,7 +231,7 @@
             // 
             this.downloadHistoryHelp.Caption = "This does not delete any of your orders, just the log of when they were downloade" +
     "d.";
-            this.downloadHistoryHelp.Location = new System.Drawing.Point(127, 88);
+            this.downloadHistoryHelp.Location = new System.Drawing.Point(127, 94);
             this.downloadHistoryHelp.Name = "downloadHistoryHelp";
             this.downloadHistoryHelp.Size = new System.Drawing.Size(12, 12);
             this.downloadHistoryHelp.TabIndex = 22;
@@ -241,7 +241,7 @@
             // 
             this.emailContentHelp.Caption = "The message body is the only thing that will be deleted. You will still be able t" +
     "o see if an email was sent, when, to whom, and the subject line.";
-            this.emailContentHelp.Location = new System.Drawing.Point(109, 111);
+            this.emailContentHelp.Location = new System.Drawing.Point(109, 117);
             this.emailContentHelp.Name = "emailContentHelp";
             this.emailContentHelp.Size = new System.Drawing.Size(12, 12);
             this.emailContentHelp.TabIndex = 23;
@@ -251,7 +251,7 @@
             // 
             this.shippingLabelsHelp.Caption = "This only deletes the actual label image. The shipment settings, tracking number," +
     " and all other information is preserved.";
-            this.shippingLabelsHelp.Location = new System.Drawing.Point(149, 134);
+            this.shippingLabelsHelp.Location = new System.Drawing.Point(149, 140);
             this.shippingLabelsHelp.Name = "shippingLabelsHelp";
             this.shippingLabelsHelp.Size = new System.Drawing.Size(12, 12);
             this.shippingLabelsHelp.TabIndex = 24;
@@ -261,7 +261,7 @@
             // 
             this.printJobHelp.Caption = "The content of the print job is the only thing that will deleted. You will still " +
     "be able to see your print history and filter against it.";
-            this.printJobHelp.Location = new System.Drawing.Point(128, 157);
+            this.printJobHelp.Location = new System.Drawing.Point(128, 163);
             this.printJobHelp.Name = "printJobHelp";
             this.printJobHelp.Size = new System.Drawing.Size(12, 12);
             this.printJobHelp.TabIndex = 25;
