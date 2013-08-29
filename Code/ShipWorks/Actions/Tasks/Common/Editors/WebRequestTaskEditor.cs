@@ -253,18 +253,14 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             oneRequestPerFilterResultMenuItem.Available =
                 inputSource == ActionTaskInputSource.FilterContents;
-
             oneRequestPerTemplateResultMenuItem.Available =
                 inputSource != ActionTaskInputSource.Nothing;
 
-            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult && !oneRequestPerTemplateResultMenuItem.Available)
-            {
-                oneRequestPerFilterResultMenuItem.PerformClick();
-            }
-
-            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult && !oneRequestPerFilterResultMenuItem.Available)
+            if ((task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult && !oneRequestPerFilterResultMenuItem.Available) ||
+                (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult && !oneRequestPerTemplateResultMenuItem.Available))
             {
                 singleRequestMenuItem.PerformClick();
+                return;
             }
 
             if (task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult)
