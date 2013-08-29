@@ -94,7 +94,7 @@
             this.additionalHandling.Location = new System.Drawing.Point(118, 2);
             this.additionalHandling.Name = "additionalHandling";
             this.additionalHandling.Size = new System.Drawing.Size(222, 17);
-            this.additionalHandling.TabIndex = 24;
+            this.additionalHandling.TabIndex = 0;
             this.additionalHandling.Text = "This package requires additional handling";
             this.additionalHandling.UseVisualStyleBackColor = true;
             // 
@@ -127,9 +127,9 @@
             this.verbalConfirmation.Name = "verbalConfirmation";
             this.verbalConfirmation.PhoneExtension = "";
             this.verbalConfirmation.PhoneNumber = "";
-            this.verbalConfirmation.Size = new System.Drawing.Size(354, 80);
+            this.verbalConfirmation.Size = new System.Drawing.Size(377, 80);
             this.verbalConfirmation.State = false;
-            this.verbalConfirmation.TabIndex = 25;
+            this.verbalConfirmation.TabIndex = 2;
             // 
             // dryIceDetails
             // 
@@ -137,7 +137,7 @@
             this.dryIceDetails.Name = "dryIceDetails";
             this.dryIceDetails.Size = new System.Drawing.Size(351, 75);
             this.dryIceDetails.State = false;
-            this.dryIceDetails.TabIndex = 8;
+            this.dryIceDetails.TabIndex = 1;
             // 
             // UpsPackageDetailControl
             // 

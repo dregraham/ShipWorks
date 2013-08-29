@@ -45,8 +45,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(package, UpsProfilePackageFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
             AddValueMapping(package, UpsProfilePackageFields.AdditionalHandlingEnabled, additionalHandlingState, additionalHandling, labelAdditionalHandling);
             AddValueMapping(package, UpsProfilePackageFields.DryIceEnabled, dryIceState, dryIceControl);
-            AddValueMapping(package, UpsProfilePackageFields.VerbalConfirmationEnabled, verbalConfirmationState, 
-                verbalConfirmationControl, labelVerbalConfirmation, verbalConfirmationDetails);
+            AddValueMapping(package, UpsProfilePackageFields.VerbalConfirmationEnabled, verbalConfirmationState, verbalConfirmationDetails);
         }
 
         /// <summary>

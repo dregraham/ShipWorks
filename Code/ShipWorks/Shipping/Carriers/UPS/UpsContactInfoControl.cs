@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public UpsContactInfoControl()
         {
             InitializeComponent();
+            tableLayoutPanel.Enabled = verbalConfirmationRequired.Checked;
         }
 
         /// <summary>
@@ -113,6 +114,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             nameTextBox.Text = packageEntity.VerbalConfirmationName;
             phoneNumberTextBox.Text = packageEntity.VerbalConfirmationPhone;
             phoneExtensionTextBox.Text = packageEntity.VerbalConfirmationPhoneExtension;
+        }
+
+        /// <summary>
+        /// The verbal confirmation check box has changed
+        /// </summary>
+        private void OnVerbalConfirmationChanged(object sender, System.EventArgs e)
+        {
+            tableLayoutPanel.Enabled = verbalConfirmationRequired.Checked;
         }
     }
 }

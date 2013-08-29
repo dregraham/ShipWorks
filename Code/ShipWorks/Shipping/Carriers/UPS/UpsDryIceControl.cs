@@ -24,13 +24,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// The form has loaded
-        /// </summary>
-        private void OnLoad(object sender, System.EventArgs e)
-        {
-        }
-
-        /// <summary>
         /// The regulation set has changed
         /// </summary>
         private void OnRegulationSetChanged(object sender, System.EventArgs e)

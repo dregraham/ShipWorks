@@ -29,11 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.verbalConfirmationDetails = new ShipWorks.Shipping.Carriers.UPS.UpsContactInfoControl();
             this.verbalConfirmationState = new System.Windows.Forms.CheckBox();
             this.dryIceState = new System.Windows.Forms.CheckBox();
             this.dryIceControl = new ShipWorks.Shipping.Carriers.UPS.UpsDryIceControl();
-            this.verbalConfirmationControl = new System.Windows.Forms.CheckBox();
-            this.labelVerbalConfirmation = new System.Windows.Forms.Label();
             this.additionalHandling = new System.Windows.Forms.CheckBox();
             this.labelAdditionalHandling = new System.Windows.Forms.Label();
             this.additionalHandlingState = new System.Windows.Forms.CheckBox();
@@ -47,7 +46,6 @@
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelDimensions = new System.Windows.Forms.Label();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
-            this.verbalConfirmationDetails = new ShipWorks.Shipping.Carriers.UPS.UpsContactInfoControl();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,8 +55,6 @@
             this.groupBox.Controls.Add(this.verbalConfirmationState);
             this.groupBox.Controls.Add(this.dryIceState);
             this.groupBox.Controls.Add(this.dryIceControl);
-            this.groupBox.Controls.Add(this.verbalConfirmationControl);
-            this.groupBox.Controls.Add(this.labelVerbalConfirmation);
             this.groupBox.Controls.Add(this.additionalHandling);
             this.groupBox.Controls.Add(this.labelAdditionalHandling);
             this.groupBox.Controls.Add(this.additionalHandlingState);
@@ -75,20 +71,31 @@
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox.Location = new System.Drawing.Point(0, 0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(441, 360);
+            this.groupBox.Size = new System.Drawing.Size(423, 351);
             this.groupBox.TabIndex = 1;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Package {0}";
+            // 
+            // verbalConfirmationDetails
+            // 
+            this.verbalConfirmationDetails.ContactName = "";
+            this.verbalConfirmationDetails.Location = new System.Drawing.Point(33, 259);
+            this.verbalConfirmationDetails.Name = "verbalConfirmationDetails";
+            this.verbalConfirmationDetails.PhoneExtension = "";
+            this.verbalConfirmationDetails.PhoneNumber = "";
+            this.verbalConfirmationDetails.Size = new System.Drawing.Size(374, 86);
+            this.verbalConfirmationDetails.State = false;
+            this.verbalConfirmationDetails.TabIndex = 11;
             // 
             // verbalConfirmationState
             // 
             this.verbalConfirmationState.AutoSize = true;
             this.verbalConfirmationState.Checked = true;
             this.verbalConfirmationState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.verbalConfirmationState.Location = new System.Drawing.Point(8, 260);
+            this.verbalConfirmationState.Location = new System.Drawing.Point(8, 259);
             this.verbalConfirmationState.Name = "verbalConfirmationState";
             this.verbalConfirmationState.Size = new System.Drawing.Size(15, 14);
-            this.verbalConfirmationState.TabIndex = 95;
+            this.verbalConfirmationState.TabIndex = 10;
             this.verbalConfirmationState.Tag = "";
             this.verbalConfirmationState.UseVisualStyleBackColor = true;
             // 
@@ -100,7 +107,7 @@
             this.dryIceState.Location = new System.Drawing.Point(8, 175);
             this.dryIceState.Name = "dryIceState";
             this.dryIceState.Size = new System.Drawing.Size(15, 14);
-            this.dryIceState.TabIndex = 94;
+            this.dryIceState.TabIndex = 8;
             this.dryIceState.Tag = "";
             this.dryIceState.UseVisualStyleBackColor = true;
             // 
@@ -110,27 +117,7 @@
             this.dryIceControl.Name = "dryIceControl";
             this.dryIceControl.Size = new System.Drawing.Size(348, 80);
             this.dryIceControl.State = false;
-            this.dryIceControl.TabIndex = 93;
-            // 
-            // verbalConfirmationControl
-            // 
-            this.verbalConfirmationControl.AutoSize = true;
-            this.verbalConfirmationControl.Location = new System.Drawing.Point(143, 259);
-            this.verbalConfirmationControl.Name = "verbalConfirmationControl";
-            this.verbalConfirmationControl.Size = new System.Drawing.Size(120, 17);
-            this.verbalConfirmationControl.TabIndex = 92;
-            this.verbalConfirmationControl.Text = "Verbal Confirmation";
-            this.verbalConfirmationControl.UseVisualStyleBackColor = true;
-            // 
-            // labelVerbalConfirmation
-            // 
-            this.labelVerbalConfirmation.AutoSize = true;
-            this.labelVerbalConfirmation.Location = new System.Drawing.Point(32, 260);
-            this.labelVerbalConfirmation.Name = "labelVerbalConfirmation";
-            this.labelVerbalConfirmation.Size = new System.Drawing.Size(105, 13);
-            this.labelVerbalConfirmation.TabIndex = 91;
-            this.labelVerbalConfirmation.Text = "Verbal Confirmation:";
-            this.labelVerbalConfirmation.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.dryIceControl.TabIndex = 9;
             // 
             // additionalHandling
             // 
@@ -138,7 +125,7 @@
             this.additionalHandling.Location = new System.Drawing.Point(143, 154);
             this.additionalHandling.Name = "additionalHandling";
             this.additionalHandling.Size = new System.Drawing.Size(117, 17);
-            this.additionalHandling.TabIndex = 90;
+            this.additionalHandling.TabIndex = 7;
             this.additionalHandling.Text = "Additional Handling";
             this.additionalHandling.UseVisualStyleBackColor = true;
             // 
@@ -160,7 +147,7 @@
             this.additionalHandlingState.Location = new System.Drawing.Point(8, 155);
             this.additionalHandlingState.Name = "additionalHandlingState";
             this.additionalHandlingState.Size = new System.Drawing.Size(15, 14);
-            this.additionalHandlingState.TabIndex = 87;
+            this.additionalHandlingState.TabIndex = 6;
             this.additionalHandlingState.Tag = "";
             this.additionalHandlingState.UseVisualStyleBackColor = true;
             // 
@@ -203,7 +190,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(28, 22);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 323);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 314);
             this.kryptonBorderEdge.TabIndex = 83;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -273,16 +260,6 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 5;
             // 
-            // verbalConfirmationDetails
-            // 
-            this.verbalConfirmationDetails.ContactName = "";
-            this.verbalConfirmationDetails.Location = new System.Drawing.Point(54, 282);
-            this.verbalConfirmationDetails.Name = "verbalConfirmationDetails";
-            this.verbalConfirmationDetails.PhoneExtension = "";
-            this.verbalConfirmationDetails.PhoneNumber = "";
-            this.verbalConfirmationDetails.Size = new System.Drawing.Size(354, 62);
-            this.verbalConfirmationDetails.TabIndex = 96;
-            // 
             // UpsProfilePackageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -291,7 +268,7 @@
             this.Controls.Add(this.groupBox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsProfilePackageControl";
-            this.Size = new System.Drawing.Size(441, 360);
+            this.Size = new System.Drawing.Size(423, 351);
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -312,8 +289,6 @@
         private System.Windows.Forms.CheckBox packagingState;
         private System.Windows.Forms.Label labelPackaging;
         private System.Windows.Forms.CheckBox additionalHandlingState;
-        private System.Windows.Forms.CheckBox verbalConfirmationControl;
-        private System.Windows.Forms.Label labelVerbalConfirmation;
         private System.Windows.Forms.CheckBox additionalHandling;
         private System.Windows.Forms.Label labelAdditionalHandling;
         private System.Windows.Forms.CheckBox verbalConfirmationState;
