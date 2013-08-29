@@ -104,6 +104,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // Reference
                 UpdateReferenceNumbers(shipment);
 
+                // All packages with dry ice must have the same regulation set, so verify that.
+                bool tooManyDryIceRegulations = shipment.Ups.Packages
+                                                    .Where(p => p.DryIceEnabled)
+                                                    .Select(p => p.DryIceRegulationSet)
+                                                    .Distinct()
+                                                    .Count() > 1;
+                if (tooManyDryIceRegulations)
+                {
+                    throw new UpsException("All packages containing dry ice must have the same dry ice regulation set.");
+                }
+
                 // Save the packages
                 foreach (UpsPackageEntity package in shipment.Ups.Packages)
                 {
@@ -620,37 +631,33 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             worldshipPackage.ShipperRelease = ups.ShipperRelease ? "Y" : "N";
 
-
-            // TODO: For testing, delete these!
-            package.AdditionalHandlingEnabled = true;
-            package.DryIceEnabled = false;
-            package.DryIceIsForMedicalUse = true;
-            package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Iata;
-            package.DryIceWeight = 4;
-            package.VerbalConfirmationEnabled = true;
-            package.VerbalConfirmationName = "Verbconf Name";
-            package.VerbalConfirmationPhone = "314-555-1212";
-            package.VerbalConfirmationPhoneExtension = "x1234";
-
-
             worldshipPackage.AdditionalHandlingEnabled = package.AdditionalHandlingEnabled ? "Y" : "N";
 
-            if (package.DryIceEnabled && package.VerbalConfirmationEnabled)
-            {
-                throw new UpsException("Dry Ice and Verbal Confirmation are not allowed on the same shipment.");
-            }
 
-            if (package.DryIceEnabled && package.AdditionalHandlingEnabled)
-            {
-                throw new UpsException("Dry Ice and Additional Handling are not allowed on the same shipment.");
-            }
-
+            // Add dry ice if enabled
             if (package.DryIceEnabled)
             {
+                // Verbal confirmation is not allowed with dry ice
+                if (package.VerbalConfirmationEnabled)
+                {
+                    throw new UpsException("Dry ice and verbal confirmation are not allowed on the same package.");
+                }
+
+                // Additional handling is not allowed with dry ice
+                if (package.AdditionalHandlingEnabled)
+                {
+                    throw new UpsException("Dry ice and additional handling are not allowed on the same package.");
+                }
+
                 worldshipPackage.DryIceWeight = package.DryIceWeight;
                 if (upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Ounces)
                 {
                     worldshipPackage.DryIceWeight = worldshipPackage.DryIceWeight * 16;
+                }
+
+                if (worldshipPackage.DryIceWeight > weight)
+                {
+                    throw new UpsException("Dry ice weight must be less than the package weight.");
                 }
 
                 UpsDryIceRegulationSet upsDryIceRegulationSet = (UpsDryIceRegulationSet) package.DryIceRegulationSet;
@@ -663,12 +670,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         worldshipPackage.DryIceRegulationSet = "IATA";
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException(string.Format("The Dry Ice Regulation Set '{0}' is unknown.", EnumHelper.GetDescription(upsDryIceRegulationSet)));
+                        throw new ArgumentOutOfRangeException(string.Format("The dry ice regulation set '{0}' is unknown.", EnumHelper.GetDescription(upsDryIceRegulationSet)));
                 }
 
+                worldshipPackage.DryIceWeightUnitOfMeasure = "LBS";
+                worldshipPackage.DryIceOption = "Y";
                 worldshipPackage.DryIceMedicalPurpose = package.DryIceIsForMedicalUse ? "Y" : "N";
             }
 
+            // Add verbal confirmation if enabled
             if (package.VerbalConfirmationEnabled)
             {
                 worldshipPackage.VerbalConfirmationOption = "Y";
