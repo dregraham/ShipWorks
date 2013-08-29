@@ -21,8 +21,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
     public partial class FtpFileTaskEditor : TemplateBasedTaskEditor
     {
         private readonly FtpFileTask task;
-        FtpAccountEntity ftpAccount = null;
-        private string errorMessage = string.Empty;
+        FtpAccountEntity ftpAccount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FtpFileTaskEditor"/> class.
@@ -166,37 +165,55 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void OnFtpFileTaskEditorValidating(object sender, CancelEventArgs e)
         {
+            string errorMessage = string.Format("The Upload with FTP task is missing some information.{0}{0}", Environment.NewLine);
+            List<string> errorDetails = new List<string>();
+
             if (templateCombo.SelectedTemplate == null)
             {
-                errorMessage += string.Format("Please select a template.{0}", Environment.NewLine);
+                errorDetails.Add(string.Format("A template must be selected.{0}", Environment.NewLine));
                 e.Cancel = true;
             }
 
             if (string.IsNullOrWhiteSpace(ftpHost.Text))
             {
-                errorMessage += string.Format("Please configure an FTP server.{0}", Environment.NewLine);
+                errorDetails.Add(string.Format("An FTP server was not provided.{0}", Environment.NewLine));
                 e.Cancel = true;
             }
 
             if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
             {
-                errorMessage += string.Format("Please enter a folder in which to place files on the FTP server.{0}", Environment.NewLine);
+                errorDetails.Add(string.Format("The FTP folder you want the file uploaded to was not provided.{0}", Environment.NewLine));
                 e.Cancel = true;
             }
 
             if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
             {
-                errorMessage += string.Format("Please enter a filename in which data will be saved on the FTP server.{0}", Environment.NewLine);
+                errorDetails.Add(string.Format("The file name that gets saved on the FTP server was not provided.{0}", Environment.NewLine));
                 e.Cancel = true;
             }
 
-            // If there was an error, show the user 
-            if (e.Cancel)
+            
+            if (errorDetails.Any())
             {
-                MessageHelper.ShowError(this, errorMessage);
+                //There were errors, format the details and show a message box
+                string formattedDetails = string.Empty;
+
+                if (errorDetails.Count > 1)
+                {
+                    // Prefix with indentation and hyphen so it's in a list-like format when 
+                    // there are multiple errors
+                    errorDetails.ForEach(error => formattedDetails += "   - " + error);
+                }
+                else
+                {
+                    // There's only one error, so just display it without formatting
+                    formattedDetails = errorDetails.FirstOrDefault();
+                }
+
+                MessageHelper.ShowError(this, errorMessage + formattedDetails);
             }
 
-            errorMessage = string.Empty;
+            
         }
     }
 }
