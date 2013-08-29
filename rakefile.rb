@@ -80,10 +80,18 @@ namespace :build do
 		print "done.\r\n"
 	end
 
-	desc "Build ShipWorks and generate an MSI for internal testing"
-	msbuild :internal_installer do |msb|
+	desc "Build ShipWorks and generate an MSI for internal testing. Usage: internal_installer[3.5.2] to label with a specific major/minor/patch number; otherwise 0.0.0 will be used"
+	msbuild :internal_installer, :versionLabel do |msb, args|
 		print "Building internal release installer...\r\n\r\n"
 
+		# Default the build label to 0.0.0
+		labelForBuild = "0.0.0"
+		
+		if args != nil and args.versionLabel != nil and args.versionLabel != ""
+			# A label was passed in, so use it for the Major.Minor.Patch 
+			labelForBuild = args.versionLabel
+		end
+		
 		# Use the MSBuild project when building the installer
 		msb.solution = "./Build/shipworks.proj"
 		msb.properties :configuration => :Release
@@ -93,9 +101,13 @@ namespace :build do
 		revisionNumber = revisionFile.readline
 		revisionFile.close
 
+		# Append the revision number to the label 
+		labelForBuild = labelForBuild + "." + revisionNumber
+		print "Building with label " + labelForBuild + "\r\n\r\n"
+		
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preperation for the next run
-		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt /p:CCNetLabel=0.0.0." + revisionNumber
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt /p:CCNetLabel=" + labelForBuild
 	end
 end
 
