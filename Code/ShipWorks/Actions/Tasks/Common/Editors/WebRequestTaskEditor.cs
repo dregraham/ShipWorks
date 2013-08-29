@@ -24,6 +24,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         ContextMenuStrip authMenu;
         ContextMenuStrip cardinalityMenu;
 
+        ToolStripMenuItem getMenuItem;
+        ToolStripMenuItem postMenuItem;
+
         ToolStripMenuItem singleRequestMenuItem;
         ToolStripMenuItem oneRequestPerFilterResultMenuItem;
         ToolStripMenuItem oneRequestPerTemplateResultMenuItem;
@@ -51,14 +54,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             CreateAuthMenu();
             CreateCardinalityMenu();
 
+            cardinalityLabel.Text = EnumHelper.GetDescription(task.RequestCardinality);
             verbLabel.Text = EnumHelper.GetDescription(task.Verb);
             urlTextBox.Text = task.UrlToHit;
             authLabel.Text = task.UseBasicAuthentication ? "basic" : "no";
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.Password;
-
-            urlTextBox.Validating += OnUrlTextBoxValidating;
-            urlTextBox.Validated += OnUrlTextBoxValidated;
 
             if (null != task.HttpHeaders)
             {
@@ -85,40 +86,26 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Called when [URL text box validated].
-        /// </summary>
-        void OnUrlTextBoxValidated(object sender, EventArgs e)
-        {
-            errorProvider.SetError(urlTextBox, string.Empty);
-        }
-
-        /// <summary>
-        /// Called when [URL text box validating].
-        /// </summary>
-        void OnUrlTextBoxValidating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(urlTextBox.Text))
-            {
-                errorProvider.SetError(urlTextBox, "This value is required.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
         /// Creates the verb menu.
         /// </summary>
         void CreateVerbMenu()
         {
             verbMenu = new ContextMenuStrip();
 
-            foreach (HttpVerb verb in Enum.GetValues(typeof(HttpVerb)))
-            {
-                var menuItem = new ToolStripMenuItem(EnumHelper.GetDescription(verb));
-                menuItem.Click += OnVerbMenuItemClick;
-                menuItem.Tag = verb;
+            this.getMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Get));
+            getMenuItem.Click += OnVerbMenuItemClick;
+            getMenuItem.Tag = HttpVerb.Get;
+            verbMenu.Items.Add(getMenuItem);
 
-                verbMenu.Items.Add(menuItem);
-            }
+            this.postMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Post));
+            postMenuItem.Click += OnVerbMenuItemClick;
+            postMenuItem.Tag = HttpVerb.Post;
+            verbMenu.Items.Add(postMenuItem);
+
+            var putMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Put));
+            putMenuItem.Click += OnVerbMenuItemClick;
+            putMenuItem.Tag = HttpVerb.Put;
+            verbMenu.Items.Add(putMenuItem);
         }
 
         /// <summary>
@@ -156,7 +143,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             oneRequestPerFilterResultMenuItem.Tag = WebRequestCardinality.OneRequestPerFilterResult;
             cardinalityMenu.Items.Add(oneRequestPerFilterResultMenuItem);
 
-            this.oneRequestPerTemplateResultMenuItem = new ToolStripMenuItem();
+            this.oneRequestPerTemplateResultMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerTemplateResult));
             oneRequestPerTemplateResultMenuItem.Click += OnCardinalityMenuItemClick;
             oneRequestPerTemplateResultMenuItem.Tag = WebRequestCardinality.OneRequestPerTemplateResult;
             cardinalityMenu.Items.Add(oneRequestPerTemplateResultMenuItem);
@@ -182,8 +169,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             {
                 task.Verb = clickedVerb;
                 verbLabel.Text = verbMenuItem.Text;
-
-                UpdateBodyUI();
             }
         }
 
@@ -263,14 +248,14 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void UpdateBodyUI()
         {
+            // Update cardinality menu items and selection
             var inputSource = (ActionTaskInputSource)task.Entity.InputSource;
 
             oneRequestPerFilterResultMenuItem.Available =
                 inputSource == ActionTaskInputSource.FilterContents;
 
             oneRequestPerTemplateResultMenuItem.Available =
-                inputSource != ActionTaskInputSource.Nothing &&
-                task.Verb != HttpVerb.Get;
+                inputSource != ActionTaskInputSource.Nothing;
 
             if (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult && !oneRequestPerTemplateResultMenuItem.Available)
             {
@@ -282,13 +267,29 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 singleRequestMenuItem.PerformClick();
             }
 
-            labelTemplate.Visible =
-            templateCombo.Visible =
-                (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult);
-
             if (task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult)
             {
                 templateCombo.SelectedTemplate = null;
+                requestPanel.Top = templateCombo.Top;
+            }
+            else
+            {
+                requestPanel.Top = templateCombo.Bottom + 8;
+            }
+
+            this.Height = requestPanel.Top + requestPanel.Height;
+
+            labelTemplate.Visible =
+            templateCombo.Visible =
+                task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult;
+
+            // Update verb menu items and selection
+            getMenuItem.Available =
+                task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult;
+
+            if(task.Verb == HttpVerb.Get && !getMenuItem.Available)
+            {
+                postMenuItem.PerformClick();
             }
         }
 
@@ -308,20 +309,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             authLabelSuffix.Left = authLabel.Right - 3;
             authTypePanel.Width = authLabelSuffix.Right - 3;
-        }
-
-        /// <summary>
-        /// Updates the controls displaying the verb text.
-        /// </summary>
-        void OnVerbLabelTextChanged(object sender, EventArgs e)
-        {
-            oneRequestPerTemplateResultMenuItem.Text =
-                string.Format(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerTemplateResult), verbLabel.Text);
-
-            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult)
-            {
-                cardinalityLabel.Text = oneRequestPerTemplateResultMenuItem.Text;
-            }
         }
 
         /// <summary>

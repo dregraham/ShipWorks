@@ -77,7 +77,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get { return "Send using:"; }
+            get { return "Using:"; }
         }
 
         /// <summary>

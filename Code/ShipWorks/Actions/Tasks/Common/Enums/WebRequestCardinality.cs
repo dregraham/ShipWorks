@@ -15,7 +15,7 @@ namespace ShipWorks.Actions.Tasks.Common.Enums
         [Description("request for each {0} in the filter")]
         OneRequestPerFilterResult = 1,
 
-        [Description("request using template results as the {0} body")]
+        [Description("request for each template result as the request body")]
         OneRequestPerTemplateResult = 2
     }
 }

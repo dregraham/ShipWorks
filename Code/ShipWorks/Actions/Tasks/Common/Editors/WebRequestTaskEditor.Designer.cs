@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.FlowLayoutPanel requestUrlPanel;
             System.Windows.Forms.TableLayoutPanel verbUrlPanel;
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            System.Windows.Forms.Label sendALabel;
+            System.Windows.Forms.Label asALabel;
             System.Windows.Forms.Label labelHeaders;
             System.Windows.Forms.TableLayoutPanel authPanel;
             System.Windows.Forms.Label authLabelPrefix;
@@ -52,11 +51,11 @@
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.userNameTextBox = new System.Windows.Forms.TextBox();
             this.headersGrid = new ShipWorks.UI.Controls.NameValueGrid();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.cardinalityLabel = new System.Windows.Forms.Label();
+            this.requestPanel = new System.Windows.Forms.Panel();
             requestUrlPanel = new System.Windows.Forms.FlowLayoutPanel();
             verbUrlPanel = new System.Windows.Forms.TableLayoutPanel();
-            sendALabel = new System.Windows.Forms.Label();
+            asALabel = new System.Windows.Forms.Label();
             labelHeaders = new System.Windows.Forms.Label();
             authPanel = new System.Windows.Forms.TableLayoutPanel();
             authLabelPrefix = new System.Windows.Forms.Label();
@@ -68,19 +67,19 @@
             authPanel.SuspendLayout();
             this.authTypePanel.SuspendLayout();
             this.basicAuthPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            this.requestPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTemplate
             // 
-            this.labelTemplate.Location = new System.Drawing.Point(29, 251);
+            this.labelTemplate.Location = new System.Drawing.Point(28, 27);
             this.labelTemplate.Margin = new System.Windows.Forms.Padding(0);
             this.labelTemplate.Size = new System.Drawing.Size(82, 13);
             this.labelTemplate.Text = "Using template:";
             // 
             // templateCombo
             // 
-            this.templateCombo.Location = new System.Drawing.Point(110, 248);
+            this.templateCombo.Location = new System.Drawing.Point(109, 24);
             this.templateCombo.TabIndex = 20;
             // 
             // requestUrlPanel
@@ -89,7 +88,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             requestUrlPanel.AutoSize = true;
             requestUrlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            requestUrlPanel.Location = new System.Drawing.Point(3, 33);
+            requestUrlPanel.Location = new System.Drawing.Point(2, 34);
             requestUrlPanel.Name = "requestUrlPanel";
             requestUrlPanel.Size = new System.Drawing.Size(0, 0);
             requestUrlPanel.TabIndex = 4;
@@ -105,19 +104,19 @@
             verbUrlPanel.Controls.Add(this.urlFormat, 1, 1);
             verbUrlPanel.Controls.Add(this.urlTextBox, 1, 0);
             verbUrlPanel.Controls.Add(this.verbPanel, 0, 0);
-            verbUrlPanel.Location = new System.Drawing.Point(4, -2);
+            verbUrlPanel.Location = new System.Drawing.Point(3, 2);
             verbUrlPanel.Name = "verbUrlPanel";
             verbUrlPanel.RowCount = 2;
             verbUrlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             verbUrlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            verbUrlPanel.Size = new System.Drawing.Size(579, 46);
+            verbUrlPanel.Size = new System.Drawing.Size(595, 46);
             verbUrlPanel.TabIndex = 5;
             // 
             // urlFormat
             // 
             this.urlFormat.AutoSize = true;
             this.urlFormat.Font = new System.Drawing.Font("Tahoma", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.urlFormat.Location = new System.Drawing.Point(128, 27);
+            this.urlFormat.Location = new System.Drawing.Point(116, 27);
             this.urlFormat.Name = "urlFormat";
             this.urlFormat.Size = new System.Drawing.Size(285, 11);
             this.urlFormat.TabIndex = 24;
@@ -126,10 +125,10 @@
             // urlTextBox
             // 
             this.urlTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.urlTextBox.Location = new System.Drawing.Point(128, 3);
+            this.urlTextBox.Location = new System.Drawing.Point(116, 3);
             this.urlTextBox.MaxLength = 32767;
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(448, 21);
+            this.urlTextBox.Size = new System.Drawing.Size(476, 21);
             this.urlTextBox.TabIndex = 2;
             this.urlTextBox.TokenSelectionMode = ShipWorks.Templates.Tokens.TokenSelectionMode.Paste;
             this.urlTextBox.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
@@ -138,25 +137,25 @@
             // verbPanel
             // 
             this.verbPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.verbPanel.Controls.Add(sendALabel);
+            this.verbPanel.Controls.Add(asALabel);
             this.verbPanel.Controls.Add(this.verbLabel);
             this.verbPanel.Controls.Add(this.requestToLabel);
             this.verbPanel.Location = new System.Drawing.Point(0, 4);
             this.verbPanel.Margin = new System.Windows.Forms.Padding(0);
             this.verbPanel.Name = "verbPanel";
-            this.verbPanel.Size = new System.Drawing.Size(125, 18);
+            this.verbPanel.Size = new System.Drawing.Size(113, 18);
             this.verbPanel.TabIndex = 29;
             // 
-            // sendALabel
+            // asALabel
             // 
-            sendALabel.AutoSize = true;
-            sendALabel.Location = new System.Drawing.Point(0, 3);
-            sendALabel.Margin = new System.Windows.Forms.Padding(0);
-            sendALabel.Name = "sendALabel";
-            sendALabel.Size = new System.Drawing.Size(40, 13);
-            sendALabel.TabIndex = 5;
-            sendALabel.Text = "Send a";
-            sendALabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            asALabel.AutoSize = true;
+            asALabel.Location = new System.Drawing.Point(0, 3);
+            asALabel.Margin = new System.Windows.Forms.Padding(0);
+            asALabel.Name = "asALabel";
+            asALabel.Size = new System.Drawing.Size(28, 13);
+            asALabel.TabIndex = 5;
+            asALabel.Text = "As a";
+            asALabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // verbLabel
             // 
@@ -164,7 +163,7 @@
             this.verbLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.verbLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.verbLabel.ForeColor = System.Drawing.Color.Blue;
-            this.verbLabel.Location = new System.Drawing.Point(37, 3);
+            this.verbLabel.Location = new System.Drawing.Point(25, 3);
             this.verbLabel.Margin = new System.Windows.Forms.Padding(0);
             this.verbLabel.Name = "verbLabel";
             this.verbLabel.Size = new System.Drawing.Size(32, 13);
@@ -172,13 +171,12 @@
             this.verbLabel.Text = "VERB";
             this.verbLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.verbLabel.SizeChanged += new System.EventHandler(this.OnVerbLabelSizeChanged);
-            this.verbLabel.TextChanged += new System.EventHandler(this.OnVerbLabelTextChanged);
             this.verbLabel.Click += new System.EventHandler(this.OnVerbLabelClick);
             // 
             // requestToLabel
             // 
             this.requestToLabel.AutoSize = true;
-            this.requestToLabel.Location = new System.Drawing.Point(66, 3);
+            this.requestToLabel.Location = new System.Drawing.Point(54, 3);
             this.requestToLabel.Margin = new System.Windows.Forms.Padding(0);
             this.requestToLabel.Name = "requestToLabel";
             this.requestToLabel.Size = new System.Drawing.Size(61, 13);
@@ -189,7 +187,7 @@
             // labelHeaders
             // 
             labelHeaders.AutoSize = true;
-            labelHeaders.Location = new System.Drawing.Point(4, 82);
+            labelHeaders.Location = new System.Drawing.Point(3, 86);
             labelHeaders.Margin = new System.Windows.Forms.Padding(0);
             labelHeaders.Name = "labelHeaders";
             labelHeaders.Size = new System.Drawing.Size(75, 13);
@@ -206,11 +204,11 @@
             authPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             authPanel.Controls.Add(this.authTypePanel, 0, 0);
             authPanel.Controls.Add(this.basicAuthPanel, 1, 0);
-            authPanel.Location = new System.Drawing.Point(4, 46);
+            authPanel.Location = new System.Drawing.Point(3, 50);
             authPanel.Name = "authPanel";
             authPanel.RowCount = 1;
             authPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            authPanel.Size = new System.Drawing.Size(579, 27);
+            authPanel.Size = new System.Drawing.Size(595, 27);
             authPanel.TabIndex = 23;
             // 
             // authTypePanel
@@ -280,15 +278,15 @@
             this.basicAuthPanel.Name = "basicAuthPanel";
             this.basicAuthPanel.RowCount = 1;
             this.basicAuthPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicAuthPanel.Size = new System.Drawing.Size(465, 27);
+            this.basicAuthPanel.Size = new System.Drawing.Size(481, 27);
             this.basicAuthPanel.TabIndex = 2;
             // 
             // passwordTextBox
             // 
             this.passwordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.passwordTextBox.Location = new System.Drawing.Point(298, 3);
+            this.passwordTextBox.Location = new System.Drawing.Point(306, 3);
             this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(164, 21);
+            this.passwordTextBox.Size = new System.Drawing.Size(172, 21);
             this.passwordTextBox.TabIndex = 2;
             this.passwordTextBox.UseSystemPasswordChar = true;
             this.passwordTextBox.TextChanged += new System.EventHandler(this.OnPasswordTextChanged);
@@ -309,7 +307,7 @@
             // 
             basicAuthPasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             basicAuthPasswordLabel.AutoSize = true;
-            basicAuthPasswordLabel.Location = new System.Drawing.Point(215, 7);
+            basicAuthPasswordLabel.Location = new System.Drawing.Point(223, 7);
             basicAuthPasswordLabel.Margin = new System.Windows.Forms.Padding(0);
             basicAuthPasswordLabel.Name = "basicAuthPasswordLabel";
             basicAuthPasswordLabel.Size = new System.Drawing.Size(80, 13);
@@ -322,14 +320,14 @@
             this.userNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.userNameTextBox.Location = new System.Drawing.Point(49, 3);
             this.userNameTextBox.Name = "userNameTextBox";
-            this.userNameTextBox.Size = new System.Drawing.Size(163, 21);
+            this.userNameTextBox.Size = new System.Drawing.Size(171, 21);
             this.userNameTextBox.TabIndex = 1;
             this.userNameTextBox.TextChanged += new System.EventHandler(this.OnUserNameTextChanged);
             // 
             // labelSendA2
             // 
             labelSendA2.AutoSize = true;
-            labelSendA2.Location = new System.Drawing.Point(4, 228);
+            labelSendA2.Location = new System.Drawing.Point(3, 4);
             labelSendA2.Name = "labelSendA2";
             labelSendA2.Size = new System.Drawing.Size(40, 13);
             labelSendA2.TabIndex = 28;
@@ -339,16 +337,12 @@
             // 
             this.headersGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.headersGrid.Location = new System.Drawing.Point(32, 100);
+            this.headersGrid.Location = new System.Drawing.Point(30, 104);
             this.headersGrid.Name = "headersGrid";
-            this.headersGrid.Size = new System.Drawing.Size(551, 113);
+            this.headersGrid.Size = new System.Drawing.Size(566, 113);
             this.headersGrid.TabIndex = 21;
             this.headersGrid.Values = ((System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, string>>)(resources.GetObject("headersGrid.Values")));
             this.headersGrid.DataChanged += new System.EventHandler<System.EventArgs>(this.OnHeadersGridDataChanged);
-            // 
-            // errorProvider
-            // 
-            this.errorProvider.ContainerControl = this;
             // 
             // cardinalityLabel
             // 
@@ -356,7 +350,7 @@
             this.cardinalityLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cardinalityLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cardinalityLabel.ForeColor = System.Drawing.Color.Blue;
-            this.cardinalityLabel.Location = new System.Drawing.Point(41, 228);
+            this.cardinalityLabel.Location = new System.Drawing.Point(40, 4);
             this.cardinalityLabel.Margin = new System.Windows.Forms.Padding(0);
             this.cardinalityLabel.Name = "cardinalityLabel";
             this.cardinalityLabel.Size = new System.Drawing.Size(74, 13);
@@ -365,29 +359,36 @@
             this.cardinalityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.cardinalityLabel.Click += new System.EventHandler(this.OnCardinalityLabelClick);
             // 
+            // requestPanel
+            // 
+            this.requestPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.requestPanel.Controls.Add(verbUrlPanel);
+            this.requestPanel.Controls.Add(authPanel);
+            this.requestPanel.Controls.Add(this.headersGrid);
+            this.requestPanel.Controls.Add(labelHeaders);
+            this.requestPanel.Location = new System.Drawing.Point(0, 54);
+            this.requestPanel.Name = "requestPanel";
+            this.requestPanel.Size = new System.Drawing.Size(598, 224);
+            this.requestPanel.TabIndex = 31;
+            // 
             // WebRequestTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.Controls.Add(this.requestPanel);
             this.Controls.Add(labelSendA2);
             this.Controls.Add(this.cardinalityLabel);
-            this.Controls.Add(labelHeaders);
-            this.Controls.Add(this.headersGrid);
-            this.Controls.Add(authPanel);
-            this.Controls.Add(verbUrlPanel);
             this.Controls.Add(requestUrlPanel);
             this.Name = "WebRequestTaskEditor";
-            this.Size = new System.Drawing.Size(583, 281);
+            this.Size = new System.Drawing.Size(598, 278);
             this.Controls.SetChildIndex(requestUrlPanel, 0);
-            this.Controls.SetChildIndex(verbUrlPanel, 0);
-            this.Controls.SetChildIndex(authPanel, 0);
             this.Controls.SetChildIndex(this.labelTemplate, 0);
             this.Controls.SetChildIndex(this.templateCombo, 0);
-            this.Controls.SetChildIndex(this.headersGrid, 0);
-            this.Controls.SetChildIndex(labelHeaders, 0);
             this.Controls.SetChildIndex(this.cardinalityLabel, 0);
             this.Controls.SetChildIndex(labelSendA2, 0);
+            this.Controls.SetChildIndex(this.requestPanel, 0);
             verbUrlPanel.ResumeLayout(false);
             verbUrlPanel.PerformLayout();
             this.verbPanel.ResumeLayout(false);
@@ -397,7 +398,8 @@
             this.authTypePanel.PerformLayout();
             this.basicAuthPanel.ResumeLayout(false);
             this.basicAuthPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            this.requestPanel.ResumeLayout(false);
+            this.requestPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -411,7 +413,6 @@
         private System.Windows.Forms.TextBox userNameTextBox;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Label urlFormat;
-        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.Panel verbPanel;
         private System.Windows.Forms.Label verbLabel;
         private System.Windows.Forms.Label requestToLabel;
@@ -419,6 +420,7 @@
         private System.Windows.Forms.Label authLabel;
         private System.Windows.Forms.Label authLabelSuffix;
         private System.Windows.Forms.Label cardinalityLabel;
+        private System.Windows.Forms.Panel requestPanel;
 
     }
 }
