@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -93,7 +87,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             UpdateLayout();
-            //UpdateFreightUI();
         }
 
         /// <summary>
@@ -111,61 +104,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             gridRow.Cells[0].Text = text;
         }
-
-        ///// <summary>
-        ///// Update the dispaly of freight information based on the loaded shipment's service types
-        ///// </summary>
-        //private void UpdateFreightUI()
-        //{
-        //    bool allFreight = loadedShipments.Count > 0;
-
-        //    foreach (ShipmentEntity shipment in loadedShipments)
-        //    {
-        //        if (!UpsUtility.IsFreightService((UpsServiceType)shipment.Ups.Service))
-        //        {
-        //            allFreight = false;
-        //            break;
-        //        }
-        //    }
-
-        //    UpdateFreightUI(allFreight);
-        //}
-
-        ///// <summary>
-        ///// Update the freight ui to show as freight service selection or not
-        ///// </summary>
-        //public void UpdateFreightUI(bool showAsFreight)
-        //{
-        //    if (showAsFreight)
-        //    {
-        //        labelPackages.Text = "      Skids:";
-        //        gridColumn.HeaderText = "Skids (Select to Edit)";
-
-        //        labelSkidPieces.Visible = true;
-        //        skidPieces.Visible = true;
-
-        //        labelDangerousGoods.Location = new Point(labelDangerousGoods.Location.X,
-        //            labelSkidPieces.Bottom + 11);
-        //        dangerousGoodsControl.Location = new Point(dangerousGoodsControl.Location.X,
-        //            skidPieces.Bottom + 6);
-
-        //    }
-        //    else
-        //    {
-        //        labelPackages.Text = "Packages:";
-        //        gridColumn.HeaderText = "Packages (Select to Edit)";
-
-        //        labelSkidPieces.Visible = false;
-        //        skidPieces.Visible = false;
-
-        //        labelDangerousGoods.Location = new Point(labelDangerousGoods.Location.X, 
-        //            labelSkidPieces.Location.Y);
-        //        dangerousGoodsControl.Location = new Point(dangerousGoodsControl.Location.X, 
-        //            skidPieces.Location.Y + 3);
-        //    }
-
-        //    UpdateLayout();
-        //}
 
         /// <summary>
         /// Update the layout and size of the control based on the package count
@@ -189,8 +127,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 panelPackageSelector.Visible = true;
                 packageDetailPanel.Top = packagesGrid.Bottom;
             }
-
-            //this.Height = flowPanel.Height;
 
             // Be just tall enough to hold the package content
             this.Height = packageDetailPanel.Bottom;
@@ -222,15 +158,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                         dryIceDetails.ApplyFrom(package);
                         verbalConfirmation.ApplyFrom(package);
-
-                        //skidPieces.ApplyMultiText(package.SkidPieces.ToString());
-                        //dryIceWeight.ApplyMultiWeight(package.DryIceWeight);
-
-                        //containsAlcohol.ApplyMultiCheck(package.ContainsAlcohol);
-
-                        //// Load the priority alerts and dangerous goods
-                        //priorityAlertControl.LoadPriorityAlertData(package);
-                        //dangerousGoodsControl.LoadDangerousGoodsData(package);
                     }
                 }
             }
@@ -253,24 +180,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     dryIceDetails.ReadInto(package);
                     verbalConfirmation.ReadInto(package);
-
-                    //skidPieces.ReadMultiText(t =>
-                    //{
-                    //    int pieces;
-                    //    if (int.TryParse(skidPieces.Text, out pieces))
-                    //    {
-                    //        package.SkidPieces = pieces;
-                    //    }
-                    //});
-
-                    //dryIceWeight.ReadMultiWeight(w => package.DryIceWeight = w);
-
-                    //containsAlcohol.ReadMultiCheck(w => package.ContainsAlcohol = w);
                 }
-
-                //// Save the priority alerts and dangerous goods
-                //priorityAlertControl.SavePriorityAlertToPackage(packages);
-                //dangerousGoodsControl.SaveToPackage(packages);
             }
         }
 

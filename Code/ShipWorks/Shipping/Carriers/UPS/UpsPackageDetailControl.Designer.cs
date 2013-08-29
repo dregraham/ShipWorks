@@ -36,9 +36,8 @@
             this.additionalHandling = new System.Windows.Forms.CheckBox();
             this.labelAdditionalHandling = new System.Windows.Forms.Label();
             this.packageDetailPanel = new System.Windows.Forms.Panel();
-            this.dryIceDetails = new ShipWorks.Shipping.Carriers.UPS.UpsDryIceControl();
             this.verbalConfirmation = new ShipWorks.Shipping.Carriers.UPS.UpsContactInfoControl();
-            this.labelVerbalConfirmation = new System.Windows.Forms.Label();
+            this.dryIceDetails = new ShipWorks.Shipping.Carriers.UPS.UpsDryIceControl();
             this.panelPackageSelector.SuspendLayout();
             this.packageDetailPanel.SuspendLayout();
             this.SuspendLayout();
@@ -111,7 +110,6 @@
             // 
             // packageDetailPanel
             // 
-            this.packageDetailPanel.Controls.Add(this.labelVerbalConfirmation);
             this.packageDetailPanel.Controls.Add(this.verbalConfirmation);
             this.packageDetailPanel.Controls.Add(this.dryIceDetails);
             this.packageDetailPanel.Controls.Add(this.additionalHandling);
@@ -119,35 +117,27 @@
             this.packageDetailPanel.Location = new System.Drawing.Point(3, 69);
             this.packageDetailPanel.Margin = new System.Windows.Forms.Padding(0);
             this.packageDetailPanel.Name = "packageDetailPanel";
-            this.packageDetailPanel.Size = new System.Drawing.Size(419, 179);
+            this.packageDetailPanel.Size = new System.Drawing.Size(419, 185);
             this.packageDetailPanel.TabIndex = 8;
+            // 
+            // verbalConfirmation
+            // 
+            this.verbalConfirmation.ContactName = "";
+            this.verbalConfirmation.Location = new System.Drawing.Point(8, 106);
+            this.verbalConfirmation.Name = "verbalConfirmation";
+            this.verbalConfirmation.PhoneExtension = "";
+            this.verbalConfirmation.PhoneNumber = "";
+            this.verbalConfirmation.Size = new System.Drawing.Size(354, 80);
+            this.verbalConfirmation.State = false;
+            this.verbalConfirmation.TabIndex = 25;
             // 
             // dryIceDetails
             // 
             this.dryIceDetails.Location = new System.Drawing.Point(65, 25);
             this.dryIceDetails.Name = "dryIceDetails";
             this.dryIceDetails.Size = new System.Drawing.Size(351, 75);
+            this.dryIceDetails.State = false;
             this.dryIceDetails.TabIndex = 8;
-            // 
-            // verbalConfirmation
-            // 
-            this.verbalConfirmation.ContactName = "";
-            this.verbalConfirmation.Location = new System.Drawing.Point(28, 119);
-            this.verbalConfirmation.Name = "verbalConfirmation";
-            this.verbalConfirmation.PhoneExtension = "";
-            this.verbalConfirmation.PhoneNumber = "";
-            this.verbalConfirmation.Size = new System.Drawing.Size(354, 62);
-            this.verbalConfirmation.TabIndex = 25;
-            // 
-            // labelVerbalConfirmation
-            // 
-            this.labelVerbalConfirmation.AutoSize = true;
-            this.labelVerbalConfirmation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVerbalConfirmation.Location = new System.Drawing.Point(3, 103);
-            this.labelVerbalConfirmation.Name = "labelVerbalConfirmation";
-            this.labelVerbalConfirmation.Size = new System.Drawing.Size(119, 13);
-            this.labelVerbalConfirmation.TabIndex = 50;
-            this.labelVerbalConfirmation.Text = "Verbal Confirmation";
             // 
             // UpsPackageDetailControl
             // 
@@ -157,7 +147,7 @@
             this.Controls.Add(this.packageDetailPanel);
             this.Controls.Add(this.panelPackageSelector);
             this.Name = "UpsPackageDetailControl";
-            this.Size = new System.Drawing.Size(423, 252);
+            this.Size = new System.Drawing.Size(423, 254);
             this.panelPackageSelector.ResumeLayout(false);
             this.panelPackageSelector.PerformLayout();
             this.packageDetailPanel.ResumeLayout(false);
@@ -178,6 +168,5 @@
         private System.Windows.Forms.Label labelAdditionalHandling;
         private System.Windows.Forms.Panel packageDetailPanel;
         private UpsContactInfoControl verbalConfirmation;
-        private System.Windows.Forms.Label labelVerbalConfirmation;
     }
 }

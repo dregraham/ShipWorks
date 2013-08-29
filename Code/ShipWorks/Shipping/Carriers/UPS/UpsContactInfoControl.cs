@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -8,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// A view for the UPS contact info (used in verbal confirmation) fields.
     /// </summary>
-    public partial class UpsContactInfoControl : UserControl
+    public partial class UpsContactInfoControl : UserControl, IShippingProfileControl
     {
         /// <summary>
         /// Initializes a new <see cref="UpsContactInfoControl"/> instance.
@@ -51,9 +52,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="package">Package into which values will be read</param>
         public void ReadInto(UpsPackageEntity package)
         {
-            package.VerbalConfirmationName = ContactName;
-            package.VerbalConfirmationPhone = PhoneNumber;
-            package.VerbalConfirmationPhoneExtension = PhoneExtension;
+            verbalConfirmationRequired.ReadMultiCheck(x => package.VerbalConfirmationEnabled = x);
+            nameTextBox.ReadMultiText(x => package.VerbalConfirmationName = x);
+            phoneNumberTextBox.ReadMultiText(x => package.VerbalConfirmationPhone = x);
+            phoneExtensionTextBox.ReadMultiText(x => package.VerbalConfirmationPhoneExtension = x);
         }
 
         /// <summary>
@@ -62,9 +64,55 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="package">Package from which values will be applied</param>
         public void ApplyFrom(UpsPackageEntity package)
         {
-            ContactName = package.VerbalConfirmationName;
-            PhoneNumber = package.VerbalConfirmationPhone;
-            PhoneExtension = package.VerbalConfirmationPhoneExtension;
+            verbalConfirmationRequired.ApplyMultiCheck(package.VerbalConfirmationEnabled);
+            nameTextBox.ApplyMultiText(package.VerbalConfirmationName);
+            phoneNumberTextBox.ApplyMultiText(package.VerbalConfirmationPhone);
+            phoneExtensionTextBox.ApplyMultiText(package.VerbalConfirmationPhoneExtension);
+        }
+
+        /// <summary>
+        /// Gets and sets the state in the profile
+        /// </summary>
+        public bool State
+        {
+            get { return verbalConfirmationRequired.Checked; }
+            set { verbalConfirmationRequired.Checked = value; }
+        }
+
+        /// <summary>
+        /// Saves the values to the specified profile
+        /// </summary>
+        /// <param name="entity">Profile to which the verbal confirmation information should be saved</param>
+        public void SaveToEntity(EntityBase2 entity)
+        {
+            UpsProfilePackageEntity packageEntity = entity as UpsProfilePackageEntity;
+            if (packageEntity == null)
+            {
+                return;
+            }
+
+            packageEntity.VerbalConfirmationEnabled = verbalConfirmationRequired.Checked;
+            packageEntity.VerbalConfirmationName = nameTextBox.Text;
+            packageEntity.VerbalConfirmationPhone = phoneNumberTextBox.Text;
+            packageEntity.VerbalConfirmationPhoneExtension = phoneExtensionTextBox.Text;
+        }
+
+        /// <summary>
+        /// Loads the values from the specified profile
+        /// </summary>
+        /// <param name="entity">Profile from which the verbal confirmation information should be loaded</param>
+        public void LoadFromEntity(EntityBase2 entity)
+        {
+            UpsProfilePackageEntity packageEntity = entity as UpsProfilePackageEntity;
+            if (packageEntity == null)
+            {
+                return;
+            }
+
+            verbalConfirmationRequired.Checked = packageEntity.VerbalConfirmationEnabled.GetValueOrDefault();
+            nameTextBox.Text = packageEntity.VerbalConfirmationName;
+            phoneNumberTextBox.Text = packageEntity.VerbalConfirmationPhone;
+            phoneExtensionTextBox.Text = packageEntity.VerbalConfirmationPhoneExtension;
         }
     }
 }
