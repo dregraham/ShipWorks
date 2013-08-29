@@ -116,9 +116,9 @@
             this.retentionDaysLabel.AutoSize = true;
             this.retentionDaysLabel.Location = new System.Drawing.Point(74, 20);
             this.retentionDaysLabel.Name = "retentionDaysLabel";
-            this.retentionDaysLabel.Size = new System.Drawing.Size(34, 13);
+            this.retentionDaysLabel.Size = new System.Drawing.Size(30, 13);
             this.retentionDaysLabel.TabIndex = 9;
-            this.retentionDaysLabel.Text = "days.";
+            this.retentionDaysLabel.Text = "days";
             // 
             // email
             // 
@@ -214,9 +214,9 @@
             this.retentionHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.retentionHeading.Location = new System.Drawing.Point(3, 0);
             this.retentionHeading.Name = "retentionHeading";
-            this.retentionHeading.Size = new System.Drawing.Size(151, 13);
+            this.retentionHeading.Size = new System.Drawing.Size(134, 13);
             this.retentionHeading.TabIndex = 20;
-            this.retentionHeading.Text = "Delete records older than";
+            this.retentionHeading.Text = "Delete data older than";
             // 
             // timeoutHelp
             // 
