@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 },
                 UseBasicAuthentication = true,
                 Username = "user",
-                UrlToHit = "http://www.shipworks.com",
+                Url = "http://www.shipworks.com",
                 Verb = HttpVerb.Get
             };
 

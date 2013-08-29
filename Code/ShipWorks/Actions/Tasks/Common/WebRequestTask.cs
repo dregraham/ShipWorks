@@ -20,7 +20,7 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
-    /// Task to hit a URL.
+    /// Task to submit a request to a specified URL.
     /// </summary>
     [ActionTask("Send web request", "WebRequest")]
     public class WebRequestTask : TemplateBasedTask
@@ -47,9 +47,9 @@ namespace ShipWorks.Actions.Tasks.Common
         public HttpVerb Verb { get; set; }
 
         /// <summary>
-        /// Gets or sets the URL to hit.
+        /// Gets or sets the URL the request is being submitted to.
         /// </summary>
-        public string UrlToHit { get; set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use basic authentication].
@@ -171,7 +171,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat)template.OutputFormat));
 
                 templateResult.XPathSource.Context.ProcessingComplete = false;
-                string url = TemplateTokenProcessor.ProcessTokens(UrlToHit, templateResult.XPathSource);
+                string url = TemplateTokenProcessor.ProcessTokens(Url, templateResult.XPathSource);
 
                 ProcessRequest(request, url);
             }
@@ -190,8 +190,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     string processedUrl =
                         inputSource == ActionTaskInputSource.Nothing
-                            ? UrlToHit
-                            : TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
+                            ? Url
+                            : TemplateTokenProcessor.ProcessTokens(Url, inputKeys);
 
                     ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
                     break;
@@ -204,7 +204,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                     foreach (long inputKey in inputKeys)
                     {
-                        string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
+                        string processedUrl = TemplateTokenProcessor.ProcessTokens(Url, inputKey);
                         ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
                     }
                     break;

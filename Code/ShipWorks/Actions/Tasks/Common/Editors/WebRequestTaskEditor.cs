@@ -56,7 +56,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             cardinalityLabel.Text = EnumHelper.GetDescription(task.RequestCardinality);
             verbLabel.Text = EnumHelper.GetDescription(task.Verb);
-            urlTextBox.Text = task.UrlToHit;
+            urlTextBox.Text = task.Url;
 
             // We want to get the decrypted password method here instead of using the EncryptedPassword 
             // property to avoid to having it encrypted twice when the task is saved again.
@@ -180,7 +180,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         void OnUrlTextChanged(object sender, EventArgs e)
         {
-            task.UrlToHit = urlTextBox.Text;
+            task.Url = urlTextBox.Text;
         }
 
         /// <summary>
