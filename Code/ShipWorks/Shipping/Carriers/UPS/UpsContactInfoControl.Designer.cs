@@ -35,18 +35,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
             System.Windows.Forms.Label phoneLabel;
             System.Windows.Forms.Label phoneExtensionLabel;
             ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.verbalConfirmationRequired = new System.Windows.Forms.CheckBox();
-            this.labelVerbalConfirmation = new System.Windows.Forms.Label();
             this.nameTextBox = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.phoneNumberTextBox = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.phoneExtensionTextBox = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.verbalConfirmationRequired = new System.Windows.Forms.CheckBox();
+            this.labelVerbalConfirmation = new System.Windows.Forms.Label();
             nameLabel = new System.Windows.Forms.Label();
             phoneLabel = new System.Windows.Forms.Label();
             phoneExtensionLabel = new System.Windows.Forms.Label();
             fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(fieldLengthProvider)).BeginInit();
+            this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -80,6 +80,35 @@ namespace ShipWorks.Shipping.Carriers.UPS
             phoneExtensionLabel.TabIndex = 0;
             phoneExtensionLabel.Text = "x";
             phoneExtensionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // nameTextBox
+            // 
+            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel.SetColumnSpan(this.nameTextBox, 3);
+            this.nameTextBox.Location = new System.Drawing.Point(90, 5);
+            fieldLengthProvider.SetMaxLengthSource(this.nameTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactName);
+            this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.Size = new System.Drawing.Size(154, 20);
+            this.nameTextBox.TabIndex = 1;
+            // 
+            // phoneNumberTextBox
+            // 
+            this.phoneNumberTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.phoneNumberTextBox.Location = new System.Drawing.Point(90, 36);
+            fieldLengthProvider.SetMaxLengthSource(this.phoneNumberTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactPhoneNumber);
+            this.phoneNumberTextBox.Name = "phoneNumberTextBox";
+            this.phoneNumberTextBox.Size = new System.Drawing.Size(81, 20);
+            this.phoneNumberTextBox.TabIndex = 2;
+            // 
+            // phoneExtensionTextBox
+            // 
+            this.phoneExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.phoneExtensionTextBox.Location = new System.Drawing.Point(201, 36);
+            fieldLengthProvider.SetMaxLengthSource(this.phoneExtensionTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactPhoneExtension);
+            this.phoneExtensionTextBox.MinimumSize = new System.Drawing.Size(30, 4);
+            this.phoneExtensionTextBox.Name = "phoneExtensionTextBox";
+            this.phoneExtensionTextBox.Size = new System.Drawing.Size(43, 20);
+            this.phoneExtensionTextBox.TabIndex = 3;
             // 
             // tableLayoutPanel
             // 
@@ -126,36 +155,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelVerbalConfirmation.Text = "Verbal Confirmation:";
             this.labelVerbalConfirmation.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // nameTextBox
-            // 
-            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel.SetColumnSpan(this.nameTextBox, 3);
-            this.nameTextBox.Location = new System.Drawing.Point(90, 5);
-            fieldLengthProvider.SetMaxLengthSource(this.nameTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactName);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(154, 20);
-            this.nameTextBox.TabIndex = 1;
-            // 
-            // phoneNumberTextBox
-            // 
-            this.phoneNumberTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.phoneNumberTextBox.Location = new System.Drawing.Point(90, 36);
-            fieldLengthProvider.SetMaxLengthSource(this.phoneNumberTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactPhoneNumber);
-            this.phoneNumberTextBox.Name = "phoneNumberTextBox";
-            this.phoneNumberTextBox.Size = new System.Drawing.Size(81, 20);
-            this.phoneNumberTextBox.TabIndex = 2;
-            this.phoneNumberTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // phoneExtensionTextBox
-            // 
-            this.phoneExtensionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.phoneExtensionTextBox.Location = new System.Drawing.Point(201, 36);
-            fieldLengthProvider.SetMaxLengthSource(this.phoneExtensionTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsContactPhoneExtension);
-            this.phoneExtensionTextBox.MinimumSize = new System.Drawing.Size(30, 4);
-            this.phoneExtensionTextBox.Name = "phoneExtensionTextBox";
-            this.phoneExtensionTextBox.Size = new System.Drawing.Size(43, 20);
-            this.phoneExtensionTextBox.TabIndex = 3;
-            // 
             // UpsContactInfoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -165,9 +164,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.Controls.Add(this.tableLayoutPanel);
             this.Name = "UpsContactInfoControl";
             this.Size = new System.Drawing.Size(353, 80);
+            ((System.ComponentModel.ISupportInitialize)(fieldLengthProvider)).EndInit();
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
