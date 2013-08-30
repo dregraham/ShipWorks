@@ -25,11 +25,12 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Send web request", "WebRequest")]
     public class WebRequestTask : TemplateBasedTask
     {
+        private const string PasswordSalt = "WebRequestTask";
+
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(WebRequestTask));
-
         private readonly ApiLogEntry requestLogger;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestTask"/> class.
         /// </summary>
@@ -106,7 +107,7 @@ namespace ShipWorks.Actions.Tasks.Common
             // This was added, so the various consumers (e.g. the web request editor, 
             // serialization/deserialization, etc.) of this operations on this task
             // don't have to try to maintain whether the password is encrypted or not.            
-            EncryptedPassword = SecureText.Encrypt(plainTextPassword, Username);
+            EncryptedPassword = SecureText.Encrypt(plainTextPassword, PasswordSalt);
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public string GetDecryptedPassword()
         {
-            return SecureText.Decrypt(EncryptedPassword, Username);
+            return SecureText.Decrypt(EncryptedPassword, PasswordSalt);
         }
 
         /// <summary>
