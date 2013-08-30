@@ -126,7 +126,7 @@
             this.additionalHandling.Name = "additionalHandling";
             this.additionalHandling.Size = new System.Drawing.Size(117, 17);
             this.additionalHandling.TabIndex = 7;
-            this.additionalHandling.Text = "Additional Handling";
+            this.additionalHandling.Text = "This package requires additional handling";
             this.additionalHandling.UseVisualStyleBackColor = true;
             // 
             // labelAdditionalHandling
