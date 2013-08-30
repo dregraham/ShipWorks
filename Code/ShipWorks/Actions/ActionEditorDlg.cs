@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -521,6 +522,19 @@ namespace ShipWorks.Actions
                 List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
                 List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
                 
+                // Validate all the task editors
+                var errors = new List<TaskValidationError>();
+                foreach (ActionTaskBubble editor in ActiveBubbles)
+                {
+                    editor.ValidateTask(errors);
+                }
+
+                if (errors.Any())
+                {
+                    MessageHelper.ShowError(this, errors.Select(x => x.ToString()).Combine(Environment.NewLine + Environment.NewLine));
+                    return;
+                }
+
                 // Update the flow order
                 foreach (ActionTask task in tasksToSave)
                 {

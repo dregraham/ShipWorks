@@ -76,6 +76,7 @@
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.CausesValidation = false;
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(577, 492);
             this.cancel.Name = "cancel";
@@ -108,6 +109,7 @@
             this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionControl.CausesValidation = false;
             this.optionControl.Controls.Add(this.optionPageAction);
             this.optionControl.Controls.Add(this.optionPageSettings);
             this.optionControl.Location = new System.Drawing.Point(12, 55);
@@ -121,6 +123,7 @@
             // 
             this.optionPageAction.BackColor = System.Drawing.Color.White;
             this.optionPageAction.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.optionPageAction.CausesValidation = false;
             this.optionPageAction.Controls.Add(this.addTask);
             this.optionPageAction.Controls.Add(this.panelTrigger);
             this.optionPageAction.Controls.Add(this.triggerCombo);

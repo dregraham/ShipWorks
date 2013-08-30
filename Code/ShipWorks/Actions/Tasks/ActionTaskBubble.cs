@@ -543,5 +543,17 @@ namespace ShipWorks.Actions.Tasks
                 }
             }
         }
+
+        /// <summary>
+        /// Validates the task editor
+        /// </summary>
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public void ValidateTask(ICollection<TaskValidationError> errors)
+        {
+            foreach (ActionTaskEditor editor in panelTaskSettings.Controls.OfType<ActionTaskEditor>())
+            {
+                editor.ValidateTask(errors);
+            }
+        }
     }
 }

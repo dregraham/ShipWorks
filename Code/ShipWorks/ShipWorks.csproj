@@ -438,6 +438,7 @@
     <Compile Include="Actions\Tasks\Common\RunCommandTask.cs" />
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
     <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
+    <Compile Include="Actions\Tasks\TaskValidationError.cs" />
     <Compile Include="Actions\Triggers\ScheduledTrigger.cs" />
     <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.cs">
       <SubType>UserControl</SubType>

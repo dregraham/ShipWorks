@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 
@@ -14,7 +17,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
     public partial class BackupDatabaseTaskEditor : ActionTaskEditor
     {
         private readonly BackupDatabaseTask task;
-        private string errorMessage = string.Empty;
 
         /// <summary>
         /// Constructor
@@ -36,7 +38,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            this.Validating += OnBackupDatabaseTaskEditorValidating;
+            //this.Validating += OnBackupDatabaseTaskEditorValidating;
             backupPath.Text = task.BackupDirectory;
 
             textPrefix.Text = task.FilePrefix;
@@ -95,37 +97,35 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Validate the user entered data
+        /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
         /// </summary>
-        void OnBackupDatabaseTaskEditorValidating(object sender, CancelEventArgs e)
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
+            ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
+            TaskValidationError error = new TaskValidationError(string.Format("The {0} task is missing some information.", descriptor.BaseName));
+
             if (string.IsNullOrWhiteSpace(textPrefix.Text))
             {
-                errorMessage = string.Format("Please enter a backup file name.{0}", Environment.NewLine);
-                e.Cancel = true;
+                error.Details.Add("Please enter a backup file name.");
             }
 
             if (textPrefix.Text.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
             {
-                errorMessage += string.Format("The backup file name cannot contain the following characters: {0}{1}",
-                    Path.GetInvalidFileNameChars().Where(x => x > 31).Aggregate("", (x, y) => x + " " + y), Environment.NewLine);
-
-                e.Cancel = true;
+                error.Details.Add(string.Format("The backup file name cannot contain the following characters: {0}",
+                    Path.GetInvalidFileNameChars().Where(x => x > 31).Combine(" ")));
             }
 
             if (string.IsNullOrWhiteSpace(backupPath.Text))
             {
-                errorMessage += string.Format("Please enter a backup folder.{0}", Environment.NewLine);
-                e.Cancel = true;
+                error.Details.Add("Please enter a backup folder.");
             }
 
-            // If there was an error, show the user 
-            if (e.Cancel)
+            // Add the error to the main errors collection if there are any validation errors
+            if (error.Details.Any())
             {
-                MessageHelper.ShowError(this, errorMessage);
+                errors.Add(error);
             }
-
-            errorMessage = string.Empty;
         }
     }
 }

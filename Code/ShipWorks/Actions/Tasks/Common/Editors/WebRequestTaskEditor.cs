@@ -336,5 +336,26 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 UpdateBodyUI();
             }
         }
+
+        /// <summary>
+        /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
+        /// </summary>
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public override void ValidateTask(ICollection<TaskValidationError> errors)
+        {
+            ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
+            TaskValidationError error = new TaskValidationError(string.Format("The {0} task is missing some information.", descriptor.BaseName));
+
+            if (string.IsNullOrWhiteSpace(urlTextBox.Text))
+            {
+                error.Details.Add("Please enter a request url.");
+            }
+
+            // Add the error to the main errors collection if there are any validation errors
+            if (error.Details.Any())
+            {
+                errors.Add(error);
+            }
+        }
     }
 }

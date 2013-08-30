@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.FileTransfer;
 using Interapptive.Shared.UI;
@@ -42,18 +43,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             this.task = task;
 
             LoadSettings();
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load" /> event.
-        /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            // Wire up the user control validating event so we can make sure the user has entered valid data.
-            this.Validating += OnFtpFileTaskEditorValidating;
         }
 
         /// <summary>
@@ -161,59 +150,38 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// On "OK", validate the fields.
+        /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
         /// </summary>
-        void OnFtpFileTaskEditorValidating(object sender, CancelEventArgs e)
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
-            string errorMessage = string.Format("The Upload with FTP task is missing some information.{0}{0}", Environment.NewLine);
-            List<string> errorDetails = new List<string>();
+            TaskValidationError error = new TaskValidationError("The Upload with FTP task is missing some information.");
 
             if (templateCombo.SelectedTemplate == null)
             {
-                errorDetails.Add(string.Format("A template must be selected.{0}", Environment.NewLine));
-                e.Cancel = true;
+                error.Details.Add("A template must be selected.");
             }
 
             if (string.IsNullOrWhiteSpace(ftpHost.Text))
             {
-                errorDetails.Add(string.Format("An FTP server was not provided.{0}", Environment.NewLine));
-                e.Cancel = true;
+                error.Details.Add("An FTP server was not provided.");
             }
 
             if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
             {
-                errorDetails.Add(string.Format("The FTP folder you want the file uploaded to was not provided.{0}", Environment.NewLine));
-                e.Cancel = true;
+                error.Details.Add("The FTP folder you want the file uploaded to was not provided.");
             }
 
             if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
             {
-                errorDetails.Add(string.Format("The file name that gets saved on the FTP server was not provided.{0}", Environment.NewLine));
-                e.Cancel = true;
+                error.Details.Add("The file name that gets saved on the FTP server was not provided.");
             }
 
-            
-            if (errorDetails.Any())
+            // Add the error to the main errors collection if there are any validation errors
+            if (error.Details.Any())
             {
-                //There were errors, format the details and show a message box
-                string formattedDetails = string.Empty;
-
-                if (errorDetails.Count > 1)
-                {
-                    // Prefix with indentation and hyphen so it's in a list-like format when 
-                    // there are multiple errors
-                    errorDetails.ForEach(error => formattedDetails += "   - " + error);
-                }
-                else
-                {
-                    // There's only one error, so just display it without formatting
-                    formattedDetails = errorDetails.FirstOrDefault();
-                }
-
-                MessageHelper.ShowError(this, errorMessage + formattedDetails);
+                errors.Add(error);
             }
-
-            
         }
     }
 }
