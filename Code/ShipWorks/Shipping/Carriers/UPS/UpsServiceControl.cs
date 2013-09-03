@@ -188,8 +188,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 serviceType = null;
             }
 
-            //ShipmentTypeManager.GetType(overriddenShipments.First());
-            //this.shipmen
             UpdateMiAndSurePostSpecificVisibility(serviceType);
 
             // Unhook events
