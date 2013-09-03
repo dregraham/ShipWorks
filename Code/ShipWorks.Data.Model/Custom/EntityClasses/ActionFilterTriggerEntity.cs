@@ -9,7 +9,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ActionFilterTriggerEntity
     {
         /// <summary>
-        /// List of StoreID's that the action is limited to acting on
+        /// List of Computer IDs that the action is limited to acting on
         /// </summary>
         public long[] ComputerLimitedList
         {
