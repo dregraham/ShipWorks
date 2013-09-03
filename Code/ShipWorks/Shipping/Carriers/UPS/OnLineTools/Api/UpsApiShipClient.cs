@@ -278,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // Commercial invoice requires Sold To 
-            if (!ShipmentType.IsDomestic(shipment) && ups.CommercialInvoice && !isSurePost)
+            if (!ShipmentType.IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
             {
                 xmlWriter.WriteStartElement("SoldTo");
                 xmlWriter.WriteElementString("CompanyName", companyOrName);
@@ -384,12 +384,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 return;
             }
 
-            if (!isSurePost && ups.CommercialInvoice)
+            if (!isSurePost && ups.CommercialPaperlessInvoice)
             {
                 xmlWriter.WriteStartElement("InternationalForms");
                 xmlWriter.WriteElementString("FormType", "01");
 
-                if (ups.PaperlessInternational)
+                if (ups.PaperlessAdditionalDocumentation)
                 {
                     xmlWriter.WriteElementString("AdditionalDocumentIndicator", string.Empty);
                 }

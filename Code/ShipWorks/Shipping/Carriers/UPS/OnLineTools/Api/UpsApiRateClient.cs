@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 // Get non-SurePost rates using the "standard" element writers
                 XmlTextWriter xmlTextWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.Rate, account);
-                List<UpsServiceRate> nonSurePostRates = GetRates(shipment, account, xmlTextWriter, new UpsRateServiceElementWriter(xmlTextWriter), new UpsRatePackageWeightElementWriter(xmlTextWriter), new UpsPackageServiceOptionsElementWriter(xmlTextWriter));
+                List<UpsServiceRate> nonSurePostRates = GetRates(shipment, account, xmlTextWriter, new UpsRateServiceElementWriter(xmlTextWriter), new UpsRatePackageWeightElementWriter(xmlTextWriter), new UpsRatePackageServiceOptionsElementWriter(xmlTextWriter));
 
                 rates.AddRange(nonSurePostRates);
             }
@@ -121,11 +121,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsRateType accountRateType = (UpsRateType)account.RateType;
             UpsServiceType serviceType = (UpsServiceType)ups.Service;
 
-            if (serviceType == UpsServiceType.UpsMailInnovationsExpedited ||
-                serviceType == UpsServiceType.UpsMailInnovationsFirstClass ||
-                serviceType == UpsServiceType.UpsMailInnovationsIntEconomy ||
-                serviceType == UpsServiceType.UpsMailInnovationsIntPriority ||
-                serviceType == UpsServiceType.UpsMailInnovationsPriority)
+            if(UpsUtility.IsUpsMiService(serviceType))
             {
                 return new List<UpsServiceRate>();
             }

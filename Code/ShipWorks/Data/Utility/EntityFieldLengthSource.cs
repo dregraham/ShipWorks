@@ -127,6 +127,9 @@ namespace ShipWorks.Data.Utility
         UpsQvnMessage,
         UpsCustomsDescription,
         UpsCommercialInvoiceComments,
+        UpsContactName,
+        UpsContactPhoneNumber,
+        UpsContactPhoneExtension,
 
         FedExAccountNumber,
         FedExAccountDescription,

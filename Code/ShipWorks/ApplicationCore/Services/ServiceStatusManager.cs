@@ -99,14 +99,14 @@ namespace ShipWorks.ApplicationCore.Services
             int numberOfServiceTypes = Enum.GetNames(typeof(ShipWorksServiceType)).Length;
 
             // Find computers that are missing ServiceStatus entries
-            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatuses == null || c.ServiceStatuses.Count != numberOfServiceTypes))
+            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatus == null || c.ServiceStatus.Count != numberOfServiceTypes))
             {
                 // For each ShipWorksServiceType, if the computer does have an entry for it, add it.
                 foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
                 {
-                    if (computer.ServiceStatuses == null ||
-                        computer.ServiceStatuses.Count == 0 ||
-                        computer.ServiceStatuses.All(ws => ws.ServiceType != (int)serviceType))
+                    if (computer.ServiceStatus == null ||
+                        computer.ServiceStatus.Count == 0 ||
+                        computer.ServiceStatus.All(ws => ws.ServiceType != (int)serviceType))
                     {
                         ServiceStatusEntity serviceStatus = new ServiceStatusEntity
                             {

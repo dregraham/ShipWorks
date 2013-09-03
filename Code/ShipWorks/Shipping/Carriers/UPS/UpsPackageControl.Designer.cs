@@ -30,6 +30,7 @@
         {
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.panelPackage = new System.Windows.Forms.Panel();
+            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.packagingType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackaging = new System.Windows.Forms.Label();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
@@ -43,14 +44,13 @@
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge3 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.packageCountCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.panelPackage.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelPackage
             // 
-            this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPackage.Controls.Add(this.insuranceControl);
             this.panelPackage.Controls.Add(this.packagingType);
             this.panelPackage.Controls.Add(this.labelPackaging);
@@ -60,8 +60,17 @@
             this.panelPackage.Controls.Add(this.dimensionsControl);
             this.panelPackage.Location = new System.Drawing.Point(6, 88);
             this.panelPackage.Name = "panelPackage";
-            this.panelPackage.Size = new System.Drawing.Size(357, 189);
+            this.panelPackage.Size = new System.Drawing.Size(357, 185);
             this.panelPackage.TabIndex = 3;
+            // 
+            // insuranceControl
+            // 
+            this.insuranceControl.BackColor = System.Drawing.Color.White;
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(21, 137);
+            this.insuranceControl.Name = "insuranceControl";
+            this.insuranceControl.Size = new System.Drawing.Size(416, 46);
+            this.insuranceControl.TabIndex = 6;
             // 
             // packagingType
             // 
@@ -87,7 +96,7 @@
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(90, 33);
             this.weight.Name = "weight";
             this.weight.RangeMax = 1000D;
@@ -111,7 +120,7 @@
             // 
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
-            this.labelDimensions.Location = new System.Drawing.Point(20, 65);
+            this.labelDimensions.Location = new System.Drawing.Point(20, 66);
             this.labelDimensions.Name = "labelDimensions";
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 4;
@@ -121,8 +130,8 @@
             // 
             this.dimensionsControl.BackColor = System.Drawing.Color.White;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(87, 59);
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(87, 60);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 5;
@@ -175,10 +184,10 @@
             // 
             // kryptonBorderEdge1
             // 
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge1.Location = new System.Drawing.Point(5, 283);
+            this.kryptonBorderEdge1.Location = new System.Drawing.Point(5, 273);
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(26, 1);
             this.kryptonBorderEdge1.TabIndex = 16;
@@ -187,13 +196,13 @@
             // 
             // kryptonBorderEdge3
             // 
-            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge3.AutoSize = false;
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(5, 13);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 270);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 260);
             this.kryptonBorderEdge3.TabIndex = 17;
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge3.Visible = false;
@@ -219,15 +228,6 @@
             this.packageCountCombo.Size = new System.Drawing.Size(106, 21);
             this.packageCountCombo.TabIndex = 1;
             // 
-            // insuranceControl
-            // 
-            this.insuranceControl.BackColor = System.Drawing.Color.White;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.insuranceControl.Location = new System.Drawing.Point(21, 136);
-            this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(416, 46);
-            this.insuranceControl.TabIndex = 6;
-            // 
             // UpsPackageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,9 +240,9 @@
             this.Controls.Add(this.packagesGrid);
             this.Controls.Add(this.packageCountCombo);
             this.Controls.Add(this.labelPackages);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsPackageControl";
-            this.Size = new System.Drawing.Size(363, 288);
+            this.Size = new System.Drawing.Size(363, 278);
             this.panelPackage.ResumeLayout(false);
             this.panelPackage.PerformLayout();
             this.ResumeLayout(false);

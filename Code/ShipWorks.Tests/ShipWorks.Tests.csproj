@@ -283,6 +283,8 @@
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationInvoiceInfoManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\Manipulators\UpsSaveCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\UpsInvoiceRegistrationResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageServiceOptionsElementWriterTests.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCoreTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManagerTest.cs" />

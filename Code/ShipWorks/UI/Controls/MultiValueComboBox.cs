@@ -114,6 +114,7 @@ namespace ShipWorks.UI.Controls
         /// When the index changes, we are no longer null.  We do need this in addition to the handler.  The handler is required
         /// for when the user is manuall changing.  This is required for cases where the underlying SelectedIndexChanged property
         /// is the same, and we wouldn't get the handler - but we always wan't manually setting this to clear the multi-value flag.
+        /// </summary>
         public override int SelectedIndex
         {
             get

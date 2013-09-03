@@ -836,6 +836,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipServiceType.cs" />
@@ -1061,7 +1062,9 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.Designer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.Designer.cs">
+      <DependentUpon>FedExPackageDetailControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExPackagePriorityAlertsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1426,6 +1429,7 @@
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsReturnServiceType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsSurePostSubclassificationType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UspsEndorsementType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageServiceOptionsElementWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageWeightElementWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageWeightElementWriter.cs" />
@@ -1438,6 +1442,12 @@
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsUsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\UpsServiceMapping.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\UpsServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsDryIceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsDryIceControl.Designer.cs">
+      <DependentUpon>UpsDryIceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsEnvironment\UpsSettings.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsEnvironment\UpsSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulator.cs" />
@@ -1485,6 +1495,12 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsInvoiceAuthorizationControl.Designer.cs">
       <DependentUpon>UpsInvoiceAuthorizationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsPackageDetailControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsPackageDetailControl.Designer.cs">
+      <DependentUpon>UpsPackageDetailControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceGateway.cs" />
@@ -1541,6 +1557,12 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsContractService.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServicePackageTypeSetting.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsContactInfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsContactInfoControl.Designer.cs">
+      <DependentUpon>UpsContactInfoControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\WorldShip\AlternateTrackingLoaded.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipContractServicesControl.cs">
       <SubType>UserControl</SubType>
@@ -6638,8 +6660,17 @@
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsShipmentCharacteristicsControl.resx">
       <DependentUpon>UpsShipmentCharacteristicsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\UpsDryIceControl.resx">
+      <DependentUpon>UpsDryIceControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsInvoiceAuthorizationControl.resx">
       <DependentUpon>UpsInvoiceAuthorizationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\UpsContactInfoControl.resx">
+      <DependentUpon>UpsContactInfoControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\UpsPackageDetailControl.resx">
+      <DependentUpon>UpsPackageDetailControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\WorldShip\WorldShipContractServicesControl.resx">
       <DependentUpon>WorldShipContractServicesControl.cs</DependentUpon>
@@ -9768,6 +9799,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData\3.5\3.5.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.6.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.9.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
