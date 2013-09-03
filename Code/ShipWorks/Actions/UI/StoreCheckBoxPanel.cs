@@ -84,7 +84,12 @@ namespace ShipWorks.Actions.UI
                 List<StoreEntity> selectedStores = new List<StoreEntity>();
                 foreach (CheckBox checkBox in panelStores.Controls.OfType<CheckBox>().Where(c => c.Checked))
                 {
-                    selectedStores.Add(StoreManager.GetStore((long) checkBox.Tag));
+                    StoreEntity store = StoreManager.GetStore((long)checkBox.Tag);
+                    if (store != null)
+                    {
+                        // Possible that a store could have been deleted since the panel was initialized
+                        selectedStores.Add(store);
+                    }
                 }
 
                 return selectedStores;
