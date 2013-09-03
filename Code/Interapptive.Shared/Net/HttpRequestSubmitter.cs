@@ -162,13 +162,13 @@ namespace Interapptive.Shared.Net
                             webRequest.Expect = value;
                             break;
                         case "date":
-                            webRequest.Date = GetDateValue(value);
+                            webRequest.Date = GetDateValue(headerName, value);
                             break;
                         case "host":
                             webRequest.Host = value;
                             break;
                         case "if-modified-since":
-                            webRequest.IfModifiedSince = GetDateValue(value);
+                            webRequest.IfModifiedSince = GetDateValue(headerName, value);
                             break;
                         case "range":
                         case "content-length":
@@ -258,13 +258,13 @@ namespace Interapptive.Shared.Net
         /// Gets the date value.
         /// </summary>
         /// <exception cref="System.Net.WebException">Date header not in valid format.</exception>
-        private static DateTime GetDateValue(string value)
+        private static DateTime GetDateValue(string headerName, string value)
         {
             DateTime dateForHeader;
 
             if (!DateTime.TryParse(value, out dateForHeader))
             {
-                throw new WebException("Date header not in valid format.");
+                throw new WebException(string.Format("The {0} header is not a valid date.", headerName));
             }
             return dateForHeader;
         }
