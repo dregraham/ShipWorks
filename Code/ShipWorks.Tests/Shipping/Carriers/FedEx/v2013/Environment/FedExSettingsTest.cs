@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Environment
         public void ClientProductionId_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("ITSW9558", testObject.ClientProductId);
+            Assert.AreEqual("ITSW", testObject.ClientProductId);
         }
 
         [TestMethod]
