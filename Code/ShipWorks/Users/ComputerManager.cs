@@ -109,7 +109,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// Gets the computer that Sql Server is currently running on.
         /// </summary>
-        public static ComputerEntity GetSqlServerComputer
+        public static ComputerEntity SqlServerComputer
         {
             get
             {

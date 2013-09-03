@@ -284,7 +284,7 @@ namespace ShipWorks.Actions
                 runOnSpecificComputers.Enabled = false;
                 runOnAnyComputer.Enabled = false;
                 runOnTriggerringComputer.Enabled = false;
-                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer });
+                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.SqlServerComputer });
             }
             else
             {
