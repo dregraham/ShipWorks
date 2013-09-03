@@ -116,9 +116,9 @@ namespace ShipWorks.Actions
             storeCheckBoxPanel.Enabled = action.StoreLimited;
 
             //Load the computer limited settings
-            runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitationType.None;
-            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.TriggeringComputer;
-            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
+            runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.None;
+            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.TriggeringComputer;
+            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.NamedList;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
@@ -634,17 +634,17 @@ namespace ShipWorks.Actions
                     //Save the computer limited settings
                     if (runOnTriggerringComputer.Checked)
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitationType.TriggeringComputer;
+                        action.ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer;
                         action.ComputerLimitedList = new long[0];
                     }
                     else if (runOnAnyComputer.Checked)
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitationType.None;
+                        action.ComputerLimitedType = (int)ComputerLimitedType.None;
                         action.ComputerLimitedList = new long[0];
                     }
                     else
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitationType.NamedList;
+                        action.ComputerLimitedType = (int)ComputerLimitedType.NamedList;
                         action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
                     }
 

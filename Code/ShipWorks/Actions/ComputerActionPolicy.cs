@@ -11,15 +11,15 @@ namespace ShipWorks.Actions
     public class ComputerActionPolicy
     {
         private readonly List<ComputerEntity> allowedComputers;
-        private readonly ComputerLimitationType actionComputerLimitationType;
+        private readonly ComputerLimitedType actionComputerLimitationType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
         /// </summary>
-        public ComputerActionPolicy(ComputerLimitationType computerLimitationType, string internalComputerLimitedList) //, long triggeringComputerID)
+        public ComputerActionPolicy(ComputerLimitedType computerLimitationType, string internalComputerLimitedList) //, long triggeringComputerID)
         {
             allowedComputers = ReadCsv(internalComputerLimitedList);
-            actionComputerLimitationType = (ComputerLimitationType)computerLimitationType;
+            actionComputerLimitationType = (ComputerLimitedType)computerLimitationType;
         }
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace ShipWorks.Actions
         {
             switch (actionComputerLimitationType)
             {
-                case ComputerLimitationType.None:
+                case ComputerLimitedType.None:
                     return true;
-                case ComputerLimitationType.TriggeringComputer:
-                case ComputerLimitationType.NamedList:
+                case ComputerLimitedType.TriggeringComputer:
+                case ComputerLimitedType.NamedList:
                     return allowedComputers.Any(c => c.ComputerID == computer.ComputerID);
                 default:
                     throw new ArgumentOutOfRangeException(string.Format("{0} is an unknown ComputerLimitationType.", EnumHelper.GetDescription(actionComputerLimitationType)));

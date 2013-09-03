@@ -246,7 +246,7 @@ namespace ShipWorks.ApplicationCore.Services
             if (allScheduledActions.Any())
             {
                 // Find the list of required Computers for actions that specify a named list of computers
-                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitationType.NamedList))
+                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitedType.NamedList))
                 {
                     if (allServices.Where(s => action.ComputerLimitedList.Contains(s.ComputerID)).All(s => s.GetStatus() != ServiceStatus.Running))
                     {
@@ -255,7 +255,7 @@ namespace ShipWorks.ApplicationCore.Services
                     }
                 }
 
-                if (allScheduledActions.Any(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitationType.None) && allServices.All(s => s.GetStatus() != ServiceStatus.Running))
+                if (allScheduledActions.Any(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitedType.None) && allServices.All(s => s.GetStatus() != ServiceStatus.Running))
                 {
                     // When there are scheduled action configured to run on any computer, but there aren't any computers 
                     // running the service, only add the user's computer to the list

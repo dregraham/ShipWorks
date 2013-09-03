@@ -199,7 +199,7 @@ namespace ShipWorks.Actions
             entity.ObjectID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
             
-            if (action.ComputerLimitedType == (int) ComputerLimitationType.TriggeringComputer)
+            if (action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer)
             {
                 // It's limited to only running on this computer, so use this computer ID as
                 // the only computer that can execute the action

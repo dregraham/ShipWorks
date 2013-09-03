@@ -206,7 +206,7 @@ namespace ShipWorks.Actions
             action.Name = "New Action";
             action.Enabled = true;
 
-            action.ComputerLimitedType = (int) ComputerLimitationType.TriggeringComputer;
+            action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
             action.InternalComputerLimitedList = string.Empty;
 
             action.StoreLimited = false;

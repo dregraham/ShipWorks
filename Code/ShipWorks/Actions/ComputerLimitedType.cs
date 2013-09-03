@@ -7,7 +7,7 @@ namespace ShipWorks.Actions
     /// Specifies the type of computer limitation for an action.
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum ComputerLimitationType
+    public enum ComputerLimitedType
     {
         /// <summary>
         /// The action may run on any computer.

@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Settings
                     action.Enabled = enabled;
                     action.InternalOwner = identifier;
 
-                    action.ComputerLimitedType = (int) (computerLimited ? ComputerLimitationType.TriggeringComputer : ComputerLimitationType.None);
+                    action.ComputerLimitedType = (int) (computerLimited ? ComputerLimitedType.TriggeringComputer : ComputerLimitedType.None);
                     action.InternalComputerLimitedList = string.Empty;
 
                     action.StoreLimited = false;
