@@ -1,16 +1,16 @@
-﻿using System.Diagnostics;
-using Interapptive.Shared.Enums;
+﻿using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
+using System.Collections;
+using System.Diagnostics;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Linq;
-using System.Collections;
-using Interapptive.Shared.Utility;
 
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
@@ -259,7 +259,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [TestMethod]
-        public void WriteServiceOptionsElement_DoNotWriteDryIce_WhenDryIceIsNotEnabled_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteDryIce_WhenDryIceIsNotEnabled_Test()
         {
             package.DryIceEnabled = false;
 

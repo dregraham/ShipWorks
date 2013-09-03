@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         protected readonly XmlWriter xmlWriter;
 
         /// <summary>
-        /// Prevents a default instance of the <see cref="UpsPackageServiceOptionsElementWriter" /> class from being created.
+        /// Initializes a new <see cref="UpsPackageServiceOptionsElementWriter" /> instance.
         /// </summary>
         /// <param name="xmlWriter">The XML writer.</param>
         public UpsPackageServiceOptionsElementWriter(XmlWriter xmlWriter)
@@ -89,27 +89,37 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // Dry ice
             if (package.DryIceEnabled)
             {
-                double dryIceWeightInLbs = WeightUtility.Convert(servicePackageSettings.WeightUnitOfMeasure, WeightUnitOfMeasure.Pounds, package.DryIceWeight);
-
-                xmlWriter.WriteStartElement("DryIce");
-                xmlWriter.WriteElementString("RegulationSet", EnumHelper.GetApiValue((UpsDryIceRegulationSet)package.DryIceRegulationSet));
-
-                xmlWriter.WriteStartElement("DryIceWeight");
-                xmlWriter.WriteStartElement("UnitOfMeasurement");
-                xmlWriter.WriteElementString("Code", "LBS");
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteElementString("Weight", dryIceWeightInLbs.ToString("##0.0"));
-                xmlWriter.WriteEndElement();
-
-                if (package.DryIceRegulationSet == (int)UpsDryIceRegulationSet.Cfr && package.DryIceIsForMedicalUse)
-                {
-                    xmlWriter.WriteElementString("MedicalUseIndicator", null);
-                }
-
-                xmlWriter.WriteEndElement();
+                WriteDryIceElement(package, servicePackageSettings);
             }
 
             // End service options
+            xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Writes the dry ice element and its children.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        /// <param name="servicePackageSettings">The service package settings.</param>
+        protected virtual void WriteDryIceElement(UpsPackageEntity package, UpsServicePackageTypeSetting servicePackageSettings)
+        {
+            double dryIceWeightInLbs = WeightUtility.Convert(servicePackageSettings.WeightUnitOfMeasure, WeightUnitOfMeasure.Pounds, package.DryIceWeight);
+
+            xmlWriter.WriteStartElement("DryIce");
+            xmlWriter.WriteElementString("RegulationSet", EnumHelper.GetApiValue((UpsDryIceRegulationSet)package.DryIceRegulationSet));
+
+            xmlWriter.WriteStartElement("DryIceWeight");
+            xmlWriter.WriteStartElement("UnitOfMeasurement");
+            xmlWriter.WriteElementString("Code", "LBS");
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteElementString("Weight", dryIceWeightInLbs.ToString("##0.0"));
+            xmlWriter.WriteEndElement();
+
+            if (package.DryIceRegulationSet == (int)UpsDryIceRegulationSet.Cfr && package.DryIceIsForMedicalUse)
+            {
+                xmlWriter.WriteElementString("MedicalUseIndicator", null);
+            }
+
             xmlWriter.WriteEndElement();
         }
     }
