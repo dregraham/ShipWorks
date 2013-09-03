@@ -36,7 +36,7 @@ namespace ShipWorks.Actions.UI
             Point location = new Point(0, 0);
 
             // Go through all the stores
-            foreach (StoreEntity store in StoreManager.GetAllStores())
+            foreach (StoreEntity store in StoreManager.GetAllStores().Where(s => s.Enabled))
             {
                 CheckBox checkBox = new CheckBox();
                 checkBox.AutoSize = true;

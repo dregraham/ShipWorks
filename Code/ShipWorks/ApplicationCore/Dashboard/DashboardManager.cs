@@ -30,6 +30,7 @@ using ShipWorks.Stores.Platforms;
 using Interapptive.Shared.Net;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
+using ShipWorks.ApplicationCore.Services;
 
 namespace ShipWorks.ApplicationCore.Dashboard
 {
@@ -480,38 +481,19 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private static void CheckForSchedulerServiceStoppedChanges()
         {
             // Check the database for any changes
-            List<ServiceStatusEntity> stoppedSchedulerServices = SchedulerServiceMessageManager.StoppedServices;
+            bool areAnyRequiredSchedulersStopped = ServiceStatusManager.GetComputersRequiringShipWorksService().Any();
             List<DashboardSchedulerServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardSchedulerServiceStoppedItem>().ToList<DashboardSchedulerServiceStoppedItem>();
 
             // If the message is already there we don't have to do anything
-            if (!existingDashboardItems.Any() && stoppedSchedulerServices.Count > 0)
+            if (!existingDashboardItems.Any() && areAnyRequiredSchedulersStopped)
             {
-                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
+                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
                 AddDashboardItem(item);
             }
-            else if (existingDashboardItems.Any() && stoppedSchedulerServices.Count == 0)
+            else if (existingDashboardItems.Any() && !areAnyRequiredSchedulersStopped)
             {
                 // The stopped services are now running, so remove the stopped dashboard item.
-                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
-                
                 existingDashboardItems.ForEach(RemoveDashboardItem);
-
-                //// It's no longer active, so we've got to get rid of it.
-                //RemoveDashboardItem(item);
-            }
-            else if (stoppedSchedulerServices.Count > 0)
-            {
-                // There are existing service dashboard items AND the number of stopped services has changed, so remove
-                // the current dashboard item and add the new one.
-                existingDashboardItems.ForEach(RemoveDashboardItem);
-
-                //DashboardServiceStoppedItem item = existingDashboardItems.FirstOrDefault() as DashboardServiceStoppedItem;
-
-                //// It's no longer active, so we've got to get rid of it.
-                //RemoveDashboardItem(item);
-
-                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem(stoppedSchedulerServices);
-                AddDashboardItem(item);
             }
         }
 
@@ -523,7 +505,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // Check the database for any changes
             ServerMessageManager.CheckDatabaseForChanges();
 
-            // Active messages are those that have not in some way been dismissed, and match the criteria of the current user and stoers.
+            // Active messages are those that have not in some way been dismissed, and match the criteria of the current user and stores.
             List<ServerMessageEntity> activeMessages = ServerMessageManager.ActiveMessages.ToList();
 
             // Now we can get the list of messages that we need to display

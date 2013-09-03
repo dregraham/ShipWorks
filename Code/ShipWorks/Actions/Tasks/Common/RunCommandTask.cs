@@ -15,7 +15,7 @@ using log4net;
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
-    /// Task for running a command
+    /// Task for running a program
     /// </summary>
     [ActionTask("Run a command", "RunCommand", ActionTaskCategory.External)]
     public class RunCommandTask : ActionTask
@@ -57,7 +57,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get { return "Run command using:"; }
+            get { return "Replace tokens in the script below with:"; }
         }
 
         /// <summary>

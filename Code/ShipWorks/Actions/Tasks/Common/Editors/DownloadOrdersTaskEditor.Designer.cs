@@ -38,9 +38,9 @@
             this.taskDescription.AutoSize = true;
             this.taskDescription.Location = new System.Drawing.Point(-3, 0);
             this.taskDescription.Name = "taskDescription";
-            this.taskDescription.Size = new System.Drawing.Size(227, 13);
+            this.taskDescription.Size = new System.Drawing.Size(172, 13);
             this.taskDescription.TabIndex = 0;
-            this.taskDescription.Text = "Select the stores you want to download from:";
+            this.taskDescription.Text = "Download orders for these stores:";
             // 
             // storeCheckBoxPanel
             // 

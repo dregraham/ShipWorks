@@ -8,21 +8,16 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
     public class DashboardSchedulerServiceStoppedItem : DashboardItem
     {
-        private readonly List<ServiceStatusEntity> schedulerEntities;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardSchedulerServiceStoppedItem" /> class.
         /// </summary>
-        /// <param name="schedulers">The schedulers that are not running.</param>
-        public DashboardSchedulerServiceStoppedItem(IEnumerable<ServiceStatusEntity> schedulers)
-        {
-            schedulerEntities = new List<ServiceStatusEntity>(schedulers);
-        }
+        public DashboardSchedulerServiceStoppedItem()
+        { }
 
         /// <summary>
         /// Initialize the item with given bar that it will display its information in
         /// </summary>
-        /// <param name="dashboardBar">The UI element associated with ths dashboard item.</param>
+        /// <param name="dashboardBar">The UI element associated with this dashboard item.</param>
         public override void Initialize(DashboardBar dashboardBar)
         {
             base.Initialize(dashboardBar);
@@ -30,10 +25,9 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DashboardBar.CanUserDismiss = false;
 
             DashboardBar.Image = Resources.gear_stop_16;
-            DashboardBar.PrimaryText = "Schedulers";
+            DashboardBar.PrimaryText = "Actions";
 
-            bool usePlural = schedulerEntities.Count > 1;
-            DashboardBar.SecondaryText = string.Format("There {0} {1} required ShipWorks scheduling service{2} not running.", usePlural ? "are" : "is", schedulerEntities.Count, usePlural ? "s" : string.Empty);
+            DashboardBar.SecondaryText = "A required ShipWorks action scheduler is not running.";
 
             List<DashboardAction> dashboardActions = new List<DashboardAction> { new DashboardActionMethod("[link]More info[/link]", OnMoreInfo) };
             DashboardBar.ApplyActions(dashboardActions);

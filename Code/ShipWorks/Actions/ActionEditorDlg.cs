@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -186,7 +187,32 @@ namespace ShipWorks.Actions
             trigger = ActionTriggerFactory.CreateTrigger(triggerType, null);
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
+            UpdateTriggeringComputerUI(triggerType);
+
             CreateTriggerEditor();
+        }
+
+        /// <summary>
+        /// Updates the text and appearance of the runOnTriggeringComputer radio button based
+        /// on the action trigger type.
+        /// </summary>
+        private void UpdateTriggeringComputerUI(ActionTriggerType triggerType)
+        {
+            // Disable the triggering computer option - triggering computer is not a valid option 
+            // when the trigger is based on a scheduled
+            runOnTriggerringComputer.Enabled = triggerType != ActionTriggerType.Scheduled;
+
+            if (triggerType == ActionTriggerType.Scheduled)
+            {
+                // Since it's not really a valid use case and should be disabled, just the default/generic text for this 
+                runOnTriggerringComputer.Text = string.Format("On the computer that triggers the action");
+            }
+            else
+            {
+                // Dynamically update the text so that it contains contextual information regarding
+                // what the triggering computer will actually be
+                runOnTriggerringComputer.Text = string.Format("On the computer where {0}", EnumHelper.GetDescription(triggerType).ToLower());
+            }
         }
 
         /// <summary>
@@ -232,7 +258,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Layout and upate all the task bubbles to reflect their appropriate indexes
+        /// Layout and update all the task bubbles to reflect their appropriate indexes
         /// </summary>
         private void UpdateTaskBubbles()
         {
@@ -264,8 +290,9 @@ namespace ShipWorks.Actions
             {
                 runOnSpecificComputers.Enabled = true;
                 runOnAnyComputer.Enabled = true;
-                runOnTriggerringComputer.Enabled = true;
             }
+            
+            UpdateTriggeringComputerUI(trigger.TriggerType);
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
@@ -476,10 +503,11 @@ namespace ShipWorks.Actions
 
             if (((ActionTriggerType)triggerCombo.SelectedValue) == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
             {
-                ActiveControl = runOnTriggerringComputer;
-                optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowError(this, "A scheduled action cannot be set to run on the triggering computer.");
-                return;
+                // When the option to run on the triggering computer is selected and wit the Schedule trigger, just change 
+                // this to run on any computer for now with the thought process being that we don't to put another step 
+                // for the user to complete when creating a scheduled action
+                runOnTriggerringComputer.Checked = false;
+                runOnAnyComputer.Checked = true;
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -508,6 +536,19 @@ namespace ShipWorks.Actions
                 List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
                 List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
                 
+                // Validate all the task editors
+                var errors = new List<TaskValidationError>();
+                foreach (ActionTaskBubble editor in ActiveBubbles)
+                {
+                    editor.ValidateTask(errors);
+                }
+
+                if (errors.Any())
+                {
+                    MessageHelper.ShowError(this, errors.Select(x => x.ToString()).Combine(Environment.NewLine + Environment.NewLine));
+                    return;
+                }
+
                 // Update the flow order
                 foreach (ActionTask task in tasksToSave)
                 {

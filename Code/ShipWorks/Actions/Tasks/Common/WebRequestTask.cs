@@ -15,23 +15,31 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml.XPath;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
-    /// Task to hit a URL.
+    /// Task to submit a request to a specified URL.
     /// </summary>
     [ActionTask("Send web request", "WebRequest", ActionTaskCategory.External)]
     public class WebRequestTask : TemplateBasedTask
     {
+        private const string PasswordSalt = "WebRequestTask";
+
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(WebRequestTask));
-
         private readonly ApiLogEntry requestLogger;
-
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebRequestTask"/> class.
+        /// </summary>
         public WebRequestTask()
         {
             requestLogger = new ApiLogEntry(ApiLogSource.WebRequestTask, "WebRequestTask");
+
+            Username = string.Empty;
+            EncryptedPassword = string.Empty;
         }
 
         /// <summary>
@@ -40,9 +48,9 @@ namespace ShipWorks.Actions.Tasks.Common
         public HttpVerb Verb { get; set; }
 
         /// <summary>
-        /// Gets or sets the URL to hit.
+        /// Gets or sets the URL the request is being submitted to.
         /// </summary>
-        public string UrlToHit { get; set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use basic authentication].
@@ -50,14 +58,19 @@ namespace ShipWorks.Actions.Tasks.Common
         public bool UseBasicAuthentication { get; set; }
 
         /// <summary>
-        /// Gets or sets the username.
+        /// Gets or sets the user name.
         /// </summary>
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        /// Gets the password in encrypted format. The getter is public so the value gets serialized, but the
+        /// setter is private, so the deserialization process can set the raw, encrypted value and so consumers
+        /// cannot directly encrypt the password themselves. 
+        /// 
+        /// It would probably be worth looking into having a separate Password class to manage this at
+        /// some point to avoid having to maintain the separate states...
         /// </summary>
-        public string Password { get; set; }
+        public string EncryptedPassword { get; private set; }       
 
         /// <summary>
         /// Gets or sets the HTTP headers.
@@ -77,7 +90,33 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get { return "Using"; }
+            get { return "Using:"; }
+        }
+
+        /// <summary>
+        /// Gets or sets the web request cardinality.
+        /// </summary>
+        public WebRequestCardinality RequestCardinality { get; set; }
+        
+        /// <summary>
+        /// Uses the plain text password to encrypt and set the value backing the 
+        /// Password property. 
+        /// </summary>
+        public void SetPassword(string plainTextPassword)
+        {
+            // This was added, so the various consumers (e.g. the web request editor, 
+            // serialization/deserialization, etc.) of this operations on this task
+            // don't have to try to maintain whether the password is encrypted or not.            
+            EncryptedPassword = SecureText.Encrypt(plainTextPassword, PasswordSalt);
+        }
+
+        /// <summary>
+        /// Gets the decrypted password. The separate, private Password property is only here
+        /// so the task settings get serialized.
+        /// </summary>
+        public string GetDecryptedPassword()
+        {
+            return SecureText.Decrypt(EncryptedPassword, PasswordSalt);
         }
 
         /// <summary>
@@ -87,11 +126,6 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get { return ActionTaskInputRequirement.Optional; }
         }
-
-        /// <summary>
-        /// Gets or sets the web request cardinality.
-        /// </summary>
-        public WebRequestCardinality RequestCardinality { get; set; }
 
         /// <summary>
         /// The object is being deserialized into its values
@@ -137,7 +171,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat)template.OutputFormat));
 
                 templateResult.XPathSource.Context.ProcessingComplete = false;
-                string url = TemplateTokenProcessor.ProcessTokens(UrlToHit, templateResult.XPathSource);
+                string url = TemplateTokenProcessor.ProcessTokens(Url, templateResult.XPathSource);
 
                 ProcessRequest(request, url);
             }
@@ -156,8 +190,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     string processedUrl =
                         inputSource == ActionTaskInputSource.Nothing
-                            ? UrlToHit
-                            : TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKeys);
+                            ? Url
+                            : TemplateTokenProcessor.ProcessTokens(Url, inputKeys);
 
                     ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
                     break;
@@ -170,7 +204,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                     foreach (long inputKey in inputKeys)
                     {
-                        string processedUrl = TemplateTokenProcessor.ProcessTokens(UrlToHit, inputKey);
+                        string processedUrl = TemplateTokenProcessor.ProcessTokens(Url, inputKey);
                         ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
                     }
                     break;
@@ -241,10 +275,10 @@ namespace ShipWorks.Actions.Tasks.Common
             catch (WebException ex)
             {
                 // Leverage the crash submitter to extract and format the exception details, and remove 
-                // any portion of the message that would show the callstack since the log will be in plain 
+                // any portion of the message that would show the call stack since the log will be in plain 
                 // text to the user
                 string exceptionDetail = CrashSubmitter.GetExceptionDetail(ex);
-                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Callstack:", StringComparison.OrdinalIgnoreCase));
+                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Call stack:", StringComparison.OrdinalIgnoreCase));
 
                 requestLogger.LogResponse(message, "log");
 
@@ -262,7 +296,7 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 // .NET typically waits for a server challenge before sending authorization, so force the authorization headers 
                 //  be sent rather than using a NetworkCredential object
-                string authInfo = string.Format("{0}:{1}", Username, Password);
+                string authInfo = string.Format("{0}:{1}", Username, GetDecryptedPassword());
                 string encodedAuthInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
 
                 request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);

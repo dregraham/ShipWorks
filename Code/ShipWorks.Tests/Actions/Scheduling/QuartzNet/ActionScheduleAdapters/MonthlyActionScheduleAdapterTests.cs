@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
     [TestClass]
     public class MonthlyActionScheduleAdapterTests
     {
-        MonthlyActionScheduleAdapter target;
+        private MonthlyActionScheduleAdapter target;
 
         [TestInitialize]
         public void Initialize()
@@ -25,8 +25,9 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         [TestMethod]
         public void DayMode_FiresAtStartTimeOfDay()
         {
-            var schedule = new MonthlyActionSchedule {
-                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(),
+            var schedule = new MonthlyActionSchedule
+            {
+                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Day,
                 ExecuteOnWeek = WeekOfMonthType.First,
                 ExecuteOnDay = DayOfWeek.Monday,
@@ -34,11 +35,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             };
 
             var utcFireTimes = schedule.ComputeFireTimes(target, 5)
-                .Select(x => x.ToUniversalTime()).ToArray();
+                                       .Select(x => x.ToUniversalTime()).ToArray();
 
             Assert.IsTrue(utcFireTimes.All(
                 x => x.TimeOfDay == schedule.StartDateTimeInUtc.TimeOfDay
-            ));
+                              ));
         }
 
         [TestMethod]
@@ -46,7 +47,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new MonthlyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("3/4/2013Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("3/4/2013").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Day,
                 ExecuteOnWeek = WeekOfMonthType.Third,
                 ExecuteOnDay = DayOfWeek.Thursday,
@@ -54,11 +55,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             };
 
             var localFireTimes = schedule.ComputeFireTimes(target, 6)
-                .Select(x => x.ToLocalTime()).ToArray();
+                                         .Select(x => x.ToLocalTime()).ToArray();
 
             Assert.IsTrue(localFireTimes.All(
                 x => x.DayOfWeek == schedule.ExecuteOnDay
-            ));
+                              ));
         }
 
         [TestMethod]
@@ -66,7 +67,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new MonthlyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("3/4/2013Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("3/4/2013").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Day,
                 ExecuteOnWeek = WeekOfMonthType.Fourth,
                 ExecuteOnDay = DayOfWeek.Wednesday,
@@ -74,11 +75,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             };
 
             var localFireTimes = schedule.ComputeFireTimes(target, 6)
-                .Select(x => x.ToLocalTime()).ToArray();
+                                         .Select(x => x.ToLocalTime()).ToArray();
 
             Assert.IsTrue(localFireTimes.All(
-                x => (WeekOfMonthType)(x.Day / 7) == schedule.ExecuteOnWeek
-            ));
+                x => (WeekOfMonthType)(x.Day/7) == schedule.ExecuteOnWeek
+                              ));
         }
 
         [TestMethod]
@@ -86,20 +87,63 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new MonthlyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("1/1/2013Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("1/1/2013").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Day,
                 ExecuteOnWeek = WeekOfMonthType.Second,
                 ExecuteOnDay = DayOfWeek.Sunday,
                 ExecuteOnDayMonths = new List<MonthType> { MonthType.January, MonthType.April, MonthType.December }
             };
 
-            var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDayMonths.Count)
-                .Select(x => x.ToLocalTime()).ToArray();
+            var localFireTimes = schedule.ComputeFireTimes(target, 3*schedule.ExecuteOnDayMonths.Count)
+                                         .Select(x => x.ToLocalTime()).ToArray();
 
             CollectionAssert.AreEqual(
                 schedule.ExecuteOnDayMonths.Repeat(3).ToArray(),
                 localFireTimes.Select(x => (MonthType)(x.Month - 1)).ToArray()
-            );
+                );
+        }
+
+        [TestMethod]
+        public void DayMode_FiresOnLastDayOfMonth()
+        {
+            var schedule = new MonthlyActionSchedule()
+            {
+
+                StartDateTimeInUtc = DateTime.Parse("1/1/2013").ToUniversalTime(),
+                CalendarType = MonthlyCalendarType.Day,
+                ExecuteOnWeek = WeekOfMonthType.Last,
+                ExecuteOnAnyDay = true,
+                ExecuteOnDayMonths = new List<MonthType> { MonthType.January, MonthType.February, MonthType.December }
+            };
+
+            var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDayMonths.Count)
+                                        .Select(x => x.ToLocalTime()).ToArray();
+
+            Assert.AreEqual((new DateTime(2013, 1, 31)).ToString(), localFireTimes[0].Date.ToString());
+            Assert.AreEqual((new DateTime(2013, 2, 28)).ToString(), localFireTimes[1].Date.ToString());
+            Assert.AreEqual((new DateTime(2013, 12, 31)).ToString(), localFireTimes[2].Date.ToString());
+        }
+
+        [TestMethod]
+        public void DayMode_FiresOnLastSpecifiedDayOfMonth()
+        {
+            var schedule = new MonthlyActionSchedule()
+            {
+                StartDateTimeInUtc = DateTime.Parse("1/1/2013").ToUniversalTime(),
+                CalendarType = MonthlyCalendarType.Day,
+                ExecuteOnWeek = WeekOfMonthType.Last,
+                ExecuteOnAnyDay = false,
+                ExecuteOnDay = DayOfWeek.Wednesday,
+                ExecuteOnDayMonths = new List<MonthType> { MonthType.January, MonthType.February, MonthType.December }
+            };
+
+            var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDayMonths.Count)
+                                        .Select(x => x.ToLocalTime()).ToArray();
+
+            Assert.AreEqual((new DateTime(2013, 1, 30)).ToString(), localFireTimes[0].Date.ToString());
+            Assert.AreEqual((new DateTime(2013, 2, 27)).ToString(), localFireTimes[1].Date.ToString());
+            Assert.AreEqual((new DateTime(2013, 12, 25)).ToString(), localFireTimes[2].Date.ToString());
+
         }
 
 
@@ -108,18 +152,18 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new MonthlyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("6/3/2013 03:31").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Date,
                 ExecuteOnDates = new List<int> { 1, 15 },
                 ExecuteOnDateMonths = new List<MonthType> { MonthType.June }
             };
 
             var utcFireTimes = schedule.ComputeFireTimes(target, 5)
-                .Select(x => x.ToUniversalTime()).ToArray();
+                                       .Select(x => x.ToUniversalTime()).ToArray();
 
             Assert.IsTrue(utcFireTimes.All(
                 x => x.TimeOfDay == schedule.StartDateTimeInUtc.TimeOfDay
-            ));
+                              ));
         }
 
         [TestMethod]
@@ -127,19 +171,19 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new MonthlyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("1/1/2013Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("1/1/2013").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Date,
-                ExecuteOnDates = new List<int> { 1, 5, 15 },
+                ExecuteOnDates = new List<int> { 1, 5, 28 },
                 ExecuteOnDateMonths = new List<MonthType> { MonthType.June }
             };
 
-            var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDates.Count)
-                .Select(x => x.ToLocalTime()).ToArray();
+            var localFireTimes = schedule.ComputeFireTimes(target, 3*schedule.ExecuteOnDates.Count)
+                                         .Select(x => x.ToLocalTime()).ToArray();
 
             CollectionAssert.AreEqual(
                 schedule.ExecuteOnDates.Repeat(3).ToArray(),
                 localFireTimes.Select(x => x.Day).ToArray()
-            );
+                );
         }
 
         [TestMethod]
@@ -147,19 +191,19 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var schedule = new MonthlyActionSchedule
             {
-                StartDateTimeInUtc = DateTime.Parse("1/1/2013Z").ToUniversalTime(),
+                StartDateTimeInUtc = DateTime.Parse("1/1/2013").ToUniversalTime(),
                 CalendarType = MonthlyCalendarType.Date,
                 ExecuteOnDates = new List<int> { 7 },
                 ExecuteOnDateMonths = new List<MonthType> { MonthType.January, MonthType.August, MonthType.September }
             };
 
-            var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDateMonths.Count)
-                .Select(x => x.ToLocalTime()).ToArray();
+            var localFireTimes = schedule.ComputeFireTimes(target, 3*schedule.ExecuteOnDateMonths.Count)
+                                         .Select(x => x.ToLocalTime()).ToArray();
 
             CollectionAssert.AreEqual(
                 schedule.ExecuteOnDateMonths.Repeat(3).ToArray(),
                 localFireTimes.Select(x => (MonthType)(x.Month - 1)).ToArray()
-            );
+                );
         }
     }
 }

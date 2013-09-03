@@ -30,7 +30,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             tokenizedExecuteCommand.Text = task.Command;
             shouldTimeout.Checked = task.ShouldStopCommandOnTimeout;
             timeoutInMinutes.Value = task.CommandTimeoutInMinutes;
-
+            
             tokenizedExecuteCommand.TextChanged += OnTokenizedExecuteCommandTextChanged;
         }
 

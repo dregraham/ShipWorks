@@ -283,6 +283,7 @@
     <Compile Include="Actions\Scheduling\ActionSchedules\Editors\UI\MonthComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Actions\Scheduling\ActionSchedules\Enums\ActionEndsOnType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\ActionScheduleType.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DailyActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\Enums\MonthyCalendarType.cs" />
@@ -438,6 +439,7 @@
     <Compile Include="Actions\Tasks\Common\RunCommandTask.cs" />
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
     <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
+    <Compile Include="Actions\Tasks\TaskValidationError.cs" />
     <Compile Include="Actions\Triggers\ScheduledTrigger.cs" />
     <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.cs">
       <SubType>UserControl</SubType>
@@ -462,7 +464,6 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\SchedulerServiceMessageManager.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
@@ -560,7 +561,6 @@
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
-    <Compile Include="ApplicationCore\Services\UI\ServiceGridRow.cs" />
     <Compile Include="Data\Administration\DatabaseDetailsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
