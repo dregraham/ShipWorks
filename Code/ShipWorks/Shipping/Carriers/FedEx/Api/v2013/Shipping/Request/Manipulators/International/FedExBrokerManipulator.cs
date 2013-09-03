@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator that modifies the Broker
-    /// properties of the customs detail portion of the FedEx ProcessShipmentRequest object.
+    /// properties of the customs detail portion of the FedEx IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExBrokerManipulator : FedExShippingRequestManipulatorBase
     {
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             if (request.ShipmentEntity.FedEx.BrokerEnabled)
             {
@@ -81,11 +81,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         }
 
         /// <summary>
-        /// Gets a list of any special service types from the ProcessShipmentRequest object.
+        /// Gets a list of any special service types from the IFedExNativeShipmentRequest object.
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <returns>A List of ShipmentSpecialServiceType objects.</returns>
-        private List<ShipmentSpecialServiceType> GetSpecialServiceTypes(ProcessShipmentRequest nativeRequest)
+        private List<ShipmentSpecialServiceType> GetSpecialServiceTypes(IFedExNativeShipmentRequest nativeRequest)
         {
             // We want to build a list of the special service types from the existing request
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <returns>A CustomsClearanceDetail object.</returns>
-        private CustomsClearanceDetail GetCustomsDetail(ProcessShipmentRequest nativeRequest)
+        private CustomsClearanceDetail GetCustomsDetail(IFedExNativeShipmentRequest nativeRequest)
         {
             return nativeRequest.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
         }
@@ -126,8 +126,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

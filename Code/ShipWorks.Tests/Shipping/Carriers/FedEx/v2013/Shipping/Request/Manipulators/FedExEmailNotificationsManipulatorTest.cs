@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipul
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
-            shipRequest = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object);
+            shipRequest = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object, new ProcessShipmentRequest());
             testObject = new FedExEmailNotificationsManipulator();
 
             shipmentEntity.FedEx.EmailNotifySender = 0;

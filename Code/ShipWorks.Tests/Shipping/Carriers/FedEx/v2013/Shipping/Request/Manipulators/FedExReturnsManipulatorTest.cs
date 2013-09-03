@@ -49,7 +49,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipul
                 shipmentEntity,
                 null,
                 null,
-                settingsRepository.Object);
+                settingsRepository.Object,
+                new ProcessShipmentRequest());
         }
 
         [TestMethod]

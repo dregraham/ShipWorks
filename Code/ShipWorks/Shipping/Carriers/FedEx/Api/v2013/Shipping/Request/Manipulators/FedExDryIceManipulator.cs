@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 
             int currentPackageIndex = request.SequenceNumber;
 
-            ProcessShipmentRequest nativeRequest = InitializeShipmentRequest(request);
+            IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request);
 
             if (request.ShipmentEntity.FedEx.Service != (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
             {
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureShipment(CarrierRequest request, ProcessShipmentRequest nativeRequest)
+        private void ConfigureShipment(CarrierRequest request, IFedExNativeShipmentRequest nativeRequest)
         {
             ShipmentSpecialServiceType[] shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
             Array.Resize(ref shipmentSpecialServiceTypes, shipmentSpecialServiceTypes.Length + 1);
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <param name="request">The request.</param>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="currentPackageIndex">Index of the current package.</param>
-        private void ConfigurePackage(CarrierRequest request, ProcessShipmentRequest nativeRequest, int currentPackageIndex)
+        private void ConfigurePackage(CarrierRequest request, IFedExNativeShipmentRequest nativeRequest, int currentPackageIndex)
         {
             PackageSpecialServiceType[] packageSpecialServiceTypes = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes;
             Array.Resize(ref packageSpecialServiceTypes, packageSpecialServiceTypes.Length + 1);
@@ -115,15 +115,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             };
         }
 
-        private ProcessShipmentRequest InitializeShipmentRequest(CarrierRequest request)
+        private IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

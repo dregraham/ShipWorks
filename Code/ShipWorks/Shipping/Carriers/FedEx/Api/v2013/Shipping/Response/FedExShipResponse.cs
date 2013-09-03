@@ -15,14 +15,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
     {
         private readonly ILabelRepository labelRepository;
         private readonly List<ICarrierResponseManipulator> shipmentManipulators;
-        private readonly ProcessShipmentReply nativeResponse;
+        private readonly IFedExNativeShipmentReply nativeResponse;
         private readonly CarrierRequest request;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="reply">WSDL response from FedEx</param>
-        public FedExShipResponse(ProcessShipmentReply reply, CarrierRequest request, ShipmentEntity shipment, ILabelRepository labelRepository, List<ICarrierResponseManipulator> shipmentManipulators)
+        public FedExShipResponse(IFedExNativeShipmentReply reply, CarrierRequest request, ShipmentEntity shipment, ILabelRepository labelRepository, List<ICarrierResponseManipulator> shipmentManipulators)
         {
             this.nativeResponse = reply;
             Shipment = shipment;

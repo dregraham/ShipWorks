@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipula
     {
         private readonly ILog log = LogManager.GetLogger(typeof(FedExShipmentCostManipulator));
 
-        private ProcessShipmentReply reply;
+        private IFedExNativeShipmentReply reply;
 
         private ShipmentEntity shipment;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipula
             FedExShipResponse fedExShipResponse = (FedExShipResponse) carrierResponse;
 
             shipment = fedExShipResponse.Shipment;
-            reply = fedExShipResponse.NativeResponse as ProcessShipmentReply;
+            reply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
 
             ShipmentRating ratingInfo = reply.CompletedShipmentDetail.ShipmentRating;
 

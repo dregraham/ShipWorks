@@ -7,6 +7,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
@@ -38,13 +40,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Communicates with the FedEx API to process a shipment.
         /// </summary>
-        /// <param name="processShipmentRequest">The process shipment request.</param>
-        /// <returns>The ProcessShipmentReply receivied from FedEx.</returns>
-        public ProcessShipmentReply Ship(ProcessShipmentRequest processShipmentRequest)
+        /// <param name="nativeShipmentRequest">The native shipment request.</param>
+        /// <returns>
+        /// The ProcessShipmentReply receivied from FedEx.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.</exception>
+        /// <exception cref="FedExSoapException"></exception>
+        public IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest)
         {
             try
             {
-                ProcessShipmentReply processReply;
+                IFedExNativeShipmentReply processReply;
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // ShipService object here (i.e. no more abstractions can be made)
@@ -55,12 +61,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
 
                     // The request should already be configured at this point, so we just need to send
                     // it across the wire to FedEx
-                    processReply = service.processShipment(processShipmentRequest);
+                    ProcessShipmentRequest processShipmentRequest = nativeShipmentRequest as ProcessShipmentRequest;
+                    if (processShipmentRequest != null)
+                    {
+                        processReply = service.processShipment(processShipmentRequest);                        
+                    }
+                    else
+                    {
+                        CreatePendingShipmentRequest createPendingShipmentRequest = nativeShipmentRequest as CreatePendingShipmentRequest;
+                        
+                        if (createPendingShipmentRequest == null)
+                        {
+                            throw new ArgumentException("nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.");
+                        }
+
+                        processReply = service.createPendingShipment(createPendingShipmentRequest);
+                    }
 
                     // If we are an Interapptive user, save for certification
                     if (InterapptiveOnly.IsInterapptiveUser)
                     {
-                        string customerTransactionId = processShipmentRequest.TransactionDetail.CustomerTransactionId;
+                        string customerTransactionId = nativeShipmentRequest.TransactionDetail.CustomerTransactionId;
                         FedExUtility.SaveCertificationRequestAndResponseFiles(customerTransactionId, "Ship", service.RawSoap);
                     }
                 }

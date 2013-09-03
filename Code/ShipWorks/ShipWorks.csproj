@@ -829,6 +829,12 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\CreatePendingShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\IFedExNativeShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\ProcessShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\CreatePendingShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />

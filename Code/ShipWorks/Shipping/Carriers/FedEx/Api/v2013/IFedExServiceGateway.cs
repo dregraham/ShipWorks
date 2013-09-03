@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
@@ -22,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// </summary>
         /// <param name="processShipmentRequest">The process shipment request.</param>
         /// <returns>The ProcessShipmentReply recevied from FedEx.</returns>
-        ProcessShipmentReply Ship(ProcessShipmentRequest processShipmentRequest);
+        IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest);
 
         /// <summary>
         /// Intended to interact with the FedEx API to get locationID

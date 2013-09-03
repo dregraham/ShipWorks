@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipula
     /// </summary>
     public class FedExShipmentTrackingManipulator : ICarrierResponseManipulator
     {
-        private ProcessShipmentReply processShipmentReply;
+        private IFedExNativeShipmentReply processShipmentReply;
 
         private ShipmentEntity shipment;
 
@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipula
             FedExShipResponse fedExShipResponse = (FedExShipResponse) carrierResponse;
 
             shipment = fedExShipResponse.Shipment;
-            processShipmentReply = fedExShipResponse.NativeResponse as ProcessShipmentReply;
+            processShipmentReply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
 
             if (processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber == "1")
             {

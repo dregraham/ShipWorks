@@ -37,7 +37,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipul
                 null,
                 BuildFedExShipmentEntity.SetupRequestShipmentEntity(),
                 null,
-                null, settingsRepository.Object);
+                null, 
+                settingsRepository.Object,
+                new ProcessShipmentRequest());
 
             processShipmentRequest = ((ProcessShipmentRequest)request.NativeRequest);
 

@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipul
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
-            request = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object);
+            request = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object, new ProcessShipmentRequest());
             
             testObject = new FedExMasterTrackingManipulator();
         }
