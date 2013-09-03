@@ -72,7 +72,7 @@ ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUS
 GO
 PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [RunComputerID], [Status])
 GO
 PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
 GO
