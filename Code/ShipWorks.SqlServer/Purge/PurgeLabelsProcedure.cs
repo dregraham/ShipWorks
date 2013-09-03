@@ -19,13 +19,13 @@ public partial class StoredProcedures
     /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
     /// which Label records will be purged. Any records with an Shipment.ProcessedDate value earlier than
     /// this date will be purged.</param>
-    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeLabels(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgeLabels(SqlDateTime olderThan, SqlDateTime runUntil)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeLabelCommandText, LabelsPurgeAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);
+        PurgeScriptRunner.RunPurgeScript(PurgeLabelCommandText, LabelsPurgeAppLockName, olderThan, runUntil);
     }
 
     private static string PurgeLabelCommandText
@@ -171,7 +171,7 @@ INSERT INTO #LabelsToCleanUp
 		INNER JOIN [Shipment] ON [UpsPackage].ShipmentID = [Shipment].ShipmentID
 		INNER JOIN [ObjectReference] ON [UpsPackage].UpsPackageID = [ObjectReference].ConsumerID			
 	WHERE 
-		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
+		[Shipment].ProcessedDate < @olderThan
 		AND [Shipment].Processed = 1
 		AND [Shipment].ShipmentType = 0 --UPS
 		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
@@ -190,7 +190,7 @@ INSERT INTO #LabelsToCleanUp
 		INNER JOIN [Shipment] ON [FedexPackage].ShipmentID = [Shipment].ShipmentID
 		INNER JOIN [ObjectReference] ON [FedexPackage].FedexPackageID = [ObjectReference].ConsumerID
 	WHERE 
-		[Shipment].ProcessedDate < @earliestRetentionDateInUtc	
+		[Shipment].ProcessedDate < @olderThan	
 		AND [Shipment].Processed = 1
 		AND [Shipment].ShipmentType = 6	-- FedEx
 		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
@@ -212,7 +212,7 @@ INSERT INTO #LabelsToCleanUp
 	where 
 		Shipment.Processed = 1
 		AND Shipment.ShipmentType = 11	-- OnTrac
-		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
+		AND Shipment.ProcessedDate < @olderThan	
 		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 		
 -- Endicia, Express1, & Stamps labels
@@ -229,7 +229,7 @@ INSERT INTO #LabelsToCleanUp
 		INNER JOIN [Shipment] ON [PostalShipment].ShipmentID = [Shipment].ShipmentID		
 		INNER JOIN [ObjectReference] ON [PostalShipment].ShipmentID = [ObjectReference].ConsumerID		
 	WHERE 
-		[Shipment].ProcessedDate < @earliestRetentionDateInUtc
+		[Shipment].ProcessedDate < @olderThan
 		AND [Shipment].Processed = 1
 		AND [Shipment].ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
 		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
@@ -251,7 +251,7 @@ INSERT INTO #LabelsToCleanUp
 	where 
 		Shipment.Processed = 1
 		AND Shipment.ShipmentType = 12	-- iParcel
-		AND Shipment.ProcessedDate < @earliestRetentionDateInUtc	
+		AND Shipment.ProcessedDate < @olderThan	
 		AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 
 CREATE INDEX IX_ResourceWorking on #LabelsToCleanUp (ObjectReferenceID, ResourceID)		
@@ -268,7 +268,7 @@ BEGIN
 		ImageFormat nvarchar(5)
 	)
 
-	WHILE @latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GetUtcDate()
+	WHILE @runUntil IS NULL OR @runUntil > GetUtcDate()
 	BEGIN
 	
 
@@ -284,9 +284,9 @@ BEGIN
 
         -- stop if the batch isn't expected to complete in time
         IF (
-            @latestExecutionTimeInUtc IS NOT NULL AND
+            @runUntil IS NOT NULL AND
             @batchTotal > 0 AND
-            DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+            DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @runUntil
         )
             BREAK;
 	    
