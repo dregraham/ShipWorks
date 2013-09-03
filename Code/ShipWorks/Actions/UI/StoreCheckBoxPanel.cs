@@ -12,7 +12,7 @@ using ShipWorks.Stores;
 namespace ShipWorks.Actions.UI
 {
     /// <summary>
-    /// A user control for displaying a list of checkboxes for all the stores in the system. 
+    /// A user control for displaying a list of check boxes for all the stores in the system. 
     /// </summary>
     public partial class StoreCheckBoxPanel : UserControl
     {
@@ -27,16 +27,20 @@ namespace ShipWorks.Actions.UI
         }
         
         /// <summary>
-        /// Load the panel of store checkboxes
+        /// Load the panel of store check boxes
         /// </summary>
         public void LoadStores()
         {
+            // Detach all event handlers prior to clearing the list
+            List<CheckBox> checkBoxes = panelStores.Controls.OfType<CheckBox>().ToList();
+            checkBoxes.ForEach(c => c.CheckedChanged -= OnCheckedChanged);
+
             panelStores.Controls.Clear();
 
             Point location = new Point(0, 0);
 
             // Go through all the stores
-            foreach (StoreEntity store in StoreManager.GetAllStores().Where(s => s.Enabled))
+            foreach (StoreEntity store in StoreManager.GetEnabledStores())
             {
                 CheckBox checkBox = new CheckBox();
                 checkBox.AutoSize = true;
@@ -55,7 +59,7 @@ namespace ShipWorks.Actions.UI
         }
 
         /// <summary>
-        /// Called when a store checkbox is checked/unchecked.
+        /// Called when a store check box is checked/unchecked.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
@@ -69,7 +73,7 @@ namespace ShipWorks.Actions.UI
         }
         
         /// <summary>
-        /// Gets or sets therake build selected stores.
+        /// Gets or sets the selected stores.
         /// </summary>
         /// <value>The selected stores.</value>
         [Browsable(false)]
