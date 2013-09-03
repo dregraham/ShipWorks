@@ -49,7 +49,8 @@ namespace ShipWorks.UI.Controls
             this.ResumeLayout(false);
         }
 
-        [Category("Behavior"), DefaultValue(200)]
+        [Category("Behavior")]
+        [DefaultValue(200)]
         public int DropDownMinimumHeight
         {
             get;
