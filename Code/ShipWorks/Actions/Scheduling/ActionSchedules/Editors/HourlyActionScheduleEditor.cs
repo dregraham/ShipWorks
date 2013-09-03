@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors
 {
