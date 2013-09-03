@@ -9761,10 +9761,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Maintenance\ShrinkDatabase.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\AuditCleanup.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\EmailCleanup.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\LabelCleanup.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Cleanup\PrintResultCleanup.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData\3.5\3.5.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
