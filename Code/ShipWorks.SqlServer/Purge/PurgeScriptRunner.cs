@@ -25,7 +25,7 @@ namespace ShipWorks.SqlServer.Purge
         {
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
-                SqlAppLockUtility.GetLockedCommand(connection, purgeAppLockName, command =>
+                SqlAppLockUtility.RunLockedCommand(connection, purgeAppLockName, command =>
                 {
                     command.CommandText = script;
 
