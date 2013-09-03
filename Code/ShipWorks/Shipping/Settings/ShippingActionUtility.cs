@@ -31,9 +31,7 @@ namespace ShipWorks.Shipping.Settings
 
             // By default auto-printing is enabled
             bool enabled = (code != ShipmentTypeCode.UpsWorldShip);
-
-            // But for WorldShip its a special case where its not
-
+            
             return CreateAction("Print labels", CreateProcessedTrigger(code), typeof(PrintShipmentsTask), code, identifier, enabled, true, null);
         }
 
