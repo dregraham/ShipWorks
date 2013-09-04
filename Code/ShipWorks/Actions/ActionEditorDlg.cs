@@ -675,21 +675,6 @@ namespace ShipWorks.Actions
                     return;
                 }
 
-                if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Scheduled)
-                {
-                    try
-                    {
-                        // User changed the trigger from a scheduled trigger to another type of trigger, so we need to make sure
-                        // the action is remvoed from the schedule
-                        new Scheduler().UnscheduleAction(action);
-                    }
-                    catch (SchedulingException schedulingException)
-                    {
-                        MessageHelper.ShowError(this, string.Format("An error occurred trying to remove a scheduled action. {0}", schedulingException.Message));
-                        return;
-                    }
-                }
-
                 // Transacted since we affect multiple action tables
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

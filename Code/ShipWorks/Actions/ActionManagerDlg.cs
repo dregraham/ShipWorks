@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Actions.Scheduling;
 using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
@@ -293,6 +294,12 @@ namespace ShipWorks.Actions
                 }
 
                 UpdateEnabledDisplay(e.Row);
+            }
+            catch (SchedulingException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+
+                BeginInvoke((MethodInvoker)delegate { e.Row.Checked = false; });
             }
             catch (ActionConcurrencyException ex)
             {
