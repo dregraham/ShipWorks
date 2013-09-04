@@ -623,7 +623,6 @@
     <Compile Include="Data\Caching\EntityTypeChangeMonitor.cs" />
     <Compile Include="Data\Caching\EntityTypeChangeNotifier.cs" />
     <Compile Include="Data\Caching\EntityTypeChangeVersion.cs" />
-    <Compile Include="Data\Connection\ISqlSessionConfiguration.cs" />
     <Compile Include="Data\Connection\SingleUserModeDlg.cs">
       <SubType>Form</SubType>
     </Compile>
