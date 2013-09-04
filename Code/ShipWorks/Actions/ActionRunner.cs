@@ -161,10 +161,8 @@ namespace ShipWorks.Actions
             }
             else
             {
-                ActionEntity actionEntity = ActionManager.GetAction(queue.ActionID);
-
                 // If its for a different computer we can't do it
-                if (actionEntity.ComputerLimitedType != (int)ComputerLimitedType.None && queue.ComputerLimitedList != null && !queue.ComputerLimitedList.Any(x => x == UserSession.Computer.ComputerID))
+                if (queue.ComputerLimitedList.Length > 0 && !queue.ComputerLimitedList.Contains(UserSession.Computer.ComputerID))
                 {
                     result = ActionRunnerResult.WrongComputer;
                     return null;
@@ -493,8 +491,7 @@ namespace ShipWorks.Actions
                             List<long> inputKeys = GetStepInputKeys(step, actionTask, queue.ObjectID);
 
                             // Run the task.  If it requires input, and there is no input, don't even try to run it
-                            if ((actionTask.RequiresInput != ActionTaskInputRequirement.None && inputKeys.Count == 0) &&
-                                    (ActionTaskInputSource)step.InputSource != ActionTaskInputSource.Nothing)
+                            if (step.InputSource != (int)ActionTaskInputSource.Nothing && inputKeys.Count == 0)
                             {
                                 log.WarnFormat("ActionStep - Skipping due to no input");
                             }
@@ -779,7 +776,7 @@ namespace ShipWorks.Actions
             List<long> input = new List<long>();
 
             // We need to create the base object so we can know if it needs input
-            if (actionTask.RequiresInput == ActionTaskInputRequirement.None || inputSource == ActionTaskInputSource.Nothing)
+            if (inputSource == ActionTaskInputSource.Nothing)
             {
                 return input;
             }
