@@ -264,7 +264,7 @@ namespace Interapptive.Shared.Net
 
             if (!DateTime.TryParse(value, out dateForHeader))
             {
-                throw new WebException(string.Format("The {0} header is not a valid date.", headerName));
+                throw new WebException(string.Format(CultureInfo.InvariantCulture, "The {0} header is not a valid date.", headerName));
             }
             return dateForHeader;
         }
