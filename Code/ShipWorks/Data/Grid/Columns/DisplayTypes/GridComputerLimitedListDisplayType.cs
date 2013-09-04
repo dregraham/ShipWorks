@@ -28,7 +28,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             {
                 // Since this is currently only used by the ActionErrorColumnDefinitionFactory, so returning 
                 // "Any computer" when the list is null or empty is the desired behavior in this context
-                return "Any computer";
+                return "(Any Computer)";
             }
 
             return string.Join(", ",
