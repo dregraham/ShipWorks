@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using System.ComponentModel;
-
-namespace ShipWorks.Actions.Tasks
+﻿namespace ShipWorks.Actions.Tasks
 {
     /// <summary>
     /// Controls where the data that is fed into the task comes from

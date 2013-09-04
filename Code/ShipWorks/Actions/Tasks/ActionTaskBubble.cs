@@ -170,7 +170,7 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private void UpdateControlLayout()
         {
-            panelInputSource.Visible = task.RequiresInput != ActionTaskInputRequirement.None;
+            panelInputSource.Visible = task.InputRequirement != ActionTaskInputRequirement.None;
             panelTaskSettings.Top = panelInputSource.Visible ? panelInputSource.Bottom : panelInputSource.Top;
 
             flowInfoControl.UpdateInfoDisplay(task, trigger, allBubbles);
@@ -349,7 +349,7 @@ namespace ShipWorks.Actions.Tasks
 
             AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
 
-            if (task.RequiresInput == ActionTaskInputRequirement.Optional)
+            if (task.InputRequirement == ActionTaskInputRequirement.Optional)
             {
                 AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "Nothing");
             }

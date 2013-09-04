@@ -122,7 +122,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the input requirement for this task type (Optional).
         /// </summary>
-        public override ActionTaskInputRequirement RequiresInput
+        public override ActionTaskInputRequirement InputRequirement
         {
             get { return ActionTaskInputRequirement.Optional; }
         }

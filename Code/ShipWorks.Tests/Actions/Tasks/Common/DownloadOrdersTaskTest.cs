@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [TestMethod]
         public void RequiresInput_ReturnsNone_Test()
         {
-            Assert.AreEqual(testObject.RequiresInput, ActionTaskInputRequirement.None);
+            Assert.AreEqual(testObject.InputRequirement, ActionTaskInputRequirement.None);
         }
 
         [TestMethod]

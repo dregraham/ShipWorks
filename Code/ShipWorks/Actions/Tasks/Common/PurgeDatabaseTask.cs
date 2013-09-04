@@ -57,7 +57,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// This task does not require any input to run.
         /// </summary>
-        public override ActionTaskInputRequirement RequiresInput
+        public override ActionTaskInputRequirement InputRequirement
         {
             get { return ActionTaskInputRequirement.None; }
         }

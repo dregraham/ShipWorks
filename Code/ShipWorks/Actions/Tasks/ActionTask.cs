@@ -100,7 +100,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Indicates if the task requires input to function.  Such as the contents of a filter, or the item that caused the action.
         /// </summary>
-        public virtual ActionTaskInputRequirement RequiresInput
+        public virtual ActionTaskInputRequirement InputRequirement
         {
             get { return ActionTaskInputRequirement.Required; }
         }
@@ -112,7 +112,7 @@ namespace ShipWorks.Actions.Tasks
         {
             get
             {
-                if (RequiresInput != ActionTaskInputRequirement.None)
+                if (InputRequirement != ActionTaskInputRequirement.None)
                 {
                     throw new NotImplementedException("Must be overridden by derived class when input is required or optional.");
                 }
