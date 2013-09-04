@@ -154,7 +154,6 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static ServiceStatusEntity GetServiceStatus(long computerID, ShipWorksServiceType serviceType)
         {
-            CheckForChangesNeeded();
             return ServicesStatuses.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)serviceType);
         }
 
@@ -235,9 +234,6 @@ namespace ShipWorks.ApplicationCore.Services
         /// need to have the ShipWorks service running.</returns>
         public static List<ServiceStatusEntity> GetComputersRequiringShipWorksService()
         {
-            // Force a db check since the service is running in another process and our local cache will not be updated.
-            ServiceStatusManager.CheckForChangesNeeded();
-
             List<ActionEntity> allScheduledActions = ActionManager.Actions.Where(a => a.TriggerType == (int)ActionTriggerType.Scheduled).ToList();
             List<ServiceStatusEntity> allServices = new List<ServiceStatusEntity>(ServiceStatusManager.ServicesStatuses);
 
