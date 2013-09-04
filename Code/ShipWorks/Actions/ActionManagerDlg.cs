@@ -297,9 +297,10 @@ namespace ShipWorks.Actions
             }
             catch (SchedulingException ex)
             {
+                action.RollbackChanges();
                 MessageHelper.ShowError(this, ex.Message);
 
-                BeginInvoke((MethodInvoker)delegate { e.Row.Checked = false; });
+                BeginInvoke((MethodInvoker)delegate { e.Row.Checked = !e.Row.Checked; });
             }
             catch (ActionConcurrencyException ex)
             {

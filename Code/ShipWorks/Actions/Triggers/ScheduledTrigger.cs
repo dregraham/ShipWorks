@@ -186,8 +186,6 @@ namespace ShipWorks.Actions.Triggers
         public override void DeleteExtraState(ActionEntity action, SqlAdapter adapter)
         {
             new Scheduler().UnscheduleAction(action);
-
-            base.DeleteExtraState(action, adapter);
         }
 
         /// <summary>
