@@ -246,7 +246,7 @@ namespace ShipWorks.ApplicationCore.Services
             if (allScheduledActions.Any())
             {
                 // Find the list of required Computers for actions that specify a named list of computers
-                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitedType.NamedList))
+                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitedType.List))
                 {
                     if (allServices.Where(s => action.ComputerLimitedList.Contains(s.ComputerID)).All(s => s.GetStatus() != ServiceStatus.Running))
                     {

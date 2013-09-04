@@ -1,12 +1,8 @@
-﻿using System.Reflection;
-
-
-namespace ShipWorks.Actions
+﻿namespace ShipWorks.Actions
 {
     /// <summary>
     /// Specifies the type of computer limitation for an action.
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ComputerLimitedType
     {
         /// <summary>
@@ -20,8 +16,8 @@ namespace ShipWorks.Actions
         TriggeringComputer = 1,
 
         /// <summary>
-        /// The action may only run on a named subset of computers.
+        /// The action may only run on a specific list of computers.
         /// </summary>
-        NamedList = 2
+        List = 2
     }
 }

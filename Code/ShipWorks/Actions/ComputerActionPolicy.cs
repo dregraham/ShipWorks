@@ -64,7 +64,7 @@ namespace ShipWorks.Actions
                 case ComputerLimitedType.None:
                     return true;
                 case ComputerLimitedType.TriggeringComputer:
-                case ComputerLimitedType.NamedList:
+                case ComputerLimitedType.List:
                     return allowedComputers.Any(c => c.ComputerID == computer.ComputerID);
                 default:
                     throw new ArgumentOutOfRangeException(string.Format("{0} is an unknown ComputerLimitationType.", EnumHelper.GetDescription(actionComputerLimitationType)));

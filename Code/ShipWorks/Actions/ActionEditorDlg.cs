@@ -118,7 +118,7 @@ namespace ShipWorks.Actions
             //Load the computer limited settings
             runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.None;
             runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.TriggeringComputer;
-            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.NamedList;
+            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.List;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
@@ -644,7 +644,7 @@ namespace ShipWorks.Actions
                     }
                     else
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitedType.NamedList;
+                        action.ComputerLimitedType = (int)ComputerLimitedType.List;
                         action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
                     }
 
