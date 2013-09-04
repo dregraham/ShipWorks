@@ -27,34 +27,6 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SchedulingException))]
-        public void ScheduleAction_ThrowsSchedulingException_WhenJobDoesNotExist_AndStartDateOccursInPast_Test()
-        {
-            ActionEntity action = new ActionEntity();
-
-            // Set the trigger to be five seconds in the past
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartDateTimeInUtc = DateTime.UtcNow.AddSeconds(-5);
-
-            // Throw scheduling exception
-            testObject.ScheduleAction(action, schedule);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(SchedulingException))]
-        public void ScheduleAction_ThrowsSchedulingException_WhenJobDoesNotExist_AndStartDateOccursNow_Test()
-        {
-            ActionEntity action = new ActionEntity();
-
-            // Set the trigger to be now
-            ActionSchedule schedule = new Mock<ActionSchedule>().Object;
-            schedule.StartDateTimeInUtc = DateTime.UtcNow;
-
-            // Throw scheduling exception
-            testObject.ScheduleAction(action, schedule);
-        }
-
-        [TestMethod]
         public void ScheduleAction_DelegatesToSchedulingEngine_WhenJobDoesNotExist_AndStartDateIsInFuture_Test()
         {
             ActionEntity action = new ActionEntity();

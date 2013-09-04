@@ -56,7 +56,9 @@ namespace ShipWorks.Actions
         public bool IsComputerAllowed(ComputerEntity computer)
         {
             if (allowedComputerIDs.Count == 0)
-                return true;
+            {
+                return true;   
+            }
 
             return allowedComputerIDs.Contains(computer.ComputerID);
         }

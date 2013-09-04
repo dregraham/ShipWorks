@@ -58,7 +58,6 @@ namespace ShipWorks.Actions
 
                     while (reader.Read())
                     {
-                        long actionID = reader.GetInt64(0);
                         string internalComputerLimitedList = reader.GetString(2);
 
                         ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(internalComputerLimitedList);
