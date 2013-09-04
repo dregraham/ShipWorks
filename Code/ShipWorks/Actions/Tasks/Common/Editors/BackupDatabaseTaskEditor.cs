@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -103,7 +104,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
             ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
-            TaskValidationError error = new TaskValidationError(string.Format("The {0} task is missing some information.", descriptor.BaseName));
+            TaskValidationError error = new TaskValidationError(string.Format("The '{0}' task is missing some information.", descriptor.BaseName));
 
             if (string.IsNullOrWhiteSpace(textPrefix.Text))
             {
@@ -124,7 +125,17 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             // Add the error to the main errors collection if there are any validation errors
             if (error.Details.Any())
             {
-                errors.Add(error);
+                if (SqlSession.Current.IsLocalServer())
+                {
+                    errors.Add(error);  
+                }
+                else
+                {
+                    errors.Add(new TaskValidationError(string.Format(CultureInfo.InvariantCulture, 
+                        "The '{0}' task can only be configured on the computer running your database ({1}).", 
+                        descriptor.BaseName,
+                        SqlSession.Current.GetServerMachineName())));
+                }
             }
         }
     }

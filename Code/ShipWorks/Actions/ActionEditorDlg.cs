@@ -115,16 +115,20 @@ namespace ShipWorks.Actions
             storeLimited.Checked = action.StoreLimited;
             storeCheckBoxPanel.Enabled = action.StoreLimited;
 
+            UpdateRunOnComputerUI();
+        }
+
+        /// <summary>
+        /// Updates the run on computer ui based on the current state of the action
+        /// </summary>
+        private void UpdateRunOnComputerUI()
+        {
             //Load the computer limited settings
             runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.None;
-            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.TriggeringComputer;
-            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitedType.List;
+            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer;
+            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.List;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
-
-            // Check all the boxes for the stores its limited to
-            List<long> storeIDs = action.StoreLimitedList.ToList();
-            storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
         }
 
         /// <summary>
@@ -134,6 +138,10 @@ namespace ShipWorks.Actions
         {
             storeCheckBoxPanel.LoadStores();
             storeSettings.Height = storeCheckBoxPanel.Bottom + 4;
+
+            // Check all the boxes for the stores its limited to
+            List<long> storeIDs = action.StoreLimitedList.ToList();
+            storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
         }
 
         /// <summary>
@@ -187,8 +195,6 @@ namespace ShipWorks.Actions
             trigger = ActionTriggerFactory.CreateTrigger(triggerType, null);
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
-            UpdateTriggeringComputerUI(triggerType);
-
             CreateTriggerEditor();
         }
 
@@ -196,7 +202,7 @@ namespace ShipWorks.Actions
         /// Updates the text and appearance of the runOnTriggeringComputer radio button based
         /// on the action trigger type.
         /// </summary>
-        private void UpdateTriggeringComputerUI(ActionTriggerType triggerType)
+        private void UpdateTriggerRelatedUI(ActionTriggerType triggerType)
         {
             // Disable the triggering computer option - triggering computer is not a valid option 
             // when the trigger is based on a scheduled
@@ -213,6 +219,9 @@ namespace ShipWorks.Actions
                 // what the triggering computer will actually be
                 runOnTriggerringComputer.Text = string.Format("On the computer where {0}", EnumHelper.GetDescription(triggerType).ToLower());
             }
+
+            // Don't show the store settings if the trigger type is a scheduled trigger
+            storeSettings.Visible = trigger.TriggerType != ActionTriggerType.Scheduled;
         }
 
         /// <summary>
@@ -242,10 +251,13 @@ namespace ShipWorks.Actions
                 ActionTriggerEditor oldEditor = (ActionTriggerEditor) panelTrigger.Controls[0];
 
                 panelTrigger.Controls.Remove(oldEditor);
+                oldEditor.SizeChanged -= OnActionTriggerEditorSizeChanged;
                 oldEditor.Dispose();
             }
 
             UpdateTaskBubbles();
+
+            UpdateTriggerRelatedUI(trigger.TriggerType);
         }
 
         /// <summary>
@@ -276,28 +288,23 @@ namespace ShipWorks.Actions
 
             UpdateTaskArea();
 
-            // If any of the tasks are to backup the database, make sure the action
-            // runs on the Sql computer and disable the UI to change it
-            if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
-            {
-                runOnSpecificComputers.Checked = true;
-                runOnSpecificComputers.Enabled = false;
-                runOnAnyComputer.Enabled = false;
-                runOnTriggerringComputer.Enabled = false;
-                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.SqlServerComputer });
-            }
-            else
-            {
-                runOnSpecificComputers.Enabled = true;
-                runOnAnyComputer.Enabled = true;
-            }
-            
-            UpdateTriggeringComputerUI(trigger.TriggerType);
+            //// If any of the tasks are to backup the database, make sure the action
+            //// runs on the Sql computer and disable the UI to change it
+            //if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
+            //{
+            //    runOnSpecificComputers.Checked = true;
+            //    runOnSpecificComputers.Enabled = false;
+            //    runOnAnyComputer.Enabled = false;
+            //    runOnTriggerringComputer.Enabled = false;
+            //    runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.SqlServerComputer });
+            //}
+            //else
+            //{
+            //    runOnSpecificComputers.Enabled = true;
+            //    runOnAnyComputer.Enabled = true;
+            //}
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
-
-            // Don't show the store settings if the trigger type is a scheduled trigger
-            storeSettings.Visible = trigger.TriggerType != ActionTriggerType.Scheduled;
         }
 
         /// <summary>
@@ -335,7 +342,6 @@ namespace ShipWorks.Actions
         /// </summary>
         private void OnChangeLimitStores(object sender, EventArgs e)
         {
-            //panelStores.Enabled = storeLimited.Checked;
             storeCheckBoxPanel.Enabled = storeLimited.Checked;
         }
 
@@ -354,12 +360,6 @@ namespace ShipWorks.Actions
         {
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((SandMenuItem) sender).Tag;
             ActionTask task = binding.CreateInstance();
-
-            // Cancel adding the task if it cannot currently be selected
-            if (!EnsureTaskCanBeSelected(task))
-            {
-                return;
-            }
 
             AddTaskBubble(task);
         }
@@ -385,16 +385,6 @@ namespace ShipWorks.Actions
             bubble.MoveUp += new EventHandler(OnBubbleMoveUp);
             bubble.MoveDown += new EventHandler(OnBubbleMoveDown);
             bubble.Delete += new EventHandler(OnBubbleDelete);
-            bubble.ActionTaskChanging += OnBubbleTaskChanging;
-        }
-
-        /// <summary>
-        /// The selected task for the bubble has changed
-        /// </summary>
-        private void OnBubbleTaskChanging(object sender, ActionTaskChangingEventArgs e)
-        {
-            // Cancel the task change if the selected task cannot be selected
-            e.Cancel = !EnsureTaskCanBeSelected(e.NewTask);
         }
 
         /// <summary>
@@ -471,22 +461,123 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Checks whether the the specified task can be selected 
+        /// Checks whether the the run on computer settings are valid
         /// </summary>
-        /// <param name="task">The task that should be checked</param>
+        /// <param name="actionTriggerType">Type of trigger currently selected</param>
         /// <returns></returns>
-        private bool EnsureTaskCanBeSelected(ActionTask task)
+        private bool ValidateRunOnComputer(ActionTriggerType actionTriggerType)
         {
-            if (task is BackupDatabaseTask && !SqlSession.Current.IsLocalServer())
+            if (actionTriggerType == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
             {
-                MessageHelper.ShowError(this,
-                    string.Format(
-                        "The task '{0}' can only be configured from the computer running the database.",
-                        ActionTaskManager.GetDescriptor(task.GetType()).BaseName));
+                // When the option to run on the triggering computer is selected and with the Schedule trigger, just change 
+                // this to run on any computer for now with the thought process being that we don't to put another step 
+                // for the user to complete when creating a scheduled action
+                runOnTriggerringComputer.Checked = false;
+                runOnAnyComputer.Checked = true;
+            }
+
+            if (runOnSpecificComputers.Checked && !runOnSpecificComputersList.GetSelectedComputers().Any())
+            {
+                optionControl.SelectedPage = optionPageSettings;
+                MessageHelper.ShowError(this, "At least one computer must be selected when choosing to run actions on specific computers.");
                 return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Validate that the flow of tasks does not result in any infinite loops
+        /// </summary>
+        private bool ValidateTaskFlow(List<ActionTask> tasks)
+        {
+            // If there arent any tasks, there can't be a flow issue
+            if (tasks.Count == 0)
+            {
+                return true;
+            }
+
+            // Get the entities in order
+            List<ActionTaskEntity> steps = tasks.Select(t => t.Entity).OrderBy(e => e.StepIndex).ToList();
+
+            // The list of steps that have been visited so far
+            List<int> stepsSeen = new List<int> { 0 };
+
+            return ValidateTaskFlow(steps[0], steps, stepsSeen);
+        }
+
+        /// <summary>
+        /// Validate that the flow from the given step does not result in revisiting a step that has already been seen.
+        /// </summary>
+        private bool ValidateTaskFlow(ActionTaskEntity step, List<ActionTaskEntity> steps, List<int> stepsSeen)
+        {
+            int nextIndexSuccess = GetNextStepIndex(steps.IndexOf(step), steps, step.FlowSuccess);
+            int nextIndexSkipped = step.FilterCondition ? GetNextStepIndex(steps.IndexOf(step), steps, step.FlowSkipped) : -1;
+            int nextIndexError = GetNextStepIndex(steps.IndexOf(step), steps, step.FlowError);
+
+            List<int> potentialIndexes = new List<int> { nextIndexSuccess, nextIndexSkipped, nextIndexError }.Where(i => i != -1).Distinct().ToList();
+
+            // Now check each potential next step for its next steps
+            foreach (int index in potentialIndexes)
+            {
+                if (stepsSeen.Contains(index))
+                {
+                    return false;
+                }
+
+                // Make a new copy each time we recurse down so we don't invalidate the list with old ones in it
+                List<int> cloneSeen = new List<int>();
+                cloneSeen.AddRange(stepsSeen);
+                cloneSeen.Add(index);
+
+                if (!ValidateTaskFlow(steps[index], steps, cloneSeen))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get what would be the next step index
+        /// </summary>
+        private int GetNextStepIndex(int currentIndex, List<ActionTaskEntity> steps, int flowOption)
+        {
+            if (flowOption == (int) ActionTaskFlowOption.Quit || flowOption == (int) ActionTaskFlowOption.Suspend)
+            {
+                return -1;
+            }
+
+            if (flowOption == (int) ActionTaskFlowOption.NextStep)
+            {
+                if (currentIndex == steps.Count - 1)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return currentIndex + 1;
+                }
+            }
+
+            // The flow option is the negative of the next step to execute
+            return -(flowOption + 1);
+        }
+
+        /// <summary>
+        /// The RunOnSpecificComputers checkbox was checked or unchecked
+        /// </summary>
+        void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
+        {
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+
+            if (runOnSpecificComputersList.Visible && 
+                runOnSpecificComputersList.Enabled &&
+                !runOnSpecificComputersList.GetSelectedComputers().Any())
+            {
+                runOnSpecificComputersList.ShowPopup();   
+            }
         }
 
         /// <summary>
@@ -501,13 +592,11 @@ namespace ShipWorks.Actions
                 return;
             }
 
-            if (((ActionTriggerType)triggerCombo.SelectedValue) == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
+            ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
+
+            if (!ValidateRunOnComputer(actionTriggerType))
             {
-                // When the option to run on the triggering computer is selected and wit the Schedule trigger, just change 
-                // this to run on any computer for now with the thought process being that we don't to put another step 
-                // for the user to complete when creating a scheduled action
-                runOnTriggerringComputer.Checked = false;
-                runOnAnyComputer.Checked = true;
+                return;
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -516,18 +605,11 @@ namespace ShipWorks.Actions
             {
                 trigger.Validate();
             }
-            catch (Exception ex)
+            catch (SchedulingException ex)
             {
                 optionControl.SelectedPage = optionPageAction;
                 ActiveControl = panelTrigger;
                 MessageHelper.ShowError(this, ex.Message);
-                return;
-            }
-
-            if (runOnSpecificComputers.Checked && !runOnSpecificComputersList.GetSelectedComputers().Any())
-            {
-                optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowError(this, "At least one computer must be selected when choosing to run actions on specific computers.");
                 return;
             }
 
@@ -571,14 +653,12 @@ namespace ShipWorks.Actions
                 {
                     return;
                 }
-
-                ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
                 
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !at.IsAllowedForTrigger(actionTriggerType)).ToList();
                 if (invalidTasks.Any())
                 {
-                    var invalidTaskNames = invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
+                    var invalidTaskNames = invalidTasks.Select(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
 
                     string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
 
@@ -712,85 +792,6 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Validate that the flow of tasks does not result in any infinite loops
-        /// </summary>
-        private bool ValidateTaskFlow(List<ActionTask> tasks)
-        {
-            // If there arent any tasks, there can't be a flow issue
-            if (tasks.Count == 0)
-            {
-                return true;
-            }
-
-            // Get the entities in order
-            List<ActionTaskEntity> steps = tasks.Select(t => t.Entity).OrderBy(e => e.StepIndex).ToList();
-
-            // The list of steps that have been visited so far
-            List<int> stepsSeen = new List<int> { 0 };
-
-            return ValidateTaskFlow(steps[0], steps, stepsSeen);
-        }
-
-        /// <summary>
-        /// Validate that the flow from the given step does not result in revisiting a step that has already been seen.
-        /// </summary>
-        private bool ValidateTaskFlow(ActionTaskEntity step, List<ActionTaskEntity> steps, List<int> stepsSeen)
-        {
-            int nextIndexSuccess = GetNextStepIndex(steps.IndexOf(step), steps, step.FlowSuccess);
-            int nextIndexSkipped = step.FilterCondition ? GetNextStepIndex(steps.IndexOf(step), steps, step.FlowSkipped) : -1;
-            int nextIndexError = GetNextStepIndex(steps.IndexOf(step), steps, step.FlowError);
-
-            List<int> potentialIndexes = new List<int> { nextIndexSuccess, nextIndexSkipped, nextIndexError }.Where(i => i != -1).Distinct().ToList();
-
-            // Now check each potential next step for its next steps
-            foreach (int index in potentialIndexes)
-            {
-                if (stepsSeen.Contains(index))
-                {
-                    return false;
-                }
-
-                // Make a new copy each time we recurse down so we don't invalidate the list with old ones in it
-                List<int> cloneSeen = new List<int>();
-                cloneSeen.AddRange(stepsSeen);
-                cloneSeen.Add(index);
-
-                if (!ValidateTaskFlow(steps[index], steps, cloneSeen))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Get what would be the next step index
-        /// </summary>
-        private int GetNextStepIndex(int currentIndex, List<ActionTaskEntity> steps, int flowOption)
-        {
-            if (flowOption == (int) ActionTaskFlowOption.Quit || flowOption == (int) ActionTaskFlowOption.Suspend)
-            {
-                return -1;
-            }
-
-            if (flowOption == (int) ActionTaskFlowOption.NextStep)
-            {
-                if (currentIndex == steps.Count - 1)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return currentIndex + 1;
-                }
-            }
-
-            // The flow option is the negative of the next step to execute
-            return -(flowOption + 1);
-        }
-
-        /// <summary>
         /// Window is closing
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
@@ -800,17 +801,6 @@ namespace ShipWorks.Actions
             {
                 action.RollbackChanges();
             }
-        }
-
-        /// <summary>
-        /// The RunOnSpecificComputers checkbox was checked or unchecked
-        /// </summary>
-        void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
-        {
-            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
-
-            if (runOnSpecificComputersList.Visible && runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
-                runOnSpecificComputersList.ShowPopup();
         }
     }
 }

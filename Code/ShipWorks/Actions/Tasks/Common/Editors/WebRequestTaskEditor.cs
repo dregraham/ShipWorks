@@ -344,7 +344,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
             ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
-            TaskValidationError error = new TaskValidationError(string.Format("The {0} task is missing some information.", descriptor.BaseName));
+            TaskValidationError error = new TaskValidationError(string.Format("The '{0}' task is missing some information.", descriptor.BaseName));
 
             if (string.IsNullOrWhiteSpace(urlTextBox.Text))
             {

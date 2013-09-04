@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Triggers.Editors;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using Interapptive.Shared.Utility;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Actions.Triggers
 {
