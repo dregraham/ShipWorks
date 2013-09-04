@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -14,7 +15,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// A task to automate order downloads to run on a scheduled basis.
     /// </summary>
-    [ActionTask("Download orders", "DownloadOrders", ActionTaskCategory.UpdateLocally, ActionTriggerClassifications.Scheduled)]
+    [ActionTask("Download orders", "DownloadOrders", ActionTaskCategory.UpdateLocally)]
     public class DownloadOrdersTask : ActionTask
     {
         private List<long> storeIDs;
@@ -68,6 +69,16 @@ namespace ShipWorks.Actions.Tasks.Common
             }
 
             DownloadManager.StartDownload(storeEntities, DownloadInitiatedBy.ShipWorks);
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return triggerType == ActionTriggerType.Scheduled;
         }
     }
 }

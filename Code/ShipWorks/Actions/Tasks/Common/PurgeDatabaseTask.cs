@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -14,7 +15,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for deleting/purging old data.
     /// </summary>
-    [ActionTask("Delete old data", "PurgeDatabase", ActionTaskCategory.Administration, ActionTriggerClassifications.Scheduled)]
+    [ActionTask("Delete old data", "PurgeDatabase", ActionTaskCategory.Administration)]
     public class PurgeDatabaseTask : ActionTask
     {
         // Logger
@@ -180,6 +181,16 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 throw new ActionTaskRunException(exceptionMessage, new ExceptionCollection(new ArrayList(exceptions.Values)));
             }
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return triggerType == ActionTriggerType.Scheduled;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -301,6 +302,16 @@ namespace ShipWorks.Actions.Tasks
         protected virtual void DeleteExtraState()
         {
 
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public virtual bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return true;
         }
     }
 }

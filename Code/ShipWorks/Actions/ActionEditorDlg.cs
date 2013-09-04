@@ -575,17 +575,16 @@ namespace ShipWorks.Actions
                 ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
                 
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
-                List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).IsAllowedForTrigger(actionTriggerType)).ToList();
+                List<ActionTask> invalidTasks = tasksToSave.Where(at => !at.IsAllowedForTrigger(actionTriggerType)).ToList();
                 if (invalidTasks.Any())
                 {
                     var invalidTaskNames = invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
 
                     string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
 
-                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} cannot be used with '{3}'.",
+                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' cannot be used with '{2}'.",
                         invalidTaskNames.Count() == 1 ? "" : "s", 
                         invalidTasksMsg,
-                        invalidTaskNames.Count() == 1 ? "is" : "are", 
                         EnumHelper.GetDescription(actionTriggerType)));
                     return;
                 }

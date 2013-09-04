@@ -19,7 +19,6 @@ namespace ShipWorks.Actions.Tasks
         string baseName;
         string identifier;
         ActionTaskCategory category;
-        ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
         /// Constructor
@@ -66,7 +65,6 @@ namespace ShipWorks.Actions.Tasks
             this.baseName = attribute.DisplayName;
             this.identifier = attribute.Identifier;
             this.category = attribute.Category;
-            this.allowedActionTriggerClassifications = attribute.AllowedActionTriggerClassifications;
         }
 
         /// <summary>
@@ -121,30 +119,6 @@ namespace ShipWorks.Actions.Tasks
             {
                 return type;
             }
-        }
-
-        /// <summary>
-        /// If this task is allowed to be added to an Action that is of Scheduled type.
-        /// </summary>
-        public ActionTriggerClassifications TriggerClassifications
-        {
-            get
-            {
-                return allowedActionTriggerClassifications;
-            }
-        }
-
-        /// <summary>
-        /// Is the task allowed to be run using the specified trigger type?
-        /// </summary>
-        /// <param name="triggerType">Type of trigger that should be tested</param>
-        /// <returns></returns>
-        public bool IsAllowedForTrigger(ActionTriggerType triggerType)
-        {
-            ActionTriggerClassifications classification = (triggerType == ActionTriggerType.Scheduled) ? 
-                ActionTriggerClassifications.Scheduled : 
-                ActionTriggerClassifications.Nonscheduled;
-            return (allowedActionTriggerClassifications & classification) != ActionTriggerClassifications.None;
         }
 
         /// <summary>
