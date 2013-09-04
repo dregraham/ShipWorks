@@ -23,6 +23,8 @@ namespace ShipWorks.Actions.UI
         /// </summary>
         public StoreCheckBoxPanel()
         {
+            SelectedStoreIDs = new List<long>();
+
             InitializeComponent();
         }
         
@@ -73,35 +75,37 @@ namespace ShipWorks.Actions.UI
         }
         
         /// <summary>
-        /// Gets or sets the selected stores.
+        /// Gets or sets the selected store IDs.
         /// </summary>
         /// <value>The selected stores.</value>
         [Browsable(false)]
-        public IEnumerable<StoreEntity> SelectedStores
+        public IEnumerable<long> SelectedStoreIDs
         {
             get
             {
-                List<StoreEntity> selectedStores = new List<StoreEntity>();
+                List<long> selectedStoreIDs = new List<long>();
                 foreach (CheckBox checkBox in panelStores.Controls.OfType<CheckBox>().Where(c => c.Checked))
                 {
-                    StoreEntity store = StoreManager.GetStore((long)checkBox.Tag);
+                    // It's possible that a store could have been deleted since the panel was initialized
+                    long storeID = (long)checkBox.Tag;
+                    StoreEntity store = StoreManager.GetStore(storeID);
+
                     if (store != null)
                     {
-                        // Possible that a store could have been deleted since the panel was initialized
-                        selectedStores.Add(store);
+                        selectedStoreIDs.Add(storeID);
                     }
                 }
 
-                return selectedStores;
+                return selectedStoreIDs;
             }
             set
             {
                 if (value != null)
                 {
-                    foreach (StoreEntity store in value)
+                    foreach (long storeID in value)
                     {
-                        // Update the state of the checkboxes based on the store list provided
-                        CheckBox storeCheckBox = panelStores.Controls.OfType<CheckBox>().Single(c => (long) c.Tag == store.StoreID);
+                        // Update the state of the check boxes based on the store ID list provided
+                        CheckBox storeCheckBox = panelStores.Controls.OfType<CheckBox>().Single(c => (long)c.Tag == storeID);
                         if (storeCheckBox != null)
                         {
                             storeCheckBox.Checked = true;
@@ -110,6 +114,5 @@ namespace ShipWorks.Actions.UI
                 }
             }
         }
-
     }
 }

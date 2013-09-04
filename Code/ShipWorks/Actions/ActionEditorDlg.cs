@@ -123,8 +123,8 @@ namespace ShipWorks.Actions
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
             // Check all the boxes for the stores its limited to
-            List<StoreEntity> stores = action.StoreLimitedList.Select(storeID => StoreManager.GetStore(storeID)).ToList();
-            storeCheckBoxPanel.SelectedStores = stores;
+            List<long> storeIDs = action.StoreLimitedList.ToList();
+            storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace ShipWorks.Actions
         /// </summary>
         private long[] GenerateStoreLimitedListFromUI()
         {
-            return storeCheckBoxPanel.SelectedStores.Select(s => s.StoreID).ToArray();
+            return storeCheckBoxPanel.SelectedStoreIDs.ToArray();
         }
 
         /// <summary>

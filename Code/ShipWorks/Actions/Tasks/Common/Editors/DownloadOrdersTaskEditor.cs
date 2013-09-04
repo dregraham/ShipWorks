@@ -31,8 +31,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             Height = storeCheckBoxPanel.Bottom + 5;
 
             // Update the selected stores based on the task settings
-            List<StoreEntity> stores = this.task.StoreIDs.Select(storeID => new StoreEntity(storeID)).ToList();
-            storeCheckBoxPanel.SelectedStores = stores;
+            IEnumerable<long> storeIDs = this.task.StoreIDs;
+            storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
 
             storeCheckBoxPanel.StoreSelectionChanged += OnStoreSelectionChanged;
         }
@@ -44,7 +44,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnStoreSelectionChanged(object sender, System.EventArgs e)
         {
-            task.StoreIDs = storeCheckBoxPanel.SelectedStores.Select(s => s.StoreID);
+            task.StoreIDs = storeCheckBoxPanel.SelectedStoreIDs;
         }
 
 
