@@ -326,7 +326,7 @@ namespace ShipWorks.Data.Grid
             {
                 EntityGridColumn entityColumn = baseColumn as EntityGridColumn;
 
-                if (entityColumn != null && entityColumn.Definition.SortProvider != null)
+                if (entityColumn != null)
                 {
                     return entityColumn.Definition.SortProvider.GetLocalSortValue(entity);
                 }
