@@ -61,9 +61,7 @@ namespace ShipWorks.Actions
                         long actionID = reader.GetInt64(0);
                         string internalComputerLimitedList = reader.GetString(2);
 
-                        ActionEntity actionEntity = ActionManager.GetAction(actionID);
-
-                        ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy((ComputerLimitedType)actionEntity.ComputerLimitedType, internalComputerLimitedList);
+                        ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(internalComputerLimitedList);
                         if (computerActionPolicy.IsComputerAllowed(UserSession.Computer))
                         {
                             // Add the ActionQueueID
