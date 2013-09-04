@@ -1833,10 +1833,6 @@ namespace ShipWorks
                         storesChanged = true;
                     }
 
-                    // Check for any server messages that need to be put up in the dashboard.  This does not check the server - just
-                    // what's already been stored in the database.
-                    DashboardManager.CheckForChanges();
-
                     // These just mark that changes need to be checked next time data is requested
                     TemplateManager.CheckForChangesNeeded();
                     SystemData.CheckForChangesNeeded();
@@ -1858,9 +1854,15 @@ namespace ShipWorks
                     ShippingDefaultsRuleManager.CheckForChangesNeeded();
                     ShippingPrintOutputManager.CheckForChangesNeeded();
                     ShippingProviderRuleManager.CheckForChangesNeeded();
+                    ServiceStatusManager.CheckForChangesNeeded();
 
                     // Check for any WorldShip shipments that need imported
                     WorldShipImportMonitor.CheckForShipments();
+
+                    // Check for any server messages that need to be put up in the dashboard.  This does not check the server - just
+                    // what's already been stored in the database, so it's done after the various CheckForChangesNeeded calls above
+                    // to ensure the latest data is being used.
+                    DashboardManager.CheckForChanges();
 
                     bool reloadColumns = false;
 
