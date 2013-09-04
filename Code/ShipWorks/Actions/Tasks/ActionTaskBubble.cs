@@ -159,10 +159,10 @@ namespace ShipWorks.Actions.Tasks
             {
                 ActionTaskChangingEventArgs args = new ActionTaskChangingEventArgs(previousTask, newTask);
                 ActionTaskChanging(this, args);
-                return args.Cancel;
+                return !args.Cancel;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace ShipWorks.Actions.Tasks
             }
 
             // Raise the task changing event
-            if (RaiseActionTaskChanging(oldTask, task))
+            if (!RaiseActionTaskChanging(oldTask, task))
             {
                 // Reset the selected task if any event handlers canceled the change
                 taskTypes.SelectedMenuObject = ActionTaskManager.GetBinding(oldTask);
@@ -277,26 +277,23 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private EntityType? GetEffectiveInputEntityType()
         {
-            if (task.RequiresInput == ActionTaskInputRequirement.None ||
-                task.Entity.InputSource == (int)ActionTaskInputSource.Nothing)
+            if (task.Entity.InputSource == (int)ActionTaskInputSource.Nothing)
             {
                 return null;
             }
 
-            if (task.Entity.InputSource == (int) ActionTaskInputSource.TriggeringRecord)
+            if (task.Entity.InputSource == (int)ActionTaskInputSource.TriggeringRecord)
             {
                 return trigger.TriggeringEntityType;
             }
-            else
-            {
-                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(task.Entity.InputFilterNodeID);
-                if (filterNode == null)
-                {
-                    return null;
-                }
 
-                return FilterHelper.GetEntityType((FilterTarget) filterNode.Filter.FilterTarget);
+            FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(task.Entity.InputFilterNodeID);
+            if (filterNode == null)
+            {
+                return null;
             }
+
+            return FilterHelper.GetEntityType((FilterTarget)filterNode.Filter.FilterTarget);
         }
 
         /// <summary>
