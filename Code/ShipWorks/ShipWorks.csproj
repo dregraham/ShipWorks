@@ -466,8 +466,13 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\HeartBeat.cs" />
+    <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\DefaultServiceHostFactory.cs" />

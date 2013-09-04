@@ -10,7 +10,7 @@ namespace ShipWorks.Data.Utility
     /// <summary>
     /// Used for tracking changes to the last @@DBTS of the database
     /// </summary>
-    class TimestampTracker
+    public class TimestampTracker
     {
         long timestamp = 0;
 

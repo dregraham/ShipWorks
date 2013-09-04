@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
+using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -126,28 +127,16 @@ namespace ShipWorks
         // Used to manage the UI state of the online update commands
         OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
 
+        UIHeartbeat uiHeartbeat;
+
         // So we don't have to do all of the heartbeat if nothing has changed
-        TimestampTracker heartbeatTimestampTracker = new TimestampTracker();
-        bool heartbeatChangeProcessingPending = false;
         DateTime lastHeartbeatTime = DateTime.MinValue;
-        int storesChangeVersion = -1;
 
-        // If we are in a forced heartbeat that caused the heart rate to change, this is how many fast beats are left
-        int heartbeatForcedFastRatesStart = 10;
-        int heartbeatForcedFastRatesLeft = 0;
 
-        // Heartbeat standards
-        TimeSpan heartbeatMinimumWait = TimeSpan.FromSeconds(.5);
-        int heartbeatFastRate = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
-        int heartbeatNormalRate = (int) TimeSpan.FromSeconds(15).TotalMilliseconds;
 
-        [Flags]
-        enum HeartbeatOptions
-        {
-            None = 0x00,
-            ChangesExpected = 0x01,
-            ForceGridReload = 0x02
-        }
+
+
+
 
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
@@ -165,6 +154,8 @@ namespace ShipWorks
 
             // Persist size\position of the window
             WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState, "MainForm");
+
+            uiHeartbeat = new UIHeartbeat(this);
         }
 
         #region Initialization \ Shutdown
@@ -356,7 +347,7 @@ namespace ShipWorks
                     return;
                 }
 
-                heartbeat.Stop();
+                heartbeatTimer.Stop();
 
                 if (UserSession.IsLoggedOn)
                 {
@@ -524,10 +515,6 @@ namespace ShipWorks
 
             log.InfoFormat("Logon to SQL Server: Success");
 
-            // Reset timestamp tracking for the heartbeat
-            heartbeatTimestampTracker.Reset();
-            lastHeartbeatTime = DateTime.MinValue;
-
             // Now we know we have a connection to a current database.  Initialize a new session.
             UserSession.InitializeForCurrentDatabase();
 
@@ -664,7 +651,7 @@ namespace ShipWorks
             CheckDatabaseDiskUsage();
 
             // Start the heartbeat
-            heartbeat.Start();
+            heartbeatTimer.Start();
             ForceHeartbeat();
         }
 
@@ -838,7 +825,7 @@ namespace ShipWorks
         private void ShowBlankUI()
         {
             // Stop the update heartbeat
-            heartbeat.Stop();
+            heartbeatTimer.Stop();
 
             ApplicationText = "";
 
@@ -1653,11 +1640,11 @@ namespace ShipWorks
             }
             else
             {
-                if (heartbeat.Enabled)
+                if (heartbeatTimer.Enabled)
                 {
                     // Reset the timer
-                    heartbeat.Stop();
-                    heartbeat.Start();
+                    heartbeatTimer.Stop();
+                    heartbeatTimer.Start();
 
                     // If changes are expected, we increase the heartrate, so we can pickup the new filter counts more quickly.
                     if ((options & HeartbeatOptions.ChangesExpected) != 0)
@@ -1665,10 +1652,10 @@ namespace ShipWorks
                         log.InfoFormat("Increasing heart rate");
 
                         // Increase the heart rate
-                        heartbeat.Interval = heartbeatFastRate;
+                        heartbeatTimer.Interval = HeartBeat.HeartbeatFastRate;
 
                         // Only force the fast beat for so long - we can't wait forever for changes
-                        heartbeatForcedFastRatesLeft = heartbeatForcedFastRatesStart;
+                       uiHeartbeat.HeartbeatForcedFastRatesLeft = uiHeartbeat.heartbeatForcedFastRatesStart;
                     }
 
                     // Force it to go now, if it
@@ -1690,271 +1677,7 @@ namespace ShipWorks
         /// </summary>
         private void _DoHeartbeat(HeartbeatOptions options)
         {
-            if (IsDisposed)
-            {
-                return;
-            }
-
-            if (!heartbeat.Enabled)
-            {
-                return;
-            }
-
-            // Check for pending background DB reconnects
-            ConnectionMonitor.VerifyConnected();
-
-            // Make sure we are not in a failure state
-            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashWindow.IsApplicationCrashed)
-            {
-                return;
-            }
-
-            // Can't be within a connection sensitive scope.  If the connection might be changed, we can't be kicking off stuff
-            // and using the connection.
-            if (ConnectionSensitiveScope.IsActive)
-            {
-                return;
-            }
-
-            // Shouldn't be able to get here while not logged in
-            Debug.Assert(SqlSession.IsConfigured);
-            Debug.Assert(UserSession.IsLoggedOn);
-
-            // Extract heartbeat options
-            bool forceGridReload = (options & HeartbeatOptions.ForceGridReload) != 0;
-
-            // If its beating too fast, then skip it, we don't want to update too often.
-            TimeSpan timeSinceLastHeartbeat = DateTime.UtcNow - lastHeartbeatTime;
-            if (timeSinceLastHeartbeat < heartbeatMinimumWait && !forceGridReload)
-            {
-                // Increase the heartrate for one beat (if its not fast already) so we get back in here quickly.
-                if (heartbeatForcedFastRatesLeft == 0)
-                {
-                    heartbeatForcedFastRatesLeft = 1;
-                    heartbeat.Interval = heartbeatFastRate;
-                }
-
-                return;
-            }
-
-            // Don't update while in the middle of a store deletion
-            if (DeletionService.IsDeletingStore)
-            {
-                return;
-            }
-
-            // See if we are in a state of forced fast heart rate
-            if (heartbeatForcedFastRatesLeft > 0)
-            {
-                // Done with the forced fast rate
-                if (--heartbeatForcedFastRatesLeft == 0)
-                {
-                    log.DebugFormat("[Heartbeat] Canceling fast heart rate (time out)");
-                    heartbeat.Interval = heartbeatNormalRate;
-                }
-            }
-
-            Stopwatch sw = Stopwatch.StartNew();
-
-            // Check for any change in the database. 
-            bool heartbeatChangeDetected = heartbeatTimestampTracker.CheckForChange();
-
-            log.InfoFormat("[Heartbeat] Starting (Changes: {0}). Time since last: {1}", heartbeatChangeDetected, timeSinceLastHeartbeat.TotalSeconds);
-            long connections = ConnectionMonitor.TotalConnectionCount;
-
-            DownloadManager.StartAutoDownloadIfNeeded();
-            EmailCommunicator.StartAutoEmailingIfNeeded();
-
-            // If there was a heartbeat change detected, kick off actions and set the flag to process heartbeat changes
-            if (heartbeatChangeDetected)
-            {
-                // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
-                ActionProcessor.StartProcessing();
-
-                // This flag stays true until section below sees it and resets to false.  The section in question only 
-                // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
-                // runs to ensure changes are not missed.
-                heartbeatChangeProcessingPending = true;
-            }
-
-            // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
-            FilterContentManager.CheckRelativeDateFilters();
-
-            // Make sure all our counts are up-to-date
-            FilterContentManager.CheckForChanges();
-
-            // Detect if a modal window is open.  The popup test is, for now, to make sure we don't reload the 
-            // grid columns on a filter layout change while the right-click grid column editor is open.
-            if (!NativeMethods.IsWindowEnabled(Handle) || PopupController.IsAnyPopupVisible)
-            {
-                if (heartbeatChangeDetected)
-                {
-                    filterTree.UpdateFilterCounts();
-
-                    if (forceGridReload)
-                    {
-                        gridControl.ReloadFiltering();
-                    }
-                    else
-                    {
-                        gridControl.UpdateFiltering();
-                    }
-
-                    UpdateSelectionDependentUI();
-                }
-                else if (forceGridReload)
-                {
-                    gridControl.ReloadFiltering();
-                    UpdateSelectionDependentUI();
-                }
-            }
-            else
-            {
-                // We only do all this checking if there was a dbts change.
-                //
-                // IMPORTANT: 
-                //
-                // This means that all the stuff in this section must be dependant at some level on a timestamp column.
-                // If some type of change checking is not 1. Then it probably should be 2. If it can't be, then it cant be excluded
-                // by the timestamp tracking change detection.
-                //
-                if (heartbeatChangeProcessingPending)
-                {
-                    log.DebugFormat("[Heartbeat] Processing timestamp change");
-                    heartbeatChangeProcessingPending = false;
-
-                    bool storesChanged = false;
-
-                    // Depending on what changes, we may need to force the grid to redraw
-                    StoreManager.CheckForChanges();
-                    if (storesChangeVersion != StoreManager.ChangeVersion)
-                    {
-                        storesChangeVersion = StoreManager.ChangeVersion;
-                        storesChanged = true;
-                    }
-
-                    // These just mark that changes need to be checked next time data is requested
-                    TemplateManager.CheckForChangesNeeded();
-                    SystemData.CheckForChangesNeeded();
-                    ConfigurationData.CheckForChangesNeeded();
-                    ShippingSettings.CheckForChangesNeeded();
-                    LabelSheetManager.CheckForChangesNeeded();
-                    EmailAccountManager.CheckForChangesNeeded();
-                    FtpAccountManager.CheckForChangesNeeded();
-                    ComputerManager.CheckForChangesNeeded();
-                    UserManager.CheckForChangesNeeded();
-                    ActionManager.CheckForChangesNeeded();
-                    ShippingOriginManager.CheckForChangesNeeded();
-                    StampsAccountManager.CheckForChangesNeeded();
-                    EndiciaAccountManager.CheckForChangesNeeded();
-                    DimensionsManager.CheckForChangesNeeded();
-                    ShippingProfileManager.CheckForChangesNeeded();
-                    FedExAccountManager.CheckForChangesNeeded();
-                    UpsAccountManager.CheckForChangesNeeded();
-                    ShippingDefaultsRuleManager.CheckForChangesNeeded();
-                    ShippingPrintOutputManager.CheckForChangesNeeded();
-                    ShippingProviderRuleManager.CheckForChangesNeeded();
-                    ServiceStatusManager.CheckForChangesNeeded();
-
-                    // Check for any WorldShip shipments that need imported
-                    WorldShipImportMonitor.CheckForShipments();
-
-                    // Check for any server messages that need to be put up in the dashboard.  This does not check the server - just
-                    // what's already been stored in the database, so it's done after the various CheckForChangesNeeded calls above
-                    // to ensure the latest data is being used.
-                    DashboardManager.CheckForChanges();
-
-                    bool reloadColumns = false;
-
-                    // If the filter layout is dirty, we have to reload it
-                    if (FilterLayoutContext.Current.IsLayoutDirty())
-                    {
-                        log.InfoFormat("[Heartbeat] Filter layout is dirty");
-
-                        // Grid columns are layout dependant.  Save off the current set before we reload
-                        gridControl.SaveGridColumnState();
-
-                        // Reload the filter tree
-                        filterTree.SelectedFilterNodeChanged -= new EventHandler(this.OnSelectedFilterNodeChanged);
-                        filterTree.ReloadLayouts();
-                        filterTree.SelectedFilterNodeChanged += new EventHandler(this.OnSelectedFilterNodeChanged);
-
-                        // Update the new active filter tree selection. Don't clear a search though.
-                        if (!gridControl.IsSearchActive)
-                        {
-                            gridControl.ActiveFilterNode = filterTree.SelectedFilterNode;
-                        }
-
-                        // If a node moved, it could now be inheriting different settings, so we have to force the columns to reload.
-                        reloadColumns = true;
-
-                        // # of filters present can effect edition issues
-                        editionGuiHelper.UpdateUI();
-                    }
-
-                    else
-                    {
-                        // Refresh any filters that have changed in the database.  This is basically just for filter name changes... mostly any
-                        // changes to definitions and such are reported as IsLayoutDirty
-                        foreach (FilterEntity filter in FilterLayoutContext.Current.RefreshFilters())
-                        {
-                            filterTree.UpdateFilterName(filter);
-                        }
-
-                        // Ensure the filter tree is showing up-to-date counts
-                        filterTree.UpdateFilterCounts();
-
-                        // Ensure the grids are up to date
-                        if (forceGridReload)
-                        {
-                            gridControl.ReloadFiltering();
-                        }
-                        else
-                        {
-                            gridControl.UpdateFiltering();
-                        }
-                    }
-
-                    if (storesChanged)
-                    {
-                        UpdateStoreDependentUI();
-
-                        // Needed in case a store is renamed, to get the new name to show up
-                        gridControl.Refresh();
-
-                        // No longer need to reload the columns later, since the UpdateStoreDependentUI does it.
-                        reloadColumns = false;
-                    }
-
-                    if (reloadColumns)
-                    {            
-                        FilterNodeColumnManager.InitializeForCurrentUser();
-                        gridControl.ReloadGridColumns();
-                    }
-
-                    UpdateSelectionDependentUI();
-                }
-                else if (forceGridReload)
-                {
-                    gridControl.ReloadFiltering();
-                    UpdateSelectionDependentUI();
-                }
-            }
-
-            // If the filter tree is showing some spinning, then loop back around so we can get the updated non-spinning counts as soon as possible
-            if (filterTree.HasCalculatingNodes() && heartbeatForcedFastRatesLeft == 0)
-            {
-                log.DebugFormat("[Heartbeat] Forcing reloop due to spinning filters");
-
-                heartbeatForcedFastRatesLeft = 1;
-                heartbeat.Interval = heartbeatFastRate;
-            }
-
-            // Save the last heartbeat time from the end of the heartbeat.  That way if it takes a while to process, we don't overlap.
-            lastHeartbeatTime = DateTime.UtcNow;
-
-            // Logging
-            log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}, Interval: {2}s", sw.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections, heartbeat.Interval / 1000);
+            uiHeartbeat.DoHeartbeat(options);
         }
 
         /// <summary>
@@ -1962,7 +1685,7 @@ namespace ShipWorks
         /// </summary>
         void OnEnterThreadModal(object sender, EventArgs e)
         {
-            if (IsDisposed || !heartbeat.Enabled)
+            if (IsDisposed || !heartbeatTimer.Enabled)
             {
                 return;
             }
@@ -1984,7 +1707,7 @@ namespace ShipWorks
         /// </summary>
         void OnLeaveThreadModal(object sender, EventArgs e)
         {
-            if (IsDisposed || !heartbeat.Enabled)
+            if (IsDisposed || !heartbeatTimer.Enabled)
             {
                 return;
             }
@@ -4008,5 +3731,6 @@ namespace ShipWorks
         #endregion
 
         #endregion
+
     }
 }
