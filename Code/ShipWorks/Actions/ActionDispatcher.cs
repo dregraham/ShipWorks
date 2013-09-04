@@ -153,34 +153,22 @@ namespace ShipWorks.Actions
         {
             ActionManager.CheckForChangesNeeded();
             ActionEntity actionEntity = ActionManager.GetAction(actionID);
-            if (!actionEntity.Enabled)
-                return;
-
-            ActionTriggerType actionTriggerType = (ActionTriggerType)actionEntity.TriggerType;
-
-            // Get the specific action trigger type and check any specific settings
-            switch (actionTriggerType)
+            
+            if (actionEntity == null || !actionEntity.Enabled)
             {
-                case ActionTriggerType.OrderDownloaded:
-                case ActionTriggerType.DownloadFinished:
-                case ActionTriggerType.ShipmentProcessed:
-                case ActionTriggerType.ShipmentVoided:
-                case ActionTriggerType.FilterContentChanged:
-                    log.WarnFormat("Scheduled Actions do not support trigger type: {0}", EnumHelper.GetDescription(actionTriggerType));
-                    return;
-                case ActionTriggerType.Scheduled:
-                    // TODO: Add any cron trigger checks...
-                    // CronTrigger cronTrigger = new CronTrigger(actionEntity.TriggerSettings);
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                // Possible race condition where the action could have been deleted
+                // between dispatching the action and getting the entity from the ActionManager
+                return;
             }
 
-            // Scheduled actions should not be running in any sql adapter context, so create one now
-            using (SqlAdapter adapter = new SqlAdapter(false))
+            // Only dispatch scheduled actions
+            if ((ActionTriggerType)actionEntity.TriggerType == ActionTriggerType.Scheduled)
             {
-                DispatchAction(actionEntity, null, adapter);
+                // Scheduled actions should not be running in any sql adapter context, so create one now
+                using (SqlAdapter adapter = new SqlAdapter(false))
+                {
+                    DispatchAction(actionEntity, null, adapter);
+                }
             }
         }
 
@@ -193,7 +181,7 @@ namespace ShipWorks.Actions
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
-            entity.ActionQueueType = (int)ActionManager.ActionQueueType;
+            entity.ActionQueueType = action.TriggerType == (int)ActionTriggerType.Scheduled ? (int)ActionQueueType.Scheduled : (int)ActionQueueType.UserInterface;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;
