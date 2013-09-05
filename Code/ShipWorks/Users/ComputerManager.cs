@@ -76,25 +76,8 @@ namespace ShipWorks.Users
                         InternalCheckForChanges();
                     }
 
-                    List<ComputerEntity> computers = EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
-
-                    // Load the computers' ServiceStatusEntities.
-                    computers.ForEach(EnsureServiceStatusesLoaded);
-
-                    return computers;
+                    return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Ensures the ServiceStatuses for the computer exist.
-        /// </summary>
-        public static void EnsureServiceStatusesLoaded(ComputerEntity computer)
-        {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                computer.ServiceStatuses.Clear();
-                computer.ServiceStatuses.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.ServiceStatusEntity).Cast<ServiceStatusEntity>());
             }
         }
 

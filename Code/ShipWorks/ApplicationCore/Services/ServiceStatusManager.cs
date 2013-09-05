@@ -96,29 +96,32 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private static void AddMissingComputers()
         {
-            int numberOfServiceTypes = Enum.GetNames(typeof(ShipWorksServiceType)).Length;
-
-            // Find computers that are missing ServiceStatus entries
-            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatuses == null || c.ServiceStatuses.Count != numberOfServiceTypes))
+            using (SqlAdapter adapter = new SqlAdapter())
             {
-                // For each ShipWorksServiceType, if the computer does have an entry for it, add it.
-                foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
-                {
-                    if (computer.ServiceStatuses == null ||
-                        computer.ServiceStatuses.Count == 0 ||
-                        computer.ServiceStatuses.All(ws => ws.ServiceType != (int)serviceType))
-                    {
-                        ServiceStatusEntity serviceStatus = new ServiceStatusEntity
-                            {
-                                ServiceType = (int) serviceType,
-                                ServiceFullName = string.Empty,
-                                ServiceDisplayName = string.Empty,
-                                ComputerID = computer.ComputerID
-                            };
+                var serviceTypeValues = (int[])Enum.GetValues(typeof(ShipWorksServiceType));
 
-                        SaveServiceStatus(serviceStatus);
+                foreach (ComputerEntity computer in ComputerManager.Computers)
+                {
+                    computer.ServiceStatuses.Clear();
+                    computer.ServiceStatuses.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.ServiceStatusEntity).Cast<ServiceStatusEntity>());
+
+                    // For each ShipWorksServiceType value, if the computer does have an entry for it, add it.
+                    var missingServiceTypes = serviceTypeValues.Except(computer.ServiceStatuses.Select(x => x.ServiceType));
+
+                    foreach (int serviceType in missingServiceTypes)
+                    {
+                        ServiceStatusEntity serviceStatus = new ServiceStatusEntity {
+                            ServiceType = serviceType,
+                            ServiceFullName = string.Empty,
+                            ServiceDisplayName = string.Empty,
+                            ComputerID = computer.ComputerID
+                        };
+
+                        SaveServiceStatus(serviceStatus, adapter);
                     }
                 }
+
+                adapter.Commit();
             }
         }
 
