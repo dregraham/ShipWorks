@@ -1,6 +1,4 @@
 ﻿declare @DatabaseName nvarchar(255)
-declare @DataFileName nvarchar(255)
-declare @LogFileName nvarchar(255)
 declare @BackupToFileName nvarchar(255)
 declare @BackupDisplayName nvarchar(255)
 declare @IsRecoveryModeFull bit
@@ -31,39 +29,12 @@ select @IsRecoveryModeFull =
 	  
 set @BackupToFileName = N'' + @DatabaseName + '_ShrinkDbTask_log.bak'
 
-select @DataFileName = mf.name
-from sys.master_files mf, sys.databases d
-where d.database_id = mf.database_id
-and d.name = @DatabaseName and mf.type = 0
-
-select @LogFileName = mf.name
-from sys.master_files mf, sys.databases d
-where d.database_id = mf.database_id
-and d.name = @DatabaseName and mf.type = 1
 
 if @IsRecoveryModeFull = 1 and @FullDBBackupExists = 1
 begin
-	print '1st log Back up of ' + @DatabaseName + ' to ' + @BackupToFileName
+	print 'Log Back up of ' + @DatabaseName + ' to ' + @BackupToFileName
 	BACKUP LOG @DatabaseName 
 	TO  DISK = @BackupToFileName 
 	WITH NOFORMAT, INIT,  NAME = @BackupDisplayName, SKIP, NOREWIND, NOUNLOAD,  STATS = 10
 end
 
-DBCC SHRINKDATABASE (@DatabaseName, 1);
-
-DBCC SHRINKFILE (@DataFileName , 0, TRUNCATEONLY)
-
-DBCC SHRINKFILE (@LogFileName , 0, TRUNCATEONLY)
-
-
-DBCC SHRINKDATABASE (@DatabaseName, 1);
-
-if @IsRecoveryModeFull = 1 and @FullDBBackupExists = 1
-begin
-	print '2nd log Back up of ' + @DatabaseName + ' to ' + @BackupToFileName
-	BACKUP LOG @DatabaseName 
-	TO  DISK = @BackupToFileName 
-	WITH NOFORMAT, INIT,  NAME = @BackupDisplayName, SKIP, NOREWIND, NOUNLOAD,  STATS = 10
-end
-
-DBCC SHRINKDATABASE (@DatabaseName, 1)
