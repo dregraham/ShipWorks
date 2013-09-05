@@ -104,7 +104,7 @@ namespace ShipWorks.ApplicationCore
 
             // Shouldn't be able to get here while not logged in
             Debug.Assert(SqlSession.IsConfigured);
-            Debug.Assert(UserSession.IsLoggedOn);
+            Debug.Assert(UserSession.IsLoggedOn || !Program.ExecutionMode.IsUserInteractive);
 
             // Extract heartbeat options
             bool forceReload = (options & HeartbeatOptions.ForceReload) != 0;
