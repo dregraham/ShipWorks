@@ -509,8 +509,9 @@
 		</CreateItem>
 		
 		<Zip Files="@(FilesToZip)"
-			 WorkingDirectory="$(AppDirectory)\"
-			 ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" />
+			  WorkingDirectory="$(AppDirectory)\"
+			  ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip"
+        ParallelCompression="false"/>
 
 		<!-- Delete all the files that went into the zip -->
 		<Delete Files="@(FilesToZip)" />
