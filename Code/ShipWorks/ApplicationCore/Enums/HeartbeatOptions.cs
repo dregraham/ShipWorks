@@ -10,6 +10,6 @@ namespace ShipWorks.ApplicationCore.Enums
     {
         None = 0x00,
         ChangesExpected = 0x01,
-        ForceGridReload = 0x02
+        ForceReload = 0x02
     }
 }

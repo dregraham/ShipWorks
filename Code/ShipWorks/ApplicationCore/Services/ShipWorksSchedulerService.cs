@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.UI;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Scheduling;
+using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.Data.Utility;
 using System.IO;
 using System.Threading;
@@ -20,7 +21,8 @@ namespace ShipWorks.ApplicationCore.Services
         CancellationTokenSource canceller;
 
         readonly Timer timer = new Timer();
-        TimestampTracker timestampTracker;
+
+        private Heartbeat _heartbeat;
 
         /// <summary>
         /// Constructor.
@@ -56,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Required for printing
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
 
-            timestampTracker = new TimestampTracker();
+            _heartbeat = new Heartbeat();
 
             timer.Enabled = true;
             timer.Interval = 1000;
@@ -88,10 +90,8 @@ namespace ShipWorks.ApplicationCore.Services
         {
             // Switch to checking every 2 seconds
             timer.Interval = 2000;
-            if (timestampTracker.CheckForChange())
-            {
-                ActionProcessor.StartProcessing();
-            }
+            
+            _heartbeat.DoHeartbeat(HeartbeatOptions.None);
         }
     }
 }

@@ -129,15 +129,6 @@ namespace ShipWorks
 
         UIHeartbeat uiHeartbeat;
 
-        // So we don't have to do all of the heartbeat if nothing has changed
-        DateTime lastHeartbeatTime = DateTime.MinValue;
-
-
-
-
-
-
-
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
 
@@ -1213,7 +1204,7 @@ namespace ShipWorks
         /// </summary>
         private void OnAsyncMenuCommandCompleted(object sender, MenuCommandCompleteEventArgs e)
         {
-            ForceHeartbeat(HeartbeatOptions.ForceGridReload | HeartbeatOptions.ChangesExpected);
+            ForceHeartbeat(HeartbeatOptions.ForceReload | HeartbeatOptions.ChangesExpected);
 
             e.ShowMessage(this);
         }
@@ -1585,7 +1576,7 @@ namespace ShipWorks
         /// </summary>
         void OnEntityChangeDetected(object sender, EventArgs e)
         {
-            ForceHeartbeat(HeartbeatOptions.ForceGridReload);
+            ForceHeartbeat(HeartbeatOptions.ForceReload);
         }
 
         /// <summary>
@@ -1652,10 +1643,10 @@ namespace ShipWorks
                         log.InfoFormat("Increasing heart rate");
 
                         // Increase the heart rate
-                        heartbeatTimer.Interval = HeartBeat.HeartbeatFastRate;
+                        heartbeatTimer.Interval = Heartbeat.HeartbeatFastRate;
 
                         // Only force the fast beat for so long - we can't wait forever for changes
-                       uiHeartbeat.HeartbeatForcedFastRatesLeft = uiHeartbeat.heartbeatForcedFastRatesStart;
+                       uiHeartbeat.HeartbeatForcedFastRatesLeft = uiHeartbeat.HeartbeatForcedFastRatesStart;
                     }
 
                     // Force it to go now, if it
