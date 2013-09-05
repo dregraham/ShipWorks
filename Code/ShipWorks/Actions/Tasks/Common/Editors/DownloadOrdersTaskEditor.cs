@@ -28,11 +28,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             // Don't truncate the display of the panel after loading the stores
             storeCheckBoxPanel.LoadStores();
-            Height = storeCheckBoxPanel.Bottom + 5;
 
             // Update the selected stores based on the task settings
             IEnumerable<long> storeIDs = this.task.StoreIDs;
             storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
+
+            Height = storeCheckBoxPanel.Bottom + 5;
 
             storeCheckBoxPanel.StoreSelectionChanged += OnStoreSelectionChanged;
         }

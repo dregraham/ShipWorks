@@ -18,13 +18,14 @@ namespace ShipWorks.Actions.UI
     {
         public event EventHandler StoreSelectionChanged;
 
+        // By default we only show enabled stores, but if someone tries to say a disabled one is checked, we add it in
+        List<long> storesForcedDisplayed = new List<long>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StoreCheckBoxPanel"/> class.
         /// </summary>
         public StoreCheckBoxPanel()
         {
-            SelectedStoreIDs = new List<long>();
-
             InitializeComponent();
         }
         
@@ -42,12 +43,12 @@ namespace ShipWorks.Actions.UI
             Point location = new Point(0, 0);
 
             // Go through all the stores
-            foreach (StoreEntity store in StoreManager.GetEnabledStores())
+            foreach (StoreEntity store in StoreManager.GetAllStores().Where(s => s.Enabled || storesForcedDisplayed.Contains(s.StoreID)))
             {
                 CheckBox checkBox = new CheckBox();
                 checkBox.AutoSize = true;
                 checkBox.Location = location;
-                checkBox.Text = store.StoreName;
+                checkBox.Text = store.StoreName + " " + store.Enabled;
                 checkBox.Location = location;
                 checkBox.Parent = panelStores;
                 checkBox.Tag = store.StoreID;
@@ -100,17 +101,25 @@ namespace ShipWorks.Actions.UI
             }
             set
             {
-                if (value != null)
+                if (value == null)
                 {
-                    foreach (long storeID in value)
-                    {
-                        // Update the state of the check boxes based on the store ID list provided
-                        CheckBox storeCheckBox = panelStores.Controls.OfType<CheckBox>().Single(c => (long)c.Tag == storeID);
-                        if (storeCheckBox != null)
-                        {
-                            storeCheckBox.Checked = true;
-                        }
-                    }
+                    value = new long[0];
+                }
+
+                var displayedStores = panelStores.Controls.OfType<CheckBox>().Select(c => (long) c.Tag);
+                var missingStores = value.Except(displayedStores);
+
+                // If we don't have checkboxes for some of them, they may just be disabled.  Force them to be displayed anyway.
+                if (missingStores.Any())
+                {
+                    storesForcedDisplayed.AddRange(missingStores);
+                    LoadStores();
+                }
+
+                // Check all the ones that need checked
+                foreach (CheckBox checkBox in panelStores.Controls.OfType<CheckBox>())
+                {
+                    checkBox.Checked = value.Contains((long)checkBox.Tag);
                 }
             }
         }

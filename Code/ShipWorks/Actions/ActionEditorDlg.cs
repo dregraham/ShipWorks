@@ -137,11 +137,12 @@ namespace ShipWorks.Actions
         private void LoadStoresPanel()
         {
             storeCheckBoxPanel.LoadStores();
-            storeSettings.Height = storeCheckBoxPanel.Bottom + 4;
 
             // Check all the boxes for the stores its limited to
             List<long> storeIDs = action.StoreLimitedList.ToList();
             storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
+
+            storeSettings.Height = storeCheckBoxPanel.Bottom + 4;
         }
 
         /// <summary>
