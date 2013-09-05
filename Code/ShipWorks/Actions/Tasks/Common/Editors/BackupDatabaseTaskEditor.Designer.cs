@@ -38,7 +38,14 @@
             this.lableBackups = new System.Windows.Forms.Label();
             this.checkboxLimitBackupsRetained = new System.Windows.Forms.CheckBox();
             this.labelCleanup = new System.Windows.Forms.Label();
+            this.editorPanel = new System.Windows.Forms.Panel();
+            this.databaseConfigurationNotification = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.messagePanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).BeginInit();
+            this.editorPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.messagePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelNotice
@@ -142,27 +149,69 @@
             this.labelCleanup.Text = "Retention:";
             this.labelCleanup.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // editorPanel
+            // 
+            this.editorPanel.Controls.Add(this.labelCleanup);
+            this.editorPanel.Controls.Add(this.checkboxLimitBackupsRetained);
+            this.editorPanel.Controls.Add(this.lableBackups);
+            this.editorPanel.Controls.Add(this.numericBackupCount);
+            this.editorPanel.Controls.Add(this.textPrefix);
+            this.editorPanel.Controls.Add(this.labelPrefix);
+            this.editorPanel.Controls.Add(this.browse);
+            this.editorPanel.Controls.Add(this.backupPath);
+            this.editorPanel.Controls.Add(this.labelPath);
+            this.editorPanel.Controls.Add(this.labelNotice);
+            this.editorPanel.Location = new System.Drawing.Point(0, 0);
+            this.editorPanel.Name = "editorPanel";
+            this.editorPanel.Size = new System.Drawing.Size(453, 96);
+            this.editorPanel.TabIndex = 17;
+            // 
+            // databaseConfigurationNotification
+            // 
+            this.databaseConfigurationNotification.AutoSize = true;
+            this.databaseConfigurationNotification.Location = new System.Drawing.Point(21, 4);
+            this.databaseConfigurationNotification.Name = "databaseConfigurationNotification";
+            this.databaseConfigurationNotification.Size = new System.Drawing.Size(408, 13);
+            this.databaseConfigurationNotification.TabIndex = 19;
+            this.databaseConfigurationNotification.Text = "The \'{0}\' task can only be configured on the computer running your database ({1})" +
+    ".";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.information16;
+            this.pictureBox1.Location = new System.Drawing.Point(1, 2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 18;
+            this.pictureBox1.TabStop = false;
+            // 
+            // messagePanel
+            // 
+            this.messagePanel.Controls.Add(this.databaseConfigurationNotification);
+            this.messagePanel.Controls.Add(this.pictureBox1);
+            this.messagePanel.Location = new System.Drawing.Point(0, 95);
+            this.messagePanel.Name = "messagePanel";
+            this.messagePanel.Size = new System.Drawing.Size(453, 21);
+            this.messagePanel.TabIndex = 20;
+            // 
             // BackupDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
-            this.Controls.Add(this.labelCleanup);
-            this.Controls.Add(this.checkboxLimitBackupsRetained);
-            this.Controls.Add(this.lableBackups);
-            this.Controls.Add(this.numericBackupCount);
-            this.Controls.Add(this.textPrefix);
-            this.Controls.Add(this.labelPrefix);
-            this.Controls.Add(this.browse);
-            this.Controls.Add(this.backupPath);
-            this.Controls.Add(this.labelPath);
-            this.Controls.Add(this.labelNotice);
+            this.Controls.Add(this.messagePanel);
+            this.Controls.Add(this.editorPanel);
             this.Name = "BackupDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(456, 99);
+            this.Size = new System.Drawing.Size(456, 120);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).EndInit();
+            this.editorPanel.ResumeLayout(false);
+            this.editorPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.messagePanel.ResumeLayout(false);
+            this.messagePanel.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -178,6 +227,10 @@
         private System.Windows.Forms.Label lableBackups;
         private System.Windows.Forms.CheckBox checkboxLimitBackupsRetained;
         private System.Windows.Forms.Label labelCleanup;
+        private System.Windows.Forms.Panel editorPanel;
+        private System.Windows.Forms.Label databaseConfigurationNotification;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel messagePanel;
 
     }
 }

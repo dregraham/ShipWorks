@@ -53,7 +53,17 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             numericBackupCount.Enabled = task.LimitNumberOfBackupsRetained;
 
             // Editing is not allowed unless the user is on the database server
-            Enabled = SqlSession.Current.IsLocalServer();
+            if (SqlSession.Current.IsLocalServer())
+            {
+                messagePanel.Visible = false;
+                Height = messagePanel.Top;
+            }
+            else
+            {
+                ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
+                databaseConfigurationNotification.Text = GetDatabaseConfigurationMessage(descriptor);
+                editorPanel.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -131,12 +141,22 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 }
                 else
                 {
-                    errors.Add(new TaskValidationError(string.Format(CultureInfo.InvariantCulture, 
-                        "The '{0}' task can only be configured on the computer running your database ({1}).", 
-                        descriptor.BaseName,
-                        SqlSession.Current.GetServerMachineName())));
+                    errors.Add(new TaskValidationError(GetDatabaseConfigurationMessage(descriptor)));
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets a message notifying the user that they can only configure the database task on the database server
+        /// </summary>
+        /// <param name="descriptor">Task that will be used for the name</param>
+        /// <returns></returns>
+        private static string GetDatabaseConfigurationMessage(ActionTaskDescriptor descriptor)
+        {
+            return string.Format(CultureInfo.InvariantCulture, 
+                                 "The '{0}' task can only be configured on the computer running your database ({1}).", 
+                                 descriptor.BaseName,
+                                 SqlSession.Current.GetServerMachineName());
         }
     }
 }
