@@ -130,10 +130,10 @@ namespace :test do
 
 	desc "Execute unit tests"
 	mstest :units do |mstest|
-		print "Deleting previous units results...\r\n\r\n"
+		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
+		print "Deleting previous units results...\r\n\r\n"				
 		File.delete("TestResults/units-results.trx") if File.exist?("TestResults/units-results.trx")
 		print "Executing ShipWorks unit tests...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
 	end	
 end
