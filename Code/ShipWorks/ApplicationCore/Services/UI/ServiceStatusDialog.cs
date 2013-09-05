@@ -1,24 +1,18 @@
-﻿using System.Linq;
-using Divelements.SandGrid;
+﻿using Divelements.SandGrid;
 using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Data.Caching;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.Definitions;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Users;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ShipWorks.Users;
-using System.Collections.Generic;
-using ShipWorks.Actions.Triggers;
 
 
 namespace ShipWorks.ApplicationCore.Services.UI
@@ -31,10 +25,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
     {
         static readonly Guid gridSettingsKey = new Guid("{53EE16A4-9315-4D22-B768-58613546476B}");
 
-        private bool startingService;
-        private Timer startingServiceTimer;
-
-        private readonly Timer dataRefreshTimer;
+        private int startingServiceChecksRemaining;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceStatusDialog"/> class.
@@ -44,10 +35,6 @@ namespace ShipWorks.ApplicationCore.Services.UI
             InitializeComponent();
 
             WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
-
-            // Keep the timer disabled until after the initial population of the grid
-            dataRefreshTimer = new Timer { Interval = 10000, Enabled = false };
-            dataRefreshTimer.Tick += OnDataRefreshTimerTick;
         }
 
         /// <summary>
@@ -72,7 +59,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
             // Load the data and start the timer to get data refreshed
             LoadData();
-            dataRefreshTimer.Enabled = true;
+            dataRefreshTimer.Start();
 
             entityGrid.GridCellLinkClicked += OnGridCellLinkClicked;
         }
@@ -86,10 +73,10 @@ namespace ShipWorks.ApplicationCore.Services.UI
         {
             // Disable the timer until after the data has been refreshed to avoid events queuing
             // up if the database is slow to respond
-            dataRefreshTimer.Enabled = false;
+            dataRefreshTimer.Stop();
             LoadData();
 
-            dataRefreshTimer.Enabled = true;
+            dataRefreshTimer.Start();
         }
 
 
@@ -99,10 +86,31 @@ namespace ShipWorks.ApplicationCore.Services.UI
         /// </summary>
         private void LoadData()
         {
+            ServiceStatusManager.CheckForChangesNeeded();
+
             List<ServiceStatusEntity> entities = ServiceStatusManager.GetComputersRequiringShipWorksService();
             LocalCollectionEntityGateway<ServiceStatusEntity> requiredServicesGateway = new LocalCollectionEntityGateway<ServiceStatusEntity>(entities);
 
             entityGrid.OpenGateway(requiredServicesGateway);
+
+            // If a service is starting, see if it has started successfully
+            if (startingServiceChecksRemaining > 0)
+            {
+                --startingServiceChecksRemaining;
+
+                ServiceStatusEntity service = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ShipWorksServiceType.Scheduler);
+
+                if (service.GetStatus() == ServiceStatus.Running)
+                {
+                    ShowStartingServiceUI(false);
+                    startingServiceChecksRemaining = 0;
+                }
+                else if(startingServiceChecksRemaining == 0)
+                {
+                    ShowStartingServiceUI(false);
+                    MessageBox.Show("The service was not able to start.", "ShipWorks", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         /// <summary>
@@ -114,62 +122,20 @@ namespace ShipWorks.ApplicationCore.Services.UI
 
             if (action == GridLinkAction.Start)
             {
-                startingService = true;
-                UpdateStartingServiceUI(false);
+                startingServiceChecksRemaining = 30000 / dataRefreshTimer.Interval;
+                ShowStartingServiceUI(true);
                 ShipWorksServiceBase.RunAllInBackground();
-                startingServiceTimer = new Timer { Interval = 30000, Enabled = true };
-                startingServiceTimer.Tick += StartingServiceTimerOnTick;
-            }
-        }
-
-        /// <summary>
-        /// The start service timer elapsed, which means the service failed to start
-        /// </summary>
-        private void StartingServiceTimerOnTick(object sender, EventArgs e)
-        {
-            // If a service is starting, see if it has started successfully
-            if (startingService)
-            {
-                ServiceStatusEntity service = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ShipWorksServiceType.Scheduler);
-
-                if (service.GetStatus() == ServiceStatus.Running)
-                {
-                    UpdateStartingServiceUI(true);
-                    startingService = false;
-                }
-            }
-            else
-            {
-                UpdateStartingServiceUI(true);
-                MessageBox.Show("The service was not able to start.", "ShipWorks", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         /// <summary>
         /// Show or hide the UI that lets the user know that the service is starting.
         /// </summary>
-        /// <param name="isComplete">Is the process just starting or is it finished?</param>
-        private void UpdateStartingServiceUI(bool isComplete)
+        /// <param name="isStarting">Is the process just starting or is it finished?</param>
+        private void ShowStartingServiceUI(bool isStarting)
         {
-            // Enable/disable the timer based on whether the process is complete; we don't want the 
-            // data being refreshed while the service is still starting due to the 30 second wait
-            // to avoid confusion (i.e. the service is started, the data is reloaded causing the 
-            // row to be removed, but the "starting service..." UI is still visible)
-            dataRefreshTimer.Enabled = isComplete;
-
-            if (isComplete)
-            {
-                // We need to get rid of the timer if the startup is complete
-                startingServiceTimer.Tick -= StartingServiceTimerOnTick;
-                startingServiceTimer.Dispose();
-                startingServiceTimer = null;
-            }
-
-            // Refresh the data source of the grid
-            LoadData();
-
-            entityGrid.Enabled = isComplete;
-            startingServicePanel.Visible = !isComplete;
+            entityGrid.Enabled = !isStarting;
+            startingServicePanel.Visible = isStarting;
         }
 
         /// <summary>
@@ -180,24 +146,6 @@ namespace ShipWorks.ApplicationCore.Services.UI
         {
             layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[ServiceStatusFields.ComputerID].ColumnGuid;
             layout.DefaultSortOrder = ListSortDirection.Ascending;
-        }
-
-        /// <summary>
-        /// The form has been closed
-        /// </summary>
-        protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            if (startingServiceTimer != null)
-            {
-                startingServiceTimer.Tick -= StartingServiceTimerOnTick;
-                startingServiceTimer.Dispose();
-            }
-
-            if (dataRefreshTimer != null)
-            {
-                dataRefreshTimer.Tick -= OnDataRefreshTimerTick;
-                dataRefreshTimer.Dispose();
-            }
         }
     }
 }
