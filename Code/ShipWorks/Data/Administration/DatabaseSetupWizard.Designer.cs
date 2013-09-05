@@ -54,22 +54,24 @@ namespace ShipWorks.Data.Administration
             this.radioSqlServerCurrent = new System.Windows.Forms.RadioButton();
             this.labelChooseNewOrExistingSqlServer = new System.Windows.Forms.Label();
             this.wizardPageSelectSqlServerInstance = new ShipWorks.UI.Wizard.WizardPage();
+            this.panelSearchSqlServers = new System.Windows.Forms.Panel();
+            this.searchSqlServersLabel = new System.Windows.Forms.Label();
+            this.searchSqlServersPicture = new System.Windows.Forms.PictureBox();
+            this.panelSelectedInstance = new System.Windows.Forms.Panel();
+            this.labelDatabaseSelect = new System.Windows.Forms.Label();
+            this.pictureSqlConnection = new System.Windows.Forms.PictureBox();
             this.gridDatabses = new Divelements.SandGrid.SandGrid();
             this.gridColumnName = new Divelements.SandGrid.GridColumn();
             this.gridColumnStatus = new Divelements.SandGrid.GridColumn();
             this.gridColumnStoreType = new Divelements.SandGrid.GridColumn();
             this.gridColumnLatestOrder = new Divelements.SandGrid.GridColumn();
-            this.labelDatabaseSelect = new System.Windows.Forms.Label();
-            this.pictureSqlConnection = new System.Windows.Forms.PictureBox();
+            this.labelSqlConnection = new System.Windows.Forms.Label();
+            this.linkSqlInstanceAccount = new ShipWorks.UI.Controls.LinkControl();
             this.panelSqlInstanceHelp = new System.Windows.Forms.Panel();
             this.linkHelpSelectSqlInstance = new ShipWorks.UI.Controls.LinkControl();
             this.labelSelectSqlInstance2 = new System.Windows.Forms.Label();
-            this.labelSqlConnection = new System.Windows.Forms.Label();
-            this.linkSqlInstanceAccount = new ShipWorks.UI.Controls.LinkControl();
             this.labelSelectSqlInstance = new System.Windows.Forms.Label();
-            this.labelServerSearching = new System.Windows.Forms.Label();
-            this.pictureServerSearching = new System.Windows.Forms.PictureBox();
-            this.comboSqlServers = new System.Windows.Forms.ComboBox();
+            this.comboSqlServers = new ShipWorks.UI.Controls.ImageComboBox();
             this.wizardPageDatabaseName = new ShipWorks.UI.Wizard.WizardPage();
             this.panelDatabaseGivenName = new System.Windows.Forms.Panel();
             this.linkEditGivenDatabaseName = new System.Windows.Forms.LinkLabel();
@@ -175,9 +177,11 @@ namespace ShipWorks.Data.Administration
             this.panelSqlInstanceRunning.SuspendLayout();
             this.panelSqlInstanceCurrent.SuspendLayout();
             this.wizardPageSelectSqlServerInstance.SuspendLayout();
+            this.panelSearchSqlServers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.searchSqlServersPicture)).BeginInit();
+            this.panelSelectedInstance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSqlConnection)).BeginInit();
             this.panelSqlInstanceHelp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).BeginInit();
             this.wizardPageDatabaseName.SuspendLayout();
             this.panelDatabaseGivenName.SuspendLayout();
             this.panelDatabaseChooseName.SuspendLayout();
@@ -227,7 +231,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageChooseSqlServer);
+            this.mainPanel.Controls.Add(this.wizardPageSelectSqlServerInstance);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -495,15 +499,10 @@ namespace ShipWorks.Data.Administration
             // 
             // wizardPageSelectSqlServerInstance
             // 
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.gridDatabses);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelDatabaseSelect);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.pictureSqlConnection);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.panelSearchSqlServers);
+            this.wizardPageSelectSqlServerInstance.Controls.Add(this.panelSelectedInstance);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.panelSqlInstanceHelp);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelSqlConnection);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.linkSqlInstanceAccount);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelSelectSqlInstance);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.labelServerSearching);
-            this.wizardPageSelectSqlServerInstance.Controls.Add(this.pictureServerSearching);
             this.wizardPageSelectSqlServerInstance.Controls.Add(this.comboSqlServers);
             this.wizardPageSelectSqlServerInstance.Description = "Choose a running database to connect to.";
             this.wizardPageSelectSqlServerInstance.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -515,6 +514,68 @@ namespace ShipWorks.Data.Administration
             this.wizardPageSelectSqlServerInstance.Title = "Connect to ShipWorks";
             this.wizardPageSelectSqlServerInstance.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSelectSqlInstance);
             this.wizardPageSelectSqlServerInstance.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSelectSqlInstance);
+            // 
+            // panelSearchSqlServers
+            // 
+            this.panelSearchSqlServers.Controls.Add(this.searchSqlServersLabel);
+            this.panelSearchSqlServers.Controls.Add(this.searchSqlServersPicture);
+            this.panelSearchSqlServers.Location = new System.Drawing.Point(267, 31);
+            this.panelSearchSqlServers.Name = "panelSearchSqlServers";
+            this.panelSearchSqlServers.Size = new System.Drawing.Size(256, 20);
+            this.panelSearchSqlServers.TabIndex = 59;
+            // 
+            // searchSqlServersLabel
+            // 
+            this.searchSqlServersLabel.AutoSize = true;
+            this.searchSqlServersLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.searchSqlServersLabel.Location = new System.Drawing.Point(19, 2);
+            this.searchSqlServersLabel.Name = "searchSqlServersLabel";
+            this.searchSqlServersLabel.Size = new System.Drawing.Size(66, 13);
+            this.searchSqlServersLabel.TabIndex = 57;
+            this.searchSqlServersLabel.Text = "Searching...";
+            // 
+            // searchSqlServersPicture
+            // 
+            this.searchSqlServersPicture.Image = global::ShipWorks.Properties.Resources.indiciator_green;
+            this.searchSqlServersPicture.Location = new System.Drawing.Point(2, 0);
+            this.searchSqlServersPicture.Name = "searchSqlServersPicture";
+            this.searchSqlServersPicture.Size = new System.Drawing.Size(16, 16);
+            this.searchSqlServersPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.searchSqlServersPicture.TabIndex = 58;
+            this.searchSqlServersPicture.TabStop = false;
+            // 
+            // panelSelectedInstance
+            // 
+            this.panelSelectedInstance.Controls.Add(this.labelDatabaseSelect);
+            this.panelSelectedInstance.Controls.Add(this.pictureSqlConnection);
+            this.panelSelectedInstance.Controls.Add(this.gridDatabses);
+            this.panelSelectedInstance.Controls.Add(this.labelSqlConnection);
+            this.panelSelectedInstance.Controls.Add(this.linkSqlInstanceAccount);
+            this.panelSelectedInstance.Location = new System.Drawing.Point(18, 58);
+            this.panelSelectedInstance.Name = "panelSelectedInstance";
+            this.panelSelectedInstance.Size = new System.Drawing.Size(500, 210);
+            this.panelSelectedInstance.TabIndex = 56;
+            // 
+            // labelDatabaseSelect
+            // 
+            this.labelDatabaseSelect.AutoSize = true;
+            this.labelDatabaseSelect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDatabaseSelect.Location = new System.Drawing.Point(3, 4);
+            this.labelDatabaseSelect.Name = "labelDatabaseSelect";
+            this.labelDatabaseSelect.Size = new System.Drawing.Size(190, 13);
+            this.labelDatabaseSelect.TabIndex = 54;
+            this.labelDatabaseSelect.Text = "Select your ShipWorks database";
+            // 
+            // pictureSqlConnection
+            // 
+            this.pictureSqlConnection.Image = global::ShipWorks.Properties.Resources.arrows_greengray;
+            this.pictureSqlConnection.Location = new System.Drawing.Point(22, 22);
+            this.pictureSqlConnection.Name = "pictureSqlConnection";
+            this.pictureSqlConnection.Size = new System.Drawing.Size(16, 16);
+            this.pictureSqlConnection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureSqlConnection.TabIndex = 53;
+            this.pictureSqlConnection.TabStop = false;
+            this.pictureSqlConnection.Visible = false;
             // 
             // gridDatabses
             // 
@@ -533,7 +594,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabses.EnableSearching = false;
             this.gridDatabses.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
             this.gridDatabses.ImageTextSeparation = 1;
-            this.gridDatabses.Location = new System.Drawing.Point(41, 100);
+            this.gridDatabses.Location = new System.Drawing.Point(22, 46);
             this.gridDatabses.Name = "gridDatabses";
             this.gridDatabses.Renderer = windowsXPRenderer1;
             this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
@@ -543,7 +604,7 @@ namespace ShipWorks.Data.Administration
                         new Divelements.SandGrid.GridCell("Ready"),
                         new Divelements.SandGrid.GridCell("Brian, on 07/13/11"),
                         new Divelements.SandGrid.GridCell("Order #1292, from 07/11/11")})});
-            this.gridDatabses.Size = new System.Drawing.Size(484, 156);
+            this.gridDatabses.Size = new System.Drawing.Size(467, 153);
             this.gridDatabses.TabIndex = 55;
             this.gridDatabses.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
             // 
@@ -589,32 +650,36 @@ namespace ShipWorks.Data.Administration
             this.gridColumnLatestOrder.MinimumWidth = 75;
             this.gridColumnLatestOrder.Width = 221;
             // 
-            // labelDatabaseSelect
+            // labelSqlConnection
             // 
-            this.labelDatabaseSelect.AutoSize = true;
-            this.labelDatabaseSelect.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDatabaseSelect.Location = new System.Drawing.Point(22, 82);
-            this.labelDatabaseSelect.Name = "labelDatabaseSelect";
-            this.labelDatabaseSelect.Size = new System.Drawing.Size(190, 13);
-            this.labelDatabaseSelect.TabIndex = 54;
-            this.labelDatabaseSelect.Text = "Select your ShipWorks database";
+            this.labelSqlConnection.AutoSize = true;
+            this.labelSqlConnection.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelSqlConnection.Location = new System.Drawing.Point(39, 24);
+            this.labelSqlConnection.Name = "labelSqlConnection";
+            this.labelSqlConnection.Size = new System.Drawing.Size(262, 13);
+            this.labelSqlConnection.TabIndex = 51;
+            this.labelSqlConnection.Text = "Successfully connected using your Windows account.";
+            this.labelSqlConnection.Visible = false;
             // 
-            // pictureSqlConnection
+            // linkSqlInstanceAccount
             // 
-            this.pictureSqlConnection.Image = global::ShipWorks.Properties.Resources.arrows_greengray;
-            this.pictureSqlConnection.Location = new System.Drawing.Point(41, 54);
-            this.pictureSqlConnection.Name = "pictureSqlConnection";
-            this.pictureSqlConnection.Size = new System.Drawing.Size(16, 16);
-            this.pictureSqlConnection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureSqlConnection.TabIndex = 53;
-            this.pictureSqlConnection.TabStop = false;
-            this.pictureSqlConnection.Visible = false;
+            this.linkSqlInstanceAccount.AutoSize = true;
+            this.linkSqlInstanceAccount.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkSqlInstanceAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkSqlInstanceAccount.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.linkSqlInstanceAccount.Location = new System.Drawing.Point(300, 24);
+            this.linkSqlInstanceAccount.Name = "linkSqlInstanceAccount";
+            this.linkSqlInstanceAccount.Size = new System.Drawing.Size(137, 13);
+            this.linkSqlInstanceAccount.TabIndex = 50;
+            this.linkSqlInstanceAccount.Text = "Change the account to use";
+            this.linkSqlInstanceAccount.Visible = false;
+            this.linkSqlInstanceAccount.Click += new System.EventHandler(this.OnChangeSqlInstanceAccount);
             // 
             // panelSqlInstanceHelp
             // 
             this.panelSqlInstanceHelp.Controls.Add(this.linkHelpSelectSqlInstance);
             this.panelSqlInstanceHelp.Controls.Add(this.labelSelectSqlInstance2);
-            this.panelSqlInstanceHelp.Location = new System.Drawing.Point(269, 5);
+            this.panelSqlInstanceHelp.Location = new System.Drawing.Point(267, 6);
             this.panelSqlInstanceHelp.Name = "panelSqlInstanceHelp";
             this.panelSqlInstanceHelp.Size = new System.Drawing.Size(256, 20);
             this.panelSqlInstanceHelp.TabIndex = 52;
@@ -626,7 +691,7 @@ namespace ShipWorks.Data.Administration
             this.linkHelpSelectSqlInstance.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkHelpSelectSqlInstance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkHelpSelectSqlInstance.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.linkHelpSelectSqlInstance.Location = new System.Drawing.Point(66, 1);
+            this.linkHelpSelectSqlInstance.Location = new System.Drawing.Point(65, 2);
             this.linkHelpSelectSqlInstance.Name = "linkHelpSelectSqlInstance";
             this.linkHelpSelectSqlInstance.Size = new System.Drawing.Size(127, 13);
             this.linkHelpSelectSqlInstance.TabIndex = 49;
@@ -642,31 +707,6 @@ namespace ShipWorks.Data.Administration
             this.labelSelectSqlInstance2.TabIndex = 47;
             this.labelSelectSqlInstance2.Text = "Don\'t see it?";
             // 
-            // labelSqlConnection
-            // 
-            this.labelSqlConnection.AutoSize = true;
-            this.labelSqlConnection.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelSqlConnection.Location = new System.Drawing.Point(58, 56);
-            this.labelSqlConnection.Name = "labelSqlConnection";
-            this.labelSqlConnection.Size = new System.Drawing.Size(262, 13);
-            this.labelSqlConnection.TabIndex = 51;
-            this.labelSqlConnection.Text = "Successfully connected using your Windows account.";
-            this.labelSqlConnection.Visible = false;
-            // 
-            // linkSqlInstanceAccount
-            // 
-            this.linkSqlInstanceAccount.AutoSize = true;
-            this.linkSqlInstanceAccount.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkSqlInstanceAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.linkSqlInstanceAccount.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.linkSqlInstanceAccount.Location = new System.Drawing.Point(319, 56);
-            this.linkSqlInstanceAccount.Name = "linkSqlInstanceAccount";
-            this.linkSqlInstanceAccount.Size = new System.Drawing.Size(137, 13);
-            this.linkSqlInstanceAccount.TabIndex = 50;
-            this.linkSqlInstanceAccount.Text = "Change the account to use";
-            this.linkSqlInstanceAccount.Visible = false;
-            this.linkSqlInstanceAccount.Click += new System.EventHandler(this.OnChangeSqlInstanceAccount);
-            // 
             // labelSelectSqlInstance
             // 
             this.labelSelectSqlInstance.AutoSize = true;
@@ -677,28 +717,9 @@ namespace ShipWorks.Data.Administration
             this.labelSelectSqlInstance.TabIndex = 46;
             this.labelSelectSqlInstance.Text = "Where is your database running?";
             // 
-            // labelServerSearching
-            // 
-            this.labelServerSearching.AutoSize = true;
-            this.labelServerSearching.ForeColor = System.Drawing.Color.DimGray;
-            this.labelServerSearching.Location = new System.Drawing.Point(287, 33);
-            this.labelServerSearching.Name = "labelServerSearching";
-            this.labelServerSearching.Size = new System.Drawing.Size(133, 13);
-            this.labelServerSearching.TabIndex = 11;
-            this.labelServerSearching.Text = "Searching your network...";
-            // 
-            // pictureServerSearching
-            // 
-            this.pictureServerSearching.Image = ((System.Drawing.Image)(resources.GetObject("pictureServerSearching.Image")));
-            this.pictureServerSearching.Location = new System.Drawing.Point(269, 31);
-            this.pictureServerSearching.Name = "pictureServerSearching";
-            this.pictureServerSearching.Size = new System.Drawing.Size(16, 16);
-            this.pictureServerSearching.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureServerSearching.TabIndex = 10;
-            this.pictureServerSearching.TabStop = false;
-            // 
             // comboSqlServers
             // 
+            this.comboSqlServers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.comboSqlServers.Location = new System.Drawing.Point(41, 29);
             this.comboSqlServers.Name = "comboSqlServers";
             this.comboSqlServers.Size = new System.Drawing.Size(220, 21);
@@ -1727,10 +1748,14 @@ namespace ShipWorks.Data.Administration
             this.panelSqlInstanceCurrent.PerformLayout();
             this.wizardPageSelectSqlServerInstance.ResumeLayout(false);
             this.wizardPageSelectSqlServerInstance.PerformLayout();
+            this.panelSearchSqlServers.ResumeLayout(false);
+            this.panelSearchSqlServers.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.searchSqlServersPicture)).EndInit();
+            this.panelSelectedInstance.ResumeLayout(false);
+            this.panelSelectedInstance.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSqlConnection)).EndInit();
             this.panelSqlInstanceHelp.ResumeLayout(false);
             this.panelSqlInstanceHelp.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureServerSearching)).EndInit();
             this.wizardPageDatabaseName.ResumeLayout(false);
             this.panelDatabaseGivenName.ResumeLayout(false);
             this.panelDatabaseGivenName.PerformLayout();
@@ -1791,7 +1816,7 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label labelInstanceName;
         private System.Windows.Forms.RadioButton radioSqlServerCurrent;
         private ShipWorks.UI.Wizard.WizardPage wizardPageSelectSqlServerInstance;
-        private System.Windows.Forms.ComboBox comboSqlServers;
+        private ShipWorks.UI.Controls.ImageComboBox comboSqlServers;
         private ShipWorks.UI.Wizard.WizardPage wizardPageDatabaseName;
         private System.Windows.Forms.TextBox databaseName;
         private System.Windows.Forms.Label labelDatabaseName;
@@ -1834,8 +1859,6 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.PictureBox warningIcon;
         private System.Windows.Forms.Label labelNote2;
         private System.Windows.Forms.Label labelCantRestore;
-        private System.Windows.Forms.PictureBox pictureServerSearching;
-        private System.Windows.Forms.Label labelServerSearching;
         private System.Windows.Forms.PictureBox pictureBox6;
         private ShipWorks.UI.Wizard.WizardPage wizardPagePrerequisitePlaceholder;
         private System.Windows.Forms.Label label24;
@@ -1917,5 +1940,9 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.LinkLabel linkEditGivenDatabaseName;
         private System.Windows.Forms.Label givenDatabaseName;
         private System.Windows.Forms.Label labelGivenDatabaseName;
+        private System.Windows.Forms.Panel panelSelectedInstance;
+        private System.Windows.Forms.PictureBox searchSqlServersPicture;
+        private System.Windows.Forms.Label searchSqlServersLabel;
+        private System.Windows.Forms.Panel panelSearchSqlServers;
     }
 }

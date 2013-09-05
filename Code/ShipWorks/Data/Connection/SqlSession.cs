@@ -163,7 +163,18 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public void TestConnection()
         {
-            using (SqlConnection con = new SqlConnection(Configuration.GetConnectionString()))
+            TestConnection(TimeSpan.FromSeconds(10));
+        }
+
+        /// <summary>
+        /// Tries to connect to SQL Server.  Throws an exception on failure.
+        /// </summary>
+        public void TestConnection(TimeSpan timeout)
+        {
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(Configuration.GetConnectionString());
+            csb.ConnectTimeout = (int) timeout.TotalSeconds;
+
+            using (SqlConnection con = new SqlConnection(csb.ToString()))
             {
                 con.Open();
 

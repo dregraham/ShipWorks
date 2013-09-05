@@ -84,6 +84,32 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
+        /// Extracts just the server name part from the SERVER\Instance representation.
+        /// </summary>
+        public static string ExtractServerName(string serverInstance)
+        {
+            if (serverInstance == null)
+            {
+                throw new ArgumentNullException("serverInstance");
+            }
+
+            string server;
+
+            // Extract just the instance name
+            string[] parts = serverInstance.Split('\\');
+            if (parts.Length < 1)
+            {
+                server = "";
+            }
+            else
+            {
+                server = parts[0];
+            }
+
+            return server;
+        }
+
+        /// <summary>
         /// Extracts just the instance name part from the SERVER\Instance representation.  If there is no instance name, just the server name,
         /// the empty string is returned.
         /// </summary>
@@ -225,7 +251,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
 
             // If firstTry was given, use it
-            if (firstTry != null)
+            if (firstTry != null && !(!firstTry.WindowsAuth && string.IsNullOrWhiteSpace(firstTry.Username)))
             {
                 configsToTry.Add(new SqlSessionConfiguration(firstTry));
             }
@@ -250,12 +276,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 try
                 {
                     config.ServerInstance = instance;
-                    config.DatabaseName = "master";
+                    config.DatabaseName = "";
 
                     SqlSession session = new SqlSession(config);
-                    session.TestConnection();
-
-                    config.DatabaseName = "";
+                    session.TestConnection(TimeSpan.FromSeconds(3));
 
                     return config;
                 }

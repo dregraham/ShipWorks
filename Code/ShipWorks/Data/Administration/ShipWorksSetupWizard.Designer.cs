@@ -148,7 +148,7 @@
             this.detailedSetup.Name = "detailedSetup";
             this.detailedSetup.Size = new System.Drawing.Size(163, 23);
             this.detailedSetup.TabIndex = 3;
-            this.detailedSetup.Text = "Get connected >";
+            this.detailedSetup.Text = "Get set up >";
             this.detailedSetup.UseVisualStyleBackColor = true;
             this.detailedSetup.Click += new System.EventHandler(this.OnOpenDetailedSetup);
             // 
@@ -180,7 +180,7 @@
             this.labelWelcomeGlad.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWelcomeGlad.Location = new System.Drawing.Point(103, 17);
             this.labelWelcomeGlad.Name = "labelWelcomeGlad";
-            this.labelWelcomeGlad.Size = new System.Drawing.Size(237, 13);
+            this.labelWelcomeGlad.Size = new System.Drawing.Size(161, 13);
             this.labelWelcomeGlad.TabIndex = 0;
             this.labelWelcomeGlad.Text = "Are you new to ShipWorks?";
             // 
