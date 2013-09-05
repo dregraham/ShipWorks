@@ -23,9 +23,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize EndicaAccountManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<EndiciaAccountEntity>();
             InternalCheckForChanges();

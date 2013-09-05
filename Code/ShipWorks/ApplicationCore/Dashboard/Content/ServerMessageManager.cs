@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Initialize when a user logs in
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             activeMessages = new List<ServerMessageEntity>();
 

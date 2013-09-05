@@ -18,6 +18,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         static bool needCheckForChanges;
 
         /// <summary>
+        /// Initialize iParcelAccountManager
+        /// </summary>
+        public static void InitializeForCurrentSession()
+        {
+            synchronizer = new TableSynchronizer<IParcelAccountEntity>();
+            InternalCheckForChanges();
+        }
+
+        /// <summary>
         /// Return the active list of i-parcel accounts
         /// </summary>
         public static List<IParcelAccountEntity> Accounts
@@ -34,15 +43,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
                 }
             }
-        }
-
-        /// <summary>
-        /// Initialize when a user logs in
-        /// </summary>
-        public static void InitializeForCurrentUser()
-        {
-            synchronizer = new TableSynchronizer<IParcelAccountEntity>();
-            InternalCheckForChanges();
         }
 
         /// <summary>

@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Profiles
             {
                 MessageHelper.ShowError(this, "Your changes cannot be saved because another use has deleted the profile.");
 
-                ShippingProfileManager.InitializeForCurrentUser();
+                ShippingProfileManager.InitializeForCurrentSession();
                 DialogResult = DialogResult.Abort;
             }
         }

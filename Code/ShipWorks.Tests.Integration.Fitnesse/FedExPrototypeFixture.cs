@@ -82,13 +82,13 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             DataProvider.InitializeForApplication();
             AuditProcessor.InitializeForApplication();
 
-            FedExAccountManager.InitializeForCurrentUser();
+            FedExAccountManager.InitializeForCurrentSession();
             ShippingSettings.InitializeForCurrentDatabase();
-            ShippingProfileManager.InitializeForCurrentUser();
-            ShippingDefaultsRuleManager.InitializeForCurrentUser();
-            ShippingProviderRuleManager.InitializeForCurrentUser();
+            ShippingProfileManager.InitializeForCurrentSession();
+            ShippingDefaultsRuleManager.InitializeForCurrentSession();
+            ShippingProviderRuleManager.InitializeForCurrentSession();
 
-            StoreManager.InitializeForCurrentUser();
+            StoreManager.InitializeForCurrentSession();
 
             UserManager.InitializeForCurrentUser();
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             ShippingManager.InitializeForCurrentDatabase();
             LogSession.Initialize();
 
-            TemplateManager.InitializeForCurrentUser();
+            TemplateManager.InitializeForCurrentSession();
         }
 
         public string FedExAccountNumber { get; set; }

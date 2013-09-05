@@ -21,9 +21,9 @@ namespace ShipWorks.Filters.Search
         static Dictionary<FilterTarget, FilterNodeEntity> searchPlaceholders;
 
         /// <summary>
-        /// Initialize our search stuff for the logged in user
-        /// </summary>
-        public static void InitializeForCurrentUser()
+        /// Initialize our search stuff 
+        /// </summary> 
+        public static void InitializeForCurrentSession()
         {
             searchPlaceholders = new Dictionary<FilterTarget, FilterNodeEntity>();
 

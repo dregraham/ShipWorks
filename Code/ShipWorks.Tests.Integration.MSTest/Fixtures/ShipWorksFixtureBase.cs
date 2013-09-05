@@ -64,11 +64,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
                 AccountManagerInitializeForCurrentUser();
 
                 ShippingSettings.InitializeForCurrentDatabase();
-                ShippingProfileManager.InitializeForCurrentUser();
-                ShippingDefaultsRuleManager.InitializeForCurrentUser();
-                ShippingProviderRuleManager.InitializeForCurrentUser();
+                ShippingProfileManager.InitializeForCurrentSession();
+                ShippingDefaultsRuleManager.InitializeForCurrentSession();
+                ShippingProviderRuleManager.InitializeForCurrentSession();
 
-                StoreManager.InitializeForCurrentUser();
+                StoreManager.InitializeForCurrentSession();
 
                 UserManager.InitializeForCurrentUser();
 
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
                 ShippingManager.InitializeForCurrentDatabase();
                 LogSession.Initialize();
 
-                TemplateManager.InitializeForCurrentUser();
+                TemplateManager.InitializeForCurrentSession();
             }
         }
 

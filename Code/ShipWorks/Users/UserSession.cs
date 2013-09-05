@@ -1,51 +1,45 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Security.Cryptography;
-using System.Xml;
-using Interapptive.Shared;
-using System.IO;
-using System.Xml.XPath;
-using ShipWorks.Data.Adapter.Custom;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Security;
-using ShipWorks.Users.Audit;
+using System.IO;
+using System.Text;
+using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared.Data;
-using ShipWorks.Data.Grid.Columns;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
-using ShipWorks.Stores;
-using ShipWorks.Filters;
-using ShipWorks.Templates;
-using ShipWorks.Templates.Media;
-using ShipWorks.Filters.Search;
-using ShipWorks.Email.Accounts;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.Stores.Communication;
+using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email.Accounts;
+using ShipWorks.FileTransfer;
+using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Filters.Search;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.EquaShip;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Defaults;
+using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Settings.Printing;
-using ShipWorks.Shipping;
-using ShipWorks.FileTransfer;
-using ShipWorks.Shipping.Carriers.EquaShip;
-using ShipWorks.Shipping.Carriers.OnTrac;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Templates;
+using ShipWorks.Templates.Media;
+using ShipWorks.Users.Audit;
+using ShipWorks.Users.Security;
+using log4net;
 
 namespace ShipWorks.Users
 {
@@ -55,22 +49,22 @@ namespace ShipWorks.Users
     public static class UserSession
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(UserSession));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UserSession));
 
         // The currently logged in user and his security context
-        static UserEntity loggedInUser;
-        static SecurityContext securityContext;
+        private static UserEntity loggedInUser;
+        private static SecurityContext securityContext;
 
         // The current running computer
-        static ComputerEntity thisComputer;
+        private static ComputerEntity thisComputer;
 
         // Uniquely identifies the database to which we are connected
-        static string databaseID = null;
+        private static string databaseID = null;
 
         // The username of the last user to successfully logon
-        static string lastUsername = "";
-        static string lastPassword = "";
-        static bool lastRemember;
+        private static string lastUsername = "";
+        private static string lastPassword = "";
+        private static bool lastRemember;
 
         /// <summary>
         /// One-time initialization of the session
@@ -119,47 +113,52 @@ namespace ShipWorks.Users
         /// <summary>
         /// Required initialization that must take place after a user logs in to get various resources and managers ready
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
-            ComputerManager.InitializeForCurrentUser();
-            ServiceStatusManager.InitializeForCurrentUser();
+            ServiceStatusManager.InitializeForCurrentSession();
 
-            ObjectLabelManager.InitializeForCurrentUser();
-
-            if (UserSession.IsLoggedOn)
-                GridColumnDefinitionManager.InitializeForCurrentUser();
-
-            FilterContentManager.InitializeForCurrentUser();
-            ActionManager.InitializeForCurrentUser();
-            FtpAccountManager.InitializeForCurrentUser();
-            StoreManager.InitializeForCurrentUser();
-            TemplateManager.InitializeForCurrentUser();
-            LabelSheetManager.InitializeForCurrentUser();
-            EmailAccountManager.InitializeForCurrentUser();
-            SearchManager.InitializeForCurrentUser();
+            ObjectLabelManager.InitializeForCurrentSession();
 
             if (UserSession.IsLoggedOn)
-                ServerMessageManager.InitializeForCurrentUser();
+            {
+                GridColumnDefinitionManager.InitializeForCurrentSession();
+            }
 
-            DownloadManager.InitializeForCurrentUser();
+            FilterContentManager.InitializeForCurrentSession();
+            ActionManager.InitializeForCurrentSession();
+            FtpAccountManager.InitializeForCurrentSession();
+            StoreManager.InitializeForCurrentSession();
+            TemplateManager.InitializeForCurrentSession();
+            LabelSheetManager.InitializeForCurrentSession();
+            EmailAccountManager.InitializeForCurrentSession();
+            SearchManager.InitializeForCurrentSession();
 
             if (UserSession.IsLoggedOn)
-                FilterLayoutContext.InitializeForCurrentUser();
+            {
+                ServerMessageManager.InitializeForCurrentSession();
+            }
 
-            FilterNodeColumnManager.InitializeForCurrentUser();
-            ShippingOriginManager.InitializeForCurrentUser();
-            StampsAccountManager.InitializeForCurrentUser();
-            EndiciaAccountManager.InitializeForCurrentUser();
-            DimensionsManager.InitializeForCurrentUser();
-            ShippingProfileManager.InitializeForCurrentUser();
-            FedExAccountManager.InitializeForCurrentUser();
-            UpsAccountManager.InitializeForCurrentUser();
-            ShippingDefaultsRuleManager.InitializeForCurrentUser();
-            ShippingPrintOutputManager.InitializeForCurrentUser();
-            ShippingProviderRuleManager.InitializeForCurrentUser();
-            EquaShipAccountManager.InitializeForCurrentUser();
-            OnTracAccountManager.InitializeForCurrentUser();
-            iParcelAccountManager.InitializeForCurrentUser();
+            DownloadManager.InitializeForCurrentSession();
+
+            if (UserSession.IsLoggedOn)
+            {
+                FilterLayoutContext.InitializeForCurrentSession();
+            }
+
+            FilterNodeColumnManager.InitializeForCurrentSession();
+            ShippingOriginManager.InitializeForCurrentSession();
+            StampsAccountManager.InitializeForCurrentSession();
+            EndiciaAccountManager.InitializeForCurrentSession();
+            DimensionsManager.InitializeForCurrentSession();
+            ShippingProfileManager.InitializeForCurrentSession();
+            FedExAccountManager.InitializeForCurrentSession();
+            UpsAccountManager.InitializeForCurrentSession();
+            ShippingDefaultsRuleManager.InitializeForCurrentSession();
+            ShippingPrintOutputManager.InitializeForCurrentSession();
+            ShippingProviderRuleManager.InitializeForCurrentSession();
+            EquaShipAccountManager.InitializeForCurrentSession();
+            OnTracAccountManager.InitializeForCurrentSession();
+            iParcelAccountManager.InitializeForCurrentSession();
         }
 
         /// <summary>
@@ -186,14 +185,14 @@ namespace ShipWorks.Users
         /// </summary>
         public static UserEntity User
         {
-            get 
+            get
             {
                 if (AuditBehaviorScope.IsSuperUserActive)
                 {
                     return SuperUser.Instance;
                 }
 
-                return loggedInUser; 
+                return loggedInUser;
             }
         }
 
@@ -202,14 +201,14 @@ namespace ShipWorks.Users
         /// </summary>
         public static SecurityContext Security
         {
-            get 
+            get
             {
                 if (AuditBehaviorScope.IsSuperUserActive)
                 {
                     return SuperUser.SecurityContext;
                 }
 
-                return securityContext; 
+                return securityContext;
             }
         }
 
@@ -242,8 +241,8 @@ namespace ShipWorks.Users
             {
                 // The basics that we always have to have are the user and computer
                 string basics = string.Format("{0:X5}{1:X5}",
-                    (UserSession.User != null) ? (UserSession.User.UserID - 2) / 1000 : 0,
-                    (UserSession.Computer != null) ? (UserSession.Computer.ComputerID - 1) / 1000 : 0);
+                                              (UserSession.User != null) ? (UserSession.User.UserID - 2)/1000 : 0,
+                                              (UserSession.Computer != null) ? (UserSession.Computer.ComputerID - 1)/1000 : 0);
 
                 // We start with just the basics
                 string workStationID = basics;
@@ -261,9 +260,9 @@ namespace ShipWorks.Users
                     }
 
                     string additional = string.Format("{0}{1:X1}{2}",
-                        auditEnabledFlag, 
-                        (int) AuditReason.ReasonType,
-                        AuditReason.ReasonDetail);
+                                                      auditEnabledFlag,
+                                                      (int)AuditReason.ReasonType,
+                                                      AuditReason.ReasonDetail);
 
                     // SQL Server limits this to a max of 128.  The "- 2" is to make room for our terminator
                     workStationID += StringUtility.Truncate(additional, 128 - workStationID.Length - 2) + "@;";
@@ -278,10 +277,7 @@ namespace ShipWorks.Users
         /// </summary>
         public static string DatabaseID
         {
-            get
-            {
-                return databaseID;
-            }
+            get { return databaseID; }
         }
 
         /// <summary>
@@ -416,7 +412,7 @@ namespace ShipWorks.Users
             {
                 AuditUtility.Audit(AuditActionType.Logoff);
             }
-            // Catch everything here since we may be trying to logoff due to a crash
+                // Catch everything here since we may be trying to logoff due to a crash
             catch (Exception ex)
             {
                 log.Error("Could not audit logoff to database.", ex);
@@ -436,10 +432,7 @@ namespace ShipWorks.Users
         /// </summary>
         public static string LastSuccessfulUsername
         {
-            get
-            {
-                return lastUsername;
-            }
+            get { return lastUsername; }
         }
 
         /// <summary>
@@ -493,18 +486,18 @@ namespace ShipWorks.Users
             {
                 // The guid isnt enough.  They could restore the database to a different path, essentially copying it.  In which
                 // case the guid will be the same, but the path will be different.
-                string targetPhysDb = (string) SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
+                string targetPhysDb = (string)SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
 
                 // Of course, they could also copy the same database, on two different machines, that would have the same path. So to
                 // uniqueify that, we use the machine name.
                 string machineName = SqlSession.Current.GetServerMachineName();
 
                 // Has to be usable in a path, so we replace / with !
-                databaseID = string.Format("{0:B}-{1}", 
-                    systemData.DatabaseID, 
-                    "{" + 
-                    UserUtility.HashPassword(targetPhysDb + machineName).Replace('/', '!') + 
-                    "}");
+                databaseID = string.Format("{0:B}-{1}",
+                                           systemData.DatabaseID,
+                                           "{" +
+                                           UserUtility.HashPassword(targetPhysDb + machineName).Replace('/', '!') +
+                                           "}");
 
                 log.InfoFormat("Acquired DatabaseID: {0}", databaseID);
             }
@@ -515,10 +508,7 @@ namespace ShipWorks.Users
         /// </summary>
         public static string SettingsFilename
         {
-            get
-            {
-                return Path.Combine(DataPath.WindowsUserSettings, "user.xml");
-            }
+            get { return Path.Combine(DataPath.WindowsUserSettings, "user.xml"); }
         }
     }
 }

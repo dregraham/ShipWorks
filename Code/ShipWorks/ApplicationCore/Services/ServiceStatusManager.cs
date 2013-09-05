@@ -53,9 +53,9 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// Initialize when a user logs in
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
-            ComputerManager.InitializeForCurrentUser();
+            ComputerManager.InitializeForCurrentSession();
 
             // Add any missing computers 
             AddMissingComputers();

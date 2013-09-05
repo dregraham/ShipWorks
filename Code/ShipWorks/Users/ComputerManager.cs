@@ -29,7 +29,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// Initialize when a user logs in
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ComputerEntity>();
             InternalCheckForChanges();

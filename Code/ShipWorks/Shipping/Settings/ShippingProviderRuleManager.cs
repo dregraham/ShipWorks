@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Settings
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize ShippingProviderRuleManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingProviderRuleEntity>();
             InternalCheckForChanges();

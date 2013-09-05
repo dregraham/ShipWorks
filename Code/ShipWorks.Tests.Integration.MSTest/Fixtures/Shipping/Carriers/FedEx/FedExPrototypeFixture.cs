@@ -85,13 +85,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 DataProvider.InitializeForApplication();
                 AuditProcessor.InitializeForApplication();
 
-                FedExAccountManager.InitializeForCurrentUser();
+                FedExAccountManager.InitializeForCurrentSession();
                 ShippingSettings.InitializeForCurrentDatabase();
-                ShippingProfileManager.InitializeForCurrentUser();
-                ShippingDefaultsRuleManager.InitializeForCurrentUser();
-                ShippingProviderRuleManager.InitializeForCurrentUser();
+                ShippingProfileManager.InitializeForCurrentSession();
+                ShippingDefaultsRuleManager.InitializeForCurrentSession();
+                ShippingProviderRuleManager.InitializeForCurrentSession();
 
-                StoreManager.InitializeForCurrentUser();
+                StoreManager.InitializeForCurrentSession();
 
                 UserManager.InitializeForCurrentUser();
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 ShippingManager.InitializeForCurrentDatabase();
                 LogSession.Initialize();
 
-                TemplateManager.InitializeForCurrentUser();
+                TemplateManager.InitializeForCurrentSession();
             }
         }
 

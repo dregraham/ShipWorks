@@ -24,8 +24,8 @@ namespace ShipWorks.Tests.Integration.Fitnesse
 
         public override void AccountManagerInitializeForCurrentUser()
         {
-            iParcelAccountManager.InitializeForCurrentUser();
-            ShippingOriginManager.InitializeForCurrentUser();
+            iParcelAccountManager.InitializeForCurrentSession();
+            ShippingOriginManager.InitializeForCurrentSession();
         }
 
         public string TrackByEmail { get; set; }

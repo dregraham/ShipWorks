@@ -683,7 +683,7 @@ namespace ShipWorks
 
             try
             {
-                UserSession.InitializeForCurrentUser();
+                UserSession.InitializeForCurrentSession();
 
                 logonAsyncLoadSuccess = true;
             }
@@ -1054,7 +1054,7 @@ namespace ShipWorks
             gridMenuLayoutProvider.UpdateStoreDependentUI();
 
             // The available columns depend on the store types that exist
-            FilterNodeColumnManager.InitializeForCurrentUser();
+            FilterNodeColumnManager.InitializeForCurrentSession();
             gridControl.ReloadGridColumns();
 
             // Update the panels based on the current store set

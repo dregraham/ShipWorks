@@ -21,9 +21,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize StampsAccountManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<StampsAccountEntity>();
             InternalCheckForChanges();

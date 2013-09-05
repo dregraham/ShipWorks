@@ -51,7 +51,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             maxTimestamp = 0;
             countCache.Clear();

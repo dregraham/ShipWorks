@@ -150,7 +150,7 @@ namespace ShipWorks
 
                 if (reloadColumns)
                 {
-                    FilterNodeColumnManager.InitializeForCurrentUser();
+                    FilterNodeColumnManager.InitializeForCurrentSession();
                     mainForm.gridControl.ReloadGridColumns();
                 }
 

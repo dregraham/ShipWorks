@@ -32,9 +32,9 @@ namespace ShipWorks.Actions
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize table syncronizer
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             tableSynchronizer = new TableSynchronizer<ActionEntity>();
             InternalCheckForChanges();

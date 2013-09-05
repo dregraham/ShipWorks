@@ -34,9 +34,9 @@ namespace ShipWorks.Templates.Media
         }
 
         /// <summary>
-        /// Initialize when a user logs in
-        /// </summary>
-        public static void InitializeForCurrentUser()
+        /// Initialize LabelSheetManager
+        /// </summary> 
+        public static void InitializeForCurrentSession()
         {
             sheetSynchronizer = new TableSynchronizer<LabelSheetEntity>();
             InternalCheckForChanges();
