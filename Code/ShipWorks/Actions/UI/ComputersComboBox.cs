@@ -2,7 +2,6 @@
 using ShipWorks.UI;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -15,10 +14,8 @@ namespace ShipWorks.Actions.UI
     /// <summary>
     /// Shows a list of individually selectable current computers.
     /// </summary>
-    public class ComputersComboBox : PopupComboBox
+    public partial class ComputersComboBox : PopupComboBox
     {
-        FlowLayoutPanel checkBoxPanel;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputersComboBox"/> class.
         /// </summary>
@@ -29,39 +26,17 @@ namespace ShipWorks.Actions.UI
             checkBoxPanel.FlowDirection = FlowDirection.TopDown;
             PopupController = new PopupController(checkBoxPanel);
 
-            if (LicenseManager.UsageMode == LicenseUsageMode.Runtime)
-                BindComputers();
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+            {
+                BindComputers();   
+            }
         }
 
-        private void InitializeComponent()
-        {
-            this.checkBoxPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.SuspendLayout();
-            // 
-            // checkBoxPanel
-            // 
-            this.checkBoxPanel.AutoScroll = true;
-            this.checkBoxPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBoxPanel.Location = new System.Drawing.Point(0, 0);
-            this.checkBoxPanel.Name = "checkBoxPanel";
-            this.checkBoxPanel.Size = new System.Drawing.Size(130, 306);
-            this.checkBoxPanel.TabIndex = 0;
-            this.checkBoxPanel.Visible = false;
-            this.checkBoxPanel.WrapContents = false;
-            // 
-            // ComputersComboBox
-            // 
-            this.Controls.Add(this.checkBoxPanel);
-            this.Name = "ComputerComboPopup";
-            this.Size = new System.Drawing.Size(316, 21);
-            this.ResumeLayout(false);
-
-        }
-
+        /// <summary>
+        /// Add the list of computers to the check box panel
+        /// </summary>
         void BindComputers()
         {
-            ComputerManager.CheckForChangesNeeded();
-
             checkBoxPanel.Controls.Clear();
             checkBoxPanel.Controls.AddRange(
                 ComputerManager.Computers
@@ -85,7 +60,7 @@ namespace ShipWorks.Actions.UI
         /// </summary>
         public void SetSelectedComputers(IEnumerable<ComputerEntity> computers)
         {
-            SetSelectedItems(x => (ComputerEntity)x, computers);
+            SetSelectedItems(computers.Select(x => x.ComputerID));
         }
 
         /// <summary>
@@ -93,35 +68,48 @@ namespace ShipWorks.Actions.UI
         /// </summary>
         public void SetSelectedComputers(IEnumerable<long> computerIDs)
         {
-            SetSelectedItems(x => ((ComputerEntity)x).ComputerID, computerIDs);
+            SetSelectedItems(computerIDs);
         }
 
-
+        /// <summary>
+        /// Gets a list of checkboxes from the controls collection
+        /// </summary>
         IEnumerable<CheckBox> CheckBoxes
         {
             get { return checkBoxPanel.Controls.Cast<CheckBox>(); }
         }
 
+        /// <summary>
+        /// Gets a list of selected checkboxes from the controls collection
+        /// </summary>
         IEnumerable<CheckBox> SelectedCheckBoxes
         {
             get { return CheckBoxes.Where(x => x.Checked); }
         }
 
-
+        /// <summary>
+        /// Gets a list of items associated with the selected checkboxes from the controls collection
+        /// </summary>
         IEnumerable<object> GetSelectedItems()
         {
             return SelectedCheckBoxes.Select(x => x.Tag);
         }
 
-        void SetSelectedItems<TKey>(Func<object, TKey> keySelector, IEnumerable<TKey> keys)
+        /// <summary>
+        /// Checks the checkbox for all the 
+        /// </summary>
+        /// <param name="computerIds"></param>
+        void SetSelectedItems(IEnumerable<long> computerIds)
         {
-            var matches = CheckBoxes.GroupJoin(keys, x => keySelector(x.Tag), x => x, (x, k) => new { CheckBox = x, Matched = k.Any() });
-            foreach (var item in matches)
+            // Create a hash set to avoid multiple enumerations of computerId
+            HashSet<long> computers = new HashSet<long>(computerIds);
+
+            foreach (var checkBox in CheckBoxes)
             {
-                item.CheckBox.Checked = item.Matched;
+                long computerId = ((ComputerEntity) checkBox.Tag).ComputerID;
+                checkBox.Checked = computers.Contains(computerId);
             }
         }
-
 
         /// <summary>
         /// Draws the item that the user has currently selected.

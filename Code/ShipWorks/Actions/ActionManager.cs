@@ -222,7 +222,6 @@ namespace ShipWorks.Actions
         {
             try
             {
-                // The action isn't a scheduled one, so save.
                 adapter.SaveAndRefetch(action);
 
                 CheckForChangesNeeded();
