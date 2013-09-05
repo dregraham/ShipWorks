@@ -48,7 +48,7 @@ namespace ShipWorks.Actions.UI
                 CheckBox checkBox = new CheckBox();
                 checkBox.AutoSize = true;
                 checkBox.Location = location;
-                checkBox.Text = store.StoreName + " " + store.Enabled;
+                checkBox.Text = store.StoreName;
                 checkBox.Location = location;
                 checkBox.Parent = panelStores;
                 checkBox.Tag = store.StoreID;
