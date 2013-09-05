@@ -9,7 +9,7 @@ Albacore.configure do |config|
 	end
 
 	config.mstest do |mstest|
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
+		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
 	end
 end
 
