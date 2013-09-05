@@ -5532,5 +5532,5 @@ ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [IX_ServiceStatus] UNIQUE NONCL
 GO
 ALTER TABLE [dbo].[ServiceStatus] ENABLE CHANGE_TRACKING
 GO
-ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [FK_Scheduler_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
+ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [FK_ServiceStatus_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
 GO

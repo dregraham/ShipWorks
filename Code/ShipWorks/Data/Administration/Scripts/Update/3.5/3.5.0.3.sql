@@ -198,7 +198,7 @@ IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION
 GO
 PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ComputerLimitedList], [Status])
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
