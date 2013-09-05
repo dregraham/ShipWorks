@@ -76,9 +76,8 @@
     <Error Text="ReleaseType is set but CreateInstaller is False"
       Condition=" $(ReleaseType) != 'None' and $(CreateInstaller) != 'True' " />
 
-    <!-- Commented out for now to get build to run locally from command line -->
-    <!--<Error Text="Obfuscate is not True but BuildType is Automated"
-      Condition=" $(Obfuscate) != 'True' and $(BuildType) == 'Automated' " />-->
+    <Error Text="Obfuscate is not True but BuildType is Automated"
+      Condition=" $(Obfuscate) != 'True' and $(BuildType) == 'Automated' and $(ReleaseType) != 'Internal'" />
     
   </Target>
 
