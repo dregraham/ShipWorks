@@ -76,11 +76,10 @@
 		<Error Text="ReleaseType is set but CreateInstaller is False"
 			Condition=" $(ReleaseType) != 'None' and $(CreateInstaller) != 'True' " />
 
-		<!-- Commented out for now to get build to run locally from command line -->
-		<!--<Error Text="Obfuscate is not True but BuildType is Automated"
-			Condition=" $(Obfuscate) != 'True' and $(BuildType) == 'Automated' " />-->
-		
-	</Target>
+    <Error Text="Obfuscate is not True but BuildType is Automated"
+      Condition=" $(Obfuscate) != 'True' and $(BuildType) == 'Automated' and $(ReleaseType) != 'Internal'" />
+    
+  </Target>
 
 	<!-- The assembly info for the shared project shouldn't come from our build label, but its own.  Don't do this for internal releases.  For internal releases we want to keep the 0.0.0.X naming  -->
 	<Target Name="UpdateSharedAssemblyInfo"  Condition=" '$(BuildType)' == 'Automated' and '$(ReleaseType)' != 'Internal' " >
