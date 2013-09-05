@@ -1,4 +1,5 @@
-﻿using Divelements.SandGrid;
+﻿using System.Linq;
+using Divelements.SandGrid;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Data.Grid;
@@ -24,6 +25,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
     public partial class ServiceStatusDialog : Form
     {
         static readonly Guid gridSettingsKey = new Guid("{53EE16A4-9315-4D22-B768-58613546476B}");
+        GridHiddenSortColumn<ServiceStatusEntityGridRow> orderGridPositionSorter = new GridHiddenSortColumn<ServiceStatusEntityGridRow>(r => r.SortIndex);
 
         private int startingServiceChecksRemaining;
 
@@ -46,13 +48,14 @@ namespace ShipWorks.ApplicationCore.Services.UI
             base.OnLoad(e);
             
             startingServicePanel.Visible = false;
-            
-            //Prepare for paging
-            entityGrid.InitializeGrid();
 
             //Prepare configurable columns
-            entityGrid.InitializeColumns(new StandardGridColumnStrategy(gridSettingsKey, GridColumnDefinitionSet.ServiceStatus, InitializeDefaultGridLayout));
+            entityGrid.InitializeColumns(new StandardGridColumnStrategy(gridSettingsKey, 
+                GridColumnDefinitionSet.ServiceStatus,
+                InitializeDefaultGridLayout,
+                new List<GridColumn> { orderGridPositionSorter }));
             entityGrid.SaveColumnsOnClose(this);
+            entityGrid.SortChanged += OnEntityGridSortChanged;
 
             entityGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
             entityGrid.RowHighlightType = RowHighlightType.None;
@@ -62,6 +65,14 @@ namespace ShipWorks.ApplicationCore.Services.UI
             dataRefreshTimer.Start();
 
             entityGrid.GridCellLinkClicked += OnGridCellLinkClicked;
+        }
+
+        /// <summary>
+        /// Sorting of the entity grid has changed
+        /// </summary>
+        private void OnEntityGridSortChanged(object sender, GridEventArgs gridEventArgs)
+        {
+            ApplySecondarySort();
         }
 
         /// <summary>
@@ -86,12 +97,17 @@ namespace ShipWorks.ApplicationCore.Services.UI
         /// </summary>
         private void LoadData()
         {
-            ServiceStatusManager.CheckForChangesNeeded();
-
             List<ServiceStatusEntity> entities = ServiceStatusManager.GetComputersRequiringShipWorksService();
-            LocalCollectionEntityGateway<ServiceStatusEntity> requiredServicesGateway = new LocalCollectionEntityGateway<ServiceStatusEntity>(entities);
 
-            entityGrid.OpenGateway(requiredServicesGateway);
+            entityGrid.Rows.Clear();
+            int secondarySortIndex = 0;
+
+            foreach (ServiceStatusEntity serviceStatus in entities)
+            {
+                entityGrid.Rows.Add(new ServiceStatusEntityGridRow(serviceStatus, secondarySortIndex++));
+            }
+
+            ApplySort();
 
             // If a service is starting, see if it has started successfully
             if (startingServiceChecksRemaining > 0)
@@ -111,6 +127,39 @@ namespace ShipWorks.ApplicationCore.Services.UI
                     MessageBox.Show("The service was not able to start.", "ShipWorks", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        /// <summary>
+        /// Apply the sort, adding the computer name column to stop grid rows from moving when the data is reloaded
+        /// </summary>
+        private void ApplySort()
+        {
+            entityGrid.PrimaryGrid.SetSort(
+                new[] { entityGrid.SortColumn }, 
+                new[] { entityGrid.SortDirection });
+        }
+
+        /// <summary>
+        /// Apply the secondary sort on the hidden order column, if necesaary
+        /// </summary>
+        private void ApplySecondarySort()
+        {
+            if (entityGrid.SortColumn == null)
+            {
+                return;
+            }
+
+            List<GridColumn> sortColumns = entityGrid.Columns.Cast<GridColumn>().Where(c => c.SortOrder != SortOrder.None).ToList();
+
+            if (sortColumns.Contains(orderGridPositionSorter))
+            {
+                return;
+            }
+
+            // After the primary sort, then sort by order number, and within an order, the shipment number
+            entityGrid.PrimaryGrid.SetSort(
+               new[] { sortColumns[0], orderGridPositionSorter },
+               new[] { entityGrid.SortDirection, ListSortDirection.Ascending });
         }
 
         /// <summary>
@@ -142,7 +191,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
         /// Set up the default grid layout
         /// </summary>
         /// <param name="layout"></param>
-        void InitializeDefaultGridLayout(GridColumnLayout layout)
+        private void InitializeDefaultGridLayout(GridColumnLayout layout)
         {
             layout.DefaultSortColumnGuid = ServiceStatusColumnDefinitionFactory.CreateDefinitions()[ServiceStatusFields.ComputerID].ColumnGuid;
             layout.DefaultSortOrder = ListSortDirection.Ascending;

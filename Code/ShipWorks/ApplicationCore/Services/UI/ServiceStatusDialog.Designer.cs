@@ -36,7 +36,7 @@
             this.startingServicePanel = new System.Windows.Forms.Panel();
             this.startingServiceImage = new System.Windows.Forms.PictureBox();
             this.startingServiceLabel = new System.Windows.Forms.Label();
-            this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
+            this.entityGrid = new ShipWorks.Data.Grid.EntityGrid();
             this.dataRefreshTimer = new System.Windows.Forms.Timer(this.components);
             closeButton = new System.Windows.Forms.Button();
             labelHeader = new System.Windows.Forms.Label();
@@ -153,7 +153,7 @@
         private System.Windows.Forms.Panel startingServicePanel;
         private System.Windows.Forms.Label startingServiceLabel;
         private System.Windows.Forms.PictureBox startingServiceImage;
-        private Data.Grid.Paging.PagedEntityGrid entityGrid;
+        private Data.Grid.EntityGrid entityGrid;
         private System.Windows.Forms.Timer dataRefreshTimer;
     }
 }
