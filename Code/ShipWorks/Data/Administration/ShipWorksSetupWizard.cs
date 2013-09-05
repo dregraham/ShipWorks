@@ -258,7 +258,15 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void CreateDatabase()
         {
-            sqlSession.Configuration.CopyFrom(SqlInstanceUtility.DetermineCredentials(SqlInstanceUtility.AutomaticServerInstance));
+            string automaticInstance = SqlInstanceUtility.AutomaticServerInstance;
+
+            SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(automaticInstance);
+            if (configuration == null)
+            {
+                throw new SqlScriptException(string.Format("Could not connect to '{0}' with the expected credentials.", automaticInstance));
+            }
+
+            sqlSession.Configuration.CopyFrom(configuration);
             sqlSession.Configuration.DatabaseName = "";
 
             try
