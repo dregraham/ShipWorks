@@ -247,7 +247,19 @@ namespace ShipWorks.Actions
                     sb.Append(", ");
                 }
 
-                sb.Append(ActionTaskManager.GetDescriptor(task.GetType()).Identifier);
+                var binding = ActionTaskManager.GetBinding(task);
+
+                sb.Append(binding.Identifier);
+
+                if (binding.StoreTypeCode != null)
+                {
+                    sb.AppendFormat(":{0}", (int) binding.StoreTypeCode);
+                }
+
+                if (binding.StoreID != null)
+                {
+                    sb.AppendFormat(":{0}", (long) binding.StoreID);
+                }
             }
 
             return sb.ToString();
