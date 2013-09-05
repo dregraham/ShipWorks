@@ -1,11 +1,10 @@
-﻿using Interapptive.Shared.UI;
-using ShipWorks.Actions;
-using ShipWorks.Actions.Scheduling;
-using ShipWorks.ApplicationCore.Enums;
-using ShipWorks.Data.Utility;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Timers;
+using Interapptive.Shared.UI;
+using ShipWorks.Actions.Scheduling;
+using ShipWorks.ApplicationCore.Enums;
 using Timer = System.Timers.Timer;
 
 namespace ShipWorks.ApplicationCore.Services
@@ -17,10 +16,10 @@ namespace ShipWorks.ApplicationCore.Services
     [System.ComponentModel.DesignerCategory("Component")]
     public partial class ShipWorksSchedulerService : ShipWorksServiceBase
     {
-        IScheduler scheduler;
-        CancellationTokenSource canceller;
+        private IScheduler scheduler;
+        private CancellationTokenSource canceller;
 
-        readonly Timer timer = new Timer();
+        private readonly Timer timer = new Timer();
 
         private Heartbeat _heartbeat;
 
@@ -38,14 +37,8 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public IScheduler Scheduler
         {
-            get
-            {
-                return scheduler ?? (scheduler = new Scheduler());
-            }
-            set
-            {
-                scheduler = value;
-            }
+            get { return scheduler ?? (scheduler = new Scheduler()); }
+            set { scheduler = value; }
         }
 
         /// <summary>
@@ -88,9 +81,9 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private void OnTimerInterval(object source, ElapsedEventArgs args)
         {
-            // Switch to checking every 2 seconds
-            timer.Interval = 2000;
-            
+            // Switch to checking every 15 seconds
+            timer.Interval = (int)TimeSpan.FromSeconds(15).TotalMilliseconds;
+
             _heartbeat.DoHeartbeat(HeartbeatOptions.None);
         }
     }
