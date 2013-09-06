@@ -260,7 +260,6 @@ CREATE TABLE [dbo].[ActionFilterTrigger]
 [ActionID] [bigint] NOT NULL,
 [FilterNodeID] [bigint] NOT NULL,
 [Direction] [int] NOT NULL,
-[ComputerLimited] [bit] NOT NULL,
 [ComputerLimitedType] [int] NOT NULL,
 [ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
