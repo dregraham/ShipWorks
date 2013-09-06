@@ -80,6 +80,7 @@ namespace ShipWorks.Actions.UI
         /// </summary>
         /// <value>The selected stores.</value>
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IEnumerable<long> SelectedStoreIDs
         {
             get

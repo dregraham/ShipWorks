@@ -70,7 +70,12 @@ namespace ShipWorks.Actions.Tasks.Common
         /// It would probably be worth looking into having a separate Password class to manage this at
         /// some point to avoid having to maintain the separate states...
         /// </summary>
-        public string EncryptedPassword { get; private set; }       
+        public string EncryptedPassword { get; private set; }
+
+        /// <summary>
+        /// Indicates if the HTTP headers that have been configured should be included in the request
+        /// </summary>
+        public bool IncludeCustomHttpHeaders { get; set; }
 
         /// <summary>
         /// Gets or sets the HTTP headers.
@@ -90,7 +95,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get { return "Using:"; }
+            get { return "Send the request using:"; }
         }
 
         /// <summary>
@@ -302,16 +307,19 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
             }
 
-            foreach (KeyValuePair<string, string> header in HttpHeaders)
+            if (IncludeCustomHttpHeaders)
             {
-                try
+                foreach (KeyValuePair<string, string> header in HttpHeaders)
                 {
-                    request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
-                }
-                catch (ArgumentException ex)
-                {
-                    log.Error("Error adding header in WebRequestTask", ex);
-                    throw new ActionTaskRunException("Invalid header for WebRequest task.", ex);
+                    try
+                    {
+                        request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        log.Error("Error adding header in WebRequestTask", ex);
+                        throw new ActionTaskRunException("Invalid header for WebRequest task.", ex);
+                    }
                 }
             }
         }

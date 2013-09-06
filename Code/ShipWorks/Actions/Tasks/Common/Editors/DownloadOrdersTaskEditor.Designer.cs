@@ -43,7 +43,7 @@
             // 
             // storeCheckBoxPanel
             // 
-            this.storeCheckBoxPanel.Location = new System.Drawing.Point(14, 17);
+            this.storeCheckBoxPanel.Location = new System.Drawing.Point(14, 21);
             this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
             this.storeCheckBoxPanel.Size = new System.Drawing.Size(335, 57);
             this.storeCheckBoxPanel.TabIndex = 1;
