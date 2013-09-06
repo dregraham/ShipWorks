@@ -69,7 +69,7 @@
             // templateCombo
             // 
             this.templateCombo.Location = new System.Drawing.Point(160, 30);
-            this.templateCombo.Size = new System.Drawing.Size(283, 21);
+            this.templateCombo.Size = new System.Drawing.Size(271, 21);
             this.templateCombo.TabIndex = 20;
             // 
             // requestUrlPanel
@@ -257,7 +257,7 @@
             this.comboVerb.FormattingEnabled = true;
             this.comboVerb.Location = new System.Drawing.Point(370, 1);
             this.comboVerb.Name = "comboVerb";
-            this.comboVerb.Size = new System.Drawing.Size(73, 21);
+            this.comboVerb.Size = new System.Drawing.Size(61, 21);
             this.comboVerb.TabIndex = 33;
             // 
             // comboCardinality
