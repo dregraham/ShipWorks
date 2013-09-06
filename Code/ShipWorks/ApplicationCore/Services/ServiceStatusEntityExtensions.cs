@@ -1,8 +1,10 @@
-﻿using ShipWorks.Actions;
+﻿using System.Collections.Generic;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Linq;
+using ShipWorks.Users;
 
 
 namespace ShipWorks.ApplicationCore.Services
@@ -16,57 +18,29 @@ namespace ShipWorks.ApplicationCore.Services
         /// <returns>The service status.</returns>
         public static ServiceStatus GetStatus(this ServiceStatusEntity instance)
         {
-            if (null == instance)
-                throw new ArgumentNullException("instance");
-
-            if (!instance.LastStartDateTime.HasValue)
-                return ServiceStatus.NeverStarted;
-
-            if (
-                instance.LastStopDateTime.HasValue &&
-                instance.LastStopDateTime > instance.LastStartDateTime
-            )
-                return ServiceStatus.Stopped;
-
-            if (
-                !instance.LastCheckInDateTime.HasValue ||
-                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan)
-            )
-                return ServiceStatus.NotResponding;
-
-            return ServiceStatus.Running;
-        }
-
-        /// <summary>
-        /// Determines whether the service is required to be running.  This may be based on the current
-        /// system state and thus can change based on external factors, so do not cache the result.
-        /// </summary>
-        /// <param name="instance">The service instance.</param>
-        /// <returns>true if the service is required; otherwise false.</returns>
-        public static bool IsRequiredToRun(this ServiceStatusEntity instance)
-        {
-            if (null == instance)
-                throw new ArgumentNullException("instance");
-
-            if (instance.ServiceType == (int)ShipWorksServiceType.Scheduler)
+            if (instance == null)
             {
-                bool noOtherSchedulersAreRunning = ServiceStatusManager.ServicesStatuses
-                    .Where(s => s.ServiceType == (int)ShipWorksServiceType.Scheduler && !s.Equals(instance))
-                    .All(s => s.GetStatus() != ServiceStatus.Running);
-
-                var unrunnableActions = ActionManager.Actions
-                    .Where(a =>
-                        a.TriggerType == (int)ActionTriggerType.Scheduled &&
-                        a.Enabled && (
-                            (a.ComputerLimitedType == (int)ComputerLimitationType.None && noOtherSchedulersAreRunning) ||
-                            (a.ComputerLimitedType == (int)ComputerLimitationType.NamedList && a.ComputerLimitedList.Contains(instance.ComputerID))
-                        )
-                    );
-
-                return unrunnableActions.Any();
+                throw new ArgumentNullException("instance");
             }
 
-            return false;
+            if (!instance.LastStartDateTime.HasValue)
+            {
+                return ServiceStatus.NeverStarted;
+            }
+
+            if (instance.LastStopDateTime.HasValue &&
+                instance.LastStopDateTime > instance.LastStartDateTime)
+            {
+                return ServiceStatus.Stopped;
+            }
+
+            if (!instance.LastCheckInDateTime.HasValue || 
+                instance.LastCheckInDateTime.Value <= DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan))
+            {
+                return ServiceStatus.NotResponding;
+            }
+
+            return ServiceStatus.Running;
         }
     }
 }

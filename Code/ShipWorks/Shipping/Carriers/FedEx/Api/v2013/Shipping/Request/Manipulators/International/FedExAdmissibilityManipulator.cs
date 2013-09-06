@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator for modifying the packaging properties of
-    /// the package line items in the FedEx ProcessShipmentRequest object.
+    /// the package line items in the FedEx IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExAdmissibilityManipulator : FedExShippingRequestManipulatorBase
     {
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             if (request.ShipmentEntity.ShipCountryCode == "CA")
             {
@@ -97,8 +97,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Scheduling.QuartzNet;
 using System.Threading.Tasks;
 using System.Threading;
@@ -43,9 +44,9 @@ namespace ShipWorks.Actions.Scheduling
             if (!schedulingEngine.HasExistingSchedule(action))
             {
                 // New jobs/actions cannot be scheduled to occur in the past
-                if (schedule.StartDateTimeInUtc <= DateTime.UtcNow)
+                if (schedule.StartDateTimeInUtc <= DateTime.UtcNow && schedule.ScheduleType == ActionScheduleType.OneTime)
                 {
-                    throw new SchedulingException("The start date must be in the future when scheduling a new action.");
+                    throw new SchedulingException("The start date must be in the future when scheduling a one time action.");
                 }
             }
 

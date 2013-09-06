@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
     /// <summary>
     /// Task for promoting an online MarketplaceAdvisor parcel
     /// </summary>
-    [ActionTask("Promote parcel", "MarketplaceAdvisorPromoteParcel")]
+    [ActionTask("Promote parcel", "MarketplaceAdvisorPromoteParcel", ActionTaskCategory.UpdateOnline)]
     public class MarketplaceAdvisorPromoteParcelTask : StoreInstanceTaskBase
     {
         /// <summary>

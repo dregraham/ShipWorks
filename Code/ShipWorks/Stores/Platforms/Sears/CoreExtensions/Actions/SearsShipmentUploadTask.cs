@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to Sears
     /// </summary>
-    [ActionTask("Upload shipment details", "SearsShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "SearsShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class SearsShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

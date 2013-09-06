@@ -33,6 +33,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Stores;
 using log4net;
 using log4net.Repository.Hierarchy;
+using System.Globalization;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -147,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.CustomsDocumentsOnly = false;
             shipment.Ups.CustomsDescription = "Goods";
 
-            shipment.Ups.CommercialInvoice = false;
+            shipment.Ups.CommercialPaperlessInvoice = false;
             shipment.Ups.CommercialInvoiceTermsOfSale = (int) UpsTermsOfSale.NotSpecified;
             shipment.Ups.CommercialInvoicePurpose = (int) UpsExportReason.Sale;
             shipment.Ups.CommercialInvoiceComments = "";
@@ -165,7 +166,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.Endorsement = 0;
             shipment.Ups.Subclassification = 0;
 
-            shipment.Ups.PaperlessInternational = false;
+            shipment.Ups.PaperlessAdditionalDocumentation = false;
             shipment.Ups.ShipperRelease = false;
             shipment.Ups.CarbonNeutral = false;
 
@@ -278,7 +279,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.Subclassification = 0;
 
             profile.Ups.ShipperRelease = false;
-            profile.Ups.PaperlessInternational = false;
+            profile.Ups.CommercialPaperlessInvoice = false;
+            profile.Ups.PaperlessAdditionalDocumentation = false;
             profile.Ups.CarbonNeutral = false;
         }
 
@@ -335,6 +337,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, UpsPackageFields.DimsWeight);
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, UpsPackageFields.DimsAddWeight);
                 }
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.AdditionalHandlingEnabled, package, UpsPackageFields.AdditionalHandlingEnabled);
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceEnabled, package, UpsPackageFields.DryIceEnabled);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceIsForMedicalUse, package, UpsPackageFields.DryIceIsForMedicalUse);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceRegulationSet, package, UpsPackageFields.DryIceRegulationSet);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DryIceWeight, package, UpsPackageFields.DryIceWeight);
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationEnabled, package, UpsPackageFields.VerbalConfirmationEnabled);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationName, package, UpsPackageFields.VerbalConfirmationName);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhone, package, UpsPackageFields.VerbalConfirmationPhone);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.VerbalConfirmationPhoneExtension, package, UpsPackageFields.VerbalConfirmationPhoneExtension);
             }
 
             // Remove any packages that are too many for the profile
@@ -398,7 +412,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.Subclassification, ups, UpsShipmentFields.Subclassification);
             ShippingProfileUtility.ApplyProfileValue(source.Endorsement, ups, UpsShipmentFields.Endorsement);
 
-            ShippingProfileUtility.ApplyProfileValue(source.PaperlessInternational, ups, UpsShipmentFields.PaperlessInternational);
+            ShippingProfileUtility.ApplyProfileValue(source.PaperlessAdditionalDocumentation, ups, UpsShipmentFields.PaperlessAdditionalDocumentation);
+            ShippingProfileUtility.ApplyProfileValue(source.CommercialPaperlessInvoice, ups, UpsShipmentFields.CommercialPaperlessInvoice);
             ShippingProfileUtility.ApplyProfileValue(source.ShipperRelease, ups, UpsShipmentFields.ShipperRelease);
             ShippingProfileUtility.ApplyProfileValue(source.CarbonNeutral, ups, UpsShipmentFields.CarbonNeutral);
 
@@ -689,7 +704,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                         RateResult rateResult = new RateResult(
                             (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
-                            GetServiceTransitDays(service, transitTimes), 
+                            GetServiceTransitDays(service, transitTimes) + " " + GetServiceEstimatedArrivalTime(service, transitTimes), 
                             serviceRate.Amount,
                             service);
 
@@ -737,12 +752,32 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             if (transitTime != null)
             {
-                return ((int) (transitTime.ArrivalDate.Date - DateTime.Now.Date).TotalDays).ToString();
+                return ((int) (transitTime.ArrivalDate.Date - DateTime.Now.Date).TotalDays).ToString(CultureInfo.InvariantCulture);
             }
             else
             {
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Gets the service estimated arrival time for the given service type if it's available.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <param name="transitTimes">The transit times.</param>
+        /// <returns>A string value of the arrival time in the format of "DayOfWeek h:mm tt" (e.g. Friday 4:00 PM)</returns>
+        private string GetServiceEstimatedArrivalTime(UpsServiceType service, List<UpsTransitTime> transitTimes)
+        {
+            UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
+            string arrivalInfo = string.Empty;
+
+            if (transitTime != null)
+            {
+                DateTime localArrival = transitTime.ArrivalDate.ToLocalTime();
+                arrivalInfo = string.Format("({0} {1})", localArrival.DayOfWeek.ToString(), localArrival.ToString("h:mm tt"));
+            }
+
+            return arrivalInfo;
         }
 
         /// <summary>

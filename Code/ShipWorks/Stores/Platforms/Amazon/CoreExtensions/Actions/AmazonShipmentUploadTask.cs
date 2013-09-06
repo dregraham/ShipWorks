@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment detials to Amazon
     /// </summary>
-    [ActionTask("Upload shipment details", "AmazonShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "AmazonShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class AmazonShipmentUploadTask : StoreInstanceTaskBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonShipmentUploadTask));

@@ -44,16 +44,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 return;
             }
 
-            ProcessShipmentRequest nativeRequest = InitializeShipmentRequest(request);
+            IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request);
 
             FedExReturnType returnType = (FedExReturnType) request.ShipmentEntity.FedEx.ReturnType;
 
-            ShipmentSpecialServiceType[] shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
-            Array.Resize(ref shipmentSpecialServiceTypes, shipmentSpecialServiceTypes.Length + 1);
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes;
-
-            shipmentSpecialServiceTypes[shipmentSpecialServiceTypes.Length - 1] = ShipmentSpecialServiceType.RETURN_SHIPMENT;
-
+            // Get current list of ShipmentSpecialServiceTypes. This will be added back later in the function as there might be more
+            // ServiceTypes to conditionally add.
+            List<ShipmentSpecialServiceType> shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
+            shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.RETURN_SHIPMENT);
+            
             // Add Return Detail
             nativeRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail = new ReturnShipmentDetail();
 
@@ -61,11 +60,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             if (returnType == FedExReturnType.EmailReturnLabel)
             {
                 nativeRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType = ReturnType.PENDING;
+                shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.PENDING_SHIPMENT);
             }
             else
             {
                 nativeRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType = ReturnType.PRINT_RETURN_LABEL;
             }
+
+            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes.ToArray();
 
             // RMA Reason
             if (!string.IsNullOrWhiteSpace(request.ShipmentEntity.FedEx.RmaReason))
@@ -109,6 +111,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 {
                     Type = PendingShipmentType.EMAIL,
                     ExpirationDate = DateTime.Today.AddDays(30),
+                    ExpirationDateSpecified = true,
                     EmailLabelDetail = new EMailLabelDetail
                     {
                         NotificationEMailAddress = request.ShipmentEntity.ShipEmail
@@ -122,10 +125,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// </summary>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private ProcessShipmentRequest InitializeShipmentRequest(CarrierRequest request)
+        private IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request)
         {
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

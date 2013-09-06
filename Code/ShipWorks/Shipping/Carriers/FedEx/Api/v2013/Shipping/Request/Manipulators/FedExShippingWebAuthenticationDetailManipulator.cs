@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         }
 
         /// <summary>
-        /// Manipulates the specified request by setting the WebAuthenticationDetail property of a ProcessShipmentRequest object.
+        /// Manipulates the specified request by setting the WebAuthenticationDetail property of a IFedExNativeShipmentRequest object.
         /// </summary>
         /// <param name="request">The request being manipulated.</param>
         public override void Manipulate(CarrierRequest request)
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             ValidateRequest(request);
 
             // We can safely cast this since we've passed validation
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             nativeRequest.WebAuthenticationDetail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(FedExSettings);
         }
@@ -51,8 +51,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

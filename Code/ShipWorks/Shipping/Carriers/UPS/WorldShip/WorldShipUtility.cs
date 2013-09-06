@@ -104,6 +104,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // Reference
                 UpdateReferenceNumbers(shipment);
 
+                // All packages with dry ice must have the same regulation set, so verify that.
+                bool tooManyDryIceRegulations = shipment.Ups.Packages
+                                                    .Where(p => p.DryIceEnabled)
+                                                    .Select(p => p.DryIceRegulationSet)
+                                                    .Distinct()
+                                                    .Count() > 1;
+                if (tooManyDryIceRegulations)
+                {
+                    throw new UpsException("All packages containing dry ice must have the same dry ice regulation set.");
+                }
+
                 // Save the packages
                 foreach (UpsPackageEntity package in shipment.Ups.Packages)
                 {
@@ -293,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             // International Invoice
-            if (!isDomestic && ups.CommercialInvoice)
+            if (!isDomestic && ups.CommercialPaperlessInvoice)
             {
                 worldship.InvoiceTermsOfSale = UpsApiShipClient.GetTermsOfShipmentApiCode((UpsTermsOfSale) ups.CommercialInvoiceTermsOfSale);
                 worldship.InvoiceReasonForExport = GetReasonForExportCode((UpsExportReason) ups.CommercialInvoicePurpose);
@@ -619,6 +630,67 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             worldshipPackage.ShipperRelease = ups.ShipperRelease ? "Y" : "N";
+
+            worldshipPackage.AdditionalHandlingEnabled = package.AdditionalHandlingEnabled ? "Y" : "N";
+
+
+            // Add dry ice if enabled
+            if (package.DryIceEnabled)
+            {
+                // Verbal confirmation is not allowed with dry ice
+                if (package.VerbalConfirmationEnabled)
+                {
+                    throw new UpsException("Dry ice and verbal confirmation are not allowed on the same package.");
+                }
+
+                // Additional handling is not allowed with dry ice
+                if (package.AdditionalHandlingEnabled)
+                {
+                    throw new UpsException("Dry ice and additional handling are not allowed on the same package.");
+                }
+
+                worldshipPackage.DryIceWeight = package.DryIceWeight;
+                if (upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Ounces)
+                {
+                    worldshipPackage.DryIceWeight = worldshipPackage.DryIceWeight * 16;
+                }
+
+                if (worldshipPackage.DryIceWeight > weight)
+                {
+                    throw new UpsException("Dry ice weight must be less than the package weight.");
+                }
+
+                UpsDryIceRegulationSet upsDryIceRegulationSet = (UpsDryIceRegulationSet) package.DryIceRegulationSet;
+                switch (upsDryIceRegulationSet)
+                {
+                    case UpsDryIceRegulationSet.Cfr:
+                        worldshipPackage.DryIceRegulationSet = "49CFR";
+                        break;
+                    case UpsDryIceRegulationSet.Iata:
+                        worldshipPackage.DryIceRegulationSet = "IATA";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(string.Format("The dry ice regulation set '{0}' is unknown.", EnumHelper.GetDescription(upsDryIceRegulationSet)));
+                }
+
+                worldshipPackage.DryIceWeightUnitOfMeasure = "LBS";
+                worldshipPackage.DryIceOption = "Y";
+                worldshipPackage.DryIceMedicalPurpose = package.DryIceIsForMedicalUse ? "Y" : "N";
+            }
+
+            // Add verbal confirmation if enabled
+            if (package.VerbalConfirmationEnabled)
+            {
+                worldshipPackage.VerbalConfirmationOption = "Y";
+                worldshipPackage.VerbalConfirmationContactName = package.VerbalConfirmationName;
+                
+                // WorldShip imports correctly when all non-numerics are removed from the concatenated phone number.
+                Regex onlyNumbers = new Regex("[^.0-9]");
+                string worldShipPhone = onlyNumbers.Replace(package.VerbalConfirmationPhone, string.Empty);
+                worldShipPhone += onlyNumbers.Replace(package.VerbalConfirmationPhoneExtension, string.Empty);
+
+                worldshipPackage.VerbalConfirmationTelephone = worldShipPhone;
+            }
 
             adapter.SaveAndRefetch(worldshipPackage);
         }

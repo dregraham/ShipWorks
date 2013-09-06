@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that manipulates the shipping charges
-    /// of a ProcessShipmentRequest object.
+    /// of a IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExShippingChargesManipulator : FedExShippingRequestManipulatorBase
     {
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization 
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             // Use the the FedEx account information associated with the request to populate 
             // the payment account and country code
@@ -130,8 +130,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

@@ -508,7 +508,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncComputer(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", ServiceStatusEntity.Relations.ComputerEntityUsingComputerID, true, signalRelatedEntity, "ServiceStatuses", resetFKFields, new int[] { (int)ServiceStatusFieldIndex.ComputerID } );		
+			base.PerformDesetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", ServiceStatusEntity.Relations.ComputerEntityUsingComputerID, true, signalRelatedEntity, "ServiceStatus", resetFKFields, new int[] { (int)ServiceStatusFieldIndex.ComputerID } );		
 			_computer = null;
 		}
 
@@ -730,14 +730,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_computer != null)
 						{
-							_computer.UnsetRelatedEntity(this, "ServiceStatuses");
+							_computer.UnsetRelatedEntity(this, "ServiceStatus");
 						}
 					}
 					else
 					{
 						if(_computer!=value)
 						{
-							((IEntity2)value).SetRelatedEntity(this, "ServiceStatuses");
+							((IEntity2)value).SetRelatedEntity(this, "ServiceStatus");
 						}
 					}
 				}

@@ -22,6 +22,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Void.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Void.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
 {
@@ -110,7 +112,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
                 new FedExInternationalControlledExportManipulator()
             };
 
-            return new FedExShipRequest(manipulators, shipmentEntity, fedExService, responseFactory, settingsRepository);
+            IFedExNativeShipmentRequest nativeShipmentRequest;
+
+            if (shipmentEntity.ReturnShipment && ((FedExReturnType)shipmentEntity.FedEx.ReturnType) == FedExReturnType.EmailReturnLabel)
+            {
+                nativeShipmentRequest = new CreatePendingShipmentRequest();
+            }
+            else
+            {
+                nativeShipmentRequest = new ProcessShipmentRequest();
+            }
+
+            return new FedExShipRequest(manipulators, shipmentEntity, fedExService, responseFactory, settingsRepository, nativeShipmentRequest);
         }
 
         /// <summary>

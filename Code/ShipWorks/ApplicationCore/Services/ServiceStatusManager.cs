@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using ShipWorks.Actions;
+using ShipWorks.Actions.Triggers;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -97,14 +99,14 @@ namespace ShipWorks.ApplicationCore.Services
             int numberOfServiceTypes = Enum.GetNames(typeof(ShipWorksServiceType)).Length;
 
             // Find computers that are missing ServiceStatus entries
-            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatuses == null || c.ServiceStatuses.Count != numberOfServiceTypes))
+            foreach (ComputerEntity computer in ComputerManager.Computers.Where(c => c.ServiceStatus == null || c.ServiceStatus.Count != numberOfServiceTypes))
             {
                 // For each ShipWorksServiceType, if the computer does have an entry for it, add it.
                 foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
                 {
-                    if (computer.ServiceStatuses == null ||
-                        computer.ServiceStatuses.Count == 0 ||
-                        computer.ServiceStatuses.All(ws => ws.ServiceType != (int)serviceType))
+                    if (computer.ServiceStatus == null ||
+                        computer.ServiceStatus.Count == 0 ||
+                        computer.ServiceStatus.All(ws => ws.ServiceType != (int)serviceType))
                     {
                         ServiceStatusEntity serviceStatus = new ServiceStatusEntity
                             {
@@ -152,6 +154,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static ServiceStatusEntity GetServiceStatus(long computerID, ShipWorksServiceType serviceType)
         {
+            CheckForChangesNeeded();
             return ServicesStatuses.SingleOrDefault(a => a.ComputerID == computerID && a.ServiceType == (int)serviceType);
         }
 
@@ -222,6 +225,46 @@ namespace ShipWorks.ApplicationCore.Services
             log.InfoFormat("Service '{0}' checking in at {1}", serviceStatus.ServiceDisplayName, serviceStatus.LastCheckInDateTime);
 
             SaveServiceStatus(serviceStatus);
+        }
+
+        /// <summary>
+        /// Gets a list of the minimum required computers that need to have ShipWorks running 
+        /// as a service based on the actions currently configured in the system.
+        /// </summary>
+        /// <returns>A list of ServiceStatusEntity objects representing the computers that
+        /// need to have the ShipWorks service running.</returns>
+        public static List<ServiceStatusEntity> GetComputersRequiringShipWorksService()
+        {
+            // Force a db check since the service is running in another process and our local cache will not be updated.
+            ServiceStatusManager.CheckForChangesNeeded();
+
+            List<ActionEntity> allScheduledActions = ActionManager.Actions.Where(a => a.TriggerType == (int)ActionTriggerType.Scheduled).ToList();
+            List<ServiceStatusEntity> allServices = new List<ServiceStatusEntity>(ServiceStatusManager.ServicesStatuses);
+
+            List<long> requiredComputerIDs = new List<long>();
+
+            if (allScheduledActions.Any())
+            {
+                // Find the list of required Computers for actions that specify a named list of computers
+                foreach (ActionEntity action in allScheduledActions.Where(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitationType.NamedList))
+                {
+                    if (allServices.Where(s => action.ComputerLimitedList.Contains(s.ComputerID)).All(s => s.GetStatus() != ServiceStatus.Running))
+                    {
+                        // Only add computers if none of the named computers are running the service
+                        requiredComputerIDs.AddRange(action.ComputerLimitedList);
+                    }
+                }
+
+                if (allScheduledActions.Any(a => a.Enabled && a.ComputerLimitedType == (int)ComputerLimitationType.None) && allServices.All(s => s.GetStatus() != ServiceStatus.Running))
+                {
+                    // When there are scheduled action configured to run on any computer, but there aren't any computers 
+                    // running the service, only add the user's computer to the list
+                    requiredComputerIDs.Add(UserSession.Computer.ComputerID);
+                }
+            }
+
+            allServices.ForEach(s => s.Computer = ComputerManager.Computers.FirstOrDefault(c => c.ComputerID == s.ComputerID));
+            return allServices.Where(s => requiredComputerIDs.Contains(s.ComputerID)).ToList();
         }
     }
 }

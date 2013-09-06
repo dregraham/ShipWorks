@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
-        /// Process the given xmldocument api response
+        /// Process the given API response in the XML document.
         /// </summary>
         private static List<UpsTransitTime> ProcessApiResponse(XmlDocument xmlDocument, ShipmentEntity shipment)
         {
@@ -151,9 +151,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 string serviceCode = XPathUtility.Evaluate(summaryNode, "Service/Code", "");
                 string businessDays = XPathUtility.Evaluate(summaryNode, "EstimatedArrival/BusinessTransitDays", "");
                 string date = XPathUtility.Evaluate(summaryNode, "EstimatedArrival/Date", "");
+                string localTime = XPathUtility.Evaluate(summaryNode, "EstimatedArrival/Time", "");
 
-                // Calculate the TotalDays
                 DateTime arrivalDate = DateTime.ParseExact(date, "yyyy-MM-dd", null);
+                arrivalDate = arrivalDate.Add(DateTime.Parse(localTime).TimeOfDay);
 
                 try
                 {

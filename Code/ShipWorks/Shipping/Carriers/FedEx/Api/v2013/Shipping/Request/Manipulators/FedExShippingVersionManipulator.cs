@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that will manipulate the
-    /// Version information of a ProcessShipmentRequest object.
+    /// Version information of a IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExShippingVersionManipulator : FedExShippingRequestManipulatorBase
     {
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             ValidateRequest(request);
 
             // We can safely cast this since we've passed validation
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             nativeRequest.Version = new VersionId
             {
@@ -65,8 +65,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

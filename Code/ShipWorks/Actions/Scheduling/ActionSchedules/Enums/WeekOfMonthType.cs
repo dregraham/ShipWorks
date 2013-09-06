@@ -21,6 +21,11 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Enums
 
         [Description("Fourth")]
         [XmlEnum("3")]
-        Fourth = 3
+        Fourth = 3,
+
+
+        [Description("Last")]
+        [XmlEnum("4")]
+        Last = 4
     }
 }

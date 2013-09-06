@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions
     /// <summary>
     /// Task for marking eBay orders as shipped or processed
     /// </summary>
-    [ActionTask("Update online status", "EbayOnlineUpdate")]
+    [ActionTask("Update online status", "EbayOnlineUpdate", ActionTaskCategory.UpdateOnline)]
     public class EbayOnlineUpdateTask : StoreTypeTaskBase
     {
         bool markShipped = false;

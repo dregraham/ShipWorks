@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that will manipulate the total weight
-    /// of the ProcessShipmentRequest based on the shipment entity's total weight.
+    /// of the IFedExNativeShipmentRequest based on the shipment entity's total weight.
     /// </summary>
     public class FedExTotalWeightManipulator : FedExShippingRequestManipulatorBase
     {
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization 
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             // Just need to assign the weight value in pounds
             nativeRequest.RequestedShipment.TotalWeight = new Weight { Units =GetApiWeightUnit(request.ShipmentEntity), Value = (decimal)request.ShipmentEntity.TotalWeight };
@@ -61,8 +61,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

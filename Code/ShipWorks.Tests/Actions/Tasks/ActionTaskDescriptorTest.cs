@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Actions.Tasks
         }
 
         #region Support classes
-        [ActionTask("Schedulable Task", "SchedulableTaskTest", ActionTriggerClassifications.Scheduled)]
+        [ActionTask("Schedulable Task", "SchedulableTaskTest", ActionTaskCategory.Administration, ActionTriggerClassifications.Scheduled)]
         private class SchedulableTaskTest : ActionTask
         {
             public override ActionTaskEditor CreateEditor()
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Actions.Tasks
             }
         }
 
-        [ActionTask("Non Schedulable Task", "NonSchedulableTaskTest", ActionTriggerClassifications.Nonscheduled)]
+        [ActionTask("Non Schedulable Task", "NonSchedulableTaskTest", ActionTaskCategory.Administration, ActionTriggerClassifications.Nonscheduled)]
         private class NonSchedulableTaskTest : ActionTask
         {
             public override ActionTaskEditor CreateEditor()
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Actions.Tasks
             }
         }
 
-        [ActionTask("Default Task", "DefaultTaskTest")]
+        [ActionTask("Default Task", "DefaultTaskTest", ActionTaskCategory.Administration)]
         private class DefaultTaskTest : ActionTask
         {
             public override ActionTaskEditor CreateEditor()
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Actions.Tasks
             }
         }
 
-        [ActionTask("All Task", "AllTaskTest", ActionTriggerClassifications.Nonscheduled | ActionTriggerClassifications.Scheduled)]
+        [ActionTask("All Task", "AllTaskTest", ActionTaskCategory.Administration, ActionTriggerClassifications.Nonscheduled | ActionTriggerClassifications.Scheduled)]
         private class AllTaskTest : ActionTask
         {
             public override ActionTaskEditor CreateEditor()

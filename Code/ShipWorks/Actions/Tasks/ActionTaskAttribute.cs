@@ -10,25 +10,26 @@ namespace ShipWorks.Actions.Tasks
     {
         string displayName;
         string identifier;
+        ActionTaskCategory category;
         ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionTaskAttribute(string displayName, string identifier)
+        public ActionTaskAttribute(string displayName, string identifier, ActionTaskCategory category) :
+            this(displayName, identifier, category, ActionTriggerClassifications.Scheduled | ActionTriggerClassifications.Nonscheduled)
         {
-            this.displayName = displayName;
-            this.identifier = identifier;
-            allowedActionTriggerClassifications = ActionTriggerClassifications.Scheduled | ActionTriggerClassifications.Nonscheduled; 
+
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionTaskAttribute(string displayName, string identifier, ActionTriggerClassifications allowedActionTriggerClassifications)
+        public ActionTaskAttribute(string displayName, string identifier, ActionTaskCategory category, ActionTriggerClassifications allowedActionTriggerClassifications)
         {
             this.displayName = displayName;
             this.identifier = identifier;
+            this.category = category;
             this.allowedActionTriggerClassifications = allowedActionTriggerClassifications;
         }
 
@@ -56,8 +57,18 @@ namespace ShipWorks.Actions.Tasks
         }
 
         /// <summary>
-        /// If this task is allowed to be added to an Action that is of Scheduled type.  For example, "Play a Sound" is not allowed
-        /// as the sound will not be heard when run as a service.
+        /// Get the task category - used for UI display purposes
+        /// </summary>
+        public ActionTaskCategory Category
+        {
+            get
+            {
+                return category;
+            }
+        }
+
+        /// <summary>
+        /// If this task is allowed to be added to an Action that is of Scheduled type.
         /// </summary>
         public ActionTriggerClassifications AllowedActionTriggerClassifications
         {

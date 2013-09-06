@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <param name="request"></param>
         public override void Manipulate(CarrierRequest request)
         {
-            ProcessShipmentRequest nativeRequest = InitializeShipmentRequest(request);
+            IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request);
 
             FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
             List<PackageSpecialServiceType> specialServices = new List<PackageSpecialServiceType>();
@@ -110,18 +110,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         }
 
         /// <summary>
-        /// Initializes nativeRequest ensuring CarrierRequest is a ProcessShipmentRequest and has
+        /// Initializes nativeRequest ensuring CarrierRequest is a IFedExNativeShipmentRequest and has
         /// required object initialized
         /// </summary>
-        private ProcessShipmentRequest InitializeShipmentRequest(CarrierRequest request)
+        private IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

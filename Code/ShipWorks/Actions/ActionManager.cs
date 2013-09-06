@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
@@ -242,9 +243,9 @@ namespace ShipWorks.Actions
                     if (updateJob)
                     {
                         // Jobs/actions cannot be scheduled to occur in the past
-                        if (scheduledTrigger.Schedule.StartDateTimeInUtc <= DateTime.UtcNow)
+                        if (scheduledTrigger.Schedule.StartDateTimeInUtc <= DateTime.UtcNow && scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
                         {
-                            throw new SchedulingException("The start date must be in the future when modifying a scheduled action.");
+                            throw new SchedulingException("The start date must be in the future when scheduling a one time action.");
                         }
                     }
 

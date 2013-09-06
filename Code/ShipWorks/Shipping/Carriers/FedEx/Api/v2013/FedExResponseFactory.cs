@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <exception cref="CarrierException">An unexpected response type was provided to create a FedExShipResponse.</exception>
         public ICarrierResponse CreateShipResponse(object nativeResponse, CarrierRequest request, ShipmentEntity shipmentEntity)
         {
-            ProcessShipmentReply processShipmentReply = nativeResponse as ProcessShipmentReply;
+            IFedExNativeShipmentReply processShipmentReply = nativeResponse as IFedExNativeShipmentReply;
 
             if (processShipmentReply == null)
             {

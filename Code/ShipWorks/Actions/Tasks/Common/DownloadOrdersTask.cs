@@ -14,7 +14,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// A task to automate order downloads to run on a scheduled basis.
     /// </summary>
-    [ActionTask("Download orders", "DownloadOrders", ActionTriggerClassifications.Scheduled)]
+    [ActionTask("Download orders", "DownloadOrders", ActionTaskCategory.UpdateLocally, ActionTriggerClassifications.Scheduled)]
     public class DownloadOrdersTask : ActionTask
     {
         private List<long> storeIDs;

@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that will manipulate the Priority Alert settings
-    /// of a FedEx ProcessShipmentRequest.
+    /// of a FedEx IFedExNativeShipmentRequest.
     /// </summary>
     public class FedExPriorityAlertManipulator : FedExShippingRequestManipulatorBase
     {
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             if (currentPackageIndex < request.ShipmentEntity.FedEx.Packages.Count)
             {
                 // We can safely cast this since we've passed initialization
-                ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+                IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
                 // Extract any API enhancement type to a FedEx enhancement type array for the current package
                 FedExPackageEntity package = request.ShipmentEntity.FedEx.Packages[currentPackageIndex];
@@ -95,8 +95,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

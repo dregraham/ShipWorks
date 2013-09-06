@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.FileTransfer;
 using Interapptive.Shared.UI;
@@ -15,10 +16,13 @@ using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
+    /// <summary>
+    /// Task editor for Upload using FTP task
+    /// </summary>
     public partial class FtpFileTaskEditor : TemplateBasedTaskEditor
     {
         private readonly FtpFileTask task;
-        FtpAccountEntity ftpAccount = null;
+        FtpAccountEntity ftpAccount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FtpFileTaskEditor"/> class.
@@ -39,27 +43,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             this.task = task;
 
             LoadSettings();
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load" /> event.
-        /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            ftpHost.Validating += OnFtpHostValidating;
-            ftpHost.Validated += OnFieldValidated;
-
-            tokenizedFtpFilename.Validating += OnFtpFilenameValidating;
-            tokenizedFtpFilename.Validated += OnFieldValidated;
-
-            tokenizedFtpFolder.Validating += OnFtpFolderValidating;
-            tokenizedFtpFolder.Validated += OnFieldValidated;
-
-            templateCombo.Validating += OnTemplateSelectionValidating;
-            templateCombo.Validated += OnFieldValidated;
         }
 
         /// <summary>
@@ -123,7 +106,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             if (ftpAccount != null)
             {
-                using (FtpFolderBrowserDlg ftpFolderBrowserDlg = new FtpFolderBrowserDlg(ftpAccount, ""))
+                using (FtpFolderBrowserDlg ftpFolderBrowserDlg = new FtpFolderBrowserDlg(ftpAccount, tokenizedFtpFolder.Text))
                 {
                     if (ftpFolderBrowserDlg.ShowDialog(this) == DialogResult.OK)
                     {
@@ -141,18 +124,18 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             if (ftpAccount == null)
             {
                 ftpHost.Text = "";
+                browseFtpFolder.Enabled = false;
             }
             else
             {
                 ftpHost.Text = ftpAccount.Host;
+                browseFtpFolder.Enabled = true;
             }
         }
 
         /// <summary>
         /// Called when tokenizedFtpFolder text changed to update the FtpFolder property of the task.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnTokenizedFtpFolderTextChanged(object sender, EventArgs e)
         {
             task.FtpFolder = tokenizedFtpFolder.Text;
@@ -161,67 +144,44 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Called when tokenizedFtpFilename text changed to update the FtpFileName property of the task.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnTokenizedFtpFilenameTextChanged(object sender, EventArgs e)
         {
             task.FtpFileName = tokenizedFtpFilename.Text;
         }
 
         /// <summary>
-        /// Called when Ftp host validating.
+        /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
         /// </summary>
-        void OnFtpHostValidating(object sender, CancelEventArgs e)
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
-            if (string.IsNullOrWhiteSpace(ftpHost.Text))
-            {
-                errorProvider.SetError(ftpHost, "Please configure an FTP Server.");
-                e.Cancel = true;
-            }
-        }
+            TaskValidationError error = new TaskValidationError("The Upload with FTP task is missing some information.");
 
-        /// <summary>
-        /// Called when Ftp folder validating.
-        /// </summary>
-        void OnFtpFolderValidating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
-            {
-                errorProvider.SetError(tokenizedFtpFolder, "Please enter a folder in which to place files on the FTP Server.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when Ftp filename validating.
-        /// </summary>
-        void OnFtpFilenameValidating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
-            {
-                errorProvider.SetError(tokenizedFtpFilename, "Please enter a filename in which data will be saved on the FTP Server.");
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when template selection is validating.
-        /// </summary>
-        void OnTemplateSelectionValidating(object sender, CancelEventArgs e)
-        {
             if (templateCombo.SelectedTemplate == null)
             {
-                errorProvider.SetError(templateCombo, "Please select a template.");
-                e.Cancel = true;
+                error.Details.Add("A template must be selected.");
             }
-        }
 
-        /// <summary>
-        /// On a successful validation, set the error to blank so that it removes the error icon.
-        /// </summary>
-        private void OnFieldValidated(object sender, EventArgs e)
-        {
-            errorProvider.SetError((Control)sender, string.Empty);
+            if (string.IsNullOrWhiteSpace(ftpHost.Text))
+            {
+                error.Details.Add("An FTP server was not provided.");
+            }
+
+            if (string.IsNullOrWhiteSpace(tokenizedFtpFolder.Text))
+            {
+                error.Details.Add("The FTP folder you want the file uploaded to was not provided.");
+            }
+
+            if (string.IsNullOrWhiteSpace(tokenizedFtpFilename.Text))
+            {
+                error.Details.Add("The file name that gets saved on the FTP server was not provided.");
+            }
+
+            // Add the error to the main errors collection if there are any validation errors
+            if (error.Details.Any())
+            {
+                errors.Add(error);
+            }
         }
     }
 }

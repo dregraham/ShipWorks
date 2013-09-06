@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment detials to Magento
     /// </summary>
-    [ActionTask("Upload shipment details", "MagentoShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "MagentoShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class MagentoShipmentUploadTask : StoreInstanceTaskBase
     {
         // comments to be uploaded.

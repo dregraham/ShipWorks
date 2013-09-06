@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to Etsy
     /// </summary>
-    [ActionTask("Upload shipment details", "EtsyShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "EtsyShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class EtsyShipmentUploadTask : StoreInstanceTaskBase
     {
 

@@ -220,6 +220,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 WritePackageReference(ups.ReferenceNumber, ups, xmlWriter, forLabels);
                 WritePackageReference(ups.ReferenceNumber2, ups, xmlWriter, forLabels);
 
+                // Additional handling
+                if (package.AdditionalHandlingEnabled)
+                {
+                    xmlWriter.WriteElementString("AdditionalHandlingIndicator", null);
+                }
+
                 // Service options
                 UpsServicePackageTypeSetting servicePackageSettings = UpsServicePackageTypeSetting.ServicePackageValidationSettings.FirstOrDefault(s => s.ServiceType == (UpsServiceType)ups.Service && s.PackageType == (UpsPackagingType)package.PackagingType);
                 serviceOptionsElementWriter.WriteServiceOptionsElement(ups, package, servicePackageSettings);

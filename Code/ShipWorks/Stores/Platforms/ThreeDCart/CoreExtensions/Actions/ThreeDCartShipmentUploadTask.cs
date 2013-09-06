@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to ThreeDCart
     /// </summary>
-    [ActionTask("Upload shipment details", "ThreeDCartShipmentUpload")]
+    [ActionTask("Upload shipment details", "ThreeDCartShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class ThreeDCartShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

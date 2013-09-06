@@ -119,6 +119,7 @@
     <Compile Include="Actions\Tasks\Common\WebRequestTaskTests.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\TaskTestUtility.cs" />
+    <Compile Include="Actions\Tasks\TaskValidationErrorTest.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
@@ -282,6 +283,8 @@
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationInvoiceInfoManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\Manipulators\UpsSaveCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Response\UpsInvoiceRegistrationResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageServiceOptionsElementWriterTests.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCoreTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\Manipulators\UpsOpenAccountAddEndUserInformationTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\UpsOpenAccountRequestFactoryTest.cs" />

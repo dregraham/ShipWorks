@@ -65,7 +65,7 @@ namespace ShipWorks.Actions.Tasks
             toolStrip.Renderer = new NoBorderToolStripRenderer();
 
             // Load the ComboBox with the available task options
-            taskTypes.DropDownMenu = ActionTaskManager.CreateTasksMenu();
+            taskTypes.DropDownSandPopupMenu = ActionTaskManager.CreateTasksMenu();
             taskTypes.SelectedMenuObject = ActionTaskManager.GetBinding(task);
             taskTypes.DisplayValueProvider = (object tag) => { return ((ActionTaskDescriptorBinding) tag).FullName; };
 
@@ -277,7 +277,8 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private EntityType? GetEffectiveInputEntityType()
         {
-            if (task.RequiresInput != ActionTaskInputRequirement.None)
+            if (task.RequiresInput == ActionTaskInputRequirement.None ||
+                task.Entity.InputSource == (int)ActionTaskInputSource.Nothing)
             {
                 return null;
             }
@@ -442,7 +443,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Get the descriptive text to use for the given entity type in the data source menu
         /// </summary>
-        private string GetTriggeringEntityDescription(EntityType? entityType)
+        public static string GetTriggeringEntityDescription(EntityType? entityType)
         {
             if (entityType == null)
             {
@@ -463,7 +464,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Get the label to use for the Input Label when choosing the triggering record option.
         /// </summary>
-        private string GetInputTriggeringRecordOption(EntityType triggering, EntityType? target)
+        private static string GetInputTriggeringRecordOption(EntityType triggering, EntityType? target)
         {
             if (target == null || target == triggering)
             {
@@ -511,7 +512,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Get the label to use for the Input Label when choosing the filter option
         /// </summary>
-        private string GetInputFilterOption(EntityType? target)
+        private static string GetInputFilterOption(EntityType? target)
         {
             if (target == null)
             {
@@ -540,6 +541,18 @@ namespace ShipWorks.Actions.Tasks
                 {
                     RaiseBubbleChanged();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Validates the task editor
+        /// </summary>
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public void ValidateTask(ICollection<TaskValidationError> errors)
+        {
+            foreach (ActionTaskEditor editor in panelTaskSettings.Controls.OfType<ActionTaskEditor>())
+            {
+                editor.ValidateTask(errors);
             }
         }
     }

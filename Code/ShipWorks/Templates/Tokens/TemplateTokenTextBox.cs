@@ -257,6 +257,16 @@ namespace ShipWorks.Templates.Tokens
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to [show token options].
+        /// </summary>
+        [DefaultValue(true)]
+        public bool ShowTokenOptions
+        {
+            get { return tokenOptionsDropdown.Visible; }
+            set { tokenOptionsDropdown.Visible = value; }
+        }
+
+        /// <summary>
         /// Update the token suggestions menu based on the selected usage
         /// </summary>
         private void UpdateTokenSuggestionsMenu()

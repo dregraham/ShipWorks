@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
     /// <summary>
     /// Task to change the flags of MarketplaceAdvisor parcel
     /// </summary>
-    [ActionTask("Change parcel flags", "MarketplaceAdvisorChangeParcelFlags")]
+    [ActionTask("Change parcel flags", "MarketplaceAdvisorChangeParcelFlags", ActionTaskCategory.UpdateOnline)]
     public class MarketplaceAdvisorChangeParcelFlagsTask : MarketplaceAdvisorChangeFlagsTaskBase
     {
         /// <summary>

@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that modifies the InternationalTrafficInArmsRegulationsDetail
-    /// attributes within the FedEx API's ProcessShipmentRequest object if the shipment has a traffic in arms license number.
+    /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment has a traffic in arms license number.
     /// </summary>
     public class FedExTrafficInArmsManipulator : FedExShippingRequestManipulatorBase
     {
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             if (!string.IsNullOrEmpty(request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber))
             {
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// Adds the traffic in arms option to the reqeust.
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
-        private void AddTrafficInArmsOption(ProcessShipmentRequest nativeRequest)
+        private void AddTrafficInArmsOption(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
             {
@@ -91,8 +91,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

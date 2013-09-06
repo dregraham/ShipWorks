@@ -16,7 +16,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for setting the status of an order
     /// </summary>
-    [ActionTask("Set local order status", "OrderStatus")]
+    [ActionTask("Set local order status", "OrderStatus", ActionTaskCategory.UpdateLocally)]
     public class SetOrderStatusTask : ActionTask
     {
         string status = string.Empty;

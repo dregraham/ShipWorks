@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment
         {
             get
             {
-                return "ITSW9558";
+                return "ITSW";
             }
         }
 

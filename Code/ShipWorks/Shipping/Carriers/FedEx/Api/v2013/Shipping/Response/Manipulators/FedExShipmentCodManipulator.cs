@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipula
     /// </summary>
     public class FedExShipmentCodManipulator : ICarrierResponseManipulator
     {
-        private ProcessShipmentReply processShipmentReply;
+        private IFedExNativeShipmentReply processShipmentReply;
 
         private ShipmentEntity shipment;
 
@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipula
             FedExShipResponse fedExShipResponse = (FedExShipResponse) carrierResponse;
 
             shipment = fedExShipResponse.Shipment;
-            processShipmentReply = fedExShipResponse.NativeResponse as ProcessShipmentReply;
+            processShipmentReply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
 
             // For COD we have to save off the cod tracking info.  Null for ground
 

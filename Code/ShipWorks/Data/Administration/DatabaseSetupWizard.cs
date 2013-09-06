@@ -963,7 +963,7 @@ namespace ShipWorks.Data.Administration
         /// </summa
         private void OnChangeSelectedInstance(object sender, EventArgs e)
         {
-            string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;;
+            string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
 
             // If we are already conected to or connecting to this exact session, then forget it.
             if (connectionSession != null)
@@ -982,6 +982,23 @@ namespace ShipWorks.Data.Administration
                 }
             }
 
+            // Create a copy that we can mess around with without affecting the UI session
+            connectionSession = new SqlSession(sqlSession);
+            connectionSession.Configuration.ServerInstance = selectedInstance;
+
+            // If there is no selected instance name, we just clear everything out. And get out.
+            if (string.IsNullOrWhiteSpace(selectedInstance))
+            {
+                gridDatabses.Rows.Clear();
+                gridDatabses.EmptyText = "";
+
+                pictureSqlConnection.Visible = false;
+                labelSqlConnection.Visible = false;
+                linkSqlInstanceAccount.Visible = false;
+
+                return;
+           }
+
             gridDatabses.Rows.Clear();
             gridDatabses.EmptyText = string.Format("Connecting to databases on '{0}'...", comboSqlServers.Text);
 
@@ -992,10 +1009,6 @@ namespace ShipWorks.Data.Administration
 
             labelSqlConnection.Text = "Connecting...";
             labelSqlConnection.Visible = true;
-
-            // Create a copy that we can mess around with without affecting the UI session
-            connectionSession = new SqlSession(sqlSession);
-            connectionSession.Configuration.ServerInstance = selectedInstance;
 
             // Create another variable for closure purposes
             SqlSession backgroundSession = connectionSession;
@@ -1027,6 +1040,10 @@ namespace ShipWorks.Data.Administration
                         return;
                     }
 
+                    // Whether it worked or not, this is now the SQL Instance this session is configured for.  This is especially important to set now in case
+                    // the user opens the window to try to change the credentials.
+                    sqlSession.Configuration.ServerInstance = selectedInstance;
+
                     // Null indicates error
                     if (t.Result == null)
                     {
@@ -1045,9 +1062,7 @@ namespace ShipWorks.Data.Administration
                         linkSqlInstanceAccount.Text = "Change";
                         gridDatabses.EmptyText = "No databases were found.";
 
-
                         // Save the credentials
-                        sqlSession.Configuration.ServerInstance = configuration.ServerInstance;
                         sqlSession.Configuration.Username = configuration.Username;
                         sqlSession.Configuration.Password = configuration.Password;
                         sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;

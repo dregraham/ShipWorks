@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that will add the appropriate special
-    /// shipment type attributes to the ProcessShipmentRequest object.
+    /// shipment type attributes to the IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExShipmentSpecialServiceTypeManipulator : FedExShippingRequestManipulatorBase
     {        
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             // Use the ship date of the shipment entity to determine the ship time stamp; not looking at the 
             // ShipTimestamp property of the request here, because there's no guarantee it's been set
@@ -95,8 +95,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

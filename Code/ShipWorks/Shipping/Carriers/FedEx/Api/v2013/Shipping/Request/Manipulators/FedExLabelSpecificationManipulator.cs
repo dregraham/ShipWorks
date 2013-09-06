@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator that will manipulate the label specification of a
-    /// ProcessShipmentRequest.
+    /// IFedExNativeShipmentRequest.
     /// </summary>
     public class FedExLabelSpecificationManipulator : FedExShippingRequestManipulatorBase
     {
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization 
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;            
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;            
 
             //Fetch the latest shipping settings from the repository
             ShippingSettingsEntity shippingSettings = SettingsRepository.GetShippingSettings();
@@ -79,8 +79,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

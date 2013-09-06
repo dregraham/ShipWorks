@@ -89,7 +89,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             AddValueMapping(ups, UpsProfileFields.CarbonNeutral, carbonNeutralState, carbonNeutral, carbonNeutralLabel);
             AddValueMapping(ups, UpsProfileFields.ShipperRelease, shipperReleaseState, shipperRelease, shipperReleaseLabel);
-            AddValueMapping(ups, UpsProfileFields.PaperlessInternational, paperlessState, paperless, paperlessLabel);
+            AddValueMapping(ups, UpsProfileFields.CommercialPaperlessInvoice, usePaperlessInvoiceState, usePaperlessInvoice, usePaperlessInvoiceLabel);
+            AddValueMapping(ups, UpsProfileFields.PaperlessAdditionalDocumentation, extraDocumentsState, extraDocuments, extraDocumentsLabel);
 
             AddValueMapping(ups, UpsProfileFields.DeliveryConfirmation, confirmationState, confirmationType, labelConfirmation);
             AddValueMapping(ups, UpsProfileFields.ReferenceNumber, referenceState, referenceNumber, labelReference);

@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request
                 secondManipulator.Object
             };
 
-            testObject = new FedExShipRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, settingsRespository.Object);
+            testObject = new FedExShipRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, settingsRespository.Object, new ProcessShipmentRequest());
         }
 
         [TestMethod]

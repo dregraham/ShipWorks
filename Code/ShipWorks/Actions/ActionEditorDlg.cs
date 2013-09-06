@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -26,6 +27,8 @@ using Interapptive.Shared.UI;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Printing;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using SandMenu = Divelements.SandRibbon.Menu;
 
 namespace ShipWorks.Actions
 {
@@ -138,25 +141,37 @@ namespace ShipWorks.Actions
         /// </summary>
         private void CreateAddTaskMenu()
         {
-            addTask.ContextMenuStrip = ActionTaskManager.CreateTasksMenu();
+            addTask.SplitSandPopupMenu = ActionTaskManager.CreateTasksMenu();
 
-            HookAddTaskEvents(addTask.ContextMenuStrip.Items);
+            HookAddTaskEvents(addTask.SplitSandPopupMenu.Items);
         }
 
         /// <summary>
         /// Hookup event listeners for each MenuItem in the menu
         /// </summary>
-        private void HookAddTaskEvents(ToolStripItemCollection items)
+        private void HookAddTaskEvents(Divelements.SandRibbon.WidgetCollection items)
         {
-            foreach (ToolStripMenuItem menuItem in items.OfType<ToolStripMenuItem>())
+            foreach (Divelements.SandRibbon.WidgetBase item in items)
             {
-                if (menuItem.DropDownItems.Count == 0)
+                SandMenuItem menuItem = item as SandMenuItem;
+                if (menuItem != null)
                 {
-                    menuItem.Click += new EventHandler(OnAddTask);
+                    if (menuItem.Items.Count > 0)
+                    {
+                        HookAddTaskEvents(menuItem.Items);
+                    }
+                    else
+                    {
+                        menuItem.Activate += new EventHandler(OnAddTask);
+                    }
                 }
                 else
                 {
-                    HookAddTaskEvents(menuItem.DropDownItems);
+                    SandMenu menu = item as SandMenu;
+                    if (menu != null)
+                    {
+                        HookAddTaskEvents(menu.Items);
+                    }
                 }
             }
         }
@@ -172,7 +187,32 @@ namespace ShipWorks.Actions
             trigger = ActionTriggerFactory.CreateTrigger(triggerType, null);
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
+            UpdateTriggeringComputerUI(triggerType);
+
             CreateTriggerEditor();
+        }
+
+        /// <summary>
+        /// Updates the text and appearance of the runOnTriggeringComputer radio button based
+        /// on the action trigger type.
+        /// </summary>
+        private void UpdateTriggeringComputerUI(ActionTriggerType triggerType)
+        {
+            // Disable the triggering computer option - triggering computer is not a valid option 
+            // when the trigger is based on a scheduled
+            runOnTriggerringComputer.Enabled = triggerType != ActionTriggerType.Scheduled;
+
+            if (triggerType == ActionTriggerType.Scheduled)
+            {
+                // Since it's not really a valid use case and should be disabled, just the default/generic text for this 
+                runOnTriggerringComputer.Text = string.Format("On the computer that triggers the action");
+            }
+            else
+            {
+                // Dynamically update the text so that it contains contextual information regarding
+                // what the triggering computer will actually be
+                runOnTriggerringComputer.Text = string.Format("On the computer where {0}", EnumHelper.GetDescription(triggerType).ToLower());
+            }
         }
 
         /// <summary>
@@ -218,7 +258,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Layout and upate all the task bubbles to reflect their appropriate indexes
+        /// Layout and update all the task bubbles to reflect their appropriate indexes
         /// </summary>
         private void UpdateTaskBubbles()
         {
@@ -250,8 +290,9 @@ namespace ShipWorks.Actions
             {
                 runOnSpecificComputers.Enabled = true;
                 runOnAnyComputer.Enabled = true;
-                runOnTriggerringComputer.Enabled = true;
             }
+            
+            UpdateTriggeringComputerUI(trigger.TriggerType);
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
@@ -311,7 +352,7 @@ namespace ShipWorks.Actions
         /// </summary>
         void OnAddTask(object sender, EventArgs e)
         {
-            ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((ToolStripMenuItem) sender).Tag;
+            ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((SandMenuItem) sender).Tag;
             ActionTask task = binding.CreateInstance();
 
             // Cancel adding the task if it cannot currently be selected
@@ -462,10 +503,11 @@ namespace ShipWorks.Actions
 
             if (((ActionTriggerType)triggerCombo.SelectedValue) == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
             {
-                ActiveControl = runOnTriggerringComputer;
-                optionControl.SelectedPage = optionPageSettings;
-                MessageHelper.ShowError(this, "A scheduled action cannot be set to run on the triggering computer.");
-                return;
+                // When the option to run on the triggering computer is selected and wit the Schedule trigger, just change 
+                // this to run on any computer for now with the thought process being that we don't to put another step 
+                // for the user to complete when creating a scheduled action
+                runOnTriggerringComputer.Checked = false;
+                runOnAnyComputer.Checked = true;
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -494,6 +536,19 @@ namespace ShipWorks.Actions
                 List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
                 List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
                 
+                // Validate all the task editors
+                var errors = new List<TaskValidationError>();
+                foreach (ActionTaskBubble editor in ActiveBubbles)
+                {
+                    editor.ValidateTask(errors);
+                }
+
+                if (errors.Any())
+                {
+                    MessageHelper.ShowError(this, errors.Select(x => x.ToString()).Combine(Environment.NewLine + Environment.NewLine));
+                    return;
+                }
+
                 // Update the flow order
                 foreach (ActionTask task in tasksToSave)
                 {
@@ -523,12 +578,14 @@ namespace ShipWorks.Actions
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).IsAllowedForTrigger(actionTriggerType)).ToList();
                 if (invalidTasks.Any())
                 {
-                    string invalidTasksMsg = string.Join<string>(", ", invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName));
+                    var invalidTaskNames = invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
 
-                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} not allowed for use with '{3}'", 
-                        invalidTasks.Count == 1 ? "" : "s", 
+                    string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
+
+                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} cannot be used with '{3}'.",
+                        invalidTaskNames.Count() == 1 ? "" : "s", 
                         invalidTasksMsg,
-                        invalidTasks.Count == 1 ? "is" : "are", 
+                        invalidTaskNames.Count() == 1 ? "is" : "are", 
                         EnumHelper.GetDescription(actionTriggerType)));
                     return;
                 }

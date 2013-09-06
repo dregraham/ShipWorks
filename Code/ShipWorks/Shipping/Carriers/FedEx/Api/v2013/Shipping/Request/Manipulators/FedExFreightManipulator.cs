@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 return;
             }
 
-            ProcessShipmentRequest nativeRequest = InitializeShipmentRequest(request, fedex);
+            IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request, fedex);
 
             // Add the express freight detail
             CreateFedExExpressFreightDetailManipulations(nativeRequest.RequestedShipment, fedex);
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            if (!(request.NativeRequest is ProcessShipmentRequest))
+            if (!(request.NativeRequest is IFedExNativeShipmentRequest))
             {
                 // Abort - we have an unexpected native request
                 throw new CarrierException("An unexpected request type was provided.");
@@ -132,15 +132,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <summary>
         /// Initialize the request properties needed for freight
         /// </summary>
-        private static ProcessShipmentRequest InitializeShipmentRequest(CarrierRequest request, FedExShipmentEntity fedex)
+        private static IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request, FedExShipmentEntity fedex)
         {
             if (request == null)
             {
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

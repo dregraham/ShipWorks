@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment detials to ChannelAdvisor
     /// </summary>
-    [ActionTask("Upload shipment details", "ChannelAdvisorShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "ChannelAdvisorShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class ChannelAdvisorShipmentUploadTask : StoreInstanceTaskBase
     {
         /// <summary>

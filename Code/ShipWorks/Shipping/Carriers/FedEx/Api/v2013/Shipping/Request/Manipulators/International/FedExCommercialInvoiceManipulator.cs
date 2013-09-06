@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that builds up the commercial
-    /// invoice portion of the customs detail in the FedEx ProcessShipmentRequest object.
+    /// invoice portion of the customs detail in the FedEx IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExCommercialInvoiceManipulator : FedExShippingRequestManipulatorBase
     {
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
 
             shipmentCurrencyType = GetShipmentCurrencyType(fedExShipment.Shipment);
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <returns>A CustomsClearanceDetail object.</returns>
-        private CustomsClearanceDetail GetCustomsDetail(ProcessShipmentRequest nativeRequest)
+        private CustomsClearanceDetail GetCustomsDetail(IFedExNativeShipmentRequest nativeRequest)
         {
             return nativeRequest.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
         }
@@ -189,8 +189,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

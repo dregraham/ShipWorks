@@ -2570,7 +2570,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UpsPackageEntity's mappings</summary>
 		private void InitUpsPackageEntityMappings()
 		{
-			base.AddElementMapping( "UpsPackageEntity", "ShipWorksLocal", @"dbo", "UpsPackage", 16 );
+			base.AddElementMapping( "UpsPackageEntity", "ShipWorksLocal", @"dbo", "UpsPackage", 25 );
 			base.AddElementFieldMapping( "UpsPackageEntity", "UpsPackageID", "UpsPackageID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UpsPackageEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "UpsPackageEntity", "PackagingType", "PackagingType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -2587,11 +2587,20 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UpsPackageEntity", "DeclaredValue", "DeclaredValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 13 );
 			base.AddElementFieldMapping( "UpsPackageEntity", "TrackingNumber", "TrackingNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
 			base.AddElementFieldMapping( "UpsPackageEntity", "UspsTrackingNumber", "UspsTrackingNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 17 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", false, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", false, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 19 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", false, (int)SqlDbType.NVarChar, 4, 0, 0, false, "", null, typeof(System.String), 20 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "DryIceEnabled", "DryIceEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 21 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 22 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "DryIceWeight", "DryIceWeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 23 );
+			base.AddElementFieldMapping( "UpsPackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 24 );
 		}
 		/// <summary>Inits UpsProfileEntity's mappings</summary>
 		private void InitUpsProfileEntityMappings()
 		{
-			base.AddElementMapping( "UpsProfileEntity", "ShipWorksLocal", @"dbo", "UpsProfile", 27 );
+			base.AddElementMapping( "UpsProfileEntity", "ShipWorksLocal", @"dbo", "UpsProfile", 28 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "UpsAccountID", "UpsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "Service", "Service", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -2616,14 +2625,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UpsProfileEntity", "ReturnContents", "ReturnContents", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 21 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "Endorsement", "Endorsement", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 22 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "Subclassification", "Subclassification", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 23 );
-			base.AddElementFieldMapping( "UpsProfileEntity", "PaperlessInternational", "PaperlessInternational", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 24 );
+			base.AddElementFieldMapping( "UpsProfileEntity", "PaperlessAdditionalDocumentation", "PaperlessAdditionalDocumentation", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 24 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "ShipperRelease", "ShipperRelease", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 25 );
 			base.AddElementFieldMapping( "UpsProfileEntity", "CarbonNeutral", "CarbonNeutral", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 26 );
+			base.AddElementFieldMapping( "UpsProfileEntity", "CommercialPaperlessInvoice", "CommercialPaperlessInvoice", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 27 );
 		}
 		/// <summary>Inits UpsProfilePackageEntity's mappings</summary>
 		private void InitUpsProfilePackageEntityMappings()
 		{
-			base.AddElementMapping( "UpsProfilePackageEntity", "ShipWorksLocal", @"dbo", "UpsProfilePackage", 10 );
+			base.AddElementMapping( "UpsProfilePackageEntity", "ShipWorksLocal", @"dbo", "UpsProfilePackage", 19 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "UpsProfilePackageID", "UpsProfilePackageID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "PackagingType", "PackagingType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -2634,6 +2644,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DimsHeight", "DimsHeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 7 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DimsWeight", "DimsWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 8 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DimsAddWeight", "DimsAddWeight", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 9 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 10 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 11 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 12 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, (int)SqlDbType.NVarChar, 4, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 14 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 15 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 17 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 18 );
 		}
 		/// <summary>Inits UpsShipmentEntity's mappings</summary>
 		private void InitUpsShipmentEntityMappings()
@@ -2662,7 +2681,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UpsShipmentEntity", "EmailNotifyMessage", "EmailNotifyMessage", false, (int)SqlDbType.NVarChar, 120, 0, 0, false, "", null, typeof(System.String), 20 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "CustomsDocumentsOnly", "CustomsDocumentsOnly", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 21 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "CustomsDescription", "CustomsDescription", false, (int)SqlDbType.NVarChar, 150, 0, 0, false, "", null, typeof(System.String), 22 );
-			base.AddElementFieldMapping( "UpsShipmentEntity", "CommercialInvoice", "CommercialInvoice", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
+			base.AddElementFieldMapping( "UpsShipmentEntity", "CommercialPaperlessInvoice", "CommercialPaperlessInvoice", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "CommercialInvoiceTermsOfSale", "CommercialInvoiceTermsOfSale", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 24 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "CommercialInvoicePurpose", "CommercialInvoicePurpose", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 25 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "CommercialInvoiceComments", "CommercialInvoiceComments", false, (int)SqlDbType.NVarChar, 200, 0, 0, false, "", null, typeof(System.String), 26 );
@@ -2678,7 +2697,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UpsShipmentEntity", "UspsTrackingNumber", "UspsTrackingNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 36 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "Endorsement", "Endorsement", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 37 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "Subclassification", "Subclassification", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 38 );
-			base.AddElementFieldMapping( "UpsShipmentEntity", "PaperlessInternational", "PaperlessInternational", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 39 );
+			base.AddElementFieldMapping( "UpsShipmentEntity", "PaperlessAdditionalDocumentation", "PaperlessAdditionalDocumentation", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 39 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "ShipperRelease", "ShipperRelease", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 40 );
 			base.AddElementFieldMapping( "UpsShipmentEntity", "CarbonNeutral", "CarbonNeutral", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 41 );
 		}
@@ -2763,7 +2782,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits WorldShipPackageEntity's mappings</summary>
 		private void InitWorldShipPackageEntityMappings()
 		{
-			base.AddElementMapping( "WorldShipPackageEntity", "ShipWorksLocal", @"dbo", "WorldShipPackage", 35 );
+			base.AddElementMapping( "WorldShipPackageEntity", "ShipWorksLocal", @"dbo", "WorldShipPackage", 44 );
 			base.AddElementFieldMapping( "WorldShipPackageEntity", "UpsPackageID", "UpsPackageID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "WorldShipPackageEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "WorldShipPackageEntity", "PackageType", "PackageType", false, (int)SqlDbType.VarChar, 35, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2799,6 +2818,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "WorldShipPackageEntity", "Qvn3ContactName", "Qvn3ContactName", true, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 32 );
 			base.AddElementFieldMapping( "WorldShipPackageEntity", "Qvn3Email", "Qvn3Email", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 33 );
 			base.AddElementFieldMapping( "WorldShipPackageEntity", "ShipperRelease", "ShipperRelease", true, (int)SqlDbType.Char, 1, 0, 0, false, "", null, typeof(System.String), 34 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, (int)SqlDbType.Char, 1, 0, 0, false, "", null, typeof(System.String), 35 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "VerbalConfirmationOption", "VerbalConfirmationOption", true, (int)SqlDbType.Char, 1, 0, 0, false, "", null, typeof(System.String), 36 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "VerbalConfirmationContactName", "VerbalConfirmationContactName", true, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 37 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "VerbalConfirmationTelephone", "VerbalConfirmationTelephone", true, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 38 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, (int)SqlDbType.NVarChar, 5, 0, 0, false, "", null, typeof(System.String), 39 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "DryIceWeight", "DryIceWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 40 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "DryIceMedicalPurpose", "DryIceMedicalPurpose", true, (int)SqlDbType.Char, 1, 0, 0, false, "", null, typeof(System.String), 41 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "DryIceOption", "DryIceOption", true, (int)SqlDbType.Char, 1, 0, 0, false, "", null, typeof(System.String), 42 );
+			base.AddElementFieldMapping( "WorldShipPackageEntity", "DryIceWeightUnitOfMeasure", "DryIceWeightUnitOfMeasure", true, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 43 );
 		}
 		/// <summary>Inits WorldShipProcessedEntity's mappings</summary>
 		private void InitWorldShipProcessedEntityMappings()

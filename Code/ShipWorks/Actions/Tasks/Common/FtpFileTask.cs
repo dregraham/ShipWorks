@@ -19,7 +19,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for ftping a chosen template
     /// </summary>
-    [ActionTask("Transfer file(s)", "Ftp")]
+    [ActionTask("Upload with FTP", "Ftp", ActionTaskCategory.Output)]
     public class FtpFileTask : TemplateBasedTask
     {
         static int logIndex;
@@ -62,7 +62,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return "Ftp file(s) using:";
+                return "Upload using:";
             }
         }
 

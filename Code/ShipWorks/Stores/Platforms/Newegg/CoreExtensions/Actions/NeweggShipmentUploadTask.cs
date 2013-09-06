@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions
     /// <summary>
     /// A task to upload shipping details to Newegg.
     /// </summary>
-    [ActionTask("Upload shipment details", "NeweggShipmentUploadTask")]
+    [ActionTask("Upload shipment details", "NeweggShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class NeweggShipmentUploadTask : StoreInstanceTaskBase
     {
         /// <summary>

@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator for manipulating COD related
-    /// fields of the FedEx ProcessShipmentRequest object.
+    /// fields of the FedEx IFedExNativeShipmentRequest object.
     /// </summary>
     public class FedExCodOptionsManipulator : FedExShippingRequestManipulatorBase
     {
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             ShipmentEntity shipmentEntity = request.ShipmentEntity;
 
             if (shipmentEntity.FedEx.CodEnabled)
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <param name="codDetail">The cod detail.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
-        private void ConfigureShipmentDetails(ProcessShipmentRequest nativeRequest, ShipmentEntity shipmentEntity, CodDetail codDetail, string currency)
+        private void ConfigureShipmentDetails(IFedExNativeShipmentRequest nativeRequest, ShipmentEntity shipmentEntity, CodDetail codDetail, string currency)
         {
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
             {
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="codDetail">The cod detail.</param>
         /// <param name="currency">The currency.</param>
-        private void ConfigurePackageDetails(ProcessShipmentRequest nativeRequest, ShipmentEntity shipmentEntity, CodDetail codDetail, string currency)
+        private void ConfigurePackageDetails(IFedExNativeShipmentRequest nativeRequest, ShipmentEntity shipmentEntity, CodDetail codDetail, string currency)
         {
             // Get a handle to first line item and initialize any values we'll be manipulating
             RequestedPackageLineItem packageLineItem = nativeRequest.RequestedShipment.RequestedPackageLineItems[0];
@@ -240,8 +240,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             // We'll potentially be adding COD at the package level, so initialize the package index
             currentPackageIndex = request.SequenceNumber;
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

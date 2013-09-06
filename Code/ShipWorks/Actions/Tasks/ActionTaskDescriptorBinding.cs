@@ -104,7 +104,7 @@ namespace ShipWorks.Actions.Tasks
                 if (storeTypeCode != null)
                 {
                     // See if this type code is the only type code we have like it in the system
-                    bool onlyThisType = StoreManager.GetUniqueStoreTypes().Count == 1 && StoreManager.GetUniqueStoreTypes()[0].TypeCode == storeTypeCode.Value;
+                    bool onlyThisType = StoreManager.GetUniqueStoreTypes(true).Count == 1 && StoreManager.GetUniqueStoreTypes(true)[0].TypeCode == storeTypeCode.Value;
                     
                     if (!onlyThisType)
                     {
@@ -114,7 +114,7 @@ namespace ShipWorks.Actions.Tasks
 
                 if (storeID != null)
                 {
-                    bool onlyStore = StoreManager.GetAllStores().Count == 1 && StoreManager.GetAllStores()[0].StoreID == storeID.Value;
+                    bool onlyStore = StoreManager.GetEnabledStores().Count == 1 && StoreManager.GetEnabledStores()[0].StoreID == storeID.Value;
 
                     if (!onlyStore)
                     {
@@ -149,6 +149,17 @@ namespace ShipWorks.Actions.Tasks
             get
             {
                 return descriptor.Identifier;
+            }
+        }
+
+        /// <summary>
+        /// Get the task category - used for UI display purposes
+        /// </summary>
+        public ActionTaskCategory Category
+        {
+            get
+            {
+                return descriptor.Category;
             }
         }
 

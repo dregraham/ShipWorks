@@ -32,5 +32,14 @@ namespace ShipWorks.Actions.Tasks
         {
 
         }
+
+        /// <summary>
+        /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
+        /// </summary>
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public virtual void ValidateTask(ICollection<TaskValidationError> errors)
+        {
+
+        }
     }
 }

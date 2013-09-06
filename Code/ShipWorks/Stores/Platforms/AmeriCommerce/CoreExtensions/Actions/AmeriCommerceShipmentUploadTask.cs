@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to AmeriCommerce
     /// </summary>
-    [ActionTask("Upload shipment details", "AmeriCommerceShipmentUpload")]
+    [ActionTask("Upload shipment details", "AmeriCommerceShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class AmeriCommerceShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

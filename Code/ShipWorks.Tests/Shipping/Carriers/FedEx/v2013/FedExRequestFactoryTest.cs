@@ -1,32 +1,30 @@
-﻿using System; 
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using Moq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Close.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators.International;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Request;
 using RateManipulators = ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Request.Manipulators;
-using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 {
     [TestClass]
     public class FedExRequestFactoryTest
     {
-        private FedExRequestFactory testObject;
-
         private Mock<IFedExServiceGateway> fedExService;
         private Mock<ICarrierResponseFactory> responseFactory;
         private Mock<ICarrierSettingsRepository> settingsRepository;
+        private FedExRequestFactory testObject;
         private Mock<IFedExShipmentTokenProcessor> tokenProcessor;
 
         [TestInitialize]
@@ -34,11 +32,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         {
             fedExService = new Mock<IFedExServiceGateway>();
             responseFactory = new Mock<ICarrierResponseFactory>();
-            
+
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity());
 
-            tokenProcessor =new Mock<IFedExShipmentTokenProcessor>();
+            tokenProcessor = new Mock<IFedExShipmentTokenProcessor>();
 
             // Use the "testing version" of the constructor
             testObject = new FedExRequestFactory(fedExService.Object, settingsRepository.Object, tokenProcessor.Object, responseFactory.Object);
@@ -68,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
-            Assert.AreEqual(35, request.Manipulators.Count());   
+            Assert.AreEqual(35, request.Manipulators.Count());
         }
 
         [TestMethod]
@@ -230,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExDryIceManipulator)) == 1);
         }
-		
+
         [TestMethod]
         public void CreateShipRequest_FedExPriorityAlertManipulator_Test()
         {
@@ -337,9 +335,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
         #endregion CreateShipRequest Tests
 
-        
         #region CreateVersionCaptureRequest Tests
-        
+
         [TestMethod]
         public void CreateVersionCaptureRequest_PopulatesManipulators_Test()
         {
@@ -376,13 +373,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
         #endregion CreateVersionCaptureRequest Tests
 
-
         #region CreatePackageMovementRequest Tests
 
         [TestMethod]
         public void CreatePackageMovementRequest_PopulatesManipulators_Test()
         {
-            CarrierRequest request = testObject.CreatePackageMovementRequest(new ShipmentEntity(),  new FedExAccountEntity());
+            CarrierRequest request = testObject.CreatePackageMovementRequest(new ShipmentEntity(), new FedExAccountEntity());
 
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
@@ -415,7 +411,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
         #endregion CreateVersionCaptureRequest Tests
 
-        
         #region CreateGroundCloseRequest Tests
 
         [TestMethod]
@@ -461,7 +456,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
 
         #endregion CreateCloseRequest Tests
-
 
         #region CreateSmartPostCloseRequest Tests
 
@@ -509,7 +503,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
         #endregion CreateSmartPostCloseRequest Tests
 
-
         #region CreateRegisterCspUserRequest Tests
 
         [TestMethod]
@@ -555,7 +548,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
 
         #endregion CreateRegisterCspUserRequest Tests
-        
 
         #region CreateSubscriptionRequest Tests
 
@@ -616,11 +608,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         [TestMethod]
         public void CreateRateRequest_PopulatesManipulators_WithSpecializedManipulators_Test()
         {
-            
-            Mock<ICarrierRequestManipulator> specializedManipulator1 = new Mock<ICarrierRequestManipulator>();
-            Mock<ICarrierRequestManipulator> specializedManipulator2 = new Mock<ICarrierRequestManipulator>();
+            var specializedManipulator1 = new Mock<ICarrierRequestManipulator>();
+            var specializedManipulator2 = new Mock<ICarrierRequestManipulator>();
 
-            List<ICarrierRequestManipulator> specializedList = new List<ICarrierRequestManipulator>
+            var specializedList = new List<ICarrierRequestManipulator>
             {
                 specializedManipulator1.Object,
                 specializedManipulator2.Object
@@ -758,7 +749,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(RateManipulators.FedExRateVersionManipulator)) == 1);
         }
-        
+
         #endregion CreateRateRequest Tests
     }
 }

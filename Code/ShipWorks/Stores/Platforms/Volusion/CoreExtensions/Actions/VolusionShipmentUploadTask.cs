@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment deails to Volusion
     /// </summary>
-    [ActionTask("Upload shipment details", "VolusionShipmentUpload")]
+    [ActionTask("Upload shipment details", "VolusionShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class VolusionShipmentUploadTask : StoreTypeTaskBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionShipmentUploadTask));

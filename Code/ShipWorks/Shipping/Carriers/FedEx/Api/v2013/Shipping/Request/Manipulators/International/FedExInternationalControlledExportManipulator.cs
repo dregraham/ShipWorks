@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization 
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             AddControlledExportOption(nativeRequest);
             
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// Adds the controlled export option to the request.
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
-        private static void AddControlledExportOption(ProcessShipmentRequest nativeRequest)
+        private static void AddControlledExportOption(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
             {
@@ -111,8 +111,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private static void InitializeRequest(CarrierRequest request)
         {
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

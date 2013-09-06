@@ -65,6 +65,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         }
 
+        public override void Initialize()
+        {
+            packageControl.PackageCountChanged += packageDetailsControl.PackageCountChanged;
+        }
+
         /// <summary>
         /// Load the list of UPS accounts
         /// </summary>
@@ -126,6 +131,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Load the package information
             packageControl.LoadShipments(LoadedShipments, enableEditing);
+            packageDetailsControl.LoadShipments(LoadedShipments, enableEditing);
 
             ResumeRateCriteriaChangeEvent();
         }
@@ -188,8 +194,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 serviceType = null;
             }
 
-            //ShipmentTypeManager.GetType(overriddenShipments.First());
-            //this.shipmen
             UpdateMiAndSurePostSpecificVisibility(serviceType);
 
             // Unhook events
@@ -280,6 +284,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Save the package crap
             packageControl.SaveToEntities();
+            packageDetailsControl.SaveToEntities();
 
             // Save the 
             foreach (ShipmentEntity shipment in LoadedShipments)
@@ -557,14 +562,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             else
             {
                 UpsAccountEntity account = upsAccount.SelectedIndex >= 0 ? UpsAccountManager.GetAccount((long) upsAccount.SelectedValue) : null;
-                if (account != null)
-                {
-                    text += account.Description;
-                }
-                else
-                {
-                    text += "(None)";
-                }
+                text += (account != null) ? account.Description : "(None)";
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
@@ -633,6 +631,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnPackageControlSizeChanged(object sender, EventArgs e)
         {
             sectionShipment.Height = (sectionShipment.Height - sectionShipment.ContentPanel.Height) + packageControl.Bottom + 4;
+        }
+
+        /// <summary>
+        /// The size of the package details control has changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnPackageDetailsControlSizeChanged(object sender, EventArgs e)
+        {
+            otherPackageDetails.Height = (otherPackageDetails.Height - otherPackageDetails.ContentPanel.Height) + packageDetailsControl.Bottom + 4;
         }
 
         /// <summary>

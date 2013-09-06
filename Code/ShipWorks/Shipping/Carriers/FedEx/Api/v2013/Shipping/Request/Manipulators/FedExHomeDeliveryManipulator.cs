@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that configures the 
-    /// FedEx ProcessShipmentRequest object with home delivery options depending on the 
+    /// FedEx IFedExNativeShipmentRequest object with home delivery options depending on the 
     /// shipment entity.
     /// </summary>
     public class FedExHomeDeliveryManipulator : FedExShippingRequestManipulatorBase
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             
             FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
             FedExHomeDeliveryType homeDeliveryType = (FedExHomeDeliveryType) fedExShipment.HomeDeliveryType;
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// Gets the service type list.
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureServiceType(ProcessShipmentRequest nativeRequest)
+        private void ConfigureServiceType(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
             {
@@ -85,12 +85,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         }
 
         /// <summary>
-        /// Configures the home delivery details of the ProcessShipmentRequest.
+        /// Configures the home delivery details of the IFedExNativeShipmentRequest.
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="homeDeliveryType">Type of the home delivery.</param>
         /// <param name="fedExShipment">The FedEx shipment.</param>
-        private void ConfigureHomeDeliveryDetails(ProcessShipmentRequest nativeRequest, FedExHomeDeliveryType homeDeliveryType, FedExShipmentEntity fedExShipment)
+        private void ConfigureHomeDeliveryDetails(IFedExNativeShipmentRequest nativeRequest, FedExHomeDeliveryType homeDeliveryType, FedExShipmentEntity fedExShipment)
         {
             // Figure out the FedEx API premium type value
             HomeDeliveryPremiumType premiumType;
@@ -133,8 +133,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

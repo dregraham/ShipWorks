@@ -182,7 +182,7 @@
             this.labelWelcomeGlad.Name = "labelWelcomeGlad";
             this.labelWelcomeGlad.Size = new System.Drawing.Size(237, 13);
             this.labelWelcomeGlad.TabIndex = 0;
-            this.labelWelcomeGlad.Text = "Are you totally brand new to ShipWorks?";
+            this.labelWelcomeGlad.Text = "Are you new to ShipWorks?";
             // 
             // labelWelcomeAdvanced
             // 

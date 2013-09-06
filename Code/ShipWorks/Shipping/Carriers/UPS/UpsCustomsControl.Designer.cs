@@ -32,7 +32,9 @@
             this.labelDocuments = new System.Windows.Forms.Label();
             this.labelDescriptionOfGoods = new System.Windows.Forms.Label();
             this.descriptionOfGoods = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.sectionCommercialInvoice = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.sectionInvoicing = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.extraDocuments = new System.Windows.Forms.CheckBox();
+            this.extraDocumentsLabel = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -45,21 +47,22 @@
             this.ciComments = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelComments = new System.Windows.Forms.Label();
             this.labelTermsOfSale = new System.Windows.Forms.Label();
-            this.commercialInvoice = new System.Windows.Forms.CheckBox();
-            this.paperless = new System.Windows.Forms.CheckBox();
-            this.paperlessLabel = new System.Windows.Forms.Label();
+            this.usePaperlessInvoice = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).BeginInit();
             this.sectionGeneral.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCommercialInvoice)).BeginInit();
-            this.sectionCommercialInvoice.ContentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionInvoicing)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionInvoicing.ContentPanel)).BeginInit();
+            this.sectionInvoicing.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sectionContents
             // 
-            this.sectionContents.Location = new System.Drawing.Point(6, 140);
+            this.sectionContents.Location = new System.Drawing.Point(6, 120);
             this.sectionContents.Size = new System.Drawing.Size(555, 362);
             // 
             // label1
@@ -77,14 +80,12 @@
             // 
             // sectionGeneral.ContentPanel
             // 
-            this.sectionGeneral.ContentPanel.Controls.Add(this.paperless);
-            this.sectionGeneral.ContentPanel.Controls.Add(this.paperlessLabel);
             this.sectionGeneral.ContentPanel.Controls.Add(this.descriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDescriptionOfGoods);
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(555, 130);
+            this.sectionGeneral.Size = new System.Drawing.Size(606, 110);
             // 
             // groupSelectedContent
             // 
@@ -136,44 +137,66 @@
             // descriptionOfGoods
             // 
             this.descriptionOfGoods.Location = new System.Drawing.Point(75, 56);
-            this.fieldLengthProvider.SetMaxLengthSource(this.descriptionOfGoods, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsCustomsDescription);
             this.descriptionOfGoods.Name = "descriptionOfGoods";
             this.descriptionOfGoods.Size = new System.Drawing.Size(258, 21);
             this.descriptionOfGoods.TabIndex = 5;
             // 
-            // sectionCommercialInvoice
+            // sectionInvoicing
             // 
-            this.sectionCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionInvoicing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             // 
-            // sectionCommercialInvoice.ContentPanel
+            // sectionInvoicing.ContentPanel
             // 
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.label7);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.label6);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.label5);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciAdditional);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciInsurance);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciFreight);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciPurpose);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciTermsOfSale);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.labelPurpose);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciComments);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.labelComments);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.labelTermsOfSale);
-            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.commercialInvoice);
-            this.sectionCommercialInvoice.ExtraText = "";
-            this.sectionCommercialInvoice.Location = new System.Drawing.Point(6, 507);
-            this.sectionCommercialInvoice.Name = "sectionCommercialInvoice";
-            this.sectionCommercialInvoice.SectionName = "Commercial Invoice";
-            this.sectionCommercialInvoice.SettingsKey = "{ae2272b7-0a1c-43d8-9215-e301bcc1f9b8}";
-            this.sectionCommercialInvoice.Size = new System.Drawing.Size(555, 221);
-            this.sectionCommercialInvoice.TabIndex = 2;
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.extraDocuments);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.extraDocumentsLabel);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.label7);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.label6);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.label5);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.ciAdditional);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.ciInsurance);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.ciFreight);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.ciPurpose);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.ciTermsOfSale);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.labelPurpose);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.ciComments);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.labelComments);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.labelTermsOfSale);
+            this.sectionInvoicing.ContentPanel.Controls.Add(this.usePaperlessInvoice);
+            this.sectionInvoicing.ExtraText = "";
+            this.sectionInvoicing.Location = new System.Drawing.Point(6, 487);
+            this.sectionInvoicing.Name = "sectionInvoicing";
+            this.sectionInvoicing.SectionName = "Invoicing";
+            this.sectionInvoicing.SettingsKey = "{ae2272b7-0a1c-43d8-9215-e301bcc1f9b8}";
+            this.sectionInvoicing.Size = new System.Drawing.Size(555, 238);
+            this.sectionInvoicing.TabIndex = 2;
+            // 
+            // extraDocuments
+            // 
+            this.extraDocuments.AutoSize = true;
+            this.extraDocuments.BackColor = System.Drawing.Color.White;
+            this.extraDocuments.Location = new System.Drawing.Point(119, 29);
+            this.extraDocuments.Name = "extraDocuments";
+            this.extraDocuments.Size = new System.Drawing.Size(263, 17);
+            this.extraDocuments.TabIndex = 96;
+            this.extraDocuments.Text = "My shipment requires additional paper documents";
+            this.extraDocuments.UseVisualStyleBackColor = false;
+            // 
+            // extraDocumentsLabel
+            // 
+            this.extraDocumentsLabel.AutoSize = true;
+            this.extraDocumentsLabel.BackColor = System.Drawing.Color.White;
+            this.extraDocumentsLabel.Location = new System.Drawing.Point(21, 30);
+            this.extraDocumentsLabel.Name = "extraDocumentsLabel";
+            this.extraDocumentsLabel.Size = new System.Drawing.Size(93, 13);
+            this.extraDocumentsLabel.TabIndex = 95;
+            this.extraDocumentsLabel.Text = "Extra Documents:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(27, 139);
+            this.label7.Location = new System.Drawing.Point(27, 158);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(87, 13);
             this.label7.TabIndex = 94;
@@ -183,7 +206,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(28, 166);
+            this.label6.Location = new System.Drawing.Point(28, 185);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(86, 13);
             this.label6.TabIndex = 93;
@@ -193,7 +216,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(41, 115);
+            this.label5.Location = new System.Drawing.Point(41, 134);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(73, 13);
             this.label5.TabIndex = 92;
@@ -206,7 +229,7 @@
             0,
             0,
             65536});
-            this.ciAdditional.Location = new System.Drawing.Point(120, 163);
+            this.ciAdditional.Location = new System.Drawing.Point(120, 182);
             this.ciAdditional.Name = "ciAdditional";
             this.ciAdditional.Size = new System.Drawing.Size(95, 21);
             this.ciAdditional.TabIndex = 6;
@@ -219,7 +242,7 @@
             0,
             0,
             65536});
-            this.ciInsurance.Location = new System.Drawing.Point(120, 136);
+            this.ciInsurance.Location = new System.Drawing.Point(120, 155);
             this.ciInsurance.Name = "ciInsurance";
             this.ciInsurance.Size = new System.Drawing.Size(95, 21);
             this.ciInsurance.TabIndex = 5;
@@ -232,7 +255,7 @@
             0,
             0,
             65536});
-            this.ciFreight.Location = new System.Drawing.Point(120, 112);
+            this.ciFreight.Location = new System.Drawing.Point(120, 131);
             this.ciFreight.Name = "ciFreight";
             this.ciFreight.Size = new System.Drawing.Size(95, 21);
             this.ciFreight.TabIndex = 4;
@@ -242,7 +265,7 @@
             // 
             this.ciPurpose.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ciPurpose.FormattingEnabled = true;
-            this.ciPurpose.Location = new System.Drawing.Point(119, 58);
+            this.ciPurpose.Location = new System.Drawing.Point(119, 77);
             this.ciPurpose.Name = "ciPurpose";
             this.ciPurpose.PromptText = "(Multiple Values)";
             this.ciPurpose.Size = new System.Drawing.Size(161, 21);
@@ -252,7 +275,7 @@
             // 
             this.ciTermsOfSale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ciTermsOfSale.FormattingEnabled = true;
-            this.ciTermsOfSale.Location = new System.Drawing.Point(119, 31);
+            this.ciTermsOfSale.Location = new System.Drawing.Point(119, 50);
             this.ciTermsOfSale.Name = "ciTermsOfSale";
             this.ciTermsOfSale.PromptText = "(Multiple Values)";
             this.ciTermsOfSale.Size = new System.Drawing.Size(161, 21);
@@ -262,7 +285,7 @@
             // 
             this.labelPurpose.AutoSize = true;
             this.labelPurpose.BackColor = System.Drawing.Color.White;
-            this.labelPurpose.Location = new System.Drawing.Point(64, 61);
+            this.labelPurpose.Location = new System.Drawing.Point(64, 80);
             this.labelPurpose.Name = "labelPurpose";
             this.labelPurpose.Size = new System.Drawing.Size(50, 13);
             this.labelPurpose.TabIndex = 86;
@@ -270,8 +293,7 @@
             // 
             // ciComments
             // 
-            this.ciComments.Location = new System.Drawing.Point(119, 85);
-            this.fieldLengthProvider.SetMaxLengthSource(this.ciComments, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsCommercialInvoiceComments);
+            this.ciComments.Location = new System.Drawing.Point(119, 104);
             this.ciComments.Name = "ciComments";
             this.ciComments.Size = new System.Drawing.Size(161, 21);
             this.ciComments.TabIndex = 3;
@@ -280,7 +302,7 @@
             // 
             this.labelComments.AutoSize = true;
             this.labelComments.BackColor = System.Drawing.Color.White;
-            this.labelComments.Location = new System.Drawing.Point(53, 88);
+            this.labelComments.Location = new System.Drawing.Point(53, 107);
             this.labelComments.Name = "labelComments";
             this.labelComments.Size = new System.Drawing.Size(61, 13);
             this.labelComments.TabIndex = 84;
@@ -290,63 +312,46 @@
             // 
             this.labelTermsOfSale.AutoSize = true;
             this.labelTermsOfSale.BackColor = System.Drawing.Color.White;
-            this.labelTermsOfSale.Location = new System.Drawing.Point(42, 34);
+            this.labelTermsOfSale.Location = new System.Drawing.Point(39, 53);
             this.labelTermsOfSale.Name = "labelTermsOfSale";
             this.labelTermsOfSale.Size = new System.Drawing.Size(75, 13);
             this.labelTermsOfSale.TabIndex = 83;
             this.labelTermsOfSale.Text = "Terms of sale:";
             // 
-            // commercialInvoice
+            // usePaperlessInvoice
             // 
-            this.commercialInvoice.AutoSize = true;
-            this.commercialInvoice.BackColor = System.Drawing.Color.White;
-            this.commercialInvoice.Location = new System.Drawing.Point(12, 8);
-            this.commercialInvoice.Name = "commercialInvoice";
-            this.commercialInvoice.Size = new System.Drawing.Size(154, 17);
-            this.commercialInvoice.TabIndex = 0;
-            this.commercialInvoice.Text = "Create Commercial Invoice";
-            this.commercialInvoice.UseVisualStyleBackColor = false;
-            // 
-            // paperless
-            // 
-            this.paperless.AutoSize = true;
-            this.paperless.BackColor = System.Drawing.Color.White;
-            this.paperless.Location = new System.Drawing.Point(75, 84);
-            this.paperless.Name = "paperless";
-            this.paperless.Size = new System.Drawing.Size(205, 17);
-            this.paperless.TabIndex = 7;
-            this.paperless.Text = "Paperless international documentation";
-            this.paperless.UseVisualStyleBackColor = false;
-            // 
-            // paperlessLabel
-            // 
-            this.paperlessLabel.AutoSize = true;
-            this.paperlessLabel.BackColor = System.Drawing.Color.White;
-            this.paperlessLabel.Location = new System.Drawing.Point(13, 85);
-            this.paperlessLabel.Name = "paperlessLabel";
-            this.paperlessLabel.Size = new System.Drawing.Size(57, 13);
-            this.paperlessLabel.TabIndex = 6;
-            this.paperlessLabel.Text = "Paperless:";
+            this.usePaperlessInvoice.AutoSize = true;
+            this.usePaperlessInvoice.BackColor = System.Drawing.Color.White;
+            this.usePaperlessInvoice.Location = new System.Drawing.Point(12, 8);
+            this.usePaperlessInvoice.Name = "usePaperlessInvoice";
+            this.usePaperlessInvoice.Size = new System.Drawing.Size(129, 17);
+            this.usePaperlessInvoice.TabIndex = 0;
+            this.usePaperlessInvoice.Text = "Use paperless invoice";
+            this.usePaperlessInvoice.UseVisualStyleBackColor = false;
+            this.usePaperlessInvoice.CheckedChanged += new System.EventHandler(this.OnUsePaperlessInvoiceCheckedChanged);
             // 
             // UpsCustomsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.sectionCommercialInvoice);
+            this.Controls.Add(this.sectionInvoicing);
             this.Name = "UpsCustomsControl";
             this.Size = new System.Drawing.Size(564, 727);
-            this.Controls.SetChildIndex(this.sectionCommercialInvoice, 0);
+            this.Controls.SetChildIndex(this.sectionInvoicing, 0);
             this.Controls.SetChildIndex(this.sectionContents, 0);
             this.Controls.SetChildIndex(this.sectionGeneral, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).EndInit();
             this.sectionGeneral.ContentPanel.ResumeLayout(false);
             this.sectionGeneral.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            this.sectionCommercialInvoice.ContentPanel.ResumeLayout(false);
-            this.sectionCommercialInvoice.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCommercialInvoice)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionInvoicing.ContentPanel)).EndInit();
+            this.sectionInvoicing.ContentPanel.ResumeLayout(false);
+            this.sectionInvoicing.ContentPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionInvoicing)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -357,7 +362,7 @@
         private System.Windows.Forms.Label labelDocuments;
         private ShipWorks.UI.Controls.MultiValueTextBox descriptionOfGoods;
         private System.Windows.Forms.Label labelDescriptionOfGoods;
-        private ShipWorks.UI.Controls.CollapsibleGroupControl sectionCommercialInvoice;
+        private ShipWorks.UI.Controls.CollapsibleGroupControl sectionInvoicing;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
@@ -370,8 +375,8 @@
         private ShipWorks.UI.Controls.MultiValueTextBox ciComments;
         private System.Windows.Forms.Label labelComments;
         private System.Windows.Forms.Label labelTermsOfSale;
-        private System.Windows.Forms.CheckBox commercialInvoice;
-        private System.Windows.Forms.CheckBox paperless;
-        private System.Windows.Forms.Label paperlessLabel;
+        private System.Windows.Forms.CheckBox usePaperlessInvoice;
+        private System.Windows.Forms.CheckBox extraDocuments;
+        private System.Windows.Forms.Label extraDocumentsLabel;
     }
 }

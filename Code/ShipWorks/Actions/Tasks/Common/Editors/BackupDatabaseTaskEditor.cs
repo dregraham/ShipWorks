@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
+    /// <summary>
+    /// Task editor for backup database task.
+    /// </summary>
     public partial class BackupDatabaseTaskEditor : ActionTaskEditor
     {
         private readonly BackupDatabaseTask task;
@@ -31,14 +38,11 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            //this.Validating += OnBackupDatabaseTaskEditorValidating;
             backupPath.Text = task.BackupDirectory;
-            backupPath.Validating += OnBackupPathValidating;
-            backupPath.Validated += OnBackupPathValidated;
 
             textPrefix.Text = task.FilePrefix;
             textPrefix.TextChanged += OnPrefixTextChanged;
-            textPrefix.Validating += OnTextPrefixValidating;
-            textPrefix.Validated += OnTextPrefixValidated;
 
             numericBackupCount.Value = task.KeepNumberOfBackups;
             numericBackupCount.ValueChanged += OnBackupCountValueChanged;
@@ -93,53 +97,35 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Validate that the file prefix does not use any illegal characters
+        /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
         /// </summary>
-        private void OnTextPrefixValidating(object sender, CancelEventArgs e)
+        /// <param name="errors">Collection of errors to which new errors will be added</param>
+        public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
+            ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
+            TaskValidationError error = new TaskValidationError(string.Format("The {0} task is missing some information.", descriptor.BaseName));
+
             if (string.IsNullOrWhiteSpace(textPrefix.Text))
             {
-                errorProvider.SetError(textPrefix, "This value is required.");
-                e.Cancel = true;
+                error.Details.Add("Please enter a backup file name.");
             }
 
             if (textPrefix.Text.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
             {
-                errorProvider.SetError(textPrefix, string.Format("Backup name cannot contain the following characters: {0}", 
-                    Path.GetInvalidFileNameChars().Where(x => x > 31).Aggregate("", (x, y) => x + " " + y)));
-
-                e.Cancel = true;
+                error.Details.Add(string.Format("The backup file name cannot contain the following characters: {0}",
+                    Path.GetInvalidFileNameChars().Where(x => x > 31).Combine(" ")));
             }
-        }
 
-        /// <summary>
-        /// Clear the validation error for the prefix text box
-        /// </summary>
-        private void OnTextPrefixValidated(object sender, EventArgs e)
-        {
-            errorProvider.SetError(textPrefix, "");
-        }
-
-        /// <summary>
-        /// Validate that the text box has a value entered
-        /// </summary>
-        private void OnBackupPathValidating(object sender, CancelEventArgs e)
-        {
             if (string.IsNullOrWhiteSpace(backupPath.Text))
             {
-                errorProvider.SetError(browse, "This value is required.");
-                e.Cancel = true;
+                error.Details.Add("Please enter a backup folder.");
             }
-        }
 
-        /// <summary>
-        /// Clear the validation error for the backup path text box
-        /// </summary>
-        private void OnBackupPathValidated(object sender, EventArgs e)
-        {
-            // Use the browse button as the error control so that the validation
-            // UI shows up next to it instead of over it
-            errorProvider.SetError(browse, "");
+            // Add the error to the main errors collection if there are any validation errors
+            if (error.Details.Any())
+            {
+                errors.Add(error);
+            }
         }
     }
 }

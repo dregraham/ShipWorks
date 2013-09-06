@@ -8326,6 +8326,24 @@ namespace ShipWorks.Data.Model
 		TrackingNumber,
 		///<summary>UspsTrackingNumber. </summary>
 		UspsTrackingNumber,
+		///<summary>AdditionalHandlingEnabled. </summary>
+		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationEnabled. </summary>
+		VerbalConfirmationEnabled,
+		///<summary>VerbalConfirmationName. </summary>
+		VerbalConfirmationName,
+		///<summary>VerbalConfirmationPhone. </summary>
+		VerbalConfirmationPhone,
+		///<summary>VerbalConfirmationPhoneExtension. </summary>
+		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceEnabled. </summary>
+		DryIceEnabled,
+		///<summary>DryIceRegulationSet. </summary>
+		DryIceRegulationSet,
+		///<summary>DryIceWeight. </summary>
+		DryIceWeight,
+		///<summary>DryIceIsForMedicalUse. </summary>
+		DryIceIsForMedicalUse,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8385,12 +8403,14 @@ namespace ShipWorks.Data.Model
 		Endorsement,
 		///<summary>Subclassification. </summary>
 		Subclassification,
-		///<summary>PaperlessInternational. </summary>
-		PaperlessInternational,
+		///<summary>PaperlessAdditionalDocumentation. </summary>
+		PaperlessAdditionalDocumentation,
 		///<summary>ShipperRelease. </summary>
 		ShipperRelease,
 		///<summary>CarbonNeutral. </summary>
 		CarbonNeutral,
+		///<summary>CommercialPaperlessInvoice. </summary>
+		CommercialPaperlessInvoice,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8422,6 +8442,24 @@ namespace ShipWorks.Data.Model
 		DimsWeight,
 		///<summary>DimsAddWeight. </summary>
 		DimsAddWeight,
+		///<summary>AdditionalHandlingEnabled. </summary>
+		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationName. </summary>
+		VerbalConfirmationName,
+		///<summary>VerbalConfirmationPhone. </summary>
+		VerbalConfirmationPhone,
+		///<summary>VerbalConfirmationPhoneExtension. </summary>
+		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceRegulationSet. </summary>
+		DryIceRegulationSet,
+		///<summary>DryIceWeight. </summary>
+		DryIceWeight,
+		///<summary>DryIceIsForMedicalUse. </summary>
+		DryIceIsForMedicalUse,
+		///<summary>DryIceEnabled. </summary>
+		DryIceEnabled,
+		///<summary>VerbalConfirmationEnabled. </summary>
+		VerbalConfirmationEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8479,8 +8517,8 @@ namespace ShipWorks.Data.Model
 		CustomsDocumentsOnly,
 		///<summary>CustomsDescription. </summary>
 		CustomsDescription,
-		///<summary>CommercialInvoice. </summary>
-		CommercialInvoice,
+		///<summary>CommercialPaperlessInvoice. </summary>
+		CommercialPaperlessInvoice,
 		///<summary>CommercialInvoiceTermsOfSale. </summary>
 		CommercialInvoiceTermsOfSale,
 		///<summary>CommercialInvoicePurpose. </summary>
@@ -8511,8 +8549,8 @@ namespace ShipWorks.Data.Model
 		Endorsement,
 		///<summary>Subclassification. </summary>
 		Subclassification,
-		///<summary>PaperlessInternational. </summary>
-		PaperlessInternational,
+		///<summary>PaperlessAdditionalDocumentation. </summary>
+		PaperlessAdditionalDocumentation,
 		///<summary>ShipperRelease. </summary>
 		ShipperRelease,
 		///<summary>CarbonNeutral. </summary>
@@ -8818,6 +8856,24 @@ namespace ShipWorks.Data.Model
 		Qvn3Email,
 		///<summary>ShipperRelease. </summary>
 		ShipperRelease,
+		///<summary>AdditionalHandlingEnabled. </summary>
+		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationOption. </summary>
+		VerbalConfirmationOption,
+		///<summary>VerbalConfirmationContactName. </summary>
+		VerbalConfirmationContactName,
+		///<summary>VerbalConfirmationTelephone. </summary>
+		VerbalConfirmationTelephone,
+		///<summary>DryIceRegulationSet. </summary>
+		DryIceRegulationSet,
+		///<summary>DryIceWeight. </summary>
+		DryIceWeight,
+		///<summary>DryIceMedicalPurpose. </summary>
+		DryIceMedicalPurpose,
+		///<summary>DryIceOption. </summary>
+		DryIceOption,
+		///<summary>DryIceWeightUnitOfMeasure. </summary>
+		DryIceWeightUnitOfMeasure,
 		/// <summary></summary>
 		AmountOfFields
 	}

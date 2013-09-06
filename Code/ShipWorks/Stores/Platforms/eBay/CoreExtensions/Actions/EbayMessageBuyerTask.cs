@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions
     /// <summary>
     /// Task for sending shipment notification email to the buyer's eBay inbox.
     /// </summary>
-    [ActionTask("Send eBay message to buyer", "EbayMessageBuyer")]
+    [ActionTask("Send eBay message to buyer", "EbayMessageBuyer", ActionTaskCategory.UpdateOnline)]
     public class EbayMessageBuyerTask : StoreTypeTaskBase
     {
         // Logger 

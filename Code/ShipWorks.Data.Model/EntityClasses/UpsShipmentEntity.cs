@@ -574,7 +574,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsDescription", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("CommercialInvoice", fieldHashtable);
+			_fieldsCustomProperties.Add("CommercialPaperlessInvoice", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CommercialInvoiceTermsOfSale", fieldHashtable);
@@ -622,7 +622,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Subclassification", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("PaperlessInternational", fieldHashtable);
+			_fieldsCustomProperties.Add("PaperlessAdditionalDocumentation", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipperRelease", fieldHashtable);
@@ -1003,15 +1003,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UpsShipmentFieldIndex.CustomsDescription, value); }
 		}
 
-		/// <summary> The CommercialInvoice property of the Entity UpsShipment<br/><br/>
+		/// <summary> The CommercialPaperlessInvoice property of the Entity UpsShipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UpsShipment"."CommercialInvoice"<br/>
+		/// <remarks>Mapped on  table field: "UpsShipment"."CommercialPaperlessInvoice"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean CommercialInvoice
+		public virtual System.Boolean CommercialPaperlessInvoice
 		{
-			get { return (System.Boolean)GetValue((int)UpsShipmentFieldIndex.CommercialInvoice, true); }
-			set	{ SetValue((int)UpsShipmentFieldIndex.CommercialInvoice, value); }
+			get { return (System.Boolean)GetValue((int)UpsShipmentFieldIndex.CommercialPaperlessInvoice, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.CommercialPaperlessInvoice, value); }
 		}
 
 		/// <summary> The CommercialInvoiceTermsOfSale property of the Entity UpsShipment<br/><br/>
@@ -1179,15 +1179,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UpsShipmentFieldIndex.Subclassification, value); }
 		}
 
-		/// <summary> The PaperlessInternational property of the Entity UpsShipment<br/><br/>
+		/// <summary> The PaperlessAdditionalDocumentation property of the Entity UpsShipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UpsShipment"."PaperlessInternational"<br/>
+		/// <remarks>Mapped on  table field: "UpsShipment"."PaperlessAdditionalDocumentation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean PaperlessInternational
+		public virtual System.Boolean PaperlessAdditionalDocumentation
 		{
-			get { return (System.Boolean)GetValue((int)UpsShipmentFieldIndex.PaperlessInternational, true); }
-			set	{ SetValue((int)UpsShipmentFieldIndex.PaperlessInternational, value); }
+			get { return (System.Boolean)GetValue((int)UpsShipmentFieldIndex.PaperlessAdditionalDocumentation, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.PaperlessAdditionalDocumentation, value); }
 		}
 
 		/// <summary> The ShipperRelease property of the Entity UpsShipment<br/><br/>

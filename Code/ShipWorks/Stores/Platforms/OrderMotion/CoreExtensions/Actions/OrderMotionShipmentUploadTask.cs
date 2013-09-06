@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to OrderMotion
     /// </summary>
-    [ActionTask("Upload shipment details", "OrderMotionShipmentUpload")]
+    [ActionTask("Upload shipment details", "OrderMotionShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class OrderMotionShipmentUploadTask : StoreTypeTaskBase
     {
         /// <summary>

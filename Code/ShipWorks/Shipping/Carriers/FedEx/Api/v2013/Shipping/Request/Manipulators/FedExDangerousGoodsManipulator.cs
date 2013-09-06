@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that modifies the DangerousGoodsDetail
-    /// attributes within the FedEx API's ProcessShipmentRequest object if the shipment 
+    /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment 
     /// has dangerous goods enabled.
     /// </summary>
     public class FedExDangerousGoodsManipulator : FedExShippingRequestManipulatorBase
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             
             if (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DangerousGoodsEnabled)
             {
@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// Adds the dangerous goods option to the request.
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureDangerousGoodsOption(ProcessShipmentRequest nativeRequest)
+        private void ConfigureDangerousGoodsOption(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested == null)
             {
@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="lineItemIndex">Index of the line item.</param>
-        private static void InitializeLineItem(ProcessShipmentRequest nativeRequest)
+        private static void InitializeLineItem(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.RequestedPackageLineItems.Length == 0)
             {
@@ -265,8 +265,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             // We'll potentially be adding COD at the package level, so initialize the package index
             currentPackageIndex = request.SequenceNumber;
 
-            // The native FedEx request type should be a ProcessShipmentRequest
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             this.loadedShipments = shipments;
 
-            // Enable all the controls (except the grid, which you can always select from) based on the enabled state
+            // Enable all the controlsk (except the grid, which you can always select from) based on the enabled state
             foreach (Control control in Controls)
             {
                 if (control != packagesGrid)

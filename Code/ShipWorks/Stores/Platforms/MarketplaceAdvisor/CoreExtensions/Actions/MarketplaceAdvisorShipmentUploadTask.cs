@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
     /// <summary>
     /// Task to update the online shipment record of a MarketplaceAdvisor order
     /// </summary>
-    [ActionTask("Upload shipment details", "MarketplaceAdvisorShipmentUpload")]
+    [ActionTask("Upload shipment details", "MarketplaceAdvisorShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class MarketplaceAdvisorShipmentUploadTask : StoreInstanceTaskBase
     {
         /// <summary>

@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="fedExService">The FedEx service used to route the request to FedEx.</param>
         /// <param name="responseFactory">The response factory that should be used to create the ICarrierResponse object returned from the Submit method.</param>
-        public FedExShipRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, ICarrierResponseFactory responseFactory, ICarrierSettingsRepository settingsRepository)
+        public FedExShipRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, ICarrierResponseFactory responseFactory, ICarrierSettingsRepository settingsRepository, IFedExNativeShipmentRequest shipmentRequest)
             : base(requestManipulators, shipmentEntity)
         {
             this.fedExService = fedExService;
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request
             accountEntity = (FedExAccountEntity)settingsRepository.GetAccount(shipmentEntity);
 
             // The native FedEx request needs to be a ProcessShipmentRequest to send the shipment to the FedEx service
-            this.NativeRequest = new ProcessShipmentRequest();
+            this.NativeRequest = shipmentRequest;
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request
             
             // The request is ready to be sent to FedEx; we're sure the native request will be a ProcessShipmentRequest 
             // (since we assigned it as such in the constructor) so we can safely cast it here
-            ProcessShipmentReply nativeResponse = fedExService.Ship(this.NativeRequest as ProcessShipmentRequest);
+            IFedExNativeShipmentReply nativeResponse = fedExService.Ship(this.NativeRequest as IFedExNativeShipmentRequest);
 
             // Defer to the response factory to create the ship response that wraps the raw/native response obtained from the service
             return responseFactory.CreateShipResponse(nativeResponse, this, this.ShipmentEntity);

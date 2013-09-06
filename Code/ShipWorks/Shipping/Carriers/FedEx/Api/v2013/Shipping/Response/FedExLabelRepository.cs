@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
             FedExShipResponse fedExShipResponse = (FedExShipResponse) response;
 
             ShipmentEntity shipment = fedExShipResponse.Shipment;
-            ProcessShipmentReply reply = fedExShipResponse.NativeResponse as ProcessShipmentReply;
+            IFedExNativeShipmentReply reply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
 
             SaveShipmentLabels(reply, shipment);
 
@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
-        private void SavePackageLabels(ProcessShipmentReply reply, ShipmentEntity shipment)
+        private void SavePackageLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
             string certificationId = reply.TransactionDetail.CustomerTransactionId;
 
@@ -49,7 +49,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
                     FedExPackageEntity package = shipment.FedEx.Packages[int.Parse(packageReply.SequenceNumber) - 1];
 
                     // Save the primary label image
-                    SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);
+                    if (packageReply.Label != null)
+                    {
+                        SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);                        
+                    }
 
                     // Package level COD
                     if (shipment.FedEx.CodEnabled && packageReply.CodReturnDetail != null && packageReply.CodReturnDetail.Label != null)
@@ -75,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
-        private static void SaveShipmentLabels(ProcessShipmentReply reply, ShipmentEntity shipment)
+        private static void SaveShipmentLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
             // Documents
             if (reply.CompletedShipmentDetail.ShipmentDocuments != null)
@@ -97,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
         /// <param name="reply">The reply.</param>
         /// <param name="shipment">The shipment.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        private void SaveAssociatedShipments(ProcessShipmentReply reply, ShipmentEntity shipment)
+        private void SaveAssociatedShipments(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
             if (reply.CompletedShipmentDetail.AssociatedShipments != null)
             {
