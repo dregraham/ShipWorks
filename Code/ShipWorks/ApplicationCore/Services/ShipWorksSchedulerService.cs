@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Services
 
         private readonly Timer timer = new Timer();
 
-        private Heartbeat _heartbeat;
+        private Heartbeat heartbeat;
 
         /// <summary>
         /// Constructor.
@@ -51,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Required for printing
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
 
-            _heartbeat = new Heartbeat();
+            heartbeat = new Heartbeat();
 
             timer.Enabled = true;
             timer.Interval = 1000;
@@ -84,7 +84,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Switch to checking every 15 seconds
             timer.Interval = (int)TimeSpan.FromSeconds(15).TotalMilliseconds;
 
-            _heartbeat.DoHeartbeat(HeartbeatOptions.None);
+            heartbeat.DoHeartbeat(HeartbeatOptions.None);
         }
     }
 }

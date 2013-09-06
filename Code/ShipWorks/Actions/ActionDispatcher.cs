@@ -179,31 +179,31 @@ namespace ShipWorks.Actions
         {
             log.DebugFormat("Dispatching action '{0}' for {1}", action.Name, objectID);
 
-            ActionQueueEntity entity = new ActionQueueEntity();
-            entity.ActionID = action.ActionID;
-            entity.ActionQueueType = action.TriggerType == (int)ActionTriggerType.Scheduled ? (int)ActionQueueType.Scheduled : (int)ActionQueueType.UserInterface;
-            entity.ActionName = action.Name;
-            entity.ActionVersion = action.RowVersion;
-            entity.ObjectID = objectID;
-            entity.TriggerComputerID = UserSession.Computer.ComputerID;
+            ActionQueueEntity actionQueueEntity = new ActionQueueEntity();
+            actionQueueEntity.ActionID = action.ActionID;
+            actionQueueEntity.ActionQueueType = action.TriggerType == (int)ActionTriggerType.Scheduled ? (int)ActionQueueType.Scheduled : (int)ActionQueueType.UserInterface;
+            actionQueueEntity.ActionName = action.Name;
+            actionQueueEntity.ActionVersion = action.RowVersion;
+            actionQueueEntity.ObjectID = objectID;
+            actionQueueEntity.TriggerComputerID = UserSession.Computer.ComputerID;
             
             if (action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer)
             {
                 // It's limited to only running on this computer, so use this computer ID as
                 // the only computer that can execute the action
-                entity.InternalComputerLimitedList = UserSession.Computer.ComputerID.ToString(CultureInfo.InvariantCulture);
+                actionQueueEntity.InternalComputerLimitedList = UserSession.Computer.ComputerID.ToString(CultureInfo.InvariantCulture);
             }
             else
             {
                 // Just copy over the list of computers that are able to execute the action
-                entity.InternalComputerLimitedList = action.InternalComputerLimitedList;
+                actionQueueEntity.InternalComputerLimitedList = action.InternalComputerLimitedList;
             }
 
             // Set the initial status and the first step
-            entity.Status = (int) ActionQueueStatus.Dispatched;
-            entity.NextStep = 0;
+            actionQueueEntity.Status = (int) ActionQueueStatus.Dispatched;
+            actionQueueEntity.NextStep = 0;
 
-            adapter.SaveEntity(entity);
+            adapter.SaveEntity(actionQueueEntity);
 
             // Ensure the action processor is working
             ActionProcessor.StartProcessing();
