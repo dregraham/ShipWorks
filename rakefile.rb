@@ -9,12 +9,14 @@ Albacore.configure do |config|
 	end
 
 	config.mstest do |mstest|
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\mstest.exe"
+		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
 	end
 end
 
 @innoPath = "C:/Program Files (x86)/Inno Setup 5/ISCC.EXE"
 
+# The path to the file containing the next revision number to use in the version (i.e. 4567 would result in a version of x.x.x.4567)
+@revisionFilePath = "\\\\INTFS01\\Development\\CruiseControl\\Configuration\\Versioning\\ShipWorks\\NextRevision.txt"
 
 desc "Cleans and builds the solution with the debug config"
 task :rebuild => ["build:clean", "build:debug"]
@@ -97,7 +99,7 @@ namespace :build do
 		msb.properties :configuration => :Release
 
 		# Grab the revision number to use for this build
-		revisionFile = File.open("C:\\Temp\\NextRevision.txt")
+		revisionFile = File.open(@revisionFilePath)
 		revisionNumber = revisionFile.readline
 		revisionFile.close
 
@@ -107,7 +109,37 @@ namespace :build do
 		
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preperation for the next run
-		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=C:\\Temp\\NextRevision.txt /p:CCNetLabel=" + labelForBuild
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
+	end
+	
+	desc "Build ShipWorks and generate a public installer"
+	msbuild :public_installer, :versionLabel do |msb, args|
+		print "Building an installer for the public release...\r\n\r\n"
+
+		# Default the build label to 0.0.0
+		labelForBuild = "0.0.0"
+		
+		if args != nil and args.versionLabel != nil and args.versionLabel != ""
+			# A label was passed in, so use it for the Major.Minor.Patch 
+			labelForBuild = args.versionLabel
+		end
+		
+		# Use the MSBuild project when building the installer
+		msb.solution = "./Build/shipworks.proj"
+		msb.properties :configuration => :Release
+
+		# Grab the revision number to use for this build
+		revisionFile = File.open(@revisionFilePath)
+		revisionNumber = revisionFile.readline
+		revisionFile.close
+
+		# Append the revision number to the label 
+		labelForBuild = labelForBuild + "." + revisionNumber
+		print "Building with label " + labelForBuild + "\r\n\r\n"
+		
+		# Use the revisionNumber extracted from the file and pass the revision filename
+		# so the build will increment the version in preparation for the next run
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
 	end
 end
 
@@ -130,10 +162,12 @@ namespace :test do
 
 	desc "Execute unit tests"
 	mstest :units do |mstest|
+		print "Deleting previous units results...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		print "Deleting previous units results...\r\n\r\n"				
 		File.delete("TestResults/units-results.trx") if File.exist?("TestResults/units-results.trx")
+
 		print "Executing ShipWorks unit tests...\r\n\r\n"
+		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
 	end	
 end
