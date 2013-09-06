@@ -199,10 +199,17 @@ namespace ShipWorks.Actions.Triggers
         {
             if (null == Schedule)
             {
-                throw new SchedulingException("No schedule has been set for this trigger.");   
+                throw new ActionTriggerException("No schedule has been set for this trigger.");   
             }
 
-            Schedule.Validate();
+            try
+            {
+                Schedule.Validate();
+            }
+            catch (SchedulingException ex)
+            {
+                throw new ActionTriggerException(ex.Message, ex);
+            }
         }
     }
 }

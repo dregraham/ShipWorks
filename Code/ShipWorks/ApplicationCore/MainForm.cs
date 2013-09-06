@@ -106,6 +106,7 @@ using ShipWorks.ApplicationCore.Help;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
+using ShipWorks.Actions.Triggers;
 
 namespace ShipWorks
 {
@@ -617,6 +618,9 @@ namespace ShipWorks
 
             filterTree.LoadLayouts(FilterTarget.Orders, FilterTarget.Customers);
             filterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
+
+            // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
+            UpdateUserInitiatedActionsUI();
 
             // We can now show the normal UI
             ApplyCurrentUserLayout();
@@ -1278,6 +1282,143 @@ namespace ShipWorks
                 contextOrderLocalStatus,
                 popupLocalStatus,
                 OnExecuteMenuCommand);
+        }
+
+        /// <summary>
+        /// Update the UI that's based on user initiated actions
+        /// </summary>
+        private void UpdateUserInitiatedActionsUI()
+        {
+            string ribbonChunkName = "Custom Actions";
+
+            // Get the actions for all custom buttons that need to be added
+            var enabledActions = ActionManager.Actions.Where(a => a.TriggerType == (int) ActionTriggerType.UserInitiated && a.Enabled).Select(a => new { Action = a, Trigger = (UserInitiatedTrigger) ActionManager.LoadTrigger(a) });
+
+            // Get the actions for the ribbon
+            var ribbonActions = enabledActions.Where(a => a.Trigger.ShowOnRibbon);
+
+            // Get the ribbon chunk that holds our action buttons
+            var actionChunk = ribbonTabHome.Chunks.Cast<RibbonChunk>().Where(c => c.Text == ribbonChunkName).SingleOrDefault();
+
+            // Maybe we need to remove it
+            if (actionChunk != null)
+            {
+                // Remove any buttons that are no longer around
+                foreach (SandButton existingButton in actionChunk.Items.OfType<SandButton>().ToList())
+                {
+                    if (!ribbonActions.Any(a => a.Trigger.Guid == existingButton.Guid))
+                    {
+                        existingButton.Dispose();
+                    }
+                }
+
+                // If there are no actions, kill the chunk
+                if (!ribbonActions.Any())
+                {
+                    ribbonTabHome.Chunks.Remove(actionChunk);
+                }
+            }
+
+            // See if there are any to show on the ribbon
+            if (ribbonActions.Any())
+            {
+                // Maybe we need to create it
+                if (actionChunk == null)
+                {
+                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false };
+                    ribbonTabHome.Chunks.Add(actionChunk);
+                }
+
+                // Add all the buttons
+                foreach (var action in ribbonActions)
+                {
+                    // See if we can find the existing button
+                    SandButton button = actionChunk.Items.OfType<SandButton>().FirstOrDefault(b => b.Guid == action.Trigger.Guid);
+
+                    // If it doesn't exist, create it
+                    if (button == null)
+                    {
+                        button = new SandButton(action.Action.Name);
+                        button.Guid = action.Trigger.Guid;
+                        button.Tag = action.Action.ActionID;
+                        button.TextContentRelation = TextContentRelation.Underneath;
+                        button.Activate += OnCustomActionButton;
+
+                        actionChunk.Items.Add(button);
+                    }
+
+                    // Update the properties
+                    button.Text = action.Action.Name;
+                    button.Image = action.Trigger.LoadImage();
+
+                    // Configure selection requirements
+                    if (action.Trigger.SelectionRequirement != UserInitiatedSelectionRequirement.None)
+                    {
+                        selectionDependentEnabler.SetEnabledWhen(button, (action.Trigger.SelectionRequirement == UserInitiatedSelectionRequirement.Orders) ? SelectionDependentType.OneOrMoreOrders : SelectionDependentType.OneOrMoreCustomers);
+                    }
+                    else
+                    {
+                        selectionDependentEnabler.SetEnabledWhen(button, SelectionDependentType.Ignore);
+                    }
+                }
+
+                UpdateSelectionDependentUI();
+            }
+
+            // Get the actions that should be displayed in the order menu
+            var orderActions = enabledActions.Where(a => a.Trigger.ShowOnOrdersMenu);
+
+            // Clear any that are in there now
+            contextOrderCustomActions.DropDownItems.Clear();
+
+            // Add in the new ones
+            foreach (var action in orderActions)
+            {
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(action.Action.Name, action.Trigger.LoadImage());
+                menuItem.Tag = action.Action.ActionID;
+                menuItem.Click += OnCustomActionMenu;
+
+                contextOrderCustomActions.DropDownItems.Add(menuItem);
+            }
+
+            // Get the actions that should be displayed in the customer menu
+            var customerActions = enabledActions.Where(a => a.Trigger.ShowOnCustomersMenu);
+
+            // Clear any that are in there now
+            contextCustomerCustomActions.DropDownItems.Clear();
+
+            // Add in the new ones
+            foreach (var action in customerActions)
+            {
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(action.Action.Name, action.Trigger.LoadImage());
+                menuItem.Tag = action.Action.ActionID;
+                menuItem.Click += OnCustomActionMenu;
+
+                contextCustomerCustomActions.DropDownItems.Add(menuItem);
+            }
+
+            // Update the menu visibility \ availability
+            gridMenuLayoutProvider.UpdateUserInitiatedActionDependentUI();
+        }
+
+        /// <summary>
+        /// User has clicked a custom action button
+        /// </summary>
+        void OnCustomActionButton(object sender, EventArgs e)
+        {
+            long actionID = (long) ((SandButton) sender).Tag;
+
+            ActionDispatcher.DispatchUserInitiated(actionID, gridControl.Selection.OrderedKeys);
+        }
+
+        /// <summary>
+        /// User has clicked a custom action menu
+        /// </summary>
+        void OnCustomActionMenu(object sender, EventArgs e)
+        {
+            long actionID = (long) ((ToolStripMenuItem) sender).Tag;
+
+            ActionDispatcher.DispatchUserInitiated(actionID, gridControl.Selection.OrderedKeys);
         }
 
         #endregion
@@ -2865,6 +3006,8 @@ namespace ShipWorks
             {
                 dlg.ShowDialog(this);
             }
+
+            UpdateUserInitiatedActionsUI();
         }
 
         /// <summary>

@@ -440,6 +440,26 @@
     <Compile Include="Actions\Tasks\Common\SaveFileTask.cs" />
     <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
     <Compile Include="Actions\Tasks\TaskValidationError.cs" />
+    <Compile Include="Actions\Triggers\ActionTriggerException.cs" />
+    <Compile Include="Actions\Triggers\Editors\UserInititatedTriggerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Triggers\Editors\UserInititatedTriggerEditor.Designer.cs">
+      <DependentUpon>UserInititatedTriggerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.Designer.cs">
+      <DependentUpon>UserInitiatedImageChooserDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Triggers\UserInitiatedSelectionRequirement.cs" />
+    <Compile Include="Actions\Triggers\UserInitiatedStockImages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserInitiatedStockImages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Triggers\UserInitiatedTrigger.cs" />
     <Compile Include="Actions\Triggers\ScheduledTrigger.cs" />
     <Compile Include="Actions\Triggers\Editors\ScheduledTriggerEditor.cs">
       <SubType>UserControl</SubType>
@@ -5454,6 +5474,16 @@
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Triggers\Editors\UserInititatedTriggerEditor.resx">
+      <DependentUpon>UserInititatedTriggerEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.resx">
+      <DependentUpon>UserInitiatedImageChooserDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Triggers\UserInitiatedStockImages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserInitiatedStockImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\UI\StoreCheckBoxPanel.resx">
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -9775,12 +9805,36 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData.sql" />
+    <None Include="Resources\add - Copy.png" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
     <None Include="Resources\box_software1.png" />
     <None Include="Resources\cartresponse.png" />
+    <None Include="Resources\alarm.png" />
+    <None Include="Resources\airplane.png" />
+    <None Include="Resources\alarmclock.png" />
     <Content Include="Resources\AmazonMWSHeader.png" />
+    <None Include="Resources\bullet_ball_glass_blue.png" />
+    <None Include="Resources\bullet_ball_glass_green.png" />
+    <None Include="Resources\bullet_ball_glass_red.png" />
+    <None Include="Resources\bullet_ball_glass_yellow.png" />
+    <None Include="Resources\bullet_square_blue.png" />
+    <None Include="Resources\bullet_square_green.png" />
+    <None Include="Resources\bullet_square_grey.png" />
+    <None Include="Resources\bullet_square_red.png" />
+    <None Include="Resources\blackboard.png" />
+    <None Include="Resources\briefcase2.png" />
+    <None Include="Resources\cashier.png" />
+    <None Include="Resources\at.png" />
+    <None Include="Resources\bomb.png" />
+    <None Include="Resources\certificate.png" />
+    <None Include="Resources\banana.png" />
+    <None Include="Resources\baseball.png" />
+    <None Include="Resources\box_closed.png" />
+    <None Include="Resources\brush4.png" />
+    <None Include="Resources\camera.png" />
+    <None Include="Resources\barcode - Copy.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -9818,6 +9872,36 @@
     <None Include="Resources\data.png" />
     <None Include="Resources\client_network2.png" />
     <None Include="Resources\clients.png" />
+    <None Include="Resources\disk_green.png" />
+    <None Include="Resources\disk_yellow.png" />
+    <None Include="Resources\document_edit.png" />
+    <None Include="Resources\document_refresh.png" />
+    <None Include="Resources\flash.png" />
+    <None Include="Resources\folder_network.png" />
+    <None Include="Resources\folder_time.png" />
+    <None Include="Resources\folder2_blue.png" />
+    <None Include="Resources\heart.png" />
+    <None Include="Resources\column-chart.png" />
+    <None Include="Resources\date-time.png" />
+    <None Include="Resources\fax.png" />
+    <None Include="Resources\download.png" />
+    <None Include="Resources\home.png" />
+    <None Include="Resources\key1.png" />
+    <None Include="Resources\mail.png" />
+    <None Include="Resources\cocktail.png" />
+    <None Include="Resources\cow.png" />
+    <None Include="Resources\drink_blue.png" />
+    <None Include="Resources\flag_checkered.png" />
+    <None Include="Resources\flower_white.png" />
+    <None Include="Resources\guitar.png" />
+    <None Include="Resources\laptop.png" />
+    <None Include="Resources\loudspeaker.png" />
+    <None Include="Resources\magnet.png" />
+    <None Include="Resources\flag_blue - Copy.png" />
+    <None Include="Resources\creditcards - Copy.png" />
+    <None Include="Resources\message - Copy.png" />
+    <None Include="Resources\disk_blue - Copy.png" />
+    <None Include="Resources\lightbulb - Copy.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -9831,14 +9915,33 @@
     <None Include="Resources\server_client1.png" />
     <None Include="Resources\monitor_preferences.png" />
     <None Include="Resources\node_add.png" />
+    <None Include="Resources\music.png" />
+    <None Include="Resources\notebook.png" />
+    <None Include="Resources\mobilephone3.png" />
+    <None Include="Resources\money_envelope.png" />
+    <None Include="Resources\monitor.png" />
+    <None Include="Resources\mouse.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />
     <None Include="Resources\satellite_dish_add.png" />
     <None Include="Resources\server_to_client.png" />
+    <None Include="Resources\pie-chart.png" />
+    <None Include="Resources\pin_green.png" />
+    <None Include="Resources\pin_grey.png" />
+    <None Include="Resources\pin_red.png" />
+    <None Include="Resources\playingcard.png" />
+    <None Include="Resources\potion_blue.png" />
+    <None Include="Resources\potion_green.png" />
+    <None Include="Resources\printer_network.png" />
+    <None Include="Resources\printer - Copy.png" />
+    <None Include="Resources\paperclip - Copy.png" />
+    <None Include="Resources\pin_blue - Copy.png" />
+    <None Include="Resources\refresh - Copy.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
+    <None Include="Resources\ship2.png" />
     <Content Include="Resources\shipworks.ico" />
     <EmbeddedResource Include="Templates\Distribution\History.xml" />
     <None Include="Resources\template_snippet16.png" />
@@ -9870,6 +9973,19 @@
     <None Include="Resources\start_shipworks_service.png" />
     <None Include="Resources\workstation_network.png" />
     <None Include="Resources\workplace_add.png" />
+    <None Include="Resources\star_blue.png" />
+    <None Include="Resources\star_grey.png" />
+    <None Include="Resources\stop.png" />
+    <None Include="Resources\ticket_blue.png" />
+    <None Include="Resources\thought.png" />
+    <None Include="Resources\upload.png" />
+    <None Include="Resources\spider.png" />
+    <None Include="Resources\sportscar.png" />
+    <None Include="Resources\target.png" />
+    <None Include="Resources\toolbox.png" />
+    <None Include="Resources\wrench.png" />
+    <None Include="Resources\yinyang.png" />
+    <None Include="Resources\shoppingcart - Copy.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -11635,7 +11751,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

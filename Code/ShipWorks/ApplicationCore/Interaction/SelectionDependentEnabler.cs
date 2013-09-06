@@ -87,6 +87,9 @@ namespace ShipWorks.ApplicationCore.Interaction
             if (state == SelectionDependentType.Ignore)
             {
                 componentMap.Remove(component);
+
+                // Now that we are ignoring it, make sure it's enabled
+                EnableComponent(component, true);
             }
             else
             {

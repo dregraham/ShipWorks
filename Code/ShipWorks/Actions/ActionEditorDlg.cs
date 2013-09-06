@@ -606,7 +606,7 @@ namespace ShipWorks.Actions
             {
                 trigger.Validate();
             }
-            catch (SchedulingException ex)
+            catch (ActionTriggerException ex)
             {
                 optionControl.SelectedPage = optionPageAction;
                 ActiveControl = panelTrigger;

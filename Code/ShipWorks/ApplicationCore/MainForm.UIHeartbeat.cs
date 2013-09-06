@@ -148,6 +148,8 @@ namespace ShipWorks
                     reloadColumns = false;
                 }
 
+
+
                 if (reloadColumns)
                 {
                     FilterNodeColumnManager.InitializeForCurrentSession();

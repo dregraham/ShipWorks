@@ -24,6 +24,7 @@ namespace ShipWorks.Actions.Triggers
                 case ActionTriggerType.ShipmentVoided: return new ShipmentVoidedTrigger(xmlSettings);
                 case ActionTriggerType.FilterContentChanged: return new FilterContentTrigger(xmlSettings);
                 case ActionTriggerType.Scheduled: return new ScheduledTrigger(xmlSettings);
+                case ActionTriggerType.UserInitiated: return new UserInitiatedTrigger(xmlSettings);
             }
 
             throw new InvalidOperationException("Factory does not handle trigger type: " + type);

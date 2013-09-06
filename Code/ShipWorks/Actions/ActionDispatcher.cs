@@ -12,6 +12,7 @@ using ShipWorks.Users;
 using ShipWorks.Shipping;
 using log4net;
 using System.Globalization;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Actions
 {
@@ -170,6 +171,25 @@ namespace ShipWorks.Actions
                     DispatchAction(actionEntity, null, adapter);
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates an ActionQueue entry for the given UserInitiated action
+        /// </summary>
+        public static void DispatchUserInitiated(long actionID, IEnumerable<long> selection)
+        {
+            ActionEntity actionEntity = ActionManager.GetAction(actionID);
+
+            if (actionEntity == null || !actionEntity.Enabled)
+            {
+                MessageHelper.ShowInformation(null, "Action Went Away");
+
+                // Possible race condition where the action could have been deleted
+                // between dispatching the action and getting the entity from the ActionManager
+                return;
+            }
+
+            MessageHelper.ShowInformation(null, "Action: " +  actionEntity.Name);
         }
 
         /// <summary>
