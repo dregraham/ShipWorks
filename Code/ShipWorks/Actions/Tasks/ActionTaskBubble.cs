@@ -342,14 +342,17 @@ namespace ShipWorks.Actions.Tasks
         {
             inputSourceMenu = new ContextMenuStrip();
 
-            if (trigger.TriggeringEntityType != null)
+            if (task.InputRequirement != ActionTaskInputRequirement.None)
             {
-                AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType));
+                if (trigger.TriggeringEntityType != null)
+                {
+                    AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType));
+                }
+
+                AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
             }
 
-            AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
-
-            if (task.InputRequirement == ActionTaskInputRequirement.Optional)
+            if (task.InputRequirement != ActionTaskInputRequirement.Required)
             {
                 AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "No Input");
             }
@@ -378,13 +381,12 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private void SelectInputSource(ActionTaskInputSource inputSource)
         {
-            // See if its a valid data source
-            bool isValid = inputSourceMenu.Items.Cast<ToolStripMenuItem>().Any(i => ((ActionTaskInputSource) i.Tag) == inputSource);
+            var validInputSources = inputSourceMenu.Items.Cast<ToolStripMenuItem>().Select(x => (ActionTaskInputSource)x.Tag).ToList();
 
-            // If its not currently valid, default to Always
-            if (!isValid)
+            // If its not a valid input source, default to the first available option
+            if (!validInputSources.Contains(inputSource))
             {
-                inputSource = ActionTaskInputSource.FilterContents;
+                inputSource = validInputSources.First();
             }
 
             // Update the task
