@@ -38,6 +38,7 @@
             this.comboCardinality = new System.Windows.Forms.ComboBox();
             this.panelCardinality = new System.Windows.Forms.Panel();
             this.panelStandard = new System.Windows.Forms.Panel();
+            this.example = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInMinutes)).BeginInit();
             this.panelCardinality.SuspendLayout();
             this.panelStandard.SuspendLayout();
@@ -62,7 +63,7 @@
             this.tokenizedExecuteCommand.Multiline = true;
             this.tokenizedExecuteCommand.Name = "tokenizedExecuteCommand";
             this.tokenizedExecuteCommand.ShowTokenOptions = false;
-            this.tokenizedExecuteCommand.Size = new System.Drawing.Size(432, 105);
+            this.tokenizedExecuteCommand.Size = new System.Drawing.Size(432, 111);
             this.tokenizedExecuteCommand.TabIndex = 2;
             this.tokenizedExecuteCommand.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
@@ -72,7 +73,7 @@
             this.shouldTimeout.AutoSize = true;
             this.shouldTimeout.Checked = true;
             this.shouldTimeout.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.shouldTimeout.Location = new System.Drawing.Point(7, 132);
+            this.shouldTimeout.Location = new System.Drawing.Point(7, 157);
             this.shouldTimeout.Name = "shouldTimeout";
             this.shouldTimeout.Size = new System.Drawing.Size(197, 17);
             this.shouldTimeout.TabIndex = 3;
@@ -84,7 +85,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(244, 133);
+            this.label1.Location = new System.Drawing.Point(244, 158);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 13);
             this.label1.TabIndex = 4;
@@ -93,7 +94,7 @@
             // timeoutInMinutes
             // 
             this.timeoutInMinutes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.timeoutInMinutes.Location = new System.Drawing.Point(201, 131);
+            this.timeoutInMinutes.Location = new System.Drawing.Point(201, 156);
             this.timeoutInMinutes.Maximum = new decimal(new int[] {
             300,
             0,
@@ -147,6 +148,7 @@
             // 
             // panelStandard
             // 
+            this.panelStandard.Controls.Add(this.example);
             this.panelStandard.Controls.Add(this.executeLabel);
             this.panelStandard.Controls.Add(this.tokenizedExecuteCommand);
             this.panelStandard.Controls.Add(this.timeoutInMinutes);
@@ -155,8 +157,20 @@
             this.panelStandard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStandard.Location = new System.Drawing.Point(0, 30);
             this.panelStandard.Name = "panelStandard";
-            this.panelStandard.Size = new System.Drawing.Size(441, 157);
+            this.panelStandard.Size = new System.Drawing.Size(441, 182);
             this.panelStandard.TabIndex = 9;
+            // 
+            // example
+            // 
+            this.example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.example.AutoSize = true;
+            this.example.Font = new System.Drawing.Font("Tahoma", 6.5F);
+            this.example.ForeColor = System.Drawing.Color.DimGray;
+            this.example.Location = new System.Drawing.Point(4, 133);
+            this.example.Name = "example";
+            this.example.Size = new System.Drawing.Size(246, 11);
+            this.example.TabIndex = 6;
+            this.example.Text = "eg. echo  {//Order/Total} > c:\\orders\\{//Order/Number}.txt";
             // 
             // RunCommandTaskEditor
             // 
@@ -165,7 +179,7 @@
             this.Controls.Add(this.panelStandard);
             this.Controls.Add(this.panelCardinality);
             this.Name = "RunCommandTaskEditor";
-            this.Size = new System.Drawing.Size(441, 187);
+            this.Size = new System.Drawing.Size(441, 212);
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInMinutes)).EndInit();
             this.panelCardinality.ResumeLayout(false);
             this.panelCardinality.PerformLayout();
@@ -186,6 +200,7 @@
         private System.Windows.Forms.ComboBox comboCardinality;
         private System.Windows.Forms.Panel panelCardinality;
         private System.Windows.Forms.Panel panelStandard;
+        private System.Windows.Forms.Label example;
 
     }
 }
