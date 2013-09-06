@@ -15,9 +15,9 @@ namespace ShipWorks.SqlServer.Purge
         public const string RunUntilParameterName = "@runUntil";
 
         /// <summary>
-        /// Runs a sql script. Assumes script has paramaters @RetentionDateInUtc and @LatestExecutionTimeInUtc.
+        /// Runs a sql script. Assumes script has paramaters @olderThan and @runUntil.
         /// </summary>
-        /// <param name="script">Sql script to run. Assumes script has paramaters @RetentionDateInUtc and @LatestExecutionTimeInUtc.</param>
+        /// <param name="script">Sql script to run. Assumes script has paramaters @olderThan and @runUntil.</param>
         /// <param name="purgeAppLockName">Checks for this AppLock. If applock is taken, script will not run and purge exception is thrown.</param>
         /// <param name="olderThan">Delete records older than this date</param>
         /// <param name="runUntil">Stop running the script if it runs longer than this time</param>

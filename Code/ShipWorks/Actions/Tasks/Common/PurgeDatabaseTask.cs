@@ -53,7 +53,7 @@ namespace ShipWorks.Actions.Tasks.Common
             this.scriptRunner = scriptRunner;
             this.dateProvider = dateProvider;
         }
-
+        
         /// <summary>
         /// This task does not require any input to run.
         /// </summary>

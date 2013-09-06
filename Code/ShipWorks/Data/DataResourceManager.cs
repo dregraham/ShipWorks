@@ -404,8 +404,8 @@ namespace ShipWorks.Data
                                 command.CommandType = CommandType.StoredProcedure;
                                 // Disable the command timeout since the scripts should take care of timing themselves out
                                 command.CommandTimeout = (int)TimeSpan.FromMinutes(15).TotalSeconds;
-                                command.Parameters.AddWithValue("@earliestRetentionDateInUtc", DateTime.UtcNow);
-                                command.Parameters.AddWithValue("@latestExecutionTimeInUtc", DateTime.UtcNow.AddMinutes(15));
+                                command.Parameters.AddWithValue("@olderThan", DateTime.UtcNow);
+                                command.Parameters.AddWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
 
                                 command.ExecuteNonQuery();
                             }
