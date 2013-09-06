@@ -248,7 +248,7 @@ namespace ShipWorks.Actions.Tasks
             UpdateInputSourceOptions(trigger);
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
-            taskEditor.NotifyTaskInputChanged(trigger, GetEffectiveInputEntityType());
+            taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
 
             // If the task has a filter condition, we have to make sure its still valid
             if (task.Entity.FilterCondition)
@@ -351,7 +351,7 @@ namespace ShipWorks.Actions.Tasks
 
             if (task.InputRequirement == ActionTaskInputRequirement.Optional)
             {
-                AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "Nothing");
+                AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "No Input");
             }
             
             labelInput.Text = task.InputLabel;
@@ -399,7 +399,7 @@ namespace ShipWorks.Actions.Tasks
             UpdateInputSourceFilterComboSize();
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
-            taskEditor.NotifyTaskInputChanged(trigger, GetEffectiveInputEntityType());
+            taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
         }
 
         /// <summary>
@@ -434,7 +434,7 @@ namespace ShipWorks.Actions.Tasks
             task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode != null ? inputSourceFilter.SelectedFilterNode.FilterNodeID : 0;
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
-            taskEditor.NotifyTaskInputChanged(trigger, GetEffectiveInputEntityType());
+            taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
         }
 
         /// <summary>

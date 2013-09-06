@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Templates.Tokens;
 using log4net;
+using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -57,7 +58,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get { return "Replace tokens in the script below with:"; }
+            get { return "Run the command using:"; }
         }
 
         /// <summary>
@@ -74,6 +75,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Gets or sets how long to wait before timing out the command
         /// </summary>
         public int CommandTimeoutInMinutes { get; set; }
+
+        /// <summary>
+        /// Controls how the task translates the inputs to iterations of the command
+        /// </summary>
+        public RunCommandCardinality RunCardinality { get; set; }
 
         /// <summary>
         /// Gets the temporary path to which to save the command
@@ -117,9 +123,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         /// <param name="inputKey">Id of object to use for merging tokens</param>
         /// <returns></returns>
-        private string GetProcessedCommand(long inputKey)
+        private string GetCommandToExecute(List<long> inputKeys)
         {
-            return TurnOffEcho(TemplateTokenProcessor.ProcessTokens(Command, inputKey, false));
+            return TurnOffEcho(TemplateTokenProcessor.ProcessTokens(Command, inputKeys, false));
         }
 
         /// <summary>
@@ -146,10 +152,17 @@ namespace ShipWorks.Actions.Tasks.Common
             }
             else
             {
-                foreach (long key in inputKeys)
+                if (RunCardinality == RunCommandCardinality.OneTime)
                 {
-                    RunCommand(GetProcessedCommand(key), timeoutDate);
-                }   
+                    RunCommand(GetCommandToExecute(inputKeys), timeoutDate);
+                }
+                else
+                {
+                    foreach (long key in inputKeys)
+                    {
+                        RunCommand(GetCommandToExecute(new List<long> { key }), timeoutDate);
+                    }
+                }
             }
         }
 
@@ -233,7 +246,7 @@ namespace ShipWorks.Actions.Tasks.Common
                                 if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
                                 {
                                     KillProcessTree(process);
-                                    throw new ActionTaskRunException(string.Format("The program took longer than {0} minute{1} to run.",
+                                    throw new ActionTaskRunException(string.Format("The command took longer than {0} minute{1} to run.",
                                                                                    CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
                                 }
                             }
@@ -245,8 +258,9 @@ namespace ShipWorks.Actions.Tasks.Common
                         // Verify that the command completed without errors
                         if (process.ExitCode > 0)
                         {
-                            log.ErrorFormat("The command exited with code {0}", process.ExitCode);
-                            throw new ActionTaskRunException("The program failed. See the log for details.");
+                            string errorMessage = string.Format("The command exited with code {0}.", process.ExitCode);
+                            log.ErrorFormat(errorMessage);
+                            throw new ActionTaskRunException(errorMessage);
                         }
                     }
                 }

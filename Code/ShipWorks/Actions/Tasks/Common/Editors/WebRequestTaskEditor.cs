@@ -75,7 +75,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Allows derived editors to update themselves based on the current trigger
         /// </summary>
-        public override void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
+        public override void NotifyTaskInputChanged(ActionTrigger trigger, ActionTaskInputSource inputSource, EntityType? inputType)
         {
             string entityDescription = ActionTaskBubble.GetTriggeringEntityDescription(inputType) ?? "entry";
 

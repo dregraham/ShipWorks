@@ -28,7 +28,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Allows derived editors to update themselves based on the current trigger
         /// </summary>
-        public virtual void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
+        public virtual void NotifyTaskInputChanged(ActionTrigger trigger, ActionTaskInputSource inputSource, EntityType? inputType)
         {
 
         }
