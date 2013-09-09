@@ -129,7 +129,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcomeOlt);
+            this.mainPanel.Controls.Add(this.wizardPageRates);
             this.mainPanel.Size = new System.Drawing.Size(579, 415);
             // 
             // etchBottom
@@ -170,7 +170,6 @@
             this.panelNewOrExisting.Name = "panelNewOrExisting";
             this.panelNewOrExisting.Size = new System.Drawing.Size(458, 66);
             this.panelNewOrExisting.TabIndex = 6;
-            this.panelNewOrExisting.Visible = false;
             // 
             // existingAccount
             // 
@@ -200,9 +199,9 @@
             this.labelWelcome1.Name = "labelWelcome1";
             this.labelWelcome1.Size = new System.Drawing.Size(516, 42);
             this.labelWelcome1.TabIndex = 0;
-            this.labelWelcome1.Text = "This wizard will assist you in registering your UPS account for use with ShipWor" +
-    "ks. This enables you to begin shipping, tracking, and printing UPS labels direct" +
-    "ly from ShipWorks.";
+            this.labelWelcome1.Text = "This wizard will assist you in registering your UPS account for use with ShipWork" +
+    "s. This enables you to begin shipping, tracking, and printing UPS labels directl" +
+    "y from ShipWorks.";
             // 
             // wizardPageLicense
             // 
@@ -399,7 +398,7 @@
             this.labelUps1.Size = new System.Drawing.Size(438, 32);
             this.labelUps1.TabIndex = 1;
             this.labelUps1.Text = "Thank you for registering your UPS Account. To learn more about UPS services, ple" +
-    "ase";
+    "ase"; 
             // 
             // labelSetupComplete
             // 
@@ -436,6 +435,7 @@
             this.wizardPageRates.TabIndex = 0;
             this.wizardPageRates.Title = "UPS Rate Display";
             this.wizardPageRates.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRates);
+            this.wizardPageRates.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoRates);
             // 
             // upsRateTypeControl
             // 

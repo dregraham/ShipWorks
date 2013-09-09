@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using System.Net;
 using log4net;
@@ -51,7 +52,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             // Grab the version 4 IP address of the client machine, so the consumer doesn't 
             // have to explicitly set the IP address if it doesn't have reason to
             MachineInfo = new MachineInfo();
-            MachineInfo.IPAddress = GetIPAddress();
+
+            try
+            {
+                NetworkUtility networkUtility = new NetworkUtility();
+                MachineInfo.IPAddress = networkUtility.GetIPAddress();                
+            }
+            catch (NetworkException ex)
+            {
+                throw new StampsRegistrationException("Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.", ex);
+            }
 
             PromoCode = string.Empty;
 
@@ -160,30 +170,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 
             // Send the registration data to the stamps.com web service API
             return registrationGateway.Register(this);
-        }
-
-        /// <summary>
-        /// Gets the IP address.
-        /// </summary>
-        /// <returns>A version 4 IP address.</returns>
-        private string GetIPAddress()
-        {
-            string ipAddress = string.Empty;
-
-            // Grab the version 4 IP address of the client machine before submitting the registration to Stamps.com
-            string hostName = Dns.GetHostName();
-            if (!string.IsNullOrEmpty(hostName))
-            {
-                ipAddress = Dns.GetHostAddresses(hostName).Where(ip => !IPAddress.IsLoopback(ip) && ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First().ToString();
-                log.InfoFormat("IP address submitted for Stamps.com registration was {0}", ipAddress);
-            }
-            else
-            {
-                throw new StampsRegistrationException("Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.");
-            }
-
-            return ipAddress;
-
         }
 
         /// <summary>

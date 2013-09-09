@@ -1,5 +1,7 @@
-﻿using ShipWorks.Shipping.Carriers.Api;
+﻿using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request;
+using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
@@ -37,7 +39,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
         /// to open a new UPS account via the UpsOpenAccount API.</returns>
         public CarrierRequest CreateOpenAccountRequest(OpenAccountRequest request)
         {
-            return new UpsOpenAccountRequest(upsOpenAccountService, responseFactory, request);
+            List<ICarrierRequestManipulator> requestManipulators = new List<ICarrierRequestManipulator>()
+            {
+                new UpsOpenAccountAddEndUserInformation()
+            };
+
+            return new UpsOpenAccountRequest(requestManipulators, upsOpenAccountService, responseFactory, request);
         }
     }
 }

@@ -46,8 +46,8 @@
             this.pickupStart = new System.Windows.Forms.DateTimePicker();
             this.pickUpDay = new System.Windows.Forms.Panel();
             this.pickupDateTimePanel = new System.Windows.Forms.Panel();
-            this.labelPickupLocation = new System.Windows.Forms.Label();
             this.pickupLocation = new System.Windows.Forms.ComboBox();
+            this.labelPickupLocation = new System.Windows.Forms.Label();
             this.pickUpDay.SuspendLayout();
             this.pickupDateTimePanel.SuspendLayout();
             this.SuspendLayout();
@@ -187,7 +187,7 @@
             this.preferredPickup.ShowUpDown = true;
             this.preferredPickup.Size = new System.Drawing.Size(83, 21);
             this.preferredPickup.TabIndex = 14;
-            this.preferredPickup.Value = new System.DateTime(2013, 4, 8, 8, 0, 0, 0);
+            this.preferredPickup.Value = new System.DateTime(2013, 4, 8, 12, 0, 0, 0);
             this.preferredPickup.ValueChanged += new System.EventHandler(this.OnTimeChanged);
             // 
             // latestPickup
@@ -240,15 +240,6 @@
             this.pickupDateTimePanel.Size = new System.Drawing.Size(311, 128);
             this.pickupDateTimePanel.TabIndex = 18;
             // 
-            // labelPickupLocation
-            // 
-            this.labelPickupLocation.AutoSize = true;
-            this.labelPickupLocation.Location = new System.Drawing.Point(33, 3);
-            this.labelPickupLocation.Name = "labelPickupLocation";
-            this.labelPickupLocation.Size = new System.Drawing.Size(84, 13);
-            this.labelPickupLocation.TabIndex = 17;
-            this.labelPickupLocation.Text = "Pickup Location:";
-            // 
             // pickupLocation
             // 
             this.pickupLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -257,6 +248,15 @@
             this.pickupLocation.Name = "pickupLocation";
             this.pickupLocation.Size = new System.Drawing.Size(121, 21);
             this.pickupLocation.TabIndex = 19;
+            // 
+            // labelPickupLocation
+            // 
+            this.labelPickupLocation.AutoSize = true;
+            this.labelPickupLocation.Location = new System.Drawing.Point(33, 3);
+            this.labelPickupLocation.Name = "labelPickupLocation";
+            this.labelPickupLocation.Size = new System.Drawing.Size(84, 13);
+            this.labelPickupLocation.TabIndex = 17;
+            this.labelPickupLocation.Text = "Pickup Location:";
             // 
             // UpsPickupScheduleControl
             // 
