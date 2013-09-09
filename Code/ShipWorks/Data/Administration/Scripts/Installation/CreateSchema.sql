@@ -181,7 +181,7 @@ CREATE TABLE [dbo].[ActionQueue]
 [Status] [int] NOT NULL,
 [NextStep] [int] NOT NULL,
 [ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0))
+[ActionQueueType] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
