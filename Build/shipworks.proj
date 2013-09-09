@@ -357,7 +357,10 @@
 		<ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
 		<ObfuscationExcludedAssemblies Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
 		<ObfuscationExcludedAssemblies Include="RestSharp, Version=104.1.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-	</ItemGroup>
+    <ObfuscationExcludedAssemblies Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
+    <ObfuscationExcludedAssemblies Include="Common.Logging.Log4Net1210, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
+    <ObfuscationExcludedAssemblies Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4" />
+  </ItemGroup>
   <ItemGroup>
     <ObfuscationExcludedRegEx Include="^(Triggers|UserDefinedFunctions|StoredProcedures)::.+" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Filters\.Content\.Conditions\..+::.+" />
