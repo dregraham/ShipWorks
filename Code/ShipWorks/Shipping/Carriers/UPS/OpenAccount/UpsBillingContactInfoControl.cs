@@ -16,8 +16,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
     public partial class UpsBillingContactInfoControl : UserControl
     {
-        private UpsAccountEntity upsAccountEntity;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBillingContactInfoControl" /> class.
         /// </summary>
@@ -25,11 +23,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             InitializeComponent();
         }
-
+         
         /// <summary>
         /// Saves to request.
         /// </summary>
-        public void SaveToRequest(OpenAccountRequest request)
+        public void SaveToAccountAndRequest(OpenAccountRequest request, UpsAccountEntity upsAccount)
         {
             if (request.BillingAddress == null)
             {
@@ -46,22 +44,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 throw new UpsOpenAccountException("Required fields missing.", UpsOpenAccountErrorCode.MissingRequiredFields);
             }
 
-            upsAccountEntity = new UpsAccountEntity();
-            PersonAdapter personAdapter = new PersonAdapter(upsAccountEntity, "");
+            PersonAdapter personAdapter = new PersonAdapter(upsAccount, "");
             billingContactPersonControl.SaveToEntity(personAdapter);
 
-            request.BillingAddress.City = upsAccountEntity.City;
-            request.BillingAddress.CompanyName = upsAccountEntity.Company;
+            request.BillingAddress.City = upsAccount.City;
+            request.BillingAddress.CompanyName = upsAccount.Company;
             request.BillingAddress.ContactName = billingContactPersonControl.FullName;
-            request.BillingAddress.CountryCode = upsAccountEntity.CountryCode;
-            request.BillingAddress.EmailAddress = upsAccountEntity.Email;
-            request.BillingAddress.Phone.Number = upsAccountEntity.Phone;
-            request.BillingAddress.PostalCode = upsAccountEntity.PostalCode;
-            request.BillingAddress.StateProvinceCode = upsAccountEntity.StateProvCode;
-            request.BillingAddress.StreetAddress = upsAccountEntity.Street1;
-
-            upsAccountEntity.RollbackChanges();
-            upsAccountEntity = null;
+            request.BillingAddress.CountryCode = upsAccount.CountryCode;
+            request.BillingAddress.EmailAddress = upsAccount.Email;
+            request.BillingAddress.Phone.Number = upsAccount.Phone;
+            request.BillingAddress.PostalCode = upsAccount.PostalCode;
+            request.BillingAddress.StateProvinceCode = upsAccount.StateProvCode;
+            request.BillingAddress.StreetAddress = upsAccount.Street1;
         }
     }
 }

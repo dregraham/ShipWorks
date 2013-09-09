@@ -18,11 +18,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <summary>
         /// Gets or sets the open account request.
         /// </summary>
-        public OpenAccountRequest OpenAccountRequest
-        {
-            private get;
-            set;
-        }
+        public OpenAccountRequest OpenAccountRequest { private get; set; }
 
         /// <summary>
         /// Gets or sets the invalid shipping address.
@@ -30,21 +26,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <value>
         /// The invalid shipping address.
         /// </value>
-        public Action AccountCreated
-        {
-            private get;
-            set;
-        }
+        public Action<string> AccountCreated { private get; set; }
 
         /// <summary>
         /// Clicks the create UPS account.
         /// </summary>
         private void ClickCreateUpsAccount(object sender, EventArgs e)
         {
-            var clerk = new UpsClerk();
-            if (CreateUpsAccount(clerk))
+            UpsClerk clerk = new UpsClerk();
+            string shipperNumber = CreateUpsAccount(clerk);
+
+            if (!string.IsNullOrEmpty(shipperNumber))
             {
-                AccountCreated();
+                AccountCreated(shipperNumber);
             }
         }
 
@@ -53,28 +47,34 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         /// <param name="clerk">The clerk.</param>
         /// <returns></returns>
-        private bool CreateUpsAccount(UpsClerk clerk)
+        private string CreateUpsAccount(IUpsClerk clerk)
         {
-            bool isAccountCreated = false;
+            string shipperNumber = string.Empty;
+
             try
             {
-                clerk.OpenAccount(OpenAccountRequest);
-                isAccountCreated = true;
+                OpenAccountResponse response = clerk.OpenAccount(OpenAccountRequest);
+
+                shipperNumber = response.ShipperNumber;
+
+                if (string.IsNullOrEmpty(shipperNumber))
+                {
+                    throw new UpsOpenAccountException("Ups didn't return a new account number.");
+                }
             }
             catch (UpsOpenAccountPickupAddressException ex)
             {
                 if (CorrectPickupAddress(ex.SuggestedAddress, OpenAccountRequest.PickupAddress))
                 {
-                    isAccountCreated = CreateUpsAccount(clerk);
+                    shipperNumber = CreateUpsAccount(clerk);
                 }
             }
             catch (UpsOpenAccountBusinessAddressException ex)
             {
                 if (CorrectBillingAddress(ex.SuggestedAddress, OpenAccountRequest.BillingAddress))
                 {
-                    isAccountCreated = CreateUpsAccount(clerk);
+                    shipperNumber = CreateUpsAccount(clerk);
                 }
-
             }
             catch (UpsOpenAccountSoapException ex)
             {
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 MessageHelper.ShowError(this, ex.Message);
             }
 
-            return isAccountCreated;
+            return shipperNumber;
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             bool isAddressCorrected = false;
 
-            using (var invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
+            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
             {
                 invalidAddressDlg.SetAddress(addressCandidate, "Pickup");
-                var result = invalidAddressDlg.ShowDialog();
+                DialogResult result = invalidAddressDlg.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
@@ -130,10 +130,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             bool isAddressCorrected = false;
 
-            using (var invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
+            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
             {
                 invalidAddressDlg.SetAddress(addressCandidate, "Billing");
-                var result = invalidAddressDlg.ShowDialog();
+                DialogResult result = invalidAddressDlg.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {

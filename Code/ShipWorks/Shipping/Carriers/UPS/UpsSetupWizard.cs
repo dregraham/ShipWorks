@@ -729,7 +729,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                upsBillingContactInfoControl.SaveToRequest(openAccountRequest);
+                upsBillingContactInfoControl.SaveToAccountAndRequest(openAccountRequest, upsAccount);
             }
             catch (UpsOpenAccountException ex)
             {
@@ -823,11 +823,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             NextEnabled = isAccountCreated;
 
-            createAccount.AccountCreated = () =>
+            createAccount.AccountCreated = accountNumber =>
             {
-                NextEnabled = true;
-                isAccountCreated = true;
-                MessageHelper.ShowInformation(this, "Account created. Click next to continue.");
+                upsAccount.AccountNumber = accountNumber;
+                bool processRegistration = ProcessRegistration(3);
+                if (processRegistration)
+                {
+                    NextEnabled = true;
+                    isAccountCreated = true;
+
+                    MessageHelper.ShowInformation(this, "Account created. Click next to continue.");                    
+                }
+                else
+                {
+                    MessageHelper.ShowInformation(this, string.Format("Ups Account created, but not registered in ShipWorks."));
+                }
             };
 
         }

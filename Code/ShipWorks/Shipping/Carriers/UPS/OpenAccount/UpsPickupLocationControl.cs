@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 throw new UpsOpenAccountException("Required fields missing.", UpsOpenAccountErrorCode.MissingRequiredFields);
             }
 
-            upsAccountEntity = new UpsAccountEntity();
+                upsAccountEntity = new UpsAccountEntity();
             PersonAdapter personAdapter = new PersonAdapter(upsAccountEntity, "");
             pickupLocationPersonControl.SaveToEntity(personAdapter);
 
