@@ -141,7 +141,8 @@ namespace ShipWorks.ApplicationCore.Interaction
                 {
                     if (databaseDependent)
                     {
-                        if (ConnectionSensitiveScope.IsActive ||
+                        if (!SqlSession.IsConfigured ||
+                            ConnectionSensitiveScope.IsActive ||
                             ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
                         {
                             return false;
