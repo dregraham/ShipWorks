@@ -50,17 +50,16 @@
             // 
             // labelNotice
             // 
-            this.labelNotice.AutoSize = true;
             this.labelNotice.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelNotice.Location = new System.Drawing.Point(96, 24);
             this.labelNotice.Name = "labelNotice";
-            this.labelNotice.Size = new System.Drawing.Size(355, 13);
+            this.labelNotice.Size = new System.Drawing.Size(250, 29);
             this.labelNotice.TabIndex = 5;
             this.labelNotice.Text = "(The date and time of the backup will be added to the backup file name.)";
             // 
             // browse
             // 
-            this.browse.Location = new System.Drawing.Point(352, 43);
+            this.browse.Location = new System.Drawing.Point(348, 54);
             this.browse.Name = "browse";
             this.browse.Size = new System.Drawing.Size(75, 23);
             this.browse.TabIndex = 9;
@@ -70,16 +69,16 @@
             // 
             // backupPath
             // 
-            this.backupPath.Location = new System.Drawing.Point(99, 45);
+            this.backupPath.Location = new System.Drawing.Point(99, 56);
             this.backupPath.Name = "backupPath";
             this.backupPath.ReadOnly = true;
-            this.backupPath.Size = new System.Drawing.Size(247, 21);
+            this.backupPath.Size = new System.Drawing.Size(243, 21);
             this.backupPath.TabIndex = 8;
             // 
             // labelPath
             // 
             this.labelPath.AutoSize = true;
-            this.labelPath.Location = new System.Drawing.Point(18, 48);
+            this.labelPath.Location = new System.Drawing.Point(18, 59);
             this.labelPath.Name = "labelPath";
             this.labelPath.Size = new System.Drawing.Size(76, 13);
             this.labelPath.TabIndex = 7;
@@ -105,7 +104,7 @@
             // 
             // numericBackupCount
             // 
-            this.numericBackupCount.Location = new System.Drawing.Point(212, 71);
+            this.numericBackupCount.Location = new System.Drawing.Point(212, 82);
             this.numericBackupCount.Minimum = new decimal(new int[] {
             1,
             0,
@@ -123,7 +122,7 @@
             // lableBackups
             // 
             this.lableBackups.AutoSize = true;
-            this.lableBackups.Location = new System.Drawing.Point(265, 73);
+            this.lableBackups.Location = new System.Drawing.Point(265, 84);
             this.lableBackups.Name = "lableBackups";
             this.lableBackups.Size = new System.Drawing.Size(102, 13);
             this.lableBackups.TabIndex = 14;
@@ -132,7 +131,7 @@
             // checkboxLimitBackupsRetained
             // 
             this.checkboxLimitBackupsRetained.AutoSize = true;
-            this.checkboxLimitBackupsRetained.Location = new System.Drawing.Point(99, 72);
+            this.checkboxLimitBackupsRetained.Location = new System.Drawing.Point(99, 83);
             this.checkboxLimitBackupsRetained.Name = "checkboxLimitBackupsRetained";
             this.checkboxLimitBackupsRetained.Size = new System.Drawing.Size(113, 17);
             this.checkboxLimitBackupsRetained.TabIndex = 15;
@@ -142,7 +141,7 @@
             // labelCleanup
             // 
             this.labelCleanup.AutoSize = true;
-            this.labelCleanup.Location = new System.Drawing.Point(36, 73);
+            this.labelCleanup.Location = new System.Drawing.Point(36, 84);
             this.labelCleanup.Name = "labelCleanup";
             this.labelCleanup.Size = new System.Drawing.Size(58, 13);
             this.labelCleanup.TabIndex = 16;
@@ -163,15 +162,14 @@
             this.editorPanel.Controls.Add(this.labelNotice);
             this.editorPanel.Location = new System.Drawing.Point(0, 0);
             this.editorPanel.Name = "editorPanel";
-            this.editorPanel.Size = new System.Drawing.Size(453, 96);
+            this.editorPanel.Size = new System.Drawing.Size(453, 109);
             this.editorPanel.TabIndex = 17;
             // 
             // databaseConfigurationNotification
             // 
-            this.databaseConfigurationNotification.AutoSize = true;
-            this.databaseConfigurationNotification.Location = new System.Drawing.Point(21, 4);
+            this.databaseConfigurationNotification.Location = new System.Drawing.Point(25, 4);
             this.databaseConfigurationNotification.Name = "databaseConfigurationNotification";
-            this.databaseConfigurationNotification.Size = new System.Drawing.Size(408, 13);
+            this.databaseConfigurationNotification.Size = new System.Drawing.Size(411, 30);
             this.databaseConfigurationNotification.TabIndex = 19;
             this.databaseConfigurationNotification.Text = "The \'{0}\' task can only be configured on the computer running your database ({1})" +
     ".";
@@ -179,7 +177,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ShipWorks.Properties.Resources.information16;
-            this.pictureBox1.Location = new System.Drawing.Point(1, 2);
+            this.pictureBox1.Location = new System.Drawing.Point(5, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -190,9 +188,9 @@
             // 
             this.messagePanel.Controls.Add(this.databaseConfigurationNotification);
             this.messagePanel.Controls.Add(this.pictureBox1);
-            this.messagePanel.Location = new System.Drawing.Point(0, 95);
+            this.messagePanel.Location = new System.Drawing.Point(0, 110);
             this.messagePanel.Name = "messagePanel";
-            this.messagePanel.Size = new System.Drawing.Size(453, 21);
+            this.messagePanel.Size = new System.Drawing.Size(453, 35);
             this.messagePanel.TabIndex = 20;
             // 
             // BackupDatabaseTaskEditor
@@ -203,7 +201,7 @@
             this.Controls.Add(this.messagePanel);
             this.Controls.Add(this.editorPanel);
             this.Name = "BackupDatabaseTaskEditor";
-            this.Size = new System.Drawing.Size(456, 120);
+            this.Size = new System.Drawing.Size(456, 147);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.numericBackupCount)).EndInit();
             this.editorPanel.ResumeLayout(false);
