@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             XElement element = WritePackagesXml(shipment);
 
             var additionalHandlings =
-                ((IEnumerable)element.XPathEvaluate("/AdditionalHandlingIndicator"))
+                ((IEnumerable)element.XPathEvaluate("/AdditionalHandling"))
                     .Cast<XElement>().ToList();
 
             Assert.AreEqual(1, additionalHandlings.Count);
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             XElement element = WritePackagesXml(shipment);
 
             var additionalHandlings =
-                ((IEnumerable)element.XPathEvaluate("/AdditionalHandlingIndicator"))
+                ((IEnumerable)element.XPathEvaluate("/AdditionalHandling"))
                     .Cast<XElement>().ToList();
 
             Assert.AreEqual(0, additionalHandlings.Count);
