@@ -85,11 +85,17 @@ namespace ShipWorks.ApplicationCore.Services.UI
             // Disable the timer until after the data has been refreshed to avoid events queuing
             // up if the database is slow to respond
             dataRefreshTimer.Stop();
+
+            // Force a reload of the services from the database because the heartbeat is paused
+            // while a dialog is open, and if the services are not refreshed, the UI will think
+            // the service failed to start
+            ServiceStatusManager.CheckForChangesNeeded();
+
+            CheckForStartingService();
             LoadData();
 
             dataRefreshTimer.Start();
         }
-
 
         /// <summary>
         /// Loads the (static) list of computers/services that need to be running into the gateway and use it 
@@ -108,24 +114,31 @@ namespace ShipWorks.ApplicationCore.Services.UI
             }
 
             ApplySort();
+        }
 
+        /// <summary>
+        /// Checks whether the application is currently trying to start a service
+        /// </summary>
+        private void CheckForStartingService()
+        {
             // If a service is starting, see if it has started successfully
-            if (startingServiceChecksRemaining > 0)
+            if (startingServiceChecksRemaining <= 0)
             {
-                --startingServiceChecksRemaining;
+                return;
+            }
 
-                ServiceStatusEntity service = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ShipWorksServiceType.Scheduler);
+            --startingServiceChecksRemaining;
+            ServiceStatusEntity service = ServiceStatusManager.GetServiceStatus(UserSession.Computer.ComputerID, ShipWorksServiceType.Scheduler);
 
-                if (service.GetStatus() == ServiceStatus.Running)
-                {
-                    ShowStartingServiceUI(false);
-                    startingServiceChecksRemaining = 0;
-                }
-                else if(startingServiceChecksRemaining == 0)
-                {
-                    ShowStartingServiceUI(false);
-                    MessageBox.Show("The service was not able to start.", "ShipWorks", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            if (service.GetStatus() == ServiceStatus.Running)
+            {
+                ShowStartingServiceUI(false);
+                startingServiceChecksRemaining = 0;
+            }
+            else if (startingServiceChecksRemaining == 0)
+            {
+                ShowStartingServiceUI(false);
+                MessageBox.Show("The service was not able to start.", "ShipWorks", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
