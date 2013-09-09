@@ -1418,7 +1418,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             if (code == failedDueToMsdeExists)
             {
-                return "SQL Server failed to install.  This may be becuase a previous version of SQL Server (MSDE) is installed on your computer.  Uninstalling MSDE may resolve the issue.";
+                return "SQL Server failed to install.  This may be because a previous version of SQL Server (MSDE) is installed on your computer.  Uninstalling MSDE may resolve the issue.";
             }
 
             return string.Format("Reason code: {0:X}.", code);

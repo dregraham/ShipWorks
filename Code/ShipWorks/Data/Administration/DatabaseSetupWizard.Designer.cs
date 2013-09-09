@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseSetupWizard));
             this.wizardPageChooseWisely2012 = new ShipWorks.UI.Wizard.WizardPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -150,7 +150,7 @@ namespace ShipWorks.Data.Administration
             this.labelSetupNewDatabase = new System.Windows.Forms.Label();
             this.wizardPageManageLocalDb = new ShipWorks.UI.Wizard.WizardPage();
             this.label2 = new System.Windows.Forms.Label();
-            this.linkControl1 = new ShipWorks.UI.Controls.LinkControl();
+            this.linkHelpEnableRemote = new ShipWorks.UI.Controls.LinkControl();
             this.labelLocalDbEnableRemote2 = new System.Windows.Forms.Label();
             this.pictureLocalDbEnableRemote = new System.Windows.Forms.PictureBox();
             this.radioLocalDbEnableRemote = new System.Windows.Forms.RadioButton();
@@ -302,6 +302,7 @@ namespace ShipWorks.Data.Administration
             this.linkEnableRemoteConnections.Size = new System.Drawing.Size(57, 13);
             this.linkEnableRemoteConnections.TabIndex = 52;
             this.linkEnableRemoteConnections.Text = "Learn how";
+            this.linkEnableRemoteConnections.Click += new System.EventHandler(this.OnLinkLearnEnableRemoteConnections);
             // 
             // labelAnotherPC
             // 
@@ -596,7 +597,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabses.ImageTextSeparation = 1;
             this.gridDatabses.Location = new System.Drawing.Point(22, 46);
             this.gridDatabses.Name = "gridDatabses";
-            this.gridDatabses.Renderer = windowsXPRenderer1;
+            this.gridDatabses.Renderer = windowsXPRenderer2;
             this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
             this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
@@ -696,6 +697,7 @@ namespace ShipWorks.Data.Administration
             this.linkHelpSelectSqlInstance.Size = new System.Drawing.Size(127, 13);
             this.linkHelpSelectSqlInstance.TabIndex = 49;
             this.linkHelpSelectSqlInstance.Text = "Don\'t worry, we can help";
+            this.linkHelpSelectSqlInstance.Click += new System.EventHandler(this.OnLinkSqlTroubleshooting);
             // 
             // labelSelectSqlInstance2
             // 
@@ -1509,7 +1511,7 @@ namespace ShipWorks.Data.Administration
             // wizardPageManageLocalDb
             // 
             this.wizardPageManageLocalDb.Controls.Add(this.label2);
-            this.wizardPageManageLocalDb.Controls.Add(this.linkControl1);
+            this.wizardPageManageLocalDb.Controls.Add(this.linkHelpEnableRemote);
             this.wizardPageManageLocalDb.Controls.Add(this.labelLocalDbEnableRemote2);
             this.wizardPageManageLocalDb.Controls.Add(this.pictureLocalDbEnableRemote);
             this.wizardPageManageLocalDb.Controls.Add(this.radioLocalDbEnableRemote);
@@ -1536,17 +1538,18 @@ namespace ShipWorks.Data.Administration
             this.label2.TabIndex = 54;
             this.label2.Text = "But first, make sure it\'s ready for remote connections.";
             // 
-            // linkControl1
+            // linkHelpEnableRemote
             // 
-            this.linkControl1.AutoSize = true;
-            this.linkControl1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.linkControl1.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.linkControl1.Location = new System.Drawing.Point(347, 51);
-            this.linkControl1.Name = "linkControl1";
-            this.linkControl1.Size = new System.Drawing.Size(57, 13);
-            this.linkControl1.TabIndex = 53;
-            this.linkControl1.Text = "Learn how";
+            this.linkHelpEnableRemote.AutoSize = true;
+            this.linkHelpEnableRemote.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkHelpEnableRemote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkHelpEnableRemote.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.linkHelpEnableRemote.Location = new System.Drawing.Point(347, 51);
+            this.linkHelpEnableRemote.Name = "linkHelpEnableRemote";
+            this.linkHelpEnableRemote.Size = new System.Drawing.Size(57, 13);
+            this.linkHelpEnableRemote.TabIndex = 53;
+            this.linkHelpEnableRemote.Text = "Learn how";
+            this.linkHelpEnableRemote.Click += new System.EventHandler(this.OnLinkLearnEnableRemoteConnections);
             // 
             // labelLocalDbEnableRemote2
             // 
@@ -1917,7 +1920,7 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Timer progressLocalDbTimer;
         private System.Windows.Forms.Label labelSetupComplete;
         private System.Windows.Forms.Label label2;
-        private UI.Controls.LinkControl linkControl1;
+        private UI.Controls.LinkControl linkHelpEnableRemote;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabelAdvancedOptions;
         private UI.Controls.LinkControl linkEnableRemoteConnections;

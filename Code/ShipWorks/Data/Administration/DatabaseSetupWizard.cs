@@ -403,6 +403,14 @@ namespace ShipWorks.Data.Administration
             radioChooseRestore2012.Top = radioChooseCreate2012.Top + 26;
         }
 
+        /// <summary>
+        /// Open the help link for learning how to enable remote connections
+        /// </summary>
+        private void OnLinkLearnEnableRemoteConnections(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/help/EnableRemoteConnections.html", this);
+        }
+
         #endregion
 
         #region Manage Local DB
@@ -1401,6 +1409,14 @@ namespace ShipWorks.Data.Administration
             }
         }
 
+        /// <summary>
+        /// Open the help link to troubleshoot connecting to a database
+        /// </summary>
+        private void OnLinkSqlTroubleshooting(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/help/DatabaseTroubleshooting.html", this);
+        }
+
         #endregion
 
         #region Install SQL Server
@@ -2166,6 +2182,7 @@ namespace ShipWorks.Data.Administration
         }
 
         #endregion    
+
     }
 }
 
