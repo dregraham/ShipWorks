@@ -19,13 +19,13 @@ public partial class StoredProcedures
     /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
     /// which PrintResult records will be purged. Any records with an PrintResult.PrintDate value earlier than
     /// this date will be purged.</param>
-    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgePrintResult(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgePrintResult(SqlDateTime olderThan, SqlDateTime runUntil)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgePrintResultCommandText, PurgePrintResultAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);
+        PurgeScriptRunner.RunPurgeScript(PurgePrintResultCommandText, PurgePrintResultAppLockName, olderThan, runUntil);
     }
 
     /// <summary>
@@ -155,7 +155,7 @@ INNER JOIN
 ON 
     ObjectReference.ObjectReferenceID = PrintResult.ContentResourceID 
 WHERE  
-    PrintResult.PrintDate < @earliestRetentionDateInUtc 
+    PrintResult.PrintDate < @olderThan 
        AND ObjectReference.ObjectID NOT IN ( @PrintImageResourceID, @EplResourceID ) 
 
 CREATE INDEX IX_PrintJobWorking ON #PrintJobWorking (PrintResultID) 
@@ -170,7 +170,7 @@ BEGIN
         IsThermal         BIT 
       ) 
 
-      WHILE (@latestExecutionTimeInUtc IS NULL OR @latestExecutionTimeInUtc > GETUTCDATE())
+      WHILE (@runUntil IS NULL OR @runUntil > GETUTCDATE())
       BEGIN 
             INSERT INTO @CurrentBatch 
             SELECT TOP (@BatchSize) 
@@ -187,7 +187,7 @@ BEGIN
             DECLARE @TotalSeconds INT = DATEDIFF(second, @StartTime, GETUTCDATE()) + 1; 
 
             -- stop if the batch isn't expected to complete in time 
-            IF ( @latestExecutionTimeInUtc IS NOT NULL AND @BatchTotal > 0 AND DATEADD(second, @TotalSeconds * @BatchSize / @BatchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc )
+            IF ( @runUntil IS NOT NULL AND @BatchTotal > 0 AND DATEADD(second, @TotalSeconds * @BatchSize / @BatchTotal, GETUTCDATE()) > @runUntil )
               BREAK; 
 
             -- Wrap edits in transaction 

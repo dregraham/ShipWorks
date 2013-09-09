@@ -312,6 +312,7 @@
     <Compile Include="Threading\ThreadSafeCollection.cs" />
     <Compile Include="Threading\ThreadSafeCollectionBehavior.cs" />
     <Compile Include="UI\MessageHelper.cs" />
+    <Compile Include="UI\UserControlTypeDescriptionProvider.cs" />
     <Compile Include="UI\WindowState.cs" />
     <Compile Include="UI\WindowStateSaver.cs" />
     <Compile Include="UI\WindowStateSaverOptions.cs" />
@@ -334,7 +335,6 @@
     <Compile Include="Utility\SortOrderAttribute.cs" />
     <Compile Include="Utility\StreamUtility.cs" />
     <Compile Include="Utility\StringUtility.cs" />
-    <Compile Include="Utility\UserControlTypeDescriptionProvider.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
     <Compile Include="Utility\XmlUtility.cs" />

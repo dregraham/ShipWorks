@@ -109,6 +109,23 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueueSelection.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ActionQueueSelectionFieldIndex:int
+	{
+		///<summary>ActionQueueSelectionID. </summary>
+		ActionQueueSelectionID,
+		///<summary>ActionQueueID. </summary>
+		ActionQueueID,
+		///<summary>ObjectID. </summary>
+		ObjectID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ActionQueueStep.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -8444,22 +8461,22 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>AdditionalHandlingEnabled. </summary>
 		AdditionalHandlingEnabled,
+		///<summary>VerbalConfirmationEnabled. </summary>
+		VerbalConfirmationEnabled,
 		///<summary>VerbalConfirmationName. </summary>
 		VerbalConfirmationName,
 		///<summary>VerbalConfirmationPhone. </summary>
 		VerbalConfirmationPhone,
 		///<summary>VerbalConfirmationPhoneExtension. </summary>
 		VerbalConfirmationPhoneExtension,
+		///<summary>DryIceEnabled. </summary>
+		DryIceEnabled,
 		///<summary>DryIceRegulationSet. </summary>
 		DryIceRegulationSet,
 		///<summary>DryIceWeight. </summary>
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
-		///<summary>DryIceEnabled. </summary>
-		DryIceEnabled,
-		///<summary>VerbalConfirmationEnabled. </summary>
-		VerbalConfirmationEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9352,6 +9369,8 @@ namespace ShipWorks.Data.Model
 		ActionFilterTriggerEntity,
 		///<summary>ActionQueue</summary>
 		ActionQueueEntity,
+		///<summary>ActionQueueSelection</summary>
+		ActionQueueSelectionEntity,
 		///<summary>ActionQueueStep</summary>
 		ActionQueueStepEntity,
 		///<summary>ActionTask</summary>

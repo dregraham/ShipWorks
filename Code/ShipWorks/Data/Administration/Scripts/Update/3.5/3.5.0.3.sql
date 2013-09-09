@@ -140,7 +140,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_ActionQueue]
 [Status] [int] NOT NULL,
 [NextStep] [int] NOT NULL,
 [ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0))
+[ActionQueueType] [int] NOT NULL
 )
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
@@ -198,7 +198,7 @@ IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION
 GO
 PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ComputerLimitedList], [Status])
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO

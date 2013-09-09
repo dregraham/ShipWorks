@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandGrid.dll</HintPath>
+    </Reference>
     <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
@@ -112,7 +116,6 @@
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
-    <Compile Include="Actions\Tasks\ActionTaskDescriptorTest.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />

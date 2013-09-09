@@ -42,6 +42,7 @@ using Interapptive.Shared.Win32;
 using System.Threading.Tasks;
 using ShipWorks.Properties;
 using Divelements.SandGrid;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Data.Administration
 {
@@ -97,6 +98,10 @@ namespace ShipWorks.Data.Administration
 
         // What we display for LocalDB instead of the actual connection string
         const string localDbDisplayName = "(Local Only)";
+
+        // To mark our special comboBox items
+        object serverSearchAgain = new object();
+        object serverSearching = new object();
 
         /// <summary>
         /// Let's consumers control what the user is allowed to do in the wizard
@@ -183,6 +188,8 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            gridDatabses.Rows.Clear();
+
             StartSearchingSqlServers();
 
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
@@ -840,7 +847,11 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void StartSearchingSqlServers()
         {
-            gridDatabses.Rows.Clear();
+            comboSqlServers.Items.Clear();
+            comboSqlServers.Items.Add(new ImageComboBoxItem("Searching...", serverSearching, Resources.indiciator_green) { Selectable = false });
+
+            // Force the list to refresh, in case it's already dropped down
+            comboSqlServers.RefreshItemList();
 
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
@@ -873,29 +884,33 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
-            pictureServerSearching.Visible = false;
-            labelServerSearching.Visible = false;
-
-            panelSqlInstanceHelp.Location = pictureServerSearching.Location;
+            panelSqlInstanceHelp.Top = panelSearchSqlServers.Top;
             panelSqlInstanceHelp.Visible = true;
+            panelSearchSqlServers.Visible = false;
+
+            comboSqlServers.Items.Clear();
+            comboSqlServers.Items.Add(new ImageComboBoxItem("Refresh...", serverSearchAgain, Resources.arrows_green_static) { CloseOnSelect = false });
 
             string[] servers = (string[]) e.UserState;
 
             if (SqlInstanceUtility.IsLocalDbInstalled())
             {
-                comboSqlServers.Items.Add(localDbDisplayName);
+                comboSqlServers.Items.Add(new ImageComboBoxItem(localDbDisplayName, Resources.server));
             }
 
             // Load the list with all servers found on the LAN
             foreach (string server in servers)
             {
-                comboSqlServers.Items.Add(server);
+                comboSqlServers.Items.Add(new ImageComboBoxItem(server, string.Compare(SqlInstanceUtility.ExtractServerName(server), Environment.MachineName, true) == 0 ? Resources.server : Resources.server_client2));
             }
 
-            // Auto-select first one if nothing is in there already
-            if (comboSqlServers.Text.Length == 0 && comboSqlServers.Items.Count > 0)
+            // Force the list to refresh, in case it's already dropped down
+            comboSqlServers.RefreshItemList();
+
+            // Auto-select first one if nothing is in there already.  We use index 1, because index 0 is always Refresh
+            if (comboSqlServers.Text.Length == 0 && comboSqlServers.Items.Count > 1)
             {
-                comboSqlServers.SelectedIndex = 0;
+                comboSqlServers.SelectedIndex = 1;
             }
         }
 
@@ -904,21 +919,25 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnSteppingIntoSelectSqlInstance(object sender, WizardSteppingIntoEventArgs e)
         {
+            labelDatabaseSelect.Text = sqlInstanceChooseDatabase ? "Select your ShipWorks database" : "Connection Check";
+            gridDatabses.Visible = sqlInstanceChooseDatabase;
+
             if (e.FirstTime)
             {
                 // Prepopulate the instance box with the current
                 if (SqlSession.IsConfigured)
                 {
-                    comboSqlServers.Text = SqlSession.Current.Configuration.IsLocalDb() ? 
-                        localDbDisplayName : 
+                    comboSqlServers.Text = SqlSession.Current.Configuration.IsLocalDb() ?
+                        localDbDisplayName :
                         SqlSession.Current.Configuration.ServerInstance;
 
-                    OnChangeSelectedInstance(null, EventArgs.Empty);
+                    // Don't show the "Searching..." next to the ComboBox if we are also showing that we are trying to connect to a selected instance
+                    panelSearchSqlServers.Visible = false;
                 }
-            }
 
-            labelDatabaseSelect.Visible = sqlInstanceChooseDatabase;
-            gridDatabses.Visible = sqlInstanceChooseDatabase;
+                // This function handles a selected instance or blank
+                ConnectToSelectedServerInstance();
+            }
         }
 
         /// <summary>
@@ -933,13 +952,12 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-
         /// <summary>
         /// Leaving focus from the SQL instance combo
         /// </summary>
         private void OnLeaveSqlInstance(object sender, EventArgs e)
         {
-            OnChangeSelectedInstance(null, EventArgs.Empty);
+            ConnectToSelectedServerInstance();
         }
 
         /// <summary>
@@ -949,7 +967,7 @@ namespace ShipWorks.Data.Administration
         {
             if (comboSqlServers.Focused && keyData == Keys.Return)
             {
-                OnChangeSelectedInstance(null, EventArgs.Empty);
+                ConnectToSelectedServerInstance();
                 return true;
             }
             else
@@ -962,6 +980,39 @@ namespace ShipWorks.Data.Administration
         /// The selected SQL Server instance has changed
         /// </summa
         private void OnChangeSelectedInstance(object sender, EventArgs e)
+        {
+            ImageComboBoxItem selected = comboSqlServers.SelectedItem as ImageComboBoxItem;
+            if (selected != null)
+            {
+                // The only time there'd be a value is in our special marker items that shouldn't be selected
+                if (selected.Value != null)
+                {
+                    // Kick off a search again
+                    if (selected.Value == serverSearchAgain)
+                    {
+                        StartSearchingSqlServers();
+                    }
+
+                    comboSqlServers.SelectedIndexChanged -= OnChangeSelectedInstance;
+                    comboSqlServers.SelectedIndex = -1;
+                    comboSqlServers.SelectedIndexChanged += OnChangeSelectedInstance;
+
+                    return;
+                }
+                else
+                {
+                    // Update the text in the ComboBox
+                    comboSqlServers.Text = selected.Text;
+                }
+            }
+
+            ConnectToSelectedServerInstance();
+        }
+
+        /// <summary>
+        /// Connect to the currently selected SQL Server instance
+        /// </summary>
+        private void ConnectToSelectedServerInstance()
         {
             string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
 
@@ -992,23 +1043,31 @@ namespace ShipWorks.Data.Administration
                 gridDatabses.Rows.Clear();
                 gridDatabses.EmptyText = "";
 
+                panelSelectedInstance.Visible = false;
+
                 pictureSqlConnection.Visible = false;
                 labelSqlConnection.Visible = false;
                 linkSqlInstanceAccount.Visible = false;
 
                 return;
-           }
+            }
+            else 
+            {
+                panelSelectedInstance.Visible = true;
+            }
 
+            // Clear the database list
             gridDatabses.Rows.Clear();
-            gridDatabses.EmptyText = string.Format("Connecting to databases on '{0}'...", comboSqlServers.Text);
-
-            linkSqlInstanceAccount.Visible = false;
+            gridDatabses.EmptyText = "";
+            gridDatabses.Visible = false;
 
             pictureSqlConnection.Image = Resources.arrows_greengray;
             pictureSqlConnection.Visible = true;
 
-            labelSqlConnection.Text = "Connecting...";
+            labelSqlConnection.Text = string.Format("Connecting to '{0}'...", comboSqlServers.Text);
             labelSqlConnection.Visible = true;
+
+            linkSqlInstanceAccount.Visible = false;
 
             // Create another variable for closure purposes
             SqlSession backgroundSession = connectionSession;
@@ -1044,13 +1103,17 @@ namespace ShipWorks.Data.Administration
                     // the user opens the window to try to change the credentials.
                     sqlSession.Configuration.ServerInstance = selectedInstance;
 
+                    string instanceDisplay = (selectedInstance == SqlInstanceUtility.LocalDbServerInstance) ? localDbDisplayName : selectedInstance;
+
                     // Null indicates error
                     if (t.Result == null)
                     {
                         pictureSqlConnection.Image = Resources.warning16;
-                        labelSqlConnection.Text = "ShipWorks could not connect to the selected database server.";
+                        labelSqlConnection.Text = string.Format("Could not connect to '{0}'", instanceDisplay);
                         linkSqlInstanceAccount.Text = "Try changing the account";
+
                         gridDatabses.EmptyText = "";
+                        gridDatabses.Visible = false;
                     }
                     else
                     {
@@ -1058,9 +1121,11 @@ namespace ShipWorks.Data.Administration
                         List<SqlDatabaseDetail> databases = t.Result.Item2;
 
                         pictureSqlConnection.Image = Resources.check16;
-                        labelSqlConnection.Text = string.Format("Successfully connected using {0} account.", configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
+                        labelSqlConnection.Text = string.Format("Connected to '{0}' using {1} account.", instanceDisplay, configuration.WindowsAuth ? "your Windows" : string.Format("the '{0}'", configuration.Username));
                         linkSqlInstanceAccount.Text = "Change";
+
                         gridDatabses.EmptyText = "No databases were found.";
+                        gridDatabses.Visible = sqlInstanceChooseDatabase;
 
                         // Save the credentials
                         sqlSession.Configuration.Username = configuration.Username;
@@ -1182,7 +1247,7 @@ namespace ShipWorks.Data.Administration
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    OnChangeSelectedInstance(null, EventArgs.Empty);
+                    ConnectToSelectedServerInstance();
                 }
             }
         }
@@ -2079,7 +2144,7 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-        #endregion
+        #endregion    
     }
 }
 

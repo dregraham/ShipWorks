@@ -30,6 +30,7 @@ namespace ShipWorks.UI.Controls
         public PopupComboBox()
         {
             DropDownMinimumHeight = 200;
+            DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 
             InitializeComponent();
 
@@ -42,18 +43,22 @@ namespace ShipWorks.UI.Controls
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            // 
-            // CustomComboBox
-            // 
-            this.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ResumeLayout(false);
         }
 
-        [Category("Behavior"), DefaultValue(200)]
+        [Category("Behavior")]
+        [DefaultValue(200)]
         public int DropDownMinimumHeight
         {
             get;
             set;
+        }
+
+        [DefaultValue(ComboBoxStyle.DropDownList)]
+        public new ComboBoxStyle DropDownStyle
+        {
+            get { return base.DropDownStyle; }
+            set { base.DropDownStyle = value; }
         }
 
         /// <summary>

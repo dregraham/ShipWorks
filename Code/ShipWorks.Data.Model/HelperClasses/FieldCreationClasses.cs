@@ -184,6 +184,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ActionQueueSelectionEntity</summary>
+	public partial class ActionQueueSelectionFields
+	{
+		/// <summary>Creates a new ActionQueueSelectionEntity.ActionQueueSelectionID field instance</summary>
+		public static EntityField2 ActionQueueSelectionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ActionQueueSelectionID);}
+		}
+		/// <summary>Creates a new ActionQueueSelectionEntity.ActionQueueID field instance</summary>
+		public static EntityField2 ActionQueueID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ActionQueueID);}
+		}
+		/// <summary>Creates a new ActionQueueSelectionEntity.ObjectID field instance</summary>
+		public static EntityField2 ObjectID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ObjectID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ActionQueueStepEntity</summary>
 	public partial class ActionQueueStepFields
 	{
@@ -17862,6 +17882,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.AdditionalHandlingEnabled);}
 		}
+		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationEnabled field instance</summary>
+		public static EntityField2 VerbalConfirmationEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationEnabled);}
+		}
 		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationName field instance</summary>
 		public static EntityField2 VerbalConfirmationName
 		{
@@ -17877,6 +17902,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension);}
 		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceEnabled field instance</summary>
+		public static EntityField2 DryIceEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceEnabled);}
+		}
 		/// <summary>Creates a new UpsProfilePackageEntity.DryIceRegulationSet field instance</summary>
 		public static EntityField2 DryIceRegulationSet
 		{
@@ -17891,16 +17921,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceIsForMedicalUse
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceIsForMedicalUse);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.DryIceEnabled field instance</summary>
-		public static EntityField2 DryIceEnabled
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceEnabled);}
-		}
-		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationEnabled field instance</summary>
-		public static EntityField2 VerbalConfirmationEnabled
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationEnabled);}
 		}
 	}
 

@@ -15,7 +15,7 @@ using ShippingInfo = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
-    ///     Downloader for ChannelAdvisor
+    /// Downloader for ChannelAdvisor
     /// </summary>
     public class ChannelAdvisorDownloader : StoreDownloader
     {
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private int totalCount;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         /// <param name="store"></param>
         public ChannelAdvisorDownloader(StoreEntity store)
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {}
 
         /// <summary>
-        ///     Convenience property for quick access to the specific store entity
+        /// Convenience property for quick access to the specific store entity
         /// </summary>
         private ChannelAdvisorStoreEntity ChannelAdvisorStore
         {
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Download data
+        /// Download data
         /// </summary>
         protected override void Download()
         {
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 Progress.Detail = "Checking for orders...";
 
-                var client = new ChannelAdvisorClient(ChannelAdvisorStore);
+                ChannelAdvisorClient client = new ChannelAdvisorClient(ChannelAdvisorStore);
 
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Download the next page of results from CA
+        /// Download the next page of results from CA
         /// </summary>
         private bool DownloadNextOrdersPage(ChannelAdvisorClient client)
         {
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Tells Channel Advisor we downloaded the orders.
+        /// Tells Channel Advisor we downloaded the orders.
         /// </summary>
         private void MarkOrdersAsExported(ChannelAdvisorClient client, IEnumerable<OrderResponseDetailComplete> caOrders)
         {
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Loads the orders into ShipWorks database.
+        /// Loads the orders into ShipWorks database.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="caOrders">The ca orders.</param>
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // check for cancellation
                 if (Progress.IsCancelRequested)
                 {
-                    break;
+                    return;
                 }
 
                 Progress.Detail = String.Format("Processing order {0}...", (QuantitySaved + 1));
@@ -146,14 +146,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Load order data from the CA response
+        /// Load order data from the CA response
         /// </summary>
         private void LoadOrder(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder)
         {
             int orderNumber = caOrder.OrderID;
 
             // get the order instance
-            var order = (ChannelAdvisorOrderEntity)InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity)InstantiateOrder(new OrderNumberIdentifier(orderNumber));
 
             order.OrderDate = caOrder.OrderTimeGMT.Value;
             order.OnlineLastModified = caOrder.LastUpdateDate ?? order.OrderDate;
@@ -222,7 +222,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Sets the ChannelAdvisor order flags.
+        /// Sets the ChannelAdvisor order flags.
         /// </summary>
         /// <param name="order">The order.</param>
         /// <param name="caOrder">The ca order.</param>
@@ -234,13 +234,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // When using the Enum.TryParse method, if an new/unknown flag type is encountered,
             // the NoFlag value will be assigned to the output parameter, so there's not really
             // any reason to inspect the results of the TryParse here.
-            var flagType = ChannelAdvisorFlagType.NoFlag;
+            ChannelAdvisorFlagType flagType = ChannelAdvisorFlagType.NoFlag;
             Enum.TryParse(caOrder.FlagStyle, true, out flagType);
             order.FlagType = (int)flagType;
         }
 
         /// <summary>
-        ///     Creates a new payment detail for the order
+        /// Creates a new payment detail for the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {
@@ -251,7 +251,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Imports payment information for the order
+        /// Imports payment information for the order
         /// </summary>
         private void LoadPayments(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
@@ -262,7 +262,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Import order charges from CA shopping cart
+        /// Import order charges from CA shopping cart
         /// </summary>
         private void LoadCharges(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
@@ -334,7 +334,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Loads the promotion.
+        /// Loads the promotion.
         /// </summary>
         /// <param name="order">The order.</param>
         /// <param name="promoCode">The promo code.</param>
@@ -355,7 +355,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Creates and populates an order charge
+        /// Creates and populates an order charge
         /// </summary>
         private void LoadCharge(OrderEntity order, string type, string description, decimal amount)
         {
@@ -367,13 +367,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Imports order items from the CA shopping cart
+        /// Imports order items from the CA shopping cart
         /// </summary>
         private void LoadItems(ChannelAdvisorClient client, ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemItemResponse caItem in caOrder.ShoppingCart.LineItemSKUList)
             {
-                var item = (ChannelAdvisorOrderItemEntity)InstantiateOrderItem(order);
+                ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity)InstantiateOrderItem(order);
 
                 item.Name = caItem.Title;
                 item.Quantity = caItem.Quantity;
@@ -472,7 +472,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Retrieves Image information from ChannelAdvisor and populates the OrderItem appropriately
+        /// Retrieves Image information from ChannelAdvisor and populates the OrderItem appropriately
         /// </summary>
         private static void PopulateImages(ChannelAdvisorClient client, ChannelAdvisorOrderItemEntity orderItem)
         {
@@ -499,7 +499,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Loads any notes from the CA order
+        /// Loads any notes from the CA order
         /// </summary>
         private void LoadNotes(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
@@ -524,7 +524,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        ///     Addresses
+        /// Addresses
         /// </summary>
         private void LoadAddresses(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
@@ -552,8 +552,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 && billing.City.Length == 0)
             {
                 // copy shipping to billing
-                var shipAdapter = new PersonAdapter(order, "Ship");
-                var billAdapter = new PersonAdapter(order, "Bill");
+                PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
+                PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
                 PersonAdapter.Copy(shipAdapter, billAdapter);
             }
             else

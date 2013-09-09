@@ -601,7 +601,7 @@ namespace ShipWorks.Stores.Management
                     action.Name = "Online Update";
                     action.Enabled = true;
 
-                    action.ComputerLimitedType = (int) ComputerLimitationType.TriggeringComputer;
+                    action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
                     action.InternalComputerLimitedList = string.Empty;
 
                     action.StoreLimited = true;

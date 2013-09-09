@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ShipWorks.UI.Controls
 {
@@ -12,6 +13,8 @@ namespace ShipWorks.UI.Controls
     public class ImageComboBox : PopupComboBox
 	{
         const int imageSize = 16;
+
+        #region DropDownListBox
 
         // Custom ListBox for displaying the dropdown items
         class DropDownListBox : ListBox
@@ -27,7 +30,7 @@ namespace ShipWorks.UI.Controls
                 this.ItemHeight = 18;
                 this.IntegralHeight = false;
 
-                SetStyle(ControlStyles.ResizeRedraw, true);
+                SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
             }
 
             /// <summary>
@@ -45,22 +48,27 @@ namespace ShipWorks.UI.Controls
                 e.Graphics.FillRectangle(SystemBrushes.Window, e.Bounds);
                 Color textColor = SystemColors.WindowText;
 
-                // Draw selected
-                if ((e.State & DrawItemState.Selected) != 0 && hoverIndex < 0)
-                {
-                    hoverIndex = e.Index;
-
-                    e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
-                    textColor = SystemColors.HighlightText;
-                }
-                // Draw hovered
-                else if (hoverIndex == e.Index)
-                {
-                    e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
-                    textColor = SystemColors.HighlightText;
-                }
-
                 object item = Items[e.Index];
+                ImageComboBoxItem imageItem = item as ImageComboBoxItem;
+
+                // If it's a plain item, or an ImageComboBoxItem that actually is selectable...
+                if (imageItem == null || imageItem.Selectable)
+                {
+                    // Draw selected
+                    if ((e.State & DrawItemState.Selected) != 0 && hoverIndex < 0)
+                    {
+                        hoverIndex = e.Index;
+
+                        e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+                        textColor = SystemColors.HighlightText;
+                    }
+                    // Draw hovered
+                    else if (hoverIndex == e.Index)
+                    {
+                        e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+                        textColor = SystemColors.HighlightText;
+                    }
+                }
 
                 // Shrink the bounds
                 Rectangle bounds = e.Bounds;
@@ -124,12 +132,12 @@ namespace ShipWorks.UI.Controls
                     int oldHoverIndex = hoverIndex;
                     hoverIndex = newHoverIndex;
 
-                    if (oldHoverIndex != -1)
+                    if (oldHoverIndex >= 0 && oldHoverIndex < Items.Count)
                     {
                         Invalidate(GetItemRectangle(oldHoverIndex));
                     }
 
-                    if (hoverIndex != -1)
+                    if (hoverIndex >= 0 && hoverIndex < Items.Count)
                     {
                         Invalidate(GetItemRectangle(hoverIndex));
                     }
@@ -149,10 +157,39 @@ namespace ShipWorks.UI.Controls
                     int oldHoverIndex = hoverIndex;
                     hoverIndex = -1;
 
-                    Invalidate(GetItemRectangle(oldHoverIndex));
+                    if (oldHoverIndex >= 0 && oldHoverIndex < Items.Count)
+                    {
+                        Invalidate(GetItemRectangle(oldHoverIndex));
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Invalidate the rect that contains the given image
+            /// </summary>
+            public void InvalidateImage(Image image)
+            {
+                int index = -1;
+
+                foreach (ImageComboBoxItem imageItem in Items.OfType<ImageComboBoxItem>())
+                {
+                    if (imageItem.Image == image)
+                    {
+                        index = Items.IndexOf(imageItem);
+                    }
+                }
+
+                if (index >= 0)
+                {
+                    Rectangle rect = GetItemRectangle(index);
+                    rect.Width = 18;
+
+                    Invalidate(rect);
                 }
             }
         }
+
+        #endregion
 
         DropDownListBox listBox = new DropDownListBox();
 
@@ -165,18 +202,86 @@ namespace ShipWorks.UI.Controls
             PopupController popupController = new PopupController(listBox);
             popupController.Animate = PopupAnimation.System;
             popupController.SizerStyle = PopupSizerStyle.None;
+            popupController.PopupClosing += OnClosingDropDown;
 
             // The filter is what we are going to be dropping down
             this.PopupController = popupController;
 		}
 
         /// <summary>
+        /// Disposing
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
+
+        /// <summary>
         /// Dropdown is showing, we have to fill the box
         /// </summary>
         protected override void OnShowingDropDown()
         {
-            listBox.SelectedIndexChanged -= new EventHandler(OnSelectItem);
+            RefreshItemList();
 
+            AnimateImages(true);
+        }
+
+        /// <summary>
+        /// The DropDown is closing
+        /// </summary>
+        private void OnClosingDropDown(object sender, EventArgs e)
+        {
+            AnimateImages(false);
+        }
+
+        /// <summary>
+        /// Start or stop animating all images in our current list
+        /// </summary>
+        private void AnimateImages(bool animate)
+        {
+            // Go through each image we have and see if any need animated
+            foreach (ImageComboBoxItem imageItem in listBox.Items.OfType<ImageComboBoxItem>())
+            {
+                if (imageItem.Image != null && ImageAnimator.CanAnimate(imageItem.Image))
+                {
+                    if (animate)
+                    {
+                        ImageAnimator.Animate(imageItem.Image, OnImageAnimateFrameChanged);
+                    }
+                    else
+                    {
+                        ImageAnimator.StopAnimate(imageItem.Image, OnImageAnimateFrameChanged);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Frames have been updated and are ready to be redrawn
+        /// </summary>
+        private void OnImageAnimateFrameChanged(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(() => OnImageAnimateFrameChanged(sender, e)));
+                return;
+            }
+
+            Image image = (Image)sender;
+
+            ImageAnimator.UpdateFrames(image);
+
+            listBox.InvalidateImage(image);
+        }
+
+        /// <summary>
+        /// Refresh the item list from the Items collection
+        /// </summary>
+        public void RefreshItemList()
+        {
+            AnimateImages(false);
+
+            listBox.SelectedIndexChanged -= new EventHandler(OnSelectItem);
             listBox.Items.Clear();
 
             foreach (object item in Items)
@@ -184,12 +289,18 @@ namespace ShipWorks.UI.Controls
                 listBox.Items.Add(item);
             }
 
-            if (SelectedIndex >= 0)
+            if (SelectedIndex >= 0 && SelectedIndex < listBox.Items.Count)
             {
                 listBox.SelectedIndex = SelectedIndex;
             }
 
             listBox.SelectedIndexChanged += new EventHandler(OnSelectItem);
+            
+            // If the popup is visible, go ahead and restart the animation
+            if (PopupController.IsPopupVisible)
+            {
+                AnimateImages(true);
+            }
         }
 
         /// <summary>
@@ -197,17 +308,34 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         void OnSelectItem(object sender, EventArgs e)
         {
+            if (listBox.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            ImageComboBoxItem imageItem = Items[listBox.SelectedIndex] as ImageComboBoxItem;
+
+            // Not selectable
+            if (imageItem != null && !imageItem.Selectable)
+            {
+                return;
+            }
+
             SelectedIndex = listBox.SelectedIndex;
 
-            PopupController.Close(DialogResult.OK);
+            // Check for closable
+            if (imageItem == null || imageItem.CloseOnSelect)
+            {
+                PopupController.Close(DialogResult.OK);
+            }
         }
 
         /// <summary>
-        /// Draw the selected filter
+        /// Draw the selected item.  Only applies when style is DropDownList
         /// </summary>
         protected override void OnDrawSelectedItem(Graphics g, Color foreColor, Rectangle bounds)
         {
-            if (SelectedIndex < 0)
+            if (SelectedIndex < 0 || DropDownStyle != ComboBoxStyle.DropDownList)
             {
                 return;
             }
@@ -215,6 +343,22 @@ namespace ShipWorks.UI.Controls
             object item = Items[SelectedIndex];
 
             DropDownListBox.DrawImageAndText(item, g, Font, foreColor, bounds);
+        }
+
+        /// <summary>
+        /// Override command key processing
+        /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Down || keyData == Keys.Up)
+            {
+                // Eat it
+                return true;
+            }
+            else
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
         }
 	}
 }

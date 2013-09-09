@@ -329,7 +329,7 @@ namespace ShipWorks.ApplicationCore.Services
             UserSession.InitializeForCurrentDatabase();
 
             UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentSession();
         }
 
         void OnCheckInTimerElapsed(object sender, ElapsedEventArgs e)

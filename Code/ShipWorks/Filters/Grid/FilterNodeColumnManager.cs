@@ -37,9 +37,9 @@ namespace ShipWorks.Filters.Grid
         static Dictionary<long, FilterNodeColumnSettings> defaultSettings = new Dictionary<long, FilterNodeColumnSettings>();
 
         /// <summary>
-        /// Load user column data. To be called when a user logs in.
+        /// Load user column data. 
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             // Clear any remnants from the last user
             userSettings.Clear();

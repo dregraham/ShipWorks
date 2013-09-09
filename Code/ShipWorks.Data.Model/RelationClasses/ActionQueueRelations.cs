@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.ActionQueueSelectionEntityUsingActionQueueID);
 			toReturn.Add(this.ActionQueueStepEntityUsingActionQueueID);
 
 			toReturn.Add(this.ActionEntityUsingActionID);
@@ -38,6 +39,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between ActionQueueEntity and ActionQueueSelectionEntity over the 1:n relation they have, using the relation between the fields:
+		/// ActionQueue.ActionQueueID - ActionQueueSelection.ActionQueueID
+		/// </summary>
+		public virtual IEntityRelation ActionQueueSelectionEntityUsingActionQueueID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(ActionQueueFields.ActionQueueID, ActionQueueSelectionFields.ActionQueueID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ActionQueueEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ActionQueueSelectionEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between ActionQueueEntity and ActionQueueStepEntity over the 1:n relation they have, using the relation between the fields:
 		/// ActionQueue.ActionQueueID - ActionQueueStep.ActionQueueID

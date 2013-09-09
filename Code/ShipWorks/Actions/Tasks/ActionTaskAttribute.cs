@@ -11,26 +11,15 @@ namespace ShipWorks.Actions.Tasks
         string displayName;
         string identifier;
         ActionTaskCategory category;
-        ActionTriggerClassifications allowedActionTriggerClassifications;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionTaskAttribute(string displayName, string identifier, ActionTaskCategory category) :
-            this(displayName, identifier, category, ActionTriggerClassifications.Scheduled | ActionTriggerClassifications.Nonscheduled)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ActionTaskAttribute(string displayName, string identifier, ActionTaskCategory category, ActionTriggerClassifications allowedActionTriggerClassifications)
+        public ActionTaskAttribute(string displayName, string identifier, ActionTaskCategory category)
         {
             this.displayName = displayName;
             this.identifier = identifier;
             this.category = category;
-            this.allowedActionTriggerClassifications = allowedActionTriggerClassifications;
         }
 
         /// <summary>
@@ -66,16 +55,5 @@ namespace ShipWorks.Actions.Tasks
                 return category;
             }
         }
-
-        /// <summary>
-        /// If this task is allowed to be added to an Action that is of Scheduled type.
-        /// </summary>
-        public ActionTriggerClassifications AllowedActionTriggerClassifications
-        {
-            get
-            {
-                return allowedActionTriggerClassifications;
-            }
-        }  
     }
 }

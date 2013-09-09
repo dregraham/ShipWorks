@@ -13,16 +13,16 @@ public partial class StoredProcedures
     /// <summary>
     /// Purges old audit records from the database.
     /// </summary>
-    /// <param name="earliestRetentionDateInUtc">Indicates the date/time to use for determining
+    /// <param name="olderThan">Indicates the date/time to use for determining
     /// which Audit records will be purged. Any records with an Audit.Date value earlier than
     /// this date will be purged.</param>
-    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeAudit(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgeAudit(SqlDateTime olderThan, SqlDateTime runUntil)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeAuditCommandText, PurgeAuditAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);
+        PurgeScriptRunner.RunPurgeScript(PurgeAuditCommandText, PurgeAuditAppLockName, olderThan, runUntil);
     }
 
     /// <summary>
@@ -46,12 +46,12 @@ public partial class StoredProcedures
                     @batchTotal BIGINT = 0;
 
                 -- purge in batches while time allows
-                WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
+                WHILE @runUntil IS NULL OR GETUTCDATE() < @runUntil
                 BEGIN
                     INSERT #AuditPurgeBatch
                     SELECT TOP (@batchSize) AuditID
                     FROM Audit
-                    WHERE [Date] < @earliestRetentionDateInUtc;
+                    WHERE [Date] < @olderThan;
 
                     SET @batchSize = @@ROWCOUNT;
                     IF @batchSize = 0
@@ -61,9 +61,9 @@ public partial class StoredProcedures
 
                     -- stop if the batch isn't expected to complete in time
                     IF (
-                        @latestExecutionTimeInUtc IS NOT NULL AND
+                        @runUntil IS NOT NULL AND
                         @batchTotal > 0 AND
-                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @runUntil
                     )
                         BREAK;
 

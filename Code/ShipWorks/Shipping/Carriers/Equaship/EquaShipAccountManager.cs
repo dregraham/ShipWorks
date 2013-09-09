@@ -19,7 +19,10 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         static TableSynchronizer<EquaShipAccountEntity> synchronizer;
         static bool needCheckForChanges = false;
 
-        public static void InitializeForCurrentUser()
+        /// <summary>
+        /// Initializes EquaShipAccountManager
+        /// </summary>
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<EquaShipAccountEntity>();
             InternalCheckForChanges();

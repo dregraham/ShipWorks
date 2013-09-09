@@ -1,23 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Data.SqlClient;
-using System.Transactions;
-using Common.Logging;
-using Interapptive.Shared.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Filters;
 using Interapptive.Shared.Utility;
-using ShipWorks.Users;
 using ShipWorks.Data.Connection;
 using ShipWorks.Filters.Search;
-using ShipWorks.Users.Logon;
-using ShipWorks.Users.Security;
-using ShipWorks.Shipping;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
@@ -36,12 +23,6 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public static class InitialDataLoader
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(InitialDataLoader));
-
-        // Used for executing initial data scripts
-        static SqlScriptLoader initialDataSqlScriptLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Installation.InitialData");
-
         /// <summary>
         /// Create the core data required to run ShipWorks at all
         /// </summary>
@@ -435,72 +416,5 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-        /// <summary>
-        /// Add initial data to the current database.
-        /// </summary>
-        public static void AddSqlScriptInitialDataToDatabase()
-        {
-            log.InfoFormat("Add initial data to the current database.");
-
-            try
-            {
-                // Put the SuperUser in scope, and don't audit
-                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
-                {
-                    using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
-                    {
-                        // Add the initial data
-                        RunInitialDataSqlScripts();
-
-                        transaction.Complete();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("UpdateDatabase failed", ex);
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Get a list of all the initial data scripts in ShipWorks, ordered from smallest version to greatest.
-        /// </summary>
-        private static List<SqlUpdateScript> GetInitialDataSqlScripts()
-        {
-            List<SqlUpdateScript> scripts = new List<SqlUpdateScript>();
-
-            foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(r => r.StartsWith(initialDataSqlScriptLoader.ResourcePath)))
-            {
-                scripts.Add(new SqlUpdateScript("InitialData", resource));
-            }
-
-            return scripts.OrderBy(s => s.SchemaVersion).ToList();
-        }
-
-        /// <summary>
-        /// Runs each initial data script
-        /// </summary>
-        private static void RunInitialDataSqlScripts()
-        {
-            // Get all the initial data scripts
-            List<SqlUpdateScript> updateScripts = GetInitialDataSqlScripts().ToList();
-
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                // Go through each initial data script (they are already sorted in version order)
-                foreach (SqlUpdateScript script in updateScripts)
-                {
-                    log.InfoFormat("Updating to {0}", script.SchemaVersion);
-
-                    // Execute the script
-                    SqlScript executor = initialDataSqlScriptLoader[script.ScriptName];
-
-                    // Run all the batches in the script
-                    executor.Execute(con);
-                }
-            }
-        }
     }
 }

@@ -39,9 +39,9 @@ namespace ShipWorks.Templates
         static List<ObjectLabelEntity> deletedTemplateLabels;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize TemplateManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             folderSynchronizer = new TableSynchronizer<TemplateFolderEntity>();
             templateSynchronizer = new TableSynchronizer<TemplateEntity>();

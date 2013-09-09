@@ -96,5 +96,24 @@ namespace ShipWorks.UI
 
             return cropped;
         }
+
+        /// <summary>
+        /// Resize the given image to the new size
+        /// </summary>
+        /// 
+        public static Image ResizeImage(Image image, Size size)
+        {
+            Bitmap newImage = new Bitmap(size.Width, size.Height);
+
+            using (Graphics g = Graphics.FromImage(newImage))
+            {
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.DrawImage(image, new Rectangle(0, 0, size.Width, size.Height));
+            }
+
+            return newImage;
+        }
     }
 }

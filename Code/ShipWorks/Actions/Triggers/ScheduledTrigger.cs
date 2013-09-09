@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Triggers.Editors;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using Interapptive.Shared.Utility;
@@ -13,6 +14,8 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using ShipWorks.Actions.Scheduling;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Actions.Triggers
 {
@@ -162,14 +165,51 @@ namespace ShipWorks.Actions.Triggers
         }
 
         /// <summary>
+        /// Some triggers may have extra database state they need to save in addition to what get's persisted in the XML settings.
+        /// Such as the sound file resource for the PlaySound task.  This gives the trigger a chance to save it.
+        /// </summary>
+        public override void SaveExtraState(ActionEntity action, SqlAdapter adapter)
+        {
+            base.SaveExtraState(action, adapter);
+
+            // And finally schedule the action
+            Scheduler scheduler = new Scheduler();
+            scheduler.UnscheduleAction(action);
+
+            if (action.Enabled)
+            {
+                scheduler.ScheduleAction(action, Schedule);
+            }
+        }
+
+        /// <summary>
+        /// The trigger is being deleted.  Any database extra state saved by the trigger in SaveExtraState should be cleaned up.
+        /// </summary>
+        public override void DeleteExtraState(ActionEntity action, SqlAdapter adapter)
+        {
+            new Scheduler().UnscheduleAction(action);
+
+            base.DeleteExtraState(action, adapter);
+        }
+
+        /// <summary>
         /// Validates the schedule.
         /// </summary>
         public override void Validate()
         {
             if (null == Schedule)
-                throw new SchedulingException("No schedule has been set for this trigger.");
+            {
+                throw new ActionTriggerException("No schedule has been set for this trigger.");   
+            }
 
-            Schedule.Validate();
+            try
+            {
+                Schedule.Validate();
+            }
+            catch (SchedulingException ex)
+            {
+                throw new ActionTriggerException(ex.Message, ex);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Columns.SortProviders;
@@ -10,12 +11,12 @@ using ShipWorks.Data.Model.HelperClasses;
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
     /// <summary>
-    /// Factory class for creating the builtin column definitions
+    /// Factory class for creating the built-in column definitions
     /// </summary>
     public static class ActionErrorColumnDefinitionFactory
     {        
         /// <summary>
-        /// Create the default grid column definitions for all possible download log columns.
+        /// Create the default grid column definitions for all possible action error columns.
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
@@ -26,9 +27,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         ActionQueueFields.TriggerDate),
 
                     new GridColumnDefinition("{A34E560E-DDC6-44c6-A532-A262C9CB9D3E}", true,
-                        new GridComputerListDisplayType(), "Computer(s)", @"\\ShippingPC",
+                        new GridComputerLimitedListDisplayType(), "Can Run On", @"\\ShippingPC",
                         new GridColumnFunctionValueProvider(x => ((ActionQueueEntity)x).ComputerLimitedList),
-                        null),
+                        new GridColumnSortProvider(ActionQueueFields.InternalComputerLimitedList)),
 
                     new GridColumnDefinition("{10668EBE-8755-47A0-94E7-06E4DB466766}",
                         new GridComputerDisplayType(), "Triggered On", @"\\ShippingPC",

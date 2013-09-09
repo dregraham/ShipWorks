@@ -56,10 +56,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (158 + 0));
+			base.InitClass( (159 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
+			InitActionQueueSelectionEntityInfos();
 			InitActionQueueStepEntityInfos();
 			InitActionTaskEntityInfos();
 			InitAmazonASINEntityInfos();
@@ -261,6 +262,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "ActionQueueType", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.ActionQueueType, 0, 0, 10);
+		}
+		/// <summary>Inits ActionQueueSelectionEntity's FieldInfo objects</summary>
+		private void InitActionQueueSelectionEntityInfos()
+		{
+			base.AddElementFieldInfo("ActionQueueSelectionEntity", "ActionQueueSelectionID", typeof(System.Int64), true, false, true, false,  (int)ActionQueueSelectionFieldIndex.ActionQueueSelectionID, 0, 0, 19);
+			base.AddElementFieldInfo("ActionQueueSelectionEntity", "ActionQueueID", typeof(System.Int64), false, true, false, false,  (int)ActionQueueSelectionFieldIndex.ActionQueueID, 0, 0, 19);
+			base.AddElementFieldInfo("ActionQueueSelectionEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)ActionQueueSelectionFieldIndex.ObjectID, 0, 0, 19);
 		}
 		/// <summary>Inits ActionQueueStepEntity's FieldInfo objects</summary>
 		private void InitActionQueueStepEntityInfos()
@@ -2502,14 +2510,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "AdditionalHandlingEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.AdditionalHandlingEnabled, 0, 0, 0);
+			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationName", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationName, 35, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationPhone", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationPhone, 15, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", typeof(System.String), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension, 4, 0, 0);
+			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceRegulationSet", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceRegulationSet, 0, 0, 10);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceWeight, 0, 0, 38);
 			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceIsForMedicalUse", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, 0, 0, 0);
-			base.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceEnabled, 0, 0, 0);
-			base.AddElementFieldInfo("UpsProfilePackageEntity", "VerbalConfirmationEnabled", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.VerbalConfirmationEnabled, 0, 0, 0);
 		}
 		/// <summary>Inits UpsShipmentEntity's FieldInfo objects</summary>
 		private void InitUpsShipmentEntityInfos()

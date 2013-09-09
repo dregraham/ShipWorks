@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Grid.Columns.ValueProviders
@@ -15,6 +12,7 @@ namespace ShipWorks.Data.Grid.Columns.ValueProviders
 
         /// <summary>
         /// Constructor
+        /// </summary>
         public GridColumnFunctionValueProvider(Func<EntityBase2, object> valueFunction)
             : base(null)
         {

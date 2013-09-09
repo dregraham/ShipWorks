@@ -16,13 +16,13 @@ public partial class StoredProcedures
     /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
     /// which EmailOutbound records will be purged. Any records with an EmailOutbound.SentDate value earlier than
     /// this date will be purged.</param>
-    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeEmailOutbound(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgeEmailOutbound(SqlDateTime olderThan, SqlDateTime runUntil)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeEmailOutboundCommandText, PurgeEmailOutboundAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);             
+        PurgeScriptRunner.RunPurgeScript(PurgeEmailOutboundCommandText, PurgeEmailOutboundAppLockName, olderThan, runUntil);             
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public partial class StoredProcedures
                     @batchTotal BIGINT = 0;
 
                 -- purge in batches while time allows
-                WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
+                WHILE @runUntil IS NULL OR GETUTCDATE() < @runUntil
                 BEGIN
                     INSERT #EmailPurgeBatch
                     SELECT TOP (@batchSize) e.EmailOutboundID
@@ -74,7 +74,7 @@ public partial class StoredProcedures
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID
                     WHERE
-                        e.SentDate < @earliestRetentionDateInUtc AND
+                        e.SentDate < @olderThan AND
                         e.SendStatus = 1 AND  -- only purge emails that have been sent
                         o.ObjectID <> @deletedEmailResourceID;
 
@@ -86,9 +86,9 @@ public partial class StoredProcedures
 
                     -- stop if the batch isn't expected to complete in time
                     IF (
-                        @latestExecutionTimeInUtc IS NOT NULL AND
+                        @runUntil IS NOT NULL AND
                         @batchTotal > 0 AND
-                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @runUntil
                     )
                         BREAK;
 

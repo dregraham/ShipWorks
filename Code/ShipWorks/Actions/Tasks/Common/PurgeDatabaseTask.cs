@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -14,7 +15,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for deleting/purging old data.
     /// </summary>
-    [ActionTask("Delete old data", "PurgeDatabase", ActionTaskCategory.Administration, ActionTriggerClassifications.Scheduled)]
+    [ActionTask("Delete old data", "PurgeDatabase", ActionTaskCategory.Administration)]
     public class PurgeDatabaseTask : ActionTask
     {
         // Logger
@@ -52,11 +53,11 @@ namespace ShipWorks.Actions.Tasks.Common
             this.scriptRunner = scriptRunner;
             this.dateProvider = dateProvider;
         }
-
+        
         /// <summary>
         /// This task does not require any input to run.
         /// </summary>
-        public override ActionTaskInputRequirement RequiresInput
+        public override ActionTaskInputRequirement InputRequirement
         {
             get { return ActionTaskInputRequirement.None; }
         }
@@ -116,8 +117,8 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             DateTime sqlDate = scriptRunner.SqlUtcDateTime;
             DateTime localStopExecutionAfter = dateProvider.UtcNow.AddHours(TimeoutInHours);
-            DateTime sqlStopExecutionAfter = sqlDate.AddHours(TimeoutInHours);
-            DateTime earliestRetentionDateInUtc = sqlDate.AddDays(-RetentionPeriodInDays);
+            DateTime runUntil = sqlDate.AddHours(TimeoutInHours);
+            DateTime olderThan = sqlDate.AddDays(-RetentionPeriodInDays);
 
             Dictionary<PurgeDatabaseType, Exception> exceptions = new Dictionary<PurgeDatabaseType, Exception>();
 
@@ -140,10 +141,10 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 string scriptName = EnumHelper.GetApiValue(purge);
 
-                log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, earliestRetentionDateInUtc);
+                log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, olderThan);
                 try
                 {
-                    scriptRunner.RunScript(scriptName, earliestRetentionDateInUtc, CanTimeout ? sqlStopExecutionAfter : (DateTime?)null, 5);
+                    scriptRunner.RunScript(scriptName, olderThan, CanTimeout ? runUntil : (DateTime?)null, 5);
                     log.InfoFormat("Finished {0} successfully.", scriptName);
                 }
                 catch (DbException ex)
@@ -180,6 +181,16 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 throw new ActionTaskRunException(exceptionMessage, new ExceptionCollection(new ArrayList(exceptions.Values)));
             }
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return triggerType == ActionTriggerType.Scheduled;
         }
     }
 }

@@ -19,17 +19,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
     {
         private readonly WebRequestTask task;
 
-        private ContextMenuStrip verbMenu;
-        private ContextMenuStrip authMenu;
-        private ContextMenuStrip cardinalityMenu;
-
-        private ToolStripMenuItem getMenuItem;
-        private ToolStripMenuItem postMenuItem;
-
-        private ToolStripMenuItem singleRequestMenuItem;
-        private ToolStripMenuItem oneRequestPerFilterResultMenuItem;
-        private ToolStripMenuItem oneRequestPerTemplateResultMenuItem;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestTaskEditor"/> class.
         /// </summary>
@@ -49,17 +38,17 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             base.OnLoad(e);
 
-            CreateVerbMenu();
-            CreateAuthMenu();
-            CreateCardinalityMenu();
+            UpdateCardinalityUI(null);
+            UpdateVerbUI();
+            UpdateTemplateUI();
+            UpdateAdditionalOptionsUI();
 
-            cardinalityLabel.Text = EnumHelper.GetDescription(task.RequestCardinality);
-            verbLabel.Text = EnumHelper.GetDescription(task.Verb);
+            comboCardinality.SelectedValue = task.RequestCardinality;
+            comboVerb.SelectedValue = task.Verb;
             urlTextBox.Text = task.Url;
 
             // We want to get the decrypted password method here instead of using the EncryptedPassword 
             // property to avoid to having it encrypted twice when the task is saved again.
-            authLabel.Text = task.UseBasicAuthentication ? "basic" : "no";
             userNameTextBox.Text = task.Username;
             passwordTextBox.Text = task.GetDecryptedPassword();
 
@@ -68,113 +57,173 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 headersGrid.Values = task.HttpHeaders.Select(x => new KeyValuePair<string, string>(HttpUtility.UrlDecode(x.Key), HttpUtility.UrlDecode(x.Value))).ToList();
             }
 
-            UpdateAuthUI();
-            UpdateBodyUI();
+            useBasicAuth.Checked = task.UseBasicAuthentication;
+            includeExtraHeaders.Checked = task.IncludeCustomHttpHeaders;
         }
 
         /// <summary>
         /// Allows derived editors to update themselves based on the current trigger
         /// </summary>
-        public override void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
+        public override void NotifyTaskInputChanged(ActionTrigger trigger, ActionTaskInputSource inputSource, EntityType? inputType)
         {
-            string entityDescription = ActionTaskBubble.GetTriggeringEntityDescription(inputType) ?? "entry";
+            UpdateCardinalityUI(inputType);
+        }
 
-            oneRequestPerFilterResultMenuItem.Text =
-                string.Format(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerFilterResult), entityDescription);
+        /// <summary>
+        /// Load the cardinality selection box
+        /// </summary>
+        private void UpdateCardinalityUI(EntityType? inputType)
+        {
+            ActionTaskInputSource inputSource = (ActionTaskInputSource) task.Entity.InputSource;
 
-            if (task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult)
+            comboCardinality.SelectedValueChanged -= OnChangeCardinality;
+
+            object selected = comboCardinality.SelectedValue;
+
+            comboCardinality.DataSource = null;
+            comboCardinality.DisplayMember = "Key";
+            comboCardinality.ValueMember = "Value";
+
+            comboCardinality.DataSource = EnumHelper.GetEnumList<WebRequestCardinality>
+                (
+                    e =>
+                    {
+                        switch (e)
+                        {
+                            case WebRequestCardinality.OneRequestPerFilterResult:
+                                return inputSource == ActionTaskInputSource.FilterContents;
+
+                            case WebRequestCardinality.OneRequestPerTemplateResult:
+                                return inputSource != ActionTaskInputSource.Nothing;
+
+                            default:
+                                return true;
+                        }
+                    }
+                )
+                .Select(e =>
+                    new KeyValuePair<string, WebRequestCardinality>
+                        (
+                            string.Format(e.Description, ActionTaskBubble.GetTriggeringEntityDescription(inputType) ?? "entry"),
+                            e.Value)
+                        ).ToList();
+
+            if (selected != null)
             {
-                cardinalityLabel.Text = oneRequestPerFilterResultMenuItem.Text;
+                comboCardinality.SelectedValue = selected;
+            }
+            
+            comboCardinality.SelectedValueChanged += OnChangeCardinality;
+
+            if (comboCardinality.SelectedIndex < 0)
+            {
+                comboCardinality.SelectedIndex = 0;
+            }
+        }
+
+        /// <summary>
+        /// Changing the cardinality
+        /// </summary>
+        private void OnChangeCardinality(object sender, EventArgs e)
+        {
+            task.RequestCardinality = (WebRequestCardinality) comboCardinality.SelectedValue;
+
+            UpdateTemplateUI();
+            UpdateVerbUI();
+        }
+
+        /// <summary>
+        /// Update the verb combo box
+        /// </summary>
+        private void UpdateVerbUI()
+        {
+            comboVerb.SelectedValueChanged -= OnChangeVerb;
+
+            object selected = comboVerb.SelectedValue;
+
+            comboVerb.DataSource = null;
+            comboVerb.DisplayMember = "Key";
+            comboVerb.ValueMember = "Value";
+
+            comboVerb.DataSource = EnumHelper.GetEnumList<HttpVerb>
+                (
+                    v =>
+                    {
+                        switch (v)
+                        {
+                            case HttpVerb.Get:
+                                return task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult;
+
+                            default:
+                                return true;
+                        }
+                    }
+                )
+                .Select(e =>
+                    new KeyValuePair<string, HttpVerb>
+                        (
+                            e.Description,
+                            e.Value)
+                        ).ToList();
+
+            if (selected != null)
+            {
+                comboVerb.SelectedValue = selected;
             }
 
-            UpdateBodyUI();
-        }
+            comboVerb.SelectedValueChanged += OnChangeVerb;
 
-        /// <summary>
-        /// Creates the verb menu.
-        /// </summary>
-        private void CreateVerbMenu()
-        {
-            verbMenu = new ContextMenuStrip();
-
-            this.getMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Get));
-            getMenuItem.Click += OnVerbMenuItemClick;
-            getMenuItem.Tag = HttpVerb.Get;
-            verbMenu.Items.Add(getMenuItem);
-
-            this.postMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Post));
-            postMenuItem.Click += OnVerbMenuItemClick;
-            postMenuItem.Tag = HttpVerb.Post;
-            verbMenu.Items.Add(postMenuItem);
-
-            ToolStripMenuItem putMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(HttpVerb.Put));
-            putMenuItem.Click += OnVerbMenuItemClick;
-            putMenuItem.Tag = HttpVerb.Put;
-            verbMenu.Items.Add(putMenuItem);
-        }
-
-        /// <summary>
-        /// Creates the auth menu.
-        /// </summary>
-        private void CreateAuthMenu()
-        {
-            authMenu = new ContextMenuStrip();
-
-            ToolStripMenuItem noMenuItem = new ToolStripMenuItem("no");
-            noMenuItem.Click += OnAuthMenuItemClick;
-            noMenuItem.Tag = false;
-            authMenu.Items.Add(noMenuItem);
-
-            ToolStripMenuItem basicMenuItem = new ToolStripMenuItem("basic");
-            basicMenuItem.Click += OnAuthMenuItemClick;
-            basicMenuItem.Tag = true;
-            authMenu.Items.Add(basicMenuItem);
-        }
-
-        /// <summary>
-        /// Creates the cardinality menu.
-        /// </summary>
-        private void CreateCardinalityMenu()
-        {
-            cardinalityMenu = new ContextMenuStrip();
-
-            this.singleRequestMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(WebRequestCardinality.SingleRequest));
-            singleRequestMenuItem.Click += OnCardinalityMenuItemClick;
-            singleRequestMenuItem.Tag = WebRequestCardinality.SingleRequest;
-            cardinalityMenu.Items.Add(singleRequestMenuItem);
-
-            this.oneRequestPerFilterResultMenuItem = new ToolStripMenuItem();
-            oneRequestPerFilterResultMenuItem.Click += OnCardinalityMenuItemClick;
-            oneRequestPerFilterResultMenuItem.Tag = WebRequestCardinality.OneRequestPerFilterResult;
-            cardinalityMenu.Items.Add(oneRequestPerFilterResultMenuItem);
-
-            this.oneRequestPerTemplateResultMenuItem = new ToolStripMenuItem(EnumHelper.GetDescription(WebRequestCardinality.OneRequestPerTemplateResult));
-            oneRequestPerTemplateResultMenuItem.Click += OnCardinalityMenuItemClick;
-            oneRequestPerTemplateResultMenuItem.Tag = WebRequestCardinality.OneRequestPerTemplateResult;
-            cardinalityMenu.Items.Add(oneRequestPerTemplateResultMenuItem);
-        }
-
-        /// <summary>
-        /// Called when [click verb label].
-        /// </summary>
-        private void OnVerbLabelClick(object sender, EventArgs e)
-        {
-            verbMenu.Show(verbLabel.Parent.PointToScreen(new Point(verbLabel.Left, verbLabel.Bottom)));
-        }
-
-        /// <summary>
-        /// Called when [click verb menu item].
-        /// </summary>
-        private void OnVerbMenuItemClick(object sender, EventArgs e)
-        {
-            ToolStripMenuItem verbMenuItem = (ToolStripMenuItem)sender;
-            HttpVerb clickedVerb = (HttpVerb)verbMenuItem.Tag;
-
-            if (task.Verb != clickedVerb)
+            if (comboVerb.SelectedIndex < 0)
             {
-                task.Verb = clickedVerb;
-                verbLabel.Text = verbMenuItem.Text;
+                comboVerb.SelectedIndex = 0;
             }
+        }
+
+        /// <summary>
+        /// Update the UI for additional options
+        /// </summary>
+        private void UpdateAdditionalOptionsUI()
+        {
+            panelBasicAuth.Visible = useBasicAuth.Checked;
+            includeExtraHeaders.Top = (useBasicAuth.Checked) ? panelBasicAuth.Bottom + 4 : useBasicAuth.Bottom + 4;
+            headersGrid.Top = includeExtraHeaders.Bottom + 4;
+
+            headersGrid.Visible = includeExtraHeaders.Checked;
+            requestPanel.Height = (includeExtraHeaders.Checked) ? headersGrid.Bottom + 4 : includeExtraHeaders.Bottom + 4;
+
+            this.Height = requestPanel.Bottom;
+        }
+
+        /// <summary>
+        /// Updates the template display UI
+        /// </summary>
+        private void UpdateTemplateUI()
+        {
+            if (task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult)
+            {
+                templateCombo.SelectedTemplate = null;
+                requestPanel.Top = templateCombo.Top;
+
+                labelTemplate.Visible = false;
+                templateCombo.Visible = false;
+            }
+            else
+            {
+                requestPanel.Top = templateCombo.Bottom + 8;
+
+                labelTemplate.Visible = true;
+                templateCombo.Visible = true;
+            }
+
+            this.Height = requestPanel.Bottom;
+        }
+
+        /// <summary>
+        /// The verb to use has changed
+        /// </summary>
+        private void OnChangeVerb(object sender, EventArgs e)
+        {
+            task.Verb = (HttpVerb) comboVerb.SelectedValue;
         }
 
         /// <summary>
@@ -183,31 +232,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         private void OnUrlTextChanged(object sender, EventArgs e)
         {
             task.Url = urlTextBox.Text;
-        }
-
-        /// <summary>
-        /// Called when the auth label is clicked.
-        /// </summary>
-        private void OnAuthLabelClick(object sender, EventArgs e)
-        {
-            authMenu.Show(authLabel.Parent.PointToScreen(new Point(authLabel.Left, authLabel.Bottom)));
-        }
-
-        /// <summary>
-        /// Called when [click auth menu item].
-        /// </summary>
-        private void OnAuthMenuItemClick(object sender, EventArgs e)
-        {
-            ToolStripMenuItem authMenuItem = (ToolStripMenuItem)sender;
-            bool useBasicAuth = (bool)authMenuItem.Tag;
-
-            if (task.UseBasicAuthentication != useBasicAuth)
-            {
-                task.UseBasicAuthentication = useBasicAuth;
-                authLabel.Text = authMenuItem.Text;
-
-                UpdateAuthUI();
-            }
         }
 
         /// <summary>
@@ -227,17 +251,23 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Updates the auth UI.
+        /// Changing whether or not to use basic auth
         /// </summary>
-        private void UpdateAuthUI()
+        private void OnChangeUseBasicAuth(object sender, EventArgs e)
         {
-            basicAuthPanel.Visible = task.UseBasicAuthentication;
+            task.UseBasicAuthentication = useBasicAuth.Checked;
 
-            if (!basicAuthPanel.Visible)
-            {
-                userNameTextBox.Text = null;
-                passwordTextBox.Text = null;
-            }
+            UpdateAdditionalOptionsUI();
+        }
+
+        /// <summary>
+        /// Changing whether or not to include extra headers
+        /// </summary>
+        private void OnChangeIncludeHttpHeaders(object sender, EventArgs e)
+        {
+            task.IncludeCustomHttpHeaders = includeExtraHeaders.Checked;
+
+            UpdateAdditionalOptionsUI();
         }
 
         /// <summary>
@@ -249,102 +279,13 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         }
 
         /// <summary>
-        /// Updates the body UI.
-        /// </summary>
-        private void UpdateBodyUI()
-        {
-            // Update cardinality menu items and selection
-            ActionTaskInputSource inputSource = (ActionTaskInputSource)task.Entity.InputSource;
-
-            oneRequestPerFilterResultMenuItem.Available =
-                inputSource == ActionTaskInputSource.FilterContents;
-            oneRequestPerTemplateResultMenuItem.Available =
-                inputSource != ActionTaskInputSource.Nothing;
-
-            if ((task.RequestCardinality == WebRequestCardinality.OneRequestPerFilterResult && !oneRequestPerFilterResultMenuItem.Available) ||
-                (task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult && !oneRequestPerTemplateResultMenuItem.Available))
-            {
-                singleRequestMenuItem.PerformClick();
-                return;
-            }
-
-            if (task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult)
-            {
-                templateCombo.SelectedTemplate = null;
-                requestPanel.Top = templateCombo.Top;
-            }
-            else
-            {
-                requestPanel.Top = templateCombo.Bottom + 8;
-            }
-
-            this.Height = requestPanel.Top + requestPanel.Height;
-
-            labelTemplate.Visible =
-            templateCombo.Visible =
-                task.RequestCardinality == WebRequestCardinality.OneRequestPerTemplateResult;
-
-            // Update verb menu items and selection
-            getMenuItem.Available =
-                task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult;
-
-            if (task.Verb == HttpVerb.Get && !getMenuItem.Available)
-            {
-                postMenuItem.PerformClick();
-            }
-        }
-
-        /// <summary>
-        /// Manually sizes and aligns the controls affected by the verb text size.
-        /// </summary>
-        private void OnVerbLabelSizeChanged(object sender, EventArgs e)
-        {
-            requestToLabel.Left = verbLabel.Right - 3;
-            verbPanel.Width = requestToLabel.Right - 2;
-        }
-
-        /// <summary>
-        /// Manually sizes and aligns the controls affected by the auth text size.
-        /// </summary>
-        private void OnAuthLabelSizeChanged(object sender, EventArgs e)
-        {
-            authLabelSuffix.Left = authLabel.Right - 3;
-            authTypePanel.Width = authLabelSuffix.Right - 3;
-        }
-
-        /// <summary>
-        /// Shows the cardinality (a request per...) menu.
-        /// </summary>
-        private void OnCardinalityLabelClick(object sender, EventArgs e)
-        {
-            cardinalityMenu.Show(cardinalityLabel.Parent.PointToScreen(new Point(cardinalityLabel.Left, cardinalityLabel.Bottom)));
-        }
-
-        /// <summary>
-        /// Called when a cardinality menu item is clicked.
-        /// </summary>
-        private void OnCardinalityMenuItemClick(object sender, EventArgs e)
-        {
-            ToolStripMenuItem cardinalityMenuItem = (ToolStripMenuItem)sender;
-            WebRequestCardinality clickedCardinality = (WebRequestCardinality)cardinalityMenuItem.Tag;
-
-            if (task.RequestCardinality != clickedCardinality)
-            {
-                task.RequestCardinality = clickedCardinality;
-                cardinalityLabel.Text = cardinalityMenuItem.Text;
-
-                UpdateBodyUI();
-            }
-        }
-
-        /// <summary>
         /// Performs validation outside of the Windows Forms flow to make dealing with navigation easier
         /// </summary>
         /// <param name="errors">Collection of errors to which new errors will be added</param>
         public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
             ActionTaskDescriptor descriptor = new ActionTaskDescriptor(task.GetType());
-            TaskValidationError error = new TaskValidationError(string.Format("The {0} task is missing some information.", descriptor.BaseName));
+            TaskValidationError error = new TaskValidationError(string.Format("The '{0}' task is missing some information.", descriptor.BaseName));
 
             if (string.IsNullOrWhiteSpace(urlTextBox.Text))
             {

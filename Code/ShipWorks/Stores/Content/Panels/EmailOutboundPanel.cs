@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             bucket.PredicateExpression.AddWithAnd(objectKeyExpression);
 
-            return new QueryableEntityGateway(EntityType.EmailOutboundEntity, bucket); ;
+            return new QueryableEntityGateway(EntityType.EmailOutboundEntity, bucket);
         }
 
         /// <summary>

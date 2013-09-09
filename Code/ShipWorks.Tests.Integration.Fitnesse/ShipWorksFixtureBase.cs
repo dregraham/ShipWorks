@@ -93,11 +93,11 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             AccountManagerInitializeForCurrentUser();
 
             ShippingSettings.InitializeForCurrentDatabase();
-            ShippingProfileManager.InitializeForCurrentUser();
-            ShippingDefaultsRuleManager.InitializeForCurrentUser();
-            ShippingProviderRuleManager.InitializeForCurrentUser();
+            ShippingProfileManager.InitializeForCurrentSession();
+            ShippingDefaultsRuleManager.InitializeForCurrentSession();
+            ShippingProviderRuleManager.InitializeForCurrentSession();
 
-            StoreManager.InitializeForCurrentUser();
+            StoreManager.InitializeForCurrentSession();
 
             UserManager.InitializeForCurrentUser();
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             ShippingManager.InitializeForCurrentDatabase();
             LogSession.Initialize();
 
-            TemplateManager.InitializeForCurrentUser();
+            TemplateManager.InitializeForCurrentSession();
         }
 
         public virtual decimal GetRates()

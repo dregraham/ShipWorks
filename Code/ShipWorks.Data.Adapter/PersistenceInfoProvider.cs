@@ -55,10 +55,11 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((158 + 0));
+			base.InitClass((159 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
+			InitActionQueueSelectionEntityMappings();
 			InitActionQueueStepEntityMappings();
 			InitActionTaskEntityMappings();
 			InitAmazonASINEntityMappings();
@@ -263,6 +264,14 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ActionQueueEntity", "NextStep", "NextStep", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ContextLock", "ContextLock", true, (int)SqlDbType.NVarChar, 36, 0, 0, false, "", null, typeof(System.String), 12 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ActionQueueType", "ActionQueueType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
+		}
+		/// <summary>Inits ActionQueueSelectionEntity's mappings</summary>
+		private void InitActionQueueSelectionEntityMappings()
+		{
+			base.AddElementMapping( "ActionQueueSelectionEntity", "ShipWorksLocal", @"dbo", "ActionQueueSelection", 3 );
+			base.AddElementFieldMapping( "ActionQueueSelectionEntity", "ActionQueueSelectionID", "ActionQueueSelectionID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "ActionQueueSelectionEntity", "ActionQueueID", "ActionQueueID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "ActionQueueSelectionEntity", "ObjectID", "ObjectID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
 		}
 		/// <summary>Inits ActionQueueStepEntity's mappings</summary>
 		private void InitActionQueueStepEntityMappings()
@@ -2645,14 +2654,14 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DimsWeight", "DimsWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 8 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DimsAddWeight", "DimsAddWeight", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 9 );
 			base.AddElementFieldMapping( "UpsProfilePackageEntity", "AdditionalHandlingEnabled", "AdditionalHandlingEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 10 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 11 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, (int)SqlDbType.NVarChar, 4, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 14 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 15 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 17 );
-			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 18 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationEnabled", "VerbalConfirmationEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 11 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationName", "VerbalConfirmationName", true, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 12 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationPhone", "VerbalConfirmationPhone", true, (int)SqlDbType.NVarChar, 15, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "VerbalConfirmationPhoneExtension", "VerbalConfirmationPhoneExtension", true, (int)SqlDbType.NVarChar, 4, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceEnabled", "DryIceEnabled", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceRegulationSet", "DryIceRegulationSet", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceWeight", "DryIceWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 17 );
+			base.AddElementFieldMapping( "UpsProfilePackageEntity", "DryIceIsForMedicalUse", "DryIceIsForMedicalUse", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 18 );
 		}
 		/// <summary>Inits UpsShipmentEntity's mappings</summary>
 		private void InitUpsShipmentEntityMappings()

@@ -17,6 +17,9 @@ namespace ShipWorks.UI.Controls
 
         Image image;
         bool bold;
+
+        bool selectable = true;
+        bool closeOnSelect = true;
 		
 		/// <summary>
 		/// Default constructor
@@ -128,6 +131,36 @@ namespace ShipWorks.UI.Controls
                 this.value = value;
 			}
 		}
+
+        /// <summary>
+        /// Indicates if the item can be selected
+        /// </summary>
+        public bool Selectable
+        {
+            get
+            {
+                return selectable;
+            }
+            set
+            {
+                selectable = value;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the DropDown list automatically closes when this item is selected
+        /// </summary>
+        public bool CloseOnSelect
+        {
+            get
+            {
+                return closeOnSelect;
+            }
+            set
+            {
+                closeOnSelect = value;
+            }
+        }
 		
 		/// <summary>
 		/// String representation of the item.

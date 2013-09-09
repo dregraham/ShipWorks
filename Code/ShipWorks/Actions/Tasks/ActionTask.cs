@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -99,7 +100,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Indicates if the task requires input to function.  Such as the contents of a filter, or the item that caused the action.
         /// </summary>
-        public virtual ActionTaskInputRequirement RequiresInput
+        public virtual ActionTaskInputRequirement InputRequirement
         {
             get { return ActionTaskInputRequirement.Required; }
         }
@@ -111,7 +112,7 @@ namespace ShipWorks.Actions.Tasks
         {
             get
             {
-                if (RequiresInput != ActionTaskInputRequirement.None)
+                if (InputRequirement != ActionTaskInputRequirement.None)
                 {
                     throw new NotImplementedException("Must be overridden by derived class when input is required or optional.");
                 }
@@ -301,6 +302,16 @@ namespace ShipWorks.Actions.Tasks
         protected virtual void DeleteExtraState()
         {
 
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public virtual bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return true;
         }
     }
 }

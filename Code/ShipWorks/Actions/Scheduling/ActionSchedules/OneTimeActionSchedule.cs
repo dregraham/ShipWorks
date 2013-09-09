@@ -36,5 +36,19 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
         {
             throw new NotImplementedException("OneTimeActionSchedules do not use an editor.");
         }
+
+        /// <summary>
+        /// Ensures the one time schedule is valid.
+        /// </summary>
+        public override void Validate()
+        {
+            base.Validate();
+
+            // New jobs/actions cannot be scheduled to occur in the past
+            if (StartDateTimeInUtc <= DateTime.UtcNow)
+            {
+                throw new SchedulingException("The start date must be in the future when scheduling a one time action.");
+            }
+        }
     }
 }

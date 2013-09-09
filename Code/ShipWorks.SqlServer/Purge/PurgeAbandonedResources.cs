@@ -12,14 +12,14 @@ public partial class StoredProcedures
     /// <summary>
     /// Purges abandoned Resource records from the database.
     /// </summary>
-    /// <param name="earliestRetentionDateInUtc">Not used, but included to keep with the purge pattern.</param>
-    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// <param name="olderThan">Not used, but included to keep with the purge pattern.</param>
+    /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeAbandonedResources(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgeAbandonedResources(SqlDateTime olderThan, SqlDateTime runUntil)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeAbandonedResourcesCommandText, PurgeAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);
+        PurgeScriptRunner.RunPurgeScript(PurgeAbandonedResourcesCommandText, PurgeAppLockName, olderThan, runUntil);
     }
 
     /// <summary>
@@ -48,13 +48,13 @@ public partial class StoredProcedures
 		            WHERE ResourceID NOT IN (SELECT objectid FROM dbo.ObjectReference with (nolock))
 
 	            -- purge in batches while time allows
-	            WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
+	            WHILE @runUntil IS NULL OR GETUTCDATE() < @runUntil
 	            BEGIN
 		            -- stop if the batch isn't expected to complete in time
 		            IF (
-			            @latestExecutionTimeInUtc IS NOT NULL AND
+			            @runUntil IS NOT NULL AND
 			            @batchTotal > 0 AND
-			            DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+			            DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @runUntil
 		            )
 			            BREAK;
 

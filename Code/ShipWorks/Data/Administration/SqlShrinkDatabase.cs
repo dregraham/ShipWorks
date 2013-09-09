@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Administration
                 // Attach to the connection
                 using (SqlConnection con = SqlSession.Current.OpenConnection())
                 {
-                    SqlAppLockUtility.GetLockedCommand(con, "ShrinkDatabaseTaskLock", command =>
+                    SqlAppLockUtility.RunLockedCommand(con, "ShrinkDatabaseTaskLock", command =>
                         {
                             command.CommandText = ShrinkDbSql;
                             command.CommandTimeout = 0;

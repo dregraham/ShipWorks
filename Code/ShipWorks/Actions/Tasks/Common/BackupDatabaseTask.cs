@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using System.IO;
@@ -14,7 +15,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// Task for backing up the database
     /// </summary>
-    [ActionTask("Backup the database", "BackupDatabase", ActionTaskCategory.Administration, ActionTriggerClassifications.Scheduled)]
+    [ActionTask("Backup the database", "BackupDatabase", ActionTaskCategory.Administration)]
     public class BackupDatabaseTask : ActionTask
     {
         // Logger
@@ -56,7 +57,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Backing up the database does not require input
         /// </summary>
-        public override ActionTaskInputRequirement RequiresInput
+        public override ActionTaskInputRequirement InputRequirement
         {
             get
             {
@@ -136,6 +137,16 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             string fileName = string.Format("{0} {1:yyyy-MM-dd HH-mm-ss}.swb", FilePrefix, forDate);
             return Path.Combine(BackupDirectory, fileName);
+        }
+
+        /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return triggerType == ActionTriggerType.Scheduled;
         }
     }
 }

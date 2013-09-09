@@ -19,6 +19,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         static bool needCheckForChanges;
 
         /// <summary>
+        /// Initialize OnTracAccountManager
+        /// </summary>
+        public static void InitializeForCurrentSession()
+        {
+            synchronizer = new TableSynchronizer<OnTracAccountEntity>();
+            InternalCheckForChanges();
+        }
+
+        /// <summary>
         /// Return the active list of OnTrac accounts
         /// </summary>
         public static List<OnTracAccountEntity> Accounts
@@ -35,15 +44,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
                 }
             }
-        }
-
-        /// <summary>
-        /// Initialize when a user logs in
-        /// </summary>
-        public static void InitializeForCurrentUser()
-        {
-            synchronizer = new TableSynchronizer<OnTracAccountEntity>();
-            InternalCheckForChanges();
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return SqlSession.Current.GetLocalUtcDate();
+                return SqlSession.Current.GetUtcDate();
             }
         }
 
@@ -33,11 +33,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Run the specified purge script with the given parameters
         /// </summary>
         /// <param name="scriptName">Name of script resource to run</param>
-        /// <param name="earliestRetentionDateInUtc">The earliest date for which data should be retained.
+        /// <param name="olderThanInUtc">The earliest date for which data should be retained.
         /// Anything older will be purged</param>
-        /// <param name="stopExecutionAfterUtc">Execution should stop after this time</param>
+        /// <param name="runUntilInUtc">Execution should stop after this time</param>
         /// <param name="retryAttempts">Number of times to retry the purge if a handleable error is detected.  Pass 0 to not retry.</param>
-        public void RunScript(string scriptName, DateTime earliestRetentionDateInUtc, DateTime? stopExecutionAfterUtc, int retryAttempts)
+        public void RunScript(string scriptName, DateTime olderThanInUtc, DateTime? runUntilInUtc, int retryAttempts)
         {
             // If we detect a deadlock or sql lock, we'll sleep before we try again.
             // The sleep time will be one second times the sleep multiplier, so that we wait a little longer during each loop.
@@ -58,8 +58,8 @@ namespace ShipWorks.Actions.Tasks.Common
                                 command.CommandType = CommandType.StoredProcedure;
                                 // Disable the command timeout since the scripts should take care of timing themselves out
                                 command.CommandTimeout = 0;
-                                command.Parameters.AddWithValue("@earliestRetentionDateInUtc", earliestRetentionDateInUtc);
-                                command.Parameters.AddWithValue("@latestExecutionTimeInUtc", (object) stopExecutionAfterUtc ?? DBNull.Value);
+                                command.Parameters.AddWithValue("@olderThan", olderThanInUtc);
+                                command.Parameters.AddWithValue("@runUntil", (object)runUntilInUtc ?? DBNull.Value);
 
                                 command.ExecuteNonQuery();
                             }

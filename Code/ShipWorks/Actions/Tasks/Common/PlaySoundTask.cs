@@ -57,7 +57,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Input is not required to play a sound
         /// </summary>
-        public override ActionTaskInputRequirement RequiresInput
+        public override ActionTaskInputRequirement InputRequirement
         {
             get { return ActionTaskInputRequirement.None; }
         }

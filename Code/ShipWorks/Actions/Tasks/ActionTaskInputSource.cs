@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using System.ComponentModel;
-
-namespace ShipWorks.Actions.Tasks
+﻿namespace ShipWorks.Actions.Tasks
 {
     /// <summary>
     /// Controls where the data that is fed into the task comes from
@@ -25,6 +18,11 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// The data is the entire contents of a selected filter
         /// </summary>
-        FilterContents = 1
+        FilterContents = 1,
+
+        /// <summary>
+        /// The input is a capture of the selection at the time the action was initiated
+        /// </summary>
+        Selection = 2
     }
 }

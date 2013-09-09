@@ -50,7 +50,7 @@ namespace ShipWorks.Tests
 
             UserSession.InitializeForCurrentDatabase();
             UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentSession();
 
             transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(5));
 

@@ -21,7 +21,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Initialize the cache and reset it for the currently logged in user
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             labelCache = new LruCache<long, ObjectLabel>(1000, TimeSpan.FromSeconds(15));
         }

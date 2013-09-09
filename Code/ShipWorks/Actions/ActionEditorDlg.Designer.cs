@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionEditorDlg));
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.imageUser = new System.Windows.Forms.PictureBox();
@@ -230,8 +229,7 @@
             // storeCheckBoxPanel
             // 
             this.storeCheckBoxPanel.Location = new System.Drawing.Point(21, 26);
-            this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
-            this.storeCheckBoxPanel.SelectedStores = ((System.Collections.Generic.IEnumerable<ShipWorks.Data.Model.EntityClasses.StoreEntity>)(resources.GetObject("storeCheckBoxPanel.SelectedStores")));
+            this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";            
             this.storeCheckBoxPanel.Size = new System.Drawing.Size(371, 57);
             this.storeCheckBoxPanel.TabIndex = 4;
             // 

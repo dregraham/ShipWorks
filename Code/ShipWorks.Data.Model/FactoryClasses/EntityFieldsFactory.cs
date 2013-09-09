@@ -41,6 +41,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ActionQueueEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ActionQueueEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.ActionQueueSelectionEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ActionQueueSelectionEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.ActionQueueStepEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ActionQueueStepEntity");
 					break;

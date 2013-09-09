@@ -1175,13 +1175,10 @@ namespace ShipWorks.Data.Grid.Paging
                     throw new ArgumentException("column must be of type ShipWorksGridColumn");
                 }
 
-                if (null != swColumn.Definition.SortProvider)
-                {
-                    SortOperator sortOperator = SortDirection == ListSortDirection.Ascending ? SortOperator.Ascending : SortOperator.Descending;
+                SortOperator sortOperator = SortDirection == ListSortDirection.Ascending ? SortOperator.Ascending : SortOperator.Descending;
 
-                    sortClauses = swColumn.Definition.SortProvider.GetDatabaseSortClauses(sortOperator);
-                    sortRelations = swColumn.Definition.SortProvider.GetDatabaseSortRelations();
-                }
+                sortClauses = swColumn.Definition.SortProvider.GetDatabaseSortClauses(sortOperator);
+                sortRelations = swColumn.Definition.SortProvider.GetDatabaseSortRelations();
             }
 
             return new SortDefinition(sortClauses, sortRelations);

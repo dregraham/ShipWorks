@@ -49,6 +49,7 @@
             this.emailContentHelp = new ShipWorks.UI.Controls.InfoTip();
             this.shippingLabelsHelp = new ShipWorks.UI.Controls.InfoTip();
             this.printJobHelp = new ShipWorks.UI.Controls.InfoTip();
+            this.reclaimDiskSpaceHelp = new ShipWorks.UI.Controls.InfoTip();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutInHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.retentionPeriodInDays)).BeginInit();
             this.SuspendLayout();
@@ -200,11 +201,13 @@
             // reclaimDiskSpaceCheckbox
             // 
             this.reclaimDiskSpaceCheckbox.AutoSize = true;
+            this.reclaimDiskSpaceCheckbox.Checked = true;
+            this.reclaimDiskSpaceCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.reclaimDiskSpaceCheckbox.Location = new System.Drawing.Point(21, 229);
             this.reclaimDiskSpaceCheckbox.Name = "reclaimDiskSpaceCheckbox";
-            this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(114, 17);
+            this.reclaimDiskSpaceCheckbox.Size = new System.Drawing.Size(192, 17);
             this.reclaimDiskSpaceCheckbox.TabIndex = 19;
-            this.reclaimDiskSpaceCheckbox.Text = "Reclaim disk space";
+            this.reclaimDiskSpaceCheckbox.Text = "Reclaim disk space (recommended)";
             this.reclaimDiskSpaceCheckbox.UseVisualStyleBackColor = true;
             this.reclaimDiskSpaceCheckbox.CheckedChanged += new System.EventHandler(this.OnReclaimDiskSpaceCheckedChanged);
             // 
@@ -259,18 +262,28 @@
             // 
             // printJobHelp
             // 
-            this.printJobHelp.Caption = "The content of the print job is the only thing that will deleted. You will still " +
-    "be able to see your print history and filter against it.";
+            this.printJobHelp.Caption = "The content of the print job is the only thing that will be deleted. You will sti" +
+    "ll be able to see your print history and filter against it.";
             this.printJobHelp.Location = new System.Drawing.Point(128, 163);
             this.printJobHelp.Name = "printJobHelp";
             this.printJobHelp.Size = new System.Drawing.Size(12, 12);
             this.printJobHelp.TabIndex = 25;
             this.printJobHelp.Title = "Print Job Content";
             // 
+            // reclaimDiskSpaceHelp
+            // 
+            this.reclaimDiskSpaceHelp.Caption = "This will free up storage by truncating the SQL log file.";
+            this.reclaimDiskSpaceHelp.Location = new System.Drawing.Point(211, 231);
+            this.reclaimDiskSpaceHelp.Name = "reclaimDiskSpaceHelp";
+            this.reclaimDiskSpaceHelp.Size = new System.Drawing.Size(12, 12);
+            this.reclaimDiskSpaceHelp.TabIndex = 26;
+            this.reclaimDiskSpaceHelp.Title = "Reclaim Disk Space";
+            // 
             // PurgeDatabaseTaskEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.reclaimDiskSpaceHelp);
             this.Controls.Add(this.printJobHelp);
             this.Controls.Add(this.shippingLabelsHelp);
             this.Controls.Add(this.emailContentHelp);
@@ -322,5 +335,6 @@
         private ShipWorks.UI.Controls.InfoTip emailContentHelp;
         private ShipWorks.UI.Controls.InfoTip shippingLabelsHelp;
         private ShipWorks.UI.Controls.InfoTip printJobHelp;
+        private ShipWorks.UI.Controls.InfoTip reclaimDiskSpaceHelp;
     }
 }

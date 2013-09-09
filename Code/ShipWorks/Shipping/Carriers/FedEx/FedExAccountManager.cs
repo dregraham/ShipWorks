@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize FedExAccountManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<FedExAccountEntity>();
             InternalCheckForChanges();

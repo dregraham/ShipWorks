@@ -44,9 +44,9 @@ namespace ShipWorks.Stores
         static int version = 0;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize StoreManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             // These are basically a dependence of stoers
             StatusPresetManager.InitializeForCurrentUser();

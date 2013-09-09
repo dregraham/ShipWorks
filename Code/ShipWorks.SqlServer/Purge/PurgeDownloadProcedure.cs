@@ -18,13 +18,13 @@ public partial class StoredProcedures
     /// <param name="earliestRetentionDate">Indicates the date/time to use for determining
     /// which Download records will be purged. Any records with an Download.Started value earlier than
     /// this date will be purged.</param>
-    /// <param name="latestExecutionTimeInUtc">This indicates the latest date/time (in UTC) that this procedure
+    /// <param name="runUntil">This indicates the latest date/time (in UTC) that this procedure
     /// is allowed to execute. Passing in a SqlDateTime.MaxValue will effectively let the procedure run until
     /// all the appropriate records have been purged.</param>
     [SqlProcedure]
-    public static void PurgeDownload(SqlDateTime earliestRetentionDateInUtc, SqlDateTime latestExecutionTimeInUtc)
+    public static void PurgeDownload(SqlDateTime olderThan, SqlDateTime runUntil)
     {
-        PurgeScriptRunner.RunPurgeScript(PurgeDownloadCommandText, PurgeDownloadAppLockName, earliestRetentionDateInUtc, latestExecutionTimeInUtc);              
+        PurgeScriptRunner.RunPurgeScript(PurgeDownloadCommandText, PurgeDownloadAppLockName, olderThan, runUntil);              
     }
 
     /// <summary>
@@ -48,12 +48,12 @@ public partial class StoredProcedures
                     @batchTotal BIGINT = 0;
 
                 -- purge in batches while time allows
-                WHILE @latestExecutionTimeInUtc IS NULL OR GETUTCDATE() < @latestExecutionTimeInUtc
+                WHILE @runUntil IS NULL OR GETUTCDATE() < @runUntil
                 BEGIN
                     INSERT #DownloadPurgeBatch
                     SELECT TOP (@batchSize) DownloadID
                     FROM Download
-                    WHERE Started < @earliestRetentionDateInUtc;
+                    WHERE Started < @olderThan;
 
                     SET @batchSize = @@ROWCOUNT;
                     IF @batchSize = 0
@@ -63,9 +63,9 @@ public partial class StoredProcedures
 
                     -- stop if the batch isn't expected to complete in time
                     IF (
-                        @latestExecutionTimeInUtc IS NOT NULL AND
+                        @runUntil IS NOT NULL AND
                         @batchTotal > 0 AND
-                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @latestExecutionTimeInUtc
+                        DATEADD(SECOND, @totalSeconds * @batchSize / @batchTotal, GETUTCDATE()) > @runUntil
                     )
                         BREAK;
 

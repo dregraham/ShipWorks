@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Actions.Scheduling;
 using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
@@ -20,6 +21,8 @@ using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores;
 using ShipWorks.Editions;
+using System.Text.RegularExpressions;
+using ShipWorks.Actions.Tasks.Common;
 
 namespace ShipWorks.Actions
 {
@@ -123,27 +126,54 @@ namespace ShipWorks.Actions
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (string identifier in taskSummary.Split(','))
+            foreach (string entry in taskSummary.Split(','))
             {
-                if (identifier.Trim().Length == 0)
+                if (entry.Trim().Length == 0)
                 {
                     continue;
                 }
 
-                if (sb.Length > 0)
+                Match match = Regex.Match(entry.Trim(), @"([^:]+)([:](\d+))?");
+                if (match.Success)
                 {
-                    sb.Append(", ");
-                }
+                    if (sb.Length > 0)
+                    {
+                        sb.Append(", ");
+                    }
 
-                try
-                {
-                    sb.Append(ActionTaskManager.GetDescriptor(identifier.Trim()).BaseName);
-                }
-                catch (NotFoundException)
-                {
-                    // If the descriptor isn't found it's because it was truncated in the database due to the length of TaskSummary getting too long
-                    sb.Append("...");
-                    break;
+                    try
+                    {
+                        ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(match.Groups[1].Value);
+
+                        // If we don't have type binding data (pre 3.5), then just use the base name
+                        if (match.Groups.Count <= 2 || !match.Groups[2].Success)
+                        {
+                            sb.Append(descriptor.BaseName);
+                        }
+                        else
+                        {
+                            ActionTask instance = descriptor.CreateInstance();
+
+                            if (instance is StoreTypeTaskBase)
+                            {
+                                sb.Append(new ActionTaskDescriptorBinding(descriptor, (StoreTypeCode) int.Parse(match.Groups[3].Value)).FullName);
+                            }
+                            else if (instance is StoreInstanceTaskBase)
+                            {
+                                sb.Append(new ActionTaskDescriptorBinding(descriptor, long.Parse(match.Groups[3].Value)).FullName);
+                            }
+                            else
+                            {
+                                sb.Append(descriptor.BaseName);
+                            }
+                        }
+                    }
+                    catch (NotFoundException)
+                    {
+                        // If the descriptor isn't found it's because it was truncated in the database due to the length of TaskSummary getting too long
+                        sb.Append("...");
+                        break;
+                    }
                 }
             }
 
@@ -206,7 +236,7 @@ namespace ShipWorks.Actions
             action.Name = "New Action";
             action.Enabled = true;
 
-            action.ComputerLimitedType = (int) ComputerLimitationType.TriggeringComputer;
+            action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
             action.InternalComputerLimitedList = string.Empty;
 
             action.StoreLimited = false;
@@ -293,6 +323,13 @@ namespace ShipWorks.Actions
                 }
 
                 UpdateEnabledDisplay(e.Row);
+            }
+            catch (SchedulingException ex)
+            {
+                action.RollbackChanges();
+                MessageHelper.ShowError(this, ex.Message);
+
+                BeginInvoke((MethodInvoker)delegate { e.Row.Checked = !e.Row.Checked; });
             }
             catch (ActionConcurrencyException ex)
             {

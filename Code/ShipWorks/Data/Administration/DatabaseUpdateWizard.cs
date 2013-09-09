@@ -1022,7 +1022,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // Either way before leaving this page we need the environment setup
-            UserSession.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentSession();
         }
 
         #endregion

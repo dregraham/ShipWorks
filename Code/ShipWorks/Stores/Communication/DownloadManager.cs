@@ -82,9 +82,9 @@ namespace ShipWorks.Stores.Communication
         static DateTime lastAutoDownloadCheck;
 
         /// <summary>
-        /// Initialize the state for the current user login
+        /// Initialize the DownloadManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             lastAutoDownloadCheck = DateTime.MinValue;
             lastDownloadTimesCache = null;

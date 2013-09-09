@@ -32,9 +32,9 @@ namespace ShipWorks.Actions
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize table syncronizer
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             tableSynchronizer = new TableSynchronizer<ActionEntity>();
             InternalCheckForChanges();
@@ -173,12 +173,6 @@ namespace ShipWorks.Actions
             // We have to give the trigger a chance to cleanup its state too
             ActionTrigger trigger = LoadTrigger(action);
 
-            if (trigger.TriggerType == ActionTriggerType.Scheduled)
-            {
-                // We need to unschedule the scheudled action
-                new Scheduler().UnscheduleAction(action);
-            }
-
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Delete all the tasks
@@ -228,42 +222,7 @@ namespace ShipWorks.Actions
         {
             try
             {
-                // If we are a scheduled action, we need to do additional checking before trying to save.
-                if (action.TriggerType == (int) ActionTriggerType.Scheduled)
-                {
-                    // Get the scheduled trigger for this action.
-                    ScheduledTrigger scheduledTrigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, action.TriggerSettings) as ScheduledTrigger;
-
-                    // We need to see if any field has changed (other than the Enabled field, since the user could modify it on the Action list dialog)
-                    var changedFields = action.Fields.GetAsEntityFieldCoreArray().Where(f => f.FieldIndex != ActionFields.Enabled.FieldIndex && f.IsChanged);
-
-                    bool updateJob = action.IsDirty && changedFields.Any();
-
-                    // If we are to update the job, validate the date
-                    if (updateJob)
-                    {
-                        // Jobs/actions cannot be scheduled to occur in the past
-                        if (scheduledTrigger.Schedule.StartDateTimeInUtc <= DateTime.UtcNow && scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
-                        {
-                            throw new SchedulingException("The start date must be in the future when scheduling a one time action.");
-                        }
-                    }
-
-                    // Now we can save it to the db
-                    adapter.SaveAndRefetch(action);
-
-                    // And finally schedule the action
-                    if (updateJob)
-                    {
-                        Scheduler scheduler = new Scheduler();
-                        scheduler.ScheduleAction(action, scheduledTrigger.Schedule);
-                    }
-                }
-                else
-                {
-                    // The action isn't a scheduled one, so save.
-                    adapter.SaveAndRefetch(action);
-                }
+                adapter.SaveAndRefetch(action);
 
                 CheckForChangesNeeded();
             }
@@ -271,11 +230,6 @@ namespace ShipWorks.Actions
             {
                 throw new ActionConcurrencyException("Another user has recently made changes.\n\n" +
                                                      "Your changes cannot be saved since they would overwrite the other changes.", ex);
-            }
-            catch (SchedulingException schedulingException)
-            {
-                log.Error(string.Format("An error occurred while scheduling an action. {0}", schedulingException.Message), schedulingException);
-                throw;
             }
         }
 
@@ -293,7 +247,19 @@ namespace ShipWorks.Actions
                     sb.Append(", ");
                 }
 
-                sb.Append(ActionTaskManager.GetDescriptor(task.GetType()).Identifier);
+                var binding = ActionTaskManager.GetBinding(task);
+
+                sb.Append(binding.Identifier);
+
+                if (binding.StoreTypeCode != null)
+                {
+                    sb.AppendFormat(":{0}", (int) binding.StoreTypeCode);
+                }
+
+                if (binding.StoreID != null)
+                {
+                    sb.AppendFormat(":{0}", (long) binding.StoreID);
+                }
             }
 
             return sb.ToString();

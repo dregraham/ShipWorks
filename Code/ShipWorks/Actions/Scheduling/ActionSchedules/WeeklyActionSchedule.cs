@@ -98,7 +98,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
             return weeklyActionScheduleEditor;
         }
 
-
         /// <summary>
         /// Ensures the weekly schedule is valid.
         /// </summary>
@@ -107,7 +106,9 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules
             base.Validate();
 
             if (!ExecuteOnDays.Any())
+            {
                 throw new SchedulingException("At least one day of the week must be scheduled.");
+            }
         }
     }
 }

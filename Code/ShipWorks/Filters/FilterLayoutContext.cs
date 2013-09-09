@@ -52,7 +52,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Initialize the global layout context instance for the currently logged on user
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             if (instanceScope.Count > 1)
             {

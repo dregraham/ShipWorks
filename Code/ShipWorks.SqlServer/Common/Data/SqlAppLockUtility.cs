@@ -111,12 +111,12 @@ namespace ShipWorks.SqlServer.Common.Data
         }
 
         /// <summary>
-        /// Gets a SqlCommand from the given connection that is locked using the specified lock name.
+        /// Runs a SqlCommand from the given connection that is locked using the specified lock name.
         /// </summary>
         /// <param name="connection">Connection to use for locking and to create the command</param>
         /// <param name="lockName">Name of the lock that should be used</param>
         /// <param name="commandMethod">Action that will be called with the locked command</param>
-        public static void GetLockedCommand(SqlConnection connection, string lockName, Action<SqlCommand> commandMethod)
+        public static void RunLockedCommand(SqlConnection connection, string lockName, Action<SqlCommand> commandMethod)
         {
             bool needsClosing = false;
 
