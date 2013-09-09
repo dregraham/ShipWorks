@@ -184,6 +184,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ActionQueueSelectionEntity</summary>
+	public partial class ActionQueueSelectionFields
+	{
+		/// <summary>Creates a new ActionQueueSelectionEntity.ActionQueueSelectionID field instance</summary>
+		public static EntityField2 ActionQueueSelectionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ActionQueueSelectionID);}
+		}
+		/// <summary>Creates a new ActionQueueSelectionEntity.ActionQueueID field instance</summary>
+		public static EntityField2 ActionQueueID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ActionQueueID);}
+		}
+		/// <summary>Creates a new ActionQueueSelectionEntity.ObjectID field instance</summary>
+		public static EntityField2 ObjectID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueSelectionFieldIndex.ObjectID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ActionQueueStepEntity</summary>
 	public partial class ActionQueueStepFields
 	{
@@ -17612,6 +17632,51 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.UspsTrackingNumber);}
 		}
+		/// <summary>Creates a new UpsPackageEntity.AdditionalHandlingEnabled field instance</summary>
+		public static EntityField2 AdditionalHandlingEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.AdditionalHandlingEnabled);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationEnabled field instance</summary>
+		public static EntityField2 VerbalConfirmationEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationEnabled);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationName field instance</summary>
+		public static EntityField2 VerbalConfirmationName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationName);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationPhone field instance</summary>
+		public static EntityField2 VerbalConfirmationPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationPhone);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.VerbalConfirmationPhoneExtension field instance</summary>
+		public static EntityField2 VerbalConfirmationPhoneExtension
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.VerbalConfirmationPhoneExtension);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceEnabled field instance</summary>
+		public static EntityField2 DryIceEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceEnabled);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceRegulationSet field instance</summary>
+		public static EntityField2 DryIceRegulationSet
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceRegulationSet);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceWeight field instance</summary>
+		public static EntityField2 DryIceWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceWeight);}
+		}
+		/// <summary>Creates a new UpsPackageEntity.DryIceIsForMedicalUse field instance</summary>
+		public static EntityField2 DryIceIsForMedicalUse
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsPackageFieldIndex.DryIceIsForMedicalUse);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfileEntity</summary>
@@ -17806,6 +17871,51 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DimsAddWeight
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.AdditionalHandlingEnabled field instance</summary>
+		public static EntityField2 AdditionalHandlingEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.AdditionalHandlingEnabled);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationEnabled field instance</summary>
+		public static EntityField2 VerbalConfirmationEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationEnabled);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationName field instance</summary>
+		public static EntityField2 VerbalConfirmationName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationName);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationPhone field instance</summary>
+		public static EntityField2 VerbalConfirmationPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationPhone);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.VerbalConfirmationPhoneExtension field instance</summary>
+		public static EntityField2 VerbalConfirmationPhoneExtension
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.VerbalConfirmationPhoneExtension);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceEnabled field instance</summary>
+		public static EntityField2 DryIceEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceEnabled);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceRegulationSet field instance</summary>
+		public static EntityField2 DryIceRegulationSet
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceRegulationSet);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceWeight field instance</summary>
+		public static EntityField2 DryIceWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceWeight);}
+		}
+		/// <summary>Creates a new UpsProfilePackageEntity.DryIceIsForMedicalUse field instance</summary>
+		public static EntityField2 DryIceIsForMedicalUse
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceIsForMedicalUse);}
 		}
 	}
 
@@ -18616,6 +18726,51 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipperRelease
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.ShipperRelease);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.AdditionalHandlingEnabled field instance</summary>
+		public static EntityField2 AdditionalHandlingEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.AdditionalHandlingEnabled);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationOption field instance</summary>
+		public static EntityField2 VerbalConfirmationOption
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationOption);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationContactName field instance</summary>
+		public static EntityField2 VerbalConfirmationContactName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationContactName);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.VerbalConfirmationTelephone field instance</summary>
+		public static EntityField2 VerbalConfirmationTelephone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.VerbalConfirmationTelephone);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceRegulationSet field instance</summary>
+		public static EntityField2 DryIceRegulationSet
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceRegulationSet);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceWeight field instance</summary>
+		public static EntityField2 DryIceWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceWeight);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceMedicalPurpose field instance</summary>
+		public static EntityField2 DryIceMedicalPurpose
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceMedicalPurpose);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceOption field instance</summary>
+		public static EntityField2 DryIceOption
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceOption);}
+		}
+		/// <summary>Creates a new WorldShipPackageEntity.DryIceWeightUnitOfMeasure field instance</summary>
+		public static EntityField2 DryIceWeightUnitOfMeasure
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure);}
 		}
 	}
 

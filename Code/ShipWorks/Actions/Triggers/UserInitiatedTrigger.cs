@@ -74,13 +74,21 @@ namespace ShipWorks.Actions.Triggers
         /// </summary>
         public override ActionTriggerEditor CreateEditor()
         {
-            return new UserInititatedTriggerEditor(this);
+            return new UserInitiatedTriggerEditor(this);
         }
 
         /// <summary>
-        /// The entity type that triggers this trigger
+        /// The type of entity we expect to trigger us
         /// </summary>
         public override EntityType? TriggeringEntityType
+        {
+            get { return null; }
+        }
+
+        /// <summary>
+        /// The entity type that the selection needs to be
+        /// </summary>
+        public override EntityType? SelectionEntityType
         {
             get 
             {
@@ -235,6 +243,8 @@ namespace ShipWorks.Actions.Triggers
             if (resourceReferenceID != 0)
             {
                 DataResourceManager.ReleaseResourceReference(resourceReferenceID);
+
+                resourceReferenceID = 0;
             }
         }
     }

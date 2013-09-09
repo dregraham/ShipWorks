@@ -13,14 +13,14 @@ namespace ShipWorks.Actions.Triggers.Editors
     /// <summary>
     /// Custom editor for the UserInitiatedTrigger type
     /// </summary>
-    public partial class UserInititatedTriggerEditor : ActionTriggerEditor
+    public partial class UserInitiatedTriggerEditor : ActionTriggerEditor
     {
         UserInitiatedTrigger trigger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UserInititatedTriggerEditor(UserInitiatedTrigger trigger)
+        public UserInitiatedTriggerEditor(UserInitiatedTrigger trigger)
         {
             InitializeComponent();
 

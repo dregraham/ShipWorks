@@ -50,6 +50,14 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ActionQueueEntity", (int)fieldIndex));
 		}
 
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the ActionQueueSelectionEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
+		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
+		public static IEntityField2 Create(ActionQueueSelectionFieldIndex fieldIndex)
+		{
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ActionQueueSelectionEntity", (int)fieldIndex));
+		}
+
 		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the ActionQueueStepEntity. Which EntityField is created is specified by fieldIndex</summary>
 		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
 		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>

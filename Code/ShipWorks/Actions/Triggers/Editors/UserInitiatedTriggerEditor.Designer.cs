@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Actions.Triggers.Editors
 {
-    partial class UserInititatedTriggerEditor
+    partial class UserInitiatedTriggerEditor
     {
         /// <summary> 
         /// Required designer variable.

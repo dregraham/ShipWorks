@@ -441,11 +441,11 @@
     <Compile Include="Actions\Tasks\Common\SqlPurgeScriptRunner.cs" />
     <Compile Include="Actions\Tasks\TaskValidationError.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerException.cs" />
-    <Compile Include="Actions\Triggers\Editors\UserInititatedTriggerEditor.cs">
+    <Compile Include="Actions\Triggers\Editors\UserInitiatedTriggerEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Actions\Triggers\Editors\UserInititatedTriggerEditor.Designer.cs">
-      <DependentUpon>UserInititatedTriggerEditor.cs</DependentUpon>
+    <Compile Include="Actions\Triggers\Editors\UserInitiatedTriggerEditor.Designer.cs">
+      <DependentUpon>UserInitiatedTriggerEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.cs">
       <SubType>Form</SubType>
@@ -5474,8 +5474,8 @@
     <EmbeddedResource Include="Actions\Triggers\Editors\ScheduledTriggerEditor.resx">
       <DependentUpon>ScheduledTriggerEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Actions\Triggers\Editors\UserInititatedTriggerEditor.resx">
-      <DependentUpon>UserInititatedTriggerEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Actions\Triggers\Editors\UserInitiatedTriggerEditor.resx">
+      <DependentUpon>UserInitiatedTriggerEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.resx">
       <DependentUpon>UserInitiatedImageChooserDlg.cs</DependentUpon>

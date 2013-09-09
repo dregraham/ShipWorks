@@ -1408,7 +1408,7 @@ namespace ShipWorks
         {
             long actionID = (long) ((SandButton) sender).Tag;
 
-            ActionDispatcher.DispatchUserInitiated(actionID, gridControl.Selection.OrderedKeys);
+            DispatchUserInitiatedAction(actionID);
         }
 
         /// <summary>
@@ -1418,10 +1418,20 @@ namespace ShipWorks
         {
             long actionID = (long) ((ToolStripMenuItem) sender).Tag;
 
+            DispatchUserInitiatedAction(actionID);
+        }
+
+        /// <summary>
+        /// Dispatch a user initiated action for the given ActionID
+        /// </summary>
+        private void DispatchUserInitiatedAction(long actionID)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
             ActionDispatcher.DispatchUserInitiated(actionID, gridControl.Selection.OrderedKeys);
         }
 
-        #endregion
+       #endregion
 
         #region App Menu
 

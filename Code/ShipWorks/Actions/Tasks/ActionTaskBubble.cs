@@ -287,6 +287,11 @@ namespace ShipWorks.Actions.Tasks
                 return trigger.TriggeringEntityType;
             }
 
+            if (task.Entity.InputSource == (int) ActionTaskInputSource.Selection)
+            {
+                return trigger.SelectionEntityType;
+            }
+
             FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(task.Entity.InputFilterNodeID);
             if (filterNode == null)
             {
@@ -342,17 +347,23 @@ namespace ShipWorks.Actions.Tasks
         {
             inputSourceMenu = new ContextMenuStrip();
 
+            if (trigger.TriggeringEntityType != null)
+            {
+                AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType, false));
+            }
+
+            // If this trigger supports using the current selection as the input source...
+            if (trigger.SelectionEntityType != null)
+            {
+                AddInputSourceMenuItem(ActionTaskInputSource.Selection, GetInputTriggeringRecordOption(trigger.SelectionEntityType.Value, task.InputEntityType, true, "selected"));
+            }
+
             if (task.InputRequirement != ActionTaskInputRequirement.None)
             {
-                if (trigger.TriggeringEntityType != null)
-                {
-                    AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType));
-                }
-
                 AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
             }
 
-            if (task.InputRequirement != ActionTaskInputRequirement.Required)
+            if (task.InputRequirement == ActionTaskInputRequirement.Optional || task.InputRequirement == ActionTaskInputRequirement.None)
             {
                 AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "No Input");
             }
@@ -381,12 +392,13 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private void SelectInputSource(ActionTaskInputSource inputSource)
         {
-            var validInputSources = inputSourceMenu.Items.Cast<ToolStripMenuItem>().Select(x => (ActionTaskInputSource)x.Tag).ToList();
+            // See if its a valid data source
+            bool isValid = inputSourceMenu.Items.Cast<ToolStripMenuItem>().Any(i => ((ActionTaskInputSource) i.Tag) == inputSource);
 
-            // If its not a valid input source, default to the first available option
-            if (!validInputSources.Contains(inputSource))
+            // If its not currently valid, default to the first one that is available
+            if (!isValid)
             {
-                inputSource = validInputSources.First();
+                inputSource = (ActionTaskInputSource) inputSourceMenu.Items[0].Tag;
             }
 
             // Update the task
@@ -463,15 +475,18 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Get the label to use for the Input Label when choosing the triggering record option.
         /// </summary>
-        private static string GetInputTriggeringRecordOption(EntityType triggering, EntityType? target)
+        private static string GetInputTriggeringRecordOption(EntityType triggering, EntityType? target, bool supportsPlural, string adjective = "")
         {
+            string label = "The " + adjective + (!string.IsNullOrWhiteSpace(adjective) ? " " : "") + GetTriggeringEntityDescription(triggering);
+
+            // The target entity is already what we want.  So just "The order" (or if plural) "The orders"
             if (target == null || target == triggering)
             {
-                return "The " + GetTriggeringEntityDescription(triggering);
+                return label + (supportsPlural ? "s" : "");
             }
 
-            // So this would say like "The shipment's "
-            string label = "The " + GetTriggeringEntityDescription(triggering) + "'s ";
+            // So this would say like "The shipment's" if plural isn't supported, or The shipments' if it is.
+            label += (supportsPlural ? "s' " : "'s ");
 
             RelationCollection relations = EntityUtility.FindRelationChain(triggering, target.Value);
             EntityType currentEntity = triggering;

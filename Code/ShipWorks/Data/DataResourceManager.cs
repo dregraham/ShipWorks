@@ -217,9 +217,25 @@ namespace ShipWorks.Data
 
                     adapter.Commit();
                 }
+                
+                string filePath = Path.Combine(DataPath.CurrentResources, resourceFilename);
 
-                // Go ahead and make sure its written locally to our resource path, as if its being asked for now it will likely be used soon
-                File.WriteAllBytes(Path.Combine(DataPath.CurrentResources, resourceFilename), data);
+                try
+                {
+                    // Go ahead and make sure its written locally to our resource path, as if its being asked for now it will likely be used soon
+                    if (!File.Exists(filePath))
+                    {
+                        File.WriteAllBytes(filePath, data);
+                    }
+                    else
+                    {
+                        File.SetLastAccessTimeUtc(filePath, DateTime.UtcNow);
+                    }
+                }
+                catch (IOException ex)
+                {
+                    log.Warn("Couldn't update file " + filePath, ex);
+                }
             }
 
             return resourceID;

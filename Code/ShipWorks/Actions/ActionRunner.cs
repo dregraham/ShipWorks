@@ -796,6 +796,24 @@ namespace ShipWorks.Actions
 
                 input.Add(objectID.Value);
             }
+            // Input source is whatever we have saved for the selection of this task
+            else if (inputSource == ActionTaskInputSource.Selection)
+            {
+                ResultsetFields resultFields = new ResultsetFields(1);
+                resultFields.DefineField(ActionQueueSelectionFields.ObjectID, 0, "ObjectID", "");
+
+                // The dispatcher adds the selection in user-sort order, so they get assigned lowest ActionQueueSelectionID's first
+                SortExpression sort = new SortExpression(ActionQueueSelectionFields.ActionQueueSelectionID | SortOperator.Ascending);
+
+                RelationPredicateBucket bucket = new RelationPredicateBucket(ActionQueueSelectionFields.ActionQueueID == step.ActionQueue.ActionQueueID);
+                using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, sort, true))
+                {
+                    while (reader.Read())
+                    {
+                        input.Add(reader.GetInt64(0));
+                    }
+                }
+            }
             else
             {
                 long inputFilterNodeID = step.InputFilterNodeID;

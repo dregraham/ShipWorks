@@ -53,6 +53,11 @@ namespace ShipWorks.Actions.Triggers
         public abstract EntityType? TriggeringEntityType { get; }
 
         /// <summary>
+        /// The type of entity the trigger expects to be selected in the UI
+        /// </summary>
+        public virtual EntityType? SelectionEntityType { get { return null; } }
+
+        /// <summary>
         /// Raise the TriggeringEntityTypeChanged event
         /// </summary>
         protected void RaiseTriggeringEntityTypeChanged()

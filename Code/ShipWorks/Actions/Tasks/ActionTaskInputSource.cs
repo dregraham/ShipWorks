@@ -18,6 +18,11 @@
         /// <summary>
         /// The data is the entire contents of a selected filter
         /// </summary>
-        FilterContents = 1
+        FilterContents = 1,
+
+        /// <summary>
+        /// The input is a capture of the selection at the time the action was initiated
+        /// </summary>
+        Selection = 2
     }
 }
