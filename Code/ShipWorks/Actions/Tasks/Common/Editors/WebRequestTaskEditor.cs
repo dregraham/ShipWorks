@@ -199,8 +199,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void UpdateTemplateUI()
         {
-            ActionTaskInputSource inputSource = (ActionTaskInputSource) task.Entity.InputSource;
-
             if (task.RequestCardinality != WebRequestCardinality.OneRequestPerTemplateResult)
             {
                 templateCombo.SelectedTemplate = null;
