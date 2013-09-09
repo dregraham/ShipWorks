@@ -523,8 +523,7 @@
 
     <Zip Files="@(FilesToZip)"
 				WorkingDirectory="$(AppDirectory)\"
-				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip"
-				ParallelCompression="false"/>
+				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" />
 
     <!-- Delete all the files that went into the zip -->
     <Delete Files="@(FilesToZip)" />
