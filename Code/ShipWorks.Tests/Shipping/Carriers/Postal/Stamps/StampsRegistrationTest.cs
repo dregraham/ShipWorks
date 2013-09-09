@@ -17,7 +17,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         StampsRegistration testObject;
         Mock<IStampsRegistrationValidator> mockedValidator;
         Mock<IStampsRegistrationGateway> mockedGateway;
-        Mock<ILog> logger;
 
         [TestInitialize]
         public void Initialize()
@@ -29,10 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             mockedGateway = new Mock<IStampsRegistrationGateway>();
             mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>()));
 
-            logger = new Mock<ILog>();
-            logger.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));
-
-            testObject = new StampsRegistration(mockedValidator.Object, mockedGateway.Object, logger.Object);
+            testObject = new StampsRegistration(mockedValidator.Object, mockedGateway.Object);
         }
 
         [TestMethod]
@@ -116,13 +112,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             // Make sure we have a version 4 formatted IP address
             string ipExpression = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b";
             Assert.IsTrue(Regex.IsMatch(testObject.MachineInfo.IPAddress, ipExpression));
-        }
-
-        [TestMethod]
-        public void Constructor_LogsIPAddress_Test()
-        {
-            //Constructor was called in initialize method, so just need to verify log
-            logger.Verify(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
     }
 }

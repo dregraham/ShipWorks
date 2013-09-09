@@ -5,11 +5,26 @@ using log4net;
 namespace Interapptive.Shared.Net
 {
     /// <summary>
-    /// Utility class to get 
+    /// Utility class to get
     /// </summary>
     public class NetworkUtility : INetworkUtility
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(NetworkUtility));
+        private readonly ILog log;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkUtility"/> class.
+        /// </summary>
+        public  NetworkUtility():this(LogManager.GetLogger(typeof(NetworkUtility)))
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkUtility"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public NetworkUtility(ILog log)
+        {
+            this.log = log;
+        }
 
         /// <summary>
         /// Gets the IP address.

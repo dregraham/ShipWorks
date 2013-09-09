@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
     {
         private IStampsRegistrationValidator validator;
         private IStampsRegistrationGateway registrationGateway;
-        private ILog log;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsRegistration"/> class.
@@ -21,18 +21,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
         public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway)
-            : this(validator, gateway, LogManager.GetLogger(typeof(StampsRegistration)))
-        { }
-
-        /// <summary>
-        /// Constructor for testing purposes. Initializes a new instance of the <see cref="StampsRegistration"/> class.
-        /// </summary>
-        public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway, ILog log)
         {
             this.validator = validator;
             registrationGateway = gateway;
-            this.log = log;
-
             
             UserName = string.Empty;
             Password = string.Empty;
