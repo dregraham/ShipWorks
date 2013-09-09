@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Additional handling
                 if (package.AdditionalHandlingEnabled)
                 {
-                    xmlWriter.WriteElementString("AdditionalHandlingIndicator", null);
+                    xmlWriter.WriteElementString("AdditionalHandling", null);
                 }
 
                 // Service options
