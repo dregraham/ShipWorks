@@ -129,7 +129,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcomeOlt);
+            this.mainPanel.Controls.Add(this.wizardPageRates);
             this.mainPanel.Size = new System.Drawing.Size(579, 415);
             // 
             // etchBottom
@@ -398,7 +398,7 @@
             this.labelUps1.Size = new System.Drawing.Size(438, 32);
             this.labelUps1.TabIndex = 1;
             this.labelUps1.Text = "Thank you for registering your UPS Account. To learn more about UPS services, ple" +
-    "ase";
+    "ase"; 
             // 
             // labelSetupComplete
             // 
@@ -435,6 +435,7 @@
             this.wizardPageRates.TabIndex = 0;
             this.wizardPageRates.Title = "UPS Rate Display";
             this.wizardPageRates.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRates);
+            this.wizardPageRates.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoRates);
             // 
             // upsRateTypeControl
             // 

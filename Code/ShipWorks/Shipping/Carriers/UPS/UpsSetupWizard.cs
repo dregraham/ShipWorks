@@ -446,8 +446,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 adapter.Commit();
             }
-
-            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked);
         }
 
         /// <summary>
@@ -671,6 +669,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // If the account list page is present that means we didn't create the account from this wizard
             if (!Pages.Contains(wizardPageAccountList))
             {
+                upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
                 UpsAccountManager.SaveAccount(upsAccount);
             }
         }
@@ -813,6 +812,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
+        /// <summary>
+        /// Steppings the into wizard page open account create account.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
         private void SteppingIntoWizardPageOpenAccountCreateAccount(object sender, WizardSteppingIntoEventArgs e)
         {
             createAccount.OpenAccountRequest = openAccountRequest;
@@ -823,8 +827,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 NextEnabled = true;
                 isAccountCreated = true;
+                MessageHelper.ShowInformation(this, "Account created. Click next to continue.");
             };
 
+        }
+
+        /// <summary>
+        /// Called when [stepping into rates].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
+        private void OnSteppingIntoRates(object sender, WizardSteppingIntoEventArgs e)
+        {
+            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked);
         }
     }
 }
