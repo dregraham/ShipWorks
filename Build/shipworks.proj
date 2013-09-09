@@ -50,7 +50,13 @@
 			ValidateProperties;
 			CommonInitialization;
 			UpdateAssemblyInfo;
-			UpdateSharedAssemblyInfo;
+      <!-- Commenting out for now. This was originally intended to reset the assembly info for the
+           shared assemblies, so they retained the same version info from their previous build. 
+           According to Brian, this was a concept for if/when there were multiple products using
+           the same shared libraries, the shared library versioning info would stay the same across
+           the different applications/products.
+      -->
+      <!-- UpdateSharedAssemblyInfo; -->
 			Compile;
 			CopyToLatest;
 			RunTests;
