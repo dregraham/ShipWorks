@@ -907,6 +907,19 @@ namespace ShipWorks.Data.Administration
             // Force the list to refresh, in case it's already dropped down
             comboSqlServers.RefreshItemList();
 
+            // Only automatically select the first SQL instance if we are on the SQL Instance page right now.  If we aren't, we don't want to be changing out
+            // the selected instance from under the user while they are on a different page.
+            if (CurrentPage == wizardPageSelectSqlServerInstance)
+            {
+                SelectFirstSqlInstance();
+            }
+        }
+
+        /// <summary>
+        /// Automatically select the first SQL instance if none is currently selected
+        /// </summary>
+        private void SelectFirstSqlInstance()
+        {
             // Auto-select first one if nothing is in there already.  We use index 1, because index 0 is always Refresh
             if (comboSqlServers.Text.Length == 0 && comboSqlServers.Items.Count > 1)
             {
@@ -934,9 +947,17 @@ namespace ShipWorks.Data.Administration
                     // Don't show the "Searching..." next to the ComboBox if we are also showing that we are trying to connect to a selected instance
                     panelSearchSqlServers.Visible = false;
                 }
+                else
+                {
+                    SelectFirstSqlInstance();
+                }
 
                 // This function handles a selected instance or blank
                 ConnectToSelectedServerInstance();
+            }
+            else
+            {
+                SelectFirstSqlInstance();
             }
         }
 
@@ -1211,7 +1232,7 @@ namespace ShipWorks.Data.Administration
                 string name = database.Name;
 
                 // If it's local db, we special case the naming
-                if (sqlSession.Configuration.IsLocalDb())
+                if (configuration.IsLocalDb())
                 {
                     // If this is the default database for this instance of ShipWorks, then just call it default
                     if (database.Name == ShipWorksDatabaseUtility.LocalDbDatabaseName)
