@@ -22,6 +22,9 @@ namespace Interapptive.Shared.Data
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SqlUtility));
 
+        // Indicates if we've discovered we have to truncate with DELETE due to missing permissions
+        static bool truncateWithDelete = false;
+
         /// <summary>
         /// Executes each batch in the SQL, as separated by the GO keyword, using the given connection.
         /// </summary>
@@ -267,6 +270,36 @@ namespace Interapptive.Shared.Data
             }
 
             return masterPath;
+        }
+
+        /// <summary>
+        /// Truncate the given table contents
+        /// </summary>
+        public static void TruncateTable(string table, SqlConnection con)
+        {
+            if (!truncateWithDelete)
+            {
+                // Try TRUNCATE for optimal performance
+                try
+                {
+                    SqlCommand truncateCmd = con.CreateCommand();
+                    truncateCmd.CommandText = "TRUNCATE TABLE " + table;
+                    truncateCmd.ExecuteNonQuery();
+
+                    return;
+                }
+                catch (SqlException)
+                {
+
+                }
+            }
+
+            // Fallback to DELETE in case user doesn't have permission
+            SqlCommand deleteCmd = con.CreateCommand();
+            deleteCmd.CommandText = "DELETE " + table;
+            deleteCmd.ExecuteNonQuery();
+
+            truncateWithDelete = true;
         }
     }
 }
