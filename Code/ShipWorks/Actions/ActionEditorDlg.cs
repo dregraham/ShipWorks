@@ -115,16 +115,20 @@ namespace ShipWorks.Actions
             storeLimited.Checked = action.StoreLimited;
             storeCheckBoxPanel.Enabled = action.StoreLimited;
 
+            UpdateRunOnComputerUI();
+        }
+
+        /// <summary>
+        /// Updates the run on computer ui based on the current state of the action
+        /// </summary>
+        private void UpdateRunOnComputerUI()
+        {
             //Load the computer limited settings
-            runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitationType.None;
-            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.TriggeringComputer;
-            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int)ComputerLimitationType.NamedList;
+            runOnAnyComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.None;
+            runOnTriggerringComputer.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer;
+            runOnSpecificComputers.Checked = action.ComputerLimitedType == (int) ComputerLimitedType.List;
             runOnSpecificComputersList.SetSelectedComputers(action.ComputerLimitedList);
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
-
-            // Check all the boxes for the stores its limited to
-            List<StoreEntity> stores = action.StoreLimitedList.Select(storeID => StoreManager.GetStore(storeID)).ToList();
-            storeCheckBoxPanel.SelectedStores = stores;
         }
 
         /// <summary>
@@ -133,6 +137,11 @@ namespace ShipWorks.Actions
         private void LoadStoresPanel()
         {
             storeCheckBoxPanel.LoadStores();
+
+            // Check all the boxes for the stores its limited to
+            List<long> storeIDs = action.StoreLimitedList.ToList();
+            storeCheckBoxPanel.SelectedStoreIDs = storeIDs;
+
             storeSettings.Height = storeCheckBoxPanel.Bottom + 4;
         }
 
@@ -187,8 +196,6 @@ namespace ShipWorks.Actions
             trigger = ActionTriggerFactory.CreateTrigger(triggerType, null);
             trigger.TriggeringEntityTypeChanged += new EventHandler(OnChangeTriggerEntityType);
 
-            UpdateTriggeringComputerUI(triggerType);
-
             CreateTriggerEditor();
         }
 
@@ -196,7 +203,7 @@ namespace ShipWorks.Actions
         /// Updates the text and appearance of the runOnTriggeringComputer radio button based
         /// on the action trigger type.
         /// </summary>
-        private void UpdateTriggeringComputerUI(ActionTriggerType triggerType)
+        private void UpdateTriggerRelatedUI(ActionTriggerType triggerType)
         {
             // Disable the triggering computer option - triggering computer is not a valid option 
             // when the trigger is based on a scheduled
@@ -213,6 +220,9 @@ namespace ShipWorks.Actions
                 // what the triggering computer will actually be
                 runOnTriggerringComputer.Text = string.Format("On the computer where {0}", EnumHelper.GetDescription(triggerType).ToLower());
             }
+
+            // Don't show the store settings if the trigger type is a scheduled trigger
+            storeSettings.Visible = trigger.TriggerType != ActionTriggerType.Scheduled;
         }
 
         /// <summary>
@@ -242,10 +252,13 @@ namespace ShipWorks.Actions
                 ActionTriggerEditor oldEditor = (ActionTriggerEditor) panelTrigger.Controls[0];
 
                 panelTrigger.Controls.Remove(oldEditor);
+                oldEditor.SizeChanged -= OnActionTriggerEditorSizeChanged;
                 oldEditor.Dispose();
             }
 
             UpdateTaskBubbles();
+
+            UpdateTriggerRelatedUI(trigger.TriggerType);
         }
 
         /// <summary>
@@ -276,28 +289,23 @@ namespace ShipWorks.Actions
 
             UpdateTaskArea();
 
-            // If any of the tasks are to backup the database, make sure the action
-            // runs on the Sql computer and disable the UI to change it
-            if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
-            {
-                runOnSpecificComputers.Checked = true;
-                runOnSpecificComputers.Enabled = false;
-                runOnAnyComputer.Enabled = false;
-                runOnTriggerringComputer.Enabled = false;
-                runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.GetSqlServerComputer });
-            }
-            else
-            {
-                runOnSpecificComputers.Enabled = true;
-                runOnAnyComputer.Enabled = true;
-            }
-            
-            UpdateTriggeringComputerUI(trigger.TriggerType);
+            //// If any of the tasks are to backup the database, make sure the action
+            //// runs on the Sql computer and disable the UI to change it
+            //if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
+            //{
+            //    runOnSpecificComputers.Checked = true;
+            //    runOnSpecificComputers.Enabled = false;
+            //    runOnAnyComputer.Enabled = false;
+            //    runOnTriggerringComputer.Enabled = false;
+            //    runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.SqlServerComputer });
+            //}
+            //else
+            //{
+            //    runOnSpecificComputers.Enabled = true;
+            //    runOnAnyComputer.Enabled = true;
+            //}
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
-
-            // Don't show the store settings if the trigger type is a scheduled trigger
-            storeSettings.Visible = trigger.TriggerType != ActionTriggerType.Scheduled;
         }
 
         /// <summary>
@@ -335,7 +343,6 @@ namespace ShipWorks.Actions
         /// </summary>
         private void OnChangeLimitStores(object sender, EventArgs e)
         {
-            //panelStores.Enabled = storeLimited.Checked;
             storeCheckBoxPanel.Enabled = storeLimited.Checked;
         }
 
@@ -344,7 +351,7 @@ namespace ShipWorks.Actions
         /// </summary>
         private long[] GenerateStoreLimitedListFromUI()
         {
-            return storeCheckBoxPanel.SelectedStores.Select(s => s.StoreID).ToArray();
+            return storeCheckBoxPanel.SelectedStoreIDs.ToArray();
         }
 
         /// <summary>
@@ -354,12 +361,6 @@ namespace ShipWorks.Actions
         {
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((SandMenuItem) sender).Tag;
             ActionTask task = binding.CreateInstance();
-
-            // Cancel adding the task if it cannot currently be selected
-            if (!EnsureTaskCanBeSelected(task))
-            {
-                return;
-            }
 
             AddTaskBubble(task);
         }
@@ -385,16 +386,6 @@ namespace ShipWorks.Actions
             bubble.MoveUp += new EventHandler(OnBubbleMoveUp);
             bubble.MoveDown += new EventHandler(OnBubbleMoveDown);
             bubble.Delete += new EventHandler(OnBubbleDelete);
-            bubble.ActionTaskChanging += OnBubbleTaskChanging;
-        }
-
-        /// <summary>
-        /// The selected task for the bubble has changed
-        /// </summary>
-        private void OnBubbleTaskChanging(object sender, ActionTaskChangingEventArgs e)
-        {
-            // Cancel the task change if the selected task cannot be selected
-            e.Cancel = !EnsureTaskCanBeSelected(e.NewTask);
         }
 
         /// <summary>
@@ -471,245 +462,29 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Checks whether the the specified task can be selected 
+        /// Checks whether the the run on computer settings are valid
         /// </summary>
-        /// <param name="task">The task that should be checked</param>
+        /// <param name="actionTriggerType">Type of trigger currently selected</param>
         /// <returns></returns>
-        private bool EnsureTaskCanBeSelected(ActionTask task)
+        private bool ValidateRunOnComputer(ActionTriggerType actionTriggerType)
         {
-            if (task is BackupDatabaseTask && !SqlSession.Current.IsLocalServer())
+            if (actionTriggerType == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
             {
-                MessageHelper.ShowError(this,
-                    string.Format(
-                        "The task '{0}' can only be configured from the computer running the database.",
-                        ActionTaskManager.GetDescriptor(task.GetType()).BaseName));
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// User is accepting changes to the action
-        /// </summary>
-        private void OnOK(object sender, EventArgs e)
-        {
-            if (name.Text.Trim().Length == 0)
-            {
-                MessageHelper.ShowMessage(this, "Enter a name for the action.");
-                ActiveControl = name;
-                return;
-            }
-
-            if (((ActionTriggerType)triggerCombo.SelectedValue) == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
-            {
-                // When the option to run on the triggering computer is selected and wit the Schedule trigger, just change 
+                // When the option to run on the triggering computer is selected and with the Schedule trigger, just change 
                 // this to run on any computer for now with the thought process being that we don't to put another step 
                 // for the user to complete when creating a scheduled action
                 runOnTriggerringComputer.Checked = false;
                 runOnAnyComputer.Checked = true;
             }
 
-            Cursor.Current = Cursors.WaitCursor;
-            
-            try
-            {
-                trigger.Validate();
-            }
-            catch (Exception ex)
-            {
-                optionControl.SelectedPage = optionPageAction;
-                ActiveControl = panelTrigger;
-                MessageHelper.ShowError(this, ex.Message);
-                return;
-            }
-
             if (runOnSpecificComputers.Checked && !runOnSpecificComputersList.GetSelectedComputers().Any())
             {
                 optionControl.SelectedPage = optionPageSettings;
                 MessageHelper.ShowError(this, "At least one computer must be selected when choosing to run actions on specific computers.");
-                return;
+                return false;
             }
 
-            try
-            {
-                List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
-                List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
-                
-                // Validate all the task editors
-                var errors = new List<TaskValidationError>();
-                foreach (ActionTaskBubble editor in ActiveBubbles)
-                {
-                    editor.ValidateTask(errors);
-                }
-
-                if (errors.Any())
-                {
-                    MessageHelper.ShowError(this, errors.Select(x => x.ToString()).Combine(Environment.NewLine + Environment.NewLine));
-                    return;
-                }
-
-                // Update the flow order
-                foreach (ActionTask task in tasksToSave)
-                {
-                    UpdateTaskFlowOption(task, ActionTaskFields.FlowSuccess, task.Entity.FlowSuccessBubble, tasksToSave);
-                    UpdateTaskFlowOption(task, ActionTaskFields.FlowSkipped, task.Entity.FlowSkippedBubble, tasksToSave);
-                    UpdateTaskFlowOption(task, ActionTaskFields.FlowError, task.Entity.FlowErrorBubble, tasksToSave);
-
-                    task.Entity.StepIndex = tasksToSave.IndexOf(task);
-                }
-
-                if (!ValidateTaskFlow(tasksToSave))
-                {
-                    MessageHelper.ShowError(this, "The flow configured for the tasks could result in infinite looping.");
-                    return;
-                }
-
-                // We have to ensure that for each task that uses a template to print, the template is configured for printing.  We only have a single PrintTask that we have to check this for.
-                // If we ever add more tasks that print, we may consider making this more abstrat and having task have a method to return like "TemplatesToPrintWith";
-                if (!TemplatePrinterSelectionDlg.EnsureConfigured(this, tasksToSave.OfType<IPrintWithTemplates>()))
-                {
-                    return;
-                }
-
-                ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
-                
-                // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
-                List<ActionTask> invalidTasks = tasksToSave.Where(at => !ActionTaskManager.GetDescriptor(at.GetType()).IsAllowedForTrigger(actionTriggerType)).ToList();
-                if (invalidTasks.Any())
-                {
-                    var invalidTaskNames = invalidTasks.Select<ActionTask, string>(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
-
-                    string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
-
-                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' {2} cannot be used with '{3}'.",
-                        invalidTaskNames.Count() == 1 ? "" : "s", 
-                        invalidTasksMsg,
-                        invalidTaskNames.Count() == 1 ? "is" : "are", 
-                        EnumHelper.GetDescription(actionTriggerType)));
-                    return;
-                }
-
-                // Don't close the form if any of the bubbles have invalid data
-                if (ActiveBubbles.Any(bubble => !bubble.ValidateChildren()))
-                {
-                    return;
-                }
-
-                if (actionTriggerType != originalTrigger.TriggerType && originalTrigger.TriggerType == ActionTriggerType.Scheduled)
-                {
-                    try
-                    {
-                        // User changed the trigger from a scheduled trigger to another type of trigger, so we need to make sure
-                        // the action is remvoed from the schedule
-                        new Scheduler().UnscheduleAction(action);
-                    }
-                    catch (SchedulingException schedulingException)
-                    {
-                        MessageHelper.ShowError(this, string.Format("An error occurred trying to remove a scheduled action. {0}", schedulingException.Message));
-                        return;
-                    }
-                }
-
-                // Transacted since we affect multiple action tables
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    // If the action is new, we have to save it once up front to get its PK.  Require's two trip's to save,
-                    // but some of the SaveExtraState functions can require the ID... but then that can affect there XML Settings serialization,
-                    // which requires the final save to the DB
-                    if (action.IsNew)
-                    {
-                        adapter.SaveAndRefetch(action);
-                    }
-
-                    action.Name = name.Text.Trim();
-
-                    // Save the basic options of the action
-                    action.TriggerType = (int) triggerCombo.SelectedValue;
-                    action.TaskSummary = ActionManager.GetTaskSummary(tasksToSave);
-                    action.Enabled = enabled.Checked;
-                    action.StoreLimited = storeLimited.Checked;
-                    action.StoreLimitedList = GenerateStoreLimitedListFromUI();
-
-                    //Save the computer limited settings
-                    if (runOnTriggerringComputer.Checked)
-                    {
-                        action.ComputerLimitedType = (int)ComputerLimitationType.TriggeringComputer;
-                        action.ComputerLimitedList = new long[0];
-                    }
-                    else if (runOnAnyComputer.Checked)
-                    {
-                        action.ComputerLimitedType = (int)ComputerLimitationType.None;
-                        action.ComputerLimitedList = new long[0];
-                    }
-                    else
-                    {
-                        action.ComputerLimitedType = (int)ComputerLimitationType.NamedList;
-                        action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
-                    }
-
-                    // If we changed triggers, we need to notify the original that it is being deleted
-                    if (trigger != originalTrigger)
-                    {
-                        originalTrigger.DeleteExtraState(action, adapter);
-                    }
-
-                    // Give the new trigger a chance to save its state
-                    trigger.SaveExtraState(action, adapter);
-                    action.TriggerSettings = trigger.GetXml();
-
-                    // Save all the tasks
-                    foreach (ActionTask task in tasksToSave)
-                    {
-                        task.Save(action, adapter);
-                    }
-
-                    // Delete all tasks that need deleting
-                    foreach (ActionTask task in tasksToDelete)
-                    {
-                        task.Delete(adapter);
-                    }
-
-                    // We force at least the Enabled property to be saved everytime.  This is so if there were any edits made to the tasks,
-                    // optimistic concurrecy can catch it just by checking at the Action level.  This does cause optimistic concurrency to give false
-                    // positives in cases where no edits were made, but I think given the likelihood of it happening this is an OK way to handle it.  The
-                    // alternative would be to handle it in detail at both the Action and AtionTask level.
-                    action.Fields[(int) ActionFieldIndex.Enabled].IsChanged = true;
-                    action.IsDirty = true;
-
-                    // Save the action
-                    ActionManager.SaveAction(action, adapter);
-
-                    adapter.Commit();
-                }
-
-                DialogResult = DialogResult.OK;
-            }
-            catch (ActionConcurrencyException ex)
-            {
-                MessageHelper.ShowError(this, ex.Message);
-
-                DialogResult = DialogResult.Abort;
-            }
-            catch (ActionSaveException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message + "\n\nThe action has not been saved, and the editor will now close.");
-
-                // At this point I'm taking the easy approach and just closing out of the window.  This is because it would be pretty
-                // hard to make sure all the tasks roll back properly, due to the Save\Delete extra state stuff.  I also think that 
-                // having this type of error while saving will be rare.  Its possible to make this able to stay open in the future,
-                // if there was ever a compelling need.
-                DialogResult = DialogResult.Abort;
-            }
-            catch (SqlForeignKeyException)
-            {
-                MessageHelper.ShowError(this, "The action has been deleted by another user.");
-                DialogResult = DialogResult.Abort;
-            }
-            catch (SchedulingException schedulingException)
-            {
-                MessageHelper.ShowError(this, schedulingException.Message);
-            }
+            return true;
         }
 
         /// <summary>
@@ -792,6 +567,217 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
+        /// The RunOnSpecificComputers checkbox was checked or unchecked
+        /// </summary>
+        void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
+        {
+            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
+
+            if (runOnSpecificComputersList.Visible && 
+                runOnSpecificComputersList.Enabled &&
+                !runOnSpecificComputersList.GetSelectedComputers().Any())
+            {
+                runOnSpecificComputersList.ShowPopup();   
+            }
+        }
+
+        /// <summary>
+        /// User is accepting changes to the action
+        /// </summary>
+        private void OnOK(object sender, EventArgs e)
+        {
+            if (name.Text.Trim().Length == 0)
+            {
+                MessageHelper.ShowMessage(this, "Enter a name for the action.");
+                ActiveControl = name;
+                return;
+            }
+
+            ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
+
+            if (!ValidateRunOnComputer(actionTriggerType))
+            {
+                return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+            
+            try
+            {
+                trigger.Validate();
+            }
+            catch (ActionTriggerException ex)
+            {
+                optionControl.SelectedPage = optionPageAction;
+                ActiveControl = panelTrigger;
+                MessageHelper.ShowError(this, ex.Message);
+                return;
+            }
+
+            try
+            {
+                List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
+                List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
+                
+                // Validate all the task editors
+                var errors = new List<TaskValidationError>();
+                foreach (ActionTaskBubble editor in ActiveBubbles)
+                {
+                    editor.ValidateTask(errors);
+                }
+
+                if (errors.Any())
+                {
+                    MessageHelper.ShowError(this, errors.Select(x => x.ToString()).Combine(Environment.NewLine + Environment.NewLine));
+                    return;
+                }
+
+                // Update the flow order
+                foreach (ActionTask task in tasksToSave)
+                {
+                    UpdateTaskFlowOption(task, ActionTaskFields.FlowSuccess, task.Entity.FlowSuccessBubble, tasksToSave);
+                    UpdateTaskFlowOption(task, ActionTaskFields.FlowSkipped, task.Entity.FlowSkippedBubble, tasksToSave);
+                    UpdateTaskFlowOption(task, ActionTaskFields.FlowError, task.Entity.FlowErrorBubble, tasksToSave);
+
+                    task.Entity.StepIndex = tasksToSave.IndexOf(task);
+                }
+
+                if (!ValidateTaskFlow(tasksToSave))
+                {
+                    MessageHelper.ShowError(this, "The flow configured for the tasks could result in infinite looping.");
+                    return;
+                }
+
+                // We have to ensure that for each task that uses a template to print, the template is configured for printing.  We only have a single PrintTask that we have to check this for.
+                // If we ever add more tasks that print, we may consider making this more abstrat and having task have a method to return like "TemplatesToPrintWith";
+                if (!TemplatePrinterSelectionDlg.EnsureConfigured(this, tasksToSave.OfType<IPrintWithTemplates>()))
+                {
+                    return;
+                }
+                
+                // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
+                List<ActionTask> invalidTasks = tasksToSave.Where(at => !at.IsAllowedForTrigger(actionTriggerType)).ToList();
+                if (invalidTasks.Any())
+                {
+                    var invalidTaskNames = invalidTasks.Select(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
+
+                    string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
+
+                    MessageHelper.ShowError(this, string.Format("The task{0} '{1}' cannot be used with '{2}'.",
+                        invalidTaskNames.Count() == 1 ? "" : "s", 
+                        invalidTasksMsg,
+                        EnumHelper.GetDescription(actionTriggerType)));
+                    return;
+                }
+
+                // Don't close the form if any of the bubbles have invalid data
+                if (ActiveBubbles.Any(bubble => !bubble.ValidateChildren()))
+                {
+                    return;
+                }
+
+                // Transacted since we affect multiple action tables
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    // If the action is new, we have to save it once up front to get its PK.  Require's two trip's to save,
+                    // but some of the SaveExtraState functions can require the ID... but then that can affect there XML Settings serialization,
+                    // which requires the final save to the DB
+                    if (action.IsNew)
+                    {
+                        adapter.SaveAndRefetch(action);
+                    }
+
+                    action.Name = name.Text.Trim();
+
+                    // Save the basic options of the action
+                    action.TriggerType = (int) triggerCombo.SelectedValue;
+                    action.TaskSummary = ActionManager.GetTaskSummary(tasksToSave);
+                    action.Enabled = enabled.Checked;
+                    action.StoreLimited = storeLimited.Checked;
+                    action.StoreLimitedList = GenerateStoreLimitedListFromUI();
+
+                    //Save the computer limited settings
+                    if (runOnTriggerringComputer.Checked)
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer;
+                        action.ComputerLimitedList = new long[0];
+                    }
+                    else if (runOnAnyComputer.Checked)
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitedType.None;
+                        action.ComputerLimitedList = new long[0];
+                    }
+                    else
+                    {
+                        action.ComputerLimitedType = (int)ComputerLimitedType.List;
+                        action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
+                    }
+
+                    // If we changed triggers, we need to notify the original that it is being deleted
+                    if (trigger != originalTrigger)
+                    {
+                        originalTrigger.DeleteExtraState(action, adapter);
+                    }
+
+                    // Give the new trigger a chance to save its state
+                    trigger.SaveExtraState(action, adapter);
+                    action.TriggerSettings = trigger.GetXml();
+
+                    // Save all the tasks
+                    foreach (ActionTask task in tasksToSave)
+                    {
+                        task.Save(action, adapter);
+                    }
+
+                    // Delete all tasks that need deleting
+                    foreach (ActionTask task in tasksToDelete)
+                    {
+                        task.Delete(adapter);
+                    }
+
+                    // We force at least the Enabled property to be saved everytime.  This is so if there were any edits made to the tasks,
+                    // optimistic concurrecy can catch it just by checking at the Action level.  This does cause optimistic concurrency to give false
+                    // positives in cases where no edits were made, but I think given the likelihood of it happening this is an OK way to handle it.  The
+                    // alternative would be to handle it in detail at both the Action and AtionTask level.
+                    action.Fields[(int) ActionFieldIndex.Enabled].IsChanged = true;
+                    action.IsDirty = true;
+
+                    // Save the action
+                    ActionManager.SaveAction(action, adapter);
+
+                    adapter.Commit();
+                }
+
+                DialogResult = DialogResult.OK;
+            }
+            catch (ActionConcurrencyException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+
+                DialogResult = DialogResult.Abort;
+            }
+            catch (ActionSaveException ex)
+            {
+                MessageHelper.ShowMessage(this, ex.Message + "\n\nThe action has not been saved, and the editor will now close.");
+
+                // At this point I'm taking the easy approach and just closing out of the window.  This is because it would be pretty
+                // hard to make sure all the tasks roll back properly, due to the Save\Delete extra state stuff.  I also think that 
+                // having this type of error while saving will be rare.  Its possible to make this able to stay open in the future,
+                // if there was ever a compelling need.
+                DialogResult = DialogResult.Abort;
+            }
+            catch (SqlForeignKeyException)
+            {
+                MessageHelper.ShowError(this, "The action has been deleted by another user.");
+                DialogResult = DialogResult.Abort;
+            }
+            catch (SchedulingException schedulingException)
+            {
+                MessageHelper.ShowError(this, schedulingException.Message);
+            }
+        }
+
+        /// <summary>
         /// Window is closing
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
@@ -801,17 +787,6 @@ namespace ShipWorks.Actions
             {
                 action.RollbackChanges();
             }
-        }
-
-        /// <summary>
-        /// The RunOnSpecificComputers checkbox was checked or unchecked
-        /// </summary>
-        void OnRunOnSpecificComputersChecked(object sender, EventArgs e)
-        {
-            runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
-
-            if (runOnSpecificComputersList.Visible && runOnSpecificComputersList.Enabled && !runOnSpecificComputersList.GetSelectedComputers().Any())
-                runOnSpecificComputersList.ShowPopup();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// ActionTask that prints shipping labels using the print output configuration of the shipment type
     /// </summary>
-    [ActionTask("Print shipments", "PrintShipments", ActionTaskCategory.Output)]
+    [ActionTask("Print shipments", "PrintShipments", ActionTaskCategory.Administration)]
     public class PrintShipmentsTask : ActionTask
     {
         static readonly ILog log = LogManager.GetLogger(typeof(PrintShipmentsTask));

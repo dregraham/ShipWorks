@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Load user column data. To be called when a user logs in.
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             // Clear any remnants from the last user
             columnDefinitions.Clear();

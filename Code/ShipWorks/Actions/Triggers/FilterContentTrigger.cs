@@ -130,6 +130,8 @@ namespace ShipWorks.Actions.Triggers
         /// </summary>
         public override void SaveExtraState(ActionEntity action, SqlAdapter adapter)
         {
+            base.SaveExtraState(action, adapter);
+
             // If the user has changed the selected filter node, delete our reference holding on to the old one
             if (initialFilterNodeID != filterNodeID)
             {
@@ -173,6 +175,8 @@ namespace ShipWorks.Actions.Triggers
             adapter.DeleteEntitiesDirectly(
                 typeof(ActionFilterTriggerEntity),
                 new RelationPredicateBucket(ActionFilterTriggerFields.ActionID == action.ActionID));
+
+            base.DeleteExtraState(action, adapter);
         }
 
         /// <summary>

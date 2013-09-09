@@ -22,9 +22,9 @@ namespace ShipWorks.Shipping.Settings.Printing
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize ShippingPrintOutputManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingPrintOutputEntity>();
             InternalCheckForChanges();

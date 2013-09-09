@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Actions
                 new ComputerEntity(1001)
             };
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, "1001");
+            testObject = new ComputerActionPolicy("1001");
 
             string csv = testObject.ToCsv();
             Assert.AreEqual("1001", csv);
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             string csv = testObject.ToCsv();
             Assert.AreEqual("1001, 2001, 3001, 4001", csv);
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             Assert.IsFalse(testObject.IsComputerAllowed(new ComputerEntity(5001)));
         }
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(3001)));
         }
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(1001)));
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(2001)));
         }
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(1001)));
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Actions
         {
             string computerIDs = "1001, 2001, 3001,4001,5001";
 
-            testObject = new ComputerActionPolicy(ComputerLimitationType.NamedList, computerIDs);
+            testObject = new ComputerActionPolicy(computerIDs);
 
             for (int i = 0; i < 5; i++)
             {

@@ -61,11 +61,11 @@ namespace ShipWorks.Tests.Integration.MSTest
                 AuditProcessor.InitializeForApplication();
 
                 ShippingSettings.InitializeForCurrentDatabase();
-                ShippingProfileManager.InitializeForCurrentUser();
-                ShippingDefaultsRuleManager.InitializeForCurrentUser();
-                ShippingProviderRuleManager.InitializeForCurrentUser();
+                ShippingProfileManager.InitializeForCurrentSession();
+                ShippingDefaultsRuleManager.InitializeForCurrentSession();
+                ShippingProviderRuleManager.InitializeForCurrentSession();
 
-                StoreManager.InitializeForCurrentUser();
+                StoreManager.InitializeForCurrentSession();
 
                 UserManager.InitializeForCurrentUser();
 
@@ -80,9 +80,9 @@ namespace ShipWorks.Tests.Integration.MSTest
                 ShippingManager.InitializeForCurrentDatabase();
                 LogSession.Initialize();
 
-                TemplateManager.InitializeForCurrentUser();
+                TemplateManager.InitializeForCurrentSession();
 
-                ActionManager.InitializeForCurrentUser();
+                ActionManager.InitializeForCurrentSession();
             }
         }
 

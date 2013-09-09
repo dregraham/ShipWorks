@@ -37,6 +37,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+
 		private EntityCollection<ActionQueueStepEntity> _steps;
 
 
@@ -54,6 +55,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+
 
 
 			/// <summary>Member name Steps</summary>
@@ -118,6 +120,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+
 				_steps = (EntityCollection<ActionQueueStepEntity>)info.GetValue("_steps", typeof(EntityCollection<ActionQueueStepEntity>));
 
 
@@ -167,6 +170,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
+
 				case "Steps":
 					this.Steps.Add((ActionQueueStepEntity)entity);
 					break;
@@ -193,6 +197,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+
 
 
 				case "Steps":
@@ -238,6 +243,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
+
 				case "Steps":
 					this.Steps.Add((ActionQueueStepEntity)relatedEntity);
 					break;
@@ -256,6 +262,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+
 
 
 				case "Steps":
@@ -293,6 +300,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+
 			toReturn.Add(this.Steps);
 
 			return toReturn;
@@ -308,6 +316,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+
 				info.AddValue("_steps", ((_steps!=null) && (_steps.Count>0) && !this.MarkedForDeletion)?_steps:null);
 
 
@@ -346,6 +355,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return new ActionQueueRelations().GetAllRelations();
 		}
 		
+
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entities of type 'ActionQueueStep' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
@@ -388,6 +398,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+
 			collectionsQueue.Enqueue(this._steps);
 
 		}
@@ -397,6 +408,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+
 			this._steps = (EntityCollection<ActionQueueStepEntity>) collectionsQueue.Dequeue();
 
 		}
@@ -405,6 +417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
+
 			if (this._steps != null)
 			{
 				return true;
@@ -419,6 +432,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ActionQueueStepEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ActionQueueStepEntityFactory))) : null);
 
 		}
@@ -432,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
 
+
 			toReturn.Add("Steps", _steps);
 
 
@@ -441,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Adds the internals to the active context. </summary>
 		protected override void AddInternalsToContext()
 		{
+
 			if(_steps!=null)
 			{
 				_steps.ActiveContext = base.ActiveContext;
@@ -454,6 +470,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Initializes the class members</summary>
 		protected virtual void InitClassMembers()
 		{
+
 
 			_steps = null;
 
@@ -748,6 +765,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return (System.Int32)GetValue((int)ActionQueueFieldIndex.ActionQueueType, true); }
 			set	{ SetValue((int)ActionQueueFieldIndex.ActionQueueType, value); }
 		}
+
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ActionQueueStepEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>

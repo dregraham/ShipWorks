@@ -178,6 +178,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "IParcelPackageEntity": return EntityType.IParcelPackageEntity;
 				case "ScanFormBatchEntity": return EntityType.ScanFormBatchEntity;
 				case "ServiceStatusEntity": return EntityType.ServiceStatusEntity;
+				case "ActionQueueSelectionEntity": return EntityType.ActionQueueSelectionEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));

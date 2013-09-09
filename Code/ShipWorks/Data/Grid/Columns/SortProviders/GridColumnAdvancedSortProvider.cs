@@ -37,7 +37,7 @@ namespace ShipWorks.Data.Grid.Columns.SortProviders
         }
 
         /// <summary>
-        /// Get the collectino of relations necessary to relate to the sort field
+        /// Get the collection of relations necessary to relate to the sort field
         /// </summary>
         public override RelationCollection GetDatabaseSortRelations()
         {

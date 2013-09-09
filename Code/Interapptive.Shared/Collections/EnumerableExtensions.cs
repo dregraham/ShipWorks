@@ -3,26 +3,51 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-
 namespace Interapptive.Shared.Collections
 {
+    /// <summary>
+    /// Extension methods for the Enumerable type
+    /// </summary>
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// Repeats the items in the collection
+        /// </summary>
+        /// <typeparam name="T">Type of object in the collection</typeparam>
+        /// <param name="source">Collection to repeat</param>
+        /// <param name="count">Number of times the collection will be repeated</param>
+        /// <returns></returns>
         public static IEnumerable<T> Repeat<T>(this IEnumerable<T> source, int count)
         {
             if (null == source)
+            {
                 throw new ArgumentNullException("source");
+            }
+                
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException("count");
-
+            }
+            
             return RepeatIterator(source, count);
         }
 
-        static IEnumerable<T> RepeatIterator<T>(this IEnumerable<T> source, int count)
+        /// <summary>
+        /// Repeats the items in the collection
+        /// </summary>
+        /// <typeparam name="T">Type of object in the collection</typeparam>
+        /// <param name="source">Collection to repeat</param>
+        /// <param name="count">Number of times the collection will be repeated</param>
+        /// <returns></returns>
+        private static IEnumerable<T> RepeatIterator<T>(this IEnumerable<T> source, int count)
         {
             while (0 < count--)
+            {
                 foreach (var item in source)
-                    yield return item;
+                {
+                    yield return item;        
+                }
+            }
         }
 
         /// <summary>

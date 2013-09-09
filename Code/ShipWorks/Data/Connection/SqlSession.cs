@@ -36,8 +36,8 @@ namespace ShipWorks.Data.Connection
         readonly SqlSessionConfiguration configuration;
 
         // Cached properties of the server
-        DateTime serverLocalDate;
-        DateTime serverLocalDateUtc;
+        DateTime serverDateLocal;
+        DateTime serverDateUtc;
         Stopwatch timeSinceTimeTaken;
 
         /// <summary>
@@ -422,7 +422,7 @@ namespace ShipWorks.Data.Connection
         public DateTime GetLocalDate()
         {
             RefreshSqlDateTime();
-            return serverLocalDate + timeSinceTimeTaken.Elapsed;
+            return serverDateLocal + timeSinceTimeTaken.Elapsed;
         }
 
         /// <summary>
@@ -432,10 +432,10 @@ namespace ShipWorks.Data.Connection
         /// If the time has been retrieved from the server withing the past 30 minutes, then the current time
         /// is estimated by adding the last retrieved time plus the elapsed time.
         /// </summary>
-        public DateTime GetLocalUtcDate()
+        public DateTime GetUtcDate()
         {
             RefreshSqlDateTime();
-            return serverLocalDateUtc + timeSinceTimeTaken.Elapsed;
+            return serverDateUtc + timeSinceTimeTaken.Elapsed;
         }
 
         /// <summary>
@@ -452,16 +452,16 @@ namespace ShipWorks.Data.Connection
             {
                 using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
-                    cmd.CommandText = "SELECT GETDATE() as 'LocalDate', GETUTCDATE() as 'LocalDateUtc'";
+                    cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
 
                     using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
                     {
                         reader.Read();
 
-                        serverLocalDate = (DateTime)reader["LocalDate"];
-                        serverLocalDateUtc = (DateTime)reader["localDateUtc"];
+                        serverDateLocal = (DateTime)reader["ServerDateLocal"];
+                        serverDateUtc = (DateTime)reader["ServerDateUtc"];
 
-                        log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverLocalDate, serverLocalDateUtc);
+                        log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverDateLocal, serverDateUtc);
 
                         timeSinceTimeTaken = Stopwatch.StartNew();
                     }

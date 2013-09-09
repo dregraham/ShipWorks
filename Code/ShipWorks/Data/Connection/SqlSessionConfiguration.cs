@@ -16,7 +16,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// Configuration settings storage for SqlSession instances
     /// </summary>
-    public class SqlSessionConfiguration : ISqlSessionConfiguration
+    public class SqlSessionConfiguration
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSessionConfiguration));
 

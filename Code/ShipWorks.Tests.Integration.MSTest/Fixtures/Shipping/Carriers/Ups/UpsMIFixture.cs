@@ -21,8 +21,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.Ups
 
         protected override void AccountManagerInitializeForCurrentUser()
         {
-            UpsAccountManager.InitializeForCurrentUser();
-            ShippingOriginManager.InitializeForCurrentUser();
+            UpsAccountManager.InitializeForCurrentSession();
+            ShippingOriginManager.InitializeForCurrentSession();
         }
 
         public override bool Ship()

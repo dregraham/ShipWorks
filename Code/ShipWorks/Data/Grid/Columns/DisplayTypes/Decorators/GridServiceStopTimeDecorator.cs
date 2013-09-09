@@ -17,7 +17,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             var service = (ServiceStatusEntity)formattedValue.Entity;
 
             if (service.LastStopDateTime < service.LastStartDateTime)
+            {
                 formattedValue.ForeColor = Color.DarkGray;
+            }
         }
     }
 }

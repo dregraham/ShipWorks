@@ -9,7 +9,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users;
 
-
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
     /// <summary>
@@ -26,16 +25,16 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             {
                 new GridColumnDefinition("{F1979994-BB60-45D6-B2C1-18966AB15B65}", true,
                     new GridEnumDisplayType<ServiceStatus>(EnumSortMethod.Value),
-                    "Status", "(icon)",
+                    "Status", "Running",
                     new GridColumnFunctionValueProvider(x => ((ServiceStatusEntity)x).GetStatus()),
-                    null) 
+                    new GridColumnSortProvider(GetStatusDescription)) 
                     { DefaultWidth = 125 },
 
                 new GridColumnDefinition("{7BE7DBCE-3500-4B01-8594-471035C001AD}", true,
                     new GridComputerDisplayType(),
                     "Computer", @"\\ShippingPC",
                     new GridColumnFieldValueProvider(ServiceStatusFields.ComputerID),
-                    new GridColumnAdvancedSortProvider(ComputerFields.Name, ComputerFields.ComputerID, ServiceStatusFields.ComputerID, JoinHint.Right))
+                    new GridColumnSortProvider(x => ComputerManager.GetComputer(((ServiceStatusEntity)x).ComputerID).Name))
                     { DefaultWidth = 140 },
                     
                 new GridColumnDefinition("{D5FCAF56-6931-4AA3-AD2D-3CCFB1D66098}", true, 
@@ -52,7 +51,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridActionDisplayType(DisplayStartServiceLabel, GridLinkAction.Start), 
                     "Start", "Start",
                     new GridColumnFunctionValueProvider(x => x),
-                    null)
+                    new GridColumnSortProvider(DisplayStartServiceLabel))
                     { DefaultWidth = 35 }
             };
 
@@ -73,6 +72,16 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                    service.GetStatus() != ServiceStatus.Running
                        ? "Start"
                        : "";
+        }
+
+        /// <summary>
+        /// Gets the status description for the current service status
+        /// </summary>
+        /// <param name="arg">Service status entity from which to retrieve the status description</param>
+        /// <returns></returns>
+        private static string GetStatusDescription(EntityBase2 arg)
+        {
+            return EnumHelper.GetDescription(((ServiceStatusEntity) arg).GetStatus());
         }
     }
 }

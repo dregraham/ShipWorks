@@ -12,6 +12,10 @@ using ShipWorks.Users;
 using ShipWorks.Shipping;
 using log4net;
 using System.Globalization;
+using Interapptive.Shared.UI;
+using ShipWorks.Stores;
+using System.Diagnostics;
+using ShipWorks.Data.Adapter.Custom;
 
 namespace ShipWorks.Actions
 {
@@ -47,6 +51,9 @@ namespace ShipWorks.Actions
 
                 DispatchAction(action, order.OrderID, adapter);
             }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
         }
 
         /// <summary>
@@ -76,6 +83,9 @@ namespace ShipWorks.Actions
                     DispatchAction(action, null, adapter);
                 }
             }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
         }
 
         /// <summary>
@@ -115,6 +125,9 @@ namespace ShipWorks.Actions
 
                 DispatchAction(action, shipment.ShipmentID, adapter);
             }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
         }
 
         /// <summary>
@@ -143,6 +156,9 @@ namespace ShipWorks.Actions
 
                 DispatchAction(action, shipment.ShipmentID, adapter);
             }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
         }
 
         /// <summary>
@@ -153,53 +169,109 @@ namespace ShipWorks.Actions
         {
             ActionManager.CheckForChangesNeeded();
             ActionEntity actionEntity = ActionManager.GetAction(actionID);
-            if (!actionEntity.Enabled)
+            
+            if (actionEntity == null || !actionEntity.Enabled)
+            {
+                // Possible race condition where the action could have been deleted
+                // between dispatching the action and getting the entity from the ActionManager
                 return;
-
-            ActionTriggerType actionTriggerType = (ActionTriggerType)actionEntity.TriggerType;
-
-            // Get the specific action trigger type and check any specific settings
-            switch (actionTriggerType)
-            {
-                case ActionTriggerType.OrderDownloaded:
-                case ActionTriggerType.DownloadFinished:
-                case ActionTriggerType.ShipmentProcessed:
-                case ActionTriggerType.ShipmentVoided:
-                case ActionTriggerType.FilterContentChanged:
-                    log.WarnFormat("Scheduled Actions do not support trigger type: {0}", EnumHelper.GetDescription(actionTriggerType));
-                    return;
-                case ActionTriggerType.Scheduled:
-                    // TODO: Add any cron trigger checks...
-                    // CronTrigger cronTrigger = new CronTrigger(actionEntity.TriggerSettings);
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
-            // Scheduled actions should not be running in any sql adapter context, so create one now
-            using (SqlAdapter adapter = new SqlAdapter(false))
+            // Only dispatch scheduled actions
+            if ((ActionTriggerType)actionEntity.TriggerType == ActionTriggerType.Scheduled)
             {
-                DispatchAction(actionEntity, null, adapter);
+                // Scheduled actions should not be running in any sql adapter context, so create one now
+                using (SqlAdapter adapter = new SqlAdapter(false))
+                {
+                    DispatchAction(actionEntity, null, adapter);
+                }
             }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
+        }
+
+        /// <summary>
+        /// Creates an ActionQueue entry for the given UserInitiated action
+        /// </summary>
+        public static void DispatchUserInitiated(long actionID, IEnumerable<long> orderedSelection)
+        {
+            ActionEntity action = ActionManager.GetAction(actionID);
+
+            if (action == null || !action.Enabled)
+            {
+                return;
+            }
+
+            UserInitiatedTrigger trigger = (UserInitiatedTrigger) ActionManager.LoadTrigger(action);
+
+            // We are potentially going to be saving selection along with dispatching the action, so do it in a transaction
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                // First we need the QueueID that all the children will be saved under
+                long actionQueueID = DispatchAction(action, null, adapter);
+
+                // If there is a selection requirement, save the selection
+                if (trigger.SelectionRequirement != UserInitiatedSelectionRequirement.None)
+                {
+                    // Save in chunks for efficiency
+                    ActionQueueSelectionCollection chunk = new ActionQueueSelectionCollection();
+
+                    foreach (long id in orderedSelection)
+                    {
+                        if (action.StoreLimited)
+                        {
+                            StoreEntity store = StoreManager.GetRelatedStore(id);
+                            if (store == null || !action.StoreLimitedList.Contains(store.StoreID))
+                            {
+                                continue;
+                            }
+                        }
+
+                        ActionQueueSelectionEntity selected = new ActionQueueSelectionEntity();
+                        selected.ActionQueueID = actionQueueID;
+                        selected.ObjectID = id;
+                        chunk.Add(selected);
+
+                        // Save up to 500 at a time
+                        if (chunk.Count >= 500)
+                        {
+                            adapter.SaveEntityCollection(chunk);
+
+                            chunk = new ActionQueueSelectionCollection();
+                        }
+                    }
+
+                    // May be an unsaved chunk left
+                    if (chunk.Count > 0)
+                    {
+                        adapter.SaveEntityCollection(chunk);
+                    }
+                }
+
+                adapter.Commit();
+            }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
         }
 
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static void DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter)
+        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter)
         {
             log.DebugFormat("Dispatching action '{0}' for {1}", action.Name, objectID);
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
-            entity.ActionQueueType = (int)ActionManager.ActionQueueType;
+            entity.ActionQueueType = action.TriggerType == (int)ActionTriggerType.Scheduled ? (int)ActionQueueType.Scheduled : (int)ActionQueueType.UserInterface;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
             
-            if (action.ComputerLimitedType == (int) ComputerLimitationType.TriggeringComputer)
+            if (action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer)
             {
                 // It's limited to only running on this computer, so use this computer ID as
                 // the only computer that can execute the action
@@ -215,10 +287,9 @@ namespace ShipWorks.Actions
             entity.Status = (int) ActionQueueStatus.Dispatched;
             entity.NextStep = 0;
 
-            adapter.SaveEntity(entity);
+            adapter.SaveAndRefetch(entity);
 
-            // Ensure the action processor is working
-            ActionProcessor.StartProcessing();
+            return entity.ActionQueueID;
         }
 
         /// <summary>

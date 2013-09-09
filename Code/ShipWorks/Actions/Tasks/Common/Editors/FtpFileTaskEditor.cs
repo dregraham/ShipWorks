@@ -155,7 +155,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <param name="errors">Collection of errors to which new errors will be added</param>
         public override void ValidateTask(ICollection<TaskValidationError> errors)
         {
-            TaskValidationError error = new TaskValidationError("The Upload with FTP task is missing some information.");
+            TaskValidationError error = new TaskValidationError("The 'Upload with FTP' task is missing some information.");
 
             if (templateCombo.SelectedTemplate == null)
             {

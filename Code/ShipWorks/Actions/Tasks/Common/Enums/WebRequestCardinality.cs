@@ -9,13 +9,13 @@ namespace ShipWorks.Actions.Tasks.Common.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum WebRequestCardinality
     {
-        [Description("single request")]
+        [Description("One Time")]
         SingleRequest = 0,
 
-        [Description("request for each {0} in the filter")]
+        [Description("Once for each {0} in the filter")]
         OneRequestPerFilterResult = 1,
 
-        [Description("request for each template result as the request body")]
+        [Description("Using the results of processing a template")]
         OneRequestPerTemplateResult = 2
     }
 }

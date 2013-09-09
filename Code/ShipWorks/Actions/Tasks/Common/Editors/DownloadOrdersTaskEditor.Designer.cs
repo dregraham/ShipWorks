@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DownloadOrdersTaskEditor));
             this.taskDescription = new System.Windows.Forms.Label();
             this.storeCheckBoxPanel = new ShipWorks.Actions.UI.StoreCheckBoxPanel();
             this.SuspendLayout();
@@ -44,9 +43,8 @@
             // 
             // storeCheckBoxPanel
             // 
-            this.storeCheckBoxPanel.Location = new System.Drawing.Point(14, 17);
+            this.storeCheckBoxPanel.Location = new System.Drawing.Point(14, 21);
             this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
-            this.storeCheckBoxPanel.SelectedStores = ((System.Collections.Generic.IEnumerable<ShipWorks.Data.Model.EntityClasses.StoreEntity>)(resources.GetObject("storeCheckBoxPanel.SelectedStores")));
             this.storeCheckBoxPanel.Size = new System.Drawing.Size(335, 57);
             this.storeCheckBoxPanel.TabIndex = 1;
             // 

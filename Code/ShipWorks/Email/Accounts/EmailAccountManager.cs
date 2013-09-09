@@ -23,9 +23,9 @@ namespace ShipWorks.Email.Accounts
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize EmailAccountManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             accountSynchronizer = new TableSynchronizer<EmailAccountEntity>();
             InternalCheckForChanges();

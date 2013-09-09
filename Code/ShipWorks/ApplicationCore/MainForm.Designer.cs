@@ -120,7 +120,7 @@ namespace ShipWorks
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemOpenShipWorks = new System.Windows.Forms.ToolStripMenuItem();
-            this.heartbeat = new System.Windows.Forms.Timer(this.components);
+            this.heartbeatTimer = new System.Windows.Forms.Timer(this.components);
             this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -280,6 +280,9 @@ namespace ShipWorks
             this.ribbonSecurityProvider = new ShipWorks.Users.Security.RibbonSecurityProvider(this.components);
             this.editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);
             this.menuItem1 = new Divelements.SandRibbon.MenuItem();
+            this.contextOrderCustomActions = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCustomerCustomActions = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCustomerCustomActionsSep = new System.Windows.Forms.ToolStripSeparator();
             statusBarStrip = new Divelements.SandRibbon.StatusBarStrip();
             stripLayout6 = new Divelements.SandRibbon.StripLayout();
             stripLayoutDatabase = new Divelements.SandRibbon.StripLayout();
@@ -1171,10 +1174,10 @@ namespace ShipWorks
             this.toolStripMenuItemOpenShipWorks.Text = "Open ShipWorks";
             this.toolStripMenuItemOpenShipWorks.Click += new System.EventHandler(this.OnTaskTrayMenuOpenShipWorks);
             // 
-            // heartbeat
+            // heartbeatTimer
             // 
-            this.heartbeat.Interval = 15000;
-            this.heartbeat.Tick += new System.EventHandler(this.OnHeartbeatTimer);
+            this.heartbeatTimer.Interval = 15000;
+            this.heartbeatTimer.Tick += new System.EventHandler(this.OnHeartbeatTimer);
             // 
             // label14
             // 
@@ -1247,6 +1250,7 @@ namespace ShipWorks
             this.contextOrderSep1,
             this.contextOrderLocalStatus,
             this.contextOrderOnlineUpdate,
+            this.contextOrderCustomActions,
             this.contextOrderSep6,
             this.contextOrderEditCustomer,
             this.contextOrderLookupCustomer,
@@ -1266,7 +1270,7 @@ namespace ShipWorks
             this.contextOrderSave,
             this.contextOrderSaveOpen});
             this.contextMenuOrderGrid.Name = "contextMenuOrderGrid";
-            this.contextMenuOrderGrid.Size = new System.Drawing.Size(170, 376);
+            this.contextMenuOrderGrid.Size = new System.Drawing.Size(170, 398);
             // 
             // contextOrderEditOrder
             // 
@@ -1329,7 +1333,7 @@ namespace ShipWorks
             this.toolStripMenuItem2,
             this.markAsNotShippedToolStripMenuItem});
             this.orderContextUpdateOnlineEbay.Name = "orderContextUpdateOnlineEbay";
-            this.orderContextUpdateOnlineEbay.Size = new System.Drawing.Size(145, 22);
+            this.orderContextUpdateOnlineEbay.Size = new System.Drawing.Size(152, 22);
             this.orderContextUpdateOnlineEbay.Text = "eBay";
             // 
             // updateShipmentToolStripMenuItem
@@ -1379,7 +1383,7 @@ namespace ShipWorks
             this.commonYToolStripMenuItem,
             this.storeAToolStripMenuItem});
             this.orderContextUpdateOnlineOsCommerce.Name = "orderContextUpdateOnlineOsCommerce";
-            this.orderContextUpdateOnlineOsCommerce.Size = new System.Drawing.Size(145, 22);
+            this.orderContextUpdateOnlineOsCommerce.Size = new System.Drawing.Size(152, 22);
             this.orderContextUpdateOnlineOsCommerce.Text = "osCommerce";
             // 
             // orderContextUpdateOnlineOsCommercePlaceholder
@@ -1502,7 +1506,6 @@ namespace ShipWorks
             this.contextMenuTemplatesPlaceholder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextMenuTemplatesPlaceholderItem});
             this.contextMenuTemplatesPlaceholder.Name = "contextMenuTemplatesPlaceholder";
-            this.contextMenuTemplatesPlaceholder.OwnerItem = this.contextCustomerSave;
             this.contextMenuTemplatesPlaceholder.Size = new System.Drawing.Size(137, 26);
             // 
             // contextMenuTemplatesPlaceholderItem
@@ -1519,7 +1522,7 @@ namespace ShipWorks
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerComposeEmail, new System.Guid("403d8e5c-5669-4fa0-bc7f-041bc60bdb28"));
             this.contextCustomerComposeEmail.Name = "contextCustomerComposeEmail";
             this.gridMenuLayoutProvider.SetPermission(this.contextCustomerComposeEmail, ShipWorks.Users.Security.PermissionType.CustomersSendEmail);
-            this.contextCustomerComposeEmail.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerComposeEmail.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerComposeEmail.Text = "Compose Email";
             this.contextCustomerComposeEmail.Visible = false;
             this.contextCustomerComposeEmail.DropDownOpening += new System.EventHandler(this.OnComposeEmailMenuOpening);
@@ -1615,7 +1618,7 @@ namespace ShipWorks
             this.contextCustomerPrint.Image = global::ShipWorks.Properties.Resources.printer1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerPrint, new System.Guid("38cce3e9-137e-4dba-8f11-f88b0637b4f9"));
             this.contextCustomerPrint.Name = "contextCustomerPrint";
-            this.contextCustomerPrint.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerPrint.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerPrint.Text = "Print";
             this.contextCustomerPrint.Visible = false;
             this.contextCustomerPrint.DropDownOpening += new System.EventHandler(this.OnPrintMenuOpening);
@@ -1627,7 +1630,7 @@ namespace ShipWorks
             this.contextCustomerSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSaveOpen, new System.Guid("a51ed164-e911-4e9c-9b6c-ead7435456de"));
             this.contextCustomerSaveOpen.Name = "contextCustomerSaveOpen";
-            this.contextCustomerSaveOpen.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerSaveOpen.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerSaveOpen.Text = "Save and Open";
             this.contextCustomerSaveOpen.Visible = false;
             this.contextCustomerSaveOpen.DropDownOpening += new System.EventHandler(this.OnSaveAndOpenMenuOpening);
@@ -1639,7 +1642,7 @@ namespace ShipWorks
             this.contextCustomerPreview.Image = global::ShipWorks.Properties.Resources.printer_view16;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerPreview, new System.Guid("bc35d3c7-5a87-4cc1-8a2b-1d6cba92f22a"));
             this.contextCustomerPreview.Name = "contextCustomerPreview";
-            this.contextCustomerPreview.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerPreview.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerPreview.Text = "Preview";
             this.contextCustomerPreview.Visible = false;
             this.contextCustomerPreview.DropDownOpening += new System.EventHandler(this.OnPreviewMenuOpening);
@@ -1652,7 +1655,7 @@ namespace ShipWorks
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerEmailNow, new System.Guid("8a832f81-a470-44cb-a984-7e7e4f93c2f1"));
             this.contextCustomerEmailNow.Name = "contextCustomerEmailNow";
             this.gridMenuLayoutProvider.SetPermission(this.contextCustomerEmailNow, ShipWorks.Users.Security.PermissionType.CustomersSendEmail);
-            this.contextCustomerEmailNow.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerEmailNow.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerEmailNow.Text = "Email Now";
             this.contextCustomerEmailNow.Visible = false;
             this.contextCustomerEmailNow.DropDownOpening += new System.EventHandler(this.OnEmailNowMenuOpening);
@@ -1664,7 +1667,7 @@ namespace ShipWorks
             this.contextCustomerSave.Image = global::ShipWorks.Properties.Resources.disk_blue1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSave, new System.Guid("2ea96f33-c914-40ff-9828-deb1556e1b4e"));
             this.contextCustomerSave.Name = "contextCustomerSave";
-            this.contextCustomerSave.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerSave.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerSave.Text = "Save";
             this.contextCustomerSave.Visible = false;
             this.contextCustomerSave.DropDownOpening += new System.EventHandler(this.OnSaveMenuOpening);
@@ -1674,6 +1677,8 @@ namespace ShipWorks
             this.contextMenuCustomerGrid.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextMenuCustomerGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextCustomerEditCustomer,
+            this.contextCustomerCustomActionsSep,
+            this.contextCustomerCustomActions,
             this.contextCustomerSep1,
             this.contextCustomerNewOrder,
             this.contextCustomerLookupOrders,
@@ -1689,7 +1694,7 @@ namespace ShipWorks
             this.contextCustomerSave,
             this.contextCustomerSaveOpen});
             this.contextMenuCustomerGrid.Name = "contextMenuCustomerGrid";
-            this.contextMenuCustomerGrid.Size = new System.Drawing.Size(158, 254);
+            this.contextMenuCustomerGrid.Size = new System.Drawing.Size(160, 304);
             // 
             // contextCustomerEditCustomer
             // 
@@ -1698,15 +1703,15 @@ namespace ShipWorks
             this.contextCustomerEditCustomer.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerEditCustomer, new System.Guid("0a6cb638-1ff9-489d-b325-2ef305c5e460"));
             this.contextCustomerEditCustomer.Name = "contextCustomerEditCustomer";
-            this.contextCustomerEditCustomer.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerEditCustomer.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerEditCustomer.Text = "Edit Customer";
             this.contextCustomerEditCustomer.Click += new System.EventHandler(this.OnEditCustomer);
             // 
             // contextCustomerSep1
             // 
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSep1, new System.Guid("c145fc99-b215-47a8-b496-25d0d7a2dc27"));
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSep1, new System.Guid("c145fc99-b215-47a8-b496-25d0d7a2dc28"));
             this.contextCustomerSep1.Name = "contextCustomerSep1";
-            this.contextCustomerSep1.Size = new System.Drawing.Size(154, 6);
+            this.contextCustomerSep1.Size = new System.Drawing.Size(156, 6);
             // 
             // contextCustomerNewOrder
             // 
@@ -1716,7 +1721,7 @@ namespace ShipWorks
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerNewOrder, new System.Guid("a06e626d-7849-46e5-9526-a644e67f525e"));
             this.contextCustomerNewOrder.Name = "contextCustomerNewOrder";
             this.gridMenuLayoutProvider.SetPermission(this.contextCustomerNewOrder, ShipWorks.Users.Security.PermissionType.CustomersAddOrder);
-            this.contextCustomerNewOrder.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerNewOrder.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerNewOrder.Text = "New Order";
             this.contextCustomerNewOrder.Click += new System.EventHandler(this.OnNewOrder);
             // 
@@ -1726,7 +1731,7 @@ namespace ShipWorks
             this.contextCustomerLookupOrders.Image = ((System.Drawing.Image)(resources.GetObject("contextCustomerLookupOrders.Image")));
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerLookupOrders, new System.Guid("5dc6ab77-dc4e-41c6-b535-082207de7e20"));
             this.contextCustomerLookupOrders.Name = "contextCustomerLookupOrders";
-            this.contextCustomerLookupOrders.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerLookupOrders.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerLookupOrders.Text = "Lookup Orders";
             this.contextCustomerLookupOrders.Click += new System.EventHandler(this.OnLookupOrders);
             // 
@@ -1734,7 +1739,7 @@ namespace ShipWorks
             // 
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSep2, new System.Guid("be42fcd9-10da-45ac-abdd-9b9d39673f30"));
             this.contextCustomerSep2.Name = "contextCustomerSep2";
-            this.contextCustomerSep2.Size = new System.Drawing.Size(154, 6);
+            this.contextCustomerSep2.Size = new System.Drawing.Size(156, 6);
             // 
             // contextCustomerCopy
             // 
@@ -1742,21 +1747,21 @@ namespace ShipWorks
             this.contextCustomerCopy.Image = global::ShipWorks.Properties.Resources.copy;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerCopy, new System.Guid("b29c29bf-0ea0-428e-b2cd-4bca4006366e"));
             this.contextCustomerCopy.Name = "contextCustomerCopy";
-            this.contextCustomerCopy.Size = new System.Drawing.Size(157, 22);
+            this.contextCustomerCopy.Size = new System.Drawing.Size(159, 22);
             this.contextCustomerCopy.Text = "Copy";
             // 
             // contextCustomerSep5
             // 
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSep5, new System.Guid("5864689c-6b8e-4a20-9b6b-97fa88de8dfd"));
             this.contextCustomerSep5.Name = "contextCustomerSep5";
-            this.contextCustomerSep5.Size = new System.Drawing.Size(154, 6);
+            this.contextCustomerSep5.Size = new System.Drawing.Size(156, 6);
             this.contextCustomerSep5.Visible = false;
             // 
             // contextCustomerSep3
             // 
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSep3, new System.Guid("38668a60-0ccd-4e3e-9a1d-4ced8733b07d"));
             this.contextCustomerSep3.Name = "contextCustomerSep3";
-            this.contextCustomerSep3.Size = new System.Drawing.Size(154, 6);
+            this.contextCustomerSep3.Size = new System.Drawing.Size(156, 6);
             this.contextCustomerSep3.Visible = false;
             // 
             // contextCustomerSep4
@@ -1764,7 +1769,7 @@ namespace ShipWorks
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSep4, new System.Guid("53c6005e-3b7c-458e-951d-a5bb37f63c09"));
             this.contextCustomerSep4.Name = "contextCustomerSep4";
             this.gridMenuLayoutProvider.SetPermission(this.contextCustomerSep4, ShipWorks.Users.Security.PermissionType.CustomersSendEmail);
-            this.contextCustomerSep4.Size = new System.Drawing.Size(154, 6);
+            this.contextCustomerSep4.Size = new System.Drawing.Size(156, 6);
             this.contextCustomerSep4.Visible = false;
             // 
             // gridMenuLayoutProvider
@@ -1979,6 +1984,7 @@ namespace ShipWorks
             // 
             // mainMenuItemSupport
             // 
+            this.mainMenuItemSupport.GroupName = "Support";
             this.mainMenuItemSupport.Guid = new System.Guid("9fa006eb-ba63-44d1-9bc2-fd9fae722b18");
             this.mainMenuItemSupport.Image = global::ShipWorks.Properties.Resources.help2;
             this.mainMenuItemSupport.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
@@ -1996,7 +2002,6 @@ namespace ShipWorks
             // 
             // mainMenuItemDatabase
             // 
-            this.mainMenuItemDatabase.GroupName = "Database";
             this.mainMenuItemDatabase.Guid = new System.Guid("7369df7b-d202-4f8f-b3f9-85107d641908");
             this.mainMenuItemDatabase.Image = global::ShipWorks.Properties.Resources.data;
             this.mainMenuItemDatabase.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
@@ -2623,6 +2628,28 @@ namespace ShipWorks
             this.menuItem1.Padding = new Divelements.SandRibbon.WidgetEdges(40, 3, 20, 3);
             this.menuItem1.Text = "Support Forum";
             // 
+            // contextCustomActions
+            // 
+            this.contextOrderCustomActions.Image = global::ShipWorks.Properties.Resources.gear_run16;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCustomActions, new System.Guid("3263d695-fa30-4738-81b5-1dc3bb18d82c"));
+            this.contextOrderCustomActions.Name = "contextCustomActions";
+            this.contextOrderCustomActions.Size = new System.Drawing.Size(169, 22);
+            this.contextOrderCustomActions.Text = "Custom Actions";
+            // 
+            // contextCustomerCustomActions
+            // 
+            this.contextCustomerCustomActions.Image = global::ShipWorks.Properties.Resources.gear_run16;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerCustomActions, new System.Guid("3263d695-fa30-4738-81b5-1dc3bb18d82d"));
+            this.contextCustomerCustomActions.Name = "contextCustomerCustomActions";
+            this.contextCustomerCustomActions.Size = new System.Drawing.Size(159, 22);
+            this.contextCustomerCustomActions.Text = "Custom Actions";
+            // 
+            // contextCustomerCustomActionsSep
+            // 
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerCustomActionsSep, new System.Guid("c145fc99-b215-47a8-b496-25d0d7a2dc27"));
+            this.contextCustomerCustomActionsSep.Name = "contextCustomerCustomActionsSep";
+            this.contextCustomerCustomActionsSep.Size = new System.Drawing.Size(156, 6);
+            // 
             // MainForm
             // 
             this.ApplicationText = "";
@@ -2708,7 +2735,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonManageUsers;
         private ShipWorks.Filters.Controls.FilterTree filterTree;
         private Divelements.SandRibbon.Button buttonFirewall;
-        private System.Windows.Forms.Timer heartbeat;
+        private System.Windows.Forms.Timer heartbeatTimer;
         private System.Windows.Forms.ContextMenuStrip contextMenuFilterTree;
         private System.Windows.Forms.ToolStripMenuItem menuItemEditFilter;
         private System.Windows.Forms.ToolStripSeparator menuItemEditFilterSep;
@@ -2913,6 +2940,9 @@ namespace ShipWorks
         private Divelements.SandRibbon.MenuItem menuItemBuySupplies;
         private Divelements.SandRibbon.Separator separator2;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemDatabase;
+        private System.Windows.Forms.ToolStripMenuItem contextOrderCustomActions;
+        private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
+        private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
     }
 }
 

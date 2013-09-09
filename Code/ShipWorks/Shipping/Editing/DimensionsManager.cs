@@ -19,9 +19,9 @@ namespace ShipWorks.Shipping.Editing
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize DimensionsManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<DimensionsProfileEntity>();
             InternalCheckForChanges();

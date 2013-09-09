@@ -93,6 +93,10 @@ namespace Interapptive.Shared.Utility
             {
                 result = TimeSpan.Parse(value);
             }
+            else if (type == typeof(Guid))
+            {
+                result = Guid.Parse(value);
+            }
             else
             {
                 result = Convert.ChangeType(value, type);

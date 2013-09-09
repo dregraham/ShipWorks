@@ -33,9 +33,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Update the editor basd on the given current trigger
         /// </summary>
-        public override void NotifyTaskInputChanged(ActionTrigger trigger, EntityType? inputType)
+        public override void NotifyTaskInputChanged(ActionTrigger trigger, ActionTaskInputSource inputSource, EntityType? inputType)
         {
-            base.NotifyTaskInputChanged(trigger, inputType);
+            base.NotifyTaskInputChanged(trigger, inputSource, inputType);
 
             bool shipDateSupported = inputType != null && inputType.Value == EntityType.ShipmentEntity;
 

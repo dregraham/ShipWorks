@@ -19,9 +19,9 @@ namespace ShipWorks.FileTransfer
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize FtpAccountManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             accountSynchronizer = new TableSynchronizer<FtpAccountEntity>();
             InternalCheckForChanges();

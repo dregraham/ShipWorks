@@ -107,6 +107,9 @@ namespace ShipWorks.Data.Administration
 
                 SqlAssemblyDeployer.DeployAssemblies(con);
 
+                // Add any initial data via script
+                sqlLoader["InitialData"].Execute(con);
+
                 // Update the database to be marked with the correct db version
                 SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
             }
@@ -117,7 +120,6 @@ namespace ShipWorks.Data.Administration
             // Create all the data that is needed for a fresh install of shipworks.
             InitialDataLoader.CreateCoreRequiredData();
             InitialDataLoader.CreateDefaultFreshInstallData();
-            InitialDataLoader.AddSqlScriptInitialDataToDatabase();
         }
 
         /// <summary>

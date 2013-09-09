@@ -19,9 +19,9 @@ namespace ShipWorks.Shipping.Settings.Origin
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize ShippingOriginManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<ShippingOriginEntity>();
             InternalCheckForChanges();

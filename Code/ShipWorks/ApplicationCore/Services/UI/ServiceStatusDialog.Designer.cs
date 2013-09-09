@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Button closeButton;
             System.Windows.Forms.Label labelHeader;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServiceStatusDialog));
@@ -35,7 +36,8 @@
             this.startingServicePanel = new System.Windows.Forms.Panel();
             this.startingServiceImage = new System.Windows.Forms.PictureBox();
             this.startingServiceLabel = new System.Windows.Forms.Label();
-            this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
+            this.entityGrid = new ShipWorks.Data.Grid.EntityGrid();
+            this.dataRefreshTimer = new System.Windows.Forms.Timer(this.components);
             closeButton = new System.Windows.Forms.Button();
             labelHeader = new System.Windows.Forms.Label();
             this.startingServicePanel.SuspendLayout();
@@ -114,6 +116,11 @@
             this.entityGrid.StretchPrimaryGrid = false;
             this.entityGrid.TabIndex = 0;
             // 
+            // dataRefreshTimer
+            // 
+            this.dataRefreshTimer.Interval = 5000;
+            this.dataRefreshTimer.Tick += new System.EventHandler(this.OnDataRefreshTimerTick);
+            // 
             // ServiceStatusDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,6 +153,7 @@
         private System.Windows.Forms.Panel startingServicePanel;
         private System.Windows.Forms.Label startingServiceLabel;
         private System.Windows.Forms.PictureBox startingServiceImage;
-        private Data.Grid.Paging.PagedEntityGrid entityGrid;
+        private Data.Grid.EntityGrid entityGrid;
+        private System.Windows.Forms.Timer dataRefreshTimer;
     }
 }

@@ -100,56 +100,12 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private static Guid LoadComputerID()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks"))
-            {
-                if (key != null)
-                {
-                    string value = key.GetValue("ComputerID") as string;
-
-                    if (value != null)
-                    {
-                        Guid guid;
-                        if (GuidHelper.TryParse(value, out guid))
-                        {
-                            return guid;
-                        }
-                    }
-                }
-            }
-
-            // This is for integration tests on 64 bit machines.  Try to open the Registry64 view.  If it throws,
-            // Just let the code flow to the InstallationException below.
-            try
-            {
-                using (RegistryKey hive = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
-                {
-                    using (RegistryKey key = hive.OpenSubKey(@"Software\Interapptive\ShipWorks"))
-                    {
-                        if (key != null)
-                        {
-                            string value = key.GetValue("ComputerID") as string;
-
-                            if (value != null)
-                            {
-                                Guid guid;
-                                if (GuidHelper.TryParse(value, out guid))
-                                {
-                                    return guid;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            throw new InstallationException(
-                "ShipWorks could not load the ComputerID.\n\n" +
-                "To fix this problem:\n" +
-                    "   (1)  Reinstall the application.\n" +
-                    "   (2)  For further support, contact Interapptive.");
+            return GetRegistryLocalMachineValue(@"Software\Interapptive\ShipWorks",
+                        "ComputerID",
+                        "ShipWorks could not load the ComputerID.\n\n" +
+                        "To fix this problem:\n" +
+                            "   (1)  Reinstall the application.\n" +
+                            "   (2)  For further support, contact Interapptive.");
         }
 
         /// <summary>
@@ -157,11 +113,60 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private static Guid LoadInstanceID()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks\Instances"))
+            return GetRegistryLocalMachineValue(@"Software\Interapptive\ShipWorks\Instances", 
+                        Program.AppLocation, 
+                        "ShipWorks could not load the InstanceID.\n\n" +
+                        "To fix this problem:\n" +
+                            "   (1)  Reinstall the application.\n" +
+                            "   (2)  For further support, contact Interapptive.");
+        }
+
+        /// <summary>
+        /// Queries Registry.LocalMachine for a Guid to return.  
+        /// </summary>
+        /// <param name="subKeyPath">The path to the key starting from registryBaseKey.</param>
+        /// <param name="keyName">The name of the key to parse into a Guid.</param>
+        /// <param name="errorMessage">If the guild cannot be found, this is the error message to be returned.</param>
+        /// <returns>If the key is found and it's value is a valid guid, the guid is returned.  Otherwise an InstallationException is thrown with errorMessage.</returns>
+        private static Guid GetRegistryLocalMachineValue(string subKeyPath, string keyName, string errorMessage)
+        {
+            Guid guid = GetRegistryValue(Registry.LocalMachine, subKeyPath, keyName);
+
+            if (guid == Guid.Empty)
+            {
+                if (MyComputer.Is64BitWindows && !MyComputer.Is64BitProcess)
+                {
+                    // This is for integration tests on 64 bit machines.  Try to open the Registry64 view.  If it throws,
+                    // Just let the code flow to the InstallationException below.
+                    using (RegistryKey registryBaseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                    {
+                        guid = GetRegistryValue(registryBaseKey, subKeyPath, keyName);
+                    }
+                }
+
+                if (guid == Guid.Empty)
+                {
+                    throw new InstallationException(errorMessage);
+                }
+            }
+
+            return guid;
+        }
+
+        /// <summary>
+        /// Queries the registry for a Guid to return.  
+        /// </summary>
+        /// <param name="registryBaseKey">The base key from which to start.</param>
+        /// <param name="subKeyPath">The path to the key starting from registryBaseKey.</param>
+        /// <param name="keyName">The name of the key to parse into a Guid.</param>
+        /// <returns>If the key is found and it's value is a valid guid, the guid is returned.  Otherwise an empty guid is returned.</returns>
+        private static Guid GetRegistryValue(RegistryKey registryBaseKey, string subKeyPath, string keyName)
+        {
+            using (RegistryKey key = registryBaseKey.OpenSubKey(subKeyPath))
             {
                 if (key != null)
                 {
-                    string value = key.GetValue(Program.AppLocation) as string;
+                    string value = key.GetValue(keyName) as string;
 
                     if (value != null)
                     {
@@ -174,11 +179,7 @@ namespace ShipWorks.ApplicationCore
                 }
             }
 
-            throw new InstallationException(
-                "ShipWorks could not load the InstanceID.\n\n" +
-                "To fix this problem:\n" +
-                    "   (1)  Reinstall the application.\n" +
-                    "   (2)  For further support, contact Interapptive.");
+            return Guid.Empty;
         }
 
         /// <summary>

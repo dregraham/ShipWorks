@@ -159,10 +159,10 @@ namespace ShipWorks.Actions.Tasks
             {
                 ActionTaskChangingEventArgs args = new ActionTaskChangingEventArgs(previousTask, newTask);
                 ActionTaskChanging(this, args);
-                return args.Cancel;
+                return !args.Cancel;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private void UpdateControlLayout()
         {
-            panelInputSource.Visible = task.RequiresInput != ActionTaskInputRequirement.None;
+            panelInputSource.Visible = task.InputRequirement != ActionTaskInputRequirement.None;
             panelTaskSettings.Top = panelInputSource.Visible ? panelInputSource.Bottom : panelInputSource.Top;
 
             flowInfoControl.UpdateInfoDisplay(task, trigger, allBubbles);
@@ -198,7 +198,7 @@ namespace ShipWorks.Actions.Tasks
             }
 
             // Raise the task changing event
-            if (RaiseActionTaskChanging(oldTask, task))
+            if (!RaiseActionTaskChanging(oldTask, task))
             {
                 // Reset the selected task if any event handlers canceled the change
                 taskTypes.SelectedMenuObject = ActionTaskManager.GetBinding(oldTask);
@@ -248,7 +248,7 @@ namespace ShipWorks.Actions.Tasks
             UpdateInputSourceOptions(trigger);
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
-            taskEditor.NotifyTaskInputChanged(trigger, GetEffectiveInputEntityType());
+            taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
 
             // If the task has a filter condition, we have to make sure its still valid
             if (task.Entity.FilterCondition)
@@ -277,26 +277,28 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private EntityType? GetEffectiveInputEntityType()
         {
-            if (task.RequiresInput == ActionTaskInputRequirement.None ||
-                task.Entity.InputSource == (int)ActionTaskInputSource.Nothing)
+            if (task.Entity.InputSource == (int)ActionTaskInputSource.Nothing)
             {
                 return null;
             }
 
-            if (task.Entity.InputSource == (int) ActionTaskInputSource.TriggeringRecord)
+            if (task.Entity.InputSource == (int)ActionTaskInputSource.TriggeringRecord)
             {
                 return trigger.TriggeringEntityType;
             }
-            else
-            {
-                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(task.Entity.InputFilterNodeID);
-                if (filterNode == null)
-                {
-                    return null;
-                }
 
-                return FilterHelper.GetEntityType((FilterTarget) filterNode.Filter.FilterTarget);
+            if (task.Entity.InputSource == (int) ActionTaskInputSource.Selection)
+            {
+                return trigger.SelectionEntityType;
             }
+
+            FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(task.Entity.InputFilterNodeID);
+            if (filterNode == null)
+            {
+                return null;
+            }
+
+            return FilterHelper.GetEntityType((FilterTarget)filterNode.Filter.FilterTarget);
         }
 
         /// <summary>
@@ -347,14 +349,23 @@ namespace ShipWorks.Actions.Tasks
 
             if (trigger.TriggeringEntityType != null)
             {
-                AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType));
+                AddInputSourceMenuItem(ActionTaskInputSource.TriggeringRecord, GetInputTriggeringRecordOption(trigger.TriggeringEntityType.Value, task.InputEntityType, false));
             }
 
-            AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
-
-            if (task.RequiresInput == ActionTaskInputRequirement.Optional)
+            // If this trigger supports using the current selection as the input source...
+            if (trigger.SelectionEntityType != null)
             {
-                AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "Nothing");
+                AddInputSourceMenuItem(ActionTaskInputSource.Selection, GetInputTriggeringRecordOption(trigger.SelectionEntityType.Value, task.InputEntityType, true, "selected"));
+            }
+
+            if (task.InputRequirement != ActionTaskInputRequirement.None)
+            {
+                AddInputSourceMenuItem(ActionTaskInputSource.FilterContents, GetInputFilterOption(task.InputEntityType));
+            }
+
+            if (task.InputRequirement == ActionTaskInputRequirement.Optional || task.InputRequirement == ActionTaskInputRequirement.None)
+            {
+                AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "No Input");
             }
             
             labelInput.Text = task.InputLabel;
@@ -384,10 +395,10 @@ namespace ShipWorks.Actions.Tasks
             // See if its a valid data source
             bool isValid = inputSourceMenu.Items.Cast<ToolStripMenuItem>().Any(i => ((ActionTaskInputSource) i.Tag) == inputSource);
 
-            // If its not currently valid, default to Always
+            // If its not currently valid, default to the first one that is available
             if (!isValid)
             {
-                inputSource = ActionTaskInputSource.FilterContents;
+                inputSource = (ActionTaskInputSource) inputSourceMenu.Items[0].Tag;
             }
 
             // Update the task
@@ -402,7 +413,7 @@ namespace ShipWorks.Actions.Tasks
             UpdateInputSourceFilterComboSize();
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
-            taskEditor.NotifyTaskInputChanged(trigger, GetEffectiveInputEntityType());
+            taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
         }
 
         /// <summary>
@@ -437,7 +448,7 @@ namespace ShipWorks.Actions.Tasks
             task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode != null ? inputSourceFilter.SelectedFilterNode.FilterNodeID : 0;
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
-            taskEditor.NotifyTaskInputChanged(trigger, GetEffectiveInputEntityType());
+            taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
         }
 
         /// <summary>
@@ -464,15 +475,18 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Get the label to use for the Input Label when choosing the triggering record option.
         /// </summary>
-        private static string GetInputTriggeringRecordOption(EntityType triggering, EntityType? target)
+        private static string GetInputTriggeringRecordOption(EntityType triggering, EntityType? target, bool supportsPlural, string adjective = "")
         {
+            string label = "The " + adjective + (!string.IsNullOrWhiteSpace(adjective) ? " " : "") + GetTriggeringEntityDescription(triggering);
+
+            // The target entity is already what we want.  So just "The order" (or if plural) "The orders"
             if (target == null || target == triggering)
             {
-                return "The " + GetTriggeringEntityDescription(triggering);
+                return label + (supportsPlural ? "s" : "");
             }
 
-            // So this would say like "The shipment's "
-            string label = "The " + GetTriggeringEntityDescription(triggering) + "'s ";
+            // So this would say like "The shipment's" if plural isn't supported, or The shipments' if it is.
+            label += (supportsPlural ? "s' " : "'s ");
 
             RelationCollection relations = EntityUtility.FindRelationChain(triggering, target.Value);
             EntityType currentEntity = triggering;

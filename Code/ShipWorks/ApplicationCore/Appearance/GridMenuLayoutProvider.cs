@@ -45,8 +45,11 @@ namespace ShipWorks.ApplicationCore.Appearance
         Dictionary<ToolStripItem, Guid> itemGuids = new Dictionary<ToolStripItem, Guid>();
         Dictionary<ToolStripItem, PermissionType> permissions = new Dictionary<ToolStripItem, PermissionType>();
 
-        // The Guid of the Update Online context menu item
+        // Known guids
         static Guid updateOnlineGuid = new Guid("16ff9a2f-0a14-4efc-acac-f872844d18e7");
+        static Guid ordersCustomActionsGuid = new Guid("3263d695-fa30-4738-81b5-1dc3bb18d82c");
+        static Guid customersCustomActionsGuid = new Guid("3263d695-fa30-4738-81b5-1dc3bb18d82d");
+        static Guid customersCustomActionsSeparatorGuid = new Guid("c145fc99-b215-47a8-b496-25d0d7a2dc27");
 
         // The main grid control, so we know what is selected
         MainGridControl gridControl;
@@ -127,7 +130,25 @@ namespace ShipWorks.ApplicationCore.Appearance
                 orderMenu, 
                 originalOrderItems,
                 (OnlineUpdateCommandProvider.HasOnlineUpdateCommands() && CheckPermission(onlineUpdateItem, false)));
-       }
+
+            // Make sure what we did above doesn't overwrite what actions need it to be
+            UpdateUserInitiatedActionDependentUI();
+        }
+
+        /// <summary>
+        /// Update UI that depends on custom user actions
+        /// </summary>
+        public void UpdateUserInitiatedActionDependentUI()
+        {
+            ToolStripItem orderActionsItem = originalOrderItems.Single(i => GetLayoutGuid(i) == ordersCustomActionsGuid);
+            ToolStripItem customerActionsItem = originalCustomerItems.Single(i => GetLayoutGuid(i) == customersCustomActionsGuid);
+            ToolStripItem customerActionsSepItem = originalCustomerItems.Single(i => GetLayoutGuid(i) == customersCustomActionsSeparatorGuid);
+
+            // Apply existance to each of them
+            ApplyExistance(orderActionsItem, orderMenu, originalOrderItems, ((ToolStripMenuItem) orderActionsItem).HasDropDownItems);
+            ApplyExistance(customerActionsItem, customerMenu, originalCustomerItems, ((ToolStripMenuItem) customerActionsItem).HasDropDownItems);
+            ApplyExistance(customerActionsSepItem, customerMenu, originalCustomerItems, ((ToolStripMenuItem) customerActionsItem).HasDropDownItems);
+        }
 
         /// <summary>
         /// Update the store dependent UI for the given menu and its original untampered set of items

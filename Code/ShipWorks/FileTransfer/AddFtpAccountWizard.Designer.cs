@@ -43,19 +43,17 @@
             this.labelFolder = new System.Windows.Forms.Label();
             this.folderBrowser = new ShipWorks.FileTransfer.FtpFolderBrowserControl();
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageAccount.SuspendLayout();
             this.wizardPageSuccess.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.iconSetupComplete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).BeginInit();
             this.wizardPageFolder.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(317, 404);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -67,7 +65,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageSuccess);
+            this.mainPanel.Controls.Add(this.wizardPageAccount);
             this.mainPanel.Size = new System.Drawing.Size(485, 332);
             // 
             // etchBottom
@@ -95,7 +93,7 @@
             this.wizardPageAccount.Controls.Add(this.labelHost);
             this.wizardPageAccount.Description = "ShipWorks will help you configure your FTP account settings.";
             this.wizardPageAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccount.Name = "wizardPageAccount";
             this.wizardPageAccount.Size = new System.Drawing.Size(485, 332);
@@ -114,7 +112,7 @@
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(37, 71);
+            this.labelPassword.Location = new System.Drawing.Point(42, 71);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(57, 13);
             this.labelPassword.TabIndex = 5;
@@ -156,7 +154,7 @@
             // labelHost
             // 
             this.labelHost.AutoSize = true;
-            this.labelHost.Location = new System.Drawing.Point(40, 17);
+            this.labelHost.Location = new System.Drawing.Point(45, 17);
             this.labelHost.Name = "labelHost";
             this.labelHost.Size = new System.Drawing.Size(54, 13);
             this.labelHost.TabIndex = 0;
@@ -168,7 +166,7 @@
             this.wizardPageSuccess.Controls.Add(this.label6);
             this.wizardPageSuccess.Description = "Your FTP account has been added to ShipWorks.";
             this.wizardPageSuccess.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageSuccess.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageSuccess.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageSuccess.Location = new System.Drawing.Point(0, 0);
             this.wizardPageSuccess.Name = "wizardPageSuccess";
             this.wizardPageSuccess.Size = new System.Drawing.Size(485, 332);
@@ -201,7 +199,7 @@
             this.wizardPageFolder.Controls.Add(this.folderBrowser);
             this.wizardPageFolder.Description = "Select the initial folder to use for your FTP account.";
             this.wizardPageFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageFolder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageFolder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFolder.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFolder.Name = "wizardPageFolder";
             this.wizardPageFolder.Size = new System.Drawing.Size(485, 332);
@@ -221,10 +219,10 @@
             // 
             // folderBrowser
             // 
-            this.folderBrowser.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.folderBrowser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.folderBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.folderBrowser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.folderBrowser.Location = new System.Drawing.Point(23, 25);
             this.folderBrowser.Name = "folderBrowser";
             this.folderBrowser.Size = new System.Drawing.Size(434, 297);
@@ -235,23 +233,23 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(485, 439);
-            this.ControlBox = false;
             this.MinimumSize = new System.Drawing.Size(501, 477);
             this.Name = "AddFtpAccountWizard";
+            this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageAccount,
             this.wizardPageFolder,
             this.wizardPageSuccess});
             this.Text = "Add FTP Account";
             this.mainPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageAccount.ResumeLayout(false);
             this.wizardPageAccount.PerformLayout();
             this.wizardPageSuccess.ResumeLayout(false);
             this.wizardPageSuccess.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.iconSetupComplete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).EndInit();
             this.wizardPageFolder.ResumeLayout(false);
             this.wizardPageFolder.PerformLayout();
             this.ResumeLayout(false);

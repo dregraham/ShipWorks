@@ -70,6 +70,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ActionQueueEntity:
 					toReturn = this.ActionQueue;
 					break;
+				case ShipWorks.Data.Model.EntityType.ActionQueueSelectionEntity:
+					toReturn = this.ActionQueueSelection;
+					break;
 				case ShipWorks.Data.Model.EntityType.ActionQueueStepEntity:
 					toReturn = this.ActionQueueStep;
 					break;
@@ -558,6 +561,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ActionQueueEntity> ActionQueue
 		{
 			get { return new DataSource2<ActionQueueEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ActionQueueSelectionEntity instances in the database.</summary>
+		public DataSource2<ActionQueueSelectionEntity> ActionQueueSelection
+		{
+			get { return new DataSource2<ActionQueueSelectionEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ActionQueueStepEntity instances in the database.</summary>

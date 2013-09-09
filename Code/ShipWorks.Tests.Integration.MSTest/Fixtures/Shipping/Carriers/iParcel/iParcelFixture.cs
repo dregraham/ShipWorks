@@ -20,8 +20,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.iParcel
 
         protected override void AccountManagerInitializeForCurrentUser()
         {
-            iParcelAccountManager.InitializeForCurrentUser();
-            ShippingOriginManager.InitializeForCurrentUser();
+            iParcelAccountManager.InitializeForCurrentSession();
+            ShippingOriginManager.InitializeForCurrentSession();
         }
 
         protected override void InitializeShipmentFields(ShipmentEntity shipment)

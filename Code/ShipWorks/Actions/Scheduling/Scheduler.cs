@@ -41,15 +41,6 @@ namespace ShipWorks.Actions.Scheduling
         /// <param name="schedule">The schedule.</param>
         public void ScheduleAction(ActionEntity action, ActionSchedule schedule)
         {
-            if (!schedulingEngine.HasExistingSchedule(action))
-            {
-                // New jobs/actions cannot be scheduled to occur in the past
-                if (schedule.StartDateTimeInUtc <= DateTime.UtcNow && schedule.ScheduleType == ActionScheduleType.OneTime)
-                {
-                    throw new SchedulingException("The start date must be in the future when scheduling a one time action.");
-                }
-            }
-
             schedule.Validate();
 
             try

@@ -166,7 +166,7 @@ namespace ShipWorks.Email
         /// </summary>
         public static bool StartEmailingAccounts(IEnumerable<long> accounts)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
+            Debug.Assert(!Program.ExecutionMode.IsUserInteractive || !Program.MainForm.InvokeRequired);
 
             bool started = false;
 

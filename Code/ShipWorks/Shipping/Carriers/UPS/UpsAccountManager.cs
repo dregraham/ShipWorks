@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize when a user logs in
+        /// Initialize UpsAccountManager
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             synchronizer = new TableSynchronizer<UpsAccountEntity>();
             InternalCheckForChanges();

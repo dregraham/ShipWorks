@@ -480,7 +480,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
         
         /// <summary>
-        /// Sets the order as exported on Channel Advisor.
+        /// Sets the orders as exported on Channel Advisor.
         /// </summary>
         public void SetOrdersExportStatus(IEnumerable<string> clientOrderIdentifiers)
         {

@@ -8,36 +8,32 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Actions
 {
+    /// <summary>
+    /// Determines whether computers are eligible to run actions.
+    /// </summary>
     public class ComputerActionPolicy
     {
-        private readonly List<ComputerEntity> allowedComputers;
-        private readonly ComputerLimitationType actionComputerLimitationType;
+        private readonly List<long> allowedComputerIDs;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComputerActionPolicy"/> class.
         /// </summary>
-        public ComputerActionPolicy(ComputerLimitationType computerLimitationType, string internalComputerLimitedList) //, long triggeringComputerID)
+        public ComputerActionPolicy(string internalComputerLimitedList)
         {
-            allowedComputers = ReadCsv(internalComputerLimitedList);
-            actionComputerLimitationType = (ComputerLimitationType)computerLimitationType;
+            allowedComputerIDs = ReadCsv(internalComputerLimitedList);
         }
 
         /// <summary>
-        /// Turns a list of comma separated list of computer IDs into a List of ComputerEntity objects.
+        /// Turns a list of comma separated list of IDs into a List of ID values.
         /// </summary>
-        /// <param name="allowedComputersCsv">The allowed computers CSV.</param>
-        /// <returns>A List of ComputerEntity objects.</returns>
-        private List<ComputerEntity> ReadCsv(string allowedComputersCsv)
+        /// <param name="idsCsv">The CSV of IDs.</param>
+        /// <returns>A List of ID values.</returns>
+        private static List<long> ReadCsv(string idsCsv)
         {
-            List<ComputerEntity> computerEntities = new List<ComputerEntity>();
-
-            string[] computerIds = allowedComputersCsv.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string computerID in computerIds)
-            {
-                computerEntities.Add(new ComputerEntity(long.Parse(computerID)));
-            }
-
-            return computerEntities;
+            return idsCsv
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => long.Parse(x))
+                .ToList();
         }
 
         /// <summary>
@@ -46,7 +42,7 @@ namespace ShipWorks.Actions
         /// <returns>A string containing a comma separated list of computer IDs.</returns>
         public string ToCsv()
         {
-            string[] computerIds = allowedComputers.Select(c => c.ComputerID.ToString(CultureInfo.InvariantCulture)).ToArray();
+            string[] computerIds = allowedComputerIDs.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray();
             return string.Join(", ", computerIds);
         }
 
@@ -59,16 +55,12 @@ namespace ShipWorks.Actions
         /// </returns>
         public bool IsComputerAllowed(ComputerEntity computer)
         {
-            switch (actionComputerLimitationType)
+            if (allowedComputerIDs.Count == 0)
             {
-                case ComputerLimitationType.None:
-                    return true;
-                case ComputerLimitationType.TriggeringComputer:
-                case ComputerLimitationType.NamedList:
-                    return allowedComputers.Any(c => c.ComputerID == computer.ComputerID);
-                default:
-                    throw new ArgumentOutOfRangeException(string.Format("{0} is an unknown ComputerLimitationType.", EnumHelper.GetDescription(actionComputerLimitationType)));
+                return true;   
             }
+
+            return allowedComputerIDs.Contains(computer.ComputerID);
         }
     }
 }

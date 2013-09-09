@@ -140,7 +140,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_ActionQueue]
 [Status] [int] NOT NULL,
 [NextStep] [int] NOT NULL,
 [ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0))
+[ActionQueueType] [int] NOT NULL
 )
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION

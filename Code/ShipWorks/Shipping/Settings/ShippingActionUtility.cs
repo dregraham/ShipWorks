@@ -31,9 +31,7 @@ namespace ShipWorks.Shipping.Settings
 
             // By default auto-printing is enabled
             bool enabled = (code != ShipmentTypeCode.UpsWorldShip);
-
-            // But for WorldShip its a special case where its not
-
+            
             return CreateAction("Print labels", CreateProcessedTrigger(code), typeof(PrintShipmentsTask), code, identifier, enabled, true, null);
         }
 
@@ -161,7 +159,7 @@ namespace ShipWorks.Shipping.Settings
                     action.Enabled = enabled;
                     action.InternalOwner = identifier;
 
-                    action.ComputerLimitedType = (int) (computerLimited ? ComputerLimitationType.TriggeringComputer : ComputerLimitationType.None);
+                    action.ComputerLimitedType = (int) (computerLimited ? ComputerLimitedType.TriggeringComputer : ComputerLimitedType.None);
                     action.InternalComputerLimitedList = string.Empty;
 
                     action.StoreLimited = false;

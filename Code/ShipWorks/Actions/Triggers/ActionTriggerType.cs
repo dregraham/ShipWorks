@@ -29,6 +29,9 @@ namespace ShipWorks.Actions.Triggers
         FilterContentChanged = 5,
 
         [Description("A scheduled time")]
-        Scheduled = 6
+        Scheduled = 6,
+
+        [Description("A custom button is clicked")]
+        UserInitiated = 7
     }
 }

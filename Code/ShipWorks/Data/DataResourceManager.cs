@@ -217,9 +217,25 @@ namespace ShipWorks.Data
 
                     adapter.Commit();
                 }
+                
+                string filePath = Path.Combine(DataPath.CurrentResources, resourceFilename);
 
-                // Go ahead and make sure its written locally to our resource path, as if its being asked for now it will likely be used soon
-                File.WriteAllBytes(Path.Combine(DataPath.CurrentResources, resourceFilename), data);
+                try
+                {
+                    // Go ahead and make sure its written locally to our resource path, as if its being asked for now it will likely be used soon
+                    if (!File.Exists(filePath))
+                    {
+                        File.WriteAllBytes(filePath, data);
+                    }
+                    else
+                    {
+                        File.SetLastAccessTimeUtc(filePath, DateTime.UtcNow);
+                    }
+                }
+                catch (IOException ex)
+                {
+                    log.Warn("Couldn't update file " + filePath, ex);
+                }
             }
 
             return resourceID;
@@ -404,8 +420,8 @@ namespace ShipWorks.Data
                                 command.CommandType = CommandType.StoredProcedure;
                                 // Disable the command timeout since the scripts should take care of timing themselves out
                                 command.CommandTimeout = (int)TimeSpan.FromMinutes(15).TotalSeconds;
-                                command.Parameters.AddWithValue("@earliestRetentionDateInUtc", DateTime.UtcNow);
-                                command.Parameters.AddWithValue("@latestExecutionTimeInUtc", DateTime.UtcNow.AddMinutes(15));
+                                command.Parameters.AddWithValue("@olderThan", DateTime.UtcNow);
+                                command.Parameters.AddWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
 
                                 command.ExecuteNonQuery();
                             }

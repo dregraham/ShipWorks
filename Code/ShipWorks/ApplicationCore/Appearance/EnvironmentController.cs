@@ -227,7 +227,7 @@ namespace ShipWorks.ApplicationCore.Appearance
                 }
 
                 // Reload the cache
-                FilterNodeColumnManager.InitializeForCurrentUser();
+                FilterNodeColumnManager.InitializeForCurrentSession();
             }
         }
     }
