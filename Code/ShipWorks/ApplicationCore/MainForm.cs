@@ -1325,7 +1325,7 @@ namespace ShipWorks
                 // Maybe we need to create it
                 if (actionChunk == null)
                 {
-                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false };
+                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, Padding = new WidgetEdges(4, 2, 4, 0) };
                     ribbonTabHome.Chunks.Add(actionChunk);
                 }
 
@@ -1341,6 +1341,7 @@ namespace ShipWorks
                         button = new SandButton(action.Action.Name);
                         button.Guid = action.Trigger.Guid;
                         button.Tag = action.Action.ActionID;
+                        button.Padding = new WidgetEdges(3, 2, 4, 14);
                         button.TextContentRelation = TextContentRelation.Underneath;
                         button.Activate += OnCustomActionButton;
 
