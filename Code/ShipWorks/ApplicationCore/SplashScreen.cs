@@ -98,7 +98,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            labelReleaseInfo.Text = string.Format("Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+            labelReleaseInfo.Text = string.Format("ShipWorks {0}", Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         /// <summary>

@@ -30,14 +30,12 @@ namespace ShipWorks.ApplicationCore
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashScreen));
             this.website = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.status = new System.Windows.Forms.Label();
             this.labelReleaseInfo = new System.Windows.Forms.Label();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge3 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // website
@@ -51,27 +49,17 @@ namespace ShipWorks.ApplicationCore
             this.website.TabIndex = 3;
             this.website.Text = "www.interapptive.com";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(60, 78);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(381, 76);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
             // status
             // 
-            this.status.AutoSize = true;
             this.status.BackColor = System.Drawing.Color.Transparent;
             this.status.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.status.ForeColor = System.Drawing.Color.Gray;
-            this.status.Location = new System.Drawing.Point(316, 233);
+            this.status.Location = new System.Drawing.Point(236, 233);
             this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(178, 13);
+            this.status.Size = new System.Drawing.Size(258, 13);
             this.status.TabIndex = 0;
             this.status.Text = "Loading Interapptive.Framework.dll";
+            this.status.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelReleaseInfo
             // 
@@ -136,6 +124,7 @@ namespace ShipWorks.ApplicationCore
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(506, 255);
             this.Controls.Add(this.kryptonBorderEdge3);
             this.Controls.Add(this.kryptonBorderEdge2);
@@ -144,7 +133,6 @@ namespace ShipWorks.ApplicationCore
             this.Controls.Add(this.status);
             this.Controls.Add(this.labelReleaseInfo);
             this.Controls.Add(this.website);
-            this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -153,7 +141,6 @@ namespace ShipWorks.ApplicationCore
             this.Text = "ShipWorks";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,7 +149,6 @@ namespace ShipWorks.ApplicationCore
         #endregion
 
         private System.Windows.Forms.Label website;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label status;
         private System.Windows.Forms.Label labelReleaseInfo;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;

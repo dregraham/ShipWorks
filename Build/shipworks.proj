@@ -504,13 +504,7 @@
 	<!-- Packages up and archives the results of the build -->
 	<PropertyGroup>
 		<PackageResultsDependsOn>
-      <!-- There were problems when generating the zip file due to a deadlock that started occurring 
-           when compressing the files. The ParallelCompression=false was added to do alleviate this, 
-           but the parameter was not being recognized when building on INTAPP01 (even though it was 
-           working locally). Commenting the ZipResults step out for now, so we can get the build
-           working on INTAPP01 (and because Brian said the zip file that gets generated has never 
-           actually been used. -->
-      <!-- ZipResults; -->
+      ZipResults;
 			CopyToArchive;
 			UpdateRevisionNumber;
 		</PackageResultsDependsOn>
