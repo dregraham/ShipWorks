@@ -16,6 +16,7 @@ using System.Text;
 using System.Web;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -172,19 +173,17 @@ namespace ShipWorks.Actions.Tasks.Common
             base.DeserializeXml(xpath);
 
             XPathNodeIterator headerIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
-
+                
             List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
             foreach (XPathNavigator header in headerIterator)
             {
-                string[] keyValue = ((string)header.TypedValue).Split(',');
+                string pairString = (string) header.TypedValue;
 
-                // ignore the first character as it is "["
-                string key = keyValue[0].Substring(1).Trim();
-
-                // ignore the last character as it is "]"
-                string value = keyValue[1].Substring(0, keyValue[1].Length - 1).Trim();
-
-                headerList.Add(new KeyValuePair<string, string>(key, value));
+                Match match = Regex.Match(pairString, @"^\[(?<key>[^,]+?)\s*,\s*(?<value>.*)\]\s*$");
+                if (match.Success)
+                {
+                    headerList.Add(new KeyValuePair<string, string>(match.Groups["key"].Value, match.Groups["value"].Value));
+                }
             }
 
             HttpHeaders = headerList.ToArray();
