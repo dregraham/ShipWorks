@@ -157,6 +157,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
                 {
                     MonthChanged();
                 }
+
+                Invalidate();
             }
         }
 
@@ -189,7 +191,7 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
         /// </summary>
         protected override void OnDrawSelectedItem(Graphics graphics, Color foreColor, Rectangle bounds)
         {
-            string text = string.Join(", ", GetSelectedMonths());
+            string text = string.Join(", ", GetSelectedMonths().Select(m => EnumHelper.GetDescription(m)));
             if (selectAll.Checked)
             {
                 text = "Every Month";

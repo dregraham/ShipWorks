@@ -366,7 +366,8 @@
     <ObfuscationExcludedRegEx Include="ShipWorks\.Filters\.Content\.Conditions\..+::.+" />
 		<ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Tasks\.Common\..+::.+" />
 		<ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Triggers\..+::.+" />
-		<ObfuscationExcludedRegEx Include="ShipWorks\.Data\.Grid\.Columns\.DisplayTypes\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Scheduling\.ActionSchedules\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Data\.Grid\.Columns\.DisplayTypes\..+::.+" />
 		<ObfuscationExcludedRegEx Include="CoreExtensions\.Actions\..+::.+" />
 		<ObfuscationExcludedRegEx Include="CoreExtensions\.Filters\..+::.+" />
 		<ObfuscationExcludedRegEx Include="CoreExtensions\.Grid\..+::.+" />

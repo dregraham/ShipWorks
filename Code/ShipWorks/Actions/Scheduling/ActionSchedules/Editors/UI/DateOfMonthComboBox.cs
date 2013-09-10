@@ -157,6 +157,8 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Editors.UI
             {
                 DateChanged();
             }
+
+            Invalidate();
         }
 
         /// <summary>

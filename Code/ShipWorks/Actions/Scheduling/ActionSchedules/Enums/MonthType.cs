@@ -6,7 +6,6 @@ namespace ShipWorks.Actions.Scheduling.ActionSchedules.Enums
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum MonthType
-        
     {
         [Description("January")]
         [XmlEnum("0")]
