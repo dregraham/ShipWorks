@@ -42,6 +42,12 @@ namespace ShipWorks.ApplicationCore.Dashboard
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DashboardManager));
 
+        // Timer for the stopped scheduler notification threshold
+        private static readonly System.Windows.Forms.Timer stoppedSchedulerNotificationTimer = new System.Windows.Forms.Timer();
+
+        // Wait 10 minutes between when a scheduler is noticed to be not running and actually notifying the user about it
+        private const int stoppedScheduleNotificationThreshold = 600000;
+
         // The panel that the controller uses to display the panel items
         static Panel panel;
 
@@ -100,6 +106,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
             tangoMessageWorkID = IdleWatcher.RegisterDatabaseDependentWork("DashboardMessagesCheck", AsyncCheckLatestServerMessages, busyText, TimeSpan.FromHours(.5));
 
             UpdateLayout();
+
+            stoppedSchedulerNotificationTimer.Interval = stoppedScheduleNotificationThreshold;
+            stoppedSchedulerNotificationTimer.Tick += OnStoppedSchedulerNotificationTimerTick;
         }
 
         /// <summary>
@@ -484,17 +493,39 @@ namespace ShipWorks.ApplicationCore.Dashboard
             bool areAnyRequiredSchedulersStopped = ServiceStatusManager.GetComputersRequiringShipWorksService().Any();
             List<DashboardSchedulerServiceStoppedItem> existingDashboardItems = dashboardItems.OfType<DashboardSchedulerServiceStoppedItem>().ToList<DashboardSchedulerServiceStoppedItem>();
 
-            // If the message is already there we don't have to do anything
-            if (!existingDashboardItems.Any() && areAnyRequiredSchedulersStopped)
+            // If the message is already there or the notification timer has started we don't have to do anything
+            if (areAnyRequiredSchedulersStopped && !existingDashboardItems.Any() && !stoppedSchedulerNotificationTimer.Enabled)
             {
-                DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
-                AddDashboardItem(item);
+                stoppedSchedulerNotificationTimer.Start();
             }
-            else if (existingDashboardItems.Any() && !areAnyRequiredSchedulersStopped)
+            else if (!areAnyRequiredSchedulersStopped)
             {
+                // We can abandon the notification threshold since all schedulers are now running
+                if (stoppedSchedulerNotificationTimer.Enabled)
+                {
+                    stoppedSchedulerNotificationTimer.Stop();
+                }
+                
                 // The stopped services are now running, so remove the stopped dashboard item.
-                existingDashboardItems.ForEach(RemoveDashboardItem);
+                if (existingDashboardItems.Any())
+                {
+                    existingDashboardItems.ForEach(RemoveDashboardItem);
+                }
             }
+        }
+
+        /// <summary>
+        /// Timer callback that is used to show the schedule stopped notification after a waiting period
+        /// </summary>
+        private static void OnStoppedSchedulerNotificationTimerTick(object sender, EventArgs eventArgs)
+        {
+            // Disable the timer
+            stoppedSchedulerNotificationTimer.Stop();
+            stoppedSchedulerNotificationTimer.Enabled = false;
+
+            // Show the dashboard item
+            DashboardSchedulerServiceStoppedItem item = new DashboardSchedulerServiceStoppedItem();
+            AddDashboardItem(item);
         }
 
         /// <summary>
