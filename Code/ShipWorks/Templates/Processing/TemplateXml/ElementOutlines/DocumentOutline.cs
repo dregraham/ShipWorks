@@ -24,7 +24,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public DocumentOutline(TemplateTranslationContext context) 
             : base(context)
         {
+
             AddElement("Generated", DateTime.UtcNow);
+            AddElement("Timestamp", DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow));
+            AddElement("UniqueID", Guid.NewGuid().ToString("B"));
             AddElement("Context", EnumHelper.GetDescription(context.Input.ContextType));
             AddElement("Reference", CreateLegacy2xReferenceOutline(context));
             

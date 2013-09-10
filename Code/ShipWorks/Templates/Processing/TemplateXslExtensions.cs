@@ -53,6 +53,15 @@ namespace ShipWorks.Templates.Processing
         }
 
         /// <summary>
+        /// Return the base64 encoding of the given input
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Base64(string input)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
+        }
+
+        /// <summary>
         /// Generates a key value for an OrderItem.  The XPathNavigator should be positioned
         /// such that the OrderItem is the current node.
         /// </summary>
