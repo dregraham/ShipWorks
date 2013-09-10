@@ -300,12 +300,6 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Verb = Verb;
                 request.AllowAutoRedirect = true;
 
-                // Add the authentication
-                if (UseBasicAuthentication)
-                {
-                    request.Credentials = new NetworkCredential(Username, GetDecryptedPassword());
-                }
-
                 // Add the headers
                 AddRequestHeaders(request, tokenProcessor);
 
@@ -361,6 +355,16 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="request">The request.</param>
         private void AddRequestHeaders(HttpRequestSubmitter request, Func<string, string> tokenProcessor)
         {
+            if (UseBasicAuthentication)
+            {
+                // .NET typically waits for a server challenge before sending authorization, so force the authorization headers 
+                //  be sent rather than using a NetworkCredential object
+                string authInfo = string.Format("{0}:{1}", Username, GetDecryptedPassword());
+                string encodedAuthInfo = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));
+
+                request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
+            }
+
             if (IncludeCustomHttpHeaders)
             {
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
