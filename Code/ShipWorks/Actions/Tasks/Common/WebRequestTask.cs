@@ -212,7 +212,14 @@ namespace ShipWorks.Actions.Tasks.Common
                 templateResult.XPathSource.Context.ProcessingComplete = false;
                 string url = TemplateTokenProcessor.ProcessTokens(Url, templateResult.XPathSource);
 
-                ProcessRequest(request, url);
+                ProcessRequest(
+                    request,
+                    url,
+                    token =>
+                    {
+                        templateResult.XPathSource.Context.ProcessingComplete = false;
+                        return TemplateTokenProcessor.ProcessTokens(token, templateResult.XPathSource);
+                    });
             }
         }
 
@@ -223,47 +230,56 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             var inputSource = (ActionTaskInputSource)context.Step.InputSource;
 
+            // How we process individual keys depends on the cardinality
             switch (RequestCardinality)
             {
+                // Single request to process - use all the input keys at once
                 case WebRequestCardinality.SingleRequest:
                 {
-                    string processedUrl =
-                        inputSource == ActionTaskInputSource.Nothing
-                            ? Url
-                            : TemplateTokenProcessor.ProcessTokens(Url, inputKeys);
+                    string processedUrl = (inputSource == ActionTaskInputSource.Nothing) ? Url : TemplateTokenProcessor.ProcessTokens(Url, inputKeys);
 
-                    ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
-                    break;
+                    ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl, token => TemplateTokenProcessor.ProcessTokens(token, inputKeys));
+                    return;
                 }
 
+                // One request per filter result - in this case, we process per input key
                 case WebRequestCardinality.OneRequestPerFilterResult:
                 {
                     if (inputSource != ActionTaskInputSource.FilterContents)
+                    {
                         throw new ActionTaskRunException("The task input is not a filter.");
+                    }
 
+                    // Go through and process for each key
                     foreach (long inputKey in inputKeys)
                     {
                         string processedUrl = TemplateTokenProcessor.ProcessTokens(Url, inputKey);
-                        ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl);
+
+                        ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl, token => TemplateTokenProcessor.ProcessTokens(token, inputKey));
                     }
-                    break;
+                    return;
                 }
 
+                // Once per template result
                 case WebRequestCardinality.OneRequestPerTemplateResult:
                 {
                     if (TemplateID == 0)
+                    {
                         throw new ActionTaskRunException("No template is selected.");
+                    }
 
                     if (inputSource == ActionTaskInputSource.Nothing)
+                    {
                         throw new ActionTaskRunException("The task has no input to use for the template.");
+                    }
 
+                    // Run it all through the base, which will take care of template processing
                     base.Run(inputKeys, context);
-                    break;
+                    return;
                 }
-
-                default:
-                    throw new ActionTaskRunException("The request configuration is invalid.");
             }
+
+            throw new ActionTaskRunException("The request configuration is invalid.");
         }
 
         /// <summary>
@@ -276,21 +292,23 @@ namespace ShipWorks.Actions.Tasks.Common
         /// or
         /// Error hitting URL.
         /// </exception>
-        private void ProcessRequest(HttpRequestSubmitter request, string url)
+        private void ProcessRequest(HttpRequestSubmitter request, string url, Func<string, string> tokenProcessor)
         {
             try
             {
+                // Setup the request
                 request.Uri = new Uri(url);
-
                 request.Verb = Verb;
                 request.AllowAutoRedirect = true;
 
+                // Add the authentication
                 if (UseBasicAuthentication)
                 {
                     request.Credentials = new NetworkCredential(Username, GetDecryptedPassword());
                 }
 
-                AddRequestHeaders(request);
+                // Add the headers
+                AddRequestHeaders(request, tokenProcessor);
 
                 // We want to allow all status codes so we can inspect them ourselves
                 HttpStatusCode[] allStatusCodes = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
@@ -299,22 +317,30 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 // Submit the request, logging both the original request and the response
                 LogFormattedRequest(request);
-                IHttpResponseReader httpResponseReader = request.GetResponse();
-                requestLogger.LogResponse(httpResponseReader.ReadResult(), "log");
 
-                if ((int)httpResponseReader.HttpWebResponse.StatusCode >= 400)
+                // Execute
+                using (IHttpResponseReader httpResponseReader = request.GetResponse())
                 {
-                    // A bad response was received that should cause the task to fail
-                    log.ErrorFormat("An invalid response was received from the server when submitting the request to {0}: {1} {2}",
-                                    request.Uri.AbsoluteUri, (int)httpResponseReader.HttpWebResponse.StatusCode, httpResponseReader.HttpWebResponse.StatusDescription);
+                    // Log the full response, but ignore it
+                    requestLogger.LogResponse(httpResponseReader.ReadResult(), "log");
 
-                    throw new ActionTaskRunException(string.Format("An invalid response was received from {0}", request.Uri.AbsoluteUri));
+                    int statusCode = (int) httpResponseReader.HttpWebResponse.StatusCode;
+                    if (statusCode >= 400)
+                    {
+                        // A bad response was received that should cause the task to fail
+                        log.ErrorFormat("An invalid response was received from the server when submitting the request to {0}: {1} {2}",
+                            request.Uri.AbsoluteUri, 
+                            statusCode, 
+                            httpResponseReader.HttpWebResponse.StatusDescription);
+
+                        throw new ActionTaskRunException(string.Format("A {0} response was received from {1}.", statusCode, request.Uri.AbsoluteUri));
+                    }
                 }
             }
             catch (UriFormatException ex)
             {
                 log.Error("Error in WebRequest Url format.", ex);
-                throw new ActionTaskRunException("Url not formatted properly.", ex);
+                throw new ActionTaskRunException(string.Format("The URL '{0}' is not a valid.", url), ex);
             }
             catch (WebException ex)
             {
@@ -334,7 +360,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Adds the authentication header (if needed) and all other headers to the request.
         /// </summary>
         /// <param name="request">The request.</param>
-        private void AddRequestHeaders(HttpRequestSubmitter request)
+        private void AddRequestHeaders(HttpRequestSubmitter request, Func<string, string> tokenProcessor)
         {
             if (IncludeCustomHttpHeaders)
             {
@@ -342,7 +368,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     try
                     {
-                        request.Headers.Add(header.Key, header.Value);
+                        request.Headers.Add(header.Key, tokenProcessor(header.Value));
                     }
                     catch (ArgumentException ex)
                     {
