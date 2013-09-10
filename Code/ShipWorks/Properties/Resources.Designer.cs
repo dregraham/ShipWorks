@@ -2473,6 +2473,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap media_stop_red {
+            get {
+                object obj = ResourceManager.GetObject("media_stop_red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap merge_cell_down {
             get {
                 object obj = ResourceManager.GetObject("merge_cell_down", resourceCulture);

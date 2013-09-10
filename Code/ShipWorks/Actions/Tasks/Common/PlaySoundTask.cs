@@ -11,6 +11,10 @@ using ShipWorks.ApplicationCore;
 using System.IO;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using NAudio.Wave;
+using System.Threading;
+using System.Diagnostics;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -22,6 +26,20 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         long resourceReferenceID = 0;
         string pendingSoundFile = null;
+
+        static object audioLock = new object();
+        static WaveOut audioCurrent;
+
+        WaveOut thisAudio;
+
+        // In seconds
+        bool stopAfter = true;
+        int stopAfterSeconds = 5;
+
+        /// <summary>
+        /// Raised when the audio stops.  Probably on a background thread
+        /// </summary>
+        public event EventHandler AudioStopped;
 
         /// <summary>
         /// Create the editor for editing the task's settings
@@ -48,7 +66,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 PlaySound();
             }
             // InvalidOperationException is what is thrown if the sound file is "PCM" or whatever that means.
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }
@@ -72,6 +90,24 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// Controls if audio should automatically stop playing after a set amount of time
+        /// </summary>
+        public bool StopAfter
+        {
+            get { return stopAfter; }
+            set { stopAfter = value; }
+        }
+
+        /// <summary>
+        /// The maximum seconds to play the sound before automatically stopping.
+        /// </summary>
+        public int StopAfterSeconds
+        {
+            get { return stopAfterSeconds; }
+            set { stopAfterSeconds = value; }
+        }
+
+        /// <summary>
         /// Set the sound file that will be saved the next time the task is saved
         /// </summary>
         [XmlIgnore]
@@ -86,6 +122,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void SaveExtraState(ActionEntity action, SqlAdapter adapter)
         {
+            // If we are saving, we are closing or changing, so stop playing
+            StopSound(true);
+
             if (pendingSoundFile == null)
             {
                 return;
@@ -134,25 +173,191 @@ namespace ShipWorks.Actions.Tasks.Common
                 return;
             }
 
-            SoundPlayer player = null;
+            string fileToPlay = null;
 
             if (pendingSoundFile != null)
             {
-                player = new SoundPlayer(pendingSoundFile);
+                fileToPlay = pendingSoundFile;
             }
             else
             {
                 DataResourceReference resource = DataResourceManager.LoadResourceReference(resourceReferenceID);
                 if (resource != null)
                 {
-                    player = new SoundPlayer(resource.GetCachedFilename());
+                    fileToPlay = resource.GetCachedFilename();
                 }
             }
 
-            if (player != null)
+            if (fileToPlay != null)
             {
-                player.Play();
+                lock (audioLock)
+                {
+                    if (audioCurrent != null && audioCurrent == thisAudio)
+                    {
+                        throw new InvalidOperationException("The sound is already playing.");
+                    }
+
+                    StopSound();
+                }
+
+                if (fileToPlay.EndsWith("mp3"))
+                {
+                    PlayMp3(fileToPlay);
+                }
+                else
+                {
+                    PlayWav(fileToPlay);
+                }
             }
+        }
+
+        /// <summary>
+        /// Stop playing the current sound
+        /// </summary>
+        public void StopSound(bool ownedOnly = false)
+        {
+            lock (audioLock)
+            {
+                if (audioCurrent != null)
+                {
+                    if (!ownedOnly || audioCurrent == thisAudio)
+                    {
+                        audioCurrent.Stop();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the sound is currently playing as initiated and owned by this instance
+        /// </summary>
+        [XmlIgnore]
+        public bool IsOwnSoundPlaying 
+        {
+            get
+            {
+                lock (audioLock)
+                {
+                    return audioCurrent != null && audioCurrent == thisAudio;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Play a wave file
+        /// </summary>
+        private void PlayWav(string waveFile)
+        {
+            PlayAudio(new AudioFileReader(waveFile));
+        }
+
+
+        /// <summary>
+        /// Play an mp3 file
+        /// </summary>
+        private void PlayMp3(string mp3File)
+        {
+            FileStream fileStream = File.OpenRead(mp3File);
+
+            Mp3FileReader reader = new Mp3FileReader(fileStream);
+
+            WaveStream waveStream = WaveFormatConversionStream.CreatePcmStream(reader);
+            BlockAlignReductionStream baStream = new BlockAlignReductionStream(waveStream);
+
+            PlayAudio(baStream);
+        }
+
+        /// <summary>
+        /// Play the given wave provider
+        /// </summary>
+        private void PlayAudio(IWaveProvider waveProvider)
+        {
+            lock (audioLock)
+            {
+                thisAudio = new WaveOut(WaveCallbackInfo.FunctionCallback());
+
+                thisAudio.PlaybackStopped += OnPlaybackStopped;
+                thisAudio.Init(waveProvider);
+                thisAudio.Play();
+
+                audioCurrent = thisAudio;
+
+                ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WaitForAudioStop), Tuple.Create(thisAudio, stopAfter, stopAfterSeconds));
+            }
+        }
+
+        /// <summary>
+        /// Wait for the current audio file to stop
+        /// </summary>
+        private void WaitForAudioStop(object state)
+        {
+            var data = (Tuple<WaveOut, bool, int>) state;
+
+            WaveOut localAudio = data.Item1;
+            bool localStopAfter = data.Item2;
+            int localStopAfterSeconds = data.Item3;
+
+            Stopwatch timer = Stopwatch.StartNew();
+
+            while (true)
+            {
+                lock (audioLock)
+                {
+                    if (localStopAfter && timer.Elapsed.TotalSeconds > localStopAfterSeconds)
+                    {
+                        localAudio.Stop();
+                    }
+
+                    if (localAudio.PlaybackState == PlaybackState.Stopped)
+                    {
+                        // If this was the current running audio, there is no more audio
+                        if (localAudio == audioCurrent)
+                        {
+                            audioCurrent = null;
+                        }
+
+                        // If this was our audio, there is no more this audio
+                        if (localAudio == thisAudio)
+                        {
+                            thisAudio = null;
+                        }
+
+                        localAudio.PlaybackStopped -= OnPlaybackStopped;
+                        localAudio.Dispose();
+                        localAudio = null;
+                    }
+                }
+
+                if (localAudio == null)
+                {
+                    // If we owned this sound, notify the sender of the stop
+                    if (AudioStopped != null)
+                    {
+                        AudioStopped(this, EventArgs.Empty);
+                    }
+
+                    return;
+                }
+
+                Thread.Sleep(10);
+            }
+        }
+
+        /// <summary>
+        /// Playback stopped
+        /// </summary>
+        void OnPlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(new WaitCallback(data =>
+                {
+                    WaveOut waveOut = (WaveOut) sender;
+
+                    lock (audioLock)
+                    {
+                        waveOut.PlaybackStopped -= OnPlaybackStopped;
+                        waveOut.Dispose();
+                    }
+                })));
         }
     }
 }
