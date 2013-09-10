@@ -818,22 +818,48 @@ namespace ShipWorks.Actions
             {
                 long inputFilterNodeID = step.InputFilterNodeID;
 
-                long? contentID = FilterHelper.GetFilterNodeContentID(inputFilterNodeID);
-                if (contentID == null)
+                ResultsetFields resultFields = new ResultsetFields(1);
+                RelationPredicateBucket bucketToUse = null;
+
+                // If it's not a top level key then we have to load the results from the filter content results
+                if (!BuiltinFilter.IsTopLevelKey(inputFilterNodeID))
                 {
-                    throw new ActionTaskRunException("The filter for the input to the task has been deleted.");
+                    long? contentID = FilterHelper.GetFilterNodeContentID(inputFilterNodeID);
+                    if (contentID == null)
+                    {
+                        throw new ActionTaskRunException("The filter for the input to the task has been deleted.");
+                    }
+
+                    // Load all ID's in the filter.
+                    resultFields.DefineField(FilterNodeContentDetailFields.ObjectID, 0, "ObjectID", "");
+                    bucketToUse = new RelationPredicateBucket(FilterNodeContentDetailFields.FilterNodeContentID == contentID);
+                }
+                else
+                {
+                    // Load directly from the orders table
+                    if (BuiltinFilter.GetTopLevelKey(FilterTarget.Orders) == inputFilterNodeID)
+                    {
+                        resultFields.DefineField(OrderFields.OrderID, 0, "ObjectID", "");
+                        bucketToUse = new RelationPredicateBucket();
+
+                    }
+                    // Load directly from the customers table
+                    else if (BuiltinFilter.GetTopLevelKey(FilterTarget.Customers) == inputFilterNodeID)
+                    {
+                        resultFields.DefineField(CustomerFields.CustomerID, 0, "ObjectID", "");
+                        bucketToUse = new RelationPredicateBucket();
+                    }
                 }
 
-                // Now we need to load all ID's in the filter.
-                ResultsetFields resultFields = new ResultsetFields(1);
-                resultFields.DefineField(FilterNodeContentDetailFields.ObjectID, 0, "ObjectID", "");
-
-                RelationPredicateBucket bucket = new RelationPredicateBucket(FilterNodeContentDetailFields.FilterNodeContentID == contentID);
-                using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+                // If we have a bucket to use to do the query, query now
+                if (bucketToUse != null)
                 {
-                    while (reader.Read())
+                    using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucketToUse, CommandBehavior.CloseConnection, 0, true))
                     {
-                        input.Add(reader.GetInt64(0));
+                        while (reader.Read())
+                        {
+                            input.Add(reader.GetInt64(0));
+                        }
                     }
                 }
             }
