@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 Validate((UpsServiceType)shipment.Ups.Service, (UpsPackagingType)package.PackagingType, 
                     (float)UpsUtility.GetPackageTotalWeight(package), 
-                    numberOfPackages, package.DryIceEnabled, package.VerbalConfirmationEnabled);
+                    numberOfPackages, package.DryIceEnabled, package.DryIceWeight, package.VerbalConfirmationEnabled);
             }
         }
 
@@ -183,8 +183,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="upsPackageType"></param>
         /// <param name="weightInPounds"></param>
         /// <param name="numberOfPackages"></param>
+        /// <param name="dryIceEnabled"></param>
+        /// <param name="dryIceWeight"></param>
+        /// <param name="verbalConfirmationEnabled"></param>
         /// <exception cref="ShippingException" />
-        private static void Validate(UpsServiceType upsServiceType, UpsPackagingType upsPackageType, float weightInPounds, int numberOfPackages, bool dryIceEnabled, bool verbalConfirmationEnabled)
+        private static void Validate(UpsServiceType upsServiceType, UpsPackagingType upsPackageType, float weightInPounds, int numberOfPackages, bool dryIceEnabled, double dryIceWeight, bool verbalConfirmationEnabled)
         {
             // Find the setting entry for the given service type and package type
             UpsServicePackageTypeSetting setting = ServicePackageValidationSettings.FirstOrDefault(s => s.ServiceType == upsServiceType &&
@@ -211,6 +214,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new ShippingException(string.Format("Dry ice is not allowed for {0} - {1}.",
                                                           EnumHelper.GetDescription(upsServiceType),
                                                           EnumHelper.GetDescription(upsPackageType)));
+            }
+
+            if (dryIceEnabled && dryIceWeight > 5.5)
+            {
+                throw new ShippingException("UPS doesn't allow more than 5.5 pounds of Dry Ice.");
             }
 
             // Check to see if verbal confirmation is allowed.
