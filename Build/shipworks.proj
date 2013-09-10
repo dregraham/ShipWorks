@@ -12,20 +12,22 @@
 		<!--Build output-->
     <ArtifactDirectory>..\Artifacts</ArtifactDirectory>
     
-    <!-- Changes to Automated for CCNet -->
+    <!-- Local or Automated (when CCNet is used it changes to Automated -->
     <BuildType>Local</BuildType>
     
-		<!-- Can be overridden for local builds -->
-		<Obfuscate Condition=" $(Obfuscate) == '' ">True</Obfuscate>
     
-		<!-- Can be overridden for local builds -->
+    <!-- Can be overridden for local builds -->
 		<PackageModules Condition=" $(PackageModules) == '' ">False</PackageModules>
 
 		<!-- Can be true or false to initiate the installer -->
 		<CreateInstaller Condition=" $(CreateInstaller) == '' ">False</CreateInstaller>
 
-		<!-- Can be true or false to initiate creation of the full release from the installer -->
+		<!-- None, Internal, or Public -->
 		<ReleaseType Condition=" $(ReleaseType) == '' ">None</ReleaseType>
+    
+		<!-- Default to no obfuscation, but force it for public builds -->
+		<Obfuscate Condition=" $(Obfuscate) == '' ">False</Obfuscate>
+    <Obfuscate Condition=" $(ReleaseType) == 'Public' ">True</Obfuscate>
     
 	</PropertyGroup>
 
@@ -50,13 +52,6 @@
 			ValidateProperties;
 			CommonInitialization;
 			UpdateAssemblyInfo;
-      <!-- Commenting out for now. This was originally intended to reset the assembly info for the
-           shared assemblies, so they retained the same version info from their previous build. 
-           According to Brian, this was a concept for if/when there were multiple products using
-           the same shared libraries, the shared library versioning info would stay the same across
-           the different applications/products.
-      -->
-      <!-- UpdateSharedAssemblyInfo; -->
 			Compile;
 			CopyToLatest;
 			RunTests;
@@ -82,46 +77,9 @@
 		<Error Text="ReleaseType is set but CreateInstaller is False"
 			Condition=" $(ReleaseType) != 'None' and $(CreateInstaller) != 'True' " />
 
-    <Error Text="Obfuscate is not True but BuildType is Automated"
-      Condition=" $(Obfuscate) != 'True' and $(BuildType) == 'Automated' and $(ReleaseType) != 'Internal'" />
+    <Error Text="Obfuscate is not True but ReleaseType is Public"
+      Condition=" $(Obfuscate) != 'True' and $(ReleaseType) == 'Public'" />
     
-	</Target>
-
-	<!-- The assembly info for the shared project shouldn't come from our build label, but its own.  Don't do this for internal releases.  For internal releases we want to keep the 0.0.0.X naming  -->
-	<Target Name="UpdateSharedAssemblyInfo"  Condition=" '$(BuildType)' == 'Automated' and '$(ReleaseType)' != 'Internal' " >
-
-		<Message Text="$(CommonBuildStateFile)" />
-    
-		<XmlRead
-				 XPath="/IntegrationResult/Parameters/NameValuePair[@name='$CCNetLabel']/@value"
-				 XmlFileName="$(CommonBuildStateFile)" >
-			<Output TaskParameter="Value" PropertyName="CommonLabelValue"/>
-		</XmlRead>
-
-		<SplitVersion Version="$(CommonLabelValue)" >
-			<Output TaskParameter="Major" PropertyName="CommonMajor" />
-			<Output TaskParameter="Minor" PropertyName="CommonMinor" />
-			<Output TaskParameter="Build" PropertyName="CommonBuild" />
-			<Output TaskParameter="Revision" PropertyName="CommonRevision" />
-		</SplitVersion>
-   
-		<!-- Get the AssemblyInfo.cs list for the shared project -->
-		<CreateItem Include="..\Code\Interapptive.Shared\**\AssemblyInfo.cs" >
-			<Output TaskParameter="Include" ItemName="CommonAssemblyInfoFiles"/>
-		</CreateItem>
-
-		<FileUpdate Files="@(CommonAssemblyInfoFiles)"
-			Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
-			ReplacementText="$(CommonMajor).$(CommonMinor).$(CommonBuild).$(CommonRevision)" />
-
-		<Time Format="u" Kind="Utc" >
-			<Output TaskParameter="FormattedTime" PropertyName="BuildDate" />
-		</Time>
-
-		<FileUpdate Files="@(CommonAssemblyInfoFiles)"
-			Regex="AssemblyDate\(.*?\)"
-			ReplacementText="AssemblyDate(%22$(BuildDate)%22)" />
-
 	</Target>
 
 	<!-- The compilation controller -->
