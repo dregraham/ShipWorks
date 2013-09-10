@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -98,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                var serviceTypeValues = (int[])Enum.GetValues(typeof(ShipWorksServiceType));
+                var serviceTypeValues = EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => (int) e.Value).ToArray();
 
                 foreach (ComputerEntity computer in ComputerManager.Computers)
                 {

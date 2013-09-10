@@ -56,8 +56,13 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static ShipWorksServiceBase GetService(string serviceTypeName)
         {
-            var serviceType = Enum.Parse(typeof(ShipWorksServiceType), serviceTypeName, true);
-            return GetService((ShipWorksServiceType)serviceType);
+            var results = EnumHelper.GetEnumList<ShipWorksServiceType>().Where(e => string.Compare(e.Key, serviceTypeName, true) == 0).Select(e => e.Value);
+            if (results.Count() != 1)
+            {
+                throw new NotFoundException("A ShipWorks service of the name '" + serviceTypeName + "' was not found.");
+            }
+
+            return GetService(results.First());
         }
 
         /// <summary>
@@ -139,7 +144,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static void RunAllInBackground()
         {
-            foreach (ShipWorksServiceType serviceType in Enum.GetValues(typeof(ShipWorksServiceType)))
+            foreach (ShipWorksServiceType serviceType in EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => e.Value))
             {
                 Process.Start(Program.AppFileName, "/s=" + serviceType).Dispose();
             }
@@ -191,8 +196,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// <returns>true if the all services were not running, or were running and signaled; false if any signal fails.</returns>
         public static bool StopAllInBackground(Guid instanceID)
         {
-            return Enum.GetValues(typeof(ShipWorksServiceType))
-                .Cast<ShipWorksServiceType>()
+            return EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => e.Value)
                 .Select(serviceType => StopInBackground(serviceType, instanceID))
                 .Aggregate((all, stopped) => all && stopped);
         }
