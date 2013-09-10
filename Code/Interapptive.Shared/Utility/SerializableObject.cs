@@ -127,7 +127,13 @@ namespace Interapptive.Shared.Utility
             // it back just by using the type of the property.
             if (isListItem)
             {
-                xmlWriter.WriteAttributeString("type", value.GetType().FullName);
+                // If its a generic list with a single generic argument as the type, don't bother serializing.
+                bool isSingleTypeGeneric = property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments().Length == 1;
+
+                if (!isSingleTypeGeneric)
+                {
+                    xmlWriter.WriteAttributeString("type", value.GetType().FullName);
+                }
             }
 
             xmlWriter.WriteAttributeString("value", SerializationUtility.SerializeValue(value));
@@ -230,13 +236,20 @@ namespace Interapptive.Shared.Utility
             }
             else
             {
-                string typeString = XPathUtility.Evaluate(xpathItem, "@type", null);
-                if (typeString == null)
+                if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments().Length == 1)
                 {
-                    return null;
+                    type = property.PropertyType.GetGenericArguments()[0];
                 }
+                else
+                {
+                    string typeString = XPathUtility.Evaluate(xpathItem, "@type", null);
+                    if (typeString == null)
+                    {
+                        return null;
+                    }
 
-                type = GetTypeByFullName(typeString);
+                    type = GetTypeByFullName(typeString);
+                }
             }
 
             string valueText = XPathUtility.Evaluate(xpathItem, "@value", null);

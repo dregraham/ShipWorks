@@ -3357,3 +3357,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "Interapptive.Shared.Net.INetworkUtility.#GetIPAddress()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Scope = "type", Target = "Interapptive.Shared.Net.NetworkException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors", Scope = "type", Target = "Interapptive.Shared.Net.NetworkException")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Scope = "member", Target = "Interapptive.Shared.Utility.SerializableObject.#SerializeValue(System.Xml.XmlTextWriter,System.Object,System.Reflection.PropertyInfo,System.Boolean)")]
