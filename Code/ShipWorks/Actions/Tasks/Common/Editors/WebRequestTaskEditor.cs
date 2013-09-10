@@ -275,7 +275,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnHeadersGridDataChanged(object sender, EventArgs e)
         {
-            task.HttpHeaders = headersGrid.Values.Select(x => new KeyValuePair<string, string>(HttpUtility.UrlEncode(x.Key), HttpUtility.UrlEncode(x.Value))).ToArray();
+            task.HttpHeaders = headersGrid.Values.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToArray();
         }
 
         /// <summary>

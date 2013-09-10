@@ -175,7 +175,7 @@
             // 
             this.passwordTextBox.Location = new System.Drawing.Point(68, 29);
             this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(188, 21);
+            this.passwordTextBox.Size = new System.Drawing.Size(259, 21);
             this.passwordTextBox.TabIndex = 2;
             this.passwordTextBox.UseSystemPasswordChar = true;
             this.passwordTextBox.TextChanged += new System.EventHandler(this.OnPasswordTextChanged);
@@ -184,7 +184,7 @@
             // 
             this.userNameTextBox.Location = new System.Drawing.Point(68, 3);
             this.userNameTextBox.Name = "userNameTextBox";
-            this.userNameTextBox.Size = new System.Drawing.Size(188, 21);
+            this.userNameTextBox.Size = new System.Drawing.Size(259, 21);
             this.userNameTextBox.TabIndex = 1;
             this.userNameTextBox.TextChanged += new System.EventHandler(this.OnUserNameTextChanged);
             // 
@@ -236,7 +236,7 @@
             this.panelBasicAuth.Controls.Add(label2);
             this.panelBasicAuth.Location = new System.Drawing.Point(41, 105);
             this.panelBasicAuth.Name = "panelBasicAuth";
-            this.panelBasicAuth.Size = new System.Drawing.Size(267, 56);
+            this.panelBasicAuth.Size = new System.Drawing.Size(341, 56);
             this.panelBasicAuth.TabIndex = 28;
             this.panelBasicAuth.Visible = false;
             // 

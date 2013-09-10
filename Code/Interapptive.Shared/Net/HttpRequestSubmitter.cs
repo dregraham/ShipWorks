@@ -77,7 +77,7 @@ namespace Interapptive.Shared.Net
         }
 
         /// <summary>
-        /// Gets the ContentType to be specified on the request
+        /// Gets or sets the ContentType to be specified on the request
         /// </summary>
         public string ContentType
         {
@@ -141,6 +141,13 @@ namespace Interapptive.Shared.Net
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
 
+            // If it's not get set the content type and redirect option.  Set them before applying the headers, so any headers will override
+            if (Verb != HttpVerb.Get)
+            {
+                webRequest.ContentType = contentType;
+                webRequest.AllowAutoRedirect = allowAutoRedirect;
+            }
+
             if (headers.Count > 0)
             {
                 foreach (string headerName in headers)
@@ -189,13 +196,6 @@ namespace Interapptive.Shared.Net
 
             // Configure request method
             SetRequestMethod(webRequest);
-
-            // If it's not get set the content type and redirect option
-            if (Verb != HttpVerb.Get)
-            {
-                webRequest.ContentType = contentType;
-                webRequest.AllowAutoRedirect = allowAutoRedirect;
-            }
 
             // Raise the posting event
             if (RequestSubmitting != null)

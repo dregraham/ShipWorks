@@ -45,22 +45,38 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
-        public HttpVerb Verb { get; set; }
+        public HttpVerb Verb 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets or sets the URL the request is being submitted to.
         /// </summary>
-        public string Url { get; set; }
+        public string Url 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use basic authentication].
         /// </summary>
-        public bool UseBasicAuthentication { get; set; }
+        public bool UseBasicAuthentication 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>
-        public string Username { get; set; }
+        public string Username 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets the password in encrypted format. The getter is public so the value gets serialized, but the
@@ -70,17 +86,29 @@ namespace ShipWorks.Actions.Tasks.Common
         /// It would probably be worth looking into having a separate Password class to manage this at
         /// some point to avoid having to maintain the separate states...
         /// </summary>
-        public string EncryptedPassword { get; private set; }
+        public string EncryptedPassword 
+        { 
+            get; 
+            private set; 
+        }
 
         /// <summary>
         /// Indicates if the HTTP headers that have been configured should be included in the request
         /// </summary>
-        public bool IncludeCustomHttpHeaders { get; set; }
+        public bool IncludeCustomHttpHeaders 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets or sets the HTTP headers.
         /// </summary>
-        public KeyValuePair<string, string>[] HttpHeaders { get; set; }
+        public KeyValuePair<string, string>[] HttpHeaders 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets a value indicating whether to postpone running or not.
@@ -101,7 +129,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the web request cardinality.
         /// </summary>
-        public WebRequestCardinality RequestCardinality { get; set; }
+        public WebRequestCardinality RequestCardinality 
+        { 
+            get; 
+            set; 
+        }
         
         /// <summary>
         /// Uses the plain text password to encrypt and set the value backing the 
@@ -173,7 +205,9 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             foreach (TemplateResult templateResult in templateResults)
             {
-                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(templateResult.ReadResult(), GetContentType((TemplateOutputFormat)template.OutputFormat));
+                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(
+                    templateResult.ReadResult(), 
+                    GetContentType((TemplateOutputFormat) template.OutputFormat));
 
                 templateResult.XPathSource.Context.ProcessingComplete = false;
                 string url = TemplateTokenProcessor.ProcessTokens(Url, templateResult.XPathSource);
@@ -251,6 +285,11 @@ namespace ShipWorks.Actions.Tasks.Common
                 request.Verb = Verb;
                 request.AllowAutoRedirect = true;
 
+                if (UseBasicAuthentication)
+                {
+                    request.Credentials = new NetworkCredential(Username, GetDecryptedPassword());
+                }
+
                 AddRequestHeaders(request);
 
                 // We want to allow all status codes so we can inspect them ourselves
@@ -297,23 +336,13 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="request">The request.</param>
         private void AddRequestHeaders(HttpRequestSubmitter request)
         {
-            if (UseBasicAuthentication)
-            {
-                // .NET typically waits for a server challenge before sending authorization, so force the authorization headers 
-                //  be sent rather than using a NetworkCredential object
-                string authInfo = string.Format("{0}:{1}", Username, GetDecryptedPassword());
-                string encodedAuthInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-
-                request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
-            }
-
             if (IncludeCustomHttpHeaders)
             {
                 foreach (KeyValuePair<string, string> header in HttpHeaders)
                 {
                     try
                     {
-                        request.Headers.Add(HttpUtility.UrlDecode(header.Key), HttpUtility.UrlDecode(header.Value));
+                        request.Headers.Add(header.Key, header.Value);
                     }
                     catch (ArgumentException ex)
                     {
