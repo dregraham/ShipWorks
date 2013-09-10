@@ -56,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static ShipWorksServiceBase GetService(string serviceTypeName)
         {
-            var results = EnumHelper.GetEnumList<ShipWorksServiceType>().Where(e => string.Compare(e.Key, serviceTypeName, true) == 0).Select(e => e.Value);
+            var results = EnumHelper.GetEnumList<ShipWorksServiceType>().Where(e => string.Compare(e.ApiValue, serviceTypeName, true) == 0).Select(e => e.Value);
             if (results.Count() != 1)
             {
                 throw new NotFoundException("A ShipWorks service of the name '" + serviceTypeName + "' was not found.");
