@@ -398,7 +398,7 @@ namespace ShipWorks.Actions.Tasks.Common
             }
 
             string postContent = Encoding.Default.GetString(request.GetPostContent());
-            string message = string.Format("{0} {1} {2}{3}{2}{2}{4}", request.Verb.ToString().ToUpper(), request.Uri.AbsoluteUri, Environment.NewLine, headerText, postContent);
+            string message = string.Format("{0} {1} {2}{3}{2}{2}{4}", EnumHelper.GetDescription(request.Verb), request.Uri.AbsoluteUri, Environment.NewLine, headerText, postContent);
 
             requestLogger.LogRequest(message, "log");
         }
@@ -407,16 +407,19 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Gets the type of the content.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">Invalid template output format</exception>
-        private static string GetContentType(TemplateOutputFormat templateOutputFormat)
+        private string GetContentType(TemplateOutputFormat templateOutputFormat)
         {
             switch (templateOutputFormat)
             {
                 case TemplateOutputFormat.Html:
                     return "text/html";
+
                 case TemplateOutputFormat.Xml:
                     return "text/xml";
+
                 case TemplateOutputFormat.Text:
-                    return "";
+                    return (Verb == HttpVerb.Post) ? "application/x-www-form-urlencoded" : "";
+
                 default:
                     throw new InvalidOperationException("Invalid template output format");
             }
