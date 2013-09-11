@@ -428,6 +428,7 @@ namespace ShipWorks.Actions
             ActionTaskBubble bubble = (ActionTaskBubble) sender;
 
             panelTasks.Controls.Remove(bubble);
+            bubble.Dispose();
 
             UpdateTaskBubbles();
         }

@@ -123,7 +123,7 @@ namespace ShipWorks.Actions.Tasks.Common
         protected override void SaveExtraState(ActionEntity action, SqlAdapter adapter)
         {
             // If we are saving, we are closing or changing, so stop playing
-            StopSound(true);
+            StopSound();
 
             if (pendingSoundFile == null)
             {
@@ -197,7 +197,7 @@ namespace ShipWorks.Actions.Tasks.Common
                         throw new InvalidOperationException("The sound is already playing.");
                     }
 
-                    StopSound();
+                    AbortAllSound();
                 }
 
                 if (fileToPlay.EndsWith("mp3"))
@@ -212,18 +212,29 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// Stop playing the current sound
+        /// Stop playing the sound for this task, if its currently playing
         /// </summary>
-        public void StopSound(bool ownedOnly = false)
+        public void StopSound()
+        {
+            lock (audioLock)
+            {
+                if (audioCurrent != null && audioCurrent == thisAudio)
+                {
+                    audioCurrent.Stop();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stop playing any currently playing sound, for any task
+        /// </summary>
+        private static void AbortAllSound()
         {
             lock (audioLock)
             {
                 if (audioCurrent != null)
                 {
-                    if (!ownedOnly || audioCurrent == thisAudio)
-                    {
-                        audioCurrent.Stop();
-                    }
+                    audioCurrent.Stop();
                 }
             }
         }
@@ -232,7 +243,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Indicates if the sound is currently playing as initiated and owned by this instance
         /// </summary>
         [XmlIgnore]
-        public bool IsOwnSoundPlaying 
+        public bool IsSoundPlaying 
         {
             get
             {

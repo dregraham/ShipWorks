@@ -64,6 +64,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             task.AudioStopped += OnAudioStopped;
 
+            UpdateDurationUI();
             UpdateAudioImage();
         }
 
@@ -95,6 +96,16 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         void OnStopAfterChanged(object sender, EventArgs e)
         {
             task.StopAfter = stopPlaying.Checked;
+
+            UpdateDurationUI();
+        }
+
+        /// <summary>
+        /// Update the UI for how long to play a sound
+        /// </summary>
+        private void UpdateDurationUI()
+        {
+            stopPlayingDuration.Enabled = stopPlaying.Checked;
         }
 
         /// <summary>
@@ -110,7 +121,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
                 {
                     soundFile.Text = Path.GetFileName(dlg.FileName);
                     task.PendingSoundFile = dlg.FileName;
-                    task.StopSound(true);
+                    task.StopSound();
                 }
             }
         }
@@ -120,7 +131,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void UpdateAudioImage()
         {
-            if (task.IsOwnSoundPlaying)
+            if (task.IsSoundPlaying)
             {
                 play.Image = Resources.media_stop_red;
             }
@@ -135,9 +146,9 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnPlay(object sender, EventArgs e)
         {
-            if (task.IsOwnSoundPlaying)
+            if (task.IsSoundPlaying)
             {
-                task.StopSound(true);
+                task.StopSound();
             }
             else
             {
@@ -154,15 +165,26 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             UpdateAudioImage();
         }
 
-        /// <summary>
-        /// Task validation means we are closing, so stop the sound
+        /// <summary> 
+        /// Clean up any resources being used.
         /// </summary>
-        public override void ValidateTask(ICollection<TaskValidationError> errors)
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
         {
-            base.ValidateTask(errors);
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
 
-            task.StopSound();
-            UpdateAudioImage();
+                if (task != null)
+                {
+                    task.StopSound();
+                }
+            }
+
+            base.Dispose(disposing);
         }
     }
 }
