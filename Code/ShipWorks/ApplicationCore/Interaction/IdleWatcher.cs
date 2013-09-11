@@ -14,6 +14,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared.Win32;
 using ShipWorks.Data.Administration;
+using System.Data.SqlClient;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -160,7 +161,15 @@ namespace ShipWorks.ApplicationCore.Interaction
                         // In the background we don't have a user, but we still need to make sure the db schema version is correct
                         else
                         {
-                            return SqlSchemaUpdater.IsCorrectSchemaVersion();
+                            try
+                            {
+                                return SqlSchemaUpdater.IsCorrectSchemaVersion();
+                            }
+                            catch (SqlException)
+                            {
+                                // If we fail to get the schema version in the background, it could be b\c the UI is upgrading or something.  Don't fail.  Just get out.
+                                return false;
+                            }
                         }
                     }
 
