@@ -78,7 +78,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static string GetServiceName(ShipWorksServiceType serviceType, Guid instanceID)
         {
-            return "ShipWorks" + serviceType + "$" + instanceID.ToString("N");
+            return "ShipWorks" + EnumHelper.GetApiValue(serviceType) + "$" + instanceID.ToString("N");
         }
 
         /// <summary>
@@ -144,9 +144,9 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         public static void RunAllInBackground()
         {
-            foreach (ShipWorksServiceType serviceType in EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => e.Value))
+            foreach (var entry in EnumHelper.GetEnumList<ShipWorksServiceType>())
             {
-                Process.Start(Program.AppFileName, "/s=" + serviceType).Dispose();
+                Process.Start(Program.AppFileName, "/s=" + entry.ApiValue).Dispose();
             }
         }
 

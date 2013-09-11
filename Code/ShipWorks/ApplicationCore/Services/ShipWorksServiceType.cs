@@ -8,7 +8,7 @@ namespace ShipWorks.ApplicationCore.Services
     public enum ShipWorksServiceType
     {
         [Description("ShipWorks Scheduler")]
-        [ApiValue("scheduler")]
+        [ApiValue("Scheduler")]
         Scheduler = 0
     }
 }

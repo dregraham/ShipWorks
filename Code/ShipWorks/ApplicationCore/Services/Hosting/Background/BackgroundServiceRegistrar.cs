@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Interapptive.Shared.Utility;
+using log4net;
 using Microsoft.Win32;
 
 
@@ -18,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Background
             {
                 foreach(var service in ShipWorksServiceBase.GetAllServices())
                 {
-                    runKey.SetValue(service.ServiceName, Program.AppFileName + " /s=" + service.ServiceType);
+                    runKey.SetValue(service.ServiceName, Program.AppFileName + " /s=" + EnumHelper.GetApiValue(service.ServiceType));
                 }
             }
 
