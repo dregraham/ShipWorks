@@ -33,6 +33,25 @@ namespace ShipWorks.Templates.Processing
         }
 
         /// <summary>
+        /// Custom message processing
+        /// </summary>
+        public override string Message
+        {
+            get
+            {
+                string message = base.Message;
+
+                // Our InnerException already is the Exception.  It's message was extacted to create the base.Message.
+                if (message.Contains("InnerException") && InnerException != null && InnerException.InnerException != null)
+                {
+                    message = message.Replace("See InnerException for a complete description of the error.", "\n\n" + InnerException.InnerException.Message);
+                }
+
+                return message;
+            }
+        }
+
+        /// <summary>
         /// The line number indicating where the error occurred.
         /// </summary>
         public int LineNumber

@@ -128,7 +128,7 @@ namespace ShipWorks.Templates.Processing
                             position = string.Format("Position: {0}", linePosition);
                         }
 
-                        return string.Format(htmlErrorFormat, ex.Message, source, line, position);
+                        return string.Format(htmlErrorFormat, ex.Message.Replace("\r", "").Replace("\n", "<br />"), source, line, position);
                     }
 
                 case TemplateOutputFormat.Xml:
