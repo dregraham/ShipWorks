@@ -11,6 +11,8 @@ using Microsoft.CSharp;
 using System.Security.Cryptography;
 using Interapptive.Shared.UI;
 using System.Text.RegularExpressions;
+using System.Collections;
+using System.Xml.Linq;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -170,7 +172,8 @@ namespace ShipWorks.Templates.Processing
                     "System.Windows.Forms.dll",
                     "System.Web.dll",
                     "System.Core.dll",
-                    "System.Xml.dll"
+                    "System.Xml.dll",
+                    "System.Drawing.dll"
                 };
                 parameters.ReferencedAssemblies.AddRange(references);
 
@@ -186,7 +189,8 @@ namespace ShipWorks.Templates.Processing
                 assembly.AppendLine("using System.Net;");
                 assembly.AppendLine("using System.Xml;");
                 assembly.AppendLine("using System.Xml.XPath;");
-                
+                assembly.AppendLine("using System.Drawing;");
+
                 assembly.AppendLine("namespace ShipWorks {");
                 assembly.AppendLine("public class Wrapper { ");
                 assembly.Append("public static object GeneratedFunction");
@@ -239,7 +243,26 @@ namespace ShipWorks.Templates.Processing
                     values[i] = PrepareFunctionValue(values[i], inputs.Groups["types"].Captures[i].Value);
                 }
 
-                return generatedMethod.Invoke(null, values.ToArray());
+                object result = generatedMethod.Invoke(null, values.ToArray());
+
+                // See if the result is enumerable
+                ICollection collection = result as ICollection;
+                if (collection != null)
+                {
+                    // Build a node set to return
+                    XElement root = new XElement("Return");
+                    foreach (object entry in collection)
+                    {
+                        root.Add(new XElement("Value", entry));
+                    }
+
+                    // Return a node iterator to the caller to traverse
+                    return root.CreateNavigator().SelectChildren(XPathNodeType.Element);
+                }
+                else
+                {
+                    return result;
+                }
             }
             else
             {
