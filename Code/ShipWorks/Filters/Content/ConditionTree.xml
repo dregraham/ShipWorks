@@ -50,6 +50,13 @@
         <Condition identifier="Customer.ForAnyNote" displayAs="Note..." />
       </Group>
 
+      <Group name="Number of">
+        <Condition identifier="Customer.QuantityOfOrder" displayAs="Orders..."/>
+        <Condition identifier="Customer.QuantityOfEmail" displayAs="Emails..." />
+        <Condition identifier="Customer.QuantityOfPrint" displayAs="Prints..." />
+        <Condition identifier="Customer.QuantityOfNote" displayAs="Notes..." />
+      </Group>
+
     </Category>
 
   </ConditionTypes>
@@ -159,6 +166,16 @@
         <Condition identifier="Order.ForAnyEmail" displayAs="Email..." />
         <Condition identifier="Order.ForAnyPrint" displayAs="Print..." />
         <Condition identifier="Order.ForAnyNote" displayAs="Note..." />
+      </Group>
+
+      <Group name="Number of">
+        <Condition identifier="Order.QuantityOfItem" displayAs="Items..." />
+        <Condition identifier="Order.QuantityOfCharge" displayAs="Charges..." />
+        <Condition identifier="Order.QuantityOfShipment" displayAs="Shipments..." />
+        <Condition identifier="Order.QuantityOfPaymentDetail" displayAs="Payments..." />
+        <Condition identifier="Order.QuantityOfEmail" displayAs="Emails..." />
+        <Condition identifier="Order.QuantityOfPrint" displayAs="Prints..." />
+        <Condition identifier="Order.QuantityOfNote" displayAs="Notes..." />
       </Group>
 
     </Category>

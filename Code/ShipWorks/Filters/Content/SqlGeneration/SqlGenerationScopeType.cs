@@ -20,6 +20,11 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         AnyChild,
 
         /// <summary>
+        /// A specific quantity of the children should exist
+        /// </summary>
+        QuantityOfChild,
+
+        /// <summary>
         /// No child rows of the parent scope can pass
         /// </summary>
         NoChild,
@@ -27,6 +32,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// A n:1 parent reference
         /// </summary>
-        Parent
+        Parent,
     }
 }

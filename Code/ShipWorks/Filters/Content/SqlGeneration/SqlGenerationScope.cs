@@ -35,6 +35,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         // If this scope is a child scope, this is the predicate used to select children
         string childPredicate;
 
+        // Used and required for transitioning into QuantityOfChild scopes
+        Func<string, string> childQuantityAdorner;
+
         // Helpful for preventing bugs if a dev forgets to call Adorn
         bool adornCalled = false;
 
@@ -58,12 +61,14 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor
         /// </summary>
-        public SqlGenerationScope(SqlGenerationContext context, SqlGenerationScopeType scopeType, SqlGenerationScope scopeFrom, IEntityRelation scopeRelation)
+        public SqlGenerationScope(SqlGenerationContext context, SqlGenerationScopeType scopeType, SqlGenerationScope scopeFrom, IEntityRelation scopeRelation, Func<string, string> childQuantityAdorner)
         {
             if (scopeFrom == null)
             {
                 throw new ArgumentNullException("scopeFrom");
             }
+
+            ValidateScopeType(scopeType, childQuantityAdorner);
 
             if (scopeType != SqlGenerationScopeType.Parent)
             {
@@ -75,6 +80,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             this.scopeType = scopeType;
             this.scopeFrom = scopeFrom;
             this.scopeRelation = scopeRelation;
+            this.childQuantityAdorner = childQuantityAdorner;
 
             // OneToMany and Hierarchy relations have the derived type on the FK side.
             if (scopeType == SqlGenerationScopeType.Parent && !scopeRelation.IsHierarchyRelation)
@@ -114,7 +120,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor.  The child predicate should contain a {0} placeholder for where the child table (of entityType) alias will be inserted.
         /// </summary>
-        public SqlGenerationScope(SqlGenerationContext context, SqlGenerationScopeType scopeType, SqlGenerationScope scopeFrom, EntityType entityType, string childPredicate)
+        public SqlGenerationScope(SqlGenerationContext context, SqlGenerationScopeType scopeType, SqlGenerationScope scopeFrom, EntityType entityType, string childPredicate, Func<string, string> childQuantityAdorner)
         {
             if (scopeType == SqlGenerationScopeType.Parent)
             {
@@ -126,6 +132,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 throw new ArgumentNullException("scopeFrom");
             }
 
+            ValidateScopeType(scopeType, childQuantityAdorner);
+
             context.IndentLevel++;
 
             this.context = context;
@@ -133,6 +141,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             this.scopeType = scopeType;
             this.scopeFrom = scopeFrom;
             this.entityType = entityType;
+            this.childQuantityAdorner = childQuantityAdorner;
 
             this.table = SqlAdapter.GetTableName(entityType);
             this.alias = context.RegisterTableAlias(entityType);
@@ -142,6 +151,22 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // Going down to a child we need to track the PK side's PK.  So if we were going from Order -> OrderCharge, we still need to know when order's
             // are added or deleted, and tracking the PK for the Order table would do that.
             context.ColumnsUsed.Add((EntityField2) scopeFrom.PrimaryKey);
+        }
+
+        /// <summary>
+        /// Validate the scope type against the given adorner
+        /// </summary>
+        private static void ValidateScopeType(SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner)
+        {
+            if (scopeType == SqlGenerationScopeType.QuantityOfChild && childQuantityAdorner == null)
+            {
+                throw new ArgumentException("childQuantityAdorner cannot be null for QuantityOfChild scope", "childQuantityAdorner");
+            }
+
+            if (scopeType != SqlGenerationScopeType.QuantityOfChild && childQuantityAdorner != null)
+            {
+                throw new ArgumentException("childQuantityAdorner cannot be set for non QuantityOfChild scope", "childQuantityAdorner");
+            }
         }
 
         /// <summary>
@@ -234,7 +259,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 context,
                 SqlGenerationScopeType.Parent,
                 this,
-                relation);
+                relation,
+                null);
 
             parentScopes.Add(sqlScope);
 
@@ -317,29 +343,52 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 sb.AppendFormat(")\n{0}", context.IndentString);
             }
 
+            StringBuilder childCount = new StringBuilder();
+
+            childCount.AppendFormat("{0}(\n", context.IndentString);
+
+            context.IndentLevel++;
+
+            if (scopeType == SqlGenerationScopeType.EveryChild)
+            {
+                // The CASE is used to output a -1 inplace of zero.  This prevents returning rows where thare are no rows, because we would have found the parent has
+                // zero total children, and the number of children mactching the query wuold be zero, so the parent would be returned.  Insted when that happens, zero will be
+                // compared to -1, and it wont be a match.
+                childCount.AppendFormat("{0}SELECT CASE COUNT({1}.{2}) WHEN 0 THEN -1 ELSE COUNT({1}.{2}) END\n", context.IndentString, TableAlias, context.GetColumnName(PrimaryKey));
+            }
+            else
+            {
+                // For QuantityOfChild - we want the actual count
+                childCount.AppendFormat("{0}SELECT COUNT({1}.{2})\n", context.IndentString, TableAlias, context.GetColumnName(PrimaryKey));
+            }
+
+            childCount.AppendFormat("{0}FROM {1}\n", context.IndentString, GetFromClause());
+            childCount.AppendFormat("{0}WHERE {1} AND ", context.IndentString, string.Format(childPredicate, TableAlias));
+
+            childCount.Append(where);
+
+            context.IndentLevel--;
+
+            childCount.AppendFormat(")\n{0}", context.IndentString);
+
             // Every child must be true
             if (scopeType == SqlGenerationScopeType.EveryChild)
             {
                 sb.AppendFormat("\n{0}{1} = \n", context.IndentString, context.GetChildAggregate("COUNT", PrimaryKey, childPredicate));
-                sb.AppendFormat("{0}(\n", context.IndentString);
 
-                context.IndentLevel++;
-
-                // The CASE is used to output a -1 inplace of zero.  This prevents returning rows where thare are no rows, because we would have found the parent has
-                // zero total children, and the number of children mactching the query wuold be zero, so the parent would be returned.  Insted when that happens, zero will be
-                // compared to -1, and it wont be a match.
-                sb.AppendFormat("{0}SELECT CASE COUNT({1}.{2}) WHEN 0 THEN -1 ELSE COUNT({1}.{2}) END\n", context.IndentString, TableAlias, context.GetColumnName(PrimaryKey));
-                sb.AppendFormat("{0}FROM {1}\n", context.IndentString, GetFromClause());
-                sb.AppendFormat("{0}WHERE {1} AND ", context.IndentString, string.Format(childPredicate, TableAlias));
-
-                sb.Append(where);
-
-                context.IndentLevel--;
+                sb.Append(childCount);
 
                 // This one is the counter-part to the one we did in the constructor
                 context.IndentLevel--;
+            }
 
-                sb.AppendFormat(")\n{0}", context.IndentString);
+            // Quantity of child
+            if (scopeType == SqlGenerationScopeType.QuantityOfChild)
+            {
+                sb.Append(childQuantityAdorner(childCount.ToString()));
+
+                // This one is the counter-part to the one we did in the constructor
+                context.IndentLevel--;
             }
 
             return sb.ToString();

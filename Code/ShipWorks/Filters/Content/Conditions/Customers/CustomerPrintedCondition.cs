@@ -29,6 +29,16 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
         /// </summary>
         public static SqlGenerationScope CreateChildScope(SqlGenerationContext context, SqlGenerationScopeType scopeType)
         {
+            string childPredicate = GetChildPredicate(context);
+
+            return context.PushScope(EntityType.PrintResultEntity, childPredicate, scopeType);
+        }
+
+        /// <summary>
+        /// Get the child predicate to use to push down into the child scope
+        /// </summary>
+        public static string GetChildPredicate(SqlGenerationContext context)
+        {
             // Get the parent scope (which will be the current customer scope)
             SqlGenerationScope parentScope = context.CurrentScope;
 
@@ -58,7 +68,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
             // This is the full predicate required to match all notes for the order
             string childPredicate = string.Format("(({0}) OR ({1}))", customerEmail, orderEmail);
 
-            return context.PushScope(EntityType.PrintResultEntity, childPredicate, scopeType);
+            return childPredicate;
         }
     }
 }

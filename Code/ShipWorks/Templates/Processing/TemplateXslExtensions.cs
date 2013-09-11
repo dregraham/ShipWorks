@@ -250,7 +250,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Prepare a funtion value for being passed int the expecting function
         /// </summary>
-        private object PrepareFunctionValue(object value, string type)
+        private static object PrepareFunctionValue(object value, string type)
         {
             Type targetType = Type.GetType(GetFullTypeName(type), true, true);
 

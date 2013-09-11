@@ -227,7 +227,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Transition to the scope of the EntityType of the target scope field, by joining on the current scope field and the target scope field.
         /// </summary>
-        public SqlGenerationScope PushScope(EntityField2 currentScopeField, EntityField2 targetScopeField, SqlGenerationScopeType scopeType)
+        public SqlGenerationScope PushScope(EntityField2 currentScopeField, EntityField2 targetScopeField, SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner = null)
         {
             EntityType fromType = EntityTypeProvider.GetEntityType(currentScopeField.ActualContainingObjectName);
             if (CurrentScope.EntityType != fromType)
@@ -254,14 +254,14 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             relation.SetPKFieldPersistenceInfo(0, SqlAdapter.GetPersistenceInfo(primaryField));
             relation.SetFKFieldPersistenceInfo(0, SqlAdapter.GetPersistenceInfo(foreignField));
 
-            return PushScope(relation, scopeType);
+            return PushScope(relation, scopeType, childQuantityAdorner);
         }
 
         /// <summary>
         /// Transition to the scope of the given EntityType using the EntityRelation builtin and known by LLBLGen between the EntityType of the 
         /// current scope and that of the given scope.
         /// </summary>
-        public SqlGenerationScope PushScope(EntityType entityType, SqlGenerationScopeType scopeType)
+        public SqlGenerationScope PushScope(EntityType entityType, SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner = null)
         {
             IEntityRelation relation;
 
@@ -281,16 +281,16 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 throw new InvalidOperationException(string.Format("Cannot transition to scope; no such relation exists. {0} -> {1}", CurrentScope.EntityType, entityType));
             }
 
-            return PushScope(relation, scopeType);
+            return PushScope(relation, scopeType, childQuantityAdorner);
         }
 
         /// <summary>
         /// Transition to the scope of the given EntityType using the predicate specified.  The child predicate should contain 
         /// a {0} placeholder for where the child table (of entityType) alias will be inserted.
         /// </summary>
-        public SqlGenerationScope PushScope(EntityType entityType, string childPredicate, SqlGenerationScopeType scopeType)
+        public SqlGenerationScope PushScope(EntityType entityType, string childPredicate, SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner = null)
         {
-            SqlGenerationScope newScope = new SqlGenerationScope(this, scopeType, CurrentScope, entityType, childPredicate);
+            SqlGenerationScope newScope = new SqlGenerationScope(this, scopeType, CurrentScope, entityType, childPredicate, childQuantityAdorner);
 
             RegisterJoin(CurrentScope.EntityType, newScope.EntityType);
 
@@ -302,7 +302,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Transition to a parent scope (going from n:1) or to a child scope (going from 1:n) using the given relation and scope type.
         /// </summary>
-        private SqlGenerationScope PushScope(IEntityRelation relation, SqlGenerationScopeType scopeType)
+        private SqlGenerationScope PushScope(IEntityRelation relation, SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner)
         {
             SqlGenerationScope newScope;
             SqlGenerationScope currentScope = CurrentScope;
@@ -316,7 +316,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             }
             else
             {
-                newScope = new SqlGenerationScope(this, scopeType, currentScope, relation);
+                newScope = new SqlGenerationScope(this, scopeType, currentScope, relation, childQuantityAdorner);
             }
 
             RegisterJoin(currentScope.EntityType, newScope.EntityType);

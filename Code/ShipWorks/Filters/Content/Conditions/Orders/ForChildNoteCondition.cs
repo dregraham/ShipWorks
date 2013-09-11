@@ -36,7 +36,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         /// <summary>
         /// Get the child predicate to use to push down into the child scope
         /// </summary>
-        private string GetChildPredicate(SqlGenerationContext context)
+        public static string GetChildPredicate(SqlGenerationContext context)
         {
             // Get the parent scope (which will be the current Order scope)
             SqlGenerationScope parentScope = context.CurrentScope;
