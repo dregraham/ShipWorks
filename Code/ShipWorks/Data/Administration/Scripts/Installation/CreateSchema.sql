@@ -72,6 +72,42 @@ PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrde
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
+PRINT N'Creating [dbo].[ActionQueue]'
+GO
+CREATE TABLE [dbo].[ActionQueue]
+(
+[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ActionID] [bigint] NOT NULL,
+[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0)),
+[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
+[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
+[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
+[TriggerComputerID] [bigint] NOT NULL,
+[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ObjectID] [bigint] NULL,
+[Status] [int] NOT NULL,
+[NextStep] [int] NOT NULL,
+[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
+GO
+ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
+GO
+PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
+GO
+PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
+GO
+ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ActionQueue]'
+GO
 PRINT N'Creating [dbo].[FedExPackage]'
 GO
 CREATE TABLE [dbo].[FedExPackage]
@@ -163,42 +199,6 @@ GO
 PRINT N'Creating index [IX_ObjectReference] on [dbo].[ObjectReference]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ObjectReference] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey])
-GO
-PRINT N'Creating [dbo].[ActionQueue]'
-GO
-CREATE TABLE [dbo].[ActionQueue]
-(
-[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[ActionID] [bigint] NOT NULL,
-[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
-[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
-[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
-[TriggerComputerID] [bigint] NOT NULL,
-[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ObjectID] [bigint] NULL,
-[Status] [int] NOT NULL,
-[NextStep] [int] NOT NULL,
-[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ActionQueueType] [int] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
-GO
-ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
-GO
-PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
-GO
-PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
-GO
-ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Altering [dbo].[ActionQueue]'
 GO
 PRINT N'Creating [dbo].[EbayOrder]'
 GO
