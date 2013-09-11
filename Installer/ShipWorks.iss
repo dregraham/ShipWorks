@@ -234,26 +234,37 @@ end;
 //----------------------------------------------------------------
 function ShipWorksVersionHasScheduler(): Boolean;
 var
-    version: TWindowsVersion;
 	TargetExe: string;
+	VersionMS: Cardinal;
+	VersionLS: Cardinal;
+	VersionMajor: Integer;
+	VersionMinor: Integer;
 begin
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
 	if (FileExists(TargetExe)) 
     then begin
 
-        GetWindowsVersionEx(version);
+	    if (GetVersionNumbers(TargetExe, VersionMS, VersionLS))
+	    then begin
+	        VersionMajor := (VersionMS shr 16) and $ffff;
+	        VersionMinor := VersionMS and $ffff;
 
-        if (
-            (version.Major > 3) or
-            ((version.Major = 3) and (version.Minor > 4)) or
+           // MsgBox(IntToStr(VersionMajor) + ' ' + IntToStr(VersionMinor),
+		   //				    mbConfirmation,
+		   //				    MB_OKCANCEL)
 
-            // Special case for internal builds
-            ((version.Major = 0) and (version.Minor = 0))
-           )
+            if (
+                (VersionMajor > 3) or
+                ((VersionMajor = 3) and (VersionMinor > 4)) or
 
-        then begin
-            Result := true;
+                // Special case for internal builds
+                ((VersionMajor = 0) and (VersionMinor = 0))
+               )
+
+            then begin
+                Result := true;
+            end;
         end;
 	end
 	else
