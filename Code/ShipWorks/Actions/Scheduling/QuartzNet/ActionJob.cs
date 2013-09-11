@@ -1,12 +1,14 @@
 ﻿using System;
 using Quartz;
 using log4net;
+using System.Reflection;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
     /// <summary>
     /// IJob implementation for dispatching a scheduled action
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ActionJob : Quartz.IJob
     {
         private readonly ILog log;
