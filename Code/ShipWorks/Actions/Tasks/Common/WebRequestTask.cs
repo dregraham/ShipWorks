@@ -341,7 +341,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 // any portion of the message that would show the call stack since the log will be in plain 
                 // text to the user
                 string exceptionDetail = CrashSubmitter.GetExceptionDetail(ex);
-                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Call stack:", StringComparison.OrdinalIgnoreCase));
+                string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Callstack:", StringComparison.OrdinalIgnoreCase));
 
                 requestLogger.LogResponse(message, "log");
 
