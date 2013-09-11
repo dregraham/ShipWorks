@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared.Win32;
+using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -141,11 +142,25 @@ namespace ShipWorks.ApplicationCore.Interaction
                 {
                     if (databaseDependent)
                     {
+                        // If we aren't configured for a database at all, or there is a scope active in which the connection could change (like Database Setup wizard),
+                        // or we know something is wrong with the connection - bail.
                         if (!SqlSession.IsConfigured ||
                             ConnectionSensitiveScope.IsActive ||
                             ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
                         {
                             return false;
+                        }
+
+                        // If we are user interactive, then we require a user to be logged on, which verifies that the schema version must be correct
+                        if (Program.ExecutionMode.IsUserInteractive)
+                        {
+                            // We can run if the user is logged in
+                            return UserSession.IsLoggedOn;
+                        }
+                        // In the background we don't have a user, but we still need to make sure the db schema version is correct
+                        else
+                        {
+                            return SqlSchemaUpdater.IsCorrectSchemaVersion();
                         }
                     }
 
@@ -171,12 +186,12 @@ namespace ShipWorks.ApplicationCore.Interaction
                         }
                     }
 
-                    if (!CanRun)
+                    if (lastRan + maxFrequency > DateTime.Now)
                     {
                         return false;
                     }
 
-                    if (lastRan + maxFrequency > DateTime.Now)
+                    if (!CanRun)
                     {
                         return false;
                     }

@@ -140,7 +140,7 @@
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Action Scheduler - Service Status Monitor";
+            this.Text = "Action Scheduler Status";
             this.startingServicePanel.ResumeLayout(false);
             this.startingServicePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.startingServiceImage)).EndInit();
