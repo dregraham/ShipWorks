@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
                 if (account == null)
                 {
-                    account = StampsAccountManager.Accounts.FirstOrDefault();
+                    account = StampsAccountManager.StampsAccounts.FirstOrDefault();
                 }
 
                 if (account != null)
@@ -297,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             StampsProfileEntity stamps = profile.Postal.Stamps;
 
-            stamps.StampsAccountID = StampsAccountManager.Accounts.Count > 0 ? StampsAccountManager.Accounts[0].StampsAccountID : 0;
+            stamps.StampsAccountID = StampsAccountManager.StampsAccounts.Count > 0 ? StampsAccountManager.StampsAccounts[0].StampsAccountID : 0;
             stamps.RequireFullAddressValidation = true;
             stamps.HidePostage = false;
             stamps.Memo = string.Empty;

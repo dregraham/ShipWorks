@@ -28,6 +28,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             this.account = account;
             passwordUpdated = false;
+
+            labelStamps.Text = StampsAccountManager.GetResellerName(account.IsExpress1);
         }
 
         /// <summary>

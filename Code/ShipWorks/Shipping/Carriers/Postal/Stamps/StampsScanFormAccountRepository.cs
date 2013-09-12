@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             List<IScanFormCarrierAccount> carrierAccounts = new List<IScanFormCarrierAccount>();
 
-            List<StampsAccountEntity> stampsAccountEntities = StampsAccountManager.Accounts;
+            List<StampsAccountEntity> stampsAccountEntities = StampsAccountManager.StampsAccounts;
             foreach (StampsAccountEntity accountEntity in stampsAccountEntities)
             {
                 StampsScanFormCarrierAccount carrierAccount = new StampsScanFormCarrierAccount(new StampsScanFormRepository(), accountEntity);

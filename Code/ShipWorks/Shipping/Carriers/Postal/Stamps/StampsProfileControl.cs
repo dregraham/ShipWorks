@@ -50,9 +50,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            if (StampsAccountManager.Accounts.Count > 0)
+            if (StampsAccountManager.StampsAccounts.Count > 0)
             {
-                stampsAccount.DataSource = StampsAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
+                stampsAccount.DataSource = StampsAccountManager.StampsAccounts.Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
                 stampsAccount.Enabled = true;
             }
             else

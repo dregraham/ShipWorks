@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             sandGrid.Rows.Clear();
 
-            foreach (StampsAccountEntity account in StampsAccountManager.Accounts)
+            foreach (StampsAccountEntity account in StampsAccountManager.StampsAccounts)
             {
                 GridRow row = new GridRow(new string[] { account.Username, "Checking..." });
                 sandGrid.Rows.Add(row);

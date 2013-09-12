@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.ComponentModel;
@@ -9,6 +10,8 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -57,21 +60,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Gets all Stamps.com based accounts in ShipWorks
+        /// </summary>
+        /// <returns></returns>
+        private static List<StampsAccountEntity> GetAccounts()
+        {
+            lock (synchronizer)
+            {
+                if (needCheckForChanges)
+                {
+                    InternalCheckForChanges();
+                }
+
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+            }
+        }
+
+        /// <summary>
         /// Return the active list of stamps.com accounts
         /// </summary>
-        public static List<StampsAccountEntity> Accounts
+        public static List<StampsAccountEntity> StampsAccounts
         {
             get
             {
-                lock (synchronizer)
-                {
-                    if (needCheckForChanges)
-                    {
-                        InternalCheckForChanges();
-                    }
+                return GetAccounts().Where(a => !a.IsExpress1).ToList();
+            }
+        }
 
-                    return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
-                }
+        /// <summary>
+        /// Return the active list of Express1 accounts
+        /// </summary>
+        public static List<StampsAccountEntity> Express1Accounts
+        {
+            get
+            {
+                return GetAccounts().Where(a => a.IsExpress1).ToList();
             }
         }
 
@@ -80,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static StampsAccountEntity GetAccount(long accountID)
         {
-            return Accounts.FirstOrDefault(a => a.StampsAccountID == accountID);
+            return GetAccounts().FirstOrDefault(a => a.StampsAccountID == accountID);
         }
 
         /// <summary>
@@ -107,6 +130,67 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             CheckForChangesNeeded();
+        }
+
+        /// <summary>
+        /// Get the default description to use for the given account
+        /// </summary>
+        public static string GetDefaultDescription(StampsAccountEntity account)
+        {
+            string descriptionBase = account.AccountNumber;
+
+            // Express1 uses terribly long account numbers
+            if (account.IsExpress1)
+            {
+                // only shorten so long as we know they're still using long account numbers.
+                if (descriptionBase.Length == 36)
+                {
+                    descriptionBase = "Express1";
+                }
+            }
+
+            StringBuilder description = new StringBuilder(descriptionBase);
+
+            if (account.Street1.Length > 0)
+            {
+                if (description.Length > 0)
+                {
+                    description.Append(", ");
+                }
+
+                description.Append(account.Street1);
+            }
+
+            if (account.PostalCode.Length > 0)
+            {
+                if (description.Length > 0)
+                {
+                    description.Append(", ");
+                }
+
+                description.Append(account.PostalCode);
+            }
+
+            return description.ToString();
+        }
+
+        /// <summary>
+        /// Displays the appropriate setup wizard based on the Stamps Reseller
+        /// </summary>
+        public static bool DisplaySetupWizard(IWin32Window owner, bool isExpress1)
+        {
+            using (WizardForm dlg = isExpress1 ? (WizardForm)new Express1SetupWizard(true) : new StampsSetupWizard())
+            {
+                return (dlg.ShowDialog(owner) == DialogResult.OK);
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the Stamps reseller, either "Stamps" or "Express1"
+        /// </summary>
+        public static string GetResellerName(bool isExpress1)
+        {
+            return isExpress1 ? "Express1" : "Stamps";
         }
     }
 }
