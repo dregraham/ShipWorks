@@ -132,6 +132,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionName);}
 		}
+		/// <summary>Creates a new ActionQueueEntity.ActionQueueType field instance</summary>
+		public static EntityField2 ActionQueueType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionQueueType);}
+		}
 		/// <summary>Creates a new ActionQueueEntity.ActionVersion field instance</summary>
 		public static EntityField2 ActionVersion
 		{
@@ -176,11 +181,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ContextLock
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ContextLock);}
-		}
-		/// <summary>Creates a new ActionQueueEntity.ActionQueueType field instance</summary>
-		public static EntityField2 ActionQueueType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionQueueType);}
 		}
 	}
 
@@ -16546,6 +16546,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 MailingPostalCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
+		}
+		/// <summary>Creates a new StampsAccountEntity.IsExpress1 field instance</summary>
+		public static EntityField2 IsExpress1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.IsExpress1);}
 		}
 	}
 

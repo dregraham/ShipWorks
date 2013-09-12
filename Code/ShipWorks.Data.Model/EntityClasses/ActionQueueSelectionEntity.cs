@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 
 
-
+		private ActionQueueEntity _actionQueue;
 
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -53,7 +53,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-
+			/// <summary>Member name ActionQueue</summary>
+			public static readonly string ActionQueue = "ActionQueue";
 
 
 
@@ -117,7 +118,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				_actionQueue = (ActionQueueEntity)info.GetValue("_actionQueue", typeof(ActionQueueEntity));
+				if(_actionQueue!=null)
+				{
+					_actionQueue.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 
 				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -134,7 +139,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch((ActionQueueSelectionFieldIndex)fieldIndex)
 			{
 				case ActionQueueSelectionFieldIndex.ActionQueueID:
-
+					DesetupSyncActionQueue(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -158,7 +163,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-
+				case "ActionQueue":
+					this.ActionQueue = (ActionQueueEntity)entity;
+					break;
 
 
 
@@ -183,7 +190,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
+				case "ActionQueue":
+					toReturn.Add(ActionQueueSelectionEntity.Relations.ActionQueueEntityUsingActionQueueID);
+					break;
 
 
 
@@ -222,7 +231,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "ActionQueue":
+					SetupSyncActionQueue(relatedEntity);
+					break;
 
 
 				default:
@@ -239,7 +250,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "ActionQueue":
+					DesetupSyncActionQueue(false, true);
+					break;
 
 
 				default:
@@ -262,7 +275,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
+			if(_actionQueue!=null)
+			{
+				toReturn.Add(_actionQueue);
+			}
 
 			return toReturn;
 		}
@@ -289,7 +305,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				info.AddValue("_actionQueue", (!this.MarkedForDeletion?_actionQueue:null));
 
 			}
 			
@@ -327,6 +343,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'ActionQueue' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoActionQueue()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ActionQueueFields.ActionQueueID, null, ComparisonOperator.Equal, this.ActionQueueID));
+			return bucket;
+		}
 
 	
 		
@@ -395,7 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-
+			toReturn.Add("ActionQueue", _actionQueue);
 
 
 
@@ -407,7 +432,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			if(_actionQueue!=null)
+			{
+				_actionQueue.ActiveContext = base.ActiveContext;
+			}
 
 		}
 
@@ -417,7 +445,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
+			_actionQueue = null;
 
 			PerformDependencyInjection();
 			
@@ -446,6 +474,38 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _actionQueue</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncActionQueue(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _actionQueue, new PropertyChangedEventHandler( OnActionQueuePropertyChanged ), "ActionQueue", ActionQueueSelectionEntity.Relations.ActionQueueEntityUsingActionQueueID, true, signalRelatedEntity, "ActionQueueSelection", resetFKFields, new int[] { (int)ActionQueueSelectionFieldIndex.ActionQueueID } );		
+			_actionQueue = null;
+		}
+
+		/// <summary> setups the sync logic for member _actionQueue</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncActionQueue(IEntity2 relatedEntity)
+		{
+			if(_actionQueue!=relatedEntity)
+			{
+				DesetupSyncActionQueue(true, true);
+				_actionQueue = (ActionQueueEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _actionQueue, new PropertyChangedEventHandler( OnActionQueuePropertyChanged ), "ActionQueue", ActionQueueSelectionEntity.Relations.ActionQueueEntityUsingActionQueueID, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnActionQueuePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
@@ -482,6 +542,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ActionQueue' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathActionQueue
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ActionQueueEntityFactory))),
+					(IEntityRelation)GetRelationsForField("ActionQueue")[0], (int)ShipWorks.Data.Model.EntityType.ActionQueueSelectionEntity, (int)ShipWorks.Data.Model.EntityType.ActionQueueEntity, 0, null, null, null, null, "ActionQueue", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+			}
+		}
 
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
@@ -543,6 +614,40 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Gets / sets related entity of type 'ActionQueueEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual ActionQueueEntity ActionQueue
+		{
+			get
+			{
+				return _actionQueue;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncActionQueue(value);
+				}
+				else
+				{
+					if(value==null)
+					{
+						if(_actionQueue != null)
+						{
+							_actionQueue.UnsetRelatedEntity(this, "ActionQueueSelection");
+						}
+					}
+					else
+					{
+						if(_actionQueue!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "ActionQueueSelection");
+						}
+					}
+				}
+			}
+		}
 
 	
 		

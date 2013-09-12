@@ -488,6 +488,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("MailingPostalCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("IsExpress1", fieldHashtable);
 		}
 		#endregion
 
@@ -760,6 +763,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StampsAccountFieldIndex.MailingPostalCode, true); }
 			set	{ SetValue((int)StampsAccountFieldIndex.MailingPostalCode, value); }
+		}
+
+		/// <summary> The IsExpress1 property of the Entity StampsAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "StampsAccount"."IsExpress1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean IsExpress1
+		{
+			get { return (System.Boolean)GetValue((int)StampsAccountFieldIndex.IsExpress1, true); }
+			set	{ SetValue((int)StampsAccountFieldIndex.IsExpress1, value); }
 		}
 
 
