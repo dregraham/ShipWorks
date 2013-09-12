@@ -1048,17 +1048,22 @@ namespace ShipWorks.Data.Administration
             // If we are already conected to or connecting to this exact session, then forget it.
             if (connectionSession != null)
             {
-                if ((connectionSession.Configuration.ServerInstance == selectedInstance) &&
-                    (
-                        connectionSession.Configuration.WindowsAuth == sqlSession.Configuration.WindowsAuth ||
-                        (
-                            connectionSession.Configuration.Username == sqlSession.Configuration.Username &&
-                            connectionSession.Configuration.Password == sqlSession.Configuration.Password
-                        )
-                    )
-                   )
+                // Same server
+                if (connectionSession.Configuration.ServerInstance == selectedInstance)
                 {
-                    return;
+                    // Same auth (windows) so we can get out
+                    if (sqlSession.Configuration.WindowsAuth && connectionSession.Configuration.WindowsAuth)
+                    {
+                        return;
+                    }
+
+                    // Same auth (password) so we can get out
+                    if (!sqlSession.Configuration.WindowsAuth && !connectionSession.Configuration.WindowsAuth &&
+                        connectionSession.Configuration.Username == sqlSession.Configuration.Username &&
+                        connectionSession.Configuration.Password == sqlSession.Configuration.Password)
+                    {
+                        return;
+                    }
                 }
             }
 
