@@ -106,110 +106,85 @@ namespace ShipWorks.Data.Administration
             progressFunctionality.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFunctionality);
            
-            // Start by disconnecting all users. We don't use this same connection the whole time, so its possible that
-            // someone could sneak in and take the single connection in between us releasing and getting it.  But if that happened, 
-            // we would blowup, and the upgrade would just have to start over the next time.
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                SqlUtility.SetSingleUser(con);
-            }
-
-            // Clear out the pool so that connection holding onto SINGLE_USER gets released
-            SqlConnection.ClearAllPools();
-
-            try
-            {
-                // Put the SuperUser in scope, and don't audit
-                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
-                {
-                    using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
-                    {
-                        // Update the tables
-                        UpdateScripts(installed, progressScripts);
-
-                        // Functionality starting
-                        progressFunctionality.Starting();
-
-                        // Update the assemblies
-                        UpdateAssemblies(progressFunctionality);
-
-                        // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
-                        // So the following stuff only runs when we are in a "regular" 3x update.
-                        if (!MigrationController.IsMigrationInProgress())
-                        {
-                            // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                            UpdateFilters(progressFunctionality);
-                        }
-
-                        // Now we need to update the database to return the correct schema version that is now installed
-                        using (SqlConnection con = SqlSession.Current.OpenConnection())
-                        {
-                            UpdateSchemaVersionStoredProcedure(con);
-                        }
-
-                        // Functionality is done
-                        progressFunctionality.PercentComplete = 100;
-                        progressFunctionality.Detail = "Done";
-                        progressFunctionality.Completed();
-
-                        transaction.Complete();
-                    }
-                }
-
-                // Clear out the pool so any connection holding onto SINGLE_USER gets released
-                SqlConnection.ClearAllPools();
-
-                // If we were upgrading from 3.1.21 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                if (installed < new Version(3, 1, 21, 0))
-                {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        SqlCommand cmd = SqlCommandProvider.Create(con);
-                        cmd.CommandText = @"
-
-                            DECLARE @dbName nvarchar(100)
-                            DECLARE @dataName nvarchar(100)
-                            DECLARE @logName nvarchar(100)
-
-                            SET @dbName = DB_NAME()
-                            SELECT @dataName = name FROM sys.database_files WHERE type = 0
-                            SELECT @logName = name FROM sys.database_files WHERE type = 1
-
-                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 100MB)' )
-                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 100MB)' )";
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    SqlUtility.SetChangeTrackingRetention(con, 1);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("UpdateDatabase failed", ex);
-
-                throw;
-            }
-            finally
+            // Start by disconnecting all users.
+            using (SingleUserModeScope singleUserScope = new SingleUserModeScope())
             {
                 try
                 {
+                    // Put the SuperUser in scope, and don't audit
+                    using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
+                    {
+                        using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
+                        {
+                            // Update the tables
+                            UpdateScripts(installed, progressScripts);
+
+                            // Functionality starting
+                            progressFunctionality.Starting();
+
+                            // Update the assemblies
+                            UpdateAssemblies(progressFunctionality);
+
+                            // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
+                            // So the following stuff only runs when we are in a "regular" 3x update.
+                            if (!MigrationController.IsMigrationInProgress())
+                            {
+                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                                UpdateFilters(progressFunctionality);
+                            }
+
+                            // Now we need to update the database to return the correct schema version that is now installed
+                            using (SqlConnection con = SqlSession.Current.OpenConnection())
+                            {
+                                UpdateSchemaVersionStoredProcedure(con);
+                            }
+
+                            // Functionality is done
+                            progressFunctionality.PercentComplete = 100;
+                            progressFunctionality.Detail = "Done";
+                            progressFunctionality.Completed();
+
+                            transaction.Complete();
+                        }
+                    }
+
                     // Clear out the pool so any connection holding onto SINGLE_USER gets released
                     SqlConnection.ClearAllPools();
 
-                    // Allow multiple connections again
+                    // If we were upgrading from 3.1.21 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
+                    if (installed < new Version(3, 1, 21, 0))
+                    {
+                        using (SqlConnection con = SqlSession.Current.OpenConnection())
+                        {
+                            SqlCommand cmd = SqlCommandProvider.Create(con);
+                            cmd.CommandText = @"
+
+                                DECLARE @dbName nvarchar(100)
+                                DECLARE @dataName nvarchar(100)
+                                DECLARE @logName nvarchar(100)
+
+                                SET @dbName = DB_NAME()
+                                SELECT @dataName = name FROM sys.database_files WHERE type = 0
+                                SELECT @logName = name FROM sys.database_files WHERE type = 1
+
+                                EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 100MB)' )
+                                EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 100MB)' )";
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
                     using (SqlConnection con = SqlSession.Current.OpenConnection())
                     {
-                        SqlUtility.SetMultiUser(con);
+                        SqlUtility.SetChangeTrackingRetention(con, 1);
                     }
                 }
-                catch (SqlException ex)
+                catch (Exception ex)
                 {
-                    log.Error("Failed to set database back to multi-user mode.", ex);
+                    log.Error("UpdateDatabase failed", ex);
+
+                    throw;
                 }
             }
         }

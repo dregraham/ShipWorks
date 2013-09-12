@@ -204,19 +204,8 @@ namespace ShipWorks.Data.Connection
                 {
                     con.Open();
 
-                    // Since we are pooling, it will open without actually connecting to the server.
-                    // We need to do this to validate we can actually connect.  This sees at least a 10x slow down
-                    // but its necessary for a good user experience on a lost connection.
-                    ValidateOpenConnection(con);
-
-                    // If there is a deadlock priority in scope, set it now
-                    if (SqlDeadlockPriorityScope.Current != null)
-                    {
-                        SqlCommandProvider.ExecuteNonQuery(con, string.Format("SET DEADLOCK_PRIORITY {0}", SqlDeadlockPriorityScope.Current.DeadlockPriority));
-
-                        // To read it back...
-                        // "SELECT deadlock_priority FROM sys.dm_exec_sessions where session_id = @@SPID"
-                    }
+                    // Prepare the connection for use
+                    PrepareConnectionForUse(con);
                 }
                 catch (SqlException ex)
                 {
@@ -238,28 +227,60 @@ namespace ShipWorks.Data.Connection
                     // If it's a login failure, or b\c our connection has gone away, we have to check to see if it is because we were locked out due to SINGLE_USER
                     if (ex.Number == 4060 || ex.Number == 233)
                     {
-                        bool isSingleUser = false;
-
-                        try
+                        if (!SingleUserModeScope.IsActive)
                         {
-                            SqlSession master = new SqlSession(SqlSession.Current);
-                            master.Configuration.DatabaseName = "master";
+                            bool isSingleUser = false;
 
-                            using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                            try
                             {
-                                testConnection.Open();
+                                SqlSession master = new SqlSession(SqlSession.Current);
+                                master.Configuration.DatabaseName = "master";
 
-                                isSingleUser = SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+                                using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                                {
+                                    testConnection.Open();
+
+                                    isSingleUser = SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName);
+                                }
+                            }
+                            catch (Exception textEx)
+                            {
+                                log.Error("Could not login to master to try to check for SINGLE_USER mode", textEx);
+                            }
+
+                            if (isSingleUser)
+                            {
+                                throw new SingleUserModeException();
                             }
                         }
-                        catch (Exception textEx)
+                        else
                         {
-                            log.Error("Could not login to master to try to check for SINGLE_USER mode", textEx);
-                        }
+                            Stopwatch timer = Stopwatch.StartNew();
 
-                        if (isSingleUser)
-                        {
-                            throw new SingleUserModeException();
+                            // Since SingleUserModeScope is active, we are here b\c another connection stole it from us.  We'll try to steal it back as soon as we can.
+                            // Basically we'll try as hard as we can for up to 30 seconds
+                            while (timer.Elapsed < TimeSpan.FromSeconds(30))
+                            {
+                                try
+                                {
+                                    con.Open();
+
+                                    // Prepare the connection for use
+                                    PrepareConnectionForUse(con);
+
+                                    log.InfoFormat("Recovered from losing SINGLE_USER in {0}s", timer.Elapsed.TotalSeconds);
+
+                                    return;
+                                }
+                                catch (SqlException)
+                                {
+                                    Thread.Sleep(1);
+
+                                    SqlConnection.ClearAllPools();
+                                }
+                            }
+
+                            throw new SqlScriptException("There was a problem maintaining the connection to the database.  Please try closing ShipWorks on your other computers.");
                         }
                     }
 
@@ -298,6 +319,26 @@ namespace ShipWorks.Data.Connection
             if (LogConnectionCallstacks)
             {
                 Debug.WriteLine(new StackTrace().ToString());
+            }
+        }
+
+        /// <summary>
+        /// Prepare the open connection for use
+        /// </summary>
+        private static void PrepareConnectionForUse(SqlConnection con)
+        {
+            // Since we are pooling, it will open without actually connecting to the server.
+            // We need to do this to validate we can actually connect.  This sees at least a 10x slow down
+            // but its necessary for a good user experience on a lost connection.
+            ValidateOpenConnection(con);
+
+            // If there is a deadlock priority in scope, set it now
+            if (SqlDeadlockPriorityScope.Current != null)
+            {
+                SqlCommandProvider.ExecuteNonQuery(con, string.Format("SET DEADLOCK_PRIORITY {0}", SqlDeadlockPriorityScope.Current.DeadlockPriority));
+
+                // To read it back...
+                // "SELECT deadlock_priority FROM sys.dm_exec_sessions where session_id = @@SPID"
             }
         }
 

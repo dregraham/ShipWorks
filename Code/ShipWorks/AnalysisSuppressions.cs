@@ -12405,3 +12405,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Scope = "member", Target = "ShipWorks.Templates.Processing.TemplateXslExtensions.#InternalRunCode(System.String,System.Collections.Generic.List`1<System.Object>)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Helperservice", Scope = "member", Target = "ShipWorks.ApplicationCore.Services.ShipWorksServiceBase.#EnumHelperserviceType")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope = "type", Target = "ShipWorks.MainForm+UIHeartbeat")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Scope = "member", Target = "ShipWorks.Data.Connection.SingleUserModeScope.#Dispose()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "ShipWorks.Data.Connection.SingleUserModeScope.#Dispose()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "type", Target = "ShipWorks.Data.Connection.SingleUserModeScope")]
