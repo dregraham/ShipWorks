@@ -6,6 +6,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Actions
 {
@@ -38,11 +39,17 @@ namespace ShipWorks.Actions
                 resultFields.DefineField(ActionQueueFields.ActionQueueID, 1, "ActionQueueID", "");
                 resultFields.DefineField(ActionQueueFields.InternalComputerLimitedList, 2, "InternalComputerLimitedList", "");
 
-                // Always grab the UI actions and only grab the scheduled actions based on the ActionManager (i.e. an action 
-                // manager capable of processing scheduled actions is also capable of processing UI based actions but an UI
-                // action manager is only capable of processing UI based actions
+                // Only process the scheduled actions based on the action manager configuration
+                Predicate isProcessableQueueType = ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType;
+
+                if(!UserInterfaceExecutionMode.IsProcessRunning)
+                {
+                    // Additionally process UI actions if the UI is not running
+                    isProcessableQueueType |= ActionQueueFields.ActionQueueType == (int)ActionQueueType.UserInterface;
+                }
+
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
-                    (ActionQueueFields.ActionQueueType == (int) ActionQueueType.UserInterface | ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType) &
+                    isProcessableQueueType &
                     (ActionQueueFields.ActionQueueID > lastQueueID) &
                     (ActionQueueFields.Status == (int) ActionQueueStatus.Dispatched |
                      ActionQueueFields.Status == (int) ActionQueueStatus.Incomplete |

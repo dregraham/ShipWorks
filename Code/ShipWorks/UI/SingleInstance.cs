@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using log4net;
 using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.UI
 {
@@ -25,24 +26,34 @@ namespace ShipWorks.UI
         static int singleInstanceActivateMessageID;
 
         // The mutex we use to see if more than one instance is running
+        static string mutexName;
         static Mutex instanceMutex;
 
         // Indicates if the application is already running
         static bool isAlreadyRunning;
 
         /// <summary>
+        /// Gets the mutex name, which is based on the instance ID.
+        /// </summary>
+        private static string MutexName
+        {
+            get
+            {
+                return mutexName ?? (mutexName = ShipWorksSession.InstanceID.ToString("B"));
+            }
+        }
+
+        /// <summary>
         /// Register an application with the given identifier
         /// </summary>
-        public static void Register(Guid instanceID)
+        public static void Register()
         {
-            string mutexName = instanceID.ToString("B");
-
             // Register the private window messages
-            windowsMessageID = NativeMethods.RegisterWindowMessage(mutexName);
-            singleInstanceActivateMessageID = NativeMethods.RegisterWindowMessage(mutexName + "_Restore");
+            windowsMessageID = NativeMethods.RegisterWindowMessage(MutexName);
+            singleInstanceActivateMessageID = NativeMethods.RegisterWindowMessage(MutexName + "_Restore");
 
             bool createdNew;
-            instanceMutex = new Mutex(false, mutexName, out createdNew);
+            instanceMutex = new Mutex(false, MutexName, out createdNew);
 
             isAlreadyRunning = !createdNew;
         }
@@ -54,12 +65,22 @@ namespace ShipWorks.UI
         {
             get 
             { 
-                if (instanceMutex == null)
+                if (instanceMutex != null)
                 {
-                    throw new InvalidOperationException("SingleInstance.Register has not yet been called.");
+                    return isAlreadyRunning; 
                 }
-                
-                return isAlreadyRunning; 
+
+                try
+                {
+                    using (Mutex.OpenExisting(MutexName))
+                    {
+                        return true;
+                    }
+                }
+                catch (WaitHandleCannotBeOpenedException)
+                {
+                    return false;
+                }
             }
         }
 

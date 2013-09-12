@@ -41,6 +41,14 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
         /// <summary>
+        /// Indicates whether the UI is running for the current instance ID.
+        /// </summary>
+        public static bool IsProcessRunning
+        {
+            get { return Program.ExecutionMode is UserInterfaceExecutionMode || SingleInstance.IsAlreadyRunning; }
+        }
+
+        /// <summary>
         /// Determines whether the execution mode supports interacting with the user.
         /// </summary>
         /// <returns>
@@ -64,7 +72,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // The installer uses this to know the app needs shutdown before the installation can continue.
             appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
 
-            SingleInstance.Register(ShipWorksSession.InstanceID);
+            SingleInstance.Register();
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
             {
