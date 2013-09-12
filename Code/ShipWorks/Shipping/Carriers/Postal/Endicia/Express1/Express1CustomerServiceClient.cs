@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         private static CustomerService CreateCustomerService(string logName)
         {
-            CustomerService service = new CustomerService(new ApiLogEntry(ApiLogSource.UspsExpress1, logName));
+            CustomerService service = new CustomerService(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
 
             // configure the endpoint
             if (Express1EndiciaUtility.UseTestServer)
@@ -332,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         private static Postal.Express1.WebServices.LabelService.EwsLabelService CreateExpress1LabelService(string logName)
         {
-            Postal.Express1.WebServices.LabelService.EwsLabelService refundService = new Postal.Express1.WebServices.LabelService.EwsLabelService(new ApiLogEntry(ApiLogSource.UspsExpress1, logName));
+            Postal.Express1.WebServices.LabelService.EwsLabelService refundService = new Postal.Express1.WebServices.LabelService.EwsLabelService(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
 
             if (Express1EndiciaUtility.UseTestServer)
             {
