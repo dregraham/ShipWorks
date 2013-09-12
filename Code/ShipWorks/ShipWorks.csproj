@@ -882,10 +882,13 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1AchType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1CreditCardType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsUtility.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1PaymentInfo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
