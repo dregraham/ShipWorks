@@ -23,7 +23,7 @@ using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
-    class StampsShipmentType : PostalShipmentType
+    public class StampsShipmentType : PostalShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value

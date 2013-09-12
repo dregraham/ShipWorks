@@ -28,10 +28,10 @@ namespace ShipWorks.Shipping
         [Description("USPS (w/o Postage)")]
         PostalWebTools = 4,
 
-        [Description("USPS (Express1 for Endicia)")]
+        [Description("USPS (Express1/Endicia)")]
         Express1Endicia = 9,
 
-        [Description("USPS (Express1 for Stamps.com)")]
+        [Description("USPS (Express1/Stamps.com)")]
         Express1Stamps = 13,
 
         [Description("FedEx")]

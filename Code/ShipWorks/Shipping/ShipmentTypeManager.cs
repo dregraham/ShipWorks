@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.Shipping
 {
@@ -105,7 +106,7 @@ namespace ShipWorks.Shipping
                     return new StampsShipmentType();
 
                 case ShipmentTypeCode.Express1Stamps:
-                    throw new NotImplementedException();
+                    return new Express1StampsShipmentType();
 
                 case ShipmentTypeCode.PostalWebTools:
                     return new PostalWebShipmentType();
