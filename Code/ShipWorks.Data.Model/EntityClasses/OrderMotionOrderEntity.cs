@@ -486,6 +486,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OrderMotionPromotion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OrderMotionShipmentNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -579,6 +582,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderMotionOrderFieldIndex.OrderMotionPromotion, true); }
 			set	{ SetValue((int)OrderMotionOrderFieldIndex.OrderMotionPromotion, value); }
+		}
+
+		/// <summary> The OrderMotionShipmentNumber property of the Entity OrderMotionOrder<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OrderMotionOrder"."OrderMotionShipmentNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OrderMotionShipmentNumber
+		{
+			get { return (System.String)GetValue((int)OrderMotionOrderFieldIndex.OrderMotionShipmentNumber, true); }
+			set	{ SetValue((int)OrderMotionOrderFieldIndex.OrderMotionShipmentNumber, value); }
 		}
 
 

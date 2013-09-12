@@ -254,16 +254,16 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ActionQueueEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ActionID", "ActionID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ActionName", "ActionName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "ActionVersion", "ActionVersion", false, (int)SqlDbType.Binary, 8, 0, 0, false, "", null, typeof(System.Byte[]), 4 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "QueueVersion", "QueueVersion", false, (int)SqlDbType.Binary, 8, 0, 0, false, "", null, typeof(System.Byte[]), 5 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "TriggerDate", "TriggerDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "TriggerComputerID", "TriggerComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "InternalComputerLimitedList", "ComputerLimitedList", false, (int)SqlDbType.VarChar, 150, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "ObjectID", "ObjectID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 9 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "Status", "Status", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "NextStep", "NextStep", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "ContextLock", "ContextLock", true, (int)SqlDbType.NVarChar, 36, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "ActionQueueEntity", "ActionQueueType", "ActionQueueType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "ActionQueueType", "ActionQueueType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "ActionVersion", "ActionVersion", false, (int)SqlDbType.Binary, 8, 0, 0, false, "", null, typeof(System.Byte[]), 5 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "QueueVersion", "QueueVersion", false, (int)SqlDbType.Binary, 8, 0, 0, false, "", null, typeof(System.Byte[]), 6 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "TriggerDate", "TriggerDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 7 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "TriggerComputerID", "TriggerComputerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "InternalComputerLimitedList", "ComputerLimitedList", false, (int)SqlDbType.VarChar, 150, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "ObjectID", "ObjectID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 10 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "Status", "Status", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "NextStep", "NextStep", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "ContextLock", "ContextLock", true, (int)SqlDbType.NVarChar, 36, 0, 0, false, "", null, typeof(System.String), 13 );
 		}
 		/// <summary>Inits ActionQueueSelectionEntity's mappings</summary>
 		private void InitActionQueueSelectionEntityMappings()
@@ -1813,10 +1813,11 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits OrderMotionOrderEntity's mappings</summary>
 		private void InitOrderMotionOrderEntityMappings()
 		{
-			base.AddElementMapping( "OrderMotionOrderEntity", "ShipWorksLocal", @"dbo", "OrderMotionOrder", 3 );
+			base.AddElementMapping( "OrderMotionOrderEntity", "ShipWorksLocal", @"dbo", "OrderMotionOrder", 4 );
 			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionShipmentID", "OrderMotionShipmentID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionPromotion", "OrderMotionPromotion", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionShipmentNumber", "OrderMotionShipmentNumber", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
 		/// <summary>Inits OrderMotionStoreEntity's mappings</summary>
 		private void InitOrderMotionStoreEntityMappings()
