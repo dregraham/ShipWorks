@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;

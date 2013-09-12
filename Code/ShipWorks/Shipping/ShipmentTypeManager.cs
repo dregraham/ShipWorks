@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.None;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;

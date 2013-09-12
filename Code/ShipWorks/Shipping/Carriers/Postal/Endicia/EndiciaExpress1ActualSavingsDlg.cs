@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Editing;
 using Divelements.SandGrid;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     if (discountedRate != null)
                     {
-                        if (Express1Utility.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.Amount <= originalRate.Amount)
+                        if (Express1EndiciaUtility.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.Amount <= originalRate.Amount)
                         {
                             // If we need to add in the parent, add it
                             if (parentRate != null)

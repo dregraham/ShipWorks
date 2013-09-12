@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia

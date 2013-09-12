@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using System.Web.Services.Protocols;
 using System.Net;
@@ -92,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        return Express1Utility.ApiKey;
+                        return Express1EndiciaUtility.ApiKey;
                     }
 
                 case EndiciaReseller.None:
@@ -139,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.Express1:
                     {
                         webService = new Express1ServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1, logName));
-                        webService.Url = Express1Utility.UseTestServer ? Express1Utility.Express1DevelopmentUrl : Express1Utility.Express1ProductionUrl;
+                        webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
                         break;
                     }
 
@@ -187,13 +188,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Express1
             if (shipment.ShipmentType == (int)ShipmentTypeCode.PostalExpress1)
             {
-                request.Test = (Express1Utility.UseTestServer || account.TestAccount) ? "YES" : "NO";
+                request.Test = (Express1EndiciaUtility.UseTestServer || account.TestAccount) ? "YES" : "NO";
 
                 // If this is an Express1 shipment, and Single-Source is turned on, we need to make sure it is a packaging type Express1 supports or
                 if (settings.Express1SingleSource)
                 {
                     // If its not a postage saving service, express1 would automatically reroute to Endicia.  It's only when the service could save, but the packaging is goofed that there's a problem.
-                    if (Express1Utility.IsPostageSavingService(serviceType) && !Express1Utility.IsValidPackagingType(serviceType, packagingType))
+                    if (Express1EndiciaUtility.IsPostageSavingService(serviceType) && !Express1EndiciaUtility.IsValidPackagingType(serviceType, packagingType))
                     {
                         request.Provider = "Endicia";
                     }
