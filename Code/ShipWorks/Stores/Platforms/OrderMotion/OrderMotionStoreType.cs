@@ -141,7 +141,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             var order = new Lazy<OrderMotionOrderEntity>(() => (OrderMotionOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("OrderMotion");
-            outline.AddElement("ShipmentNumber", () => string.Format("{0}-{1}", order.Value.OrderNumber, order.Value.OrderMotionShipmentID));
+            //outline.AddElement("ShipmentNumber", () => string.Format("{0}-{1}", order.Value.OrderNumber, order.Value.OrderMotionShipmentID));
+            outline.AddElement("ShipmentNumber", () => order.Value.OrderMotionShipmentNumber);
             outline.AddElement("Promotion", () => order.Value.OrderMotionPromotion);
         }
 
