@@ -1971,6 +1971,7 @@
       <DependentUpon>NeweggDownloadCriteriaPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionShipmentIDCondition.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionShipmentNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Actions\SearsShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Filters\SearsCustomerPickupCondition.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Filters\SearsPoNumberCondition.cs" />
