@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Filters
     /// </summary>
     [ConditionElement("OrderMotion Shipment", "OrderMotionOrder.ShipmentID")]
     [ConditionStoreType(StoreTypeCode.OrderMotion)]
-    public class OrderMotionShipmentIDCondition : StringCondition
+    public class OrderMotionShipmentIDCondition : NumericCondition<int>
     {
         /// <summary>
         /// Generate the SQL for the condition element
