@@ -134,10 +134,6 @@ namespace ShipWorks
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
 
-        // Indicates that we are already waiting for a heartbeat to be invoked to the UI thread
-        object pendingHeartbeatLock = new object();
-        HeartbeatOptions? pendingForceHeartbeatOptions = null;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -1754,42 +1750,13 @@ namespace ShipWorks
         {
             if (InvokeRequired)
             {
-                lock (pendingHeartbeatLock)
-                {
-                    // If we already invoked a forced heartbeat, just update wether changes are expected
-                    if (pendingForceHeartbeatOptions != null)
-                    {
-                        pendingForceHeartbeatOptions |= options;
-                        return;
-                    }
-                    // Nothing pending so far just set the changes expected and proceed to invoke
-                    else
-                    {
-                        pendingForceHeartbeatOptions = options;
-                    }
-                }
-
                 // Put the heartbeat on the UI thread
-                BeginInvoke((MethodInvoker) delegate
-                {
-                    HeartbeatOptions optionsToCallWith;
-
-                    lock (pendingHeartbeatLock)
-                    {
-                        optionsToCallWith = pendingForceHeartbeatOptions ?? HeartbeatOptions.None;
-                        pendingForceHeartbeatOptions = null;
-                    }
-
-                    ForceHeartbeat(optionsToCallWith);
-                });
-
+                BeginInvoke((MethodInvoker) delegate { ForceHeartbeat(options);});
                 return;
             }
-            else
-            {
-                // Force it to go now, if it
-                heartBeat.ForceHeartbeat(options);
-            }
+
+            // Force it to go now, if it
+            heartBeat.ForceHeartbeat(options);
         }
 
         /// <summary>

@@ -59,6 +59,13 @@ namespace ShipWorks.ApplicationCore
         int forcedFastRatesStart = 10;
         int forcedFastRatesLeft = 0;
 
+        // Tracks if we are in a heartbeat, so we don't beat twice at the same time
+        object doingHeartbeatLock = new object();
+        bool doingHeartbeat = false;
+
+        // Indicates that we are already waiting for a heartbeat to be invoked to the UI thread
+        HeartbeatOptions? pendingOptions = null;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Heartbeat"/> class.
         /// </summary>
@@ -120,6 +127,49 @@ namespace ShipWorks.ApplicationCore
         /// Do a single heartbeat.
         /// </summary>
         protected void DoHeartbeat(HeartbeatOptions options)
+        {
+            // Prevent two heartbeats happening at once
+            lock (doingHeartbeatLock)
+            {
+                // If we are already doing a hearbeat, we need to save the options the user wanted, so we can use them when we get around to the next hearbeat
+                if (doingHeartbeat)
+                {
+                    if (pendingOptions == null)
+                    {
+                        pendingOptions = HeartbeatOptions.None;
+                    }
+
+                    pendingOptions |= options;
+
+                    // Just get out for now
+                    return;
+                }
+
+                doingHeartbeat = true;
+            }
+
+            // If there were any pending options, be sure to consider them too
+            options = options | (pendingOptions ?? HeartbeatOptions.None);
+            pendingOptions = null;
+
+            try
+            {
+                InternalDoHeartbeat(options);
+            }
+            finally
+            {
+                lock (doingHeartbeatLock)
+                {
+                    doingHeartbeat = false;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Private version of the heartbeat that's wrapped in a check to make sure it can't be called at the same time from two different threads
+        /// </summary>
+        private void InternalDoHeartbeat(HeartbeatOptions options)
         {
             if (!CanBeat())
             {
