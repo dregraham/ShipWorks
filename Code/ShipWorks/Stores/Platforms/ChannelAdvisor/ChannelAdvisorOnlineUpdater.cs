@@ -344,7 +344,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     if (ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
                     {
-                        return "Global Mail Track and Trace 10-20 Days";
+                        return "Global Mail";
                     }
 
                     break;
