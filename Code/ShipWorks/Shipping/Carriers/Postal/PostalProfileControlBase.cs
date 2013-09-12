@@ -46,7 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             LoadServiceTypes();
             LoadConfirmationTypes();
 
-            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.PostalExpress1));
+            // TODO...
+            if((ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.Express1Stamps)
+                throw new NotImplementedException("TODO: How does Express1 Stamps figure with Cubic?");
+
+            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.Express1Endicia));
             EnumHelper.BindComboBox<PostalCustomsContentType>(contentType);
 
             dimensionsControl.Initialize();

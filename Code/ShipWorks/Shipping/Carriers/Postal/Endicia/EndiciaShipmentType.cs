@@ -316,7 +316,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 var originalType = shipment.ShipmentType;
 
                 // We temporarily turn this into an Exprss1 shipment to get rated
-                shipment.ShipmentType = (int) ShipmentTypeCode.PostalExpress1;
+                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
@@ -481,7 +481,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation); 
 
                     // Check Express1 amount
-                    shipment.ShipmentType = (int)ShipmentTypeCode.PostalExpress1;
+                    shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
                     shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                     shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
@@ -514,7 +514,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (useExpress1)
             {
                 // Now we turn this into an Express1 shipment...
-                shipment.ShipmentType = (int) ShipmentTypeCode.PostalExpress1;
+                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
@@ -577,7 +577,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             commonDetail.OriginAccount = (account == null) ? "" : account.AccountNumber;
 
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1 && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
                 commonDetail.OriginalShipmentType = ShipmentTypeCode.Endicia;
             }

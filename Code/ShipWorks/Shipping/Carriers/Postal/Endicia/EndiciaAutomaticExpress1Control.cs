@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             ShippingSettings.CheckForChangesNeeded();
 
-            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.PostalExpress1))
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Endicia))
             {
                 using (Express1SetupWizard setupDlg = new Express1SetupWizard(true))
                 {
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                Express1SetupWizard setupDlg = (Express1SetupWizard) ShipmentTypeManager.GetType(ShipmentTypeCode.PostalExpress1).CreateSetupWizard();
+                Express1SetupWizard setupDlg = (Express1SetupWizard) ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).CreateSetupWizard();
                 setupDlg.HideDetailedConfiguration = true;
 
                 if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     setupDlg.InitialAccountAddress = new PersonAdapter(EndiciaAccountManager.GetAccounts(EndiciaReseller.None)[0], "");
                 }
 
-                added = ShipmentTypeSetupControl.SetupShipmentType(this, ShipmentTypeCode.PostalExpress1, setupDlg);
+                added = ShipmentTypeSetupControl.SetupShipmentType(this, ShipmentTypeCode.Express1Endicia, setupDlg);
             }
 
             if (added)

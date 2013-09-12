@@ -163,7 +163,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
             switch (type)
             {
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return BuyDotComTrackingType.Usps;

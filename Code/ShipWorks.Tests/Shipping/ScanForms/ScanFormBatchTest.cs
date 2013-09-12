@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             {
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.FlatRateEnvelope
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.Package
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.FlatRateLargeBox
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             {
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.Cubic
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.Cubic
@@ -162,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.FlatRateLargeBox
@@ -182,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             {
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.Cubic
@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.Cubic
@@ -198,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int) ShipmentTypeCode.PostalExpress1,
+                    ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
                     Postal = new PostalShipmentEntity
                     {
                         PackagingType = (int) PostalPackagingType.FlatRateLargeBox

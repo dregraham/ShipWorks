@@ -77,8 +77,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.PostalExpress1);
-            bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.PostalExpress1) || forceAccountOnly;
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
+            bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Endicia) || forceAccountOnly;
 
             // Initialize country to US
             if (initialAccountAddress != null)

@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         {
             List<ShipmentFieldIndex> modifiedFieldList = new List<ShipmentFieldIndex>();
 
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia || shipment.ShipmentType == (int)ShipmentTypeCode.PostalExpress1)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia || shipment.ShipmentType == (int)ShipmentTypeCode.Express1Endicia)
             {
                 // These carriers place the company name field above the recipient's name, so we're going to 
                 // set the name to empty. (This is okay according to a call with eBay on 8/30/2012)

@@ -98,11 +98,14 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.Endicia:
                     return new EndiciaShipmentType();
 
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
                     return new Express1ShipmentType();
 
                 case ShipmentTypeCode.Stamps:
                     return new StampsShipmentType();
+
+                case ShipmentTypeCode.Express1Stamps:
+                    throw new NotImplementedException();
 
                 case ShipmentTypeCode.PostalWebTools:
                     return new PostalWebShipmentType();
@@ -134,14 +137,15 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.UpsOnLineTools: return 2;
                 case ShipmentTypeCode.UpsWorldShip: return 3;
                 case ShipmentTypeCode.Endicia: return 4;
-                case ShipmentTypeCode.PostalExpress1: return 5;
+                case ShipmentTypeCode.Express1Endicia: return 5;
                 case ShipmentTypeCode.Stamps: return 6;
-                case ShipmentTypeCode.PostalWebTools: return 7;
-                case ShipmentTypeCode.EquaShip: return 8;
-                case ShipmentTypeCode.OnTrac: return 9;
-                case ShipmentTypeCode.iParcel: return 10;
-                case ShipmentTypeCode.Other: return 11;
-                case ShipmentTypeCode.None: return 12;
+                case ShipmentTypeCode.Express1Stamps: return 7;
+                case ShipmentTypeCode.PostalWebTools: return 8;
+                case ShipmentTypeCode.EquaShip: return 9;
+                case ShipmentTypeCode.OnTrac: return 10;
+                case ShipmentTypeCode.iParcel: return 11;
+                case ShipmentTypeCode.Other: return 12;
+                case ShipmentTypeCode.None: return 13;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");
@@ -190,7 +194,8 @@ namespace ShipWorks.Shipping
         {
             switch (shipmentTypeCode)
             {
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Stamps:

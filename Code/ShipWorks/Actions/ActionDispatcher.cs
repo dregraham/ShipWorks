@@ -106,9 +106,15 @@ namespace ShipWorks.Actions
                 // converts the shipment to Express1.  But for ease of configuration, and to match what the user expects, we want the actions 
                 // to process as if they are Endicia.  This is where we test for if the Express1 shipment was really originally an Endicia shipment,
                 // and force Endicia actions to run.
-                if (shipmentType == ShipmentTypeCode.PostalExpress1 && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+
+                if (shipmentType == ShipmentTypeCode.Express1Endicia && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
                 {
                     shipmentType = ShipmentTypeCode.Endicia;
+                }
+                else if(shipmentType == ShipmentTypeCode.Express1Stamps )//TODO: && shipment.Postal.Stamps.OriginalStampsAccountID != null) ??
+                {
+                    //TODO: shipmentType = ShipmentTypeCode.Stamps; ??
+                    throw new NotImplementedException("TODO: Resolve this for Express1 Stamps");
                 }
 
                 // Honor the Shipment Type limitation

@@ -305,7 +305,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 {
                     PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
@@ -376,7 +377,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "UPS";
                 
                 case ShipmentTypeCode.Stamps:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
                 

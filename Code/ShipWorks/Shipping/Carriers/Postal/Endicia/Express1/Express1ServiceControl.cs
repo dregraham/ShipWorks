@@ -9,7 +9,7 @@
         /// Constructor
         /// </summary>
         public Express1ServiceControl()
-            : base (ShipmentTypeCode.PostalExpress1, EndiciaReseller.Express1)
+            : base (ShipmentTypeCode.Express1Endicia, EndiciaReseller.Express1)
         {
             InitializeComponent();
         }

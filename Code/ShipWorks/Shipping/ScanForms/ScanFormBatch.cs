@@ -112,7 +112,11 @@ namespace ShipWorks.Shipping.ScanForms
                 // Express 1 cubic shipments are created on a separate Endicia account on the Express 1 backend, so we need 
                 // to separate the Express 1 cubic shipments into a separate SCAN form and request a scan form for those separately
                 // (we don't want the user to have to split these out)
-                List<ShipmentEntity> express1CubicShipments = shipments.Where(selected => (ShipmentTypeCode)selected.ShipmentType == ShipmentTypeCode.PostalExpress1 && (PostalPackagingType)selected.Postal.PackagingType == PostalPackagingType.Cubic).ToList();
+
+                if(shipments.Any(x => (ShipmentTypeCode)x.ShipmentType == ShipmentTypeCode.Express1Stamps))
+                    throw new NotImplementedException("TODO: Does this special case also apply to Express1 Stamps?");
+
+                List<ShipmentEntity> express1CubicShipments = shipments.Where(selected => (ShipmentTypeCode)selected.ShipmentType == ShipmentTypeCode.Express1Endicia && (PostalPackagingType)selected.Postal.PackagingType == PostalPackagingType.Cubic).ToList();
                 List<ShipmentEntity> allOtherShipments = shipments.Except(express1CubicShipments).ToList();
 
                 // Create batch record

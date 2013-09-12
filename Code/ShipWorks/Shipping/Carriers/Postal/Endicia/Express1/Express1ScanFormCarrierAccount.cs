@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             // Just need to set the shipment type code for express 1 that 
             // gets used in the GetEligibleShipmentIDs method
-            ShipmentTypeCode = ShipmentTypeCode.PostalExpress1;
+            ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
         }
 
         /// <summary>

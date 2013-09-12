@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             get
             {
-                return ShipmentTypeCode.PostalExpress1;
+                return ShipmentTypeCode.Express1Endicia;
             }
         }
 

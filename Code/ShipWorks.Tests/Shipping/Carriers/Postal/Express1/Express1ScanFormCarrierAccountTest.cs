@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         [TestMethod]
         public void ShipmentTypeCode_Test()
         {
-            Assert.AreEqual(ShipmentTypeCode.PostalExpress1, testObject.ShipmentTypeCode);
+            Assert.AreEqual(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
         
         [TestMethod]

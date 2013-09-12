@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
 
                 if (!anyExpress1)
                 {
-                    RelationPredicateBucket bucket = new RelationPredicateBucket(ShipmentFields.ShipmentType == (int)ShipmentTypeCode.PostalExpress1);
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(ShipmentFields.ShipmentType == (int)ShipmentTypeCode.Express1Endicia);
                     anyExpress1 = SqlAdapter.Default.GetDbCount(new ShipmentEntityFactory().CreateFields(), bucket) > 0;
                 }
             }
@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             {
                 e.Skip = true;
             }
-            else if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.PostalExpress1))
+            else if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Endicia))
             {
                 ShowConfiguredUI();
             }
@@ -73,7 +73,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.PostalExpress1);
+                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Endicia);
 
                     Wizard.MoveNext();
                 }
@@ -95,7 +95,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            ShippingSettings.MarkAsActivated(ShipmentTypeCode.PostalExpress1);
+            ShippingSettings.MarkAsActivated(ShipmentTypeCode.Express1Endicia);
         }
     }
 }

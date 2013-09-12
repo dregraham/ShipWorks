@@ -389,7 +389,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Stamps:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
 
                 // For now, treating Equaship as Postal until eBay accepts EquaShip. (1/27/2012)
                 case ShipmentTypeCode.EquaShip:

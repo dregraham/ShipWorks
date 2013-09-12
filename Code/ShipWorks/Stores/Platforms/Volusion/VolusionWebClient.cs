@@ -227,7 +227,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
 
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
