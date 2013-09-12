@@ -128,7 +128,8 @@ namespace ShipWorks
         // Used to manage the UI state of the online update commands
         OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
 
-        UIHeartbeat uiHeartbeat;
+        // Used to keep ShipWorks "pumping" looking for data changes
+        UIHeartbeat heartBeat;
 
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
@@ -144,10 +145,11 @@ namespace ShipWorks
         {
             InitializeComponent();
 
+            // Create the heartbeat
+            heartBeat = new UIHeartbeat(this);
+
             // Persist size\position of the window
             WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState, "MainForm");
-
-            uiHeartbeat = new UIHeartbeat(this);
         }
 
         #region Initialization \ Shutdown
@@ -339,7 +341,7 @@ namespace ShipWorks
                     return;
                 }
 
-                heartbeatTimer.Stop();
+                heartBeat.Stop();
 
                 if (UserSession.IsLoggedOn)
                 {
@@ -507,6 +509,9 @@ namespace ShipWorks
 
             log.InfoFormat("Logon to SQL Server: Success");
 
+            // Reset the heartbeat
+            heartBeat.Reset();
+
             // Now we know we have a connection to a current database.  Initialize a new session.
             UserSession.InitializeForCurrentDatabase();
 
@@ -646,8 +651,7 @@ namespace ShipWorks
             CheckDatabaseDiskUsage();
 
             // Start the heartbeat
-            heartbeatTimer.Start();
-            ForceHeartbeat();
+            heartBeat.Start();
         }
 
         /// <summary>
@@ -820,7 +824,7 @@ namespace ShipWorks
         private void ShowBlankUI()
         {
             // Stop the update heartbeat
-            heartbeatTimer.Stop();
+            heartBeat.Stop();
 
             ApplicationText = "";
 
@@ -1783,44 +1787,9 @@ namespace ShipWorks
             }
             else
             {
-                if (heartbeatTimer.Enabled)
-                {
-                    // Reset the timer
-                    heartbeatTimer.Stop();
-                    heartbeatTimer.Start();
-
-                    // If changes are expected, we increase the heartrate, so we can pickup the new filter counts more quickly.
-                    if ((options & HeartbeatOptions.ChangesExpected) != 0)
-                    {
-                        log.InfoFormat("Increasing heart rate");
-
-                        // Increase the heart rate
-                        heartbeatTimer.Interval = Heartbeat.HeartbeatFastRate;
-
-                        // Only force the fast beat for so long - we can't wait forever for changes
-                       uiHeartbeat.HeartbeatForcedFastRatesLeft = uiHeartbeat.HeartbeatForcedFastRatesStart;
-                    }
-
-                    // Force it to go now, if it
-                    _DoHeartbeat(options);
-                }
+                // Force it to go now, if it
+                heartBeat.ForceHeartbeat(options);
             }
-        }
-
-        /// <summary>
-        /// Called periodically to allow ShipWorks to execute tasks on the GUI thread
-        /// </summary>
-        private void OnHeartbeatTimer(object sender, EventArgs e)
-        {
-            _DoHeartbeat(HeartbeatOptions.None);
-        }
-
-        /// <summary>
-        /// Do a single heartbeat.  Should not be called directly - call ForceHeartbeat instead
-        /// </summary>
-        private void _DoHeartbeat(HeartbeatOptions options)
-        {
-            uiHeartbeat.DoHeartbeat(options);
         }
 
         /// <summary>
@@ -1828,7 +1797,7 @@ namespace ShipWorks
         /// </summary>
         void OnEnterThreadModal(object sender, EventArgs e)
         {
-            if (IsDisposed || !heartbeatTimer.Enabled)
+            if (IsDisposed || heartBeat.Pace == HeartbeatPace.Stopped)
             {
                 return;
             }
@@ -1850,7 +1819,7 @@ namespace ShipWorks
         /// </summary>
         void OnLeaveThreadModal(object sender, EventArgs e)
         {
-            if (IsDisposed || !heartbeatTimer.Enabled)
+            if (IsDisposed || heartBeat.Pace == HeartbeatPace.Stopped)
             {
                 return;
             }

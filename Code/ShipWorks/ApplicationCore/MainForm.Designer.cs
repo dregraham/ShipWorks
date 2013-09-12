@@ -120,7 +120,6 @@ namespace ShipWorks
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemOpenShipWorks = new System.Windows.Forms.ToolStripMenuItem();
-            this.heartbeatTimer = new System.Windows.Forms.Timer(this.components);
             this.kryptonManager = new ComponentFactory.Krypton.Toolkit.KryptonManager(this.components);
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -1173,11 +1172,6 @@ namespace ShipWorks
             this.toolStripMenuItemOpenShipWorks.Size = new System.Drawing.Size(162, 22);
             this.toolStripMenuItemOpenShipWorks.Text = "Open ShipWorks";
             this.toolStripMenuItemOpenShipWorks.Click += new System.EventHandler(this.OnTaskTrayMenuOpenShipWorks);
-            // 
-            // heartbeatTimer
-            // 
-            this.heartbeatTimer.Interval = 15000;
-            this.heartbeatTimer.Tick += new System.EventHandler(this.OnHeartbeatTimer);
             // 
             // label14
             // 
@@ -2736,7 +2730,6 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonManageUsers;
         private ShipWorks.Filters.Controls.FilterTree filterTree;
         private Divelements.SandRibbon.Button buttonFirewall;
-        private System.Windows.Forms.Timer heartbeatTimer;
         private System.Windows.Forms.ContextMenuStrip contextMenuFilterTree;
         private System.Windows.Forms.ToolStripMenuItem menuItemEditFilter;
         private System.Windows.Forms.ToolStripSeparator menuItemEditFilterSep;

@@ -42,117 +42,112 @@ namespace ShipWorks.ApplicationCore
         private static readonly ILog log = LogManager.GetLogger(typeof(Heartbeat));
 
         // Heartbeat standards
-        public static readonly int HeartbeatFastRate = (int)TimeSpan.FromSeconds(1).TotalMilliseconds;
+        static readonly TimeSpan minimumWait = TimeSpan.FromSeconds(.5);
+        static readonly int normalRate = (int) TimeSpan.FromSeconds(15).TotalMilliseconds;
+        static readonly int fastRate = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
 
-        private readonly TimeSpan heartbeatMinimumWait = TimeSpan.FromSeconds(.5);
-        private readonly int heartbeatNormalRate = (int)TimeSpan.FromSeconds(15).TotalMilliseconds;
-
-        private readonly TimestampTracker heartbeatTimestampTracker = new TimestampTracker();
-        private bool heartbeatChangeProcessingPending;
-        private DateTime lastHeartbeatTime;
-
+        // So we don't have to do all of the heartbeat if nothing has changed
+        readonly TimestampTracker timestampTracker = new TimestampTracker();
+        bool changeProcessingPending;
+        DateTime lastHeartbeatTime;
         private int storesChangeVersion = -1;
+
+        // Current heartbeat rate
+        int currentRate = normalRate;
+
+        // If we are in a forced heartbeat that caused the heart rate to change, this is how many fast beats are left
+        int forcedFastRatesStart = 10;
+        int forcedFastRatesLeft = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Heartbeat"/> class.
         /// </summary>
         public Heartbeat()
         {
-            lastHeartbeatTime = DateTime.MinValue;
-
-            // Reset timestamp tracking for the heartbeat
-            heartbeatTimestampTracker.Reset();
-
-            HeartbeatForcedFastRatesStart = 10;
+            Reset();
         }
 
         /// <summary>
-        /// Gets or sets the heartbeat forced fast rates left.
+        /// Stop the heartbeat
         /// </summary>
-        public int HeartbeatForcedFastRatesLeft { get; set; }
-
-        /// <summary>
-        /// Gets the heartbeat forced fast rates start.
-        /// </summary>
-        public int HeartbeatForcedFastRatesStart { get; private set; }
-
-        /// <summary>
-        /// Do a single heartbeat.  Should not be called directly - call ForceHeartbeat instead
-        /// </summary>
-        public void DoHeartbeat(HeartbeatOptions options)
+        public void Stop()
         {
-            if (!CanStart())
+            Pace = HeartbeatPace.Stopped;
+        }
+
+        /// <summary>
+        /// Start the heartbeat
+        /// </summary>
+        public void Start()
+        {
+            Pace = HeartbeatPace.Normal;
+
+            ForceHeartbeat(HeartbeatOptions.None);
+        }
+
+        /// <summary>
+        /// Reset the heartbeat back to its initial state
+        /// </summary>
+        public void Reset()
+        {
+            lastHeartbeatTime = DateTime.MinValue;
+
+            // Reset timestamp tracking for the heartbeat
+            timestampTracker.Reset();
+        }
+
+        /// <summary>
+        /// Forces a heartbeat.  Not necessary to call, as the pacemaker will keep it pumping without this.  This just makes it happen instantly, 
+        /// and also speeds it up if its expecting changes.
+        /// </summary>
+        public void ForceHeartbeat(HeartbeatOptions options)
+        {
+            if (Pace != HeartbeatPace.Stopped)
+            {
+                // If changes are expected, we increase the heartrate.  This is for things like picking up filter counts more quickly.
+                if ((options & HeartbeatOptions.ChangesExpected) != 0)
+                {
+                    log.InfoFormat("Increasing heart rate");
+
+                    Pace = HeartbeatPace.Fast;
+                }
+
+                DoHeartbeat(options);
+            }
+        }
+
+        /// <summary>
+        /// Do a single heartbeat.
+        /// </summary>
+        protected void DoHeartbeat(HeartbeatOptions options)
+        {
+            if (!CanBeat())
             {
                 return;
             }
-
-            // Check for pending background DB reconnects
-            ConnectionMonitor.VerifyConnected();
-
-            // Make sure we are not in a failure state
-            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashWindow.IsApplicationCrashed)
-            {
-                return;
-            }
-
-            // Can't be within a connection sensitive scope.  If the connection might be changed, we can't be kicking off stuff
-            // and using the connection.
-            if (ConnectionSensitiveScope.IsActive)
-            {
-                return;
-            }
-
-            // Shouldn't be able to get here while not logged in
-            Debug.Assert(SqlSession.IsConfigured);
-            Debug.Assert(UserSession.IsLoggedOn || !Program.ExecutionMode.IsUserInteractive);
 
             // Extract heartbeat options
             bool forceReload = (options & HeartbeatOptions.ForceReload) != 0;
 
-            // If its beating too fast, then skip it, we don't want to update too often.
-            TimeSpan timeSinceLastHeartbeat = DateTime.UtcNow - lastHeartbeatTime;
-            if (timeSinceLastHeartbeat < heartbeatMinimumWait && !forceReload)
-            {
-                // Increase the heartrate for one beat (if its not fast already) so we get back in here quickly.
-                if (HeartbeatForcedFastRatesLeft == 0)
-                {
-                    HeartbeatForcedFastRatesLeft = 1;
-                    SetHeartbeatSpeed(HeartbeatFastRate);
-                }
-
-                return;
-            }
-
-            // Don't update while in the middle of a store deletion
-            if (DeletionService.IsDeletingStore)
+            // Check our pace - we may be going to fast and need to bail
+            if (!CheckPace(forceReload))
             {
                 return;
             }
 
-            // See if we are in a state of forced fast heart rate
-            if (HeartbeatForcedFastRatesLeft > 0)
-            {
-                // Done with the forced fast rate
-                if (--HeartbeatForcedFastRatesLeft == 0)
-                {
-                    log.DebugFormat("[Heartbeat] Canceling fast heart rate (time out)");
-                    SetHeartbeatSpeed(heartbeatNormalRate);
-                }
-            }
-
+            // Debugging \ Logging
             Stopwatch sw = Stopwatch.StartNew();
+            long connections = ConnectionMonitor.TotalConnectionCount;
 
             // Check for any change in the database. 
-            bool heartbeatChangeDetected = heartbeatTimestampTracker.CheckForChange();
-
-            log.InfoFormat("[Heartbeat] Starting (Changes: {0}). Time since last: {1}", heartbeatChangeDetected, timeSinceLastHeartbeat.TotalSeconds);
-            long connections = ConnectionMonitor.TotalConnectionCount;
+            bool changesDetected = timestampTracker.CheckForChange();
+            log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
 
             DownloadManager.StartAutoDownloadIfNeeded();
             EmailCommunicator.StartAutoEmailingIfNeeded();
 
             // If there was a heartbeat change detected, kick off actions and set the flag to process heartbeat changes
-            if (heartbeatChangeDetected)
+            if (changesDetected)
             {
                 // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
                 ActionProcessor.StartProcessing();
@@ -160,7 +155,7 @@ namespace ShipWorks.ApplicationCore
                 // This flag stays true until section below sees it and resets to false.  The section in question only 
                 // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
                 // runs to ensure changes are not missed.
-                heartbeatChangeProcessingPending = true;
+                changeProcessingPending = true;
             }
 
             // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
@@ -169,30 +164,152 @@ namespace ShipWorks.ApplicationCore
             // Make sure all our counts are up-to-date
             FilterContentManager.CheckForChanges();
 
-            // Detect if a modal window is open.  The popup test is, for now, to make sure we don't reload the 
-            // grid columns on a filter layout change while the right-click grid column editor is open.
-            if (IsProgramReadyForHeartbeat())
+            // Time to process the heartbeat
+            ProcessHeartbeat(changesDetected, forceReload);
+
+            // Finalize this heartbeat
+            FinishHeartbeat();
+
+            // Logging
+            log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}, Interval: {2}s", sw.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections, currentRate / 1000);
+        }
+
+        /// <summary>
+        /// Determines if the heartbeat is ready to beat
+        /// </summary>
+        protected virtual bool CanBeat()
+        {
+            if (Pace == HeartbeatPace.Stopped)
             {
-                RunActualHeartbeat(forceReload);
+                return false;
             }
-            else
+
+            // Check for pending background DB reconnects
+            ConnectionMonitor.VerifyConnected();
+
+            // Make sure we are not in a failure state
+            if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal || CrashWindow.IsApplicationCrashed)
             {
-                RunProgramNotReadyLogic(heartbeatChangeDetected, forceReload);
+                return false;
             }
 
-            AfterReload();
+            // Don't update while in the middle of a store deletion
+            if (DeletionService.IsDeletingStore)
+            {
+                return false;
+            }
 
-            // Save the last heartbeat time from the end of the heartbeat.  That way if it takes a while to process, we don't overlap.
-            lastHeartbeatTime = DateTime.UtcNow;
+            // Shouldn't be able to get here while not logged in
+            Debug.Assert(SqlSession.IsConfigured);
+            Debug.Assert(UserSession.IsLoggedOn || !Program.ExecutionMode.IsUserInteractive);
 
-            FinalLog(sw, connections);
+            return true;
+        }
+
+        /// <summary>
+        /// Check the pace of the hearbeat.  It may need adjusted, or we may need to not beat at all due to going to fast.
+        /// </summary>
+        private bool CheckPace(bool forceReload)
+        {
+            // If its beating too fast, then skip it, we don't want to update too often.
+            TimeSpan timeSinceLastHeartbeat = DateTime.UtcNow - lastHeartbeatTime;
+            if (timeSinceLastHeartbeat < minimumWait && !forceReload)
+            {
+                // Increase the heartrate for one beat (if its not fast already) so we get back in here quickly.
+                Pace = HeartbeatPace.SingleFast;
+
+                return false;
+            }
+
+            // See if we are in a state of forced fast heart rate
+            if (forcedFastRatesLeft > 0)
+            {
+                // Done with the forced fast rate
+                if (--forcedFastRatesLeft == 0)
+                {
+                    log.DebugFormat("[Heartbeat] Canceling fast heart rate (time out)");
+                    Pace = HeartbeatPace.Normal;
+                }
+            }
+
+            log.DebugFormat("[Heartbeat] Time since last: {0}s", timeSinceLastHeartbeat.TotalSeconds);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Sets the pace of the heartbeat
+        /// </summary>
+        public HeartbeatPace Pace
+        {
+            get
+            {
+                if (currentRate == 0)
+                {
+                    return HeartbeatPace.Stopped;
+                }
+
+                return (currentRate == fastRate) ?
+                    HeartbeatPace.Fast :
+                    HeartbeatPace.Normal;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case HeartbeatPace.Stopped:
+                        {
+                            currentRate = 0;
+                        }
+                        break;
+
+                    case HeartbeatPace.Fast:
+                        {
+                            // When we go to a fast beat, we keep it there for a wihle
+                            forcedFastRatesLeft = forcedFastRatesStart;
+
+                            currentRate = fastRate;
+                        }
+                        break;
+
+                    case HeartbeatPace.SingleFast:
+                        {
+                            // If the pace is already fast, and has beats left, we don't change anything.
+                            if (Pace != HeartbeatPace.Fast || forcedFastRatesLeft == 0)
+                            {
+                                forcedFastRatesLeft = 1;
+                            }
+
+                            currentRate = fastRate;
+                        }
+                        break;
+
+                    case HeartbeatPace.Normal:
+                        {
+                            currentRate = normalRate;
+                        }
+                        break;
+                }
+
+                UpdatePacemaker(currentRate);
+            }
+        }
+
+        /// <summary>
+        /// Update the pacemaker to the given pace
+        /// </summary>
+        protected virtual void UpdatePacemaker(int pace)
+        {
+
         }
 
         /// <summary>
         /// Runs the actual heartbeat. 
         /// </summary>
-        private void RunActualHeartbeat(bool forceReload)
+        protected virtual void ProcessHeartbeat(bool changesDetected, bool forceReload)
         {
+            bool storesChanged = false;
+
             // We only do all this checking if there was a dbts change.
             //
             // IMPORTANT: 
@@ -201,12 +318,9 @@ namespace ShipWorks.ApplicationCore
             // If some type of change checking is not 1. Then it probably should be 2. If it can't be, then it cant be excluded
             // by the timestamp tracking change detection.
             //
-            if (heartbeatChangeProcessingPending)
+            if (changeProcessingPending)
             {
                 log.DebugFormat("[Heartbeat] Processing timestamp change");
-                heartbeatChangeProcessingPending = false;
-
-                bool storesChanged = false;
 
                 // Depending on what changes, we may need to force the grid to redraw
                 StoreManager.CheckForChanges();
@@ -248,78 +362,30 @@ namespace ShipWorks.ApplicationCore
                 // what's already been stored in the database, so it's done after the various CheckForChangesNeeded calls above
                 // to ensure the latest data is being used.
                 DashboardManager.CheckForChanges();
-
-                ReloadExternalDependencies(forceReload, storesChanged);
             }
-            else
-            {
-                NoDataChangeBehavior(forceReload);
-            }
+
+            // Give any derived versions a chance to update the display of any changed data
+            RespondToChanges(changeProcessingPending, forceReload, storesChanged);
+
+            // We've now processed the pending change
+            changeProcessingPending = false;
         }
 
         /// <summary>
-        /// Determines whether this instance can start.
+        /// Give any derived versions respond to changes that have happened in this heartbeat
         /// </summary>
-        protected virtual bool CanStart()
+        protected virtual void RespondToChanges(bool hadChanges, bool forceReload, bool storesChanged)
         {
-            return true;
+
         }
 
         /// <summary>
-        /// Sets the heartbeat speed.
+        /// Finish the heartbeat.  Derived class should call this at the end of their overriden function
         /// </summary>
-        protected virtual void SetHeartbeatSpeed(int rate)
+        protected virtual void FinishHeartbeat()
         {
-            // do nothing
-        }
-
-        /// <summary>
-        /// Determines whether [is program ready for heartbeat].
-        /// </summary>
-        /// <returns></returns>
-        protected virtual bool IsProgramReadyForHeartbeat()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Runs after it is determined that ShipWorks is not in a state to do a heartbeat.
-        /// </summary>
-        protected virtual void RunProgramNotReadyLogic(bool heartbeatChangeDetected, bool forceReload)
-        {
-            // do nothing
-        }
-
-        /// <summary>
-        /// Reloads the external dependencies.
-        /// </summary>
-        protected virtual void ReloadExternalDependencies(bool forceReload, bool storesChanged)
-        {
-            // do nothing
-        }
-
-        /// <summary>
-        /// Executes after it is determined no data is changed.
-        /// </summary>
-        protected virtual void NoDataChangeBehavior(bool forceReload)
-        {
-            // do nothing
-        }
-
-        /// <summary>
-        /// Executes after data is reloaded.
-        /// </summary>
-        protected virtual void AfterReload()
-        {
-            // do nothing
-        }
-
-        /// <summary>
-        /// Call to log at end of HeartBeat.
-        /// </summary>
-        protected virtual void FinalLog(Stopwatch stopwatch, long connections)
-        {
-            log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}.", stopwatch.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections);
+            // Save the last heartbeat time from the end of the heartbeat.  That way if it takes a while to process, we don't overlap.
+            lastHeartbeatTime = DateTime.UtcNow;
         }
     }
 }

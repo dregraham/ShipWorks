@@ -84,7 +84,7 @@ namespace ShipWorks.ApplicationCore.Services
             // Switch to checking every 15 seconds
             timer.Interval = (int)TimeSpan.FromSeconds(15).TotalMilliseconds;
 
-            heartbeat.DoHeartbeat(HeartbeatOptions.None);
+            heartbeat.ForceHeartbeat(HeartbeatOptions.None);
         }
     }
 }
