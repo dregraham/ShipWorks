@@ -1,93 +1,92 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<Import Project="shared.targets" />
-  
+  <Import Project="shared.targets" />
+
   <PropertyGroup>
     <Configuration Condition=" $(Configuration) == '' ">Release</Configuration>
-        
+
     <ShipWorksSolution>..\ShipWorks.sln</ShipWorksSolution>
     <ShipWorksProject>..\Code\ShipWorks\ShipWorks.csproj</ShipWorksProject>
     <NativeProject>..\Code\ShipWorks.Native\Native.vcxproj</NativeProject>
-    
-		<!--Build output-->
+
+    <!--Build output-->
     <ArtifactDirectory>..\Artifacts</ArtifactDirectory>
-    
+
     <!-- Local or Automated (when CCNet is used it changes to Automated -->
     <BuildType>Local</BuildType>
-    
-    
+
     <!-- Can be overridden for local builds -->
-		<PackageModules Condition=" $(PackageModules) == '' ">False</PackageModules>
+    <PackageModules Condition=" $(PackageModules) == '' ">False</PackageModules>
 
-		<!-- Can be true or false to initiate the installer -->
-		<CreateInstaller Condition=" $(CreateInstaller) == '' ">False</CreateInstaller>
+    <!-- Can be true or false to initiate the installer -->
+    <CreateInstaller Condition=" $(CreateInstaller) == '' ">False</CreateInstaller>
 
-		<!-- None, Internal, or Public -->
-		<ReleaseType Condition=" $(ReleaseType) == '' ">None</ReleaseType>
-    
-		<!-- Default to no obfuscation, but force it for public builds -->
-		<Obfuscate Condition=" $(Obfuscate) == '' ">False</Obfuscate>
-    <Obfuscate Condition=" $(ReleaseType) == 'Public' ">True</Obfuscate>
-    
-	</PropertyGroup>
+    <!-- None, Internal, Nightly, or Public -->
+    <ReleaseType Condition=" $(ReleaseType) == '' ">None</ReleaseType>
+
+    <!-- Default to no obfuscation, but force it for public or nightly builds -->
+    <Obfuscate Condition=" $(Obfuscate) == '' ">False</Obfuscate>
+    <Obfuscate Condition=" $(ReleaseType) == 'Public' or $(ReleaseType) == 'Nightly' ">True</Obfuscate>
+
+  </PropertyGroup>
 
   <!-- Properties to set if  being called from CC.NET-->
   <PropertyGroup Condition=" '$(CCNetProject)' != '' ">
-		<BuildType>Automated</BuildType>
-	  <PackageModules Condition=" $(ReleaseType) != 'None' ">True</PackageModules>
-		<CreateInstaller Condition=" $(ReleaseType) != 'None' ">True</CreateInstaller>
-	</PropertyGroup>
+    <BuildType>Automated</BuildType>
+    <PackageModules Condition=" $(ReleaseType) != 'None' ">True</PackageModules>
+    <CreateInstaller Condition=" $(ReleaseType) != 'None' ">True</CreateInstaller>
+  </PropertyGroup>
 
   <!-- Properties controlling final output locations -->
   <PropertyGroup>
     <LogDirectory>$(ArtifactDirectory)\Logs</LogDirectory>
     <AppDirectory>$(ArtifactDirectory)\Application</AppDirectory>
     <InstallerDirectory>$(ArtifactDirectory)\Distribute</InstallerDirectory>
-		<ModulesDirectory>$(InstallerDirectory)\Modules</ModulesDirectory>
+    <ModulesDirectory>$(InstallerDirectory)\Modules</ModulesDirectory>
   </PropertyGroup>
 
   <!-- The main build -->
   <PropertyGroup>
     <BuildDependsOn>
-			ValidateProperties;
-			CommonInitialization;
-			UpdateAssemblyInfo;
-			Compile;
-			CopyToLatest;
-			RunTests;
-			PackageModules;
-			SqlSnapshot;
-			CreateInstaller;
-			PackageResults;
-		</BuildDependsOn>
+      ValidateProperties;
+      CommonInitialization;
+      UpdateAssemblyInfo;
+      Compile;
+      CopyToLatest;
+      RunTests;
+      PackageModules;
+      SqlSnapshot;
+      CreateInstaller;
+      PackageResults;
+    </BuildDependsOn>
   </PropertyGroup>
   <Target Name="Build"
 				DependsOnTargets="$(BuildDependsOn)">
   </Target>
 
-	<!-- Make sure specified input properties make sense-->
+  <!-- Make sure specified input properties make sense-->
   <Target Name="ValidateProperties">
-    
+
     <Error Text="BuildType '$(BuildType)' was specified, but CCNetLabel does not exist."
 			Condition=" $(BuildType) != 'Local' and $(CCNetLabel) == '' " />
 
-		<Error Text="ReleaseType is set but BuildType is not Automated"
+    <Error Text="ReleaseType is set but BuildType is not Automated"
 			Condition=" $(ReleaseType) != 'None' and $(BuildType) != 'Automated' " />
 
-		<Error Text="ReleaseType is set but CreateInstaller is False"
+    <Error Text="ReleaseType is set but CreateInstaller is False"
 			Condition=" $(ReleaseType) != 'None' and $(CreateInstaller) != 'True' " />
 
     <Error Text="Obfuscate is not True but ReleaseType is Public"
       Condition=" $(Obfuscate) != 'True' and $(ReleaseType) == 'Public'" />
-    
-	</Target>
 
-	<!-- The compilation controller -->
+  </Target>
+
+  <!-- The compilation controller -->
   <PropertyGroup>
     <CompileDependsOn>
       CleanAll;
       CompileSolution;
-			CompileNative;
+      CompileNative;
     </CompileDependsOn>
   </PropertyGroup>
   <Target Name="Compile"
@@ -107,7 +106,7 @@
 
   <!-- Clean the artifact folder -->
   <Target Name="CleanArtifacts">
-    
+
     <CreateItem Include="$(AppDirectory)\*.*;$(AppDirectory)\Obfuscated\*.*;$(AppDirectory)\Original\*.*;$(LogDirectory)\*.*"  Condition=" '$(BuildType)' == 'Local' ">
       <Output TaskParameter="Include" ItemName="OldArtifacts"/>
     </CreateItem>
@@ -121,200 +120,200 @@
 
   <!-- Clean all the projects -->
   <Target Name="CleanProjects" >
-    
-		<!-- Clean the whole solution-->
+
+    <!-- Clean the whole solution-->
     <MSBuild
 			Projects="$(ShipWorksSolution)"
 			Properties="Configuration=$(Configuration);"
 			Targets="Clean">
     </MSBuild>
-    
-		<!-- Clean each of the native projects -->
-		<MSBuild
+
+    <!-- Clean each of the native projects -->
+    <MSBuild
 			Projects="$(NativeProject)"
 			Properties="Configuration=$(Configuration);Platform=Win32;"
 			Targets="Clean">
-		</MSBuild>
-		<MSBuild
+    </MSBuild>
+    <MSBuild
 			Projects="$(NativeProject)"
 			Properties="Configuration=$(Configuration);Platform=x64;"
 			Targets="Clean">
-		</MSBuild>
+    </MSBuild>
 
-	</Target>
+  </Target>
 
   <!-- Compile the ShipWorks project -->
   <Target Name="CompileSolution">
 
-		<!-- We have to update the licesnes file so that it doesnt have Divilments stuff in it, which breaks the build. But gets put there
+    <!-- We have to update the licesnes file so that it doesnt have Divilments stuff in it, which breaks the build. But gets put there
 				 automatically any time you open a Form.  Opening a Form can also accidentally remove Actipro stuff, which we do need in there. -->
-		<StripDivelementsFromLicenseFile LicenseFile="..\Code\ShipWorks\Properties\licenses.licx" />
-		<EnsureActiproInLicenseFile LicenseFile="..\Code\ShipWorks\Properties\licenses.licx" />
-    
-		<MSBuild
+    <StripDivelementsFromLicenseFile LicenseFile="..\Code\ShipWorks\Properties\licenses.licx" />
+    <EnsureActiproInLicenseFile LicenseFile="..\Code\ShipWorks\Properties\licenses.licx" />
+
+    <MSBuild
 			Projects="$(ShipWorksSolution)"
 			Properties="Configuration=$(Configuration);AutomatedBuild=True;"
 			Targets="Build">
-		</MSBuild>
+    </MSBuild>
 
   </Target>
 
-	<!-- Compile the Native projects -->
-	<Target Name="CompileNative">
+  <!-- Compile the Native projects -->
+  <Target Name="CompileNative">
 
-		<MSBuild
+    <MSBuild
 			Projects="$(NativeProject)"
 			Properties="Configuration=$(Configuration);Platform=Win32"
 			Targets="Build">
-		</MSBuild>
-    
-		<MSBuild
+    </MSBuild>
+
+    <MSBuild
 			Projects="$(NativeProject)"
 			Properties="Configuration=$(Configuration);Platform=x64"
 			Targets="Build">
-		</MSBuild>
+    </MSBuild>
 
-	</Target>
+  </Target>
 
-	<!-- Copy all the files to the Latest directory -->
-	<Target Name="CopyToLatest" >
-    
-		<!-- Copy the native files -->
-		<Copy SourceFiles="..\Code\ShipWorks.Native\x64\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
-		<Copy SourceFiles="..\Code\ShipWorks.Native\Win32\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
-    
-	</Target>
+  <!-- Copy all the files to the Latest directory -->
+  <Target Name="CopyToLatest" >
+
+    <!-- Copy the native files -->
+    <Copy SourceFiles="..\Code\ShipWorks.Native\x64\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
+    <Copy SourceFiles="..\Code\ShipWorks.Native\Win32\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
+
+  </Target>
 
   <!-- Entry point for running tests-->
   <PropertyGroup>
-		<RunTestsDependsOn>
-			RunAllTests;
-			RunTestList;
-		</RunTestsDependsOn>
-	</PropertyGroup>
-	<Target Name="RunTests" DependsOnTargets="$(RunTestsDependsOn)">
-		<Message Text="RunTests - *$(Tests)*" />
-	</Target>
+    <RunTestsDependsOn>
+      RunAllTests;
+      RunTestList;
+    </RunTestsDependsOn>
+  </PropertyGroup>
+  <Target Name="RunTests" DependsOnTargets="$(RunTestsDependsOn)">
+    <Message Text="RunTests - *$(Tests)*" />
+  </Target>
 
-	<!-- Run all of the tests -->
-	<Target Name="RunAllTests" Condition="$(Tests) == 'All' " >
-    
-		  <CreateItem Include="..\Code\**\*.Tests.dll" Exclude="..\Code\**\obj\**\*.Tests.dll" >
-			  <Output TaskParameter="Include" ItemName="TestAssemblies"/>
-		  </CreateItem>
+  <!-- Run all of the tests -->
+  <Target Name="RunAllTests" Condition="$(Tests) == 'All' " >
 
-		<Exec Command='"$(MsTestExe)" /testcontainer:"%(TestAssemblies.FullPath)" /resultsfile:"$(LogDirectory)\%(TestAssemblies.Filename).trx' IgnoreExitCode="true">
-        <Output TaskParameter="ExitCode" PropertyName="ExitCode"/>
-		</Exec>
+    <CreateItem Include="..\Code\**\*.Tests.dll" Exclude="..\Code\**\obj\**\*.Tests.dll" >
+      <Output TaskParameter="Include" ItemName="TestAssemblies"/>
+    </CreateItem>
 
-		<Error Condition="$(ExitCode) != 0" Text="At least one test did not pass." />
-    
-	</Target>
+    <Exec Command='"$(MsTestExe)" /testcontainer:"%(TestAssemblies.FullPath)" /resultsfile:"$(LogDirectory)\%(TestAssemblies.Filename).trx' IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="ExitCode"/>
+    </Exec>
 
-	<!-- Run all of the tests -->
-	<Target Name="RunTestList" Condition="$(Tests) != 'All' and $(Tests) != 'None' " >
-    
-     <PropertyGroup>
-        <MetadataFile>$(Tests.Split(':')[0])</MetadataFile>
-        <TestListName>$(Tests.Split(':')[1])</TestListName>
-     </PropertyGroup>
+    <Error Condition="$(ExitCode) != 0" Text="At least one test did not pass." />
 
-		  <CreateItem Include="..\**\$(MetadataFile)" >
-			  <Output TaskParameter="Include" ItemName="TestFiles"/>
-		  </CreateItem>
+  </Target>
 
-      <!-- In case the vsdmi references debug assemblies, update to use release -->
-      <FileUpdate Files="%(TestFiles.FullPath)"
-			    Regex="\\debug\\"
-			    ReplacementText="\release\" />
-    
-		<!-- We have to change the working directory here to the directory of the vsdmi file, since it references the assemblies relatively.  That also means we have
+  <!-- Run all of the tests -->
+  <Target Name="RunTestList" Condition="$(Tests) != 'All' and $(Tests) != 'None' " >
+
+    <PropertyGroup>
+      <MetadataFile>$(Tests.Split(':')[0])</MetadataFile>
+      <TestListName>$(Tests.Split(':')[1])</TestListName>
+    </PropertyGroup>
+
+    <CreateItem Include="..\**\$(MetadataFile)" >
+      <Output TaskParameter="Include" ItemName="TestFiles"/>
+    </CreateItem>
+
+    <!-- In case the vsdmi references debug assemblies, update to use release -->
+    <FileUpdate Files="%(TestFiles.FullPath)"
+        Regex="\\debug\\"
+        ReplacementText="\release\" />
+
+    <!-- We have to change the working directory here to the directory of the vsdmi file, since it references the assemblies relatively.  That also means we have
 				 to create a fully qualified path to the results file, since using the relative LogDirectory only won't work now that we've changed the working directory-->
-    <Exec 
+    <Exec
 			Command='"$(MsTestExe)" /testmetadata:"%(TestFiles.FullPath)" /testlist:"$(TestListName)" /resultsfile:"$(MSBuildProjectDirectory)\$(LogDirectory)\%(TestFiles.Filename).trx'
 			WorkingDirectory='%(TestFiles.RootDir)%(TestFiles.Directory)'
 			IgnoreExitCode="true">
-        <Output TaskParameter="ExitCode" PropertyName="ExitCode"/>
-		</Exec>
-    
-		<Error Condition="$(ExitCode) != 0" Text="At least one test did not pass." />
-    
-	</Target>
-  
-	<!-- Package up all the modules for distribution -->
-	<Target Name="PackageModules" Condition=" $(PackageModules) == 'True' ">
+      <Output TaskParameter="ExitCode" PropertyName="ExitCode"/>
+    </Exec>
 
-		<CreateItem Include="..\Code\**\shipworks3.php" >
-        <Output TaskParameter="Include" ItemName="PhpModules"/>
-		</CreateItem>
+    <Error Condition="$(ExitCode) != 0" Text="At least one test did not pass." />
 
-		<PackagePhpModule ModuleFile="%(PhpModules.FullPath)" OutputDirectory="$(ModulesDirectory)">
-			<Output TaskParameter="PackagedFile" PropertyName="PackagedPhpFiles" />
-		</PackagePhpModule>
+  </Target>
 
-		<CreateItem Include="..\Code\**\shipworks3.mv" >
-        <Output TaskParameter="Include" ItemName="Miva4Module"/>
-		</CreateItem>
+  <!-- Package up all the modules for distribution -->
+  <Target Name="PackageModules" Condition=" $(PackageModules) == 'True' ">
 
-		<CreateItem Include="..\Code\**\shipworks3Miva5.mv" >
-        <Output TaskParameter="Include" ItemName="Miva5Module"/>
-		</CreateItem>
+    <CreateItem Include="..\Code\**\shipworks3.php" >
+      <Output TaskParameter="Include" ItemName="PhpModules"/>
+    </CreateItem>
 
-		<PackageMivaModules ModuleFileMiva4="@(Miva4Module)" ModuleFileMiva5="@(Miva5Module)" OutputDirectory="$(ModulesDirectory)">
-			<Output TaskParameter="PackagedFiles" PropertyName="PackagedMivaFiles" />
-		</PackageMivaModules>
-    
-	</Target>
-  
-	<!-- Create a snapshot of the SQL database so that we can do schema comparisons for upgrades-->
-	<Target Name="SqlSnapshot" Condition=" $(CreateInstaller) == 'True' ">
-    
+    <PackagePhpModule ModuleFile="%(PhpModules.FullPath)" OutputDirectory="$(ModulesDirectory)">
+      <Output TaskParameter="PackagedFile" PropertyName="PackagedPhpFiles" />
+    </PackagePhpModule>
+
+    <CreateItem Include="..\Code\**\shipworks3.mv" >
+      <Output TaskParameter="Include" ItemName="Miva4Module"/>
+    </CreateItem>
+
+    <CreateItem Include="..\Code\**\shipworks3Miva5.mv" >
+      <Output TaskParameter="Include" ItemName="Miva5Module"/>
+    </CreateItem>
+
+    <PackageMivaModules ModuleFileMiva4="@(Miva4Module)" ModuleFileMiva5="@(Miva5Module)" OutputDirectory="$(ModulesDirectory)">
+      <Output TaskParameter="PackagedFiles" PropertyName="PackagedMivaFiles" />
+    </PackageMivaModules>
+
+  </Target>
+
+  <!-- Create a snapshot of the SQL database so that we can do schema comparisons for upgrades-->
+  <Target Name="SqlSnapshot" Condition=" $(CreateInstaller) == 'True' ">
+
     <Message Text="Taking SQL Snapshot" />
     <Exec Command='".\SqlSnapper\RedGate.SQLSnapper.exe" /server:INTSQL01\Development /database:ShipWorksSchema /makesnapshot:"$(LogDirectory)\DatabaseSchema$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).snp"' />
-    
-	</Target>
 
-	<!-- Drives the process of creating the installer -->
-	<PropertyGroup>
-		<CreateInsatllerDependsOn>
-			Obfuscate;
-			StrongName;
-			SignAssemblies;
-			InnoSetup;
-			SignInstaller;
-		</CreateInsatllerDependsOn>
-	</PropertyGroup>
-	<Target Name="CreateInstaller"
+  </Target>
+
+  <!-- Drives the process of creating the installer -->
+  <PropertyGroup>
+    <CreateInsatllerDependsOn>
+      Obfuscate;
+      StrongName;
+      SignAssemblies;
+      InnoSetup;
+      SignInstaller;
+    </CreateInsatllerDependsOn>
+  </PropertyGroup>
+  <Target Name="CreateInstaller"
 		 Condition=" $(CreateInstaller) == 'True' "
 		 DependsOnTargets="$(CreateInsatllerDependsOn)">
-	</Target>
+  </Target>
 
-	<!-- Obfuscate the assemblies -->
+  <!-- Obfuscate the assemblies -->
   <ItemGroup>
     <ObfuscationExcludedAssemblies Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821" />
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
-		<ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
-		<ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
+    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
+    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <ObfuscationExcludedAssemblies Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
-		<ObfuscationExcludedAssemblies Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5" />
-		<ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
-		<ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
-		<ObfuscationExcludedAssemblies Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Net.Ftp, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Net.Imap, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Net.Pop3, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Net.ProxySocket, Version=2.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Net.SecureSocket, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Net.Smtp, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Rebex.Security, Version=1.5.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-		<ObfuscationExcludedAssemblies Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-		<ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
-		<ObfuscationExcludedAssemblies Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
-		<ObfuscationExcludedAssemblies Include="RestSharp, Version=104.1.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Net.Ftp, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Net.Imap, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Net.Pop3, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Net.ProxySocket, Version=2.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Net.SecureSocket, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Net.Smtp, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Security, Version=1.5.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
+    <ObfuscationExcludedAssemblies Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
+    <ObfuscationExcludedAssemblies Include="RestSharp, Version=104.1.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <ObfuscationExcludedAssemblies Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
     <ObfuscationExcludedAssemblies Include="Common.Logging.Log4Net1210, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
     <ObfuscationExcludedAssemblies Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4" />
@@ -323,22 +322,22 @@
   <ItemGroup>
     <ObfuscationExcludedRegEx Include="^(Triggers|UserDefinedFunctions|StoredProcedures)::.+" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Filters\.Content\.Conditions\..+::.+" />
-		<ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Tasks\.Common\..+::.+" />
-		<ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Triggers\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Tasks\.Common\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Triggers\..+::.+" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Actions\.Scheduling\.ActionSchedules\..+(::.+)?" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Data\.Grid\.Columns\.DisplayTypes\..+::.+" />
-		<ObfuscationExcludedRegEx Include="CoreExtensions\.Actions\..+::.+" />
-		<ObfuscationExcludedRegEx Include="CoreExtensions\.Filters\..+::.+" />
-		<ObfuscationExcludedRegEx Include="CoreExtensions\.Grid\..+::.+" />
-		<ObfuscationExcludedRegEx Include="WebServices\..+(::.+)?" />
-		<ObfuscationExcludedRegEx Include="WebServices\..+\..+(::.+)?" />
-		<ObfuscationExcludedRegEx Include="ShipWorks\.Shipping\.Carriers\.OnTrac\.Schemas\..+\..+(::.+)?" />
-		<ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\..+::.+" />
-		<ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\..+::.+" />
-	</ItemGroup>
+    <ObfuscationExcludedRegEx Include="CoreExtensions\.Actions\..+::.+" />
+    <ObfuscationExcludedRegEx Include="CoreExtensions\.Filters\..+::.+" />
+    <ObfuscationExcludedRegEx Include="CoreExtensions\.Grid\..+::.+" />
+    <ObfuscationExcludedRegEx Include="WebServices\..+(::.+)?" />
+    <ObfuscationExcludedRegEx Include="WebServices\..+\..+(::.+)?" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Shipping\.Carriers\.OnTrac\.Schemas\..+\..+(::.+)?" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\..+::.+" />
+  </ItemGroup>
   <Target Name="Obfuscate" Condition=" $(Obfuscate) == 'True' ">
 
-		<Message Text="Starting obfuscation..." />
+    <Message Text="Starting obfuscation..." />
 
     <Obfuscate
 			RootAssembly="$(AppDirectory)\ShipWorks.exe"
@@ -369,9 +368,9 @@
     <CreateItem Include="$(AppDirectory)\Obfuscated\*.*">
       <Output TaskParameter="Include" ItemName="ObfuscatedAssemblies" />
     </CreateItem>
-    
-		<!-- Copy the report to one with the version apart of the name, so its easier to use and identify -->
-		<Copy SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(LogDirectory)\ObfuscationReport$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).xml" />
+
+    <!-- Copy the report to one with the version apart of the name, so its easier to use and identify -->
+    <Copy SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(LogDirectory)\ObfuscationReport$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).xml" />
 
     <!-- Copy the assemblies that were obfuscated from our original folder so we have an archive of them-->
     <Copy SourceFiles="$(AppDirectory)\%(ObfuscatedAssemblies.Filename)%(ObfuscatedAssemblies.Extension)"
@@ -380,23 +379,23 @@
     <!-- Now copy the obfuscated assemblies too the app directory where they get picked up by the installer -->
     <Copy SourceFiles="@(ObfuscatedAssemblies)" DestinationFolder="$(AppDirectory)" />
 
-	</Target>
+  </Target>
 
   <!-- StrongName the assemblies -->
   <Target Name="StrongName">
 
-		<CreateItem Include="$(AppDirectory)\Interapptive*.dll;$(AppDirectory)\ShipWorks*.dll;$(AppDirectory)\ShipWorks.exe"
+    <CreateItem Include="$(AppDirectory)\Interapptive*.dll;$(AppDirectory)\ShipWorks*.dll;$(AppDirectory)\ShipWorks.exe"
 								Exclude="$(AppDirectory)\ShipWorks.Native.dll;$(AppDirectory)\ShipWorks.Tests.dll" >
-        <Output TaskParameter="Include" ItemName="AssembliesToSign"/>
-		</CreateItem>
+      <Output TaskParameter="Include" ItemName="AssembliesToSign"/>
+    </CreateItem>
 
-		<Message Text="Strong naming assemblies: @(AssembliesToSign->'%(Filename)', ', ')" />
+    <Message Text="Strong naming assemblies: @(AssembliesToSign->'%(Filename)', ', ')" />
     <Exec Command='"$(SnExe)" -q -Rc "%(AssembliesToSign.FullPath)" interapptive' />
 
   </Target>
 
   <!-- Sign the assemblies with authenticode -->
-  <Target Name="SignAssemblies"  Condition=" $(ReleaseType) != 'None' and '$(ReleaseType)' != 'Internal'" >
+  <Target Name="SignAssemblies"  Condition=" $(ReleaseType) != 'None' " >
 
     <Message Text="Signing assemblies: @(AssembliesToSign->'%(Filename)', ', ')" />
     <Exec Command='$(SignCommand) "%(AssembliesToSign.FullPath)"' />
@@ -409,7 +408,7 @@
     </InstallerTypes>
     <InstallerTypes Include="Endicia">
       <ExeAppend>_eBayFree</ExeAppend>
-		</InstallerTypes>
+    </InstallerTypes>
     <InstallerTypes Include="UPS">
       <ExeAppend>_UPS</ExeAppend>
     </InstallerTypes>
@@ -425,31 +424,31 @@
       <Output TaskParameter="Value" PropertyName="InstallerPath" />
     </CreateProperty>
 
-		<!-- We need to make an item out of it so we can get the full path -->
+    <!-- We need to make an item out of it so we can get the full path -->
     <CreateItem Include="$(AppDirectory)">
       <Output TaskParameter="Include" ItemName="AppOutput"/>
     </CreateItem>
     <CreateProperty Value="%(AppOutput.FullPath)">
       <Output TaskParameter="Value" PropertyName="AppPath" />
     </CreateProperty>
-    
+
     <!-- exec name -->
     <CreateProperty Value="ShipWorksSetup_$(VersionMajor)_$(VersionMinor)_$(VersionBuild)_$(VersionRevision)">
       <Output TaskParameter="Value" PropertyName="InstallerExeBaseName" />
     </CreateProperty>
-    
-		<!-- We need to embed the db version used by this version of ShipWorks -->
-		<Exec Command='"$(AppDirectory)\ShipWorks.exe" -instanceID:{CBD776DE-BA3F-4913-8B10-CFC6CE01363A} /command:getdbschemaversion -type:required' IgnoreExitCode='true'>
-        <Output TaskParameter="ExitCode" PropertyName="SchemaID"/>
-		</Exec>
+
+    <!-- We need to embed the db version used by this version of ShipWorks -->
+    <Exec Command='"$(AppDirectory)\ShipWorks.exe" -instanceID:{CBD776DE-BA3F-4913-8B10-CFC6CE01363A} /command:getdbschemaversion -type:required' IgnoreExitCode='true'>
+      <Output TaskParameter="ExitCode" PropertyName="SchemaID"/>
+    </Exec>
 
     <!-- Batching will kick in, calling this line once per installer type -->
     <Exec Command='"$(InnoSetupExe)" ..\Installer\ShipWorks.iss /O"$(InstallerPath)" /F"$(InstallerExeBaseName)%(InstallerTypes.ExeAppend)" /DEditionType=%(InstallerTypes.Identity) /DVersion=$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision) /DAppArtifacts="$(AppPath)" /DRequiredSchemaID=$(SchemaID) ' />
 
-		<!-- Copy the log to the right place.  Due to the way the Inno preprocessor works, we can't pass it in -->
-		<Copy SourceFiles='InnoSetup.iss' DestinationFolder='$(LogDirectory)' />
-		<Delete Files='InnoSetup.iss' />
-    
+    <!-- Copy the log to the right place.  Due to the way the Inno preprocessor works, we can't pass it in -->
+    <Copy SourceFiles='InnoSetup.iss' DestinationFolder='$(LogDirectory)' />
+    <Delete Files='InnoSetup.iss' />
+
     <!-- Make a list of all the installers we just created-->
     <CreateItem Include="$(InstallerPath)\$(InstallerExeBaseName)%(InstallerTypes.ExeAppend).exe">
       <Output TaskParameter="Include" ItemName="Installers" />
@@ -458,26 +457,26 @@
   </Target>
 
   <!-- Sign installer with authenticode -->
-  <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' and '$(ReleaseType)' != 'Internal'">
+  <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' ">
 
     <Message Text="Signing installers: @(Installers->'%(Filename)', ', ')" />
     <Exec Command='$(SignCommand) "%(Installers.FullPath)"' />
   </Target>
-  
-	<!-- Packages up and archives the results of the build -->
-	<PropertyGroup>
-		<PackageResultsDependsOn>
+
+  <!-- Packages up and archives the results of the build -->
+  <PropertyGroup>
+    <PackageResultsDependsOn>
       ZipResults;
-			CopyToArchive;
-			UpdateRevisionNumber;
-		</PackageResultsDependsOn>
-	</PropertyGroup>
-	<Target Name="PackageResults"
+      CopyToArchive;
+      UpdateRevisionNumber;
+    </PackageResultsDependsOn>
+  </PropertyGroup>
+  <Target Name="PackageResults"
 		 Condition=" $(BuildType) == 'Automated' "
 		 DependsOnTargets="$(PackageResultsDependsOn)">
-	</Target>
+  </Target>
 
-	<!-- Zip the results of the build -->
+  <!-- Zip the results of the build -->
   <Target Name="ZipResults" >
 
     <CreateItem Include="$(AppDirectory)\**\*">
