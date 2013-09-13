@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
@@ -12,35 +14,41 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
     /// <summary>
     /// Wizard for setting up shipping with Express1
     /// </summary>
-    public partial class Express1StampsSetupWizard : WizardForm
+    public partial class Express1SetupWizard : WizardForm
     {
-        StampsAccountEntity account = null;
+        //StampsAccountEntity account = null;
         bool forceAccountOnly = false;
         bool hideDetailedConfiguration;
         PersonAdapter initialAccountAddress;
 
+        private Express1Registration registration;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsSetupWizard() : 
-            this(false)
+        public Express1SetupWizard(Express1Registration registration) : 
+            this(registration, false)
         {
         }
 
-        public Express1StampsSetupWizard(bool forceAccountOnly)
+        public Express1SetupWizard(Express1Registration registration, bool forceAccountOnly)
         {
             InitializeComponent();
 
-            List<KeyValuePair<CreditCardTypeEnum, string>> cardTypes = new List<KeyValuePair<CreditCardTypeEnum, string>>();
-            cardTypes.Add(new KeyValuePair<CreditCardTypeEnum, string>(CreditCardTypeEnum.AmericanExpress, "American Express"));
-            cardTypes.Add(new KeyValuePair<CreditCardTypeEnum, string>(CreditCardTypeEnum.Discover, "Discover"));
-            cardTypes.Add(new KeyValuePair<CreditCardTypeEnum, string>(CreditCardTypeEnum.MasterCard, "MasterCard"));
-            cardTypes.Add(new KeyValuePair<CreditCardTypeEnum, string>(CreditCardTypeEnum.Visa, "Visa"));
+            this.registration = registration;
+
+            List<KeyValuePair<Express1CreditCardType, string>> cardTypes = new List<KeyValuePair<Express1CreditCardType, string>>
+                {
+                    new KeyValuePair<Express1CreditCardType, string>(Express1CreditCardType.AmericanExpress, "American Express"),
+                    new KeyValuePair<Express1CreditCardType, string>(Express1CreditCardType.Discover, "Discover"),
+                    new KeyValuePair<Express1CreditCardType, string>(Express1CreditCardType.MasterCard, "MasterCard"),
+                    new KeyValuePair<Express1CreditCardType, string>(Express1CreditCardType.Visa, "Visa")
+                };
 
             cardType.ValueMember = "Key";
             cardType.DisplayMember = "Value";
@@ -78,8 +86,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-            bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Stamps) || forceAccountOnly;
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(registration.ShipmentTypeCode);
+            bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(registration.ShipmentTypeCode) || forceAccountOnly;
 
             // Initialize country to US
             if (initialAccountAddress != null)
@@ -144,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             // Ensure the Finish page is the last one
             Pages.Remove(wizardPageFinish);
             Pages.Add(wizardPageFinish);
-            Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+            Pages[Pages.Count - 1].SteppingInto += OnSteppingIntoFinish;
 
             if (Pages.Contains(wizardPageAccountList))
             {
@@ -177,14 +185,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
             else
             {
-                StampsAccountManager.SaveAccount(account);
+                registration.SaveAccount();
 
                 // if it's a new account, display the account number and password for the user to copy since Express1 selects both for the user
                 panelAccountCredentials.Visible = radioNewAccount.Checked;
                 if (radioNewAccount.Checked)
                 {
                     accountDetailsTextBox.Text = String.Format("Express1 Account Number: {0}\r\nPassword: {1}",
-                        account.StampsAccountID, SecureText.Decrypt(account.Password, "Stamps"));
+                        registration.AccountNumber, SecureText.Decrypt(registration.Password, "Stamps"));
                 }
             }
         }
@@ -266,106 +274,100 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         private void OnStepNextPayment(object sender, WizardStepEventArgs e)
         {
-            //// Checking Account
-            //if (paymentMethod.SelectedIndex == 0)
-            //{
-            //    if (checkingAccount.Text.Trim().Length == 0)
-            //    {
-            //        MessageHelper.ShowInformation(this, "Please enter your checking account number.");
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
+            // Checking Account
+            if (paymentMethod.SelectedIndex == 0)
+            {
+                if (checkingAccount.Text.Trim().Length == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please enter your checking account number.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
 
-            //    if (checkingRouting.Text.Trim().Length == 0)
-            //    {
-            //        MessageHelper.ShowInformation(this, "Please enter your checking routing number.");
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
-            //}
-            //// Credit Card
-            //else
-            //{
-            //    PersonAdapter creditPerson = new PersonAdapter();
-            //    personCreditCard.SaveToEntity(creditPerson);
+                if (checkingRouting.Text.Trim().Length == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please enter your checking routing number.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
+            }
+            // Credit Card
+            else
+            {
+                PersonAdapter creditPerson = new PersonAdapter();
+                personCreditCard.SaveToEntity(creditPerson);
 
-            //    if (creditPerson.Street1.Trim().Length == 0)
-            //    {
-            //        MessageHelper.ShowInformation(this, "Please enter your street address.");
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
+                if (creditPerson.Street1.Trim().Length == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please enter your street address.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
 
-            //    if (creditPerson.City.Trim().Length == 0)
-            //    {
-            //        MessageHelper.ShowInformation(this, "Please enter your city.");
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
+                if (creditPerson.City.Trim().Length == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please enter your city.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
 
-            //    if (creditPerson.PostalCode.Trim().Length == 0)
-            //    {
-            //        MessageHelper.ShowInformation(this, "Please enter your postal code.");
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
+                if (creditPerson.PostalCode.Trim().Length == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please enter your postal code.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
 
-            //    if (cardNumber.Text.Trim().Length == 0)
-            //    {
-            //        MessageHelper.ShowInformation(this, "Please enter your credit card number.");
-            //        e.NextPage = CurrentPage;
-            //        return;
-            //    }
-            //}
+                if (cardNumber.Text.Trim().Length == 0)
+                {
+                    MessageHelper.ShowInformation(this, "Please enter your credit card number.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
+            }
 
-            //// get the address information entered on the demographics page
-            //PersonAdapter accountAddress = new PersonAdapter();
-            //personControl.SaveToEntity(accountAddress);
+            // get the address information entered on the demographics page
+            PersonAdapter accountAddress = new PersonAdapter();
+            personControl.SaveToEntity(accountAddress);
 
-            //// prepare payment information
-            //Express1PaymentInfo paymentInfo = GetPaymentInfo();
-            //try
-            //{
-            //    if (account == null)
-            //    {
-            //        account = new StampsAccountEntity();
+            // prepare payment information
+            Express1PaymentInfo paymentInfo = GetPaymentInfo();
+            try
+            {
+                // wait
+                Cursor.Current = Cursors.WaitCursor;
 
-            //        // this is an Express1 reseller
-            //        account.IsExpress1 = true;
-            //    }
+                registration.Signup(accountAddress, paymentInfo);
+            }
+            catch (StampsException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
 
-            //    // wait
-            //    Cursor.Current = Cursors.WaitCursor;
-
-            //    Express1StampsCustomerServiceClient.Signup(account, accountAddress, paymentInfo);
-            //}
-            //catch (StampsException ex)
-            //{
-            //    MessageHelper.ShowError(this, ex.Message);
-
-            //    e.NextPage = CurrentPage;
-            //    return;
-            //}
+                e.NextPage = CurrentPage;
+                return;
+            }
         }
 
-        ///// <summary>
-        ///// Get the payment as it is entered in the Credit Card UI
-        ///// </summary>
-        //private Express1PaymentInfo GetPaymentInfo()
-        //{
-        //    PersonAdapter billingAddress = new PersonAdapter();
-        //    personCreditCard.SaveToEntity(billingAddress);
+        /// <summary>
+        /// Get the payment as it is entered in the Credit Card UI
+        /// </summary>
+        private Express1PaymentInfo GetPaymentInfo()
+        {
+            PersonAdapter billingAddress = new PersonAdapter();
+            personCreditCard.SaveToEntity(billingAddress);
 
-        //    Express1PaymentInfo paymentInfo = new Express1PaymentInfo();
-        //    paymentInfo.CardBillingAddress = billingAddress;
-        //    paymentInfo.CardType = Express1StampsUtility.GetStampsCardType((CreditCardTypeEnum)cardType.SelectedValue);
-        //    paymentInfo.CardAccountNumber = cardNumber.Text.Trim();
-        //    paymentInfo.CardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1);
-        //    paymentInfo.AchAccountNumber = checkingAccount.Text.Trim();
-        //    paymentInfo.AchRoutingId = checkingRouting.Text.Trim();
+            Express1PaymentInfo paymentInfo = new Express1PaymentInfo
+                {
+                    CardBillingAddress = billingAddress,
+                    CardType = (Express1CreditCardType) cardType.SelectedValue,
+                    CardAccountNumber = cardNumber.Text.Trim(),
+                    CardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1),
+                    AchAccountNumber = checkingAccount.Text.Trim(),
+                    AchRoutingId = checkingRouting.Text.Trim()
+                };
 
-        //    return paymentInfo;
-        //}
+            return paymentInfo;
+        }
 
       
 
@@ -407,64 +409,58 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         private void OnStepExistingNext(object sender, WizardStepEventArgs e)
         {
-            //if (accountExisting.Text.Trim().Length == 0)
-            //{
-            //    MessageHelper.ShowInformation(this, "Please enter your Express1 account number.");
-            //    e.NextPage = CurrentPage;
-            //    return;
-            //}
+            if (accountExisting.Text.Trim().Length == 0)
+            {
+                MessageHelper.ShowInformation(this, "Please enter your Express1 account number.");
+                e.NextPage = CurrentPage;
+                return;
+            }
 
-            //if (passwordExisting.Text.Trim().Length == 0)
-            //{
-            //    MessageHelper.ShowInformation(this, "Please enter your Express1 account password.");
-            //    e.NextPage = CurrentPage;
-            //    return;
-            //}
+            if (passwordExisting.Text.Trim().Length == 0)
+            {
+                MessageHelper.ShowInformation(this, "Please enter your Express1 account password.");
+                e.NextPage = CurrentPage;
+                return;
+            }
 
-            //try
-            //{
+            try
+            {
+                //// credentials
+                //registration.AccountNumber = accountExisting.Text.Trim();
+                //registration.Password = SecureText.Encrypt(passwordExisting.Text, "Stamps");
 
-            //    account = new StampsAccountEntity();
+                //// other  data
+                //account.CreatedByShipWorks = false;
+                //account.AccountType = (int)StampsAccountType.Standard;
+                //account.ApiInitialPassword = "";
+                //account.SignupConfirmation = "";
+                //account.WebPassword = "";
+                //account.TestAccount = Express1StampsUtility.UseTestServer;
+                //account.ScanFormAddressSource = (int)StampsScanFormAddressSource.Provider;
 
-            //    // this is an Express1 reseller
-            //    account.StampsReseller = (int)StampsReseller.Express1;
+                //// address
+                //personControl.SaveToEntity(new PersonAdapter(account, ""));
+                //account.MailingPostalCode = account.PostalCode;
 
-            //    // credentials
-            //    account.AccountNumber = accountExisting.Text.Trim();
-            //    account.Password = SecureText.Encrypt(passwordExisting.Text, "Stamps");
+                //// description
+                //account.Description = StampsAccountManager.GetDefaultDescription(account);
 
-            //    // other  data
-            //    account.CreatedByShipWorks = false;
-            //    account.AccountType = (int)StampsAccountType.Standard;
-            //    account.ApiInitialPassword = "";
-            //    account.SignupConfirmation = "";
-            //    account.WebPassword = "";
-            //    account.TestAccount = Express1StampsUtility.UseTestServer;
-            //    account.ScanFormAddressSource = (int) StampsScanFormAddressSource.Provider;
+                //// see if we can connect
+                //StampsApiClient.GetAccountStatus(account);
 
-            //    // address
-            //    personControl.SaveToEntity(new PersonAdapter(account, ""));
-            //    account.MailingPostalCode = account.PostalCode;
+                //// save
+                //StampsAccountManager.SaveAccount(account);
 
-            //    // description
-            //    account.Description = StampsAccountManager.GetDefaultDescription(account);
+                // signup complete...
 
-            //    // see if we can connect
-            //    StampsApiClient.GetAccountStatus(account);
+            }
+            catch (StampsException ex)
+            {
+                MessageHelper.ShowError(this, "ShipWorks was unable to communicate with Stamps using this account information:\n\n" + ex.Message);
+                e.NextPage = CurrentPage;
 
-            //    // save
-            //    StampsAccountManager.SaveAccount(account);
-
-            //    // signup complete...
-
-            //}
-            //catch (StampsException ex)
-            //{
-            //    MessageHelper.ShowError(this, "ShipWorks was unable to communicate with Stamps using this account information:\n\n" + ex.Message);
-            //    e.NextPage = CurrentPage;
-
-            //    account = null;
-            //}
+                //account = null;
+            }
         }
 
         /// <summary>

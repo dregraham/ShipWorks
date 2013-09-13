@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
+using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -135,6 +136,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Gets the Express1 API Card type from the Express1 Card Type
+        /// </summary>
+        public CreditCardTypeEnum ApiCardType
+        {
+            get
+            {
+                switch (CardType)
+                {
+                    case Express1CreditCardType.AmericanExpress:
+                        return CreditCardTypeEnum.AmericanExpress;
+                    case Express1CreditCardType.Discover:
+                        return CreditCardTypeEnum.Discover;
+                    case Express1CreditCardType.MasterCard:
+                        return CreditCardTypeEnum.MasterCard;
+                    case Express1CreditCardType.Visa:
+                        return CreditCardTypeEnum.Visa;
+
+                    default:
+                        throw new InvalidOperationException("Unsupported Credit Card type.");
+                }
+            }
         }
     }
 }

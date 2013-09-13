@@ -70,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Options
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
             express1EndiciaTestServer.Checked = Express1EndiciaUtility.UseTestServer;
-            express1StampsTestServer.Checked = Express1StampsUtility.UseTestServer;
+            express1StampsTestServer.Checked = Express1StampsConnectionDetails.UseTestServer;
             equaShipTestServer.Checked = EquaShipClient.UseTestServer;
             onTracTestServer.Checked = OnTracRequest.UseTestServer;            
 
@@ -108,7 +108,7 @@ namespace ShipWorks.ApplicationCore.Options
             UpsWebClient.UseTestServer = upsOnLineTools.Checked;
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
             Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;
-            Express1StampsUtility.UseTestServer = express1StampsTestServer.Checked;
+            Express1StampsConnectionDetails.UseTestServer = express1StampsTestServer.Checked;
             EquaShipClient.UseTestServer = equaShipTestServer.Checked;
             OnTracRequest.UseTestServer = onTracTestServer.Checked;
 

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Express1
+﻿using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
     /// <summary>
     /// An interface for registering an account with Express1.
@@ -8,8 +10,8 @@
         /// <summary>
         /// Registers an account with Express1.
         /// </summary>
-        /// <param name="registration">The registration.</param>
-        /// <returns>An Express1RegistrationResult object.</returns>
-        Express1RegistrationResult Register(Express1Registration registration);
+        /// <param name="customerData">The registration data.</param>
+        /// <returns>Returns the customer credentials from the registration call.</returns>
+        CustomerCredentials Register(CustomerRegistrationData customerData);
     }
 }

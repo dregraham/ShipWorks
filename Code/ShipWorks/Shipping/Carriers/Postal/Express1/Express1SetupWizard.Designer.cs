@@ -1,8 +1,8 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
-    partial class Express1StampsSetupWizard
+    partial class Express1SetupWizard
     {
         /// <summary>
         /// Required designer variable.

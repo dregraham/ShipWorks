@@ -889,6 +889,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Registration.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1PaymentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationResult.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationErrorMessages.cs" />
@@ -900,15 +901,17 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.Designer.cs">
       <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsRegistration.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PaymentInfo.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSetupWizard.cs">
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1SetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSetupWizard.Designer.cs">
-      <DependentUpon>Express1StampsSetupWizard.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1SetupWizard.Designer.cs">
+      <DependentUpon>Express1SetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
@@ -6707,8 +6710,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSingleSourceControl.resx">
       <DependentUpon>Express1EndiciaSingleSourceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSetupWizard.resx">
-      <DependentUpon>Express1StampsSetupWizard.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1SetupWizard.resx">
+      <DependentUpon>Express1SetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Registration\StampsPaymentControl.resx">
       <DependentUpon>StampsPaymentControl.cs</DependentUpon>

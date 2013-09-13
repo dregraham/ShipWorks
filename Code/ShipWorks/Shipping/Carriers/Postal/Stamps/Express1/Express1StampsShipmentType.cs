@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using System.Windows.Forms;
-
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override Form CreateSetupWizard()
         {
-            return new Express1StampsSetupWizard();
+            return new Express1SetupWizard(new Express1StampsRegistration());
         }
 
         /// <summary>
