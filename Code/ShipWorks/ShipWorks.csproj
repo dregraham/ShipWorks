@@ -882,11 +882,16 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1AchPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1AchType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1CreditCardType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1CreditCardPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Registration.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1PaymentType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationResult.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationErrorMessages.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />

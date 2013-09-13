@@ -15,8 +15,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1PaymentInfo()
+        public Express1PaymentInfo(Express1PaymentType express1PaymentType)
         {
+            PaymentType = express1PaymentType;
+        }
+
+        /// <summary>
+        /// Currently selected payment type (Credit card, ACH, etc...)
+        /// </summary>
+        public Express1PaymentType PaymentType
+        {
+            get; 
+            set;
         }
 
         /// <summary>
