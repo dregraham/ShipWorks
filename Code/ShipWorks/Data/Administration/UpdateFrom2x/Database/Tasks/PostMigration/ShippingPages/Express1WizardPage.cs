@@ -69,7 +69,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         {
             // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
             // if they canceled before getting there endicia account# emailed to them.
-            using (Express1SetupWizard wizard = new Express1SetupWizard())
+            using (Express1EndiciaSetupWizard wizard = new Express1EndiciaSetupWizard())
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {

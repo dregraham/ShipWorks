@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Endicia))
             {
-                using (Express1SetupWizard setupDlg = new Express1SetupWizard(true))
+                using (Express1EndiciaSetupWizard setupDlg = new Express1EndiciaSetupWizard(true))
                 {
                     if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
                     {
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                Express1SetupWizard setupDlg = (Express1SetupWizard) ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).CreateSetupWizard();
+                Express1EndiciaSetupWizard setupDlg = (Express1EndiciaSetupWizard) ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).CreateSetupWizard();
                 setupDlg.HideDetailedConfiguration = true;
 
                 if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
-    partial class Express1ServiceControl
+    partial class Express1EndiciaServiceControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -55,11 +55,11 @@
             // sectionShipment
             // 
             // 
-            // Express1ServiceControl
+            // Express1EndiciaServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "Express1ServiceControl";
+            this.Name = "Express1EndiciaServiceControl";
             ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();

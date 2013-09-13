@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping
                     return new EndiciaShipmentType();
 
                 case ShipmentTypeCode.Express1Endicia:
-                    return new Express1ShipmentType();
+                    return new Express1EndiciaShipmentType();
 
                 case ShipmentTypeCode.Stamps:
                     return new StampsShipmentType();

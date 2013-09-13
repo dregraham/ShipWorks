@@ -9,12 +9,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Settings to use Express1 as a single-source for all postal shipping services
     /// </summary>
-    public partial class Express1SingleSourceControl : UserControl
+    public partial class Express1EndiciaSingleSourceControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1SingleSourceControl()
+        public Express1EndiciaSingleSourceControl()
         {
             InitializeComponent();
         }

@@ -889,6 +889,12 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PaymentInfo.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSetupWizard.Designer.cs">
+      <DependentUpon>Express1StampsSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
@@ -1356,14 +1362,14 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaUtility.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ScanFormAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ScanFormCarrierAccount.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ScanFormGateway.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1SingleSourceControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaScanFormAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaScanFormCarrierAccount.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaScanFormGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSingleSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1SingleSourceControl.Designer.cs">
-      <DependentUpon>Express1SingleSourceControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSingleSourceControl.Designer.cs">
+      <DependentUpon>Express1EndiciaSingleSourceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalEntryFacility.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalSortType.cs" />
@@ -1407,23 +1413,23 @@
     <Compile Include="Shipping\Carriers\Postal\CoreExtensions\Filters\PostaConfirmationTypeCondition.cs" />
     <Compile Include="Shipping\Carriers\Postal\CoreExtensions\Filters\PostalServiceTypeCondition.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReseller.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1CustomerServiceClient.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1Exception.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ServiceControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaCustomerServiceClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ServiceControl.Designer.cs">
-      <DependentUpon>Express1ServiceControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.Designer.cs">
+      <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaUtility.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ServiceWrapper.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1SetupWizard.cs">
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceWrapper.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1SetupWizard.Designer.cs">
-      <DependentUpon>Express1SetupWizard.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.Designer.cs">
+      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ShipmentType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsForm.cs" />
     <Compile Include="Data\Import\Xml\GenericXmlOrderLoader.cs" />
     <Compile Include="Data\Import\IOrderElementFactory.cs" />
@@ -6673,14 +6679,17 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.resx">
       <DependentUpon>EndiciaPassphraseChangeDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1ServiceControl.resx">
-      <DependentUpon>Express1ServiceControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.resx">
+      <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1SetupWizard.resx">
-      <DependentUpon>Express1SetupWizard.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.resx">
+      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1SingleSourceControl.resx">
-      <DependentUpon>Express1SingleSourceControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSingleSourceControl.resx">
+      <DependentUpon>Express1EndiciaSingleSourceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSetupWizard.resx">
+      <DependentUpon>Express1StampsSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Registration\StampsPaymentControl.resx">
       <DependentUpon>StampsPaymentControl.cs</DependentUpon>

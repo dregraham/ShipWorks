@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Handles translating an Express1 response into one deserializable by the Endicia classes.
     /// </summary>
-    public class Express1ResponseReader : XmlReader
+    public class Express1EndiciaResponseReader : XmlReader
     {
         // the decorated XmlReader
         XmlReader wrappedReader;
@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1ResponseReader(LogicalMethodInfo webMethodInfo, XmlReader original)
+        public Express1EndiciaResponseReader(LogicalMethodInfo webMethodInfo, XmlReader original)
         {
             this.wrappedReader = original;
             this.methodInfo = webMethodInfo;
@@ -215,7 +215,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Decorating XmlWriter to allow ShipWorks to communicate transparently with Endicia and Express1
     /// </summary>
-    public class Express1RequestWriter : XmlWriter
+    public class Express1EndiciaRequestWriter : XmlWriter
     {
         // the writer being decorated
         XmlWriter wrappedWriter;
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1RequestWriter(LogicalMethodInfo webMethodInfo, XmlWriter originalWriter)
+        public Express1EndiciaRequestWriter(LogicalMethodInfo webMethodInfo, XmlWriter originalWriter)
         {
             this.wrappedWriter = originalWriter;
             this.methodInfo = webMethodInfo;
@@ -425,7 +425,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// Custome web service proxy that enables ShipWorks to use Express1's web service via the Endicia Label Server 
     /// classes.
     /// </summary>
-    public class Express1ServiceWrapper : EwsLabelService
+    public class Express1EndiciaServiceWrapper : EwsLabelService
     {
         // using relction, we need to set message.method.action, which is what message.Action is
         FieldInfo methodField;
@@ -440,7 +440,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1ServiceWrapper(ApiLogEntry logEntry)
+        public Express1EndiciaServiceWrapper(ApiLogEntry logEntry)
             : base(logEntry)
         {
 
@@ -510,7 +510,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         protected override XmlReader GetReaderForMessage(System.Web.Services.Protocols.SoapClientMessage message, int bufferSize)
         {
             // return the custom XmlReader
-            return new Express1ResponseReader(message.MethodInfo, base.GetReaderForMessage(message, bufferSize));
+            return new Express1EndiciaResponseReader(message.MethodInfo, base.GetReaderForMessage(message, bufferSize));
         }
 
         /// <summary>
@@ -522,7 +522,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             FixupOutgoingSoapMessage(message);
 
             // return the custome XmlWriter
-            return new Express1RequestWriter(message.MethodInfo, base.GetWriterForMessage(message, bufferSize));
+            return new Express1EndiciaRequestWriter(message.MethodInfo, base.GetWriterForMessage(message, bufferSize));
         }
     }
 }

@@ -518,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
-                Express1ShipmentType shipmentType = (Express1ShipmentType) ShipmentTypeManager.GetType(shipment);
+                Express1EndiciaShipmentType shipmentType = (Express1EndiciaShipmentType) ShipmentTypeManager.GetType(shipment);
 
                 // Process via Express1
                 shipmentType.UpdateDynamicShipmentData(shipment);

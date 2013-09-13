@@ -3,12 +3,12 @@
     /// <summary>
     /// Express1-specific Service Control.
     /// </summary>
-    public partial class Express1ServiceControl : EndiciaServiceControl
+    public partial class Express1EndiciaServiceControl : EndiciaServiceControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1ServiceControl()
+        public Express1EndiciaServiceControl()
             : base (ShipmentTypeCode.Express1Endicia, EndiciaReseller.Express1)
         {
             InitializeComponent();

@@ -6,18 +6,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// Express1 Exception
     /// </summary>
     [Serializable]
-    public class Express1Exception : EndiciaException
+    public class Express1EndiciaException : EndiciaException
     {
-        public Express1Exception()
+        public Express1EndiciaException()
         {
         }
 
-        public Express1Exception(string message)
+        public Express1EndiciaException(string message)
             : base(message)
         {
         }
 
-        public Express1Exception(string message, Exception inner)
+        public Express1EndiciaException(string message, Exception inner)
             : base(message, inner)
         {
         }

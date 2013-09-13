@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
-    partial class Express1SingleSourceControl
+    partial class Express1EndiciaSingleSourceControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -66,7 +66,7 @@
             this.labelExpress1SingleSource.TabIndex = 7;
             this.labelExpress1SingleSource.Text = "Available Services";
             // 
-            // Express1SingleSourceControl
+            // Express1EndiciaSingleSourceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -74,7 +74,7 @@
             this.Controls.Add(this.checkBoxExpress1SingleSource);
             this.Controls.Add(this.labelExpress1SingleSource);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.Name = "Express1SingleSourceControl";
+            this.Name = "Express1EndiciaSingleSourceControl";
             this.Size = new System.Drawing.Size(421, 49);
             this.ResumeLayout(false);
             this.PerformLayout();

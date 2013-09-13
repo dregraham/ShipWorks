@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
     [TestClass]
     public class Express1ScanFormCarrierAccountTest
     {
-        private Express1ScanFormCarrierAccount testObject;
+        private Express1EndiciaScanFormCarrierAccount testObject;
         private Mock<IScanFormRepository> repository;
         private Mock<ILog> logger;
 
@@ -36,14 +36,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             logger = new Mock<ILog>();
             logger.Setup(l => l.Error(It.IsAny<string>()));
 
-            testObject = new Express1ScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
+            testObject = new Express1EndiciaScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
         }
 
 
         [TestMethod]
         public void GetGateway_ReturnsExpress1ScanFormGateway_Test()
         {
-            Assert.IsInstanceOfType(testObject.GetGateway(), typeof(Express1ScanFormGateway));
+            Assert.IsInstanceOfType(testObject.GetGateway(), typeof(Express1EndiciaScanFormGateway));
         }
 
         [TestMethod]

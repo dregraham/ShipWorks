@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAccountManagerControl();
             this.labelAccountType = new System.Windows.Forms.Label();
             this.endiciaOptions = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAutomaticExpress1Control();
-            this.express1Options = new Express1SingleSourceControl();
+            this.express1Options = new Express1EndiciaSingleSourceControl();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.labelShipmentProtection = new System.Windows.Forms.Label();
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private EndiciaAccountManagerControl accountControl;
         private System.Windows.Forms.Label labelAccountType;
         private EndiciaAutomaticExpress1Control endiciaOptions;
-        private Express1.Express1SingleSourceControl express1Options;
+        private Express1.Express1EndiciaSingleSourceControl express1Options;
         private System.Windows.Forms.Panel panelBottom;
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private System.Windows.Forms.Label labelShipmentProtection;

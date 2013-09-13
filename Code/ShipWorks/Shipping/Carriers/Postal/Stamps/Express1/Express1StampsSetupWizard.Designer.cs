@@ -1,6 +1,8 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
+﻿using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
-    partial class Express1SetupWizard
+    partial class Express1StampsSetupWizard
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Express1SetupWizard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Express1EndiciaSetupWizard));
             this.wizardPageAccountType = new ShipWorks.UI.Wizard.WizardPage();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.radioNewAccount = new System.Windows.Forms.RadioButton();
@@ -673,7 +675,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(545, 567);
-            this.Name = "Express1SetupWizard";
+            this.Name = "Express1EndiciaSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageAccountList,

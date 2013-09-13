@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Express1
                 case EndiciaReseller.Express1:
                     {
-                        webService = new Express1ServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
+                        webService = new Express1EndiciaServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
                         webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
                         break;
                     }

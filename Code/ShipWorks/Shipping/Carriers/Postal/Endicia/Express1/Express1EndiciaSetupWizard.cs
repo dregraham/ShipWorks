@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Wizard for setting up shipping with Express1
     /// </summary>
-    public partial class Express1SetupWizard : WizardForm
+    public partial class Express1EndiciaSetupWizard : WizardForm
     {
         EndiciaAccountEntity account = null;
         bool forceAccountOnly = false;
@@ -26,12 +26,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1SetupWizard() : 
+        public Express1EndiciaSetupWizard() : 
             this(false)
         {
         }
 
-        public Express1SetupWizard(bool forceAccountOnly)
+        public Express1EndiciaSetupWizard(bool forceAccountOnly)
         {
             InitializeComponent();
 
@@ -336,7 +336,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 // wait
                 Cursor.Current = Cursors.WaitCursor;
 
-                Express1CustomerServiceClient.Signup(account, accountAddress, paymentInfo);
+                Express1EndiciaCustomerServiceClient.Signup(account, accountAddress, paymentInfo);
             }
             catch (EndiciaException ex)
             {

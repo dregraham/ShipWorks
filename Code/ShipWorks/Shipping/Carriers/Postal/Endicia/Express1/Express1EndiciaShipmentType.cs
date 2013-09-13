@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Shipment type for Express 1 shipments.
     /// </summary>
-    public class Express1ShipmentType : EndiciaShipmentType
+    public class Express1EndiciaShipmentType : EndiciaShipmentType
     {
         /// <summary>
         /// Postal Shipment Type
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public override ServiceControlBase CreateServiceControl()
         {
-            return new Express1ServiceControl();
+            return new Express1EndiciaServiceControl();
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             try
             {
-                Express1CustomerServiceClient.RequestRefund(shipment);
+                Express1EndiciaCustomerServiceClient.RequestRefund(shipment);
             }
             catch (EndiciaException ex)
             {
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public override Form CreateSetupWizard()
         {
-            return new Express1SetupWizard();
+            return new Express1EndiciaSetupWizard();
         }
 
         /// <summary>

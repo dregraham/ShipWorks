@@ -4,7 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
-    public class Express1ScanFormAccountRepository : IScanFormAccountRepository
+    public class Express1EndiciaScanFormAccountRepository : IScanFormAccountRepository
     {
         /// <summary>
         /// Gets all of the accounts for a specific shipping carrier.
@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             foreach (EndiciaAccountEntity accountEntity in accountEntities)
             {
                 // The Express 1 carrier account uses the same repository as Endicia
-                Express1ScanFormCarrierAccount carrierAccount = new Express1ScanFormCarrierAccount(new EndiciaScanFormRepository(false), accountEntity);
+                Express1EndiciaScanFormCarrierAccount carrierAccount = new Express1EndiciaScanFormCarrierAccount(new EndiciaScanFormRepository(false), accountEntity);
                 carrierAccounts.Add(carrierAccount);
             }
 

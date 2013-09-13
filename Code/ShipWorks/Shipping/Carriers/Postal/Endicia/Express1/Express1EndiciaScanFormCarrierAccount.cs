@@ -7,24 +7,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// An Express1 implementation of the IScanFormCarrierAccount interface.
     /// </summary>
-    public class Express1ScanFormCarrierAccount : EndiciaScanFormCarrierAccount
+    public class Express1EndiciaScanFormCarrierAccount : EndiciaScanFormCarrierAccount
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaScanFormCarrierAccount"/> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public Express1ScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity)
-            : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1ScanFormCarrierAccount)))
+        public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity)
+            : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1EndiciaScanFormCarrierAccount)))
         { }
 
         /// <summary>
-        /// Constructor for testing. Initializes a new instance of the <see cref="Express1ScanFormCarrierAccount"/> class.
+        /// Constructor for testing. Initializes a new instance of the <see cref="Express1EndiciaScanFormCarrierAccount"/> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public Express1ScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log)
+        public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log)
             : base(repository, accountEntity, log)
         {
             // Just need to set the shipment type code for express 1 that 
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             // The Express1 gateway is very similar to that of Endicia, but need to override this method
             // since we need to call into the Express1 API rather than Endicia
-            return new Express1ScanFormGateway();
+            return new Express1EndiciaScanFormGateway();
         }
     }
 }

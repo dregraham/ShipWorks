@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Gets all Stamps.com based accounts in ShipWorks
         /// </summary>
         /// <returns></returns>
-        private static List<StampsAccountEntity> GetAccounts()
+        private static IEnumerable<StampsAccountEntity> GetAccounts()
         {
             lock (synchronizer)
             {
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static string GetDefaultDescription(StampsAccountEntity account)
         {
-            string descriptionBase = account.AccountNumber;
+            string descriptionBase = account.StampsAccountID.ToString();
 
             // Express1 uses terribly long account numbers
             if (account.IsExpress1)
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static bool DisplaySetupWizard(IWin32Window owner, bool isExpress1)
         {
-            using (WizardForm dlg = isExpress1 ? (WizardForm)new Express1SetupWizard(true) : new StampsSetupWizard())
+            using (WizardForm dlg = isExpress1 ? (WizardForm)new Express1StampsSetupWizard(true) : new StampsSetupWizard())
             {
                 return (dlg.ShowDialog(owner) == DialogResult.OK);
             }

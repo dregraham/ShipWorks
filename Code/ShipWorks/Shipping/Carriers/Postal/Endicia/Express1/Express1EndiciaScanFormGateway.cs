@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// An implementation of the IScanFormGateway interface that communicates with the Express1 API
     /// for creating/obtaining SCAN forms.
     /// </summary>
-    public class Express1ScanFormGateway : IScanFormGateway
+    public class Express1EndiciaScanFormGateway : IScanFormGateway
     {
         /// <summary>
         /// Gets the scan form from the shipping carrier and populates the properties of the given scan form.
@@ -26,16 +26,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             EndiciaAccountEntity accountEntity = scanForm.CarrierAccount.GetAccountEntity() as EndiciaAccountEntity;
             if (accountEntity == null)
             {
-                throw new Express1Exception("An attempt to create an Express1 SCAN form was made for a carrier other than Express1.");
+                throw new Express1EndiciaException("An attempt to create an Express1 SCAN form was made for a carrier other than Express1.");
             }
 
             if (shipments == null || shipments.Count() == 0)
             {
-                throw new Express1Exception("There must be at least one shipment to create a SCAN form.");
+                throw new Express1EndiciaException("There must be at least one shipment to create a SCAN form.");
             }
 
             // We have a scan form for an Endicia account, so we can obtain the scan form via the Express1 API
-            XDocument xDocument = Express1CustomerServiceClient.CreateScanForm(shipments);
+            XDocument xDocument = Express1EndiciaCustomerServiceClient.CreateScanForm(shipments);
 
             EndiciaScanFormEntity scanEntity = new EndiciaScanFormEntity();
             scanEntity.EndiciaAccountID = accountEntity.EndiciaAccountID;

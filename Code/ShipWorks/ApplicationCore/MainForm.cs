@@ -3199,7 +3199,7 @@ namespace ShipWorks
         {
             List<IScanFormAccountRepository> repositories = new List<IScanFormAccountRepository>();
             repositories.Add(new EndiciaScanFormAccountRepository());
-            repositories.Add(new Express1ScanFormAccountRepository());
+            repositories.Add(new Express1EndiciaScanFormAccountRepository());
             repositories.Add(new StampsScanFormAccountRepository());
 
             ScanFormUtility.PopulateCreateScanFormMenu(menuCreateEndiciaScanForm, repositories);

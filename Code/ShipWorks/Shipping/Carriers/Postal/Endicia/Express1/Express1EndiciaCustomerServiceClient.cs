@@ -23,9 +23,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Interacts with the Express 1 Customer Service web service
     /// </summary>
-    public static class Express1CustomerServiceClient
+    public static class Express1EndiciaCustomerServiceClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(Express1CustomerServiceClient));
+        static readonly ILog log = LogManager.GetLogger(typeof(Express1EndiciaCustomerServiceClient));
 
         /// <summary>
         /// Encrypts a string based on Express1's requirements 
@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(Express1Exception));
+                throw WebHelper.TranslateWebException(ex, typeof(Express1EndiciaException));
             }
         }
 
