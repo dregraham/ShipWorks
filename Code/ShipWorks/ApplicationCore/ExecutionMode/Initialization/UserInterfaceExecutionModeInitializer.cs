@@ -41,9 +41,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
             
-            // Setup MessageHelper
-            MessageHelper.Initialize("ShipWorks");
-
             // Check for illegal cross thread calls in any mode - not just when the debugger is attached, which is the default
             Control.CheckForIllegalCrossThreadCalls = true;
 

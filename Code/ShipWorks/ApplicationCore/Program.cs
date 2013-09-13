@@ -66,6 +66,10 @@ namespace ShipWorks
         [STAThread]
         static void Main()
         {
+            // Message boxes can currently be shown before the execution mode is initialized, so
+            // let's initialize this here until all remaining UI is moved out of the startup path.
+            MessageHelper.Initialize("ShipWorks");
+
             SetupUnhandledExceptionHandling();
 
             try

@@ -14,9 +14,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode.Initialization
         /// <param name="executionMode">The execution mode.</param>
         public override void Initialize()
         {
-            // Setup MessageHelper
-            MessageHelper.Initialize("ShipWorks");
-
             PerformCommonInitialization();
         }
     }
