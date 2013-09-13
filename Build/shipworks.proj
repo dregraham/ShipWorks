@@ -15,19 +15,18 @@
     <!-- Local or Automated (when CCNet is used it changes to Automated -->
     <BuildType>Local</BuildType>
     
-    
     <!-- Can be overridden for local builds -->
 		<PackageModules Condition=" $(PackageModules) == '' ">False</PackageModules>
 
 		<!-- Can be true or false to initiate the installer -->
 		<CreateInstaller Condition=" $(CreateInstaller) == '' ">False</CreateInstaller>
 
-		<!-- None, Internal, or Public -->
+		<!-- None, Internal, Nightly, or Public -->
 		<ReleaseType Condition=" $(ReleaseType) == '' ">None</ReleaseType>
     
-		<!-- Default to no obfuscation, but force it for public builds -->
+		<!-- Default to no obfuscation, but force it for public or nightly builds -->
 		<Obfuscate Condition=" $(Obfuscate) == '' ">False</Obfuscate>
-    <Obfuscate Condition=" $(ReleaseType) == 'Public' ">True</Obfuscate>
+    <Obfuscate Condition=" $(ReleaseType) == 'Public' or $(ReleaseType) == 'Nightly' ">True</Obfuscate>
     
 	</PropertyGroup>
 
@@ -396,7 +395,7 @@
   </Target>
 
   <!-- Sign the assemblies with authenticode -->
-  <Target Name="SignAssemblies"  Condition=" $(ReleaseType) != 'None' and '$(ReleaseType)' != 'Internal'" >
+  <Target Name="SignAssemblies"  Condition=" $(ReleaseType) != 'None' " >
 
     <Message Text="Signing assemblies: @(AssembliesToSign->'%(Filename)', ', ')" />
     <Exec Command='$(SignCommand) "%(AssembliesToSign.FullPath)"' />
@@ -458,7 +457,7 @@
   </Target>
 
   <!-- Sign installer with authenticode -->
-  <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' and '$(ReleaseType)' != 'Internal'">
+  <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' ">
 
     <Message Text="Signing installers: @(Installers->'%(Filename)', ', ')" />
     <Exec Command='$(SignCommand) "%(Installers.FullPath)"' />
