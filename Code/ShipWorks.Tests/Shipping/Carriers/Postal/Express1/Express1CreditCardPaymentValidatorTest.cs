@@ -39,11 +39,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             paymentInfo = new Express1PaymentInfo(Express1PaymentType.CreditCard)
                 {
-                    CardAccountNumber = "41111111111111111",
-                    CardCvn = 411,
-                    CardExpirationDate = DateTime.Now.AddMonths(5),
-                    CardType = Express1CreditCardType.Visa,
-                    CardBillingAddress = billingAddress
+                    CcAccountNumber = "41111111111111111",
+                    CcCvn = 411,
+                    CcExpirationDate = DateTime.Now.AddMonths(5),
+                    CcType = Express1CreditCardType.Visa,
+                    CcBillingAddress = billingAddress,
+                    CcNameOnCard = "John Doe"
                 };
         }
 
@@ -59,11 +60,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         [TestMethod]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressMissing_Test()
         {
-            paymentInfo.CardBillingAddress = null;
+            paymentInfo.CcBillingAddress = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
             
             IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.MissingCreditCardBillingAddress));
         }
 
         [TestMethod]
@@ -72,25 +73,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors; 
 
             // FirstName is null
-            paymentInfo.CardBillingAddress.FirstName = null;
+            paymentInfo.CcBillingAddress.FirstName = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressFirstName));
 
             // FirstName is blank
-            paymentInfo.CardBillingAddress.FirstName = "";
+            paymentInfo.CcBillingAddress.FirstName = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressFirstName));
 
             // FirstName is just spaces
-            paymentInfo.CardBillingAddress.FirstName = "   ";
+            paymentInfo.CcBillingAddress.FirstName = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressFirstName));
         }
 
         [TestMethod]
@@ -99,25 +100,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // LastName is null
-            paymentInfo.CardBillingAddress.LastName = null;
+            paymentInfo.CcBillingAddress.LastName = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressLastName));
 
             // LastName is blank
-            paymentInfo.CardBillingAddress.LastName = "";
+            paymentInfo.CcBillingAddress.LastName = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressLastName));
 
             // LastName is just spaces
-            paymentInfo.CardBillingAddress.LastName = "   ";
+            paymentInfo.CcBillingAddress.LastName = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressLastName));
         }
 
         [TestMethod]
@@ -126,25 +127,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // City is null
-            paymentInfo.CardBillingAddress.City = null;
+            paymentInfo.CcBillingAddress.City = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressCity));
 
             // City is blank
-            paymentInfo.CardBillingAddress.City = "";
+            paymentInfo.CcBillingAddress.City = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressCity));
 
             // City is just spaces
-            paymentInfo.CardBillingAddress.City = "   ";
+            paymentInfo.CcBillingAddress.City = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressCity));
         }
 
         [TestMethod]
@@ -153,25 +154,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // CountryCode is null
-            paymentInfo.CardBillingAddress.CountryCode = null;
+            paymentInfo.CcBillingAddress.CountryCode = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressCountryCode));
 
             // CountryCode is blank
-            paymentInfo.CardBillingAddress.CountryCode = "";
+            paymentInfo.CcBillingAddress.CountryCode = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressCountryCode));
 
             // CountryCode is just spaces
-            paymentInfo.CardBillingAddress.CountryCode = "   ";
+            paymentInfo.CcBillingAddress.CountryCode = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressCountryCode));
         }
 
         [TestMethod]
@@ -180,25 +181,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // PostalCode is null
-            paymentInfo.CardBillingAddress.PostalCode = null;
+            paymentInfo.CcBillingAddress.PostalCode = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressPostalCode));
 
             // PostalCode is blank
-            paymentInfo.CardBillingAddress.PostalCode = "";
+            paymentInfo.CcBillingAddress.PostalCode = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressPostalCode));
 
             // PostalCode is just spaces
-            paymentInfo.CardBillingAddress.PostalCode = "   ";
+            paymentInfo.CcBillingAddress.PostalCode = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressPostalCode));
         }
 
         [TestMethod]
@@ -207,25 +208,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // StateProvCode is null
-            paymentInfo.CardBillingAddress.StateProvCode = null;
+            paymentInfo.CcBillingAddress.StateProvCode = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressStateProvince));
 
             // StateProvCode is blank
-            paymentInfo.CardBillingAddress.StateProvCode = "";
+            paymentInfo.CcBillingAddress.StateProvCode = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressStateProvince));
 
             // StateProvCode is just spaces
-            paymentInfo.CardBillingAddress.StateProvCode = "   ";
+            paymentInfo.CcBillingAddress.StateProvCode = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressStateProvince));
         }
 
         [TestMethod]
@@ -234,25 +235,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // Street1 is null
-            paymentInfo.CardBillingAddress.Street1 = null;
+            paymentInfo.CcBillingAddress.Street1 = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressStreet));
 
             // Street1 is blank
-            paymentInfo.CardBillingAddress.Street1 = "";
+            paymentInfo.CcBillingAddress.Street1 = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressStreet));
 
             // Street1 is just spaces
-            paymentInfo.CardBillingAddress.Street1 = "   ";
+            paymentInfo.CcBillingAddress.Street1 = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardBillingAddressStreet));
         }
 
         [TestMethod]
@@ -261,25 +262,52 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // CardAccountNumber is null
-            paymentInfo.CardAccountNumber = null;
+            paymentInfo.CcAccountNumber = null;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardAccountNumber));
 
             // CardAccountNumber is blank
-            paymentInfo.CardAccountNumber = "";
+            paymentInfo.CcAccountNumber = "";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardAccountNumber));
 
             // CardAccountNumber is just spaces
-            paymentInfo.CardAccountNumber = "   ";
+            paymentInfo.CcAccountNumber = "   ";
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardAccountNumber));
+        }
+
+        [TestMethod]
+        public void ValidatePaymentInfo_ReturnsError_WhenNameOnCardIsInvalid_Test()
+        {
+            IEnumerable<Express1ValidationError> errors;
+
+            // CcNameOnCard is null
+            paymentInfo.CcNameOnCard = null;
+            testObject = new Express1CreditCardPaymentValidator(paymentInfo);
+
+            errors = testObject.ValidatePaymentInfo();
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardNameOnCard));
+
+            // CcNameOnCard is blank
+            paymentInfo.CcNameOnCard = "";
+            testObject = new Express1CreditCardPaymentValidator(paymentInfo);
+
+            errors = testObject.ValidatePaymentInfo();
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardNameOnCard));
+
+            // CcNameOnCard is just spaces
+            paymentInfo.CcNameOnCard = "   ";
+            testObject = new Express1CreditCardPaymentValidator(paymentInfo);
+
+            errors = testObject.ValidatePaymentInfo();
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardNameOnCard));
         }
 
         [TestMethod]
@@ -288,18 +316,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // CardCvn is 0
-            paymentInfo.CardCvn = 0;
+            paymentInfo.CcCvn = 0;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardCvn));
 
             // CardCvn is less than 0
-            paymentInfo.CardCvn = -1;
+            paymentInfo.CcCvn = -1;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardCvn));
         }
 
         [TestMethod]
@@ -308,11 +336,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             IEnumerable<Express1ValidationError> errors;
 
             // CardExpirationDate is before now
-            paymentInfo.CardExpirationDate = DateTime.MinValue;
+            paymentInfo.CcExpirationDate = DateTime.MinValue;
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardExpirationDate));
         }
 
         [TestMethod]
@@ -325,7 +353,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1CreditCardPaymentValidator(paymentInfo);
 
             errors = testObject.ValidatePaymentInfo();
-            Assert.AreEqual(errors.Count(), 1);
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidPaymentTypeAch));
         }
 
     }

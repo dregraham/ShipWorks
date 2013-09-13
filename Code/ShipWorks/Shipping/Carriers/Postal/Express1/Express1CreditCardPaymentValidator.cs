@@ -38,22 +38,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 return validationErrors;
             }
 
-            if (express1PaymentInfo.CardExpirationDate <= DateTime.Now)
+            if (express1PaymentInfo.CcExpirationDate <= DateTime.Now)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardExpirationDate));
             }
 
-            if (express1PaymentInfo.CardCvn <= 0)
+            if (express1PaymentInfo.CcCvn <= 0)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardCvn));
             }
 
-            if (string.IsNullOrWhiteSpace(express1PaymentInfo.CardAccountNumber))
+            if (string.IsNullOrWhiteSpace(express1PaymentInfo.CcAccountNumber))
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardAccountNumber));
             }
 
-            validationErrors.AddRange(ValidatePhysicalAddress(express1PaymentInfo.CardBillingAddress));
+            if (string.IsNullOrWhiteSpace(express1PaymentInfo.CcNameOnCard))
+            {
+                validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardNameOnCard));
+            }
+
+            validationErrors.AddRange(ValidatePhysicalAddress(express1PaymentInfo.CcBillingAddress));
 
             return validationErrors;
         }

@@ -32,7 +32,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
                     AchAccountNumber = "1234680",
                     AchBankName = "USBank",
                     AchRoutingId = "000000000",
-                    PaymentType = Express1PaymentType.Ach
+                    PaymentType = Express1PaymentType.Ach,
+                    AchAccountName = "John Doe"
                 };
         }
 
@@ -164,6 +165,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             errors = testObject.ValidatePaymentInfo();
             Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidAchRoutingId));
+        }
+
+        [TestMethod]
+        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountNameIsInvalid_Test()
+        {
+            IEnumerable<Express1ValidationError> errors;
+
+            // AchAccountName is null
+            paymentInfo.AchAccountName = null;
+            testObject = new Express1AchPaymentValidator(paymentInfo);
+
+            errors = testObject.ValidatePaymentInfo();
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidAchAccountName));
+
+            // AchAccountName is blank
+            paymentInfo.AchAccountName = "";
+            testObject = new Express1AchPaymentValidator(paymentInfo);
+
+            errors = testObject.ValidatePaymentInfo();
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidAchAccountName));
+
+            // AchAccountName is just spaces
+            paymentInfo.AchAccountName = "   ";
+            testObject = new Express1AchPaymentValidator(paymentInfo);
+
+            errors = testObject.ValidatePaymentInfo();
+            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidAchAccountName));
         }
     }
 }

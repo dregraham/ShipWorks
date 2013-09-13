@@ -42,6 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             validationErrors.AddRange(Express1Utilities.ValidateDataIsProvided(express1PaymentInfo.AchAccountHolderName, Express1ValidationErrorMessages.InvalidAchAccountHolderName));
             validationErrors.AddRange(Express1Utilities.ValidateDataIsProvided(express1PaymentInfo.AchBankName, Express1ValidationErrorMessages.InvalidAchBankName));
             validationErrors.AddRange(Express1Utilities.ValidateDataIsProvided(express1PaymentInfo.AchRoutingId, Express1ValidationErrorMessages.InvalidAchRoutingId));
+            validationErrors.AddRange(Express1Utilities.ValidateDataIsProvided(express1PaymentInfo.AchAccountName, Express1ValidationErrorMessages.InvalidAchAccountName));
 
             return validationErrors;
         }
