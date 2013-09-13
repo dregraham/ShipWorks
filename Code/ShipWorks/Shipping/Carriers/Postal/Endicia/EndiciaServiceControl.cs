@@ -17,8 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public partial class EndiciaServiceControl : PostalServiceControlBase
     {
-        EndiciaReseller endiciaReseller = EndiciaReseller.None;
-        ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Endicia;
+        readonly EndiciaReseller endiciaReseller = EndiciaReseller.None;
 
         /// <summary>
         /// Constructor
@@ -35,7 +34,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             : base(shipmentTypeCode)
         {
             this.endiciaReseller = endiciaReseller;
-            this.shipmentTypeCode = shipmentTypeCode;
 
             InitializeComponent();
         }
@@ -47,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             base.Initialize();
 
-            originControl.Initialize(shipmentTypeCode);
+            originControl.Initialize(ShipmentTypeCode);
 
             EnumHelper.BindComboBox<PostalSortType>(sortType);
             EnumHelper.BindComboBox<PostalEntryFacility>(entryFacility);

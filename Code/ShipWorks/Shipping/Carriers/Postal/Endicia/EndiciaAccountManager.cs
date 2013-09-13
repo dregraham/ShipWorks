@@ -61,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         /// <summary>
         /// Get the endicia accounts in the system.  Optionally include those that have not yet totally completed signup where
-        /// the user is yet to enter the account id
+        /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<EndiciaAccountEntity> GetAccounts(EndiciaReseller reseller, bool includedIncomplete)
+        public static List<EndiciaAccountEntity> GetAccounts(EndiciaReseller reseller, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includedIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int)reseller)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int)reseller)));
             }
         }
 

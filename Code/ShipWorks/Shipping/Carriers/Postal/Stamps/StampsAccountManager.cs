@@ -60,10 +60,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Gets all Stamps.com based accounts in ShipWorks
+        /// Get the Stamps.com accounts in the system.  Optionally include those that have not yet totally completed signup where
+        /// the user is yet to enter the account ID.
         /// </summary>
-        /// <returns></returns>
-        private static IEnumerable<StampsAccountEntity> GetAccounts()
+        public static List<StampsAccountEntity> GetAccounts(bool isExpress1, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -72,8 +72,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.IsExpress1 == isExpress1)));
             }
+        }
+
+        /// <summary>
+        /// Get the Stamps.com accounts in the system.
+        /// </summary>
+        public static List<StampsAccountEntity> GetAccounts(bool isExpress1)
+        {
+            return GetAccounts(isExpress1, false);
         }
 
         /// <summary>
@@ -83,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts().Where(a => !a.IsExpress1).ToList();
+                return GetAccounts(false, false);
             }
         }
 
@@ -94,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts().Where(a => a.IsExpress1).ToList();
+                return GetAccounts(true, false);
             }
         }
 
@@ -103,7 +111,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static StampsAccountEntity GetAccount(long accountID)
         {
-            return GetAccounts().FirstOrDefault(a => a.StampsAccountID == accountID);
+            StampsAccountEntity stampsAccount = StampsAccounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+
+            if(stampsAccount == null)
+            {
+                stampsAccount = Express1Accounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+            }
+
+            return stampsAccount;
         }
 
         /// <summary>
