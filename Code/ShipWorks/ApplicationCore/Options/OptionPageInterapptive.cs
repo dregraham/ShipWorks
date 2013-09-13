@@ -188,9 +188,8 @@ namespace ShipWorks.ApplicationCore.Options
                 // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
                 using (SqlConnection con = SqlSession.Current.OpenConnection())
                 {
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
-                    cmd.CommandText = "DELETE FilterNodeContentDirty; DELETE FilterNodeUpdateCheckpoint;";
-                    cmd.ExecuteNonQuery();
+                    SqlUtility.TruncateTable("FilterNodeContentDirty", con);
+                    SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", con);
                 }
             }
             finally
