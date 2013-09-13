@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl();
+            return new StampsSettingsControl(false);
         }
 
         /// <summary>

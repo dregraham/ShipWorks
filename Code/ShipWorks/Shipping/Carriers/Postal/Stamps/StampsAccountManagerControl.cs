@@ -29,6 +29,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
         long initialAccountID = -1;
 
+        bool isExpress1 = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -40,8 +42,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Load the current list of accounts into the control
         /// </summary>
-        public void Initialize()
+        public void Initialize(bool isExpress1)
         {
+            this.isExpress1 = isExpress1;
+
             LoadAccounts();
             UpdateButtonState();
         }
@@ -55,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             sandGrid.Rows.Clear();
 
-            foreach (StampsAccountEntity account in StampsAccountManager.StampsAccounts)
+            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(isExpress1))
             {
                 GridRow row = new GridRow(new string[] { account.Username, "Checking..." });
                 sandGrid.Rows.Add(row);
@@ -179,8 +183,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
-                "Note: This does not delete your account from Stamps.com.",
-                account.Username));
+                "Note: This does not delete your account from {1}.",
+                account.Username, isExpress1 ? "Express1" : "Stamps.com"));
 
             if (result == DialogResult.OK)
             {
@@ -194,12 +198,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
-            using (StampsSetupWizard wizard = new StampsSetupWizard())
+            if (StampsAccountManager.DisplaySetupWizard(this, isExpress1))
             {
-                if (wizard.ShowDialog(this) == DialogResult.OK)
-                {
-                    LoadAccounts();
-                }
+                LoadAccounts();
             }
         }
     }

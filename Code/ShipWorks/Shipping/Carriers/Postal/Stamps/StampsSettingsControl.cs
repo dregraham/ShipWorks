@@ -18,12 +18,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         bool loadedStampsAccounts = false;
 
+        bool isExpress1 = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsSettingsControl()
+        public StampsSettingsControl(bool isExpress1)
         {
             InitializeComponent();
+
+            this.isExpress1 = isExpress1;
         }
 
         /// <summary>
@@ -58,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // we'd be constantly waiting on stamps.com.
             if (!loadedStampsAccounts)
             {
-                stampsAccountControl.Initialize();
+                stampsAccountControl.Initialize(isExpress1);
                 loadedStampsAccounts = true;
             }
         }

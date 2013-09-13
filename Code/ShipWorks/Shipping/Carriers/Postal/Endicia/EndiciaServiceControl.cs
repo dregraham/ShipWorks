@@ -61,9 +61,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endiciaAccount.DisplayMember = "Key";
             endiciaAccount.ValueMember = "Value";
 
-            if (EndiciaAccountManager.GetAccounts(endiciaReseller, false).Count > 0)
+            var accounts = EndiciaAccountManager.GetAccounts(endiciaReseller, false);
+
+            if (accounts.Count > 0)
             {
-                endiciaAccount.DataSource = EndiciaAccountManager.GetAccounts(endiciaReseller, false).Select(s => new KeyValuePair<string, long>(s.Description, s.EndiciaAccountID)).ToList();
+                endiciaAccount.DataSource = accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.EndiciaAccountID)).ToList();
                 endiciaAccount.Enabled = true;
             }
             else

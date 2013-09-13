@@ -53,9 +53,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            if (StampsAccountManager.StampsAccounts.Count > 0)
+            var accounts = StampsAccountManager.GetAccounts(isExpress1, false);
+
+            if(accounts.Count > 0)
             {
-                stampsAccount.DataSource = StampsAccountManager.GetAccounts(isExpress1, false).Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
+                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
                 stampsAccount.Enabled = true;
             }
             else
@@ -148,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnManageStampsAccounts(object sender, EventArgs e)
         {
-            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg())
+            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg(isExpress1))
             {
                 dlg.ShowDialog(this);
             }

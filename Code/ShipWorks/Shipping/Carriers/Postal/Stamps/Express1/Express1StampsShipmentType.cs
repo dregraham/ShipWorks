@@ -1,4 +1,7 @@
-﻿
+﻿using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Settings;
+using System.Windows.Forms;
+
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -16,6 +19,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 return ShipmentTypeCode.Express1Stamps;
             }
+        }
+
+        /// <summary>
+        /// Creates the Express1/Stamps service control.
+        /// </summary>
+        public override ServiceControlBase CreateServiceControl()
+        {
+            return new Express1StampsServiceControl();
+        }
+
+        /// <summary>
+        /// Creates the Express1/Stamps setup wizard.
+        /// </summary>
+        public override Form CreateSetupWizard()
+        {
+            return new Express1StampsSetupWizard();
+        }
+
+        /// <summary>
+        /// Creates the Express1/Stamps settings control.
+        /// </summary>
+        public override SettingsControlBase CreateSettingsControl()
+        {
+            return new StampsSettingsControl(true);
         }
     }
 }
