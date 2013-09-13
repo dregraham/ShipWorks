@@ -2346,7 +2346,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits StampsAccountEntity's mappings</summary>
 		private void InitStampsAccountEntityMappings()
 		{
-			base.AddElementMapping( "StampsAccountEntity", "ShipWorksLocal", @"dbo", "StampsAccount", 20 );
+			base.AddElementMapping( "StampsAccountEntity", "ShipWorksLocal", @"dbo", "StampsAccount", 21 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "StampsAccountID", "StampsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2366,7 +2366,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "StampsAccountEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 16 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "Website", "Website", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "MailingPostalCode", "MailingPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 18 );
-			base.AddElementFieldMapping( "StampsAccountEntity", "IsExpress1", "IsExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 19 );
+			base.AddElementFieldMapping( "StampsAccountEntity", "AccountNumber", "AccountNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 19 );
+			base.AddElementFieldMapping( "StampsAccountEntity", "IsExpress1", "IsExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 20 );
 		}
 		/// <summary>Inits StampsProfileEntity's mappings</summary>
 		private void InitStampsProfileEntityMappings()

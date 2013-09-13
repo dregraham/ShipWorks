@@ -4333,7 +4333,8 @@ CREATE TABLE [dbo].[StampsAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsExpress1] [bit] NOT NULL
+[IsExpress1] [bit] NOT NULL,
+[AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalStampsAccount] on [dbo].[StampsAccount]'

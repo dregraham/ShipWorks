@@ -219,7 +219,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueSelection
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -231,7 +230,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueSelectionUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		

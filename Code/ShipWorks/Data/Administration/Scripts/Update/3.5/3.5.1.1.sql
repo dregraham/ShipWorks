@@ -33,12 +33,13 @@ CREATE TABLE [dbo].[tmp_rg_xx_StampsAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsExpress1] [bit] NOT NULL
+[IsExpress1] [bit] NOT NULL,
+[AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_StampsAccount] ON
 GO
-INSERT INTO [dbo].[tmp_rg_xx_StampsAccount]([StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [IsExpress1]) SELECT [StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], 0 FROM [dbo].[StampsAccount]
+INSERT INTO [dbo].[tmp_rg_xx_StampsAccount]([StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [IsExpress1], [AccountNumber]) SELECT [StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], 0, '' FROM [dbo].[StampsAccount]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_StampsAccount] OFF
 GO

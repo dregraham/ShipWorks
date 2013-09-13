@@ -16547,6 +16547,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
 		}
+		/// <summary>Creates a new StampsAccountEntity.AccountNumber field instance</summary>
+		public static EntityField2 AccountNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.AccountNumber);}
+		}
 		/// <summary>Creates a new StampsAccountEntity.IsExpress1 field instance</summary>
 		public static EntityField2 IsExpress1
 		{

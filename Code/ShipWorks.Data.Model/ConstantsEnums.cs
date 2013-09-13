@@ -7774,6 +7774,8 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
 		///<summary>IsExpress1. </summary>
 		IsExpress1,
 		/// <summary></summary>
