@@ -889,6 +889,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Registration.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1PaymentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationResult.cs" />
