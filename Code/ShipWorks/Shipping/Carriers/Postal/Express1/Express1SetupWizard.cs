@@ -200,50 +200,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
+            if (!personControl.ValidateRequiredFields())
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             PersonAdapter person = new PersonAdapter();
             personControl.SaveToEntity(person);
-
-            if (person.FirstName.Trim().Length == 0 || person.LastName.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your contact name.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.Email.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your email address.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.Phone.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your phone number.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.Street1.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your street address.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.City.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your city.");
-                e.NextPage = CurrentPage;
-                return;
-            }
-
-            if (person.PostalCode.Trim().Length == 0)
-            {
-                MessageHelper.ShowInformation(this, "Please enter your postal code.");
-                e.NextPage = CurrentPage;
-                return;
-            }
 
             // pre-load these details into the CC controls
             personCreditCard.LoadEntity(person);

@@ -40,33 +40,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     errors.Add(new Express1ValidationError("Passwords must be between 6 and 20 characters long and contain at least one letter and one number."));
                 }
 
-                if (registration.FirstCodewordType == registration.SecondCodewordType)
-                {
-                    // Code word types cannot be the same
-                    errors.Add(new Express1ValidationError("You must select two different code word questions."));
-                }
-
-                // Check the code word values
-                errors.AddRange(ValidateCodewordValue(registration.FirstCodewordValue, 1));
-                errors.AddRange(ValidateCodewordValue(registration.SecondCodewordValue, 2));
-
                 if (registration.Email.Length > 41)
                 {
                     // Email address too long
                     errors.Add(new Express1ValidationError("Email address is too long. Stamps.com only allows email addresses that are less than 41 characters long."));
                 }
 
-                if (registration.PromoCode.Length > 50)
-                {
-                    // Promo code too long
-                    errors.Add(new Express1ValidationError("An invalid promo code was provided. Stamps.com only recognizes promo codes that are 50 characters or less."));
-                }
-
-                // At least one payment method must be present
-                if (registration.CreditCard == null && registration.AchAccount == null)
-                {
-                    errors.Add(new Express1ValidationError("Stamps.com requires that either credit card or account be provided in the registration process."));
-                }
             }
 
             return errors;
@@ -82,15 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             List<Express1ValidationError> errors = new List<Express1ValidationError>();
             errors.AddRange(ValidateDataIsProvided(registration.UserName, "Username is required."));
             errors.AddRange(ValidateDataIsProvided(registration.Password, "Password is required."));
-            errors.AddRange(ValidateDataIsProvided(registration.FirstCodewordValue, "First code word is required."));
-            errors.AddRange(ValidateDataIsProvided(registration.SecondCodewordValue, "Second code word is required."));
             errors.AddRange(ValidateDataIsProvided(registration.Email, "Email address is required."));
-
-            // Address (physical)
-            errors.AddRange(ValidatePhysicalAddress(registration.PhysicalAddress));
-
-            // Machine Info
-            errors.AddRange(ValidateMachineInfo(registration.MachineInfo));
 
             return errors;
         }

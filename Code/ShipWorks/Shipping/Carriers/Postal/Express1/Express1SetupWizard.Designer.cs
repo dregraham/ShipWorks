@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Express1EndiciaSetupWizard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Express1SetupWizard));
             this.wizardPageAccountType = new ShipWorks.UI.Wizard.WizardPage();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.radioNewAccount = new System.Windows.Forms.RadioButton();
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePayment);
+            this.mainPanel.Controls.Add(this.wizardPageAddress);
             this.mainPanel.Size = new System.Drawing.Size(545, 460);
             // 
             // etchBottom
@@ -204,6 +204,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 3);
             this.personControl.Name = "personControl";
+            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Size = new System.Drawing.Size(358, 344);
             this.personControl.TabIndex = 1;
             // 
@@ -675,7 +680,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(545, 567);
-            this.Name = "Express1EndiciaSetupWizard";
+            this.Name = "Express1SetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageAccountList,
