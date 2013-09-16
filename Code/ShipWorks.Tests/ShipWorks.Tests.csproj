@@ -277,6 +277,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1AchPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1CreditCardPaymentValidatorTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1UtilitiesTest.cs" />
