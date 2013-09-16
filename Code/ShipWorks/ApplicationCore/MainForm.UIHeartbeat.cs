@@ -211,6 +211,8 @@ namespace ShipWorks
             /// </summary>
             protected override void FinishHeartbeat()
             {
+                base.FinishHeartbeat();
+
                 // If the filter tree is showing some spinning, go ahead and have it update as their may be new counts loaded by now
                 if (mainForm.filterTree.HasCalculatingNodes())
                 {
