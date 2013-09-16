@@ -121,7 +121,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     Pages.Remove(wizardPageOptions);
                 }
 
-
                 // In the case of adding Express1 accounts to use for Stamps, we really want to super-simplify the setup.  Thats how this would get set.
                 if (hideDetailedConfiguration)
                 {
@@ -140,6 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 }
                 else
                 {
+                    //TODO: implement the options control in a generic way
                     //optionsControl.LoadSettings(true);
 
                     Pages.Add(new ShippingWizardPageOrigin(shipmentType));
@@ -156,6 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             if (Pages.Contains(wizardPageAccountList))
             {
+                //TODO: implement the account control in a generic way
                 //accountControl.Initialize(true);
             }
         }
@@ -369,8 +370,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             return paymentInfo;
         }
 
-      
-
         /// <summary>
         /// Payment Method was changed
         /// </summary>
@@ -451,7 +450,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 //// save
                 //StampsAccountManager.SaveAccount(account);
 
-                // signup complete...
+                //// signup complete...
 
             }
             catch (StampsException ex)

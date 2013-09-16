@@ -8,6 +8,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// </summary>
     public class Express1StampsConnectionDetails : IExpress1ConnectionDetails
     {
+        /// <summary>
+        /// Gets the franchise Id (company code)
+        /// </summary>
         public string FranchiseId
         {
             get
@@ -16,6 +19,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
         }
 
+        /// <summary>
+        /// Gets the API key for Express1 integrations
+        /// </summary>
         public string ApiKey {
             get
             {
@@ -23,6 +29,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
         }
 
+        /// <summary>
+        /// Gets the id of the certificate to use to encrypt data
+        /// </summary>
         public string CertificateId
         {
             get

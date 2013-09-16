@@ -117,10 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 "https://service.express1.com/Customer/Gateway.aspx";
             
             // format the url
-            string url = string.Format("{0}?app={1}&info={2}", urlBase, connectionDetails.ApiKey, HttpUtility.UrlEncode(customerInfo));
-
-            // that's it
-            return url;
+            return string.Format("{0}?app={1}&info={2}", urlBase, connectionDetails.ApiKey, HttpUtility.UrlEncode(customerInfo));
         }
 
         /// <summary>
@@ -158,14 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                         Regex addressRegex = new Regex(@"Current IP Address: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
                         string ip = addressRegex.Match(text).Groups[1].Value;
 
-                        if (!String.IsNullOrEmpty(ip))
-                        {
-                            return ip;
-                        }
-                        else
-                        {
-                            return "Unknown";
-                        }
+                        return !String.IsNullOrEmpty(ip) ? ip : "Unknown";
                     }
                 }
             }
