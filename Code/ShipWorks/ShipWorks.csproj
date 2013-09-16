@@ -896,6 +896,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationErrorMessages.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IPaymentValidator.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\IRegistrationValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
