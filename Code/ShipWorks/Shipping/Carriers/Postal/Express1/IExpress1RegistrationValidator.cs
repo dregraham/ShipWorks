@@ -2,7 +2,10 @@
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
-    public interface IRegistrationValidator
+    /// <summary>
+    /// Validates Registration information prior to sending registration request to Express1.
+    /// </summary>
+    public interface IExpress1RegistrationValidator
     {
         List<Express1ValidationError> Validate(Express1Registration registration);
     }

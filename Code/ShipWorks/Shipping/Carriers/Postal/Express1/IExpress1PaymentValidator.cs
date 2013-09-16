@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// <summary>
     /// An interface for being able to validate payment information.
     /// </summary>
-    public interface IPaymentValidator
+    public interface IExpress1PaymentValidator
     {
         /// <summary>
         /// Validates payment information.

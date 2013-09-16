@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// <summary>
     /// Validates that the ACH info on a Express1PaymentInfo is valid
     /// </summary>
-    public class Express1AchPaymentValidator : IPaymentValidator
+    public class Express1AchPaymentValidator : IExpress1PaymentValidator
     {
         private readonly Express1PaymentInfo express1PaymentInfo;
         private readonly List<Express1ValidationError> validationErrors;
