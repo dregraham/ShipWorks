@@ -35,24 +35,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             stampsAccount.Username = registration.UserName;
             stampsAccount.Password = SecureText.Encrypt(registration.Password, registration.UserName);
 
-            stampsAccount.FirstName = registration.PhysicalAddress.FirstName;
-            stampsAccount.MiddleName = registration.PhysicalAddress.MiddleName;
-            stampsAccount.LastName = registration.PhysicalAddress.LastName;
-            stampsAccount.Company = registration.PhysicalAddress.Company;
+            stampsAccount.FirstName = registration.MailingAddress.FirstName;
+            stampsAccount.MiddleName = registration.MailingAddress.MiddleName;
+            stampsAccount.LastName = registration.MailingAddress.LastName;
+            stampsAccount.Company = registration.MailingAddress.Company;
 
             // Address info
-            stampsAccount.Street1 = registration.PhysicalAddress.Address1;
-            stampsAccount.Street2 = registration.PhysicalAddress.Address2;
-            stampsAccount.Street3 = registration.PhysicalAddress.Address3;
-            stampsAccount.City = registration.PhysicalAddress.City;
-            stampsAccount.PostalCode = registration.PhysicalAddress.PostalCode;
-            stampsAccount.CountryCode = Geography.GetStateProvCode(registration.PhysicalAddress.Country);
-            stampsAccount.StateProvCode = Geography.GetStateProvCode(registration.PhysicalAddress.State);
+            stampsAccount.Street1 = registration.MailingAddress.Street1;
+            stampsAccount.Street2 = registration.MailingAddress.Street2;
+            stampsAccount.Street3 = registration.MailingAddress.Street3;
+            stampsAccount.City = registration.MailingAddress.City;
+            stampsAccount.PostalCode = registration.MailingAddress.PostalCode;
+            stampsAccount.CountryCode = Geography.GetStateProvCode(registration.MailingAddress.CountryCode);
+            stampsAccount.StateProvCode = Geography.GetStateProvCode(registration.MailingAddress.StateProvCode);
             stampsAccount.MailingPostalCode = registration.MailingAddress.PostalCode;
 
             // Contact information (website is not collected required by Express1, so the registration is not
             // collecting this information)
-            stampsAccount.Phone = registration.PhysicalAddress.PhoneNumber;
+            stampsAccount.Phone = registration.Phone10Digits;
             stampsAccount.Email = registration.Email;
             stampsAccount.Website = string.Empty;
             
