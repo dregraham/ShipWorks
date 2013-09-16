@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// The billing address of the credit card
         /// </summary>
-        public PersonAdapter CcBillingAddress
+        public PersonAdapter CreditCardBillingAddress
         {
             get;
             set;
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Credit card type
         /// </summary>
-        public Express1CreditCardType CcType
+        public Express1CreditCardType CreditCardType
         {
             get;
             set;
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Credit card account number
         /// </summary>
-        public string CcAccountNumber
+        public string CreditCardAccountNumber
         {
             get;
             set;
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Credit card CVN
         /// </summary>
-        public int CcCvn
+        public int CreditCardVerificationNumber
         {
             get;
             set;
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Credit card expiration date
         /// </summary>
-        public DateTime CcExpirationDate
+        public DateTime CreditCardExpirationDate
         {
             get;
             set;
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Credit card account number
         /// </summary>
-        public string CcNameOnCard
+        public string CreditCardNameOnCard
         {
             get;
             set;
