@@ -393,6 +393,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 registration.AccountNumber = accountExisting.Text.Trim();
                 registration.Password = passwordExisting.Text;
 
+                registration.MailingAddress = new PersonAdapter();
+                personControl.SaveToEntity(registration.MailingAddress);
+
                 if (!registration.AddExistingAccount())
                 {
                     e.NextPage = CurrentPage;
