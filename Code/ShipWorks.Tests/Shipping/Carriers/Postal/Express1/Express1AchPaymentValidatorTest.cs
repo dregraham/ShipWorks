@@ -20,7 +20,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
     {
         private Express1AchPaymentValidator testObject;
         private Express1PaymentInfo paymentInfo;
-        private PersonAdapter billingAddress;
 
         [TestInitialize]
         public void Initialize()
