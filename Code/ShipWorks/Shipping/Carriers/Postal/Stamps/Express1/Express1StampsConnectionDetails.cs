@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public string ApiKey {
             get
             {
-                return "5DC584E8-6E59-4B7C-AE22-6E29E43B88C7";
+                return (TestServer) ? "E29E5BD9-2B23-4A86-A1C8-618799B52971" : "5DC584E8-6E59-4B7C-AE22-6E29E43B88C7";
             }
         }
 
@@ -36,7 +36,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                return "D5467943-8D18-47B3-B095-3DA091A664F0";
+                return (TestServer) ? "7F44DDDC-F708-4F41-B415-6FD568AEE26D" : "D5467943-8D18-47B3-B095-3DA091A664F0";
+            }
+        }
+
+        /// <summary>
+        /// Gets the url of the postage service to use for Stamps version of Express1
+        /// </summary>
+        public string ServiceUrl
+        {
+            get
+            {
+                return (TestServer) ? 
+                    "http://www.express1dev.com/Services/SDCV24Service.svc" : 
+                    "https://service.express1.com/Services/SDCV24Service.svc";
             }
         }
 

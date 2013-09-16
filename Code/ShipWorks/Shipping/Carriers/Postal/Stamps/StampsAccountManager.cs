@@ -195,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static bool DisplaySetupWizard(IWin32Window owner, bool isExpress1)
         {
-            using (WizardForm dlg = isExpress1 ? (WizardForm)new Express1SetupWizard(new Express1StampsRegistration()) : new StampsSetupWizard())
+            using (WizardForm dlg = isExpress1 ? (WizardForm)new Express1StampsShipmentType().CreateSetupWizard() : new StampsSetupWizard())
             {
                 return (dlg.ShowDialog(owner) == DialogResult.OK);
             }

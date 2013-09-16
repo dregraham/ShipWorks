@@ -4,15 +4,12 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Settings.WizardPages;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -328,17 +325,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             }
 
             // get the address information entered on the demographics page
-            PersonAdapter accountAddress = new PersonAdapter();
-            personControl.SaveToEntity(accountAddress);
+            registration.MailingAddress = new PersonAdapter();
+            personControl.SaveToEntity(registration.MailingAddress);
 
             // prepare payment information
-            Express1PaymentInfo paymentInfo = GetPaymentInfo();
+            registration.Payment = GetPaymentInfo();
+
             try
             {
                 // wait
                 Cursor.Current = Cursors.WaitCursor;
 
-                registration.Signup(accountAddress, paymentInfo);
+                registration.CreateNewAccount();
             }
             catch (StampsException ex)
             {
@@ -424,6 +422,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             try
             {
+                registration.AccountNumber = accountExisting.Text.Trim();
+                registration.Password = passwordExisting.Text;
+
+                registration.AddExistingAccount();
+
+
+
                 //// credentials
                 //registration.AccountNumber = accountExisting.Text.Trim();
                 //registration.Password = SecureText.Encrypt(passwordExisting.Text, "Stamps");

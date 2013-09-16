@@ -4,7 +4,6 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
@@ -31,19 +30,73 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Register an account with Express1
         /// </summary>
-        /// <param name="customerData"></param>
+        /// <param name="registration"></param>
         /// <returns></returns>
-        public CustomerCredentials Register(CustomerRegistrationData customerData)
+        public CustomerCredentials Register(Express1Registration registration)
         {
+            if (registration == null)
+            {
+                throw new ArgumentNullException("registration");
+            }
+
+            CustomerRegistrationData customerData = CreateExpress1ApiRegistration(registration);
+
             // populate security information
             customerData.SecurityInfo = GetSecurityInfo();
 
             using (CustomerService service = CreateCustomerService("Signup"))
             {
-                return service.RegisterCustomer(connectionDetails.ApiKey,
+                CustomerCredentials credentials = service.RegisterCustomer(connectionDetails.ApiKey,
                                                     GetCustomerInfoString(Guid.NewGuid().ToString()),
                                                     customerData);
+
+                registration.AccountNumber = credentials.AccountID;
+                registration.Password = credentials.PassPhrase;
+
+                return credentials;
             }
+        }
+
+        /// <summary>
+        /// Creates the registration structure needed by the Express1 API
+        /// </summary>
+        /// <param name="registration">ShipWorks version of the Express1 registration data</param>
+        /// <returns></returns>
+        private static CustomerRegistrationData CreateExpress1ApiRegistration(Express1Registration registration)
+        {
+            CustomerRegistrationData customerData = new CustomerRegistrationData();
+
+            // TOS
+            customerData.TermsAcceptedSpecified = true;
+            customerData.TermsAccepted = true;
+
+            // Contact Info
+            customerData.Email = registration.Email;
+            customerData.Phone = registration.Phone10Digits;
+            customerData.ContactName = registration.Name;
+            customerData.CompanyName = registration.Company;
+
+            // Mailing address
+            customerData.MailingAddress = CreateAddressInfo(registration.MailingAddress);
+
+            // Payment for postage
+            customerData.PaymentType = PaymentType.CreditCard;
+            customerData.PaymentTypeSpecified = true;
+
+            customerData.CreditCard = new CreditCardInfo();
+
+            // card detials
+            customerData.CreditCard.CardNumber = registration.Payment.CreditCardAccountNumber;
+            customerData.CreditCard.CardType = registration.Payment.ApiCardType;
+            customerData.CreditCard.NameOnCard = registration.Name;
+            customerData.CreditCard.CardTypeSpecified = true;
+            customerData.CreditCard.ExpirationMonth = registration.Payment.CreditCardExpirationDate.Month.ToString("00");
+            customerData.CreditCard.ExpirationYear = registration.Payment.CreditCardExpirationDate.Year.ToString();
+
+            // card billing address
+            customerData.CreditCard.BillingAddress = CreateAddressInfo(registration.Payment.CreditCardBillingAddress);
+
+            return customerData;
         }
 
         /// <summary>
@@ -150,6 +203,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             {
                 return "Unknown";
             }
+        }
+
+        /// <summary>
+        /// Populates an AddressInfo with data from an Endicia Account
+        /// </summary>
+        private static AddressInfo CreateAddressInfo(PersonAdapter fromAddress)
+        {
+            return new AddressInfo
+            {
+                Address1 = fromAddress.Street1,
+                Address2 = fromAddress.Street2,
+                City = fromAddress.City,
+                PostalCode = fromAddress.PostalCode,
+                State = fromAddress.StateProvCode
+            };
         }
     }
 }
