@@ -16,6 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
         private Mock<IExpress1RegistrationGateway> gateway;
         private Mock<IExpress1RegistrationRepository> repository;
+        private Mock<IExpress1RegistrationValidator> validator;
 
         private Express1RegistrationResult registrationResult;
 
@@ -34,7 +35,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             repository = new Mock<IExpress1RegistrationRepository>();
             repository.Setup(r => r.Save(It.IsAny<Express1Registration>()));
 
-            testObject = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object);
+            validator = new Mock<IExpress1RegistrationValidator>();
+            validator.Setup(v => v.Validate(It.IsAny<Express1Registration>())).Returns(new List<Express1ValidationError>());
+
+            testObject = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object, validator.Object);
+        }
+
+        [TestMethod]
+        public void AddExistingAccount_ValidatesRegistration_Test()
+        {
+            testObject.AddExistingAccount();
+
+            validator.Verify(v => v.Validate(testObject));
         }
 
         [TestMethod]
@@ -51,6 +63,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject.AddExistingAccount();
 
             repository.Verify(r => r.Save(testObject));
+        }
+
+        [TestMethod]
+        public void CreateNewAccount_ValidatesRegistration_Test()
+        {
+            testObject.CreateNewAccount();
+
+            validator.Verify(v => v.Validate(testObject));
         }
 
         [TestMethod]
