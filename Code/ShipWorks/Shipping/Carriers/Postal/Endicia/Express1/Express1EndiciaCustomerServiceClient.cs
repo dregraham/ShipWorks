@@ -373,7 +373,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                         throw new ShippingException("The response from Express1 does not appear to be correctly formatted.");
                     }
 
-                    if (string.Compare((string)result.Element("IsApproved"), "YES", true) != 0)
+                    if (string.Compare((string)result.Element("IsApproved"), "YES", StringComparison.OrdinalIgnoreCase) != 0)
                     {
                         throw new EndiciaException((string)result.Element("ErrorMsg"));
                     }
