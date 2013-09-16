@@ -300,7 +300,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 // wait
                 Cursor.Current = Cursors.WaitCursor;
 
-                registration.CreateNewAccount();
+                if (!registration.CreateNewAccount())
+                {
+                    e.NextPage = CurrentPage;
+                    Cursor.Current = Cursors.Arrow;
+                }
             }
             catch (StampsException ex)
             {
@@ -389,7 +393,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 registration.AccountNumber = accountExisting.Text.Trim();
                 registration.Password = passwordExisting.Text;
 
-                registration.AddExistingAccount();
+                if (!registration.AddExistingAccount())
+                {
+                    e.NextPage = CurrentPage;
+                    Cursor.Current = Cursors.Arrow;
+                }
 
 
 
