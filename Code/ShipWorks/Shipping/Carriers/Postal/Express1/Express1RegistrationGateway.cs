@@ -108,19 +108,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         }
 
         /// <summary>
-        /// Get the signup url for the web-based signup method
-        /// </summary>
-        public string GetSignupUrl(string customerInfo)
-        {
-            string urlBase = (connectionDetails.TestServer) ? 
-                "http://www.express1dev.com/CustomerWeb/Gateway.aspx" : 
-                "https://service.express1.com/Customer/Gateway.aspx";
-            
-            // format the url
-            return string.Format("{0}?app={1}&info={2}", urlBase, connectionDetails.ApiKey, HttpUtility.UrlEncode(customerInfo));
-        }
-
-        /// <summary>
         /// Creates the SecurityInfo data to send to Express1 along with registration
         /// for fraud detection purposes
         /// </summary>

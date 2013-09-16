@@ -15,14 +15,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     public abstract class Express1Registration
     {
         //private IStampsRegistrationValidator validator;
-        protected readonly IExpress1RegistrationGateway registrationGateway;
+        private readonly IExpress1RegistrationGateway registrationGateway;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1Registration"/> class.
         /// </summary>
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
-        public Express1Registration(IExpress1RegistrationGateway gateway)
+        protected Express1Registration(IExpress1RegistrationGateway gateway)
         {
             //this.validator = validator;
             registrationGateway = gateway;
@@ -60,6 +60,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             CreditCard = new CreditCard();
             AchAccount = new AchAccount();
+        }
+
+        /// <summary>
+        /// Gets the gateway that will be used for registration
+        /// </summary>
+        protected IExpress1RegistrationGateway RegistrationGateway
+        {
+            get
+            {
+                return registrationGateway;
+            }
         }
 
         /// <summary>

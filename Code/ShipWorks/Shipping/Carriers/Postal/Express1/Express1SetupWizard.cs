@@ -357,12 +357,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             PersonAdapter billingAddress = new PersonAdapter();
             personCreditCard.SaveToEntity(billingAddress);
 
-            Express1PaymentInfo paymentInfo = new Express1PaymentInfo
+            Express1PaymentInfo paymentInfo = new Express1PaymentInfo(Express1PaymentType.CreditCard)
                 {
-                    CardBillingAddress = billingAddress,
-                    CardType = (Express1CreditCardType) cardType.SelectedValue,
-                    CardAccountNumber = cardNumber.Text.Trim(),
-                    CardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1),
+                    CreditCardBillingAddress = billingAddress,
+                    CreditCardType = (Express1CreditCardType)cardType.SelectedValue,
+                    CreditCardAccountNumber = cardNumber.Text.Trim(),
+                    CreditCardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1),
                     AchAccountNumber = checkingAccount.Text.Trim(),
                     AchRoutingId = checkingRouting.Text.Trim()
                 };

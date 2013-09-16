@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             get
             {
-                switch (CardType)
+                switch (CreditCardType)
                 {
                     case Express1CreditCardType.AmericanExpress:
                         return CreditCardTypeEnum.AmericanExpress;

@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -41,6 +42,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
         public override void Signup(PersonAdapter accountAddress, Express1PaymentInfo paymentInfo)
         {
+            if (accountAddress == null)
+            {
+                throw new ArgumentNullException("accountAddress");
+            }
+
+            if (paymentInfo == null)
+            {
+                throw new ArgumentNullException("paymentInfo");
+            }
+
             CustomerRegistrationData customerData = new CustomerRegistrationData();
 
             // TOS
@@ -63,17 +74,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             customerData.CreditCard = new CreditCardInfo();
 
             // card detials
-            customerData.CreditCard.CardNumber = paymentInfo.CardAccountNumber;
+            customerData.CreditCard.CardNumber = paymentInfo.CreditCardAccountNumber;
             customerData.CreditCard.CardType = paymentInfo.ApiCardType;
             customerData.CreditCard.NameOnCard = customerData.ContactName;
             customerData.CreditCard.CardTypeSpecified = true;
-            customerData.CreditCard.ExpirationMonth = paymentInfo.CardExpirationDate.Month.ToString("00");
-            customerData.CreditCard.ExpirationYear = paymentInfo.CardExpirationDate.Year.ToString();
+            customerData.CreditCard.ExpirationMonth = paymentInfo.CreditCardExpirationDate.Month.ToString("00");
+            customerData.CreditCard.ExpirationYear = paymentInfo.CreditCardExpirationDate.Year.ToString();
 
             // card billing address
-            customerData.CreditCard.BillingAddress = CreateAddressInfo(paymentInfo.CardBillingAddress);
+            customerData.CreditCard.BillingAddress = CreateAddressInfo(paymentInfo.CreditCardBillingAddress);
 
-            CustomerCredentials returnedCredentials = registrationGateway.Register(customerData);
+            CustomerCredentials returnedCredentials = RegistrationGateway.Register(customerData);
 
             // Save the address 
             PersonAdapter.Copy(accountAddress, new PersonAdapter(account, ""));
@@ -83,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             account.Password = SecureText.Encrypt(returnedCredentials.PassPhrase, "Stamps");
             account.AccountNumber = returnedCredentials.AccountID;
 
+            //TODO: Address the other data that we're saving for Endicia
             //// record if this is a Test account
             //account.TestAccount = Express1EndiciaUtility.UseTestServer;
 
