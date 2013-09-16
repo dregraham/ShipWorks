@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             var registration = new Express1Registration(ShipmentTypeCode,
                                                         new Express1RegistrationGateway(new Express1StampsConnectionDetails()),
+                                                        null,
                                                         null);
             return new Express1SetupWizard(registration);
         }

@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -7,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public class Express1Registration
     {
-        //private IStampsRegistrationValidator validator;
+        private readonly IExpress1RegistrationValidator registrationValidator;
         private readonly IExpress1RegistrationGateway registrationGateway;
         private readonly IExpress1RegistrationRepository registrationRepository;
 
@@ -15,13 +17,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Initializes a new instance of the <see cref="Express1Registration" /> class.
         /// </summary>
         /// <param name="shipmentType">Type of shipment this account will be used for.</param>
-        /// <param name="gateway">The gateway.</param>
-        /// <param name="repository">The repository.</param>
-        public Express1Registration(ShipmentTypeCode shipmentType, IExpress1RegistrationGateway gateway, IExpress1RegistrationRepository repository)
+        /// <param name="gateway">The gateway used to interface with the Express1 api</param>
+        /// <param name="repository">Repository used to interface with the underlying account entities</param>
+        /// <param name="validator">Validator that will be used to ensure data is correct</param>
+        public Express1Registration(ShipmentTypeCode shipmentType, IExpress1RegistrationGateway gateway, IExpress1RegistrationRepository repository, IExpress1RegistrationValidator validator)
         {
             ShipmentTypeCode = shipmentType;
 
-            //this.validator = validator;
+            registrationValidator = validator;
             registrationGateway = gateway;
             registrationRepository = repository;
         }
@@ -107,27 +110,48 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public Express1PaymentInfo Payment { get; set; }
 
         /// <summary>
+        /// Gets a list of validation errors generated while saving or adding accounts
+        /// </summary>
+        public IList<Express1ValidationError> ValidationErrors { get; private set; }
+
+        /// <summary>
         /// Add an existing Express1 account to ShipWorks
         /// </summary>
-        public void AddExistingAccount()
+        public bool AddExistingAccount()
         {
-            registrationRepository.Save(this);
+            ValidationErrors = registrationValidator.Validate(this);
+            bool validationPassed = !ValidationErrors.Any();
+
+            if (validationPassed)
+            {
+                registrationRepository.Save(this);    
+            }
+
+            return validationPassed;
         }
 
         /// <summary>
         /// Create a new Express1 account
         /// </summary>
-        public void CreateNewAccount()
+        public bool CreateNewAccount()
         {
-            // Use the gateway to make the API call to Express1
-            Express1RegistrationResult registrationResult = registrationGateway.Register(this);
+            ValidationErrors = registrationValidator.Validate(this);
+            bool validationPassed = !ValidationErrors.Any();
 
-            // Note the account number and password from the registration result
-            AccountNumber = registrationResult.AccountNumber;
-            Password = registrationResult.Password;
+            if (validationPassed)
+            {
+                // Use the gateway to make the API call to Express1
+	            Express1RegistrationResult registrationResult = registrationGateway.Register(this);
 
-            // Use the the repository to save the registration in ShipWorks
-            registrationRepository.Save(this);
+	            // Note the account number and password from the registration result
+	            AccountNumber = registrationResult.AccountNumber;
+	            Password = registrationResult.Password;
+
+	            // Use the the repository to save the registration in ShipWorks
+	            registrationRepository.Save(this);
+            }
+
+            return validationPassed;
         }
 
         /// <summary>
