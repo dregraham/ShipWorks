@@ -12,10 +12,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         private readonly IExpress1RegistrationRepository registrationRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1Registration"/> class.
+        /// Initializes a new instance of the <see cref="Express1Registration" /> class.
         /// </summary>
         /// <param name="shipmentType">Type of shipment this account will be used for.</param>
         /// <param name="gateway">The gateway.</param>
+        /// <param name="repository">The repository.</param>
         public Express1Registration(ShipmentTypeCode shipmentType, IExpress1RegistrationGateway gateway, IExpress1RegistrationRepository repository)
         {
             ShipmentTypeCode = shipmentType;
@@ -118,7 +119,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         public void CreateNewAccount()
         {
-            registrationGateway.Register(this);
+            // Use the gateway to make the API call to Express1
+            Express1RegistrationResult registrationResult = registrationGateway.Register(this);
+
+            // Note the account number and password from the registration result
+            AccountNumber = registrationResult.AccountNumber;
+            Password = registrationResult.Password;
+
+            // Use the the repository to save the registration in ShipWorks
             registrationRepository.Save(this);
         }
 

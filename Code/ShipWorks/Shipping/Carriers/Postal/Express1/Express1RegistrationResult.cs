@@ -6,5 +6,23 @@
     /// </summary>
     public class Express1RegistrationResult
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Express1RegistrationResult"/> class.
+        /// </summary>
+        public Express1RegistrationResult()
+        {
+            AccountNumber = string.Empty;
+            Password = string.Empty;
+        }
+
+        /// <summary>
+        /// Gets or sets the account number.
+        /// </summary>
+        public string AccountNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        public string Password { get; set; }
     }
 }

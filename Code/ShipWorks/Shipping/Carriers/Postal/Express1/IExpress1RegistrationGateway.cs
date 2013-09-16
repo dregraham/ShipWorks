@@ -10,8 +10,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Registers an account with Express1.
         /// </summary>
-        /// <param name="customerData">The registration data.</param>
-        /// <returns>Returns the customer credentials from the registration call.</returns>
-        CustomerCredentials Register(Express1Registration customerData);
+        /// <param name="registration">The registration data.</param>
+        /// <returns>Returns the result of the registration call to Express1 containing the 
+        /// customer credentials that were just created.</returns>
+        Express1RegistrationResult Register(Express1Registration registration);
     }
 }

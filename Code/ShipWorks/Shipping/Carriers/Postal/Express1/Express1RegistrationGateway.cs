@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
@@ -27,33 +28,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.connectionDetails = connectionDetails;
         }
 
+
         /// <summary>
-        /// Register an account with Express1
+        /// Registers an account with Express1.
         /// </summary>
-        /// <param name="registration"></param>
-        /// <returns></returns>
-        public CustomerCredentials Register(Express1Registration registration)
+        /// <param name="registration">The registration data.</param>
+        /// <returns>Returns the result of the registration call to Express1 containing the
+        /// customer credentials that were just created.</returns>
+        /// <exception cref="System.ArgumentNullException">registration</exception>
+        public Express1RegistrationResult Register(Express1Registration registration)
         {
             if (registration == null)
             {
                 throw new ArgumentNullException("registration");
             }
 
-            CustomerRegistrationData customerData = CreateExpress1ApiRegistration(registration);
-
-            // populate security information
-            customerData.SecurityInfo = GetSecurityInfo();
-
-            using (CustomerService service = CreateCustomerService("Signup"))
+            try
             {
-                CustomerCredentials credentials = service.RegisterCustomer(connectionDetails.ApiKey,
-                                                    GetCustomerInfoString(Guid.NewGuid().ToString()),
-                                                    customerData);
+                CustomerRegistrationData customerData = CreateExpress1ApiRegistration(registration);
 
-                registration.AccountNumber = credentials.AccountID;
-                registration.Password = credentials.PassPhrase;
+                // populate security information
+                customerData.SecurityInfo = GetSecurityInfo();
 
-                return credentials;
+                using (CustomerService service = CreateCustomerService("Signup"))
+                {
+                    CustomerCredentials credentials = service.RegisterCustomer(connectionDetails.ApiKey, GetCustomerInfoString(Guid.NewGuid().ToString()), customerData);
+
+                    return new Express1RegistrationResult()
+                    {
+                        AccountNumber = credentials.AccountID,
+                        Password = credentials.PassPhrase
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(Express1RegistrationException));
             }
         }
 
@@ -85,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             customerData.CreditCard = new CreditCardInfo();
 
-            // card detials
+            // card details
             customerData.CreditCard.CardNumber = registration.Payment.CreditCardAccountNumber;
             customerData.CreditCard.CardType = registration.Payment.ApiCardType;
             customerData.CreditCard.NameOnCard = registration.Name;
