@@ -37,6 +37,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             validator = new Mock<IExpress1RegistrationValidator>();
             validator.Setup(v => v.Validate(It.IsAny<Express1Registration>())).Returns(new List<Express1ValidationError>());
+            validator.Setup(v => v.ValidatePersonalInfo(It.IsAny<Express1Registration>()))
+                     .Returns(new List<Express1ValidationError>());
+            validator.Setup(v => v.ValidatePaymentInfo(It.IsAny<Express1Registration>()))
+                     .Returns(new List<Express1ValidationError>());
 
             testObject = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object, validator.Object);
         }
@@ -103,6 +107,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject.CreateNewAccount();
 
             repository.Verify(r => r.Save(testObject));
+        }
+
+        [TestMethod]
+        public void ValidatePersonalInfo_DelegatesToValidator_Test()
+        {
+            testObject.ValidatePersonalInfo();
+
+            validator.Verify(v => v.ValidatePersonalInfo(testObject));
+        }
+
+        [TestMethod]
+        public void ValidatePaymentInfo_DelegatesToValidator_Test()
+        {
+            testObject.ValidatePaymentInfo();
+
+            validator.Verify(v => v.ValidatePaymentInfo(testObject));
         }
     }
 }

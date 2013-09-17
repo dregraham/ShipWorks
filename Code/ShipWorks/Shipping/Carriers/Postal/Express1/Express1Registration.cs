@@ -156,5 +156,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             registrationRepository.Save(this);
         }
+
+        /// <summary>
+        /// Validates the personal information about the registration
+        /// </summary>
+        /// <returns>A list of validation errors</returns>
+        public IEnumerable<Express1ValidationError> ValidatePersonalInfo()
+        {
+            return registrationValidator.ValidatePersonalInfo(this);
+        }
+
+        /// <summary>
+        /// Validates the payment information about the registration
+        /// </summary>
+        /// <returns>A list of validation errors</returns>
+        public IEnumerable<Express1ValidationError> ValidatePaymentInfo()
+        {
+            return registrationValidator.ValidatePaymentInfo(this);
+        }
     }
 }
