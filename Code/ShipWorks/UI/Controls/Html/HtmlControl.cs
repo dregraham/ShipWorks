@@ -2510,7 +2510,7 @@ namespace ShipWorks.UI.Controls.Html
         /// </summary>
         public void WaitForComplete(TimeSpan timeout)
         {
-            if (Program.ExecutionMode.IsUserInteractive && !InvokeRequired)
+            if (Program.ExecutionMode.IsUIDisplayed && !InvokeRequired)
             {
                 throw new InvalidOperationException("This function can only work if it is called from a different thread than the UI thread.");
             }
@@ -2521,7 +2521,7 @@ namespace ShipWorks.UI.Controls.Html
             // We can only do this without Application.DoEvents (when running ShipWorks with a UI) because we know we are not on the UI thread. 
             while (ReadyState != HtmlReadyState.Complete && totalMsWaited < timeout.TotalMilliseconds)
             {
-                if (!Program.ExecutionMode.IsUserInteractive)
+                if (!Program.ExecutionMode.IsUIDisplayed)
                 {
                     // We need to trigger the message pump to run if ShipWorks is running as a Windows service
                     // otherwise the ReadyState never gets set to Complete

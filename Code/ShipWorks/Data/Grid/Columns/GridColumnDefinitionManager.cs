@@ -32,8 +32,14 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Load user column data. To be called when a user logs in.
         /// </summary>
-        public static void InitializeForCurrentSession()
+        public static void InitializeForCurrentUser()
         {
+            // If there's no UI, we don't need it
+            if (!Program.ExecutionMode.IsUISupported)
+            {
+                return;
+            }
+
             // Clear any remnants from the last user
             columnDefinitions.Clear();
 

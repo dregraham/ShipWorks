@@ -26,8 +26,9 @@ namespace ShipWorks.ApplicationCore.Services
         static TableSynchronizer<ServiceStatusEntity> tableSynchronizer;
         static bool needCheckForChanges = false;
 
-        const string ormConcurrencyExceptionMessage = "Another user has recently made changes.\n\n" +
-                              "Your changes cannot be saved since they would overwrite the other changes.";
+        const string ormConcurrencyExceptionMessage = 
+            "Another user has recently made changes.\n\n" +
+            "Your changes cannot be saved since they would overwrite the other changes.";
 
         /// <summary>
         /// Returns the TimeSpan for amount a time allowed before a service is considered "not running"
@@ -36,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             get
             {
-                return new TimeSpan(0, 0, 10, 0);
+                return TimeSpan.FromMinutes(10);
             }
         }
 
@@ -47,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             get
             {
-                return new TimeSpan(0, 0, 1, 0);
+                return TimeSpan.FromMinutes(1);
             }
         }
 
@@ -97,7 +98,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private static void AddMissingComputers()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 var serviceTypeValues = EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => (int) e.Value).ToArray();
 
@@ -118,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Services
                             ComputerID = computer.ComputerID
                         };
 
-                        SaveServiceStatus(serviceStatus, adapter);
+                        SaveServiceStatus(serviceStatus);
                     }
                 }
 
@@ -162,58 +163,25 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Delete the given ServiceStatusEntity
-        /// </summary>
-        public static void DeleteServiceStatus(ServiceStatusEntity serviceStatus)
-        {
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                // Finally delete the entity itself
-                adapter.DeleteEntity(serviceStatus);
-
-                // Commit transaction
-                adapter.Commit();
-            }
-        }
-
-        /// <summary>
         /// Saves the given ServiceStatusEntity. 
         /// </summary>
-        public static void SaveServiceStatus(ServiceStatusEntity serviceStatus, SqlAdapter adapter)
+        private static void SaveServiceStatus(ServiceStatusEntity serviceStatus)
         {
             try
             {
-                // Save and refetch.
-                adapter.SaveAndRefetch(serviceStatus);
-            }
-            catch (ORMConcurrencyException ex)
-            {
-                log.Error(ormConcurrencyExceptionMessage, ex);
-
-                throw new ShipWorksServiceException(ormConcurrencyExceptionMessage, ex);
-            }
-        }
-
-        /// <summary>
-        /// Saves the given ServiceStatusEntity. 
-        /// </summary>
-        public static void SaveServiceStatus(ServiceStatusEntity serviceStatus)
-        {
-            try
-            {
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
                     // Save and refetch.
-                    SaveServiceStatus(serviceStatus, adapter);
-
-                    adapter.Commit();
+                    adapter.SaveAndRefetch(serviceStatus);
                 }
             }
             catch (ORMConcurrencyException ex)
             {
+                // Just eat it - if someone else just updated us, that's no big deal.  
                 log.Error(ormConcurrencyExceptionMessage, ex);
 
-                throw new ShipWorksServiceException(ormConcurrencyExceptionMessage, ex);
+                // Just fetch the most current
+                SqlAdapter.Default.FetchEntity(serviceStatus);
             }
         }
 

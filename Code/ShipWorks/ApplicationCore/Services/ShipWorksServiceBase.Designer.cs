@@ -29,27 +29,26 @@
         private void InitializeComponent()
         {
             this.checkInTimer = new System.Timers.Timer();
-            this.tryStartTimer = new System.Timers.Timer();
+            this.sqlSessionMonitorTimer = new System.Timers.Timer();
             ((System.ComponentModel.ISupportInitialize)(this.checkInTimer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tryStartTimer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sqlSessionMonitorTimer)).BeginInit();
             // 
             // checkInTimer
             // 
             this.checkInTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnCheckInTimerElapsed);
             // 
-            // tryStartTimer
+            // sqlSessionMonitorTimer
             // 
-            this.tryStartTimer.AutoReset = false;
-            this.tryStartTimer.Interval = 60000D;
-            this.tryStartTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTryStartTimerElapsed);
+            this.sqlSessionMonitorTimer.Interval = 5000D;
+            this.sqlSessionMonitorTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnSqlSessionMonitorTimerElapsed);
             ((System.ComponentModel.ISupportInitialize)(this.checkInTimer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tryStartTimer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sqlSessionMonitorTimer)).EndInit();
 
         }
 
         #endregion
 
         private System.Timers.Timer checkInTimer;
-        private System.Timers.Timer tryStartTimer;
+        private System.Timers.Timer sqlSessionMonitorTimer;
     }
 }

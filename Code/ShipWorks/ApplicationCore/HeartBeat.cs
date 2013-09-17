@@ -163,7 +163,6 @@ namespace ShipWorks.ApplicationCore
                     doingHeartbeat = false;
                 }
             }
-
         }
 
         /// <summary>
@@ -234,6 +233,19 @@ namespace ShipWorks.ApplicationCore
                 return false;
             }
 
+            // Can't be within a connection sensitive scope.  If the connection might be changed, we can't be kicking off stuff
+            // and using the connection.
+            if (ConnectionSensitiveScope.IsActive)
+            {
+                return false;
+            }
+
+            // If we don't have a user, then we have to get out
+            if (!UserSession.IsLoggedOn)
+            {
+                return false;
+            }
+
             // Check for pending background DB reconnects
             ConnectionMonitor.VerifyConnected();
 
@@ -248,10 +260,6 @@ namespace ShipWorks.ApplicationCore
             {
                 return false;
             }
-
-            // Shouldn't be able to get here while not logged in
-            Debug.Assert(SqlSession.IsConfigured);
-            Debug.Assert(UserSession.IsLoggedOn || !Program.ExecutionMode.IsUserInteractive);
 
             return true;
         }

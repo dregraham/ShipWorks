@@ -40,8 +40,14 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Initialize when a user logs in
         /// </summary>
-        public static void InitializeForCurrentSession()
+        public static void InitializeForCurrentUser()
         {
+            // If there's no UI, we don't need it
+            if (!Program.ExecutionMode.IsUISupported)
+            {
+                return;
+            }
+
             activeMessages = new List<ServerMessageEntity>();
 
             messageRowVersion = new byte[8];

@@ -9,54 +9,61 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
     /// <summary>
     /// Prompts user for username and password.
     /// </summary>
-    public partial class GetWindowsCredentialsDlg : Form
+    public partial class WindowsServiceCredentialsDlg : Form
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetWindowsCredentialsDlg"/> class.
+        /// Initializes a new instance of the <see cref="WindowsServiceCredentialsDlg"/> class.
         /// </summary>
-        public GetWindowsCredentialsDlg()
+        public WindowsServiceCredentialsDlg()
         {
             InitializeComponent();
         }
 
         /// <summary>
+        /// Indicates if a windows user account should be used (vs. Local System)
+        /// </summary>
+        public bool UseWindowsUserAccount
+        {
+            get
+            {
+                return radioWindowsUser.Checked;
+            }
+        }
+
+        /// <summary>
         /// Gets the username.
         /// </summary>
-        /// <value>
-        /// The username.
-        /// </value>
         public string UserName
         {
             get
             {
-                return username.Text.Trim();
+                return radioLocalSystem.Checked ? "" : username.Text.Trim();
             }
         }
 
         /// <summary>
         /// Gets the password.
         /// </summary>
-        /// <value>
-        /// The password.
-        /// </value>
         public string Password
         {
             get
             {
-                return password.Text.Trim();
+                return radioLocalSystem.Checked ? "" : password.Text.Trim();
             }
         }
 
         /// <summary>
-        /// Gets the domain. 
+        /// Gets the domain, or null if not entered
         /// </summary>
-        /// <value>
-        /// The domain. If user enterred nothing, returns null
-        /// </value>
         public string Domain
         {
             get
             {
+                if (radioLocalSystem.Checked)
+                {
+                    return "";
+                }
+
                 string trimmedDomain = domain.Text.Trim();
 
                 return string.IsNullOrEmpty(trimmedDomain) ? null : trimmedDomain;
@@ -64,26 +71,38 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         }
 
         /// <summary>
+        /// Changing the radio selection on what account to use
+        /// </summary>
+        private void OnAccountChanged(object sender, EventArgs e)
+        {
+            username.Enabled = radioWindowsUser.Checked;
+            password.Enabled = radioWindowsUser.Checked;
+            domain.Enabled = radioWindowsUser.Checked;
+        }
+
+        /// <summary>
         /// Called when [OK] button is clicked.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnOK(object sender, EventArgs e)
         {
             if (ValidateForm() && ValidateCredentials())
             {
                 DialogResult = DialogResult.OK;
-                Close();
             }
         }
 
         /// <summary>
         /// Validates the credentials.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         private bool ValidateCredentials()
         {
+            if (radioLocalSystem.Checked)
+            {
+                return true;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+
             bool isValid = false;
 
             // Settings for Active Directory
@@ -106,12 +125,12 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
                 if (!isValid)
                 {
-                    MessageHelper.ShowMessage(this, "Username or password is not valid.");
+                    MessageHelper.ShowError(this, "Username or password is not valid.");
                 }
             }
             catch (PrincipalServerDownException)
             {
-                MessageHelper.ShowMessage(this, "There was a problem reaching the entered domain.");
+                MessageHelper.ShowError(this, "There was a problem reaching the entered domain.");
             }
 
             return isValid;
@@ -122,6 +141,11 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// </summary>
         private bool ValidateForm()
         {
+            if (radioLocalSystem.Checked)
+            {
+                return true;
+            }
+
             bool isValid = false;
 
             var errorMessage = new StringBuilder();
@@ -146,17 +170,6 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             }
 
             return isValid;
-        }
-
-        /// <summary>
-        /// Called when [cancel] clicked.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnCancel(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
     }
 }

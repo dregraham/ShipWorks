@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Services.Hosting.Background;
 
 
 namespace ShipWorks.ApplicationCore.Services.UI
@@ -186,7 +187,8 @@ namespace ShipWorks.ApplicationCore.Services.UI
             {
                 startingServiceChecksRemaining = 30000 / dataRefreshTimer.Interval;
                 ShowStartingServiceUI(true);
-                ShipWorksServiceBase.RunAllInBackground();
+
+                BackgroundServiceController.RunAllInBackground();
             }
         }
 

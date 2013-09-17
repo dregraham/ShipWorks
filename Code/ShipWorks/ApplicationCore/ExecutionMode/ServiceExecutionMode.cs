@@ -1,5 +1,4 @@
 ﻿using log4net;
-using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.Services.Hosting;
 using ShipWorks.Data.Connection;
@@ -7,6 +6,12 @@ using ShipWorks.Users;
 using System;
 using System.Collections.Generic;
 using ShipWorks.ApplicationCore.Crashes;
+using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Management;
+using ShipWorks.Data;
+using ShipWorks.ApplicationCore.Logging;
 
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
@@ -14,16 +19,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// <summary>
     /// An implementation of the IExecutionMode interface intended to be used when running ShipWorks as a service.
     /// </summary>
-    public class ServiceExecutionMode : IExecutionMode
+    public class ServiceExecutionMode : ExecutionMode
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
+       static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
 
-        private readonly Lazy<IServiceHost> host;
-        private readonly IList<string> options;
-        private readonly IExecutionModeInitializer initializer;
+       readonly Lazy<IServiceHost> host;
+       readonly IList<string> options;
 
-        private DateTime startupTimeInUtc;
-        private int recoveryAttempts;
+       DateTime startupTimeInUtc;
+       int recoveryAttempts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceExecutionMode" /> class.
@@ -32,33 +36,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <param name="options">The options.</param>
         /// <param name="recoveryAttempts">The number of attempts that have been made to recover from a crash.</param>
         public ServiceExecutionMode(string serviceName, IList<string> options, int recoveryAttempts)
-            : this(serviceName, options, recoveryAttempts, null, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceExecutionMode" /> class.
-        /// </summary>
-        /// <param name="serviceName">Name of the service.</param>
-        /// <param name="options">The options.</param>
-        /// <param name="recoveryAttempts">The number of attempts that have been made to recover from a crash.</param>
-        /// <param name="hostFactory">The host factory.</param>
-        /// <param name="initializer">The initializer.</param>
-        /// <exception cref="System.ArgumentNullException">serviceName</exception>
-        public ServiceExecutionMode(string serviceName, IList<string> options, int recoveryAttempts, IServiceHostFactory hostFactory, IExecutionModeInitializer initializer)
         {
             if (null == serviceName)
             {
                 throw new ArgumentNullException("serviceName");
             }
 
-            if (null == hostFactory)
-            {
-                hostFactory = new DefaultServiceHostFactory();
-            }
-
-            host = new Lazy<IServiceHost>(() => hostFactory.GetHostFor(GetServiceForName(serviceName)));
+            host = new Lazy<IServiceHost>(() => ServiceHostFactory.GetHostFor(GetServiceForName(serviceName)));
 
             this.options = options ?? new string[0];
-            this.initializer = initializer ?? new ServiceExecutionModeInitializer();
             
             this.recoveryAttempts = recoveryAttempts;
             startupTimeInUtc = DateTime.MinValue;
@@ -87,9 +73,17 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Gets the host that ShipWorks will running within.
         /// </summary>
         /// <value>The host.</value>
-        IServiceHost Host
+        private IServiceHost Host
         {
             get { return host.Value; }
+        }
+
+        /// <summary>
+        /// Indicates if this execution mode supports displaying a UI, whether or not one is currently displayed or not
+        /// </summary>
+        public override bool IsUISupported
+        {
+            get { return false; }
         }
 
         /// <summary>
@@ -98,7 +92,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
         ///   </returns>
-        public bool IsUserInteractive
+        public override bool IsUIDisplayed
         {
             get { return false; }
         }
@@ -125,21 +119,46 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        public void Execute()
+        public override void Execute()
         {
             log.Info("Running as a service.");
             
             if (options.Contains("/stop"))
             {
+                // Only initialize the base stuff - not all the stuff we add on that kicks off processes
+                base.Initialize();
+
                 Host.Stop();
             }
             else
             {
+                // Do full initialzition
+                Initialize();
+
                 startupTimeInUtc = DateTime.UtcNow;
 
-                initializer.Initialize();
                 Host.Run();
             }
+        }
+
+        /// <summary>
+        /// Do initialization before actual running of the service
+        /// </summary>
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            // Register some idle cleanup work.
+            DataResourceManager.RegisterResourceCacheCleanup();
+            DataPath.RegisterTempFolderCleanup();
+            LogSession.RegisterLogCleanup();
+
+            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedFilterCounts", FilterContentManager.DeleteAbandonedFilterCounts, "doing maintenance", TimeSpan.FromHours(2));
+            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedQuickFilters", QuickFilterHelper.DeleteAbandonedFilters, "doing maintenance", TimeSpan.FromHours(2));
+            IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedResources", DataResourceManager.DeleteAbandonedResourceData, "cleaning up resources", TimeSpan.FromHours(2));
+
+            // Start idle processing
+            IdleWatcher.Initialize();
         }
 
         /// <summary>
@@ -148,17 +167,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        public void HandleException(Exception exception)
+        public override void HandleException(Exception exception, bool guiThread, string userEmail)
         {            
-            string userEmail = string.Empty;
-
-            if (UserSession.IsLoggedOn)
-            {
-                userEmail = UserSession.User.Email;
-                UserSession.Logoff(false);
-            }
-            UserSession.Reset();
-
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
                 log.Info("Terminating due to unrecoverable connection.", exception);
@@ -166,12 +176,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             else
             {
                 log.Fatal("Application Crashed", exception);
+
+                if (IsEligibleToSubmitCrashReport())
+                {
+                    ServiceCrash serviceCrash = new ServiceCrash(exception);
+                    serviceCrash.SubmitReport(userEmail);
+                }
             }
 
-            ServiceCrash serviceCrash = new ServiceCrash(this, exception);
-            serviceCrash.SubmitReport(userEmail);
-
-            Host.HandleServiceCrash(serviceCrash);
+            Host.HandleServiceCrash(RecoveryAttempts);
         }
 
         /// <summary>
@@ -199,12 +212,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             try
             {
-                return ShipWorksServiceBase.GetService(serviceName);
+                return ShipWorksServiceManager.GetService(serviceName);
             }
             catch (Exception ex)
             {
                 string errorMessage = string.Format("Could not find a service named '{0}'.", serviceName);
-                throw new ExecutionModeConfigurationException(errorMessage, ex);
+                throw new ShipWorksServiceException(errorMessage, ex);
             }
         }
     }

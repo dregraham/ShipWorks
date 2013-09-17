@@ -35,13 +35,14 @@
             // 
             // serviceProcessInstaller
             // 
-            serviceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalService;
+            serviceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
             serviceProcessInstaller.Password = null;
             serviceProcessInstaller.Username = null;
             // 
             // schedulerInstaller
             // 
-            schedulerInstaller.Description = "Processes ShipWorks scheduled actions.";
+            schedulerInstaller.Description = "Provides support for running ShipWorks actions when the ShipWorks application is " +
+    "not open.";
             schedulerInstaller.ServiceType = ShipWorks.ApplicationCore.Services.ShipWorksServiceType.Scheduler;
             schedulerInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 

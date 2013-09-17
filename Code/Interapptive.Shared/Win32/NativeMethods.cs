@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices.ComTypes;
+using Microsoft.Win32.SafeHandles;
 
 namespace Interapptive.Shared.Win32
 {
@@ -201,6 +202,61 @@ namespace Interapptive.Shared.Win32
         [DllImport("kernel32.dll")]
         public static extern int SetErrorMode(int uMode);
 
+        [DllImport("kernel32.dll")]
+        public static extern bool AttachConsole(int dwProcessId);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool GetFileInformationByHandle(SafeFileHandle hFile, out BY_HANDLE_FILE_INFORMATION lpFileInformation);
+
+        [DllImport("kernel32.dll")]
+        public static extern SafeFileHandle GetStdHandle(int nStdHandle);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool SetStdHandle(int nStdHandle, SafeFileHandle hHandle);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool DuplicateHandle(IntPtr hSourceProcessHandle, SafeFileHandle hSourceHandle, IntPtr hTargetProcessHandle, out SafeFileHandle lpTargetHandle, int dwDesiredAccess, Boolean bInheritHandle, int dwOptions);
+
+        [DllImport("Kernel32.dll")]
+        public static extern bool FreeConsole();
+
+        [DllImport("Kernel32.dll")]
+        public static extern bool AllocConsole();
+
+        [DllImport("advapi32.dll", EntryPoint = "ChangeServiceConfig2")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ChangeServiceFailureActions(IntPtr hService, int dwInfoLevel, [MarshalAs(UnmanagedType.Struct)] ref ServiceFailureActions lpInfo);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern Boolean ChangeServiceConfig(IntPtr hService, int nServiceType, int nStartType, int nErrorControl, String lpBinaryPathName, String lpLoadOrderGroup, IntPtr lpdwTagId, [In] char[] lpDependencies, String lpServiceStartName, String lpPassword, String lpDisplayName);
+
+        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr OpenService(IntPtr hSCManager, [MarshalAs(UnmanagedType.LPWStr)] string lpServiceName, int dwDesiredAccess);
+
+        [DllImport("advapi32.dll", EntryPoint = "OpenSCManagerW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr OpenSCManager(string machineName, string databaseName, int dwAccess);
+
+        [DllImport("advapi32.dll", PreserveSig = true)]
+        internal static extern Int32 LsaOpenPolicy(ref LsaUnicodeString SystemName, ref LsaObjectAttributes ObjectAttributes, Int32 DesiredAccess, out IntPtr PolicyHandle);
+
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true, PreserveSig = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool LookupAccountName([MarshalAs(UnmanagedType.LPTStr)] string lpSystemName, [MarshalAs(UnmanagedType.LPTStr)] string lpAccountName, IntPtr psid, ref int cbsid, StringBuilder domainName, ref int cbdomainLength, ref int use);
+
+        [DllImport("advapi32.dll", SetLastError = true, PreserveSig = true)]
+        [CLSCompliant(false)]
+        public static extern Int32 LsaAddAccountRights(IntPtr PolicyHandle, IntPtr AccountSid, LsaUnicodeString[] UserRights, int CountOfRights);
+
+        [DllImport("advapi32")]
+        public static extern IntPtr FreeSid(IntPtr pSid);
+
+        [DllImport("advapi32.dll")]
+        public static extern Int32 LsaClose(IntPtr ObjectHandle);
+
+        [DllImport("advapi32.dll")]
+        public static extern Int32 LsaNtStatusToWinError(Int32 status);
+
         #endregion
 
         #region Constants
@@ -339,6 +395,11 @@ namespace Interapptive.Shared.Win32
         public const int RGN_XOR         = 3;
         public const int RGN_DIFF        = 4;
         public const int RGN_COPY        = 5;
+
+        public const int SC_MANAGER_ALL_ACCESS = 0x000F003F;
+        public const int SERVICE_NO_CHANGE = unchecked((int) 0xffffffff); //this value is found in winsvc.h
+        public const int SERVICE_QUERY_CONFIG = 0x00000001;
+        public const int SERVICE_CHANGE_CONFIG = 0x00000002;
 
         public const int SMTO_NORMAL = 0x0000;
         public const int SMTO_BLOCK = 0x0001;
@@ -673,6 +734,32 @@ namespace Interapptive.Shared.Win32
         public const int SEM_NOGPFAULTERRORBOX = 0x0002;
         public const int SEM_NOOPENFILEERRORBOX = 0x8000;
 
+        public const int ATTACH_PARENT_PROCESS = unchecked((int) 0xFFFFFFFF);
+        public const int STD_OUTPUT_HANDLE = unchecked((int) 0xFFFFFFF5);
+        public const int STD_ERROR_HANDLE = unchecked((int) 0xFFFFFFF4);
+        public const int DUPLICATE_SAME_ACCESS = 2;
+
+        /// <summary>
+        /// Policy Enumeration
+        /// </summary>
+        [Flags]
+        public enum LsaAccessPolicy : long
+        {
+            PolicyViewLocalInformation = 0x00000001L,
+            PolicyViewAuditInformation = 0x00000002L,
+            PolicyGetPrivateInformation = 0x00000004L,
+            PolicyTrustAdmin = 0x00000008L,
+            PolicyCreateAccount = 0x00000010L,
+            PolicyCreateSecret = 0x00000020L,
+            PolicyCreatePrivilege = 0x00000040L,
+            PolicySetDefaultQuotaLimits = 0x00000080L,
+            PolicySetAuditRequirements = 0x00000100L,
+            PolicyAuditLogAdmin = 0x00000200L,
+            PolicyServerAdmin = 0x00000400L,
+            PolicyLookupNames = 0x00000800L,
+            PolicyNotification = 0x00001000L
+        }
+
         #endregion
 
         #region Structs
@@ -760,6 +847,75 @@ namespace Interapptive.Shared.Win32
             public int uItemState;
             public int lItemlParam;
         }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct BY_HANDLE_FILE_INFORMATION
+        {
+            public int FileAttributes;
+            public System.Runtime.InteropServices.ComTypes.FILETIME CreationTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastAccessTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastWriteTime;
+            public int VolumeSerialNumber;
+            public int FileSizeHigh;
+            public int FileSizeLow;
+            public int NumberOfLinks;
+            public int FileIndexHigh;
+            public int FileIndexLow;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct ServiceFailureActions
+        {
+            public int dwResetPeriod;
+
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string lpRebootMsg;
+
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string lpCommand;
+
+            public int cActions;
+
+            public IntPtr lpsaActions;
+        }
+
+        /// <summary>
+        /// Passed to LsaOpenPolicy. 
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct LsaObjectAttributes
+        {
+            private readonly int Attributes;
+            private readonly int Length;
+            private readonly IntPtr RootDirectory;
+            private readonly IntPtr SecurityDescriptor;
+            private readonly IntPtr SecurityQualityOfService;
+            private readonly LsaUnicodeString ObjectName;
+        }
+
+        /// <summary>
+        /// Used in LsaObjectAttributes.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        [CLSCompliant(false)]
+        public struct LsaUnicodeString : IDisposable
+        {
+            public UInt16 Length;
+            public UInt16 MaximumLength;
+
+            /// <summary>
+            /// NOTE: Buffer has to be declared after Length and MaximumLength;
+            /// otherwise, you will get winErrorCode: 1734 (The array bounds are invalid.)
+            /// and waste lots of time trying to track down what causes the error!
+            /// </summary>
+            public IntPtr Buffer;
+
+            public void Dispose()
+            {
+                Marshal.FreeHGlobal(Buffer);
+            }
+        }
+
 
         #endregion
 

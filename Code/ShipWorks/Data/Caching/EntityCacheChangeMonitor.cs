@@ -104,8 +104,8 @@ namespace ShipWorks.Data.Caching
         {
             Debug.Assert(!Program.MainForm.InvokeRequired);
 
-            if (!UserSession.IsLoggedOn ||
-                ConnectionSensitiveScope.IsActive ||
+            if (ConnectionSensitiveScope.IsActive || 
+                !UserSession.IsLoggedOn ||
                 ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
             {
                 return;

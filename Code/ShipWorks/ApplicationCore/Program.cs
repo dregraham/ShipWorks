@@ -13,6 +13,10 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using Interapptive.Shared.Win32;
+using System.Diagnostics;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.Services;
 
 namespace ShipWorks
 {
@@ -31,18 +35,24 @@ namespace ShipWorks
         {
             get
             {
-                var ui = ExecutionMode as UserInterfaceExecutionMode;
-                if (ui == null)
+                var uiMode = ExecutionMode as UserInterfaceExecutionMode;
+                if (uiMode == null)
+                {
                     throw new InvalidOperationException("MainForm is only available in UI execution mode.");
+                }
 
-                return ui.MainForm;
+                return uiMode.MainForm;
             }
         }
 
         /// <summary>
         /// Gets the execution mode for this instance.  (with UI, command line, etc.)
         /// </summary>
-        public static IExecutionMode ExecutionMode { get; private set; }
+        public static ExecutionMode ExecutionMode 
+        { 
+            get; 
+            private set; 
+        }
 
         /// <summary>
         /// Gets the path to the ShipWorks executable.
@@ -66,8 +76,12 @@ namespace ShipWorks
         [STAThread]
         static void Main()
         {
-            // Message boxes can currently be shown before the execution mode is initialized, so
-            // let's initialize this here until all remaining UI is moved out of the startup path.
+            // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+
+            // Has to be done right away.  MessageBoxes can be shown before any ExecutionMode - and can also be shown in any ExecutionMode.  For example, ServiceExecutionMode displays
+            // errors when trying to use Windows credentials when installing the service.
             MessageHelper.Initialize("ShipWorks");
 
             SetupUnhandledExceptionHandling();
@@ -79,6 +93,12 @@ namespace ShipWorks
 
                 // Load the per-install and per machine identifiers
                 ShipWorksSession.Initialize(commandLine);
+
+                // Make sure all our data paths have been created and logging initialized.  These happen here, and happen no matter what execution mode we are in
+                DataPath.Initialize();
+                LogSession.Initialize();
+
+                // Load the execution mode, which is command-line dependant
                 ExecutionMode = new ExecutionModeFactory(commandLine).Create();
 
                 if (!CheckSystemRequirements())
@@ -86,52 +106,30 @@ namespace ShipWorks
                     return;
                 }
 
-                try
-                {
-                    ExecutionMode.Execute();
-                }
-                catch (MultipleExecutionModeInstancesException exception)
-                {
-                    // We just want to log and eat this exception since it is only being thrown if multiple instances
-                    // of the ShipWorks UI are opened.
-                    log.Warn(exception);
-                }
-                catch (ExecutionModeConfigurationException ex)
-                {
-                    log.Fatal(ex);
-                    Console.Error.WriteLine(ex.Message);
-                    Environment.ExitCode = -1;
-                    return;
-                }
+                ExecutionMode.Execute();
 
                 // Log total connections made
                 log.InfoFormat("Total connections: {0}", ConnectionMonitor.TotalConnectionCount);
             }
             catch (FileNotFoundException ex)
             {
-                if (Environment.UserInteractive)
-                {
-                    using (InstallationProblemDlg dlg = new InstallationProblemDlg("ShipWorks requires " + ex.FileName + ", but the file could not be found."))
-                    {
-                        dlg.ShowDialog();
-                    }
-                }
-                else
-                    HandleUnhandledException(ex, false);
+                string message = "ShipWorks requires " + ex.FileName + ", but the file could not be found.";
+
+                ExecutionMode.ShowTerminationMessage(new InstallationProblemDlg(message), message);
             }
             catch (InstallationException ex)
             {
-                if (Environment.UserInteractive)
-                {
-                    using (InstallationProblemDlg dlg = new InstallationProblemDlg(ex.Message))
-                    {
-                        dlg.ShowDialog();
-                    }
-                }
-                else
-                {
-                    HandleUnhandledException(ex, false);
-                }
+                ExecutionMode.ShowTerminationMessage(new InstallationProblemDlg(ex.Message), ex.Message);
+            }
+            catch (ShipWorksServiceException ex)
+            {
+                ExecutionMode.ShowTerminationMessage(null, ex.Message);
+            }
+            catch (UserInterfaceAlreadyOpenException exception)
+            {
+                // We just want to log and eat this exception since it is only being thrown if multiple instances
+                // of the ShipWorks UI are opened.
+                log.Warn(exception);
             }
             catch (Exception ex)
             {
@@ -156,15 +154,7 @@ namespace ShipWorks
             // If we are on XP, we have to have SP2
             if (MyComputer.IsWindowsXP && MyComputer.ServicePack <= 1)
             {
-                log.Error("Service Pack 2 is required when running Windows XP.");
-
-                if (Environment.UserInteractive)
-                {
-                    using (NeedWindowsXPSP2 dlg = new NeedWindowsXPSP2())
-                    {
-                        dlg.ShowDialog();
-                    }
-                }
+                ExecutionMode.ShowTerminationMessage(new NeedWindowsXPSP2(), "Service Pack 2 is required when running Windows XP.");
 
                 return false;
             }
@@ -172,14 +162,7 @@ namespace ShipWorks
             // Have to have MDAC 2.8
             if (MyComputer.MdacVersion < new Version(2, 80))
             {
-                log.Error("MDAC 2.8 is required.");
-                if (Environment.UserInteractive)
-                {
-                    using (NeedMdac28 dlg = new NeedMdac28())
-                    {
-                        dlg.ShowDialog();
-                    }
-                }
+                ExecutionMode.ShowTerminationMessage(new NeedMdac28(), "MDAC 2.8 is required.");
 
                 return false;
             }
@@ -187,14 +170,7 @@ namespace ShipWorks
             // Right now we only support en-US due to string parsing and sql generation issues
             if (Thread.CurrentThread.CurrentCulture.Name != "en-US")
             {
-                log.Error("en-US culture is required");
-                if (Environment.UserInteractive)
-                {
-                    using (EnglishCultureRequiredDlg dlg = new EnglishCultureRequiredDlg())
-                    {
-                        dlg.ShowDialog();
-                    }
-                }
+                ExecutionMode.ShowTerminationMessage(new EnglishCultureRequiredDlg(), "en-US culture is required");
 
                 return false;
             }
@@ -202,11 +178,7 @@ namespace ShipWorks
             // See if a reboot is required
             if (StartupController.CheckRebootRequired())
             {
-                log.Info("A reboot is required before running ShipWorks.");
-                if (Environment.UserInteractive)
-                {
-                    MessageHelper.ShowInformation(null, "Your computer must be restarted before running ShipWorks.");
-                }
+                ExecutionMode.ShowTerminationMessage(null, "Your computer must be restarted before running ShipWorks.");
 
                 return false;
             }
@@ -222,14 +194,11 @@ namespace ShipWorks
             // Handle non-gui thread exceptions.  These should never happen if we do things right.
             AppDomain.CurrentDomain.UnhandledException += new System.UnhandledExceptionEventHandler(OnAppDomainException);
 
-            if (Environment.UserInteractive)
-            {
-                // Handle exceptions from GUI threads.
-                Application.ThreadException += new ThreadExceptionEventHandler(OnApplicationException);
+            // Handle exceptions from GUI threads.
+            Application.ThreadException += new ThreadExceptionEventHandler(OnApplicationException);
 
-                // Make sure app exceptions route to the "ThreadException" event
-                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            }
+            // Make sure app exceptions route to the "ThreadException" event
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         }
         
         /// <summary>
@@ -262,68 +231,23 @@ namespace ShipWorks
 
             isTerminating = true;
 
-            // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
-            if (ExecutionMode != null)
-            {
-                ExecutionMode.HandleException(ex);
-            }
-            else
-            {
-                DefaultHandleUnhandledException(ex, guiThread);
-            }
-        }
-
-        /// <summary>
-        /// Handles an unhandled exception.
-        /// </summary>
-        private static void DefaultHandleUnhandledException(Exception ex, bool guiThread)
-        {
-            string userEmail = "";
+            string userEmail = string.Empty;
             if (UserSession.IsLoggedOn)
             {
                 userEmail = UserSession.User.Email;
-
                 UserSession.Logoff(false);
             }
 
             UserSession.Reset();
 
-            if (ConnectionMonitor.HandleTerminatedConnection(ex))
+            // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
+            if (ExecutionMode != null)
             {
-                log.Info("Terminating due to unrecoverable connection.", ex);
+                ExecutionMode.HandleException(ex, guiThread, userEmail);
             }
             else
             {
-                log.Fatal("Application Crashed", ex);
-
-                if (Environment.UserInteractive)
-                {
-                    // If the splash is shown, the crash window will close it.
-                    using (CrashWindow dlg = new CrashWindow(ex, guiThread, userEmail))
-                    {
-                        // Need to not set a parent here, in case we are on another thread.  Causes
-                        // potential Invoke deadlock.
-                        dlg.ShowDialog();
-                    }
-                }
-            }
-
-            if (Environment.UserInteractive)
-            {
-                try
-                {
-                    // This forces windows to close.  If they try to save state or do other stupid things
-                    // while closing then they will throw an exception.
-                    Application.Exit();
-                }
-                catch (Exception termEx)
-                {
-                    log.Error("Termination error", termEx);
-                }
-
-                // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
-                // gets thrown, or they set e.Cancel = true, they won't have closed.
-                Application.ExitThread();
+                log.Fatal("Application crashed, and no ExecutionMode to handle exception.", ex);
             }
         }
     }

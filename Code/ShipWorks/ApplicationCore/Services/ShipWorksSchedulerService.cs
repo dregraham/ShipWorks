@@ -16,12 +16,12 @@ namespace ShipWorks.ApplicationCore.Services
     [System.ComponentModel.DesignerCategory("Component")]
     public partial class ShipWorksSchedulerService : ShipWorksServiceBase
     {
-        private IScheduler scheduler;
-        private CancellationTokenSource canceller;
+        IScheduler scheduler;
+        CancellationTokenSource canceller;
 
-        private readonly Timer timer = new Timer();
+        readonly Timer timer = new Timer();
 
-        private Heartbeat heartbeat;
+        Heartbeat heartbeat;
 
         /// <summary>
         /// Constructor.
@@ -58,7 +58,6 @@ namespace ShipWorks.ApplicationCore.Services
             timer.Elapsed += OnTimerInterval;
 
             canceller = new CancellationTokenSource();
-
             Scheduler.RunAsync(canceller.Token);
         }
 
@@ -73,7 +72,21 @@ namespace ShipWorks.ApplicationCore.Services
             timer.Close();
             timer.Dispose();
 
+            // Communicate to the scheduler that we need to stop
             canceller.Cancel();
+        }
+
+        /// <summary>
+        /// Called when the service is in the middle of running, and the SQL Session configuration changes mid-stream
+        /// </summary>
+        protected override void OnSqlConfigurationChanged()
+        {
+            // Cancel the current Scheduler
+            canceller.Cancel();
+
+            // Rerun it to ensure it loads the current SQL Session configuration
+            canceller = new CancellationTokenSource();
+            Scheduler.RunAsync(canceller.Token);
         }
 
         /// <summary>

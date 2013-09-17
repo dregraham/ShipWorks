@@ -59,13 +59,6 @@ namespace ShipWorks
                     return false;
                 }
 
-                // Can't be within a connection sensitive scope.  If the connection might be changed, we can't be kicking off stuff
-                // and using the connection.
-                if (ConnectionSensitiveScope.IsActive)
-                {
-                    return false;
-                }
-
                 return base.CanBeat();
             }
 

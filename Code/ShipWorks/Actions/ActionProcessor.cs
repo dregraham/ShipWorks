@@ -79,7 +79,7 @@ namespace ShipWorks.Actions
 
                 if (ApplicationBusyManager.TryOperationStarting("running actions", out busyToken))
                 {
-                    if (Program.ExecutionMode.IsUserInteractive)
+                    if (Program.ExecutionMode.IsUIDisplayed)
                     {
                         ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
                     }

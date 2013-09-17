@@ -130,7 +130,7 @@ namespace ShipWorks.Actions
             // If there are emails that were generated, we need to start emailing - but that has to be done on the UI
             if (EmailGenerated.Count > 0)
             {
-                if (Program.ExecutionMode.IsUserInteractive)
+                if (Program.ExecutionMode.IsUIDisplayed)
                 {
                     Program.MainForm.BeginInvoke(new MethodInvoker(StartEmailingOnUI));
                 }

@@ -94,7 +94,6 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-
         /// <summary>
         /// Handles reconnecting to the database
         /// </summary>
@@ -211,7 +210,7 @@ namespace ShipWorks.Data.Connection
                 {
                     log.WarnFormat("ConnectionMonitor failed to open connection: {0}", ex.Message);
 
-                    if (!Program.ExecutionMode.IsUserInteractive)
+                    if (!Program.ExecutionMode.IsUIDisplayed)
                     {
                         log.Warn("Application is not UserInteractive, not attempting to reconnect.");
                         throw;
@@ -394,7 +393,7 @@ namespace ShipWorks.Data.Connection
             {
                 connectionLost = true;
 
-                if (Program.ExecutionMode.IsUserInteractive)
+                if (Program.ExecutionMode.IsUIDisplayed)
                 {
                     // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be 
                     // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.

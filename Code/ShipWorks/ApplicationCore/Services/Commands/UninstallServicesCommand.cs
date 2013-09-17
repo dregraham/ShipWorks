@@ -4,6 +4,8 @@ using ShipWorks.ApplicationCore.Services.Hosting.Background;
 using ShipWorks.ApplicationCore.Services.Hosting.Windows;
 using System.Collections.Generic;
 using System.Text;
+using System;
+using Common.Logging;
 
 
 namespace ShipWorks.ApplicationCore.Services.Installers
@@ -14,6 +16,9 @@ namespace ShipWorks.ApplicationCore.Services.Installers
     /// </summary>
     public class UninstallServicesCommand : ICommandLineCommandHandler
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(UninstallServicesCommand));
+
         /// <summary>
         /// Gets the name of this command.
         /// </summary>

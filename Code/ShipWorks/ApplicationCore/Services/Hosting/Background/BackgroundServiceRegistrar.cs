@@ -1,42 +1,76 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Security;
+using Interapptive.Shared.Utility;
 using log4net;
 using Microsoft.Win32;
 
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Background
 {
+    /// <summary>
+    /// Registration of the background service version of ShipWorks, as opposed to the Windows Service
+    /// </summary>
     public class BackgroundServiceRegistrar : IServiceRegistrar
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BackgroundServiceRegistrar));
 
         const string RunKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
+        /// <summary>
+        /// Register all ShipWorks services as background services.  Basically this just adds the services to the run key
+        /// </summary>
         public void RegisterAll()
         {
             log.Info("Registering all services as background processes.");
 
-            using (var runKey = Registry.LocalMachine.OpenSubKey(RunKeyName, true))
+            try
             {
-                foreach(var service in ShipWorksServiceBase.GetAllServices())
+                using (var runKey = Registry.LocalMachine.OpenSubKey(RunKeyName, true))
                 {
-                    runKey.SetValue(service.ServiceName, Program.AppFileName + " /s=" + EnumHelper.GetApiValue(service.ServiceType));
+                    foreach (var service in ShipWorksServiceManager.GetAllServices())
+                    {
+                        runKey.SetValue(service.ServiceName, Program.AppFileName + " /s=" + EnumHelper.GetApiValue(service.ServiceType));
+                    }
                 }
-            }
 
-            ShipWorksServiceBase.RunAllInBackground();
+                // After registration, immediately start running
+                BackgroundServiceController.RunAllInBackground();
+            }
+            catch (SecurityException ex)
+            {
+                throw new ShipWorksServiceException("ShipWorks is not running with the appropriate permissions to install or uninstall services.", ex);
+            }
         }
 
+        /// <summary>
+        /// Unregister all ShipWorks services from being background services.  Basically this just removes the services from the Run key
+        /// </summary>
         public void UnregisterAll()
         {
             log.Info("Unregistering all background processes.");
 
-            ShipWorksServiceBase.StopAllInBackground();
+            // If the services are running, stop them now
+            BackgroundServiceController.StopAllInBackground();
 
-            using (var runKey = Registry.LocalMachine.OpenSubKey(RunKeyName, true))
+            // Go through each service shipworks supports
+            foreach (var service in ShipWorksServiceManager.GetAllServices())
             {
-                foreach (var service in ShipWorksServiceBase.GetAllServices())
+                // First try to read they key to see if it even exists - if it doesn't, we don't have anything to do
+                using (RegistryKey readOnly = Registry.LocalMachine.OpenSubKey(RunKeyName, false))
                 {
-                    runKey.DeleteValue(service.ServiceName, false);
+                    if (readOnly.GetValue(service.ServiceName) != null)
+                    {
+                        try
+                        {
+                            using (var runKey = Registry.LocalMachine.OpenSubKey(RunKeyName, true))
+                            {
+                                runKey.DeleteValue(service.ServiceName, false);
+                            }
+                        }
+                        catch (SecurityException ex)
+                        {
+                            throw new ShipWorksServiceException("ShipWorks is not running with the appropriate permissions to install or uninstall services.", ex);
+                        }
+                    }
                 }
             }
         }

@@ -145,31 +145,11 @@ namespace ShipWorks.ApplicationCore.Interaction
                     {
                         // If we aren't configured for a database at all, or there is a scope active in which the connection could change (like Database Setup wizard),
                         // or we know something is wrong with the connection - bail.
-                        if (!SqlSession.IsConfigured ||
-                            ConnectionSensitiveScope.IsActive ||
+                        if (ConnectionSensitiveScope.IsActive || 
+                            !UserSession.IsLoggedOn ||
                             ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
                         {
                             return false;
-                        }
-
-                        // If we are user interactive, then we require a user to be logged on, which verifies that the schema version must be correct
-                        if (Program.ExecutionMode.IsUserInteractive)
-                        {
-                            // We can run if the user is logged in
-                            return UserSession.IsLoggedOn;
-                        }
-                        // In the background we don't have a user, but we still need to make sure the db schema version is correct
-                        else
-                        {
-                            try
-                            {
-                                return SqlSchemaUpdater.IsCorrectSchemaVersion();
-                            }
-                            catch (SqlException)
-                            {
-                                // If we fail to get the schema version in the background, it could be b\c the UI is upgrading or something.  Don't fail.  Just get out.
-                                return false;
-                            }
                         }
                     }
 

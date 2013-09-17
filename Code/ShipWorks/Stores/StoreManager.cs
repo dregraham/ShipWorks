@@ -48,8 +48,8 @@ namespace ShipWorks.Stores
         /// </summary>
         public static void InitializeForCurrentSession()
         {
-            // These are basically a dependence of stoers
-            StatusPresetManager.InitializeForCurrentUser();
+            // These are basically a dependence of stores
+            StatusPresetManager.InitializeForCurrentSession();
 
             storeSynchronizer = new TableSynchronizer<StoreEntity>();
             uniqueStoreTypes = new List<StoreType>();

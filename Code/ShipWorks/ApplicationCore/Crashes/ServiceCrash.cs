@@ -14,12 +14,10 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCrash" /> class.
         /// </summary>
-        /// <param name="serviceExecutionMode">The service execution mode that generated the crash.</param>
         /// <param name="exception">The exception.</param>
-        public ServiceCrash(ServiceExecutionMode serviceExecutionMode, Exception exception)
+        public ServiceCrash(Exception exception)
         {
             Exception = exception;
-            ServiceExecutionMode = serviceExecutionMode;
         }
 
         /// <summary>
@@ -29,29 +27,19 @@ namespace ShipWorks.ApplicationCore.Crashes
         public Exception Exception { get; private set; }
 
         /// <summary>
-        /// Gets the service execution mode that generated the crash.
-        /// </summary>
-        /// <value>The service execution mode.</value>
-        public ServiceExecutionMode ServiceExecutionMode { get; private set; }
-
-
-        /// <summary>
         /// Submits a crash report (if the service is eligible to do so).
         /// </summary>
         /// <param name="userEmail">The email address of the ShipWorks user the service is running under.</param>
         public void SubmitReport(string userEmail)
         {
-            if (ServiceExecutionMode.IsEligibleToSubmitCrashReport())
+            try
             {
-                try
-                {
-                    CrashSubmitter.Submit(Exception, userEmail, string.Empty, CrashSubmitter.CreateCrashLogZip());
-                }
-                catch (Exception e)
-                {
-                    // Eat any exceptions tha occur as a result of submitting the crash report
-                    log.Error(e);
-                }
+                CrashSubmitter.Submit(Exception, userEmail, string.Empty, null);
+            }
+            catch (Exception e)
+            {
+                // Eat any exceptions tha occur as a result of submitting the crash report
+                log.Error(e);
             }
         }
     }

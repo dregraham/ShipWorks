@@ -2,6 +2,9 @@
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
+    /// <summary>
+    /// Factory that analyzes the command line and generates the proper execution mode
+    /// </summary>
     public class ExecutionModeFactory
     {
         private readonly ShipWorksCommandLine commandLine;
@@ -24,7 +27,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         /// <returns>An IExecutionMode object for running ShipWorks as a windows service, from the command line,
         /// as a background process, or through the normal UI.</returns>
-        public IExecutionMode Create()
+        public ExecutionMode Create()
         {
             if (commandLine.IsServiceSpecified)
             {
