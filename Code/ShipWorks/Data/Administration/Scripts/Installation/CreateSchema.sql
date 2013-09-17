@@ -4287,13 +4287,13 @@ CREATE TABLE [dbo].[ShippingSettings]
 [WorldShipServices] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [StampsThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,
-[Express1Thermal] [bit] NOT NULL,
-[Express1ThermalType] [int] NOT NULL,
-[Express1CustomsCertify] [bit] NOT NULL,
-[Express1CustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Express1ThermalDocTab] [bit] NOT NULL,
-[Express1ThermalDocTabType] [int] NOT NULL,
-[Express1SingleSource] [bit] NOT NULL,
+[Express1EndiciaThermal] [bit] NOT NULL,
+[Express1EndiciaThermalType] [int] NOT NULL,
+[Express1EndiciaCustomsCertify] [bit] NOT NULL,
+[Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Express1EndiciaThermalDocTab] [bit] NOT NULL,
+[Express1EndiciaThermalDocTabType] [int] NOT NULL,
+[Express1EndiciaSingleSource] [bit] NOT NULL,
 [EquaShipThermal] [bit] NOT NULL,
 [EquaShipThermalType] [int] NOT NULL,
 [OnTracThermal] [bit] NOT NULL,
@@ -4303,7 +4303,14 @@ CREATE TABLE [dbo].[ShippingSettings]
 [iParcelThermal] [bit] NOT NULL,
 [iParcelThermalType] [int] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
-[iParcelInsurancePennyOne] [bit] NOT NULL
+[iParcelInsurancePennyOne] [bit] NOT NULL,
+[Express1StampsThermal] [bit] NOT NULL,
+[Express1StampsThermalType] [int] NOT NULL,
+[Express1StampsCustomsCertify] [bit] NOT NULL,
+[Express1StampsCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Express1StampsThermalDocTab] [bit] NOT NULL,
+[Express1StampsThermalDocTabType] [int] NOT NULL,
+[Express1StampsSingleSource] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
