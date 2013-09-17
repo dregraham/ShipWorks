@@ -46,7 +46,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // Get the settings for this shipment/package type so we can determine weight unit of measure and declared value setting
             // Before calling this method, the shipment/package type should be validated so that a setting is always found if we make it this far.
             UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings
-                                                                                  .FirstOrDefault(s => s.ServiceType == serviceType && s.PackageType == (UpsPackagingType) upsShipment.Packages[0].PackagingType);
+                                                                                  .FirstOrDefault(s => s.ServiceType == serviceType && s.PackageType == (UpsPackagingType)upsShipment.Packages[0].PackagingType);
+            if (upsSetting == null)
+            {
+                // Throw a UPS exception causing the SurePost rate to be by-passed
+                string exceptionMessage = string.Format("Shipping a {0} package with {1} is not supported by SurePost.",
+                                               EnumHelper.GetDescription((UpsPackagingType)upsShipment.Packages[0].PackagingType),
+                                               EnumHelper.GetDescription(serviceType));
+
+                throw new UpsException(exceptionMessage);
+            }
 
             // UPS required the unit of measurement be in OZS if the service type is SurePost less than a pound
             bool useOunces = upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Ounces || serviceType == UpsServiceType.UpsSurePostLessThan1Lb;
