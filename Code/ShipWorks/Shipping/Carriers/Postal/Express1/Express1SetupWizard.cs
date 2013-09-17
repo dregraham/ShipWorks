@@ -402,12 +402,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     Cursor.Current = Cursors.Arrow;
                 }
 
-
-
-                //// credentials
-                //registration.AccountNumber = accountExisting.Text.Trim();
-                //registration.Password = SecureText.Encrypt(passwordExisting.Text, "Stamps");
-
                 //// other  data
                 //account.CreatedByShipWorks = false;
                 //account.AccountType = (int)StampsAccountType.Standard;
@@ -416,10 +410,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 //account.WebPassword = "";
                 //account.TestAccount = Express1StampsUtility.UseTestServer;
                 //account.ScanFormAddressSource = (int)StampsScanFormAddressSource.Provider;
-
-                //// address
-                //personControl.SaveToEntity(new PersonAdapter(account, ""));
-                //account.MailingPostalCode = account.PostalCode;
 
                 //// description
                 //account.Description = StampsAccountManager.GetDefaultDescription(account);

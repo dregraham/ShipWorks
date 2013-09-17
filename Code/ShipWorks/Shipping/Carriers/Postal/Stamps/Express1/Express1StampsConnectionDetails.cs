@@ -1,4 +1,5 @@
 ﻿using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -61,6 +62,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             get
             {
                 return UseTestServer;
+            }
+        }
+
+        /// <summary>
+        /// Gets the logging source for api calls
+        /// </summary>
+        public ApiLogSource ApiLogSource
+        {
+            get
+            {
+                return ApiLogSource.UspsExpress1Stamps;
             }
         }
 

@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         private CustomerService CreateCustomerService(string logName)
         {
             // configure the endpoint
-            return new CustomerService(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName))
+            return new CustomerService(new ApiLogEntry(connectionDetails.ApiLogSource, logName))
                 {
                     Url = connectionDetails.TestServer
                               ? "http://www.express1dev.com/Services/CustomerService.svc"
@@ -216,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         }
 
         /// <summary>
-        /// Populates an AddressInfo with data from an Endicia Account
+        /// Populates an AddressInfo with data from a an account entity
         /// </summary>
         private static AddressInfo CreateAddressInfo(PersonAdapter fromAddress)
         {

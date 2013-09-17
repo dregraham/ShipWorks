@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Express1
+﻿using ShipWorks.ApplicationCore.Logging;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
     /// <summary>
     /// Contains details used for the Express1 gateway
@@ -24,5 +26,10 @@
         /// Determines if the Live Server should be used
         /// </summary>
         bool TestServer { get; }
+
+        /// <summary>
+        /// Gets the logging source for api calls
+        /// </summary>
+        ApiLogSource ApiLogSource { get; }
     }
 }
