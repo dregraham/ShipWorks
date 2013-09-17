@@ -23,20 +23,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         bool forceAccountOnly = false;
         bool hideDetailedConfiguration;
         PersonAdapter initialAccountAddress;
+        private PostalOptionsControlBase optionsControl;
 
         private Express1Registration registration;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1SetupWizard(Express1Registration registration) : 
-            this(registration, false)
+        public Express1SetupWizard(PostalOptionsControlBase optionsControl, Express1Registration registration) : 
+            this(optionsControl, registration, false)
         {
         }
 
-        public Express1SetupWizard(Express1Registration registration, bool forceAccountOnly)
+        public Express1SetupWizard(PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly)
         {
+            this.optionsControl = optionsControl;
+
             InitializeComponent();
+            optionsControlPanel.Controls.Add(optionsControl);
+            optionsControl.Dock = DockStyle.Fill;
 
             this.registration = registration;
 
@@ -137,8 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 }
                 else
                 {
-                    //TODO: implement the options control in a generic way
-                    //optionsControl.LoadSettings(true);
+                    optionsControl.LoadSettings();
 
                     Pages.Add(new ShippingWizardPageOrigin(shipmentType));
                     Pages.Add(new ShippingWizardPageDefaults(shipmentType));
@@ -349,42 +353,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 registration.UserName = accountExisting.Text.Trim();
                 registration.Password = passwordExisting.Text;
 
-                registration.MailingAddress = new PersonAdapter();
-                personControl.SaveToEntity(registration.MailingAddress);
-
                 if (!registration.AddExistingAccount())
                 {
                     e.NextPage = CurrentPage;
                     Cursor.Current = Cursors.Arrow;
                 }
-
-                //// other  data
-                //account.CreatedByShipWorks = false;
-                //account.AccountType = (int)StampsAccountType.Standard;
-                //account.ApiInitialPassword = "";
-                //account.SignupConfirmation = "";
-                //account.WebPassword = "";
-                //account.TestAccount = Express1StampsUtility.UseTestServer;
-                //account.ScanFormAddressSource = (int)StampsScanFormAddressSource.Provider;
-
-                //// description
-                //account.Description = StampsAccountManager.GetDefaultDescription(account);
-
-                //// see if we can connect
-                //StampsApiClient.GetAccountStatus(account);
-
-                //// save
-                //StampsAccountManager.SaveAccount(account);
-
-                //// signup complete...
-
             }
             catch (StampsException ex)
             {
-                MessageHelper.ShowError(this, "ShipWorks was unable to communicate with Stamps using this account information:\n\n" + ex.Message);
+                MessageHelper.ShowError(this, "ShipWorks was unable to communicate with Express1 using this account information:\n\n" + ex.Message);
                 e.NextPage = CurrentPage;
-
-                //account = null;
             }
         }
 

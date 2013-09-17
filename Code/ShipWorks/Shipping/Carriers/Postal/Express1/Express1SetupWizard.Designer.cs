@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.pictureComplete = new System.Windows.Forms.PictureBox();
             this.labelFinish = new System.Windows.Forms.Label();
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
-            this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaOptionsControl();
+            this.optionsControlPanel = new System.Windows.Forms.Panel();
             this.wizardPageExisting = new ShipWorks.UI.Wizard.WizardPage();
             this.label6 = new System.Windows.Forms.Label();
             this.passwordExisting = new System.Windows.Forms.TextBox();
@@ -564,7 +564,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // 
             // wizardPageOptions
             // 
-            this.wizardPageOptions.Controls.Add(this.optionsControl);
+            this.wizardPageOptions.Controls.Add(this.optionsControlPanel);
             this.wizardPageOptions.Description = "Configure Express1 settings.";
             this.wizardPageOptions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -577,11 +577,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // 
             // optionsControl
             // 
-            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.Location = new System.Drawing.Point(23, 4);
-            this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(476, 234);
-            this.optionsControl.TabIndex = 1;
+            this.optionsControlPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionsControlPanel.Location = new System.Drawing.Point(23, 4);
+            this.optionsControlPanel.Name = "optionsControlPanel";
+            this.optionsControlPanel.Size = new System.Drawing.Size(476, 234);
+            this.optionsControlPanel.TabIndex = 1;
             // 
             // wizardPageExisting
             // 
@@ -760,7 +760,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         private System.Windows.Forms.PictureBox pictureComplete;
         private System.Windows.Forms.Label labelFinish;
         private UI.Wizard.WizardPage wizardPageOptions;
-        private Endicia.EndiciaOptionsControl optionsControl;
+        private System.Windows.Forms.Panel optionsControlPanel;
         private UI.Wizard.WizardPage wizardPageExisting;
         private System.Windows.Forms.TextBox passwordExisting;
         private System.Windows.Forms.Label labelPasswordExisting;

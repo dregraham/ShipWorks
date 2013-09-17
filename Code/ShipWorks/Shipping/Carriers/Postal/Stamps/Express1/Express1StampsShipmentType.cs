@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                                                         new Express1RegistrationGateway(new Express1StampsConnectionDetails()),
                                                         new StampsExpress1RegistrationRepository(), 
                                                         new Express1RegistrationValidator());
-            return new Express1SetupWizard(registration);
+            return new Express1SetupWizard(new StampsOptionsControl(true), registration);
         }
 
         /// <summary>
