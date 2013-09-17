@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            checkBoxExpress1SingleSource.Checked = settings.Express1SingleSource;
+            checkBoxExpress1SingleSource.Checked = settings.Express1EndiciaSingleSource;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            settings.Express1SingleSource = checkBoxExpress1SingleSource.Checked;
+            settings.Express1EndiciaSingleSource = checkBoxExpress1SingleSource.Checked;
         }
 
         /// <summary>

@@ -2165,13 +2165,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalWorldShipServices", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalWorldShipServices, 30, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsThermal, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsThermalType, 0, 0, 10);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1Thermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1Thermal, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1ThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1ThermalType, 0, 0, 10);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1CustomsCertify", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1CustomsCertify, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1CustomsSigner", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1CustomsSigner, 100, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1ThermalDocTab", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1ThermalDocTab, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1ThermalDocTabType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1ThermalDocTabType, 0, 0, 10);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1SingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1SingleSource, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermalType, 0, 0, 10);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaCustomsCertify", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaCustomsCertify, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaCustomsSigner", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaCustomsSigner, 100, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermalDocTab", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermalDocTab, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermalDocTabType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermalDocTabType, 0, 0, 10);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaSingleSource, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EquaShipThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.EquaShipThermal, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EquaShipThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.EquaShipThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "OnTracThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.OnTracThermal, 0, 0, 0);
@@ -2182,6 +2182,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelInsuranceProvider, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermalType, 0, 0, 10);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsCustomsCertify", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsCustomsCertify, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsCustomsSigner", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsCustomsSigner, 100, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermalDocTab", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermalDocTab, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermalDocTabType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermalDocTabType, 0, 0, 10);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsSingleSource, 0, 0, 0);
 		}
 		/// <summary>Inits ShopifyOrderEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderEntityInfos()

@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if(shipmentType == ShipmentTypeCode.Express1Stamps)
                 throw new NotImplementedException("TODO: How does Express1 Stamps figure into this method?");
 
-            if (shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1SingleSource)
+            if (shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource)
             {
                 return new List<PostalServiceType>
                     {
@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if(shipmentType == ShipmentTypeCode.Express1Stamps)
                 throw new NotImplementedException("TODO: How does Express1 Stamps figure into this method?");
 
-            if (shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1SingleSource)
+            if (shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource)
             {
                 return new List<PostalServiceType>
                     {

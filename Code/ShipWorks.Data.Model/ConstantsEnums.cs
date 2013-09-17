@@ -7345,20 +7345,20 @@ namespace ShipWorks.Data.Model
 		StampsThermal,
 		///<summary>StampsThermalType. </summary>
 		StampsThermalType,
-		///<summary>Express1Thermal. </summary>
-		Express1Thermal,
-		///<summary>Express1ThermalType. </summary>
-		Express1ThermalType,
-		///<summary>Express1CustomsCertify. </summary>
-		Express1CustomsCertify,
-		///<summary>Express1CustomsSigner. </summary>
-		Express1CustomsSigner,
-		///<summary>Express1ThermalDocTab. </summary>
-		Express1ThermalDocTab,
-		///<summary>Express1ThermalDocTabType. </summary>
-		Express1ThermalDocTabType,
-		///<summary>Express1SingleSource. </summary>
-		Express1SingleSource,
+		///<summary>Express1EndiciaThermal. </summary>
+		Express1EndiciaThermal,
+		///<summary>Express1EndiciaThermalType. </summary>
+		Express1EndiciaThermalType,
+		///<summary>Express1EndiciaCustomsCertify. </summary>
+		Express1EndiciaCustomsCertify,
+		///<summary>Express1EndiciaCustomsSigner. </summary>
+		Express1EndiciaCustomsSigner,
+		///<summary>Express1EndiciaThermalDocTab. </summary>
+		Express1EndiciaThermalDocTab,
+		///<summary>Express1EndiciaThermalDocTabType. </summary>
+		Express1EndiciaThermalDocTabType,
+		///<summary>Express1EndiciaSingleSource. </summary>
+		Express1EndiciaSingleSource,
 		///<summary>EquaShipThermal. </summary>
 		EquaShipThermal,
 		///<summary>EquaShipThermalType. </summary>
@@ -7379,6 +7379,20 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
+		///<summary>Express1StampsThermal. </summary>
+		Express1StampsThermal,
+		///<summary>Express1StampsThermalType. </summary>
+		Express1StampsThermalType,
+		///<summary>Express1StampsCustomsCertify. </summary>
+		Express1StampsCustomsCertify,
+		///<summary>Express1StampsCustomsSigner. </summary>
+		Express1StampsCustomsSigner,
+		///<summary>Express1StampsThermalDocTab. </summary>
+		Express1StampsThermalDocTab,
+		///<summary>Express1StampsThermalDocTabType. </summary>
+		Express1StampsThermalDocTabType,
+		///<summary>Express1StampsSingleSource. </summary>
+		Express1StampsSingleSource,
 		/// <summary></summary>
 		AmountOfFields
 	}

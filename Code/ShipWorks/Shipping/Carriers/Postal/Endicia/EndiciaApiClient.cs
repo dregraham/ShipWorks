@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.Test = (Express1EndiciaUtility.UseTestServer || account.TestAccount) ? "YES" : "NO";
 
                 // If this is an Express1 shipment, and Single-Source is turned on, we need to make sure it is a packaging type Express1 supports or
-                if (settings.Express1SingleSource)
+                if (settings.Express1EndiciaSingleSource)
                 {
                     // If its not a postage saving service, express1 would automatically reroute to Endicia.  It's only when the service could save, but the packaging is goofed that there's a problem.
                     if (Express1EndiciaUtility.IsPostageSavingService(serviceType) && !Express1EndiciaUtility.IsValidPackagingType(serviceType, packagingType))
@@ -227,9 +227,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                thermalType = settings.Express1Thermal ? (ThermalLabelType) settings.Express1ThermalType : (ThermalLabelType?) null;
-                thermalDocTab = settings.Express1ThermalDocTab;
-                thermalDocTabType = (ThermalDocTabType) settings.Express1ThermalDocTabType;
+                thermalType = settings.Express1EndiciaThermal ? (ThermalLabelType) settings.Express1EndiciaThermalType : (ThermalLabelType?) null;
+                thermalDocTab = settings.Express1EndiciaThermalDocTab;
+                thermalDocTabType = (ThermalDocTabType) settings.Express1EndiciaThermalDocTabType;
             }
             else
             {
@@ -618,8 +618,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                request.CustomsCertify = settings.Express1CustomsCertify ? "TRUE" : "FALSE";
-                request.CustomsSigner = settings.Express1CustomsSigner;
+                request.CustomsCertify = settings.Express1EndiciaCustomsCertify ? "TRUE" : "FALSE";
+                request.CustomsSigner = settings.Express1EndiciaCustomsSigner;
             }
             else
             {

@@ -174,13 +174,21 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
-            settings.Express1Thermal = false;
-            settings.Express1ThermalType = (int) ThermalLabelType.EPL;
-            settings.Express1CustomsCertify = false;
-            settings.Express1CustomsSigner = "";
-            settings.Express1ThermalDocTab = false;
-            settings.Express1ThermalDocTabType = (int) ThermalDocTabType.Leading;
-            settings.Express1SingleSource = false;
+            settings.Express1EndiciaThermal = false;
+            settings.Express1EndiciaThermalType = (int)ThermalLabelType.EPL;
+            settings.Express1EndiciaCustomsCertify = false;
+            settings.Express1EndiciaCustomsSigner = "";
+            settings.Express1EndiciaThermalDocTab = false;
+            settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
+            settings.Express1EndiciaSingleSource = false;
+
+            settings.Express1StampsThermal = false;
+            settings.Express1StampsThermalType = (int)ThermalLabelType.EPL;
+            settings.Express1StampsCustomsCertify = false;
+            settings.Express1StampsCustomsSigner = "";
+            settings.Express1StampsThermalDocTab = false;
+            settings.Express1StampsThermalDocTabType = (int)ThermalDocTabType.Leading;
+            settings.Express1StampsSingleSource = false;
 
             settings.WorldShipLaunch = false;
             settings.WorldShipServices = new int[0];
