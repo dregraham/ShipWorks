@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                express1Options.LoadSettings();
+                express1Options.LoadSettings(settings);
                 panelBottom.Top = express1Options.Bottom + 5;
 
                 // Doesn't make sense to show Endicia insurance choosing to Express1
