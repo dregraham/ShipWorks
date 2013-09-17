@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             // Translate the registration data into a Stamps account entity
             stampsAccount.Username = registration.UserName;
             stampsAccount.Password = SecureText.Encrypt(registration.Password, registration.UserName);
-            stampsAccount.AccountNumber = registration.AccountNumber;
 
             stampsAccount.FirstName = registration.MailingAddress.FirstName;
             stampsAccount.MiddleName = registration.MailingAddress.MiddleName;

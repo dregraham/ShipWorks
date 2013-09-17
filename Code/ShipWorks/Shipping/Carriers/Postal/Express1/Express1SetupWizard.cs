@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 if (radioNewAccount.Checked)
                 {
                     accountDetailsTextBox.Text = String.Format("Express1 Account Number: {0}\r\nPassword: {1}",
-                        registration.AccountNumber, SecureText.Decrypt(registration.Password, "Stamps"));
+                        registration.UserName, registration.Password);
                 }
             }
         }
@@ -390,7 +390,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             try
             {
-                registration.AccountNumber = accountExisting.Text.Trim();
+                registration.UserName = accountExisting.Text.Trim();
                 registration.Password = passwordExisting.Text;
 
                 registration.MailingAddress = new PersonAdapter();

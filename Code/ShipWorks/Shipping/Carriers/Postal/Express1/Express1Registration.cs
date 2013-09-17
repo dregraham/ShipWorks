@@ -73,11 +73,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public PersonAdapter MailingAddress { get; set; }
 
         /// <summary>
-        /// Gets and sets the Express1
-        /// </summary>
-        public string AccountNumber { get; set; }
-
-        /// <summary>
         /// Gets the type of shipment associated with this registration
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode { get; private set; }
@@ -144,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 	            Express1RegistrationResult registrationResult = registrationGateway.Register(this);
 
 	            // Note the account number and password from the registration result
-	            AccountNumber = registrationResult.AccountNumber;
+	            UserName = registrationResult.AccountNumber;
 	            Password = registrationResult.Password;
 
 	            // Use the the repository to save the registration in ShipWorks

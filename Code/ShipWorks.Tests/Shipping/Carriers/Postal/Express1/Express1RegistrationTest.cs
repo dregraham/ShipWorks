@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.CreateNewAccount();
 
-            Assert.AreEqual(registrationResult.AccountNumber, testObject.AccountNumber);
+            Assert.AreEqual(registrationResult.AccountNumber, testObject.UserName);
         }
 
         [TestMethod]
