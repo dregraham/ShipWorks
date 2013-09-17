@@ -13,6 +13,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <returns>A collection of Express1ValidationError objects. An empty collection indicates
         /// the payment information is valid; a non-empty collection indicates that the payment info
         /// did not pass validation.</returns>
-        IEnumerable<Express1ValidationError> ValidatePaymentInfo();
+        IEnumerable<Express1ValidationError> ValidatePaymentInfo(Express1PaymentInfo paymentInfo);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -7,6 +8,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public class Express1RegistrationValidator : IExpress1RegistrationValidator
     {
+        private readonly IExpress1PaymentValidator paymentValidator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Express1RegistrationValidator"/> class using 
+        /// the Express1CreditCardPaymentValidator.
+        /// </summary>
+        public Express1RegistrationValidator()
+            : this(new Express1CreditCardPaymentValidator())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Express1RegistrationValidator"/> class.
+        /// </summary>
+        public Express1RegistrationValidator(IExpress1PaymentValidator paymentValidator)
+        {
+            this.paymentValidator = paymentValidator;
+        }
+        
         /// <summary>
         /// Validates Registration information prior to sending registration request to Express1.
         /// </summary>
@@ -16,7 +35,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public List<Express1ValidationError> Validate(Express1Registration registration)
         {
             List<Express1ValidationError> errors = new List<Express1ValidationError>();
+            
+            errors.AddRange(ValidatePersonalInfo(registration));
+            errors.AddRange(ValidatePaymentInfo(registration));
 
+            return errors;
+        }
+
+        /// <summary>
+        /// Validates the personal information (name, address, contact info, etc.) of an Express1 registration.
+        /// </summary>
+        /// <param name="registration">The registration.</param>
+        /// <returns>A List of Express1ValidationError objects containing all of the items that
+        /// failed to pass validation. An empty list indicates the registration passed validation.</returns>
+        public List<Express1ValidationError> ValidatePersonalInfo(Express1Registration registration)
+        {
+            List<Express1ValidationError> errors = new List<Express1ValidationError>();
+            
             // Required fields contain data
             errors.AddRange(ValidateDataIsProvided(registration.Name, "Name is required"));
             errors.AddRange(ValidateDataIsProvided(registration.Phone10Digits, "Phone number is required"));
@@ -29,7 +64,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             return errors;
         }
-        
+
+        /// <summary>
+        /// Validates the payment information of an Express1 registration.
+        /// </summary>
+        /// <param name="registration">The registration.</param>
+        /// <returns>A List of Express1ValidationError objects containing all of the items that
+        /// failed to pass validation. An empty list indicates the registration passed validation.</returns>
+        public List<Express1ValidationError> ValidatePaymentInfo(Express1Registration registration)
+        {
+            return paymentValidator.ValidatePaymentInfo(registration.Payment).ToList();
+        }
+
         /// <summary>
         /// Simple validation that just checks that the string is not empty.
         /// </summary>

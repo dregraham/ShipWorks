@@ -11,16 +11,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public class Express1CreditCardPaymentValidator : IExpress1PaymentValidator
     {
-        private readonly Express1PaymentInfo express1PaymentInfo;
         private readonly List<Express1ValidationError> validationErrors;
 
         /// <summary>
-        /// Consturctor that accepts an Express1PaymentInfo
+        /// Constructor that accepts an Express1PaymentInfo
         /// </summary>
         /// <param name="express1PaymentInfo">The Express1PaymentInfo to validate.</param>
-        public Express1CreditCardPaymentValidator(Express1PaymentInfo express1PaymentInfo)
+        public Express1CreditCardPaymentValidator()
         {
-            this.express1PaymentInfo = express1PaymentInfo;
             validationErrors = new List<Express1ValidationError>();
         }
 
@@ -30,35 +28,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <returns>A collection of Express1ValidationError objects. An empty collection indicates
         /// the payment information is valid; a non-empty collection indicates that the payment info
         /// did not pass validation.</returns>
-        public IEnumerable<Express1ValidationError> ValidatePaymentInfo()
+        public IEnumerable<Express1ValidationError> ValidatePaymentInfo(Express1PaymentInfo paymentInfo)
         {
-            if (express1PaymentInfo.PaymentType == Express1PaymentType.Ach)
+            if (paymentInfo.PaymentType == Express1PaymentType.Ach)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidPaymentTypeAch));
                 return validationErrors;
             }
 
-            if (express1PaymentInfo.CreditCardExpirationDate <= DateTime.Now)
+            if (paymentInfo.CreditCardExpirationDate <= DateTime.Now)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardExpirationDate));
             }
 
-            if (express1PaymentInfo.CreditCardVerificationNumber <= 0)
+            if (paymentInfo.CreditCardVerificationNumber <= 0)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardCvn));
             }
 
-            if (string.IsNullOrWhiteSpace(express1PaymentInfo.CreditCardAccountNumber))
+            if (string.IsNullOrWhiteSpace(paymentInfo.CreditCardAccountNumber))
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardAccountNumber));
             }
 
-            if (string.IsNullOrWhiteSpace(express1PaymentInfo.CreditCardNameOnCard))
+            if (string.IsNullOrWhiteSpace(paymentInfo.CreditCardNameOnCard))
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardNameOnCard));
             }
 
-            validationErrors.AddRange(ValidatePhysicalAddress(express1PaymentInfo.CreditCardBillingAddress));
+            validationErrors.AddRange(ValidatePhysicalAddress(paymentInfo.CreditCardBillingAddress));
 
             return validationErrors;
         }
