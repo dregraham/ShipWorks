@@ -217,7 +217,6 @@
     <Compile Include="Purge\PurgeScriptRunner.cs" />
     <Compile Include="Purge\PurgePrintResultProcedure.cs" />
     <Compile Include="Purge\PurgeEmailOutboundProcedure.cs" />
-    <Compile Include="Purge\PurgeDownloadProcedure.cs" />
     <Compile Include="Common\Data\SqlLockException.cs" />
     <Compile Include="Purge\PurgeAbandonedResources.cs" />
   </ItemGroup>

@@ -176,7 +176,6 @@
             this.downloads.TabIndex = 2;
             this.downloads.Text = "Download History";
             this.downloads.UseVisualStyleBackColor = true;
-            this.downloads.Visible = false;
             // 
             // label1
             // 
