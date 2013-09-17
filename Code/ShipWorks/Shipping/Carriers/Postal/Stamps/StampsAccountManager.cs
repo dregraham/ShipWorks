@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.IsExpress1 == isExpress1)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.IsExpress1 == isExpress1)));
             }
         }
 
