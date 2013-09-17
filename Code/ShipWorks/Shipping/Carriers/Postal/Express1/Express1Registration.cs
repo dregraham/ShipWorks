@@ -30,6 +30,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         }
 
         /// <summary>
+        /// Gets and sets the id of the underlying account
+        /// </summary>
+        public long? AccountId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
         /// <value>The name of the user.</value>
@@ -119,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             if (validationPassed)
             {
-                registrationRepository.Save(this);    
+                SaveAccount();    
             }
 
             return validationPassed;
@@ -143,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 	            Password = registrationResult.Password;
 
 	            // Use the the repository to save the registration in ShipWorks
-	            registrationRepository.Save(this);
+	            SaveAccount();
             }
 
             return validationPassed;
@@ -154,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         public void SaveAccount()
         {
-            registrationRepository.Save(this);
+            AccountId = registrationRepository.Save(this);
         }
 
         /// <summary>

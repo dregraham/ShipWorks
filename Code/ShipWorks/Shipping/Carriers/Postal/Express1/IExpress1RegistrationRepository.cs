@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Saves the Express1 registration to the appropriate data source (Stamps account table or Endicia account table).
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being saved.</param>
-        void Save(Express1Registration registration);
+        long Save(Express1Registration registration);
     }
 }

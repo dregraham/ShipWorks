@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being saved.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        public void Save(Express1Registration registration)
+        public long Save(Express1Registration registration)
         {
             if (registration == null)
             {
@@ -25,7 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
 
             // Create a new stamps account entity that will get saved to the database
-            StampsAccountEntity stampsAccount = new StampsAccountEntity();
+            StampsAccountEntity stampsAccount = registration.AccountId.HasValue ? 
+                StampsAccountManager.GetAccount(registration.AccountId.Value) : 
+                new StampsAccountEntity();
 
             // Initialize the nulls to default values and denote that the account is for Express1
             stampsAccount.InitializeNullsToDefault();
@@ -58,6 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             
             // Persist the account entity to the database
             StampsAccountManager.SaveAccount(stampsAccount);
+
+            return stampsAccount.StampsAccountID;
         }
     }
 }

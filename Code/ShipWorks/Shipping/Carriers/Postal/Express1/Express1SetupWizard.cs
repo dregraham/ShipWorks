@@ -173,7 +173,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             if (Pages.Contains(wizardPageAccountList))
             {
-                //TODO: implement the account control in a generic way
                 accountControl.Initialize();
             }
         }
