@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -13,6 +14,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public void LoadSettings(ShippingSettingsEntity settings)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
             singleSourceCheckBox.Checked = settings.Express1EndiciaSingleSource;
         }
 
@@ -21,6 +27,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
             settings.Express1EndiciaSingleSource = singleSourceCheckBox.Checked;
         }
     }
