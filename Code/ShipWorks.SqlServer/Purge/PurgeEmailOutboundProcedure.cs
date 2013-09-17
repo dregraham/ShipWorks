@@ -136,7 +136,7 @@ public partial class StoredProcedures
                     FROM ObjectReference o
                     INNER JOIN EmailOutbound e ON
                         e.EmailOutboundID = o.ConsumerID AND
-                        isnull(e.HtmlPartResourceID,-15834) = o.ObjectReferenceID
+                        e.HtmlPartResourceID = o.ObjectReferenceID
                     INNER JOIN #EmailPurgeBatch p ON
                         p.EmailOutboundID = e.EmailOutboundID;
                    
