@@ -24,22 +24,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         bool hideDetailedConfiguration;
         PersonAdapter initialAccountAddress;
         private PostalOptionsControlBase optionsControl;
+        private PostalAccountManagerControlBase accountControl;
 
         private Express1Registration registration;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1SetupWizard(PostalOptionsControlBase optionsControl, Express1Registration registration) : 
-            this(optionsControl, registration, false)
+        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration) : 
+            this(accountControl, optionsControl, registration, false)
         {
         }
 
-        public Express1SetupWizard(PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly)
+        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly)
         {
-            this.optionsControl = optionsControl;
+            if (accountControl == null)
+            {
+                throw new ArgumentNullException("accountControl");
+            }
+
+            if (optionsControl == null)
+            {
+                throw new ArgumentNullException("optionsControl");
+            }
 
             InitializeComponent();
+
+            this.accountControl = accountControl;
+            accountControlPanel.Controls.Add(accountControl);
+            accountControl.Dock = DockStyle.Fill;
+
+            this.optionsControl = optionsControl;
             optionsControlPanel.Controls.Add(optionsControl);
             optionsControl.Dock = DockStyle.Fill;
 
@@ -159,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             if (Pages.Contains(wizardPageAccountList))
             {
                 //TODO: implement the account control in a generic way
-                //accountControl.Initialize(true);
+                accountControl.Initialize();
             }
         }
 

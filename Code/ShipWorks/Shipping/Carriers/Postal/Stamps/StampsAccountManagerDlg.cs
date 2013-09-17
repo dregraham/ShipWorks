@@ -19,14 +19,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsAccountManagerDlg : Form
     {
-        readonly bool isExpress1;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public StampsAccountManagerDlg(bool isExpress1)
         {
-            this.isExpress1 = isExpress1;
+            accountControl.IsExpress1 = isExpress1;
 
             InitializeComponent();
         }
@@ -36,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            accountControl.Initialize(isExpress1);
+            accountControl.Initialize();
         }
     }
 }

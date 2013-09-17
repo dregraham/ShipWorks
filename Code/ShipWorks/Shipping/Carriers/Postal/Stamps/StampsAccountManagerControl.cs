@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// <summary>
     /// UserControl for managing\editing stamps.com accounts
     /// </summary>
-    public partial class StampsAccountManagerControl : UserControl
+    public partial class StampsAccountManagerControl : PostalAccountManagerControlBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(StampsAccountManagerControl));
 
@@ -40,14 +40,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Load the current list of accounts into the control
+        /// Constructor that allows using Express1
         /// </summary>
-        public void Initialize(bool isExpress1)
+        /// <param name="isExpress1"></param>
+        public StampsAccountManagerControl(bool isExpress1)
+            : this()
         {
             this.isExpress1 = isExpress1;
+        }
 
+        /// <summary>
+        /// Load the current list of accounts into the control
+        /// </summary>
+        public override void Initialize()
+        {
             LoadAccounts();
             UpdateButtonState();
+        }
+
+        /// <summary>
+        /// Gets and sets whether this control will work with Express1 Stamps accounts or regular Stamps accounts
+        /// </summary>
+        public bool IsExpress1
+        {
+            get
+            {
+                return isExpress1;
+            }
+            set
+            {
+                isExpress1 = value;
+            }
         }
 
         /// <summary>

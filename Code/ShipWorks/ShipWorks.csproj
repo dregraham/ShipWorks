@@ -908,6 +908,9 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSingleSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\PostalAccountManagerControlBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalOptionsControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2705,7 +2708,7 @@
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResult.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsOptionsControl.cs">
-      <SubType>ASPXCodeBehind</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsOptionsControl.Designer.cs">
       <DependentUpon>StampsOptionsControl.cs</DependentUpon>

@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.accountExisting = new System.Windows.Forms.TextBox();
             this.labelAccountExisting = new System.Windows.Forms.Label();
             this.wizardPageAccountList = new ShipWorks.UI.Wizard.WizardPage();
-            this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAccountManagerControl();
+            this.accountControlPanel = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -647,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // 
             // wizardPageAccountList
             // 
-            this.wizardPageAccountList.Controls.Add(this.accountControl);
+            this.wizardPageAccountList.Controls.Add(this.accountControlPanel);
             this.wizardPageAccountList.Controls.Add(this.label5);
             this.wizardPageAccountList.Description = "Setup Express1 accounts to use from ShipWorks.";
             this.wizardPageAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -660,11 +660,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // 
             // accountControl
             // 
-            this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.Location = new System.Drawing.Point(36, 27);
-            this.accountControl.Name = "accountControl";
-            this.accountControl.Size = new System.Drawing.Size(450, 160);
-            this.accountControl.TabIndex = 3;
+            this.accountControlPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accountControlPanel.Location = new System.Drawing.Point(36, 27);
+            this.accountControlPanel.Name = "accountControlPanel";
+            this.accountControlPanel.Size = new System.Drawing.Size(450, 160);
+            this.accountControlPanel.TabIndex = 3;
             // 
             // label5
             // 
@@ -773,7 +773,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox accountDetailsTextBox;
         private UI.Wizard.WizardPage wizardPageAccountList;
-        private Endicia.EndiciaAccountManagerControl accountControl;
+        private System.Windows.Forms.Panel accountControlPanel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
     }
