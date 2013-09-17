@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.UI.Wizard;
@@ -206,11 +207,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 return;
             }
 
-            PersonAdapter person = new PersonAdapter();
-            personControl.SaveToEntity(person);
+            registration.MailingAddress = new PersonAdapter();
+            personControl.SaveToEntity(registration.MailingAddress);
 
             // pre-load these details into the CC controls
-            personCreditCard.LoadEntity(person);
+            personCreditCard.LoadEntity(registration.MailingAddress);
 
             if (radioExistingAccount.Checked)
             {
@@ -236,64 +237,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void OnStepNextPayment(object sender, WizardStepEventArgs e)
         {
-            // Checking Account
-            if (paymentMethod.SelectedIndex == 0)
-            {
-                if (checkingAccount.Text.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your checking account number.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                if (checkingRouting.Text.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your checking routing number.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-            }
-            // Credit Card
-            else
-            {
-                PersonAdapter creditPerson = new PersonAdapter();
-                personCreditCard.SaveToEntity(creditPerson);
-
-                if (creditPerson.Street1.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your street address.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                if (creditPerson.City.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your city.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                if (creditPerson.PostalCode.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your postal code.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                if (cardNumber.Text.Trim().Length == 0)
-                {
-                    MessageHelper.ShowInformation(this, "Please enter your credit card number.");
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-            }
-
-            // get the address information entered on the demographics page
-            registration.MailingAddress = new PersonAdapter();
-            personControl.SaveToEntity(registration.MailingAddress);
-
             // prepare payment information
             registration.Payment = GetPaymentInfo();
+
+            var errors = registration.ValidatePaymentInfo();
+            if (errors.Any())
+            {
+                // This is the same error formatting as the person control uses
+                MessageHelper.ShowInformation(this, "The following issues were found:" + 
+                    Environment.NewLine +
+                    errors.Select(x => "    " + x.Message).Combine(Environment.NewLine));
+                e.NextPage = CurrentPage;
+                return;
+            }
 
             try
             {
