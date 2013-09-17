@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.AddExistingAccount();
 
-            validator.Verify(v => v.Validate(testObject));
+            validator.Verify(v => v.ValidatePersonalInfo(testObject));
         }
 
         [TestMethod]

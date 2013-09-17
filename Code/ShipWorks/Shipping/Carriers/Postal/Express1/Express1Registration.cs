@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         public bool AddExistingAccount()
         {
-            ValidationErrors = registrationValidator.Validate(this);
+            ValidationErrors = registrationValidator.ValidatePersonalInfo(this);
             bool validationPassed = !ValidationErrors.Any();
 
             if (validationPassed)
