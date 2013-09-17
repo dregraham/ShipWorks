@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Data.Connection;
 using System.Diagnostics;
+using System.Threading;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -43,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public static bool WaitForOperations(IWin32Window owner, string uiUserGoalText, Action acquireAction)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
+            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (activeOperations)
             {
@@ -60,11 +61,29 @@ namespace ShipWorks.ApplicationCore.Interaction
                 return false;
             }
 
-            using (ApplicationBusyDlg dlg = new ApplicationBusyDlg(uiUserGoalText))
+            if (Program.ExecutionMode.IsUISupported)
             {
-                if (dlg.ShowDialog(owner) == DialogResult.Cancel)
+                using (ApplicationBusyDlg dlg = new ApplicationBusyDlg(uiUserGoalText))
                 {
-                    return false;
+                    if (dlg.ShowDialog(owner) == DialogResult.Cancel)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                Stopwatch timer = Stopwatch.StartNew();
+
+                // Try for 10 seconds for there to be no more
+                while (timer.Elapsed < TimeSpan.FromSeconds(10))
+                {
+                    if (GetActiveOperations().Count == 0)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(TimeSpan.FromSeconds(0.1));
                 }
             }
 

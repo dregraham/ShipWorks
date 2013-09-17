@@ -20,6 +20,7 @@ using System.Timers;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using ShipWorks.Stores;
+using ShipWorks.ApplicationCore.Interaction;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -34,7 +35,6 @@ namespace ShipWorks.ApplicationCore.Services
         ServiceStatusEntity serviceStatusEntity;
 
         // The last known SQL Session configuration
-        SqlSessionConfiguration lastConfiguration = null;
         bool lastConfigurationSuccess = false;
 
         // Lock to make sure we aren't updating at the same time
@@ -185,111 +185,130 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private bool CheckSqlSession()
         {
-            try
+            // Reloading the SQL Session and any other changes that may cause have to be within a connection scope, so we don't try to do it while other things are updating,
+            // and other things don't try to update while we are doing it.
+            using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("checking connection", null))
             {
-                // Reload the session
-                SqlSession.Initialize();
-
-                // If the session hasn't changed, and it was succesful last time, no need to go through all of this again
-                if (!HasSqlSessionChanged() && lastConfigurationSuccess)
+                if (!scope.Acquired)
                 {
-                    log.DebugFormat("SQL Session has not changed since last check");
-
-                    return true;
-                }
-
-                // Update the lastConfig to the current one, and assume it won't be succesful (until it is)
-                lastConfiguration = SqlSession.IsConfigured ? SqlSession.Current.Configuration : null;
-                lastConfigurationSuccess = false;
-
-                // The session has changed.  So first we need to clear the previous session info
-                ClearUserSession();
-
-                // SQL Sesion isn't configured
-                if (!SqlSession.IsConfigured)
-                {
-                    lastConfiguration = null;
-
-                    log.Warn("SqlSession is not configured.");
+                    log.Warn("Could not acquire the connection scope to check for SQL Session updates: " + string.Join(", ", ApplicationBusyManager.GetActiveOperations()));
                     return false;
                 }
 
-                // If the database is in SINGLE_USER, don't even try to connect
-                SqlSession master = new SqlSession(SqlSession.Current);
-                master.Configuration.DatabaseName = "master";
-                using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
-                {
-                    testConnection.Open();
+                // Load a SQL Session from disk
+                SqlSessionConfiguration diskConfiguration = new SqlSessionConfiguration();
+                diskConfiguration.Load();
 
-                    if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                // See if the SQL Session has changed
+                bool hasChanged = HasSqlSessionChanged(diskConfiguration);
+
+                // If it's changed, reload it
+                if (hasChanged)
+                {
+                    SqlSession.Initialize();
+                }
+
+                try
+                {
+                    // If the session hasn't changed, and it was succesful last time, no need to go through all of this again
+                    if (!hasChanged && lastConfigurationSuccess)
                     {
-                        log.WarnFormat("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName);
+                        log.DebugFormat("SQL Session has not changed since last check");
 
                         return false;
                     }
-                }
 
-                if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
+                    lastConfigurationSuccess = false;
+
+                    // The session has changed.  So first we need to clear the previous session info
+                    ClearUserSession();
+
+                    // SQL Sesion isn't configured
+                    if (!SqlSession.IsConfigured)
+                    {
+                        log.Warn("SqlSession is not configured.");
+                        return hasChanged;
+                    }
+
+                    // If the database is in SINGLE_USER, don't even try to connect
+                    SqlSession master = new SqlSession(SqlSession.Current);
+                    master.Configuration.DatabaseName = "master";
+                    using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                    {
+                        testConnection.Open();
+
+                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        {
+                            log.WarnFormat("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName);
+
+                            return hasChanged;
+                        }
+                    }
+
+                    if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
+                    {
+                        log.Warn("Schema is not the correct version.");
+                        return hasChanged;
+                    }
+
+                    if (StoreManager.GetDatabaseStoreCount() == 0)
+                    {
+                        log.Warn("There are no stores, nothing to do");
+                        return hasChanged;
+                    }
+
+                    DataProvider.InitializeForApplication();
+                    AuditProcessor.InitializeForApplication();
+
+                    UserSession.InitializeForCurrentDatabase();
+
+                    UserManager.InitializeForCurrentUser();
+                    UserSession.InitializeForCurrentSession();
+
+                    log.InfoFormat("SQL Session has been succesfully loaded.");
+
+                    // This is the only spot we know it was a success
+                    lastConfigurationSuccess = true;
+                    return hasChanged;
+                }
+                catch (SqlException ex)
                 {
-                    log.Warn("Schema is not the correct version.");
-                    return false;
+                    log.Error("Error establishing SqlSession.", ex);
+
+                    return hasChanged;
                 }
-
-                if (StoreManager.GetDatabaseStoreCount() == 0)
-                {
-                    log.Warn("There are no stores, nothing to do");
-                    return false;
-                }
-
-                DataProvider.InitializeForApplication();
-                AuditProcessor.InitializeForApplication();
-
-                UserSession.InitializeForCurrentDatabase();
-
-                UserManager.InitializeForCurrentUser();
-                UserSession.InitializeForCurrentSession();
-
-                // This is the only spot we know it was a success
-                lastConfigurationSuccess = true;
-                return true;
-            }
-            catch (SqlException ex)
-            {
-                log.Error("Error establishing SqlSession.", ex);
-
-                return false;
             }
         }
 
         /// <summary>
         /// Indicates if the SQL Session has changed since the last time this function was called
         /// </summary>
-        private bool HasSqlSessionChanged()
+        private bool HasSqlSessionChanged(SqlSessionConfiguration diskConfiguration)
         {
             SqlSessionConfiguration currentConfiguration = SqlSession.IsConfigured ? SqlSession.Current.Configuration : null;
 
             // They are both null, haven't changed
-            if (lastConfiguration == null && currentConfiguration == null)
+            if (diskConfiguration == null && currentConfiguration == null)
             {
                 return false;
             }
 
             // They are both not null, check the properties
-            if (lastConfiguration != null && currentConfiguration != null)
+            if (diskConfiguration != null && currentConfiguration != null)
             {
                 // Same server and database
-                if (lastConfiguration.ServerInstance == currentConfiguration.ServerInstance && lastConfiguration.DatabaseName == currentConfiguration.DatabaseName)
+                if (diskConfiguration.ServerInstance == currentConfiguration.ServerInstance && diskConfiguration.DatabaseName == currentConfiguration.DatabaseName)
                 {
                     // Same auth (windows) so we can get out
-                    if (lastConfiguration.WindowsAuth && currentConfiguration.WindowsAuth)
+                    if (diskConfiguration.WindowsAuth && currentConfiguration.WindowsAuth)
                     {
                         return false;
                     }
 
                     // Same auth (password) so we can get out
-                    if (!lastConfiguration.WindowsAuth && !currentConfiguration.WindowsAuth &&
-                        lastConfiguration.Username == currentConfiguration.Username &&
-                        lastConfiguration.Password == currentConfiguration.Password)
+                    if (!diskConfiguration.WindowsAuth && !currentConfiguration.WindowsAuth &&
+                        diskConfiguration.Username == currentConfiguration.Username &&
+                        diskConfiguration.Password == currentConfiguration.Password)
                     {
                         return false;
                     }

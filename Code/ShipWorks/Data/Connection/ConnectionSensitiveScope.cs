@@ -28,7 +28,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public ConnectionSensitiveScope(string uiUserGoalText, IWin32Window owner)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
+            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             if (scopeStack.Count == 0)
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WindowsTimer = System.Windows.Forms.Timer;
+using SystemTimer = System.Timers.Timer;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Connection;
@@ -13,6 +13,7 @@ using System.Threading;
 using ShipWorks.Users;
 using ShipWorks.Common.Threading;
 using ShipWorks.ApplicationCore.Interaction;
+using System.Timers;
 
 namespace ShipWorks.Data.Caching
 {
@@ -26,7 +27,7 @@ namespace ShipWorks.Data.Caching
 
         EntityChangeTrackingMonitor changeMonitor;
 
-        WindowsTimer changeMonitorTimer;
+        SystemTimer changeMonitorTimer;
         TimeSpan changeMonitorFrequency = TimeSpan.FromSeconds(10);
 
         bool disposed = false;
@@ -63,9 +64,10 @@ namespace ShipWorks.Data.Caching
             changeMonitor = new EntityChangeTrackingMonitor();
             changeMonitor.Initialize(entityCache.EntityTypes);
 
-            changeMonitorTimer = new WindowsTimer();
+            changeMonitorTimer = new SystemTimer();
             changeMonitorTimer.Interval = (int) changeMonitorFrequency.TotalMilliseconds;
-            changeMonitorTimer.Tick += new EventHandler(OnChangeMonitorTimer);
+            changeMonitorTimer.AutoReset = true;
+            changeMonitorTimer.Elapsed += new ElapsedEventHandler(OnChangeMonitorTimer);
             changeMonitorTimer.Start();
         }
 
@@ -82,7 +84,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void Dispose()
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
+            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             // We don't own the cache - but we do own and have to destroy the timer
             if (changeMonitorTimer != null)
@@ -100,13 +102,23 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Callback for the timer that monitors for entity changes
         /// </summary>
-        private void OnChangeMonitorTimer(object sender, EventArgs e)
+        private void OnChangeMonitorTimer(object sender, ElapsedEventArgs e)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
-
             if (ConnectionSensitiveScope.IsActive || 
                 !UserSession.IsLoggedOn ||
                 ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
+            {
+                return;
+            }
+
+            ApplicationBusyToken operationToken;
+            if (!ApplicationBusyManager.TryOperationStarting("synchronizing data", out operationToken))
+            {
+                return;
+            }
+
+            // Recheck login after we've gotten the token
+            if (!UserSession.IsLoggedOn)
             {
                 return;
             }
@@ -115,7 +127,7 @@ namespace ShipWorks.Data.Caching
 
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(AsyncMonitorChanges),
-                ApplicationBusyManager.OperationStarting("synchronizing data"));
+                operationToken);
         }
 
         /// <summary>
@@ -200,14 +212,25 @@ namespace ShipWorks.Data.Caching
 
             busyToken.Dispose();
 
-            Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
-                {
-                    // Could have been disposed
-                    if (changeMonitorTimer != null)
+            if (Program.ExecutionMode.IsUIDisplayed)
+            {
+                Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
                     {
-                        changeMonitorTimer.Start();
-                    }
-                });
+                        // Could have been disposed
+                        if (changeMonitorTimer != null)
+                        {
+                            changeMonitorTimer.Start();
+                        }
+                    });
+            }
+            else
+            {
+                // Could have been disposed
+                if (changeMonitorTimer != null)
+                {
+                    changeMonitorTimer.Start();
+                }
+            }
         }
     }
 }

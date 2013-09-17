@@ -31,6 +31,7 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Users;
 using log4net;
+using ShipWorks.ApplicationCore.Interaction;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -184,43 +185,65 @@ namespace ShipWorks.ApplicationCore
                 return;
             }
 
-            // Debugging \ Logging
-            Stopwatch sw = Stopwatch.StartNew();
-            long connections = ConnectionMonitor.TotalConnectionCount;
+            ApplicationBusyToken operationToken = null;
 
-            // Check for any change in the database. 
-            bool changesDetected = timestampTracker.CheckForChange();
-            log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
-
-            DownloadManager.StartAutoDownloadIfNeeded();
-            EmailCommunicator.StartAutoEmailingIfNeeded();
-
-            // If there was a heartbeat change detected, kick off actions and set the flag to process heartbeat changes
-            if (changesDetected)
+            // We have to make sure that the connection doesn't get swapped out from underneath use while we are beating.  Not an issue on the UI thread, where this is all on the UI thread, but
+            // it is an issue in the background service.
+            if (!ApplicationBusyManager.TryOperationStarting("refreshing", out operationToken))
             {
-                // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
-                ActionProcessor.StartProcessing();
-
-                // This flag stays true until section below sees it and resets to false.  The section in question only 
-                // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
-                // runs to ensure changes are not missed.
-                changeProcessingPending = true;
+                return;
             }
 
-            // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
-            FilterContentManager.CheckRelativeDateFilters();
+            try
+            {
+                // If somethign changed that makes it so we can't run (like the user is now logged out), then get out
+                if (!CanBeat())
+                {
+                    return;
+                }
 
-            // Make sure all our counts are up-to-date
-            FilterContentManager.CheckForChanges();
+                // Debugging \ Logging
+                Stopwatch sw = Stopwatch.StartNew();
+                long connections = ConnectionMonitor.TotalConnectionCount;
 
-            // Time to process the heartbeat
-            ProcessHeartbeat(changesDetected, forceReload);
+                // Check for any change in the database. 
+                bool changesDetected = timestampTracker.CheckForChange();
+                log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
 
-            // Finalize this heartbeat
-            FinishHeartbeat();
+                DownloadManager.StartAutoDownloadIfNeeded();
+                EmailCommunicator.StartAutoEmailingIfNeeded();
 
-            // Logging
-            log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}, Interval: {2}s", sw.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections, currentRate / 1000);
+                // If there was a heartbeat change detected, kick off actions and set the flag to process heartbeat changes
+                if (changesDetected)
+                {
+                    // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
+                    ActionProcessor.StartProcessing();
+
+                    // This flag stays true until section below sees it and resets to false.  The section in question only 
+                    // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
+                    // runs to ensure changes are not missed.
+                    changeProcessingPending = true;
+                }
+
+                // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
+                FilterContentManager.CheckRelativeDateFilters();
+
+                // Make sure all our counts are up-to-date
+                FilterContentManager.CheckForChanges();
+
+                // Time to process the heartbeat
+                ProcessHeartbeat(changesDetected, forceReload);
+
+                // Finalize this heartbeat
+                FinishHeartbeat();
+
+                // Logging
+                log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}, Interval: {2}s", sw.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections, currentRate / 1000);
+            }
+            finally
+            {
+                ApplicationBusyManager.OperationComplete(operationToken);
+            }
         }
 
         /// <summary>
