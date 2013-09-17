@@ -38,14 +38,12 @@
             this.audit = new System.Windows.Forms.CheckBox();
             this.printJobs = new System.Windows.Forms.CheckBox();
             this.labels = new System.Windows.Forms.CheckBox();
-            this.downloads = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.reclaimDiskSpaceCheckbox = new System.Windows.Forms.CheckBox();
             this.purgeToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.retentionHeading = new System.Windows.Forms.Label();
             this.timeoutHelp = new ShipWorks.UI.Controls.InfoTip();
-            this.downloadHistoryHelp = new ShipWorks.UI.Controls.InfoTip();
             this.emailContentHelp = new ShipWorks.UI.Controls.InfoTip();
             this.shippingLabelsHelp = new ShipWorks.UI.Controls.InfoTip();
             this.printJobHelp = new ShipWorks.UI.Controls.InfoTip();
@@ -167,16 +165,6 @@
         " and all other information is preserved.");
             this.labels.UseVisualStyleBackColor = true;
             // 
-            // downloads
-            // 
-            this.downloads.AutoSize = true;
-            this.downloads.Location = new System.Drawing.Point(186, 48);
-            this.downloads.Name = "downloads";
-            this.downloads.Size = new System.Drawing.Size(110, 17);
-            this.downloads.TabIndex = 2;
-            this.downloads.Text = "Download History";
-            this.downloads.UseVisualStyleBackColor = true;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -230,17 +218,6 @@
             this.timeoutHelp.TabIndex = 21;
             this.timeoutHelp.Title = "Deletion timeout";
             // 
-            // downloadHistoryHelp
-            // 
-            this.downloadHistoryHelp.Caption = "This does not delete any of your orders, just the log of when they were downloade" +
-    "d.";
-            this.downloadHistoryHelp.Location = new System.Drawing.Point(292, 50);
-            this.downloadHistoryHelp.Name = "downloadHistoryHelp";
-            this.downloadHistoryHelp.Size = new System.Drawing.Size(12, 12);
-            this.downloadHistoryHelp.TabIndex = 22;
-            this.downloadHistoryHelp.Title = "Download History";
-            this.downloadHistoryHelp.Visible = false;
-            // 
             // emailContentHelp
             // 
             this.emailContentHelp.Caption = "The message body is the only thing that will be deleted. You will still be able t" +
@@ -288,13 +265,11 @@
             this.Controls.Add(this.printJobHelp);
             this.Controls.Add(this.shippingLabelsHelp);
             this.Controls.Add(this.emailContentHelp);
-            this.Controls.Add(this.downloadHistoryHelp);
             this.Controls.Add(this.timeoutHelp);
             this.Controls.Add(this.retentionHeading);
             this.Controls.Add(this.reclaimDiskSpaceCheckbox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.downloads);
             this.Controls.Add(this.labels);
             this.Controls.Add(this.printJobs);
             this.Controls.Add(this.audit);
@@ -325,14 +300,12 @@
         private System.Windows.Forms.CheckBox audit;
         private System.Windows.Forms.CheckBox printJobs;
         private System.Windows.Forms.CheckBox labels;
-        private System.Windows.Forms.CheckBox downloads;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox reclaimDiskSpaceCheckbox;
         private System.Windows.Forms.ToolTip purgeToolTip;
         private System.Windows.Forms.Label retentionHeading;
         private ShipWorks.UI.Controls.InfoTip timeoutHelp;
-        private ShipWorks.UI.Controls.InfoTip downloadHistoryHelp;
         private ShipWorks.UI.Controls.InfoTip emailContentHelp;
         private ShipWorks.UI.Controls.InfoTip shippingLabelsHelp;
         private ShipWorks.UI.Controls.InfoTip printJobHelp;

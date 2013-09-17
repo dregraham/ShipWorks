@@ -27,8 +27,7 @@ namespace ShipWorks.Actions.Tasks.Common
             PurgeDatabaseType.Labels,
             PurgeDatabaseType.PrintJobs,
             PurgeDatabaseType.Email,
-            PurgeDatabaseType.Audit,
-            PurgeDatabaseType.Downloads
+            PurgeDatabaseType.Audit
         };
 
         /// <summary>
