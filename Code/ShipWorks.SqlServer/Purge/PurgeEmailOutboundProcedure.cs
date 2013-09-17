@@ -95,6 +95,7 @@ public partial class StoredProcedures
                     FROM EmailOutbound e
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID
+                        OR o.ObjectReferenceID = e.HtmlPartResourceID
                     WHERE
                         e.SentDate < @olderThan AND
                         e.SendStatus = 1 AND  -- only purge emails that have been sent
@@ -124,7 +125,6 @@ public partial class StoredProcedures
                         ReferenceKey = '#' + convert(VARCHAR, @deletedEmailResourceID)
                     FROM ObjectReference o
                     INNER JOIN EmailOutbound e ON
-                        e.EmailOutboundID = o.ConsumerID AND
                         e.PlainPartResourceID = o.ObjectReferenceID
                     INNER JOIN #EmailPurgeBatch p ON
                         p.EmailOutboundID = e.EmailOutboundID;
@@ -135,7 +135,6 @@ public partial class StoredProcedures
                         ReferenceKey = '#' + convert(VARCHAR, @deletedHTMLEmailResourceID)
                     FROM ObjectReference o
                     INNER JOIN EmailOutbound e ON
-                        e.EmailOutboundID = o.ConsumerID AND
                         e.HtmlPartResourceID = o.ObjectReferenceID
                     INNER JOIN #EmailPurgeBatch p ON
                         p.EmailOutboundID = e.EmailOutboundID;
