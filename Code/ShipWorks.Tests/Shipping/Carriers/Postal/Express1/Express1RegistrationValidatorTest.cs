@@ -32,6 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
                 {
                     FirstName = "First",
                     LastName = "Last",
+                    Company = "Company",
                     Street1 = "123 Main Street",
                     City = "St. Louis",
                     StateProvCode = "MO",
@@ -59,6 +60,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("Name is required", errors[0].Message);
+        }
+
+        [TestMethod]
+        public void Validate_AddsError_WhenCompanyIsMissing_Test()
+        {
+            registration.MailingAddress.Company = string.Empty;
+
+            List<Express1ValidationError> errors = testObject.Validate(registration);
+
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual("Company is required", errors[0].Message);
         }
 
         [TestMethod]
@@ -135,82 +147,92 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             paymentValidator.Verify(v => v.ValidatePaymentInfo(registration.Payment));
         }
 
-
-
+        
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenNameIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenNameIsMissing_Test()
         {
             registration.MailingAddress.FirstName = string.Empty;
             registration.MailingAddress.MiddleName = string.Empty;
             registration.MailingAddress.LastName = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("Name is required", errors[0].Message);
         }
 
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenPhoneIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenCompanyIsMissing_Test()
+        {
+            registration.MailingAddress.Company = string.Empty;
+
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
+
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual("Company is required", errors[0].Message);
+        }
+
+        [TestMethod]
+        public void ValidatePersonalInfo_AddsError_WhenPhoneIsMissing_Test()
         {
             registration.MailingAddress.Phone = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("Phone number is required", errors[0].Message);
         }
 
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenEmailIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenEmailIsMissing_Test()
         {
             registration.MailingAddress.Email = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("An email address is required", errors[0].Message);
         }
 
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenStreetIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenStreetIsMissing_Test()
         {
             registration.MailingAddress.Street1 = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("A street address is required", errors[0].Message);
         }
 
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenCityIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenCityIsMissing_Test()
         {
             registration.MailingAddress.City = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("City is required", errors[0].Message);
         }
 
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenStateIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenStateIsMissing_Test()
         {
             registration.MailingAddress.StateProvCode = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("A state/province is required", errors[0].Message);
         }
 
         [TestMethod]
-        public void ValidatePersonInfo_AddsError_WhenPostalCodeIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenPostalCodeIsMissing_Test()
         {
             registration.MailingAddress.PostalCode = string.Empty;
 
-            List<Express1ValidationError> errors = testObject.Validate(registration);
+            List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual("A postal code is required", errors[0].Message);

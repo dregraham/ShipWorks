@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             
             // Required fields contain data
             errors.AddRange(ValidateDataIsProvided(registration.Name, "Name is required"));
+            errors.AddRange(ValidateDataIsProvided(registration.Company, "Company is required"));
             errors.AddRange(ValidateDataIsProvided(registration.Phone10Digits, "Phone number is required"));
             errors.AddRange(ValidateDataIsProvided(registration.Email, "An email address is required"));
             
