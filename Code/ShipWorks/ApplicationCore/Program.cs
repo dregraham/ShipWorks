@@ -17,6 +17,7 @@ using Interapptive.Shared.Win32;
 using System.Diagnostics;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Services;
+using NDesk.Options;
 
 namespace ShipWorks
 {
@@ -88,15 +89,19 @@ namespace ShipWorks
 
             try
             {
-                // Determine any command line actions or options
-                ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(Environment.GetCommandLineArgs());
+                ShipWorksCommandLine commandLine = null;
 
-                // Load the per-install and per machine identifiers
-                ShipWorksSession.Initialize(commandLine);
-
-                // Make sure all our data paths have been created and logging initialized.  These happen here, and happen no matter what execution mode we are in
-                DataPath.Initialize();
-                LogSession.Initialize();
+                try
+                {
+                    // Determine any command line actions or options
+                    commandLine = ShipWorksCommandLine.Parse(Environment.GetCommandLineArgs());
+                }
+                // No matter what, even if the command line throws, we still initialize logging so that we can log the command line error.
+                finally
+                {
+                    // Load the per-install and per machine identifiers
+                    ShipWorksSession.Initialize(commandLine);
+                }
 
                 // Load the execution mode, which is command-line dependant
                 ExecutionMode = new ExecutionModeFactory(commandLine).Create();
@@ -125,11 +130,15 @@ namespace ShipWorks
             {
                 ExecutionMode.ShowTerminationMessage(null, ex.Message);
             }
-            catch (UserInterfaceAlreadyOpenException exception)
+            catch (UserInterfaceAlreadyOpenException ex)
             {
                 // We just want to log and eat this exception since it is only being thrown if multiple instances
                 // of the ShipWorks UI are opened.
-                log.Warn(exception);
+                log.Warn(ex);
+            }
+            catch (CommandLineCommandArgumentException ex)
+            {
+                log.Error(ex.Message);
             }
             catch (Exception ex)
             {

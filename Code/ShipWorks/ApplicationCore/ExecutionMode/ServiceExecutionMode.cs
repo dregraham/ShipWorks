@@ -12,6 +12,7 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Management;
 using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Logging;
+using NDesk.Options;
 
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
@@ -21,21 +22,22 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// </summary>
     public class ServiceExecutionMode : ExecutionMode
     {
-       static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
+        static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
 
-       readonly Lazy<IServiceHost> host;
-       readonly IList<string> options;
+        readonly Lazy<IServiceHost> host;
+        readonly IList<string> options;
 
-       DateTime startupTimeInUtc;
-       int recoveryAttempts;
+        DateTime startupTimeInUtc;
+        int recoveryAttempts;
+
+        bool stopRequested;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceExecutionMode" /> class.
         /// </summary>
         /// <param name="serviceName">Name of the service.</param>
         /// <param name="options">The options.</param>
-        /// <param name="recoveryAttempts">The number of attempts that have been made to recover from a crash.</param>
-        public ServiceExecutionMode(string serviceName, IList<string> options, int recoveryAttempts)
+        public ServiceExecutionMode(string serviceName, IList<string> options)
         {
             if (null == serviceName)
             {
@@ -45,8 +47,16 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             host = new Lazy<IServiceHost>(() => ServiceHostFactory.GetHostFor(GetServiceForName(serviceName)));
 
             this.options = options ?? new string[0];
-            
-            this.recoveryAttempts = recoveryAttempts;
+
+            // Need to extract the arguments
+            OptionSet optionSet = new OptionSet()
+                {
+                    { "recovery=", v => Int32.TryParse(v, out recoveryAttempts) },
+                    { "stop", v => stopRequested = true },
+                    { "<>", v => { throw new CommandLineCommandArgumentException("service", v, "Invalid arguments passed to service."); } }
+                };
+            optionSet.Parse(options);
+
             startupTimeInUtc = DateTime.MinValue;
         }
 
@@ -122,8 +132,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         public override void Execute()
         {
             log.Info("Running as a service.");
-            
-            if (options.Contains("/stop"))
+
+            if (stopRequested)
             {
                 // Only initialize the base stuff - not all the stuff we add on that kicks off processes
                 base.Initialize();
