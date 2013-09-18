@@ -204,12 +204,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 3);
             this.personControl.Name = "personControl";
-            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Street) 
+            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company
+			| ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
-            | ShipWorks.Data.Controls.PersonFields.Phone)));
+            | ShipWorks.Data.Controls.PersonFields.Phone));
             this.personControl.Size = new System.Drawing.Size(358, 344);
             this.personControl.TabIndex = 1;
             // 
