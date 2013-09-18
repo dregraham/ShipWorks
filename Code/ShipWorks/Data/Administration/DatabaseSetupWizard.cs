@@ -1166,6 +1166,11 @@ namespace ShipWorks.Data.Administration
                         sqlSession.Configuration.Password = configuration.Password;
                         sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
+                        // We also have to save them to our connectionSession, so we can properly track when\if it changes
+                        connectionSession.Configuration.Username = configuration.Username;
+                        connectionSession.Configuration.Password = configuration.Password;
+                        connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+
                         LoadDatabaseList(databases, configuration);
                     }
 
