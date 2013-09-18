@@ -369,7 +369,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             }
             catch (Express1RegistrationException ex)
             {
-                MessageHelper.ShowError(this, ex.Message);
+                string message = string.Format("ShipWorks encountered an error while trying to add the Express1 account.{0}{0}{1}",
+                    Environment.NewLine, ex.Message);
+
+                MessageHelper.ShowError(this, message);
                 e.NextPage = CurrentPage;
             }
         }

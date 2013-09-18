@@ -124,7 +124,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // Check for any validation errors and ensure that the credentials we 
             // have are for a valid Express1/Stamps account
             ValidationErrors = registrationValidator.ValidatePersonalInfo(this);
-            registrationGateway.VerifyAccount(this, ValidationErrors);
 
             if (ValidationErrors.Any())
             {
@@ -135,6 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 throw new Express1RegistrationException(message);
             }
 
+            registrationGateway.VerifyAccount(this);
             SaveAccount();
         }
 

@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             gateway = new Mock<IExpress1RegistrationGateway>();
             gateway.Setup(g => g.Register(It.IsAny<Express1Registration>())).Returns(registrationResult);
-            gateway.Setup(g => g.VerifyAccount(It.IsAny<Express1Registration>(), It.IsAny<ICollection<Express1ValidationError>>()));
+            gateway.Setup(g => g.VerifyAccount(It.IsAny<Express1Registration>()));
 
             repository = new Mock<IExpress1RegistrationRepository>();
             repository.Setup(r => r.Save(It.IsAny<Express1Registration>()));
@@ -59,18 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.AddExistingAccount();
 
-            gateway.Verify(r => r.VerifyAccount(testObject, It.IsAny<ICollection<Express1ValidationError>>()));
-        }
-
-        [TestMethod]
-        public void AddExistingAccount_DoesNotSaveAccount_WhenAccountIsInvalid()
-        {
-            gateway.Setup(g => g.VerifyAccount(It.IsAny<Express1Registration>(), It.IsAny<ICollection<Express1ValidationError>>()))
-                .Callback((Express1Registration r, ICollection<Express1ValidationError> e) => e.Add(new Express1ValidationError("Error")));
-
-            testObject.AddExistingAccount();
-
-            repository.Verify(r => r.Save(testObject), Times.Never());
+            gateway.Verify(r => r.VerifyAccount(testObject));
         }
 
         [TestMethod]

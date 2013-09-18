@@ -21,25 +21,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
-        /// Verifies that the specified username and password map to a valid account
+        /// Verifies that the specified user name and password map to a valid account. An Express1RegistrationException
+        /// is thrown if the account credentials are incorrect.
         /// </summary>
         /// <param name="registration">Registration that defines the account to test</param>
-        /// <param name="errors">List into which verification errors should be placed</param>
-        /// <returns>True if the account is valid, false otherwise</returns>
-        public override void VerifyAccount(Express1Registration registration, ICollection<Express1ValidationError> errors)
+        /// <exception cref="System.ArgumentNullException">registration</exception>
+        /// <exception cref="Express1RegistrationException">Thrown if the credentials could not be verified.</exception>
+        public override void VerifyAccount(Express1Registration registration)
         {
             if (registration == null)
             {
                 throw new ArgumentNullException("registration");
             }
 
-            if (errors == null)
-            {
-                throw new ArgumentNullException("errors");
-            }
-
             try
             {
+                // This throws a stamps exception if the account credentials are incorrect
                 StampsApiSession.GetAccountInfo(new StampsAccountEntity
                 {
                     Username = registration.UserName,
@@ -48,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
             catch (StampsException ex)
             {
-                errors.Add(new Express1ValidationError("ShipWorks was unable to communicate with Express1 using this account information:\n\n" + ex.Message));
+                throw new Express1RegistrationException(ex.Message, ex);
             }
         }
     }

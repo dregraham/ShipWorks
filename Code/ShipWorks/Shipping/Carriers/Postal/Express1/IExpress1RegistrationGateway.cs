@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Verifies that the specified username and password map to a valid account
         /// </summary>
         /// <param name="registration">Registration that defines the account to test</param>
-        /// <param name="errors">List into which verification errors should be placed</param>
-        void VerifyAccount(Express1Registration registration, ICollection<Express1ValidationError> errors);
+        void VerifyAccount(Express1Registration registration);
     }
 }
