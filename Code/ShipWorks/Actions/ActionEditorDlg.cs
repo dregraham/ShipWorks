@@ -346,13 +346,16 @@ namespace ShipWorks.Actions
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((SandMenuItem) sender).Tag;
             ActionTask task = binding.CreateInstance();
 
-            AddTaskBubble(task);
+            ActionTaskBubble bubble = AddTaskBubble(task);
+
+            // Scroll to the bottom
+            panelTasks.ScrollControlIntoView(bubble);
         }
 
         /// <summary>
         /// Add a task bubble for editing the properties of the given task entity
         /// </summary>
-        private void AddTaskBubble(ActionTask task)
+        private ActionTaskBubble AddTaskBubble(ActionTask task)
         {
             // Create the bubble that will hold it
             ActionTaskBubble bubble = new ActionTaskBubble(task, ActiveBubbles);
@@ -370,6 +373,8 @@ namespace ShipWorks.Actions
             bubble.MoveUp += new EventHandler(OnBubbleMoveUp);
             bubble.MoveDown += new EventHandler(OnBubbleMoveDown);
             bubble.Delete += new EventHandler(OnBubbleDelete);
+
+            return bubble;
         }
 
         /// <summary>
