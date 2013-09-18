@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
+using System.Collections.Generic;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// An interface for registering an account with Express1.

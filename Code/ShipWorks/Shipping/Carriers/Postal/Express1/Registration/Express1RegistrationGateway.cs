@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -11,7 +11,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// Gateway class for integrating with Express1

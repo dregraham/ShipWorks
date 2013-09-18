@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// An interface for being able to validate payment information.

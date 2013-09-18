@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// Base for all exceptions thrown by the Express1 Registration integration

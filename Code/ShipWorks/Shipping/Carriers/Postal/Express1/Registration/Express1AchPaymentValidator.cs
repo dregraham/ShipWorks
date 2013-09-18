@@ -1,10 +1,6 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Business;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// Validates that the ACH info on an Express1PaymentInfo is valid

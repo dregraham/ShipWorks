@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// A data transfer object that encapsulates the registration status and values of the output parameters

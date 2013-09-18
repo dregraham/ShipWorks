@@ -1,6 +1,4 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     partial class Express1SetupWizard
     {

@@ -1,5 +1,5 @@
-﻿
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// An interface for saving an Express1 registration that abstracts the details of the underlying data source.

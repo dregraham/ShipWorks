@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.UI.Wizard;
-using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Settings.WizardPages;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// Wizard for setting up shipping with Express1
