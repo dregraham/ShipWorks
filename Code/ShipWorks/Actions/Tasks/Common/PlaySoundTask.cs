@@ -15,6 +15,7 @@ using NAudio.Wave;
 using System.Threading;
 using System.Diagnostics;
 using ShipWorks.Common.Threading;
+using NAudio;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -24,6 +25,8 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Play a sound", "PlaySound", ActionTaskCategory.External)]
     public class PlaySoundTask : ActionTask
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(PlaySoundTask));
+
         long resourceReferenceID = 0;
         string pendingSoundFile = null;
 
@@ -65,9 +68,24 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 PlaySound();
             }
+            catch (MmException ex)
+            {
+                if (ex.Result == MmResult.BadDeviceId)
+                {
+                    log.Warn("There doesn't appear to be a soundcard installed.", ex);
+                }
+                else
+                {
+                    log.Error("Failed to play sound.", ex);
+
+                    throw new ActionTaskRunException(ex.Message, ex);
+                }
+            }
             // InvalidOperationException is what is thrown if the sound file is "PCM" or whatever that means.
             catch (Exception ex)
             {
+                log.Error("Failed to play sound.", ex);
+
                 throw new ActionTaskRunException(ex.Message, ex);
             }
         }
