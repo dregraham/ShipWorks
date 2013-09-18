@@ -274,11 +274,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 // wait
                 Cursor.Current = Cursors.WaitCursor;
 
-                if (!registration.CreateNewAccount())
-                {
-                    e.NextPage = CurrentPage;
-                    Cursor.Current = Cursors.Arrow;
-                }
+                registration.CreateNewAccount();
+
+                e.NextPage = CurrentPage;
+                Cursor.Current = Cursors.Arrow;
             }
             catch (Express1RegistrationException ex)
             {

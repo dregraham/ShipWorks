@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -139,27 +140,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Create a new Express1 account
         /// </summary>
         /// <exception cref="Express1RegistrationException"></exception>
-        public bool CreateNewAccount()
+        public void CreateNewAccount()
         {
             ValidationErrors = registrationValidator.Validate(this);
-            bool validationPassed = !ValidationErrors.Any();
+            
+            if (ValidationErrors.Any())
+            {
+                string message = "The following issues were found: " +
+                                 Environment.NewLine + ValidationErrors.Select(m => "    " + m.Message).Combine(Environment.NewLine);
+
+                throw new Express1RegistrationException(message);
+            }
 
             try
             {
-                if (validationPassed)
-                {
-                    // Use the gateway to make the API call to Express1
-                    Express1RegistrationResult registrationResult = registrationGateway.Register(this);
+                // Use the gateway to make the API call to Express1
+                Express1RegistrationResult registrationResult = registrationGateway.Register(this);
 
-                    // Note the account number and password from the registration result
-                    UserName = registrationResult.AccountNumber;
-                    Password = registrationResult.Password;
+                // Note the account number and password from the registration result
+                UserName = registrationResult.AccountNumber;
+                Password = registrationResult.Password;
 
-                    // Use the the repository to save the registration in ShipWorks
-                    SaveAccount();
-                }
-
-                return validationPassed;
+                // Use the the repository to save the registration in ShipWorks
+                SaveAccount();
             }
             catch (Exception ex)
             {
