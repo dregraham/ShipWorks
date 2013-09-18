@@ -24,6 +24,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ThreadTimer = System.Threading.Timer;
 using Interapptive.Shared.UI;
 using System.IO;
+using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -251,7 +252,7 @@ namespace ShipWorks.ApplicationCore.Services
 
                         if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
                         {
-                            log.WarnFormat("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName);
+                            LogThrottledWarn(string.Format("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName));
 
                             return hasChanged;
                         }
@@ -260,6 +261,12 @@ namespace ShipWorks.ApplicationCore.Services
                     if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
                     {
                         LogThrottledWarn("Schema is not the correct version.");
+                        return hasChanged;
+                    }
+
+                    if (MigrationController.IsMigrationInProgress())
+                    {
+                        LogThrottledWarn("A ShipWorks 2 upgrade is in progress.");
                         return hasChanged;
                     }
 
