@@ -2230,7 +2230,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsAccountEntity", "StampsAccountID", typeof(System.Int64), true, false, true, false,  (int)StampsAccountFieldIndex.StampsAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("StampsAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)StampsAccountFieldIndex.RowVersion, 0, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Username, 50, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Password, 50, 0, 0);
+			base.AddElementFieldInfo("StampsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Password, 100, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.FirstName, 30, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.MiddleName, 30, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.LastName, 30, 0, 0);
