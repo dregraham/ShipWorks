@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 
 namespace ShipWorks.Data.Connection
@@ -310,7 +311,7 @@ namespace ShipWorks.Data.Connection
                     logCsb.Password = "";
                 }
 
-                log.InfoFormat("ConnectionString: {0}", logCsb);
+                Log(string.Format("ConnectionString: {0}", logCsb));
 
                 lastConnectionString = connectionString;
             }
@@ -325,12 +326,12 @@ namespace ShipWorks.Data.Connection
         {
             Clear();
 
-            log.InfoFormat("Loading SqlSessionConfiguration from {0}.", SettingsFile);
+            Log(string.Format("Loading SqlSessionConfiguration from {0}.", SettingsFile));
 
             // If the file does not exist, do nothing
             if (!File.Exists(SettingsFile) || InterapptiveOnly.MagicKeysDown)
             {
-                log.Info("SqlSessionConfiguration file not found.");
+                Log("SqlSessionConfiguration file not found.");
                 return;
             }
 
@@ -409,6 +410,20 @@ namespace ShipWorks.Data.Connection
 
             // Close
             xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Log the given text
+        /// </summary>
+        private void Log(string text)
+        {
+            // In the background service we don't log anything because we get called so much over and over
+            if (Program.ExecutionMode is ServiceExecutionMode)
+            {
+                return;
+            }
+
+            log.Info(text);
         }
     }
 }

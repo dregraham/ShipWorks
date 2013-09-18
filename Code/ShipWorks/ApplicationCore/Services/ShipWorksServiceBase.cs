@@ -50,6 +50,10 @@ namespace ShipWorks.ApplicationCore.Services
         // The timespan for checking our connection
         static readonly TimeSpan sqlMonitorTimespan = TimeSpan.FromSeconds(5);
 
+        // For log throttling so we don't fill up the background log so fast
+        string lastWarnMessage = null;
+        Stopwatch lastWarnMessageTime = Stopwatch.StartNew();
+
         /// <summary>
         /// Consteructor
         /// </summary>
@@ -199,7 +203,7 @@ namespace ShipWorks.ApplicationCore.Services
             {
                 if (!scope.Acquired)
                 {
-                    log.Warn("Could not acquire the connection scope to check for SQL Session updates: " + string.Join(", ", ApplicationBusyManager.GetActiveOperations()));
+                    LogThrottledWarn("Could not acquire the connection scope to check for SQL Session updates: " + string.Join(", ", ApplicationBusyManager.GetActiveOperations()));
                     return false;
                 }
 
@@ -234,7 +238,7 @@ namespace ShipWorks.ApplicationCore.Services
                     // SQL Sesion isn't configured
                     if (!SqlSession.IsConfigured)
                     {
-                        log.Warn("SqlSession is not configured.");
+                        LogThrottledWarn("SqlSession is not configured.");
                         return hasChanged;
                     }
 
@@ -255,13 +259,13 @@ namespace ShipWorks.ApplicationCore.Services
 
                     if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
                     {
-                        log.Warn("Schema is not the correct version.");
+                        LogThrottledWarn("Schema is not the correct version.");
                         return hasChanged;
                     }
 
                     if (StoreManager.GetDatabaseStoreCount() == 0)
                     {
-                        log.Warn("There are no stores, nothing to do");
+                        LogThrottledWarn("There are no stores, nothing to do");
                         return hasChanged;
                     }
 
@@ -270,7 +274,7 @@ namespace ShipWorks.ApplicationCore.Services
                     UserManager.InitializeForCurrentUser();
                     UserSession.InitializeForCurrentSession();
 
-                    log.InfoFormat("SQL Session has been succesfully loaded.");
+                    log.InfoFormat("The user session has been successfully loaded and initialized.");
 
                     // This is the only spot we know it was a success
                     lastConfigurationSuccess = true;
@@ -278,7 +282,7 @@ namespace ShipWorks.ApplicationCore.Services
                 }
                 catch (SqlException ex)
                 {
-                    log.Error("Error establishing SqlSession.", ex);
+                    log.Error("An error occurred while connecting to SQL Server.", ex);
 
                     return hasChanged;
                 }
@@ -413,6 +417,24 @@ namespace ShipWorks.ApplicationCore.Services
 
                 // Check in with the stop time
                 ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
+            }
+        }
+
+        /// <summary>
+        /// Log a warning, but in a throttled way that doesn't fill up our background log so fast
+        /// </summary>
+        private void LogThrottledWarn(string message)
+        {
+            lock (log)
+            {
+                // Log anytime the message changes, or the same message if a minute has passed since the last time
+                if (message != lastWarnMessage || lastWarnMessageTime.Elapsed > TimeSpan.FromMinutes(1))
+                {
+                    log.Warn(message);
+
+                    lastWarnMessage = message;
+                    lastWarnMessageTime = Stopwatch.StartNew();
+                }
             }
         }
     }
