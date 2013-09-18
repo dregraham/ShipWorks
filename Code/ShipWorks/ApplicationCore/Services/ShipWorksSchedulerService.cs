@@ -5,7 +5,7 @@ using System.Timers;
 using Interapptive.Shared.UI;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.ApplicationCore.Enums;
-using Timer = System.Timers.Timer;
+using Timer = System.Threading.Timer;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Services
         IScheduler scheduler;
         CancellationTokenSource canceller;
 
-        readonly Timer timer = new Timer();
+        Timer timer;
 
         Heartbeat heartbeat;
 
@@ -51,11 +51,11 @@ namespace ShipWorks.ApplicationCore.Services
             // Required for printing
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
 
+            // Create the heartbeat
             heartbeat = new Heartbeat();
 
-            timer.Enabled = true;
-            timer.Interval = 1000;
-            timer.Elapsed += OnTimerInterval;
+            // Start the timer
+            timer = new Timer(OnTimerInterval, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
 
             canceller = new CancellationTokenSource();
             Scheduler.RunAsync(canceller.Token);
@@ -68,9 +68,9 @@ namespace ShipWorks.ApplicationCore.Services
         {
             base.OnStopCore();
 
-            timer.Stop();
-            timer.Close();
+            // Kill the timer
             timer.Dispose();
+            timer = null;
 
             // Communicate to the scheduler that we need to stop
             canceller.Cancel();
@@ -90,13 +90,10 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// If DB changes, make sure ActionProcessor is running.
+        /// Callback for our heartbeat pacemaker
         /// </summary>
-        private void OnTimerInterval(object source, ElapsedEventArgs args)
+        private void OnTimerInterval(object state)
         {
-            // Switch to checking every 15 seconds
-            timer.Interval = (int)TimeSpan.FromSeconds(15).TotalMilliseconds;
-
             heartbeat.ForceHeartbeat(HeartbeatOptions.None);
         }
     }
