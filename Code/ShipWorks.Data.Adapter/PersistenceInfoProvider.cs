@@ -2250,7 +2250,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShippingSettingsEntity's mappings</summary>
 		private void InitShippingSettingsEntityMappings()
 		{
-			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 60 );
+			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 62 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShippingSettingsID", "ShippingSettingsID", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 0 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalActivated", "Activated", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalConfigured", "Configured", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2311,6 +2311,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsThermalDocTab", "Express1StampsThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 57 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsThermalDocTabType", "Express1StampsThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 58 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsSingleSource", "Express1StampsSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 59 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1", "StampsAutomaticExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 60 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1Account", "StampsAutomaticExpress1Account", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 61 );
 		}
 		/// <summary>Inits ShopifyOrderEntity's mappings</summary>
 		private void InitShopifyOrderEntityMappings()

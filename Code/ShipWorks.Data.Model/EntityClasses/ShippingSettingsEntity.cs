@@ -611,6 +611,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Express1StampsSingleSource", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("StampsAutomaticExpress1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("StampsAutomaticExpress1Account", fieldHashtable);
 		}
 		#endregion
 
@@ -1334,6 +1340,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsSingleSource, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsSingleSource, value); }
+		}
+
+		/// <summary> The StampsAutomaticExpress1 property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpress1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean StampsAutomaticExpress1
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, value); }
+		}
+
+		/// <summary> The StampsAutomaticExpress1Account property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpress1Account"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 StampsAutomaticExpress1Account
+		{
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, value); }
 		}
 
 

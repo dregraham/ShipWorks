@@ -2189,6 +2189,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermalDocTab", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermalDocTab, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermalDocTabType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermalDocTabType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsSingleSource, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, 0, 0, 19);
 		}
 		/// <summary>Inits ShopifyOrderEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderEntityInfos()

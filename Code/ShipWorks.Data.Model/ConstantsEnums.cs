@@ -7393,6 +7393,10 @@ namespace ShipWorks.Data.Model
 		Express1StampsThermalDocTabType,
 		///<summary>Express1StampsSingleSource. </summary>
 		Express1StampsSingleSource,
+		///<summary>StampsAutomaticExpress1. </summary>
+		StampsAutomaticExpress1,
+		///<summary>StampsAutomaticExpress1Account. </summary>
+		StampsAutomaticExpress1Account,
 		/// <summary></summary>
 		AmountOfFields
 	}

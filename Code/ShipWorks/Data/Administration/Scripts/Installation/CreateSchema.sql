@@ -4287,6 +4287,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [WorldShipServices] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [StampsThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,
+[StampsAutomaticExpress1] [bit] NOT NULL,
+[StampsAutomaticExpress1Account] [bigint] NOT NULL,
 [Express1EndiciaThermal] [bit] NOT NULL,
 [Express1EndiciaThermalType] [int] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
