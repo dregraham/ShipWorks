@@ -11,17 +11,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public class Express1CreditCardPaymentValidator : IExpress1PaymentValidator
     {
-        private readonly List<Express1ValidationError> validationErrors;
-
-        /// <summary>
-        /// Constructor that accepts an Express1PaymentInfo
-        /// </summary>
-        /// <param name="express1PaymentInfo">The Express1PaymentInfo to validate.</param>
-        public Express1CreditCardPaymentValidator()
-        {
-            validationErrors = new List<Express1ValidationError>();
-        }
-
         /// <summary>
         /// Validates payment information.
         /// </summary>
@@ -30,6 +19,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// did not pass validation.</returns>
         public IEnumerable<Express1ValidationError> ValidatePaymentInfo(Express1PaymentInfo paymentInfo)
         {
+            List<Express1ValidationError> validationErrors = new List<Express1ValidationError>();
+
             if (paymentInfo.PaymentType == Express1PaymentType.Ach)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidPaymentTypeAch));

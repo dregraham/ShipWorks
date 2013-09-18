@@ -7,20 +7,10 @@ using Interapptive.Shared.Business;
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
     /// <summary>
-    /// Validates that the ACH info on a Express1PaymentInfo is valid
+    /// Validates that the ACH info on an Express1PaymentInfo is valid
     /// </summary>
     public class Express1AchPaymentValidator : IExpress1PaymentValidator
     {
-        private readonly List<Express1ValidationError> validationErrors;
-
-        /// <summary>
-        /// Constructor that accepts an Express1PaymentInfo
-        /// </summary>
-        public Express1AchPaymentValidator()
-        {
-            validationErrors = new List<Express1ValidationError>();
-        }
-
         /// <summary>
         /// Validates payment information.
         /// </summary>
@@ -29,6 +19,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// did not pass validation.</returns>
         public IEnumerable<Express1ValidationError> ValidatePaymentInfo(Express1PaymentInfo paymentInfo)
         {
+            List<Express1ValidationError> validationErrors = new List<Express1ValidationError>();
+
             if (paymentInfo.PaymentType == Express1PaymentType.CreditCard)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidPaymentTypeCreditCard));
