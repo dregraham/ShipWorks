@@ -1514,6 +1514,15 @@ namespace ShipWorks
                     // then we need to forget about that MSDE upgrade that was in the middle of happening, the user has moved on.
                     SqlServerInstaller.CancelMsdeMigrationInProgress();
                 }
+
+                // If we need to logon, force the logout now.  This makes sure that when we exit the context scope, we don't still briefly look logged in to constantly 
+                // running background threads.  Being logged in asserts that the schema is correct - and at this point, we just connected to a random database, so we don't know what
+                // which is in fact why we are saying "needLogon" is true in the first place.
+                if (needLogon)
+                {
+                    // We can't use LogOff here, because that tries to audit the logoff.  We are now connected to a different database, so it wouldn't make any sense to do that audit.
+                    UserSession.Reset();
+                }
             }
 
             // This is down here so its outside of the scope.  The Database setup can sometimes exit due to needing the machine
