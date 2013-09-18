@@ -285,7 +285,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private bool HasSqlSessionChanged(SqlSessionConfiguration diskConfiguration)
         {
-            SqlSessionConfiguration currentConfiguration = SqlSession.IsConfigured ? SqlSession.Current.Configuration : null;
+            SqlSessionConfiguration currentConfiguration = SqlSession.IsConfigured ? SqlSession.Current.Configuration : new SqlSessionConfiguration();
 
             // They are both null, haven't changed
             if (diskConfiguration == null && currentConfiguration == null)

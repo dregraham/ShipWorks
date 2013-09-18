@@ -146,12 +146,6 @@ namespace ShipWorks.Actions
         /// </summary>
         private void StartEmailingOnUI()
         {
-            // Make sure the DB is in a state where we can start doing stuff
-            if (ConnectionSensitiveScope.IsActive || !UserSession.IsLoggedOn)
-            {
-                return;
-            }
-
             // Initiate sending of all the email messages that were sent
             if (EmailGenerated.Count > 0)
             {

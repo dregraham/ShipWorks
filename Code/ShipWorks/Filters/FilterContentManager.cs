@@ -287,13 +287,19 @@ namespace ShipWorks.Filters
                 return;
             }
 
+            ApplicationBusyToken operationToken;
+            if (!ApplicationBusyManager.TryOperationStarting("updating filters", out operationToken))
+            {
+                return;
+            }
+
             // Ensure we are starting over
             calculatingEvent.Reset();
 
             // Queue the work to a background thread
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InitiateCalculationThread), 
-                new object[] { initial, ApplicationBusyManager.OperationStarting("updating filters") });
+                new object[] { initial, operationToken });
 
             // Wait for it to finish.  It's ok if it doesnt.
             calculatingEvent.WaitOne(wait, false);

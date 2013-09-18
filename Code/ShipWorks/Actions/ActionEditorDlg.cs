@@ -264,7 +264,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Updates the panel height when the action trigger editor changes it's height.
         /// </summary>
-        void OnActionTriggerEditorSizeChanged(object sender, EventArgs e)
+        private void OnActionTriggerEditorSizeChanged(object sender, EventArgs e)
         {
             panelTrigger.Height = ((ActionTriggerEditor) sender).Height;
             UpdateTaskArea();
@@ -288,22 +288,6 @@ namespace ShipWorks.Actions
             }
 
             UpdateTaskArea();
-
-            //// If any of the tasks are to backup the database, make sure the action
-            //// runs on the Sql computer and disable the UI to change it
-            //if (ActiveBubbles.Any(x => x.ActionTask is BackupDatabaseTask))
-            //{
-            //    runOnSpecificComputers.Checked = true;
-            //    runOnSpecificComputers.Enabled = false;
-            //    runOnAnyComputer.Enabled = false;
-            //    runOnTriggerringComputer.Enabled = false;
-            //    runOnSpecificComputersList.SetSelectedComputers(new[] { ComputerManager.SqlServerComputer });
-            //}
-            //else
-            //{
-            //    runOnSpecificComputers.Enabled = true;
-            //    runOnAnyComputer.Enabled = true;
-            //}
 
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
         }

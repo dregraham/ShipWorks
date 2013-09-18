@@ -26,6 +26,7 @@ using System.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Utility;
 using System.Net.Sockets;
+using ShipWorks.Users;
 
 namespace ShipWorks.Email
 {
@@ -206,6 +207,14 @@ namespace ShipWorks.Email
         /// </summary>
         public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages, bool skipDontSendBefore = true)
         {
+            Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
+
+            // Make sure the DB is in a state where we can start doing stuff
+            if (ConnectionSensitiveScope.IsActive || !UserSession.IsLoggedOn)
+            {
+                return;
+            }
+
             IEnumerable<EmailOutboundEntity> messagesToSend = messages;
 
             if (skipDontSendBefore)
@@ -237,6 +246,8 @@ namespace ShipWorks.Email
         /// </summary>
         private static void AddToEmailQueue(EmailOutboundThrottler throttler)
         {
+            Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
+
             lock (emailQueueLock)
             {
                 log.InfoFormat("Adding throttler for ({0}) to email queue.", throttler.EmailAccount.AccountName);
