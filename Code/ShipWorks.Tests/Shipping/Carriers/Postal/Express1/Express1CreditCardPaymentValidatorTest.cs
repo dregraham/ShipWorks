@@ -324,15 +324,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [TestMethod]
+        public void ValidatePaymentInfo_DoesNotReturnError_WhenCardExpirationDateIsThisMonth_Test()
+        {
+            // CardExpirationDate is today
+            paymentInfo.CreditCardExpirationDate = DateTime.Today;
+            testObject = new Express1CreditCardPaymentValidator();
+
+            IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo(paymentInfo);
+            Assert.IsFalse(errors.Any());
+        }
+
+        [TestMethod]
         public void ValidatePaymentInfo_ReturnsError_WhenPaymentTypeIsInvalid_Test()
         {
-            IEnumerable<Express1ValidationError> errors;
-
             // PaymentType is ACH
             paymentInfo.PaymentType = Express1PaymentType.Ach;
             testObject = new Express1CreditCardPaymentValidator();
 
-            errors = testObject.ValidatePaymentInfo(paymentInfo);
+            IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo(paymentInfo);
             Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidPaymentTypeAch));
         }
 

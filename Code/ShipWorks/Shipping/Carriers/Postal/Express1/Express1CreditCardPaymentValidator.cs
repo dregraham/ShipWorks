@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// did not pass validation.</returns>
         public IEnumerable<Express1ValidationError> ValidatePaymentInfo(Express1PaymentInfo paymentInfo)
         {
+            
             List<Express1ValidationError> validationErrors = new List<Express1ValidationError>();
 
             if (paymentInfo.PaymentType == Express1PaymentType.Ach)
@@ -27,7 +28,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 return validationErrors;
             }
 
-            if (paymentInfo.CreditCardExpirationDate <= DateTime.Now)
+            // Allow a credit card that expires at the end of the current month by comparing the expiration date 
+            // with the first day of the current month (i.e. a credit card that expires this month should be
+            // considered valid)
+            DateTime minimumAllowedExpirationDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            if (paymentInfo.CreditCardExpirationDate <= minimumAllowedExpirationDate)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardExpirationDate));
             }
