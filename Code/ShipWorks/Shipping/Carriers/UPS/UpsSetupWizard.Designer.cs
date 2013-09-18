@@ -129,7 +129,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcomeOlt);
+            this.mainPanel.Controls.Add(this.wizardPageFinishOlt);
             this.mainPanel.Size = new System.Drawing.Size(579, 415);
             // 
             // etchBottom
@@ -370,6 +370,7 @@
             this.linkUpsOlt.Size = new System.Drawing.Size(55, 13);
             this.linkUpsOlt.TabIndex = 4;
             this.linkUpsOlt.Text = "click here.";
+            this.linkUpsOlt.Visible = false;
             this.linkUpsOlt.Click += new System.EventHandler(this.OnLinkUpsOnlineTools);
             // 
             // linkUps
@@ -382,6 +383,7 @@
             this.linkUps.Size = new System.Drawing.Size(79, 13);
             this.linkUps.TabIndex = 3;
             this.linkUps.Text = "www.ups.com.";
+            this.linkUps.Visible = false;
             this.linkUps.Click += new System.EventHandler(this.OnLinkUpsHome);
             // 
             // label2
@@ -391,6 +393,7 @@
             this.label2.Size = new System.Drawing.Size(438, 71);
             this.label2.TabIndex = 2;
             this.label2.Text = resources.GetString("label2.Text");
+            this.label2.Visible = false;
             // 
             // labelUps1
             // 
@@ -400,6 +403,7 @@
             this.labelUps1.TabIndex = 1;
             this.labelUps1.Text = "Thank you for registering your UPS Account. To learn more about UPS services, ple" +
     "ase";
+            this.labelUps1.Visible = false;
             // 
             // labelSetupComplete
             // 
