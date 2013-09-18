@@ -204,8 +204,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 3);
             this.personControl.Name = "personControl";
-            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Street) 
+            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
@@ -575,7 +576,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.wizardPageOptions.Title = "Express1 Settings";
             this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
             // 
-            // optionsControl
+            // optionsControlPanel
             // 
             this.optionsControlPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControlPanel.Location = new System.Drawing.Point(23, 4);
@@ -658,7 +659,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.wizardPageAccountList.TabIndex = 0;
             this.wizardPageAccountList.Title = "Express1 Accounts";
             // 
-            // accountControl
+            // accountControlPanel
             // 
             this.accountControlPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accountControlPanel.Location = new System.Drawing.Point(36, 27);
