@@ -311,26 +311,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [TestMethod]
-        public void ValidatePaymentInfo_ReturnsError_WhenCardCvnIsInvalid_Test()
-        {
-            IEnumerable<Express1ValidationError> errors;
-
-            // CardCvn is 0
-            paymentInfo.CreditCardVerificationNumber = 0;
-            testObject = new Express1CreditCardPaymentValidator();
-
-            errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardCvn));
-
-            // CardCvn is less than 0
-            paymentInfo.CreditCardVerificationNumber = -1;
-            testObject = new Express1CreditCardPaymentValidator();
-
-            errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1ValidationErrorMessages.InvalidCreditCardCvn));
-        }
-
-        [TestMethod]
         public void ValidatePaymentInfo_ReturnsError_WhenCardExpirationDateIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
