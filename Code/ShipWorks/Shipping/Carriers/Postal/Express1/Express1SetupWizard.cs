@@ -284,7 +284,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 MessageHelper.ShowError(this, ex.Message);
 
                 e.NextPage = CurrentPage;
-                return;
             }
         }
 
@@ -365,13 +364,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             registration.UserName = accountExisting.Text.Trim();
             registration.Password = passwordExisting.Text;
 
-            if (!registration.AddExistingAccount())
+            try
             {
-                MessageHelper.ShowInformation(this, registration.ValidationErrors.Select(x => x.Message).Combine(Environment.NewLine));
+                registration.AddExistingAccount();
+            }
+            catch (Express1RegistrationException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
-                Cursor.Current = Cursors.Arrow;
             }
         }
+    
 
         /// <summary>
         /// Buy postage for the account

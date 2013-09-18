@@ -119,21 +119,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Add an existing Express1 account to ShipWorks
         /// </summary>
-        public bool AddExistingAccount()
+        public void AddExistingAccount()
         {
+            // Check for any validation errors and ensure that the credentials we 
+            // have are for a valid Express1/Stamps account
             ValidationErrors = registrationValidator.ValidatePersonalInfo(this);
-
-            // Ensure that the credentials we have are for a valid Express1/Stamps account
             registrationGateway.VerifyAccount(this, ValidationErrors);
-            
-            bool validationPassed = !ValidationErrors.Any();
 
-            if (validationPassed)
+            if (ValidationErrors.Any())
             {
-                SaveAccount();    
+                // Either the personal info was incomplete or the credentials could not be confirmed 
+                string message = "The following issues were found: " +
+                                 Environment.NewLine + ValidationErrors.Select(m => "    " + m.Message).Combine(Environment.NewLine);
+
+                throw new Express1RegistrationException(message);
             }
 
-            return validationPassed;
+            SaveAccount();
         }
 
         /// <summary>
