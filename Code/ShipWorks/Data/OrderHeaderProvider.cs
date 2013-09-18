@@ -142,8 +142,13 @@ namespace ShipWorks.Data
                     return;
                 }
 
-                // Kick off the async loading
-                busyToken = ApplicationBusyManager.OperationStarting("loading data");
+                // Kick off the async loading.  If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                // We only may not if we are running in the background.
+                if (!ApplicationBusyManager.TryOperationStarting("loading data", out busyToken))
+                {
+                    return;
+                }
+
                 headersReadyEvent.Reset();
 
                 ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncLoadHeaders));

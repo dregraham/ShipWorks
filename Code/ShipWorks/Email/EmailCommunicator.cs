@@ -277,8 +277,14 @@ namespace ShipWorks.Email
                 {
                     Debug.Assert(busyToken == null);
 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // We only may not if we are running in the background.
+                    if (!ApplicationBusyManager.TryOperationStarting("emailing", out busyToken))
+                    {
+                        return;
+                    }
+
                     isEmailing = true;
-                    busyToken = ApplicationBusyManager.OperationStarting("emailing");
 
                     Thread thread = new Thread(ExceptionMonitor.WrapThread(EmailWorkerThread));
                     thread.Name = "EmailThread";

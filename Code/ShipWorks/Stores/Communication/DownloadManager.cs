@@ -259,8 +259,14 @@ namespace ShipWorks.Stores.Communication
                 {
                     Debug.Assert(busyToken == null);
 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // We only may not if we are running in the background.
+                    if (!ApplicationBusyManager.TryOperationStarting("downloading", out busyToken))
+                    {
+                        return;
+                    }
+
                     isDownloading = true;
-                    busyToken = ApplicationBusyManager.OperationStarting("downloading");
 
                     Thread thread = new Thread(ExceptionMonitor.WrapThread(DownloadWorkerThread));
                     thread.Name = "DownloadThread";
