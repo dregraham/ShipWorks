@@ -41,11 +41,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardExpirationDate));
             }
 
-            if (paymentInfo.CreditCardVerificationNumber <= 0)
-            {
-                validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardCvn));
-            }
-
             if (string.IsNullOrWhiteSpace(paymentInfo.CreditCardAccountNumber))
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardAccountNumber));
