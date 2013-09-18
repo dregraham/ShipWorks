@@ -385,6 +385,11 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected virtual void OnStopCore()
         {
+            if (Program.IsCrashing)
+            {
+                return;
+            }
+
             // Could be stopping due to losing the connection
             if (lastConfigurationSuccess)
             {

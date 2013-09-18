@@ -24,7 +24,7 @@ namespace ShipWorks
     static class Program
     {
         // Indicates if the application is shutting down due to an exception
-        static bool isTerminating = false;
+        static bool isCrashing = false;
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(Program));
@@ -53,6 +53,14 @@ namespace ShipWorks
         { 
             get; 
             private set; 
+        }
+
+        /// <summary>
+        /// Indicates if the application is in the middle of crashing
+        /// </summary>
+        public static bool IsCrashing
+        {
+            get { return isCrashing; }
         }
 
         /// <summary>
@@ -232,13 +240,13 @@ namespace ShipWorks
         private static void HandleUnhandledException(Exception ex, bool guiThread)
         {
             // No executionMode, so default to the original exception handling.
-            if (isTerminating)
+            if (isCrashing)
             {
                 log.Error("Exception received while already terminating.", ex);
                 return;
             }
 
-            isTerminating = true;
+            isCrashing = true;
 
             string userEmail = string.Empty;
             if (UserSession.IsLoggedOn)

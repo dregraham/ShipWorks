@@ -69,11 +69,18 @@ namespace ShipWorks.ApplicationCore.Services
             base.OnStopCore();
 
             // Kill the timer
-            timer.Dispose();
-            timer = null;
+            if (timer != null)
+            {
+                timer.Dispose();
+                timer = null;
+            }
 
             // Communicate to the scheduler that we need to stop
-            canceller.Cancel();
+            if (canceller != null)
+            {
+                canceller.Cancel();
+                canceller = null;
+            }
         }
 
         /// <summary>
@@ -82,7 +89,10 @@ namespace ShipWorks.ApplicationCore.Services
         protected override void OnSqlConfigurationChanged()
         {
             // Cancel the current Scheduler
-            canceller.Cancel();
+            if (canceller != null)
+            {
+                canceller.Cancel();
+            }
 
             // Rerun it to ensure it loads the current SQL Session configuration
             canceller = new CancellationTokenSource();

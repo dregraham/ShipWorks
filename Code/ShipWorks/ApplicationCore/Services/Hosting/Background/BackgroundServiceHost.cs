@@ -70,6 +70,9 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Background
         /// <param name="serviceCrash">The service crash.</param>
         public void HandleServiceCrash(int recoveryCount)
         {
+            // Tell the service to stop donig whatever it is it does
+            service.InternalHostStop();
+
             int minutesToWait = Math.Min(recoveryCount + 1, 10);
 
             // Wait a minute for each time we've tried to recover, up to 10 minutes
