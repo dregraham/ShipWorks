@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // with the first day of the current month (i.e. a credit card that expires this month should be
             // considered valid)
             DateTime minimumAllowedExpirationDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            if (paymentInfo.CreditCardExpirationDate <= minimumAllowedExpirationDate)
+            if (paymentInfo.CreditCardExpirationDate < minimumAllowedExpirationDate)
             {
                 validationErrors.Add(new Express1ValidationError(Express1ValidationErrorMessages.InvalidCreditCardExpirationDate));
             }

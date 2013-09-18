@@ -335,6 +335,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [TestMethod]
+        public void ValidatePaymentInfo_DoesNotReturnError_WhenCardExpirationDateIsFirstDayOfThisMonth_Test()
+        {
+            // CardExpirationDate is the first day of the current month
+            paymentInfo.CreditCardExpirationDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            testObject = new Express1CreditCardPaymentValidator();
+
+            IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo(paymentInfo);
+            Assert.IsFalse(errors.Any());
+        }
+
+        [TestMethod]
         public void ValidatePaymentInfo_ReturnsError_WhenPaymentTypeIsInvalid_Test()
         {
             // PaymentType is ACH
