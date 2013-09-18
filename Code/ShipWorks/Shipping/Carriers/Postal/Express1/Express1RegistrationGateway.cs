@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// <summary>
     /// Gateway class for integrating with Express1
     /// </summary>
-    class Express1RegistrationGateway : IExpress1RegistrationGateway
+    public abstract class Express1RegistrationGateway : IExpress1RegistrationGateway
     {
         private readonly IExpress1ConnectionDetails connectionDetails;
 
@@ -23,11 +24,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Create a new instance of the Express1 gateway
         /// </summary>
         /// <param name="connectionDetails">Details that define the connection to use</param>
-        public Express1RegistrationGateway(IExpress1ConnectionDetails connectionDetails)
+        protected Express1RegistrationGateway(IExpress1ConnectionDetails connectionDetails)
         {
             this.connectionDetails = connectionDetails;
         }
 
+        /// <summary>
+        /// Verifies that the specified username and password map to a valid account
+        /// </summary>
+        /// <param name="registration">Registration that defines the account to test</param>
+        /// <param name="errors">List into which verification errors should be placed</param>
+        public abstract void VerifyAccount(Express1Registration registration, ICollection<Express1ValidationError> errors);
 
         /// <summary>
         /// Registers an account with Express1.

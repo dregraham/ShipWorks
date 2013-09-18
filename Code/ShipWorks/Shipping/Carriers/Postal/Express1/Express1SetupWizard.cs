@@ -363,21 +363,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 return;
             }
 
-            try
-            {
-                registration.UserName = accountExisting.Text.Trim();
-                registration.Password = passwordExisting.Text;
+            registration.UserName = accountExisting.Text.Trim();
+            registration.Password = passwordExisting.Text;
 
-                if (!registration.AddExistingAccount())
-                {
-                    e.NextPage = CurrentPage;
-                    Cursor.Current = Cursors.Arrow;
-                }
-            }
-            catch (StampsException ex)
+            if (!registration.AddExistingAccount())
             {
-                MessageHelper.ShowError(this, "ShipWorks was unable to communicate with Express1 using this account information:\n\n" + ex.Message);
+                MessageHelper.ShowInformation(this, registration.ValidationErrors.Select(x => x.Message).Combine(Environment.NewLine));
                 e.NextPage = CurrentPage;
+                Cursor.Current = Cursors.Arrow;
             }
         }
 

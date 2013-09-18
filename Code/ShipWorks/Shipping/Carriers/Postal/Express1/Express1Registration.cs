@@ -121,6 +121,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public bool AddExistingAccount()
         {
             ValidationErrors = registrationValidator.ValidatePersonalInfo(this);
+
+            // Ensure that the credentials we have are for a valid Express1/Stamps account
+            registrationGateway.VerifyAccount(this, ValidationErrors);
+            
             bool validationPassed = !ValidationErrors.Any();
 
             if (validationPassed)

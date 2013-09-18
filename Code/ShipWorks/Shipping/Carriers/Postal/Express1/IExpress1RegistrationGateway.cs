@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
+﻿using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -14,5 +15,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <returns>Returns the result of the registration call to Express1 containing the 
         /// customer credentials that were just created.</returns>
         Express1RegistrationResult Register(Express1Registration registration);
+
+        /// <summary>
+        /// Verifies that the specified username and password map to a valid account
+        /// </summary>
+        /// <param name="registration">Registration that defines the account to test</param>
+        /// <param name="errors">List into which verification errors should be placed</param>
+        void VerifyAccount(Express1Registration registration, ICollection<Express1ValidationError> errors);
     }
 }

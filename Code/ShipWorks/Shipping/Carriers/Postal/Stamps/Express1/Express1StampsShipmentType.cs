@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override Form CreateSetupWizard()
         {
             var registration = new Express1Registration(ShipmentTypeCode,
-                                                        new Express1RegistrationGateway(new Express1StampsConnectionDetails()),
+                                                        new StampsExpress1RegistrationGateway(),
                                                         new StampsExpress1RegistrationRepository(), 
                                                         new Express1RegistrationValidator());
             return new Express1SetupWizard(new StampsAccountManagerControl(true), new StampsOptionsControl(true), registration);
