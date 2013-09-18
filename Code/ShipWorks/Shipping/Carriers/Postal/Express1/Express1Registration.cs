@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 
@@ -133,25 +134,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Create a new Express1 account
         /// </summary>
+        /// <exception cref="Express1RegistrationException"></exception>
         public bool CreateNewAccount()
         {
             ValidationErrors = registrationValidator.Validate(this);
             bool validationPassed = !ValidationErrors.Any();
 
-            if (validationPassed)
+            try
             {
-                // Use the gateway to make the API call to Express1
-	            Express1RegistrationResult registrationResult = registrationGateway.Register(this);
+                if (validationPassed)
+                {
+                    // Use the gateway to make the API call to Express1
+                    Express1RegistrationResult registrationResult = registrationGateway.Register(this);
 
-	            // Note the account number and password from the registration result
-	            UserName = registrationResult.AccountNumber;
-	            Password = registrationResult.Password;
+                    // Note the account number and password from the registration result
+                    UserName = registrationResult.AccountNumber;
+                    Password = registrationResult.Password;
 
-	            // Use the the repository to save the registration in ShipWorks
-	            SaveAccount();
+                    // Use the the repository to save the registration in ShipWorks
+                    SaveAccount();
+                }
+
+                return validationPassed;
             }
-
-            return validationPassed;
+            catch (Exception ex)
+            {
+                string message = string.Format("ShipWorks encountered an error while trying to create a new Express1 account. {0}", ex.Message);
+                throw new Express1RegistrationException(message, ex);
+            }
         }
 
         /// <summary>

@@ -280,7 +280,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     Cursor.Current = Cursors.Arrow;
                 }
             }
-            catch (StampsException ex)
+            catch (Express1RegistrationException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
 
@@ -299,6 +299,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             Express1PaymentInfo paymentInfo = new Express1PaymentInfo(Express1PaymentType.CreditCard)
                 {
+                    CreditCardNameOnCard = registration.Name,
                     CreditCardBillingAddress = billingAddress,
                     CreditCardType = (Express1CreditCardType)cardType.SelectedValue,
                     CreditCardAccountNumber = cardNumber.Text.Trim(),
