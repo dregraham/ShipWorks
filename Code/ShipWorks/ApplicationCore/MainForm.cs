@@ -621,7 +621,7 @@ namespace ShipWorks
             filterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
 
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
-            UpdateUserInitiatedActionsUI();
+            UpdateCustomButtonsActionsUI();
 
             // We can now show the normal UI
             ApplyCurrentUserLayout();
@@ -1287,7 +1287,7 @@ namespace ShipWorks
         /// <summary>
         /// Update the UI that's based on user initiated actions
         /// </summary>
-        private void UpdateUserInitiatedActionsUI()
+        private void UpdateCustomButtonsActionsUI()
         {
             string ribbonChunkName = "Custom Actions";
 
@@ -1325,7 +1325,7 @@ namespace ShipWorks
                 // Maybe we need to create it
                 if (actionChunk == null)
                 {
-                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, Padding = new WidgetEdges(4, 2, 4, 0) };
+                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, ItemJustification = ItemJustification.Near };
                     ribbonTabHome.Chunks.Add(actionChunk);
                 }
 
@@ -1338,10 +1338,9 @@ namespace ShipWorks
                     // If it doesn't exist, create it
                     if (button == null)
                     {
-                        button = new SandButton(action.Action.Name);
+                        button = new SandButton();
                         button.Guid = action.Trigger.Guid;
                         button.Tag = action.Action.ActionID;
-                        button.Padding = new WidgetEdges(3, 2, 4, 14);
                         button.TextContentRelation = TextContentRelation.Underneath;
                         button.Activate += OnCustomActionButton;
 
@@ -1349,7 +1348,8 @@ namespace ShipWorks
                     }
 
                     // Update the properties
-                    button.Text = action.Action.Name;
+                    button.Text = string.Join("\r\n", StringUtility.SplitLines(action.Action.Name, 20, 2));
+                    button.Padding = button.Text.Contains("\r\n") ? new WidgetEdges(8, 2, 8, 2) : new WidgetEdges(3, 2, 4, 14);
                     button.Image = action.Trigger.LoadImage();
 
                     // Configure selection requirements
@@ -2954,7 +2954,7 @@ namespace ShipWorks
                 dlg.ShowDialog(this);
             }
 
-            UpdateUserInitiatedActionsUI();
+            UpdateCustomButtonsActionsUI();
         }
 
         /// <summary>
