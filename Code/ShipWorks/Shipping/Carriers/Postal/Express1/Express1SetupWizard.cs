@@ -276,7 +276,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
                 registration.CreateNewAccount();
 
-                e.NextPage = CurrentPage;
                 Cursor.Current = Cursors.Arrow;
             }
             catch (Express1RegistrationException ex)
