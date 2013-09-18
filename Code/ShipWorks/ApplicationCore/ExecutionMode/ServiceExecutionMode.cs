@@ -25,7 +25,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         static readonly ILog log = LogManager.GetLogger(typeof(ServiceExecutionMode));
 
         readonly Lazy<IServiceHost> host;
-        readonly IList<string> options;
 
         DateTime startupTimeInUtc;
         int recoveryAttempts;
@@ -46,7 +45,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             host = new Lazy<IServiceHost>(() => ServiceHostFactory.GetHostFor(GetServiceForName(serviceName)));
 
-            this.options = options ?? new string[0];
+            options = options ?? new string[0];
 
             // Need to extract the arguments
             OptionSet optionSet = new OptionSet()

@@ -144,8 +144,6 @@ namespace ShipWorks.Templates.Tokens
             }
         }
 
-
-
         /// <summary>
         /// Get \ set whether the box represents a null value.
         /// </summary>
@@ -197,13 +195,6 @@ namespace ShipWorks.Templates.Tokens
             }
         }
 
-        void SetInnerText(string value)
-        {
-            tokenTextBox.Text = value;
-            tokenTextBox.SelectionStart = tokenTextBox.Text.Length;
-            tokenTextBox.SelectionLength = 0;
-        }
-
         [DefaultValue(TokenUsage.Generic)]
         public TokenUsage TokenUsage
         {
@@ -224,6 +215,9 @@ namespace ShipWorks.Templates.Tokens
             }
         }
 
+        /// <summary>
+        /// The replacement mode when the user selects a token.
+        /// </summary>
         [DefaultValue(TokenSelectionMode.Replace)]
         public TokenSelectionMode TokenSelectionMode
         {
@@ -249,6 +243,9 @@ namespace ShipWorks.Templates.Tokens
             }
         }
 
+        /// <summary>
+        /// Gets or sets the maximum length of the token
+        /// </summary>
         [DefaultValue(0)]
         public int MaxLength
         {
@@ -264,6 +261,16 @@ namespace ShipWorks.Templates.Tokens
         {
             get { return tokenOptionsDropdown.Visible; }
             set { tokenOptionsDropdown.Visible = value; }
+        }
+
+        /// <summary>
+        /// Set the text of our inner text box, advancing the selection caret to the end of the string
+        /// </summary>
+        private void SetInnerText(string value)
+        {
+            tokenTextBox.Text = value;
+            tokenTextBox.SelectionStart = tokenTextBox.Text.Length;
+            tokenTextBox.SelectionLength = 0;
         }
 
         /// <summary>
@@ -353,6 +360,9 @@ namespace ShipWorks.Templates.Tokens
             }
         }
 
+        /// <summary>
+        /// The token options box is dropping down
+        /// </summary>
         private void OnClickTokenOptionsDropdown(object sender, EventArgs e)
         {
             if (TokenSelectionMode == Tokens.TokenSelectionMode.Paste)

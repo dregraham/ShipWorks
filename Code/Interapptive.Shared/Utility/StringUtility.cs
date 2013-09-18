@@ -106,7 +106,7 @@ namespace Interapptive.Shared.Utility
         {
             if (idealLineLength <= 0)
             {
-                throw new ArgumentException("lineLength must be greater than 0", "lineLength");
+                throw new ArgumentException("lineLength must be greater than 0", "idealLineLength");
             }
 
             if (text == null)

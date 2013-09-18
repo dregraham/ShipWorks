@@ -56,9 +56,30 @@ namespace ShipWorks.Templates.Tokens
         }
 
         /// <summary>
-        /// Process the tokens in the token string for the given Template Input
+        /// Process the tokens in the token string for the given entity ID
         /// </summary>
-        public static string ProcessTokens(string tokenText, TemplateXPathNavigator xpath, bool stripNewLines = true)
+        public static string ProcessTokens(string tokenText, List<long> idList, bool stripNewLines = true)
+        {
+            if (!HasTokens(tokenText))
+            {
+                return tokenText.Replace("{{", "{").Replace("}}", "}");
+            }
+
+            TemplateInput input = new TemplateInput(idList, idList, idList.Count > 0 ?
+                TemplateContextTranslator.ResolveContextFromEntityType(EntityUtility.GetEntityType(idList[0])) :
+                TemplateInputContext.Customer);
+
+            TemplateTranslationContext context = new TemplateTranslationContext(null, input, new ProgressItem(""));
+
+            TemplateXPathNavigator xpath = new TemplateXPathNavigator(context);
+
+            return ProcessTokens(tokenText, xpath, stripNewLines);
+        }
+
+        /// <summary>
+        /// Process the tokens in the token string for the given TemplateXPathNavigator as input
+        /// </summary>
+        public static string ProcessTokens(string tokenText, TemplateXPathNavigator templateXPath, bool stripNewLines = true)
         {
             if (!HasTokens(tokenText))
             {
@@ -67,12 +88,14 @@ namespace ShipWorks.Templates.Tokens
 
             try
             {
+                // Geneate the XSL and process the result
                 TemplateXsl templateXsl = TemplateXslProvider.FromToken(tokenText);
+                TemplateResult result = templateXsl.Transform(templateXPath);
 
-                TemplateResult result = templateXsl.Transform(xpath);
-
+                // Read the result into a string
                 StringBuilder sb = new StringBuilder(result.ReadResult());
 
+                // And strip newlines if requested
                 if (stripNewLines)
                 {
                     // Return the result, with newlines stripped
@@ -99,26 +122,6 @@ namespace ShipWorks.Templates.Tokens
             }
         }
 
-        /// <summary>
-        /// Process the tokens in the token string for the given entity ID
-        /// </summary>
-        public static string ProcessTokens(string tokenText, List<long> idList, bool stripNewLines = true)
-        {
-            if (!HasTokens(tokenText))
-            {
-                return tokenText.Replace("{{", "{").Replace("}}", "}");
-            }
-
-            TemplateInput input = new TemplateInput(idList, idList, idList.Count > 0 ?
-                TemplateContextTranslator.ResolveContextFromEntityType(EntityUtility.GetEntityType(idList[0])) :
-                TemplateInputContext.Customer);
-
-            TemplateTranslationContext context = new TemplateTranslationContext(null, input, new ProgressItem(""));
-
-            TemplateXPathNavigator xpath = new TemplateXPathNavigator(context);
-
-            return ProcessTokens(tokenText, xpath, stripNewLines);
-        }
 
         /// <summary>
         /// Indicates if the given text contains tokens that require processing
