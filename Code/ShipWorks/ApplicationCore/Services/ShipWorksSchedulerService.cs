@@ -48,9 +48,6 @@ namespace ShipWorks.ApplicationCore.Services
         {
             base.OnStartCore();
 
-            // Required for printing
-            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
-
             // Create the heartbeat
             heartbeat = new Heartbeat();
 

@@ -21,6 +21,9 @@ using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using ShipWorks.Stores;
 using ShipWorks.ApplicationCore.Interaction;
+using ThreadTimer = System.Threading.Timer;
+using Interapptive.Shared.UI;
+using System.IO;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -40,18 +43,19 @@ namespace ShipWorks.ApplicationCore.Services
         // Lock to make sure we aren't updating at the same time
         object timerLock = new object();
 
+        // The timers to keep us checking for sql changes
+        ThreadTimer sqlSessionMonitorTimer;
+        ThreadTimer checkInTimer;
+
+        // The timespan for checking our connection
+        static readonly TimeSpan sqlMonitorTimespan = TimeSpan.FromSeconds(5);
+
         /// <summary>
         /// Consteructor
         /// </summary>
         public ShipWorksServiceBase()
         {
             InitializeComponent();
-
-            // Set the checkin timer interval
-            checkInTimer.Interval = ServiceStatusManager.CheckInTimeSpan.TotalMilliseconds;
-
-            // See if SQL Session has changed every 5 seconds
-            sqlSessionMonitorTimer.Interval = TimeSpan.FromSeconds(5).TotalMilliseconds;
         }
 
         /// <summary>
@@ -120,17 +124,21 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected sealed override void OnStart(string[] args)
         {
-            // Start the SQL Session monitor timer for monitoring for SQL Session changes
-            sqlSessionMonitorTimer.Start();
+            // One time initialization ever - regardless of database or user changes
+            DataProvider.InitializeForApplication();
+            AuditProcessor.InitializeForApplication();
 
-            // Kick off the first one right away
-            OnSqlSessionMonitorTimerElapsed(null, null);
+            // Required for printing
+            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
+
+            // Start the primary timer
+            sqlSessionMonitorTimer = new ThreadTimer(OnSqlSessionMonitorTimerElapsed, null, TimeSpan.Zero, sqlMonitorTimespan);
         }
 
         /// <summary>
         /// The timer for retrying the connection elapsed
         /// </summary>
-        private void OnSqlSessionMonitorTimerElapsed(object sender, ElapsedEventArgs e)
+        private void OnSqlSessionMonitorTimerElapsed(object state)
         {
             if (!Monitor.TryEnter(timerLock))
             {
@@ -140,7 +148,7 @@ namespace ShipWorks.ApplicationCore.Services
             try
             {
                 // Are we running on entering this method
-                bool isRunning = checkInTimer.Enabled;
+                bool isRunning = checkInTimer != null;
 
                 // Check the SQL Session, and determine if it changed
                 bool hasChanged = CheckSqlSession();
@@ -154,7 +162,7 @@ namespace ShipWorks.ApplicationCore.Services
                         OnStartCore();
 
                         // Start the timer to periodically checkin
-                        checkInTimer.Start();
+                        checkInTimer = new ThreadTimer(OnCheckInTimerElapsed, null, ServiceStatusManager.CheckInTimeSpan, ServiceStatusManager.CheckInTimeSpan);
                     }
                     // It's already running, but the SQL config changed - we need to make sure the scheduler is now pointing to the correct database
                     else if (hasChanged)
@@ -170,7 +178,7 @@ namespace ShipWorks.ApplicationCore.Services
                         OnStop();
 
                         // Stop also stops the sql monitor timer - we need that to keep going so we can detect when it gets fixed
-                        sqlSessionMonitorTimer.Start();
+                        sqlSessionMonitorTimer = new ThreadTimer(OnSqlSessionMonitorTimerElapsed, null, sqlMonitorTimespan, sqlMonitorTimespan);
                     }
                 }
             }
@@ -256,9 +264,6 @@ namespace ShipWorks.ApplicationCore.Services
                         log.Warn("There are no stores, nothing to do");
                         return hasChanged;
                     }
-
-                    DataProvider.InitializeForApplication();
-                    AuditProcessor.InitializeForApplication();
 
                     UserSession.InitializeForCurrentDatabase();
 
@@ -347,8 +352,13 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// The periodic check-in timer has elapsed
         /// </summary>
-        void OnCheckInTimerElapsed(object sender, ElapsedEventArgs e)
+        void OnCheckInTimerElapsed(object state)
         {
+            if (!UserSession.IsLoggedOn)
+            {
+                return;
+            }
+
             ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
         }
 
@@ -357,13 +367,18 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected sealed override void OnStop()
         {
-            sqlSessionMonitorTimer.Stop();
+            if (sqlSessionMonitorTimer != null)
+            {
+                sqlSessionMonitorTimer.Dispose();
+                sqlSessionMonitorTimer = null;
+            }
 
             // If the checkin timer is on, that means we were running.
-            if (checkInTimer.Enabled)
+            if (checkInTimer != null)
             {
                 // Stop the timer
-                checkInTimer.Stop();
+                checkInTimer.Dispose();
+                checkInTimer = null;
 
                 // And shutdown
                 OnStopCore();

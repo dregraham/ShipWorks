@@ -28,27 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkInTimer = new System.Timers.Timer();
-            this.sqlSessionMonitorTimer = new System.Timers.Timer();
-            ((System.ComponentModel.ISupportInitialize)(this.checkInTimer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sqlSessionMonitorTimer)).BeginInit();
-            // 
-            // checkInTimer
-            // 
-            this.checkInTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnCheckInTimerElapsed);
-            // 
-            // sqlSessionMonitorTimer
-            // 
-            this.sqlSessionMonitorTimer.Interval = 5000D;
-            this.sqlSessionMonitorTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnSqlSessionMonitorTimerElapsed);
-            ((System.ComponentModel.ISupportInitialize)(this.checkInTimer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sqlSessionMonitorTimer)).EndInit();
 
         }
 
         #endregion
 
-        private System.Timers.Timer checkInTimer;
-        private System.Timers.Timer sqlSessionMonitorTimer;
     }
 }
