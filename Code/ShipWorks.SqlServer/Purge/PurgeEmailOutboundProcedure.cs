@@ -75,8 +75,6 @@ public partial class StoredProcedures
                     SET @deletedHTMLEmailResourceID = SCOPE_IDENTITY();
                 END;
 
-
-
                 -- create batch purge ID table
                 CREATE TABLE #EmailPurgeBatch (
                     EmailOutboundID BIGINT PRIMARY KEY
@@ -91,7 +89,7 @@ public partial class StoredProcedures
                 WHILE @runUntil IS NULL OR GETUTCDATE() < @runUntil
                 BEGIN
                     INSERT #EmailPurgeBatch
-                    SELECT TOP (@batchSize) e.EmailOutboundID
+                    SELECT DISTINCT TOP (@batchSize) e.EmailOutboundID
                     FROM EmailOutbound e
                     INNER JOIN ObjectReference o ON
                         o.ObjectReferenceID = e.PlainPartResourceID
