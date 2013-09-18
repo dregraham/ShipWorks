@@ -63,5 +63,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             return stampsAccount.StampsAccountID;
         }
+
+
+        /// <summary>
+        /// Uses the StampsAccountManager to Delete the carrier account (if it exists) associated with the 
+        /// given registration from the StampsAccount table.
+        /// </summary>
+        /// <param name="registration">The registration object containing the Express1 account info being deleted.</param>
+        public void Delete(Express1Registration registration)
+        {
+            if (registration != null && registration.AccountId.HasValue)
+            {
+                // The registration has an account ID associated with it, implying there is an account 
+                // entity associated with it. 
+                StampsAccountEntity stampsAccountEntity = StampsAccountManager.GetAccount(registration.AccountId.Value);
+                if (stampsAccountEntity != null)
+                {
+                    // We've confirmed this account still does exist and needs to be deleted
+                    StampsAccountManager.DeleteAccount(stampsAccountEntity);
+                }
+            }
+        }
     }
 }

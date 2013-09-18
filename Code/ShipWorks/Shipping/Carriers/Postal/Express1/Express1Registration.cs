@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Initializes a new instance of the <see cref="Express1Registration" /> class.
         /// </summary>
         /// <param name="shipmentType">Type of shipment this account will be used for.</param>
-        /// <param name="gateway">The gateway used to interface with the Express1 api</param>
+        /// <param name="gateway">The gateway used to interface with the Express1 API</param>
         /// <param name="repository">Repository used to interface with the underlying account entities</param>
         /// <param name="validator">Validator that will be used to ensure data is correct</param>
         public Express1Registration(ShipmentTypeCode shipmentType, IExpress1RegistrationGateway gateway, IExpress1RegistrationRepository repository, IExpress1RegistrationValidator validator)
@@ -174,6 +174,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public void SaveAccount()
         {
             AccountId = registrationRepository.Save(this);
+        }
+
+        /// <summary>
+        /// Deletes the account entity from ShipWorks that may be associated with this registration.
+        /// </summary>
+        public void DeleteAccount()
+        {
+            if (AccountId.HasValue)
+            {
+                // We have a value for the account ID, meaning the account has been created at some point.
+                registrationRepository.Delete(this);
+            }
         }
 
         /// <summary>

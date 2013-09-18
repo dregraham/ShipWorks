@@ -397,5 +397,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 BackEnabled = false;
             }
         }
+
+        /// <summary>
+        /// The window is closing
+        /// </summary>
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (DialogResult != DialogResult.OK)
+            {
+                // The user closed/canceled before completing the wizard, so we need to clean up the
+                // account that may have been created since the account is saved in ShipWorks as 
+                // soon as possible
+                registration.DeleteAccount();
+            }
+        }
     }
 }

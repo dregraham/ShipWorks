@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.AddExistingAccount();
 
-            validator.Verify(v => v.ValidatePersonalInfo(testObject));
+            validator.Verify(v => v.ValidatePersonalInfo(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.AddExistingAccount();
 
-            repository.Verify(r => r.Save(testObject));
+            repository.Verify(r => r.Save(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.AddExistingAccount();
 
-            repository.Verify(r => r.Save(testObject));
+            repository.Verify(r => r.Save(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.CreateNewAccount();
 
-            validator.Verify(v => v.Validate(testObject));
+            validator.Verify(v => v.Validate(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.CreateNewAccount();
 
-            gateway.Verify(r => r.Register(testObject));
+            gateway.Verify(r => r.Register(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.CreateNewAccount();
 
-            repository.Verify(r => r.Save(testObject));
+            repository.Verify(r => r.Save(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.ValidatePersonalInfo();
 
-            validator.Verify(v => v.ValidatePersonalInfo(testObject));
+            validator.Verify(v => v.ValidatePersonalInfo(testObject), Times.Once());
         }
 
         [TestMethod]
@@ -142,7 +142,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.ValidatePaymentInfo();
 
-            validator.Verify(v => v.ValidatePaymentInfo(testObject));
+            validator.Verify(v => v.ValidatePaymentInfo(testObject), Times.Once());
+        }
+
+        [TestMethod]
+        public void DeleteAccount_DelegatesToRepository_WhenAccountIDHasValue_Test()
+        {
+            testObject.AccountId = 1000;
+
+            testObject.DeleteAccount();
+
+            repository.Verify(r => r.Delete(testObject), Times.Once());
+        }
+
+        [TestMethod]
+        public void DeleteAccount_DoesNotDelegateToRepository_WhenAccountIDIsNull_Test()
+        {
+            testObject.AccountId = null;
+
+            testObject.DeleteAccount();
+
+            repository.Verify(r => r.Delete(testObject), Times.Never());
+        }
+
+        [TestMethod]
+        public void DeleteAccount_DoesNotDelegateToRepository_WhenAccountIDHasNotBeenAssigned_Test()
+        {
+            testObject.DeleteAccount();
+
+            repository.Verify(r => r.Delete(testObject), Times.Never());
         }
     }
 }

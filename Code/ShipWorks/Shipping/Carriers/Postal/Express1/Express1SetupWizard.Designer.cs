@@ -693,6 +693,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             this.wizardPageOptions,
             this.wizardPageFinish});
             this.Text = "Express1 Setup Wizard";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
