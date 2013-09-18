@@ -30,16 +30,19 @@
         {
             this.labelOriginInfo = new System.Windows.Forms.Label();
             this.originManagerControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
-            this.label1 = new System.Windows.Forms.Label();
-            this.stampsAccountControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountManagerControl();
+            this.labelAccountType = new System.Windows.Forms.Label();
+            this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountManagerControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
+            this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsSingleSourceControl();
+            this.panelBottom = new System.Windows.Forms.Panel();
+            this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelOriginInfo
             // 
             this.labelOriginInfo.AutoSize = true;
-            this.labelOriginInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labelOriginInfo.Location = new System.Drawing.Point(9, 251);
+            this.labelOriginInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelOriginInfo.Location = new System.Drawing.Point(12, 138);
             this.labelOriginInfo.Name = "labelOriginInfo";
             this.labelOriginInfo.Size = new System.Drawing.Size(102, 13);
             this.labelOriginInfo.TabIndex = 2;
@@ -47,51 +50,70 @@
             // 
             // originManagerControl
             // 
-            this.originManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.originManagerControl.Location = new System.Drawing.Point(12, 270);
+            this.originManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.originManagerControl.Location = new System.Drawing.Point(15, 157);
             this.originManagerControl.Name = "originManagerControl";
             this.originManagerControl.Size = new System.Drawing.Size(454, 150);
             this.originManagerControl.TabIndex = 3;
             // 
-            // label1
+            // labelAccountType
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.label1.Location = new System.Drawing.Point(9, 118);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(132, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Stamps.com Accounts";
+            this.labelAccountType.AutoSize = true;
+            this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAccountType.Location = new System.Drawing.Point(12, 5);
+            this.labelAccountType.Name = "labelAccountType";
+            this.labelAccountType.Size = new System.Drawing.Size(132, 13);
+            this.labelAccountType.TabIndex = 0;
+            this.labelAccountType.Text = "Stamps.com Accounts";
             // 
-            // stampsAccountControl
+            // accountControl
             // 
-            this.stampsAccountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.stampsAccountControl.Location = new System.Drawing.Point(9, 134);
-            this.stampsAccountControl.Name = "stampsAccountControl";
-            this.stampsAccountControl.Size = new System.Drawing.Size(459, 104);
-            this.stampsAccountControl.TabIndex = 1;
+            this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accountControl.IsExpress1 = false;
+            this.accountControl.Location = new System.Drawing.Point(12, 21);
+            this.accountControl.Name = "accountControl";
+            this.accountControl.Size = new System.Drawing.Size(459, 104);
+            this.accountControl.TabIndex = 1;
             // 
             // optionsControl
             // 
-            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(435, 105);
             this.optionsControl.TabIndex = 4;
             // 
+            // express1Options
+            // 
+            this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.express1Options.Location = new System.Drawing.Point(7, 115);
+            this.express1Options.Name = "express1Options";
+            this.express1Options.Size = new System.Drawing.Size(421, 49);
+            this.express1Options.TabIndex = 5;
+            // 
+            // panelBottom
+            // 
+            this.panelBottom.Controls.Add(this.labelAccountType);
+            this.panelBottom.Controls.Add(this.originManagerControl);
+            this.panelBottom.Controls.Add(this.labelOriginInfo);
+            this.panelBottom.Controls.Add(this.accountControl);
+            this.panelBottom.Location = new System.Drawing.Point(0, 170);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(495, 323);
+            this.panelBottom.TabIndex = 6;
+            // 
             // StampsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelBottom);
+            this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
-            this.Controls.Add(this.stampsAccountControl);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.labelOriginInfo);
-            this.Controls.Add(this.originManagerControl);
             this.Name = "StampsSettingsControl";
-            this.Size = new System.Drawing.Size(495, 444);
+            this.Size = new System.Drawing.Size(495, 507);
+            this.panelBottom.ResumeLayout(false);
+            this.panelBottom.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -99,8 +121,10 @@
 
         private System.Windows.Forms.Label labelOriginInfo;
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originManagerControl;
-        private System.Windows.Forms.Label label1;
-        private StampsAccountManagerControl stampsAccountControl;
+        private System.Windows.Forms.Label labelAccountType;
+        private StampsAccountManagerControl accountControl;
         private StampsOptionsControl optionsControl;
+        private Stamps.Express1.Express1StampsSingleSourceControl express1Options;
+        private System.Windows.Forms.Panel panelBottom;
     }
 }

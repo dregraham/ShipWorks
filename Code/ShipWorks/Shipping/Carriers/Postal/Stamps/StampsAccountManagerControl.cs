@@ -29,24 +29,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
         long initialAccountID = -1;
 
-        bool isExpress1 = false;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public StampsAccountManagerControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Constructor that allows using Express1
-        /// </summary>
-        /// <param name="isExpress1"></param>
-        public StampsAccountManagerControl(bool isExpress1)
-            : this()
-        {
-            this.isExpress1 = isExpress1;
         }
 
         /// <summary>
@@ -61,17 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets and sets whether this control will work with Express1 Stamps accounts or regular Stamps accounts
         /// </summary>
-        public bool IsExpress1
-        {
-            get
-            {
-                return isExpress1;
-            }
-            set
-            {
-                isExpress1 = value;
-            }
-        }
+        public bool IsExpress1 { get; set; }
 
         /// <summary>
         /// Load all the shippers into the grid
@@ -82,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             sandGrid.Rows.Clear();
 
-            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(isExpress1))
+            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(IsExpress1))
             {
                 GridRow row = new GridRow(new string[] { account.Username, "Checking..." });
                 sandGrid.Rows.Add(row);
@@ -207,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
                 "Note: This does not delete your account from {1}.",
-                account.Username, isExpress1 ? "Express1" : "Stamps.com"));
+                account.Username, StampsAccountManager.GetResellerName(IsExpress1)));
 
             if (result == DialogResult.OK)
             {
@@ -221,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
-            if (StampsAccountManager.DisplaySetupWizard(this, isExpress1))
+            if (StampsAccountManager.DisplaySetupWizard(this, IsExpress1))
             {
                 LoadAccounts();
             }

@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static string GetResellerName(bool isExpress1)
         {
-            return isExpress1 ? "Express1" : "Stamps";
+            return isExpress1 ? "Express1" : "Stamps.com";
         }
     }
 }

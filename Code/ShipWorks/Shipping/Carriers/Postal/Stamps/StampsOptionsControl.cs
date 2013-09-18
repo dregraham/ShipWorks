@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Utility;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -17,8 +10,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsOptionsControl : PostalOptionsControlBase
     {
-        private readonly bool isExpress1;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -28,14 +19,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Constructor that allows setting of Express1
+        /// Whether the control is used for Express1.
         /// </summary>
-        /// <param name="useExpress1Settings"></param>
-        public StampsOptionsControl(bool useExpress1Settings)
-            : this()
-        {
-            isExpress1 = useExpress1Settings;
-        }
+        public bool IsExpress1 { get; set; }
 
         /// <summary>
         /// Load the configured settings into the control
@@ -46,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if (isExpress1)
+            if(IsExpress1)
             {
                 thermalPrinter.Checked = settings.Express1StampsThermal;
                 thermalType.SelectedValue = (ThermalLabelType)settings.Express1StampsThermalType;
@@ -72,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            if (isExpress1)
+            if(IsExpress1)
             {
                 settings.Express1StampsThermal = thermalPrinter.Checked;
                 settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
