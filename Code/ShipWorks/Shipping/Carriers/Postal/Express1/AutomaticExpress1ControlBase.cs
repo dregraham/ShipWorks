@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             express1Settings = settings;
 
+            checkBoxUseExpress1.Checked = express1Settings.UseExpress1;
             OnChangeUseExpress1(checkBoxUseExpress1, EventArgs.Empty);
 
             LoadExpress1Accounts(settings.Express1Account);
