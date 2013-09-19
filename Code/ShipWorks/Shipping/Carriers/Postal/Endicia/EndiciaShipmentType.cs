@@ -22,7 +22,6 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System.Drawing.Imaging;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Insurance;
 

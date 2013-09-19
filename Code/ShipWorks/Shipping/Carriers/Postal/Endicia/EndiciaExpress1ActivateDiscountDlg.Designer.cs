@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.express1Control = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAutomaticExpress1Control();
+            this.express1Control = new Postal.Express1.AutomaticExpress1ControlBase();
             this.close = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -76,7 +76,7 @@
 
         #endregion
 
-        private EndiciaAutomaticExpress1Control express1Control;
+        private Postal.Express1.AutomaticExpress1ControlBase express1Control;
         private System.Windows.Forms.Button close;
     }
 }
