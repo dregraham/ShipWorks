@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     // The shipping type still needs to be set up, so hand off to the shipment setup control
                     setupWizard.HideDetailedConfiguration = true;
 
-                    added = ShipmentTypeSetupControl.SetupShipmentType(this, GetBaseShipmentTypeCode(), setupWizard);  
+                    added = ShipmentTypeSetupControl.SetupShipmentType(this, shipmentType.ShipmentTypeCode, setupWizard);  
                 }
             }
 
@@ -160,15 +160,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         private long GetMaxAccountId()
         {
             return EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Max(a => a.EndiciaAccountID);
-        }
-
-        /// <summary>
-        /// Gets the base shipment type.  So EndiciaShipmentType if we're currently working with Express1EndiciaShipmentType
-        /// </summary>
-        /// <returns></returns>
-        private static ShipmentTypeCode GetBaseShipmentTypeCode()
-        {
-            return ShipmentTypeCode.Express1Endicia;
         }
 
         /// <summary>
