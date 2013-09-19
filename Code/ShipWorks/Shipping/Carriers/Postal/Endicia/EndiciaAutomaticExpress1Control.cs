@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void LoadEndiciaExpress1Accounts(long accountID)
         {
-            var accounts = EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1);
+            List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1);
 
             express1Accounts.Left = express1Signup.Left;
             express1Accounts.Width = 250;
