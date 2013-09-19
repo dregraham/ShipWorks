@@ -99,15 +99,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(377, 532);
+            this.next.Location = new System.Drawing.Point(441, 532);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(458, 532);
+            this.cancel.Location = new System.Drawing.Point(522, 532);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(296, 532);
+            this.back.Location = new System.Drawing.Point(360, 532);
             // 
             // mainPanel
             // 
@@ -117,17 +117,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // etchBottom
             // 
             this.etchBottom.Location = new System.Drawing.Point(0, 522);
-            this.etchBottom.Size = new System.Drawing.Size(549, 2);
+            this.etchBottom.Size = new System.Drawing.Size(613, 2);
             // 
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(440, 3);
+            this.pictureBox.Location = new System.Drawing.Point(504, 3);
             this.pictureBox.Size = new System.Drawing.Size(102, 50);
             // 
             // topPanel
             // 
-            this.topPanel.Size = new System.Drawing.Size(545, 56);
+            this.topPanel.Size = new System.Drawing.Size(609, 56);
             // 
             // wizardPageAccountType
             // 
@@ -679,7 +679,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 567);
+            this.ClientSize = new System.Drawing.Size(609, 567);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MinimumSize = new System.Drawing.Size(625, 605);
             this.Name = "Express1SetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
@@ -691,6 +693,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageExisting,
             this.wizardPageOptions,
             this.wizardPageFinish});
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Auto;
             this.Text = "Express1 Setup Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
