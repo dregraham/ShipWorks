@@ -7869,6 +7869,8 @@ namespace ShipWorks.Data.Model
 		Memo,
 		///<summary>ScanFormID. </summary>
 		ScanFormID,
+		///<summary>OriginalStampsAccountID. </summary>
+		OriginalStampsAccountID,
 		/// <summary></summary>
 		AmountOfFields
 	}

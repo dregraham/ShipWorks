@@ -3007,7 +3007,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [IntegratorTransactionID] [uniqueidentifier] NOT NULL,
 [StampsTransactionID] [uniqueidentifier] NOT NULL,
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ScanFormID] [bigint] NULL
+[ScanFormID] [bigint] NULL,
+[OriginalStampsAccountID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'

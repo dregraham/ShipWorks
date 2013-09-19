@@ -16717,6 +16717,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.ScanFormID);}
 		}
+		/// <summary>Creates a new StampsShipmentEntity.OriginalStampsAccountID field instance</summary>
+		public static EntityField2 OriginalStampsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.OriginalStampsAccountID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity StatusPresetEntity</summary>
