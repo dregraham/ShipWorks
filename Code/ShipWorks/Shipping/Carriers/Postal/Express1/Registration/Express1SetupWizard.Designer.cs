@@ -99,35 +99,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(441, 532);
+            this.next.Location = new System.Drawing.Point(451, 532);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(522, 532);
+            this.cancel.Location = new System.Drawing.Point(532, 532);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(360, 532);
+            this.back.Location = new System.Drawing.Point(370, 532);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAddress);
-            this.mainPanel.Size = new System.Drawing.Size(545, 460);
+            this.mainPanel.Controls.Add(this.wizardPageAccountList);
+            this.mainPanel.Size = new System.Drawing.Size(625, 460);
             // 
             // etchBottom
             // 
             this.etchBottom.Location = new System.Drawing.Point(0, 522);
-            this.etchBottom.Size = new System.Drawing.Size(613, 2);
+            this.etchBottom.Size = new System.Drawing.Size(623, 2);
             // 
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(504, 3);
+            this.pictureBox.Location = new System.Drawing.Point(514, 3);
             this.pictureBox.Size = new System.Drawing.Size(102, 50);
             // 
             // topPanel
             // 
-            this.topPanel.Size = new System.Drawing.Size(609, 56);
+            this.topPanel.Size = new System.Drawing.Size(619, 56);
             // 
             // wizardPageAccountType
             // 
@@ -202,13 +202,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 3);
             this.personControl.Name = "personControl";
-            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company
-			| ShipWorks.Data.Controls.PersonFields.Street) 
+            this.personControl.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
-            | ShipWorks.Data.Controls.PersonFields.Phone));
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Size = new System.Drawing.Size(358, 344);
             this.personControl.TabIndex = 1;
             // 
@@ -580,7 +580,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.optionsControlPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControlPanel.Location = new System.Drawing.Point(23, 4);
             this.optionsControlPanel.Name = "optionsControlPanel";
-            this.optionsControlPanel.Size = new System.Drawing.Size(476, 234);
+            this.optionsControlPanel.Size = new System.Drawing.Size(493, 234);
             this.optionsControlPanel.TabIndex = 1;
             // 
             // wizardPageExisting
@@ -654,7 +654,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageAccountList.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountList.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountList.Name = "wizardPageAccountList";
-            this.wizardPageAccountList.Size = new System.Drawing.Size(545, 460);
+            this.wizardPageAccountList.Size = new System.Drawing.Size(625, 460);
             this.wizardPageAccountList.TabIndex = 0;
             this.wizardPageAccountList.Title = "Express1 Accounts";
             // 
@@ -679,9 +679,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(609, 567);
+            this.ClientSize = new System.Drawing.Size(619, 567);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MinimumSize = new System.Drawing.Size(625, 605);
+            this.MinimumSize = new System.Drawing.Size(635, 605);
             this.Name = "Express1SetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
