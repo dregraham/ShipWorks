@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 
@@ -29,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            express1Control.LoadSettings();
+            express1Control.LoadSettings(new Express1EndiciaSettingsFacade());
         }
 
         /// <summary>

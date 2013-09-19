@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Carriers.Postal.Express1.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -54,7 +53,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Save the settings
         /// </summary>
-        public void SaveSettings()
+        /// <param name="settings"></param>
+        public void SaveSettings(ShippingSettingsEntity settings)
         {
             express1Settings.UseExpress1 = checkBoxUseExpress1.Checked;
             express1Settings.Express1Account = 
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             if (accounts.Count > 0)
             {
                 express1Accounts.DataSource = accounts.ToList();
-                express1Accounts.SelectedValue = express1Settings.Express1Account;
+                express1Accounts.SelectedValue = accounts.Max(x=>x.Value);
 
                 if (express1Accounts.SelectedIndex < 0)
                 {
@@ -99,6 +99,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             bool added = false;
 
             ShippingSettings.CheckForChangesNeeded();
+
+            ShipmentType shipmentType = express1Settings.ShipmentType;
 
             using (Form setupDlg = shipmentType.CreateSetupWizard())
             {
@@ -127,17 +129,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             if (added)
             {
-                LoadEndiciaExpress1Accounts(GetMaxAccountId());
+                LoadEndiciaExpress1Accounts();
             }
-        }
-
-        /// <summary>
-        /// Gets the highest account id, which should be the newly created account
-        /// </summary>
-        /// <returns></returns>
-        private long GetMaxAccountId()
-        {
-            return EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Max(a => a.EndiciaAccountID);
         }
 
         /// <summary>
@@ -154,8 +147,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             return null;
         }
-
-        private ShipmentType shipmentType = null;
 
         /// <summary>
         /// Changing whether account should use an Express1 account for all Priority and Express shipments

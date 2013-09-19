@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {
-            using (Express1ActivateDiscountDlg dlg = new Express1ActivateDiscountDlg())
+            using (Express1ActivateDiscountDlg dlg = new Express1ActivateDiscountDlg(new Express1EndiciaSettingsFacade()))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
