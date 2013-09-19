@@ -45,7 +45,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             express1Options.Visible = isExpress1;
-
+            endiciaOptions.Visible = !isExpress1;
+            
+            
             if(isExpress1)
             {
                 express1Options.LoadSettings(settings);
@@ -53,7 +55,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                panelBottom.Top = optionsControl.Bottom + 5;
+                endiciaOptions.LoadSettings();
+                endiciaOptions.Top = optionsControl.Bottom + 5;
+
+                panelBottom.Top = endiciaOptions.Bottom + 5;
             }
         }
 
@@ -68,6 +73,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 express1Options.SaveSettings(settings);
             }
+            else
+            {
+                endiciaOptions.SaveSettings(settings);
+            }
         }
 
         /// <summary>
@@ -76,8 +85,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override void RefreshContent()
         {
             base.RefreshContent();
-
-            originManagerControl.Initialize();
 
             // We do it this way b\c it takes so long.  If we did it in LoadSettings, or each time refresh was called,
             // we'd be constantly waiting on stamps.com.

@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaOptionsControl();
             this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAccountManagerControl();
             this.labelAccountType = new System.Windows.Forms.Label();
-            this.endiciaOptions = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAutomaticExpress1Control();
+            this.endiciaOptions = new EndiciaAutomaticExpress1Control();
             this.express1Options = new Express1EndiciaSingleSourceControl();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();

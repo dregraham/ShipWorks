@@ -28,33 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelOriginInfo = new System.Windows.Forms.Label();
-            this.originManagerControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
             this.labelAccountType = new System.Windows.Forms.Label();
             this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountManagerControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
             this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsSingleSourceControl();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.endiciaOptions = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAutomaticExpress1Control();
             this.panelBottom.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // labelOriginInfo
-            // 
-            this.labelOriginInfo.AutoSize = true;
-            this.labelOriginInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOriginInfo.Location = new System.Drawing.Point(12, 138);
-            this.labelOriginInfo.Name = "labelOriginInfo";
-            this.labelOriginInfo.Size = new System.Drawing.Size(102, 13);
-            this.labelOriginInfo.TabIndex = 2;
-            this.labelOriginInfo.Text = "Origin Addresses";
-            // 
-            // originManagerControl
-            // 
-            this.originManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.originManagerControl.Location = new System.Drawing.Point(15, 157);
-            this.originManagerControl.Name = "originManagerControl";
-            this.originManagerControl.Size = new System.Drawing.Size(454, 150);
-            this.originManagerControl.TabIndex = 3;
             // 
             // labelAccountType
             // 
@@ -78,6 +59,7 @@
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionsControl.IsExpress1 = false;
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(435, 105);
@@ -94,18 +76,25 @@
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.labelAccountType);
-            this.panelBottom.Controls.Add(this.originManagerControl);
-            this.panelBottom.Controls.Add(this.labelOriginInfo);
             this.panelBottom.Controls.Add(this.accountControl);
-            this.panelBottom.Location = new System.Drawing.Point(0, 170);
+            this.panelBottom.Location = new System.Drawing.Point(0, 333);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(495, 323);
+            this.panelBottom.Size = new System.Drawing.Size(495, 131);
             this.panelBottom.TabIndex = 6;
+            // 
+            // endiciaOptions
+            // 
+            this.endiciaOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.endiciaOptions.Location = new System.Drawing.Point(3, 167);
+            this.endiciaOptions.Name = "endiciaOptions";
+            this.endiciaOptions.Size = new System.Drawing.Size(468, 160);
+            this.endiciaOptions.TabIndex = 7;
             // 
             // StampsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.endiciaOptions);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
@@ -119,12 +108,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelOriginInfo;
-        private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originManagerControl;
         private System.Windows.Forms.Label labelAccountType;
         private StampsAccountManagerControl accountControl;
         private StampsOptionsControl optionsControl;
         private Stamps.Express1.Express1StampsSingleSourceControl express1Options;
         private System.Windows.Forms.Panel panelBottom;
+        private Endicia.EndiciaAutomaticExpress1Control endiciaOptions;
     }
 }

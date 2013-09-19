@@ -882,6 +882,43 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.Designer.cs">
+      <DependentUpon>AutomaticExpress1ControlBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ActualSavingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ActualSavingsDlg.Designer.cs">
+      <DependentUpon>Express1ActualSavingsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateDiscountedFootnote.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateDiscountedFootnote.Designer.cs">
+      <DependentUpon>Express1RateDiscountedFootnote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnote.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnote.Designer.cs">
+      <DependentUpon>Express1RateNotQualifiedFootnote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ActivateDiscountDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ActivateDiscountDlg.Designer.cs">
+      <DependentUpon>Express1ActivateDiscountDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RatePromotionFootnote.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RatePromotionFootnote.Designer.cs">
+      <DependentUpon>Express1RatePromotionFootnote.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1AchType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1CreditCardType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1SingleSourceControl.cs">
@@ -894,6 +931,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1PurchasePostageDlg.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1AchPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1CreditCardPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1PaymentInfo.cs" />
@@ -915,6 +953,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceRequestWriter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceResponseReader.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceWrapper.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSingleSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6726,6 +6765,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.resx">
       <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.resx">
+      <DependentUpon>AutomaticExpress1ControlBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1ActualSavingsDlg.resx">
+      <DependentUpon>Express1ActualSavingsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1RateDiscountedFootnote.resx">
+      <DependentUpon>Express1RateDiscountedFootnote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnote.resx">
+      <DependentUpon>Express1RateNotQualifiedFootnote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1ActivateDiscountDlg.resx">
+      <DependentUpon>Express1ActivateDiscountDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1RatePromotionFootnote.resx">
+      <DependentUpon>Express1RatePromotionFootnote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Express1SingleSourceControl.resx">
       <DependentUpon>Express1SingleSourceControl.cs</DependentUpon>

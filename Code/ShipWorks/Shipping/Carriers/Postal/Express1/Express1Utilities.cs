@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -26,6 +27,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             }
 
             return errors;
+        }
+
+        /// <summary>
+        /// Indicates if the postal service method for the given shipment would be cheaper for the customer if using Express1
+        /// </summary>
+        public static bool IsPostageSavingService(ShipmentEntity shipment)
+        {
+            return IsPostageSavingService((PostalServiceType)shipment.Postal.Service);
+        }
+
+        /// <summary>
+        /// Returns if the given postal service was used for the given shipment (the shipments service is ignored) 
+        /// </summary>
+        public static bool IsPostageSavingService(PostalServiceType postalServiceType)
+        {
+            // There are domestic zones that arent cheaper, but for now we are simplifying
+            switch (postalServiceType)
+            {
+                case PostalServiceType.PriorityMail:
+                case PostalServiceType.ExpressMail:
+                case PostalServiceType.ExpressMailPremium:
+                case PostalServiceType.InternationalPriority:
+                case PostalServiceType.InternationalExpress:
+                    return true;
+            }
+
+            return false;
         }
     }
 }
