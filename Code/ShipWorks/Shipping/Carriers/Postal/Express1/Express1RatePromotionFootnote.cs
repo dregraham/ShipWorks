@@ -11,12 +11,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public partial class Express1RatePromotionFootnote : RateFootnoteControl
     {
+        private readonly IExpress1SettingsFacade express1Settings;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1RatePromotionFootnote()
+        /// <param name="settings">Express1 settings facade</param>
+        public Express1RatePromotionFootnote(IExpress1SettingsFacade settings)
         {
             InitializeComponent();
+
+            express1Settings = settings;
         }
 
         /// <summary>
@@ -24,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {
-            using (Express1ActivateDiscountDlg dlg = new Express1ActivateDiscountDlg(new Express1EndiciaSettingsFacade()))
+            using (Express1ActivateDiscountDlg dlg = new Express1ActivateDiscountDlg(express1Settings))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

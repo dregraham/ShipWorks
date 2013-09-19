@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -18,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         readonly bool isExpress1 = false;
         bool loadedAccounts = false;
+        private Express1StampsSettingsFacade express1Settings;
 
         /// <summary>
         /// Constructor
@@ -40,12 +42,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             optionsControl.LoadSettings();
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            express1Settings = new Express1StampsSettingsFacade(settings);
 
             string reseller = StampsAccountManager.GetResellerName(isExpress1);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             express1Options.Visible = isExpress1;
-            endiciaOptions.Visible = !isExpress1;
+            express1SettingsControl.Visible = !isExpress1;
             
             
             if(isExpress1)
@@ -55,10 +58,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                endiciaOptions.LoadSettings();
-                endiciaOptions.Top = optionsControl.Bottom + 5;
+                express1SettingsControl.LoadSettings(express1Settings);
+                express1SettingsControl.Top = optionsControl.Bottom + 5;
 
-                panelBottom.Top = endiciaOptions.Bottom + 5;
+                panelBottom.Top = express1SettingsControl.Bottom + 5;
             }
         }
 
@@ -75,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                endiciaOptions.SaveSettings(settings);
+                express1Settings.SaveSettings(settings);
             }
         }
 

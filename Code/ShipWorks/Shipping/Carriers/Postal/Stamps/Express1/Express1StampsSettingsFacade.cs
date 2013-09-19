@@ -13,6 +13,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     public class Express1StampsSettingsFacade : IExpress1SettingsFacade
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="settings"></param>
+        public Express1StampsSettingsFacade(ShippingSettingsEntity settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            UseExpress1 = settings.StampsAutomaticExpress1;
+            Express1Account = settings.StampsAutomaticExpress1Account;
+        }
+
+        /// <summary>
         /// Gets and sets whether Express1 should be used if possible
         /// </summary>
         public bool UseExpress1 { get; set; }

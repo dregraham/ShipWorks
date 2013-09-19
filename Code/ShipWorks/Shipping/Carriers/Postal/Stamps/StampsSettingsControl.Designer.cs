@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+﻿using ShipWorks.Shipping.Carriers.Postal.Express1;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     partial class StampsSettingsControl
     {
@@ -33,7 +35,7 @@
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
             this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsSingleSourceControl();
             this.panelBottom = new System.Windows.Forms.Panel();
-            this.endiciaOptions = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAutomaticExpress1Control();
+            this.express1SettingsControl = new ShipWorks.Shipping.Carriers.Postal.Express1.AutomaticExpress1ControlBase();
             this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,19 +84,19 @@
             this.panelBottom.Size = new System.Drawing.Size(495, 131);
             this.panelBottom.TabIndex = 6;
             // 
-            // endiciaOptions
+            // express1SettingsControl
             // 
-            this.endiciaOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.endiciaOptions.Location = new System.Drawing.Point(3, 167);
-            this.endiciaOptions.Name = "endiciaOptions";
-            this.endiciaOptions.Size = new System.Drawing.Size(468, 160);
-            this.endiciaOptions.TabIndex = 7;
+            this.express1SettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.express1SettingsControl.Location = new System.Drawing.Point(3, 167);
+            this.express1SettingsControl.Name = "express1SettingsControl";
+            this.express1SettingsControl.Size = new System.Drawing.Size(468, 160);
+            this.express1SettingsControl.TabIndex = 7;
             // 
             // StampsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.endiciaOptions);
+            this.Controls.Add(this.express1SettingsControl);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
@@ -113,6 +115,6 @@
         private StampsOptionsControl optionsControl;
         private Stamps.Express1.Express1StampsSingleSourceControl express1Options;
         private System.Windows.Forms.Panel panelBottom;
-        private Endicia.EndiciaAutomaticExpress1Control endiciaOptions;
+        private AutomaticExpress1ControlBase express1SettingsControl;
     }
 }
