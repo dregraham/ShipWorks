@@ -24,9 +24,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public StampsAccountManagerDlg(bool isExpress1)
         {
-            accountControl.IsExpress1 = isExpress1;
-
             InitializeComponent();
+
+            accountControl.IsExpress1 = isExpress1;
         }
 
         /// <summary>
