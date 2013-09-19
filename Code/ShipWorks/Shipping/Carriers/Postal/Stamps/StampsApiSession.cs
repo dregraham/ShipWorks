@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using Interapptive.Shared.Utility;
 using System.Web.Services.Protocols;
@@ -49,6 +50,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         // Cleansed address map so we don't do common addresses over and over again
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
+        // Express1 API service connection info 
+        static Express1StampsConnectionDetails express1StampsConnectionDetails = new Express1StampsConnectionDetails();
+
         /// <summary>
         /// Indicates if the test server should be used instead of hte live server
         /// </summary>
@@ -61,10 +65,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the webserivce instance with the appropriate URL
         /// </summary>
-        private static SwsimV29 CreateWebService(string logName)
+        private static SwsimV29 CreateWebService(string logName, bool isExpress1)
         {
-            SwsimV29 webService = new SwsimV29(new ApiLogEntry(ApiLogSource.UspsStamps, logName));
-            webService.Url = productionUrl;
+            SwsimV29 webService;
+            if (isExpress1)
+            {
+                webService = new Express1StampsServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Stamps, logName))
+                    {
+                        Url = express1StampsConnectionDetails.ServiceUrl
+                    };
+            }
+            else
+            {
+                webService = new SwsimV29(new ApiLogEntry(ApiLogSource.UspsStamps, logName))
+                    {
+                        Url = productionUrl
+                    };
+            }
 
             return webService;
         }
@@ -82,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
 
-                using (SwsimV29 webService = CreateWebService("Authenticate"))
+                using (SwsimV29 webService = CreateWebService("Authenticate", false))
                 {
                     string auth = webService.AuthenticateUser(new Credentials
                     {
@@ -121,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address address;
             string email;
 
-            using (SwsimV29 webService = CreateWebService("GetAccountInfo"))
+            using (SwsimV29 webService = CreateWebService("GetAccountInfo", account.IsExpress1))
             {
                 string auth = webService.GetAccountInfo(GetAuthenticator(account), out accountInfo, out address, out email);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -145,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             string url;
 
-            using (SwsimV29 webService = CreateWebService("GetURL"))
+            using (SwsimV29 webService = CreateWebService("GetURL", account.IsExpress1))
             {
                 string auth = webService.GetURL(GetAuthenticator(account), urlType, string.Empty, out url);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -174,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             bool miRequired_Unused;
 
-            using (SwsimV29 webService = CreateWebService("PurchasePostage"))
+            using (SwsimV29 webService = CreateWebService("PurchasePostage", account.IsExpress1))
             {
                 string auth = webService.PurchasePostage(GetAuthenticator(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -209,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             List<RateV11> rateResults = new List<RateV11>();
 
-            using (SwsimV29 webService = CreateWebService("GetRates"))
+            using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1))
             {
                 RateV11[] ratesArray;
 
@@ -269,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address[] candidates;
             StatusCodes statusCodes;
 
-            using (SwsimV29 webService = CreateWebService("CleanseAddress"))
+            using (SwsimV29 webService = CreateWebService("CleanseAddress", account.IsExpress1))
             {
                 string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -306,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (SwsimV29 webService = CreateWebService("RegisterAccount"))
+                using (SwsimV29 webService = CreateWebService("RegisterAccount", false))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API 
                     // for cleansing an address assumes there are existing credentials. Question is out to Stamps.com 
@@ -376,7 +393,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
 
-            using (SwsimV29 webService = CreateWebService("ScanForm"))
+            using (SwsimV29 webService = CreateWebService("ScanForm", stampsAccountEntity.IsExpress1))
             {
                 webService.CreateScanForm
                 (
@@ -424,7 +441,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            using (SwsimV29 webService = CreateWebService("Void"))
+            using (SwsimV29 webService = CreateWebService("Void", account.IsExpress1))
             {
                 string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Stamps.StampsTransactionID);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -491,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to Stamps.com as of v. 22
-                using (SwsimV29 webService = CreateWebService("Process"))
+                using (SwsimV29 webService = CreateWebService("Process", account.IsExpress1))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -518,7 +535,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV29 webService = CreateWebService("Process"))
+                using (SwsimV29 webService = CreateWebService("Process", account.IsExpress1))
                 {
                     string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
                         ref tracking,
