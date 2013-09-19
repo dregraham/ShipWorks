@@ -109,24 +109,20 @@ namespace ShipWorks.Shipping.ScanForms
         {
             if (shipments != null && shipments.Any())
             {
-                // Express 1 cubic shipments are created on a separate Endicia account on the Express 1 backend, so we need 
-                // to separate the Express 1 cubic shipments into a separate SCAN form and request a scan form for those separately
+                // Express 1 Endicia cubic shipments are created on a separate Endicia account on the Express 1 backend, so we need 
+                // to separate the Express 1 Endicia cubic shipments into a separate SCAN form and request a scan form for those separately
                 // (we don't want the user to have to split these out)
-
-                if(shipments.Any(x => (ShipmentTypeCode)x.ShipmentType == ShipmentTypeCode.Express1Stamps))
-                    throw new NotImplementedException("TODO: Does this special case also apply to Express1 Stamps?");
-
-                List<ShipmentEntity> express1CubicShipments = shipments.Where(selected => (ShipmentTypeCode)selected.ShipmentType == ShipmentTypeCode.Express1Endicia && (PostalPackagingType)selected.Postal.PackagingType == PostalPackagingType.Cubic).ToList();
-                List<ShipmentEntity> allOtherShipments = shipments.Except(express1CubicShipments).ToList();
+                List<ShipmentEntity> express1EndiciaCubicShipments = shipments.Where(selected => (ShipmentTypeCode)selected.ShipmentType == ShipmentTypeCode.Express1Endicia && (PostalPackagingType)selected.Postal.PackagingType == PostalPackagingType.Cubic).ToList();
+                List<ShipmentEntity> allOtherShipments = shipments.Except(express1EndiciaCubicShipments).ToList();
 
                 // Create batch record
                 CreatedDate = DateTime.UtcNow;
                 ShipmentType = (ShipmentTypeCode)shipments.First().ShipmentType;
 
-                if (express1CubicShipments.Any())
+                if (express1EndiciaCubicShipments.Any())
                 {
                     // Notate that this scan form contains shipments with the cubic packaging type
-                    scanForms.Add(GenerateScanForm(express1CubicShipments, "Cubic shipments"));
+                    scanForms.Add(GenerateScanForm(express1EndiciaCubicShipments, "Cubic shipments"));
                 }
 
                 if (allOtherShipments.Any())
