@@ -39,8 +39,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { IsExpress1 = true };
             StampsOptionsControl optionsControl = new StampsOptionsControl { IsExpress1 = true };
+            StampsPurchasePostageDlg postageDialog = new StampsPurchasePostageDlg();
 
-            return new Express1SetupWizard(accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
+            return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
         }
 
         /// <summary>

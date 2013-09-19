@@ -20,27 +20,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// </summary>
     public partial class Express1SetupWizard : WizardForm
     {
-        bool forceAccountOnly = false;
-        bool hideDetailedConfiguration;
-        PersonAdapter initialAccountAddress;
-        private PostalOptionsControlBase optionsControl;
-        private PostalAccountManagerControlBase accountControl;
+        private readonly bool forceAccountOnly = false;
+        private bool hideDetailedConfiguration;
+        private PersonAdapter initialAccountAddress;
 
-        private Express1Registration registration;
-        private IEnumerable<IEntity2> existingExpress1Accounts;
+        private readonly PostalOptionsControlBase optionsControl;
+        private readonly PostalAccountManagerControlBase accountControl;
+        private readonly IExpress1PurchasePostageDlg postageDialog;
+                
+        private readonly Express1Registration registration;
+        private readonly IEnumerable<IEntity2> existingExpress1Accounts;
        
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class.
+        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
+        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Stamps), the caller needs to provide
+        /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
-        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts) : 
-            this(accountControl, optionsControl, registration, false, existingExpress1Accounts)
+        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts) : 
+            this(postageDialog, accountControl, optionsControl, registration, false, existingExpress1Accounts)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class.
+        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
+        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Stamps), the caller needs to provide
+        /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
-        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly, IEnumerable<IEntity2> existingExpress1Accounts)
+        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly, IEnumerable<IEntity2> existingExpress1Accounts)
         {
+            if (postageDialog == null)
+            {  
+                throw new ArgumentNullException("postageDialog");
+            }
+
             if (accountControl == null)
             {
                 throw new ArgumentNullException("accountControl");
@@ -52,6 +63,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             }
 
             InitializeComponent();
+
+            this.postageDialog = postageDialog;
 
             this.accountControl = accountControl;
             accountControlPanel.Controls.Add(accountControl);
@@ -387,11 +400,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// </summary>
         private void OnClickBuyPostage(object sender, EventArgs e)
         {
-            //// Show the Postage Purchasing dialog
-            //using (StampsBuyPostageDlg dlg = new StampsBuyPostageDlg(account))
-            //{
-            //    dlg.ShowDialog(this);
-            //}
+            if (registration.AccountId.HasValue)
+            {
+                // Show the Postage Purchasing dialog
+                postageDialog.ShowDialog(this, registration.AccountId.Value);
+            }
+            else
+            {
+                MessageHelper.ShowError(this, "An account needs to be created before trying to buy postage.");
+            }
         }
 
         /// <summary>

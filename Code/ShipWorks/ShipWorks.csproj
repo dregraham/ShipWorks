@@ -893,6 +893,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Enums\Express1PaymentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1PurchasePostageDlg.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1AchPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1CreditCardPaymentValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1PaymentInfo.cs" />
