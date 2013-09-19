@@ -19,8 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// </summary>
     public partial class Express1SetupWizard : WizardForm
     {
-        //StampsAccountEntity account = null;
-        bool forceAccountOnly = false;
         bool hideDetailedConfiguration;
         PersonAdapter initialAccountAddress;
         private PostalOptionsControlBase optionsControl;
@@ -38,6 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 
         public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly)
         {
+            ForceAccountOnly = false;
             if (accountControl == null)
             {
                 throw new ArgumentNullException("accountControl");
@@ -78,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // Credit Card
             paymentMethod.SelectedIndex = 1;
 
-            this.forceAccountOnly = forceAccountOnly;
+            this.ForceAccountOnly = forceAccountOnly;
         }
 
         /// <summary>
@@ -100,12 +99,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         }
 
         /// <summary>
+        /// Gets and sets whether the wizard should configure the shipping type as well as creating the account
+        /// </summary>
+        public bool ForceAccountOnly { get; set; }
+
+        /// <summary>
         /// Initialization
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(registration.ShipmentTypeCode);
-            bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(registration.ShipmentTypeCode) || forceAccountOnly;
+            bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(registration.ShipmentTypeCode) || ForceAccountOnly;
 
             // Initialize country to US
             if (initialAccountAddress != null)

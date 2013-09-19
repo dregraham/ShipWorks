@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Business;
@@ -112,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         }
 
         /// <summary>
-        /// Initiate the signup for a new express1 account
+        /// Initiate the signup for a new Express1 account
         /// </summary>
         private void OnExpress1Signup(object sender, EventArgs e)
         {
@@ -120,36 +122,71 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             ShippingSettings.CheckForChangesNeeded();
 
-            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Endicia))
+            using (Form setupDlg = shipmentType.CreateSetupWizard())
             {
-                using (Express1EndiciaSetupWizard setupDlg = new Express1EndiciaSetupWizard(true))
+                // Ensure that the setup dialog is actually an Express1 setup wizard
+                var setupWizard = setupDlg as Express1SetupWizard;
+                Debug.Assert(setupWizard != null, "AutomaticExpress1Control can only create Express1 shipment types.");
+
+                // Pre-load the account address details
+                setupWizard.InitialAccountAddress = GetPersonFromFirstAccount();
+
+                if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                 {
-                    if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
-                    {
-                        setupDlg.InitialAccountAddress = new PersonAdapter(EndiciaAccountManager.GetAccounts(EndiciaReseller.None)[0], "");
-                    }
+                    // The shipping type has already been set up, so just add a new account
+                    setupWizard.ForceAccountOnly = true;
 
-                    added = (setupDlg.ShowDialog(this) == DialogResult.OK);
+                    added = (setupWizard.ShowDialog(this) == DialogResult.OK);
                 }
-            }
-            else
-            {
-                Express1EndiciaSetupWizard setupDlg = (Express1EndiciaSetupWizard) ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).CreateSetupWizard();
-                setupDlg.HideDetailedConfiguration = true;
-
-                if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
+                else
                 {
-                    setupDlg.InitialAccountAddress = new PersonAdapter(EndiciaAccountManager.GetAccounts(EndiciaReseller.None)[0], "");
-                }
+                    // The shipping type still needs to be set up, so hand off to the shipment setup control
+                    setupWizard.HideDetailedConfiguration = true;
 
-                added = ShipmentTypeSetupControl.SetupShipmentType(this, ShipmentTypeCode.Express1Endicia, setupDlg);
+                    added = ShipmentTypeSetupControl.SetupShipmentType(this, GetBaseShipmentTypeCode(), setupWizard);  
+                }
             }
 
             if (added)
             {
-                LoadEndiciaExpress1Accounts(EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Max(a => a.EndiciaAccountID));
+                LoadEndiciaExpress1Accounts(GetMaxAccountId());
             }
         }
+
+        /// <summary>
+        /// Gets the highest account id, which should be the newly created account
+        /// </summary>
+        /// <returns></returns>
+        private long GetMaxAccountId()
+        {
+            return EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Max(a => a.EndiciaAccountID);
+        }
+
+        /// <summary>
+        /// Gets the base shipment type.  So EndiciaShipmentType if we're currently working with Express1EndiciaShipmentType
+        /// </summary>
+        /// <returns></returns>
+        private static ShipmentTypeCode GetBaseShipmentTypeCode()
+        {
+            return ShipmentTypeCode.Express1Endicia;
+        }
+
+        /// <summary>
+        /// Gets a person from the first account of the current type that will be used to 
+        /// populate the defaults of the address control for the new Express1 account
+        /// </summary>
+        /// <returns></returns>
+        private PersonAdapter GetPersonFromFirstAccount()
+        {
+            if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
+            {
+                return new PersonAdapter(EndiciaAccountManager.GetAccounts(EndiciaReseller.None)[0], "");
+            }
+
+            return null;
+        }
+
+        private ShipmentType shipmentType = null;
 
         /// <summary>
         /// Changing whether account should use an Express1 account for all Priority and Express shipments
