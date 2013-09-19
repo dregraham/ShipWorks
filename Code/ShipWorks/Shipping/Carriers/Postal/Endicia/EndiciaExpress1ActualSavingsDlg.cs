@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     if (discountedRate != null)
                     {
-                        if (Express1EndiciaUtility.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.Amount <= originalRate.Amount)
+                        if (Express1Utilities.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.Amount <= originalRate.Amount)
                         {
                             // If we need to add in the parent, add it
                             if (parentRate != null)

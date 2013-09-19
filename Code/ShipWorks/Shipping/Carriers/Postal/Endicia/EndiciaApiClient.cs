@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 if (settings.Express1EndiciaSingleSource)
                 {
                     // If its not a postage saving service, express1 would automatically reroute to Endicia.  It's only when the service could save, but the packaging is goofed that there's a problem.
-                    if (Express1EndiciaUtility.IsPostageSavingService(serviceType) && !Express1EndiciaUtility.IsValidPackagingType(serviceType, packagingType))
+                    if (Express1Utilities.IsPostageSavingService(serviceType) && !Express1Utilities.IsValidPackagingType(serviceType, packagingType))
                     {
                         request.Provider = "Endicia";
                     }

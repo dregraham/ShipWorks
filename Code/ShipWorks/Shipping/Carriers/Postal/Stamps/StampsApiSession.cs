@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        public static List<RateV11> GetRates(ShipmentEntity shipment)
+        public static List<RateResult> GetRates(ShipmentEntity shipment)
         {
             StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
             if (account == null)
@@ -214,7 +214,65 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
-            return AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account);
+            List<RateResult> rates = new List<RateResult>();
+
+            foreach(RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
+            {
+                PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
+
+                RateResult baseRate = null;
+
+                // If its a rate that has sig\deliv, then you can's select the core rate itself
+                if(stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
+                {
+                    baseRate = new RateResult(
+                        PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                        stampsRate.DeliverDays.Replace("Days", ""));
+                }
+                else
+                {
+                    baseRate = new RateResult(
+                         PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                         stampsRate.DeliverDays.Replace("Days", ""),
+                         stampsRate.Amount,
+                         new PostalRateSelection(serviceType, PostalConfirmationType.None));
+                }
+
+                rates.Add(baseRate);
+
+                // Add a rate for each add-on
+                foreach(AddOnV4 addOn in stampsRate.AddOns)
+                {
+                    string name = null;
+                    PostalConfirmationType confirmationType = PostalConfirmationType.None;
+
+                    switch(addOn.AddOnType)
+                    {
+                        case AddOnTypeV4.USADC:
+                            name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.Delivery;
+                            break;
+
+                        case AddOnTypeV4.USASC:
+                            name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
+                            confirmationType = PostalConfirmationType.Signature;
+                            break;
+                    }
+
+                    if(name != null)
+                    {
+                        RateResult addOnRate = new RateResult(
+                            name,
+                            string.Empty,
+                            stampsRate.Amount + addOn.Amount,
+                            new PostalRateSelection(serviceType, confirmationType));
+
+                        rates.Add(addOnRate);
+                    }
+                }
+            }
+
+            return rates;
         }
 
         /// <summary>

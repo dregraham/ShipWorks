@@ -55,5 +55,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             return false;
         }
+
+        /// <summary>
+        /// For a given valid Express1 saving service type, is the packaging type allowed to be processed through Express1
+        /// </summary>
+        public static bool IsValidPackagingType(PostalServiceType? service, PostalPackagingType packaging)
+        {
+            // International exclusions
+            if(service == PostalServiceType.InternationalPriority || service == PostalServiceType.InternationalExpress)
+            {
+                switch(packaging)
+                {
+                    case PostalPackagingType.Envelope:
+                    case PostalPackagingType.FlatRateSmallBox:
+                    case PostalPackagingType.FlatRateMediumBox:
+                    case PostalPackagingType.FlatRateLargeBox:
+                    case PostalPackagingType.FlatRateEnvelope:
+                    case PostalPackagingType.FlatRateLegalEnvelope:
+                    case PostalPackagingType.FlatRatePaddedEnvelope:
+                        return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
