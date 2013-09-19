@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Authenticate the given user with Stamps.com.  If 
         /// </summary>
-        public static void AuthenticateUser(string username, string password)
+        public static void AuthenticateUser(string username, string password, bool isExpress1)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
 
-                using (SwsimV29 webService = CreateWebService("Authenticate", false))
+                using (SwsimV29 webService = CreateWebService("Authenticate", isExpress1))
                 {
                     string auth = webService.AuthenticateUser(new Credentials
                     {
@@ -1076,7 +1076,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                         if (triesLeft > 0 && IsStaleAuthenticator(ex))
                         {
-                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
+                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), account.IsExpress1);
                         }
                         else
                         {
@@ -1099,7 +1099,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
             {
-                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
+                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), account.IsExpress1);
 
                 auth = usernameAuthenticatorMap[account.Username];
             }

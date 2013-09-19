@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                StampsApiSession.AuthenticateUser(account.Username, password.Text);
+                StampsApiSession.AuthenticateUser(account.Username, password.Text, account.IsExpress1);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

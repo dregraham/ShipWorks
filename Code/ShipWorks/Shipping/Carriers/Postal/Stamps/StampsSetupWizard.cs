@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                StampsApiSession.AuthenticateUser(userID, password.Text);
+                StampsApiSession.AuthenticateUser(userID, password.Text, false);
 
                 if (stampsAccount == null)
                 {
