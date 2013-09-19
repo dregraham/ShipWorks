@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Gets and sets the shipment type associated with this account type
         /// </summary>
-        ShipmentType ShipmentType { get; set; }
+        ShipmentType ShipmentType { get; }
 
         /// <summary>
         /// Gets a list of account descriptions and ids

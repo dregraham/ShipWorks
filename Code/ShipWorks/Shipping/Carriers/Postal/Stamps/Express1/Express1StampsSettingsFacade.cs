@@ -40,7 +40,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Gets and sets the shipment type associated with this account type
         /// </summary>
-        public ShipmentType ShipmentType { get; set; }
+        public ShipmentType ShipmentType
+        {
+            get
+            {
+                return new Express1StampsShipmentType();
+            }
+        }
 
         /// <summary>
         /// Gets a list of account descriptions and ids
