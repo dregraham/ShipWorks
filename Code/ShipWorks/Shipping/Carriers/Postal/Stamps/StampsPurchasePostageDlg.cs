@@ -21,8 +21,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         static readonly ILog log = LogManager.GetLogger(typeof(StampsPurchasePostageDlg));
 
-        StampsAccountEntity account;
-        AccountInfo accountInfo;
+        private readonly StampsAccountEntity account;
+        private AccountInfo accountInfo;
 
         /// <summary>
         /// Constructor
@@ -43,20 +43,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnPurchase(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
+            string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
 
             try
             {
                 StampsApiSession.PurchasePostage(account, postage.Amount, accountInfo.PostageBalance.ControlTotal);
 
-                MessageHelper.ShowInformation(this, 
-                    "The purchase request has been submitted to Stamps.com.\n\n" +
-                    "It may take a few minutes before the amount is reflected in your available balance.");
+                string message = string.Format("The purchase request has been submitted to {0}.\n\n" +
+                                               "It may take a few minutes before the amount is reflected in your available balance.", carrierName);
+
+                MessageHelper.ShowInformation(this, message);
 
                 DialogResult = DialogResult.OK;
             }
             catch (StampsException ex)
             {
-                log.Error("Stamps.com purchase postage", ex);
+                string logMessage = string.Format("{0} purchase postage", carrierName);
+                log.ErrorFormat(logMessage, ex);
 
                 // Purchase "stale" (someone else has purchased in the meantime
                 if (ex.Code == 0x00450116)
