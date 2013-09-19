@@ -100,7 +100,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 catch (StampsException ex)
                 {
-                    log.Error("Error updating grid with stamps account balance.", ex);
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName(account.IsExpress1));
+                    log.Error(logMessage, ex);
                 }
             }
 
@@ -150,7 +151,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnActivate(object sender, GridRowEventArgs e)
         {
-            //OnView(sender, EventArgs.Empty);
             OnEdit(sender, EventArgs.Empty);
         }
 
@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Remvoe the selected account
+        /// Remove the selected account
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {
@@ -195,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Add a stamps.com account for use with shipworks
+        /// Add a stamps.com account for use with ShipWorks
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
