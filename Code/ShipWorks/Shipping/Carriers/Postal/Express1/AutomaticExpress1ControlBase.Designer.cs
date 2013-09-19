@@ -70,6 +70,7 @@
             this.express1Accounts.Size = new System.Drawing.Size(122, 21);
             this.express1Accounts.TabIndex = 2;
             this.express1Accounts.Visible = false;
+            this.express1Accounts.SelectedIndexChanged += new System.EventHandler(this.OnExpress1AccountsSelectedIndexChanged);
             // 
             // express1LearnMore
             // 
@@ -97,7 +98,7 @@
             // labelDiscountedPostage
             // 
             this.labelDiscountedPostage.AutoSize = true;
-            this.labelDiscountedPostage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelDiscountedPostage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDiscountedPostage.Location = new System.Drawing.Point(3, 3);
             this.labelDiscountedPostage.Name = "labelDiscountedPostage";
             this.labelDiscountedPostage.Size = new System.Drawing.Size(105, 13);
@@ -119,11 +120,11 @@
             this.checkBoxUseExpress1.Size = new System.Drawing.Size(424, 33);
             this.checkBoxUseExpress1.TabIndex = 0;
             this.checkBoxUseExpress1.Text = "Automatically save postage costs on domestic and international Priority and Expre" +
-                "ss shipments:";
+    "ss shipments:";
             this.checkBoxUseExpress1.UseVisualStyleBackColor = true;
             this.checkBoxUseExpress1.Click += new System.EventHandler(this.OnChangeUseExpress1);
             // 
-            // EndiciaAutomaticExpress1Control
+            // AutomaticExpress1ControlBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -131,7 +132,7 @@
             this.Controls.Add(this.labelDiscountedPostage);
             this.Controls.Add(this.labelDiscountInfo1);
             this.Controls.Add(this.checkBoxUseExpress1);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AutomaticExpress1ControlBase";
             this.Size = new System.Drawing.Size(454, 173);
             this.panelExpress1Account.ResumeLayout(false);

@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            express1Control.LoadSettings(new Express1EndiciaSettingsFacade());
+            express1Control.LoadSettings();
         }
 
         /// <summary>

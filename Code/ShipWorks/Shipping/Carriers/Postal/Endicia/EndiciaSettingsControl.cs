@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (endiciaReseller == EndiciaReseller.None)
             {
-                endiciaOptions.LoadSettings(new Express1EndiciaSettingsFacade());
+                endiciaOptions.LoadSettings();
                 panelBottom.Top = endiciaOptions.Bottom + 5;
 
                 insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.EndiciaInsuranceProvider;

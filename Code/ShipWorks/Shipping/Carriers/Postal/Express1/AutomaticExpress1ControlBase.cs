@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Business;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -40,33 +35,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Load the settings
         /// </summary>
-        public void LoadSettings(IExpress1SettingsFacade express1Settings)
+        public void LoadSettings(IExpress1SettingsFacade settings)
         {
-            this.express1Settings = express1Settings;
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
 
-            checkBoxUseExpress1.Checked = express1Settings.UseExpress1;
+            express1Settings = settings;
+
             OnChangeUseExpress1(checkBoxUseExpress1, EventArgs.Empty);
 
-            LoadEndiciaExpress1Accounts();
-        }
-
-        /// <summary>
-        /// Save the settings
-        /// </summary>
-        /// <param name="settings"></param>
-        public void SaveSettings(ShippingSettingsEntity settings)
-        {
-            express1Settings.UseExpress1 = checkBoxUseExpress1.Checked;
-            express1Settings.Express1Account = 
-                (express1Accounts.SelectedIndex >= 0) ? (long)express1Accounts.SelectedValue : 0;
+            LoadExpress1Accounts(settings.Express1Account);
         }
 
         /// <summary>
         /// Load the UI for endicia express 1 accounts
         /// </summary>
-        private void LoadEndiciaExpress1Accounts()
+        private void LoadExpress1Accounts(long accountId)
         {
-            ICollection<KeyValuePair<string, long>> accounts = express1Settings.GetAccountList();
+            ICollection<KeyValuePair<string, long>> accounts = express1Settings.Express1Accounts;
 
             express1Accounts.Left = express1Signup.Left;
             express1Accounts.Width = 250;
@@ -82,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             if (accounts.Count > 0)
             {
                 express1Accounts.DataSource = accounts.ToList();
-                express1Accounts.SelectedValue = accounts.Max(x=>x.Value);
+                express1Accounts.SelectedValue = accountId;
 
                 if (express1Accounts.SelectedIndex < 0)
                 {
@@ -109,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 Debug.Assert(setupWizard != null, "AutomaticExpress1Control can only create Express1 shipment types.");
 
                 // Pre-load the account address details
-                setupWizard.InitialAccountAddress = GetPersonFromFirstAccount();
+                setupWizard.InitialAccountAddress = express1Settings.DefaultAccountPerson;
 
                 if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                 {
@@ -127,25 +115,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 }
             }
 
+            // Reload the account list if a new account has been added
             if (added)
             {
-                LoadEndiciaExpress1Accounts();
+                LoadExpress1Accounts(express1Settings.Express1Accounts.Max(x => x.Value));
             }
-        }
-
-        /// <summary>
-        /// Gets a person from the first account of the current type that will be used to 
-        /// populate the defaults of the address control for the new Express1 account
-        /// </summary>
-        /// <returns></returns>
-        private PersonAdapter GetPersonFromFirstAccount()
-        {
-            if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
-            {
-                return new PersonAdapter(EndiciaAccountManager.GetAccounts(EndiciaReseller.None)[0], "");
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -153,7 +127,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void OnChangeUseExpress1(object sender, EventArgs e)
         {
+            express1Settings.UseExpress1 = checkBoxUseExpress1.Checked;
             panelExpress1Account.Enabled = checkBoxUseExpress1.Checked;
+        }
+
+        /// <summary>
+        /// The selected Express1 account has changed
+        /// </summary>
+        private void OnExpress1AccountsSelectedIndexChanged(object sender, EventArgs e)
+        {
+            express1Settings.Express1Account =
+                (express1Accounts.SelectedIndex >= 0) ? (long)express1Accounts.SelectedValue : 0;
         }
 
         /// <summary>

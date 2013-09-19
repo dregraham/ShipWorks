@@ -34,15 +34,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            var settings = ShippingSettings.Fetch();
-            express1Control.SaveSettings(settings);
-
-            if (settings.EndiciaAutomaticExpress1 && express1Settings.Express1Account <= 0)
+            // Make sure the settings are valid before trying to save them
+            if (express1Settings.UseExpress1 && express1Settings.Express1Account <= 0)
             {
                 MessageHelper.ShowMessage(this, "Please select or create an Express1 account.");
                 e.Cancel = true;
                 return;
             }
+
+            var settings = ShippingSettings.Fetch();
+            express1Settings.SaveSettings(settings);
 
             ShippingSettings.Save(settings);
 
