@@ -8,6 +8,7 @@ using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 {

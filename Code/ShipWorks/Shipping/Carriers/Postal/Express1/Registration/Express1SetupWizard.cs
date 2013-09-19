@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;

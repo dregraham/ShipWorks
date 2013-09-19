@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {

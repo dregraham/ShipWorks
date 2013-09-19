@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
