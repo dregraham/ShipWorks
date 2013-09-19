@@ -40,6 +40,7 @@ using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.Sh
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.StorePages;
 using System.IO;
 using Interapptive.Shared.Win32;
+using System.Diagnostics;
 
 namespace ShipWorks.Data.Administration
 {
@@ -163,6 +164,8 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            noSingleUserMode.Visible = InterapptiveOnly.IsInterapptiveUser && Debugger.IsAttached;
+
             if (StartupController.StartupAction == StartupAction.ContinueDatabaseUpgrade)
             {
                 if (!SqlServerInstaller.IsMsdeMigrationInProgress && StartupController.StartupArgument.Name == "AfterInstallSuccess")
@@ -832,7 +835,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Update to the latest v3 schema
-            SqlSchemaUpdater.UpdateDatabase(progressProvider);
+            SqlSchemaUpdater.UpdateDatabase(progressProvider, noSingleUserMode.Checked);
 
             // After a 2x migration, there are a few steps that need to be performed once the v3 schema is totally current
             if (!Post2xMigrationUtility.IsStepComplete(Post2xMigrationStep.PostMigrationPreparation))

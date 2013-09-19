@@ -88,9 +88,10 @@ namespace ShipWorks.Data.Administration
             }
         }
         /// <summary>
-        /// Upgrade the current database to the latest version
+        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in 
+        /// customer or production scenarios.
         /// </summary>
-        public static void UpdateDatabase(ProgressProvider progressProvider)
+        public static void UpdateDatabase(ProgressProvider progressProvider, bool debuggingMode = false)
         {
             Version installed = GetInstalledSchemaVersion();
 
@@ -107,14 +108,14 @@ namespace ShipWorks.Data.Administration
             progressProvider.ProgressItems.Add(progressFunctionality);
            
             // Start by disconnecting all users.
-            using (SingleUserModeScope singleUserScope = new SingleUserModeScope())
+            using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope())
             {
                 try
                 {
                     // Put the SuperUser in scope, and don't audit
                     using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
                     {
-                        using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
+                        using (TransactionScope transaction = new TransactionScope(debuggingMode ? TransactionScopeOption.Suppress : TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
                         {
                             // Update the tables
                             UpdateScripts(installed, progressScripts);
