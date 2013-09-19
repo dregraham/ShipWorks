@@ -882,6 +882,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -947,6 +948,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1RegistrationRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1RegistrationValidator.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Settings\IExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsSingleSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

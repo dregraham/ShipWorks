@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Business;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -27,21 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             InitializeComponent();
         }
 
-        private Func<ShippingSettingsEntity, bool> getUseExpress1;
-        private Action<ShippingSettingsEntity, bool> setUseExpress1;
-        private Func<ShippingSettingsEntity, long> getExpress1Account;
-        private Action<ShippingSettingsEntity, long> setExpress1Account;
-
-        public void SetAccessors(Func<ShippingSettingsEntity, bool> useExpress1Getter, 
-            Action<ShippingSettingsEntity, bool> useExpress1Setter,
-            Func<ShippingSettingsEntity, long> express1AccountGetter,
-            Action<ShippingSettingsEntity, long> express1AccountSetter )
-        {
-            getUseExpress1 = useExpress1Getter;
-            setUseExpress1 = useExpress1Setter;
-            getExpress1Account = express1AccountGetter;
-            setExpress1Account = express1AccountSetter;
-        }
+        private IExpress1SettingsFacade express1Settings;
 
         /// <summary>
         /// Gets whether the use wants to use Express1
@@ -54,32 +41,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Load the settings
         /// </summary>
-        public void LoadSettings()
+        public void LoadSettings(IExpress1SettingsFacade express1Settings)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            this.express1Settings = express1Settings;
 
-            checkBoxUseExpress1.Checked = getUseExpress1(settings);
+            checkBoxUseExpress1.Checked = express1Settings.UseExpress1;
             OnChangeUseExpress1(checkBoxUseExpress1, EventArgs.Empty);
 
-            LoadEndiciaExpress1Accounts(getExpress1Account(settings));
+            LoadEndiciaExpress1Accounts();
         }
 
         /// <summary>
         /// Save the settings
         /// </summary>
-        public virtual void SaveSettings(ShippingSettingsEntity settings)
+        public void SaveSettings()
         {
-            setUseExpress1(settings, checkBoxUseExpress1.Checked);
-            setExpress1Account(settings,
-                               (express1Accounts.SelectedIndex >= 0) ? (long) express1Accounts.SelectedValue : 0);                
+            express1Settings.UseExpress1 = checkBoxUseExpress1.Checked;
+            express1Settings.Express1Account = 
+                (express1Accounts.SelectedIndex >= 0) ? (long)express1Accounts.SelectedValue : 0;
         }
 
         /// <summary>
         /// Load the UI for endicia express 1 accounts
         /// </summary>
-        private void LoadEndiciaExpress1Accounts(long accountID)
+        private void LoadEndiciaExpress1Accounts()
         {
-            var accounts = GetAccountList();
+            ICollection<KeyValuePair<string, long>> accounts = express1Settings.GetAccountList();
 
             express1Accounts.Left = express1Signup.Left;
             express1Accounts.Width = 250;
@@ -95,22 +82,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             if (accounts.Count > 0)
             {
                 express1Accounts.DataSource = accounts.ToList();
-                express1Accounts.SelectedValue = accountID;
+                express1Accounts.SelectedValue = express1Settings.Express1Account;
 
                 if (express1Accounts.SelectedIndex < 0)
                 {
                     express1Accounts.SelectedIndex = accounts.Count - 1;
                 }
             }
-        }
-
-        /// <summary>
-        /// TODO: Move this into the facade class
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ICollection<KeyValuePair<string, long>> GetAccountList()
-        {
-            throw new NotImplementedException("This method must be overridden in subclasses.");
         }
 
         /// <summary>
