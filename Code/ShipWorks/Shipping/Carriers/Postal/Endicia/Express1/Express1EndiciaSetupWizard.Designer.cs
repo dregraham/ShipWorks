@@ -673,6 +673,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(545, 567);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Express1EndiciaSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
@@ -684,6 +685,7 @@
             this.wizardPageExisting,
             this.wizardPageOptions,
             this.wizardPageFinish});
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Auto;
             this.Text = "Express1 Setup Wizard";
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
