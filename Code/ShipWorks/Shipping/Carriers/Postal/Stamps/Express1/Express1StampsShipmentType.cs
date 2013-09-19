@@ -35,11 +35,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override Form CreateSetupWizard()
         {
-            var registration = new Express1Registration(ShipmentTypeCode,
-                                                        new StampsExpress1RegistrationGateway(),
-                                                        new StampsExpress1RegistrationRepository(), 
-                                                        new Express1RegistrationValidator());
-            return new Express1SetupWizard(new StampsAccountManagerControl { IsExpress1 = true }, new StampsOptionsControl { IsExpress1 = true }, registration);
+            Express1Registration registration = new Express1Registration(ShipmentTypeCode);
+
+            StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { IsExpress1 = true };
+            StampsOptionsControl optionsControl = new StampsOptionsControl { IsExpress1 = true };
+
+            return new Express1SetupWizard(accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
         }
 
         /// <summary>

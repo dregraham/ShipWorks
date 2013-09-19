@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
@@ -15,6 +16,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private readonly IExpress1RegistrationValidator registrationValidator;
         private readonly IExpress1RegistrationGateway registrationGateway;
         private readonly IExpress1RegistrationRepository registrationRepository;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Express1Registration"/> class using default values
+        /// for the gateway, repository, and validator.
+        /// </summary>
+        /// <param name="shipmentType">Type of the shipment.</param>
+        public Express1Registration(ShipmentTypeCode shipmentType)
+            : this (shipmentType, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new Express1RegistrationValidator())
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1Registration" /> class.

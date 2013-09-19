@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
@@ -19,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// </summary>
     public partial class Express1SetupWizard : WizardForm
     {
-        //StampsAccountEntity account = null;
         bool forceAccountOnly = false;
         bool hideDetailedConfiguration;
         PersonAdapter initialAccountAddress;
@@ -27,16 +27,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private PostalAccountManagerControlBase accountControl;
 
         private Express1Registration registration;
+        private IEnumerable<IEntity2> existingExpress1Accounts;
+       
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class.
+        /// </summary>
+        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts) : 
+            this(accountControl, optionsControl, registration, false, existingExpress1Accounts)
+        { }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class.
         /// </summary>
-        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration) : 
-            this(accountControl, optionsControl, registration, false)
-        {
-        }
-
-        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly)
+        public Express1SetupWizard(PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly, IEnumerable<IEntity2> existingExpress1Accounts)
         {
             if (accountControl == null)
             {
@@ -79,6 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             paymentMethod.SelectedIndex = 1;
 
             this.forceAccountOnly = forceAccountOnly;
+            this.existingExpress1Accounts = existingExpress1Accounts ?? new List<IEntity2>();
         }
 
         /// <summary>
@@ -124,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             else
             {
                 // if there are no shippers yet, then remove the account page
-                if (!StampsAccountManager.Express1Accounts.Any())
+                if (!existingExpress1Accounts.Any())
                 {
                     Pages.Remove(wizardPageAccountList);
                 }
