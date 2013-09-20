@@ -35,7 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pennyOneLink = new ShipWorks.UI.Controls.LinkControl();
             this.pennyOne = new System.Windows.Forms.CheckBox();
-            this.worldShipServicesControl = new ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipContractServicesControl();
+            this.upsMailInnovationsOptions = new ShipWorks.Shipping.Carriers.UPS.WorldShip.UpsMailInnovationsOptionsControl();
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -112,10 +112,10 @@
             // 
             // worldShipServicesControl
             // 
-            this.worldShipServicesControl.Location = new System.Drawing.Point(29, 387);
-            this.worldShipServicesControl.Name = "worldShipServicesControl";
-            this.worldShipServicesControl.Size = new System.Drawing.Size(150, 46);
-            this.worldShipServicesControl.TabIndex = 11;
+            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(29, 387);
+            this.upsMailInnovationsOptions.Name = "worldShipServicesControl";
+            this.upsMailInnovationsOptions.Size = new System.Drawing.Size(150, 46);
+            this.upsMailInnovationsOptions.TabIndex = 11;
             // 
             // labelInfo
             // 
@@ -141,7 +141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.worldShipServicesControl);
+            this.Controls.Add(this.upsMailInnovationsOptions);
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.pennyOneLink);
@@ -167,7 +167,7 @@
         private System.Windows.Forms.Label label1;
         private UI.Controls.LinkControl pennyOneLink;
         private System.Windows.Forms.CheckBox pennyOne;
-        private WorldShip.WorldShipContractServicesControl worldShipServicesControl;
+        private WorldShip.UpsMailInnovationsOptionsControl upsMailInnovationsOptions;
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Label label2;
     }

@@ -31,9 +31,6 @@
             this.labelAccounts = new System.Windows.Forms.Label();
             this.accountControl = new ShipWorks.Shipping.Carriers.UPS.UpsAccountManagerControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipOptionsControl();
-            this.label1 = new System.Windows.Forms.Label();
-            this.labelInfo = new System.Windows.Forms.Label();
-            this.worldShipServicesControl = new ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipContractServicesControl();
             this.SuspendLayout();
             // 
             // labelAccounts
@@ -64,46 +61,16 @@
             this.optionsControl.Size = new System.Drawing.Size(407, 192);
             this.optionsControl.TabIndex = 0;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 399);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "UPS Services";
-            // 
-            // labelInfo
-            // 
-            this.labelInfo.AutoSize = true;
-            this.labelInfo.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelInfo.Location = new System.Drawing.Point(9, 414);
-            this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(292, 13);
-            this.labelInfo.TabIndex = 4;
-            this.labelInfo.Text = "Select the services that are enabled on your UPS accounts.";
-            // 
-            // worldShipServicesControl
-            // 
-            this.worldShipServicesControl.Location = new System.Drawing.Point(29, 435);
-            this.worldShipServicesControl.Name = "worldShipServicesControl";
-            this.worldShipServicesControl.Size = new System.Drawing.Size(150, 46);
-            this.worldShipServicesControl.TabIndex = 5;
-            // 
             // WorldShipSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.Controls.Add(this.worldShipServicesControl);
-            this.Controls.Add(this.labelInfo);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "WorldShipSettingsControl";
-            this.Size = new System.Drawing.Size(468, 481);
+            this.Size = new System.Drawing.Size(468, 409);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -114,8 +81,5 @@
         private System.Windows.Forms.Label labelAccounts;
         private UpsAccountManagerControl accountControl;
         private WorldShipOptionsControl optionsControl;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelInfo;
-        private WorldShipContractServicesControl worldShipServicesControl;
     }
 }
