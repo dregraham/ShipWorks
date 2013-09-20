@@ -289,7 +289,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         // tracking number to upload
                         trackingNumber = shipment.TrackingNumber;
 
-                        WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+                        WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                             {
                                 if (track.Length > 0)
                                 {

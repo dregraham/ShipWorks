@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             package.ShipCarrier = GetCarrierCode(shipmentEntity);
 
             // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipmentEntity, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipmentEntity, (track, service) =>
             {
                 if (track.Length > 0)
                 {

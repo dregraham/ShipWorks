@@ -9,5 +9,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// <summary>
     /// Delegate for locating and reacting to an alternative UPS tracking method for special UPS services
     /// </summary>
-    public delegate void AlternateTrackingLoaded(string alternateTrackingNumber, UpsContractService contractService, UpsServiceType upsServiceUsed);
+    public delegate void AlternateTrackingLoaded(string alternateTrackingNumber, UpsServiceType upsServiceUsed);
 }

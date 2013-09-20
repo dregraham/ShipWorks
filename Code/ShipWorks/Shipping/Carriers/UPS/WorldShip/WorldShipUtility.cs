@@ -999,16 +999,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Determines if a given contract service is enabled.
-        /// </summary>
-        public static bool ContractServiceEnabled(UpsContractService contractService)
-        {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            return settings.UpsMailInnovationsEnabled;
-        }
-
-        /// <summary>
         /// Luanch worldship.  If an error occurs the message will be parented to the given owner window
         /// </summary>
         public static void LaunchWorldShip(IWin32Window errorOwner)
@@ -1060,7 +1050,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
                 if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
                 {
-                    alternativeTracking(shipment.Ups.UspsTrackingNumber, UpsContractService.MailInnovations, (UpsServiceType)shipment.Ups.Service);
+                    alternativeTracking(shipment.Ups.UspsTrackingNumber, (UpsServiceType)shipment.Ups.Service);
                 }
             }
         }

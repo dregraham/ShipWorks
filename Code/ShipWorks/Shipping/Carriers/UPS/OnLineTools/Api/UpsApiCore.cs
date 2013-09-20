@@ -338,6 +338,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 case UpsDeliveryConfirmationType.NoSignature: return "1";
                 case UpsDeliveryConfirmationType.Signature: return "2";
                 case UpsDeliveryConfirmationType.AdultSignature: return "3";
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation: return "4";
             }
 
             throw new InvalidOperationException("Invalid UPS DC Type: " + confirmationType);

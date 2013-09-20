@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 string carrier = ShippingManager.GetCarrierName(shipmentType).ToUpper(CultureInfo.InvariantCulture);
 
                 // Adjust tracking details per Mail Innovations and others
-                WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                     {
                         if (track.Length > 0)
                         {

@@ -607,7 +607,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
 
             // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                 {
                     if (track.Length > 0)
                     {

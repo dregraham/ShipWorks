@@ -130,7 +130,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             string tempCarrierCode = GetCarrierCode(shipment);
             string tempServiceClass = GetShipmentClassCode(shipment);
 
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                 {
                     // From CA support:
                     // Thank you for contacting ChannelAdvisor Support. For UPS Mail Innovations, the default carrier code is UPS 

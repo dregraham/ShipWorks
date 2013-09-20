@@ -227,7 +227,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
             List<UpsServiceMapping> tmpUpsServiceTypeMapping = new List<UpsServiceMapping>();
 
            // Add all of the Mail Innovations services
-            if (WorldShipUtility.ContractServiceEnabled(UpsContractService.MailInnovations))
+            if (ShippingSettings.Fetch().UpsMailInnovationsEnabled)
             {
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, UsCountryCode, "", "M4", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, UsCountryCode, "", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
@@ -237,17 +237,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, PrCountryCode, "", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsPriority, PrCountryCode, "", "M3", string.Empty, "MIT", WorldShipServiceDescriptions.UpsMailInnovationsPriority, true, false));
 
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, ViCountryCode, "", "M4", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, ViCountryCode, "", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsPriority, ViCountryCode, "", "M3", string.Empty, "MIT", WorldShipServiceDescriptions.UpsMailInnovationsPriority, true, false));
+
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, GuCountryCode, "", "M4", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, GuCountryCode, "", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsPriority, GuCountryCode, "", "M3", string.Empty, "MIT", WorldShipServiceDescriptions.UpsMailInnovationsPriority, true, false));
+
                 // Add MI International to the other country codes.
                 // When we do the Contains(CountryCode), for CA for example, if we don't add the country codes here, no MI will be displayed because
                 // the code finds the UPS OnlineTools entries with CA and doesn't set to international.
                 List<string> countryCodes = new List<string> {  CaCountryCode,
-                                                                GuCountryCode,
                                                                 AsCountryCode,
                                                                 MhCountryCode,
                                                                 FmCountryCode,
                                                                 MpCountryCode,
                                                                 PwCountryCode,
-                                                                ViCountryCode,
                                                                 MxCountryCode,
                                                                 InternationalCountryCode};
                 foreach (var countryCode in countryCodes)

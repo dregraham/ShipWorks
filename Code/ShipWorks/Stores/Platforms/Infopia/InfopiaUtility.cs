@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
             string tempShipper = GetInfopiaShipperCode(shipment);
 
             // Handle Mail Innovations et. al.
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                {
                    if (track.Length > 0)
                    {
