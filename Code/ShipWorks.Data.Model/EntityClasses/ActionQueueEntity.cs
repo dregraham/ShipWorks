@@ -37,7 +37,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-
+		private EntityCollection<ActionQueueSelectionEntity> _actionQueueSelection;
 		private EntityCollection<ActionQueueStepEntity> _steps;
 
 
@@ -57,7 +57,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			/// <summary>Member name ActionQueueSelection</summary>
+			public static readonly string ActionQueueSelection = "ActionQueueSelection";
 			/// <summary>Member name Steps</summary>
 			public static readonly string Steps = "Steps";
 
@@ -120,7 +121,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
+				_actionQueueSelection = (EntityCollection<ActionQueueSelectionEntity>)info.GetValue("_actionQueueSelection", typeof(EntityCollection<ActionQueueSelectionEntity>));
 				_steps = (EntityCollection<ActionQueueStepEntity>)info.GetValue("_steps", typeof(EntityCollection<ActionQueueStepEntity>));
 
 
@@ -170,7 +171,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "ActionQueueSelection":
+					this.ActionQueueSelection.Add((ActionQueueSelectionEntity)entity);
+					break;
 				case "Steps":
 					this.Steps.Add((ActionQueueStepEntity)entity);
 					break;
@@ -199,7 +202,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "ActionQueueSelection":
+					toReturn.Add(ActionQueueEntity.Relations.ActionQueueSelectionEntityUsingActionQueueID);
+					break;
 				case "Steps":
 					toReturn.Add(ActionQueueEntity.Relations.ActionQueueStepEntityUsingActionQueueID);
 					break;
@@ -243,7 +248,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "ActionQueueSelection":
+					this.ActionQueueSelection.Add((ActionQueueSelectionEntity)relatedEntity);
+					break;
 				case "Steps":
 					this.Steps.Add((ActionQueueStepEntity)relatedEntity);
 					break;
@@ -264,7 +271,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "ActionQueueSelection":
+					base.PerformRelatedEntityRemoval(this.ActionQueueSelection, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				case "Steps":
 					base.PerformRelatedEntityRemoval(this.Steps, relatedEntity, signalRelatedEntityManyToOne);
 					break;
@@ -300,7 +309,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-
+			toReturn.Add(this.ActionQueueSelection);
 			toReturn.Add(this.Steps);
 
 			return toReturn;
@@ -316,7 +325,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
+				info.AddValue("_actionQueueSelection", ((_actionQueueSelection!=null) && (_actionQueueSelection.Count>0) && !this.MarkedForDeletion)?_actionQueueSelection:null);
 				info.AddValue("_steps", ((_steps!=null) && (_steps.Count>0) && !this.MarkedForDeletion)?_steps:null);
 
 
@@ -356,6 +365,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'ActionQueueSelection' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoActionQueueSelection()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ActionQueueSelectionFields.ActionQueueID, null, ComparisonOperator.Equal, this.ActionQueueID));
+			return bucket;
+		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entities of type 'ActionQueueStep' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
@@ -398,7 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-
+			collectionsQueue.Enqueue(this._actionQueueSelection);
 			collectionsQueue.Enqueue(this._steps);
 
 		}
@@ -408,7 +426,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-
+			this._actionQueueSelection = (EntityCollection<ActionQueueSelectionEntity>) collectionsQueue.Dequeue();
 			this._steps = (EntityCollection<ActionQueueStepEntity>) collectionsQueue.Dequeue();
 
 		}
@@ -417,7 +435,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
-
+			if (this._actionQueueSelection != null)
+			{
+				return true;
+			}
 			if (this._steps != null)
 			{
 				return true;
@@ -432,7 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ActionQueueSelectionEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ActionQueueSelectionEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ActionQueueStepEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ActionQueueStepEntityFactory))) : null);
 
 		}
@@ -446,7 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
 
-
+			toReturn.Add("ActionQueueSelection", _actionQueueSelection);
 			toReturn.Add("Steps", _steps);
 
 
@@ -456,7 +477,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Adds the internals to the active context. </summary>
 		protected override void AddInternalsToContext()
 		{
-
+			if(_actionQueueSelection!=null)
+			{
+				_actionQueueSelection.ActiveContext = base.ActiveContext;
+			}
 			if(_steps!=null)
 			{
 				_steps.ActiveContext = base.ActiveContext;
@@ -471,7 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected virtual void InitClassMembers()
 		{
 
-
+			_actionQueueSelection = null;
 			_steps = null;
 
 
@@ -572,6 +596,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ActionQueueSelection' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathActionQueueSelection
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<ActionQueueSelectionEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ActionQueueSelectionEntityFactory))),
+					(IEntityRelation)GetRelationsForField("ActionQueueSelection")[0], (int)ShipWorks.Data.Model.EntityType.ActionQueueEntity, (int)ShipWorks.Data.Model.EntityType.ActionQueueSelectionEntity, 0, null, null, null, null, "ActionQueueSelection", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ActionQueueStep' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -766,6 +801,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ActionQueueFieldIndex.ActionQueueType, value); }
 		}
 
+		/// <summary> Gets the EntityCollection with the related entities of type 'ActionQueueSelectionEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(ActionQueueSelectionEntity))]
+		public virtual EntityCollection<ActionQueueSelectionEntity> ActionQueueSelection
+		{
+			get
+			{
+				if(_actionQueueSelection==null)
+				{
+					_actionQueueSelection = new EntityCollection<ActionQueueSelectionEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ActionQueueSelectionEntityFactory)));
+					_actionQueueSelection.SetContainingEntityInfo(this, "ActionQueue");
+				}
+				return _actionQueueSelection;
+			}
+		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ActionQueueStepEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>

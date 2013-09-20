@@ -532,9 +532,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("WorldShipLaunch", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("InternalWorldShipServices", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("StampsThermal", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -590,6 +587,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IParcelInsurancePennyOne", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UpsMailInnovationsEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -1018,17 +1018,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.WorldShipLaunch, value); }
 		}
 
-		/// <summary> The InternalWorldShipServices property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipServices"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String InternalWorldShipServices
-		{
-			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalWorldShipServices, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.InternalWorldShipServices, value); }
-		}
-
 		/// <summary> The StampsThermal property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsThermal"<br/>
@@ -1236,6 +1225,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, value); }
+		}
+
+		/// <summary> The UpsMailInnovationsEnabled property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsMailInnovationsEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean UpsMailInnovationsEnabled
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, value); }
 		}
 
 

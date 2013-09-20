@@ -1005,7 +1005,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            return settings.WorldShipServices.Contains((int)contractService);
+            return settings.UpsMailInnovationsEnabled;
         }
 
         /// <summary>

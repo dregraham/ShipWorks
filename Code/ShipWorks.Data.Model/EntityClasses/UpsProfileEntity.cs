@@ -572,6 +572,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CommercialPaperlessInvoice", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CostCenter", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("IrregularIndicator", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Cn22Number", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Cn22ContentTariffNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -997,6 +1009,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UpsProfileFieldIndex.CommercialPaperlessInvoice, false); }
 			set	{ SetValue((int)UpsProfileFieldIndex.CommercialPaperlessInvoice, value); }
+		}
+
+		/// <summary> The CostCenter property of the Entity UpsProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."CostCenter"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String CostCenter
+		{
+			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CostCenter, true); }
+			set	{ SetValue((int)UpsProfileFieldIndex.CostCenter, value); }
+		}
+
+		/// <summary> The IrregularIndicator property of the Entity UpsProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."IrregularIndicator"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> IrregularIndicator
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)UpsProfileFieldIndex.IrregularIndicator, false); }
+			set	{ SetValue((int)UpsProfileFieldIndex.IrregularIndicator, value); }
+		}
+
+		/// <summary> The Cn22Number property of the Entity UpsProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."Cn22Number"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Cn22Number
+		{
+			get { return (System.String)GetValue((int)UpsProfileFieldIndex.Cn22Number, true); }
+			set	{ SetValue((int)UpsProfileFieldIndex.Cn22Number, value); }
+		}
+
+		/// <summary> The Cn22ContentTariffNumber property of the Entity UpsProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."Cn22ContentTariffNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 40<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Cn22ContentTariffNumber
+		{
+			get { return (System.String)GetValue((int)UpsProfileFieldIndex.Cn22ContentTariffNumber, true); }
+			set	{ SetValue((int)UpsProfileFieldIndex.Cn22ContentTariffNumber, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsProfilePackageEntity' which are related to this entity via a relation of type '1:n'.

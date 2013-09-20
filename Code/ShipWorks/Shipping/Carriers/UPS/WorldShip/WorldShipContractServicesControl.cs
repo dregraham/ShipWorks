@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            List<int> enabledServices = new List<int>(settings.WorldShipServices);
+            List<int> enabledServices = new List<int>(settings.UpsMailInnovationsEnabled ? 1 : 0);
           
             // checking Mail Innovations actually includes all 3 Mail Innovations services. Key the UI off of the Domestic one
             mailInnovations.Checked = enabledServices.Contains((int)UpsContractService.MailInnovations);
@@ -49,15 +49,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 throw new ArgumentNullException("settings");
             }
 
-            List<int> enabled = new List<int>();
-
-            // checking Mail Innovations actually enabled the 3 MI services
-            if (mailInnovations.Checked)
-            {
-                enabled.Add((int)UpsContractService.MailInnovations);
-            }
-
-            settings.WorldShipServices = enabled.ToArray();
+            settings.UpsMailInnovationsEnabled = mailInnovations.Checked;
         }
     }
 }

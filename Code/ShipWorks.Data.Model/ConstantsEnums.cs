@@ -7339,8 +7339,6 @@ namespace ShipWorks.Data.Model
 		EndiciaInsuranceProvider,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>InternalWorldShipServices. </summary>
-		InternalWorldShipServices,
 		///<summary>StampsThermal. </summary>
 		StampsThermal,
 		///<summary>StampsThermalType. </summary>
@@ -7379,6 +7377,8 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
+		///<summary>UpsMailInnovationsEnabled. </summary>
+		UpsMailInnovationsEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8428,6 +8428,14 @@ namespace ShipWorks.Data.Model
 		CarbonNeutral,
 		///<summary>CommercialPaperlessInvoice. </summary>
 		CommercialPaperlessInvoice,
+		///<summary>CostCenter. </summary>
+		CostCenter,
+		///<summary>IrregularIndicator. </summary>
+		IrregularIndicator,
+		///<summary>Cn22Number. </summary>
+		Cn22Number,
+		///<summary>Cn22ContentTariffNumber. </summary>
+		Cn22ContentTariffNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8572,6 +8580,14 @@ namespace ShipWorks.Data.Model
 		ShipperRelease,
 		///<summary>CarbonNeutral. </summary>
 		CarbonNeutral,
+		///<summary>CostCenter. </summary>
+		CostCenter,
+		///<summary>IrregularIndicator. </summary>
+		IrregularIndicator,
+		///<summary>Cn22Number. </summary>
+		Cn22Number,
+		///<summary>Cn22ContentTariffNumber. </summary>
+		Cn22ContentTariffNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

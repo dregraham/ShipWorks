@@ -15572,11 +15572,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipLaunch);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.InternalWorldShipServices field instance</summary>
-		public static EntityField2 InternalWorldShipServices
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.InternalWorldShipServices);}
-		}
 		/// <summary>Creates a new ShippingSettingsEntity.StampsThermal field instance</summary>
 		public static EntityField2 StampsThermal
 		{
@@ -15671,6 +15666,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IParcelInsurancePennyOne
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.UpsMailInnovationsEnabled field instance</summary>
+		public static EntityField2 UpsMailInnovationsEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsMailInnovationsEnabled);}
 		}
 	}
 
@@ -17822,6 +17822,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CommercialPaperlessInvoice);}
 		}
+		/// <summary>Creates a new UpsProfileEntity.CostCenter field instance</summary>
+		public static EntityField2 CostCenter
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CostCenter);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.IrregularIndicator field instance</summary>
+		public static EntityField2 IrregularIndicator
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.IrregularIndicator);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.Cn22Number field instance</summary>
+		public static EntityField2 Cn22Number
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Cn22Number);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.Cn22ContentTariffNumber field instance</summary>
+		public static EntityField2 Cn22ContentTariffNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Cn22ContentTariffNumber);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -18136,6 +18156,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CarbonNeutral
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CarbonNeutral);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.CostCenter field instance</summary>
+		public static EntityField2 CostCenter
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CostCenter);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.IrregularIndicator field instance</summary>
+		public static EntityField2 IrregularIndicator
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.IrregularIndicator);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.Cn22Number field instance</summary>
+		public static EntityField2 Cn22Number
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Cn22Number);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.Cn22ContentTariffNumber field instance</summary>
+		public static EntityField2 Cn22ContentTariffNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Cn22ContentTariffNumber);}
 		}
 	}
 

@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1SingleSource = false;
 
             settings.WorldShipLaunch = false;
-            settings.WorldShipServices = new int[0];
+            settings.UpsMailInnovationsEnabled = false;
 
             settings.StampsThermal = false;
             settings.StampsThermalType = (int) ThermalLabelType.EPL;

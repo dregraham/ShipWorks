@@ -23,6 +23,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         Signature = 2,
 
         [Description("Adult Signature Required")]
-        AdultSignature = 3
+        AdultSignature = 3,
+
+        [Description("USPS Delivery Confirmation")]
+        UspsDeliveryConfirmation = 4
     }
 }
