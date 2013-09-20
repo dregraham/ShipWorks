@@ -218,7 +218,7 @@
             this.surePostGroup.Size = new System.Drawing.Size(405, 59);
             this.surePostGroup.TabIndex = 11;
             this.surePostGroup.TabStop = false;
-            this.surePostGroup.Text = "SurePost";
+            this.surePostGroup.Text = "SurePost & Mail Innovations";
             this.surePostGroup.Visible = false;
             // 
             // surePostClassificationState
@@ -271,7 +271,7 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(6, 222);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(345, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(339, 82);
             this.groupInsurance.TabIndex = 10;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -1003,7 +1003,7 @@
             this.groupOptions.Controls.Add(this.labelReference);
             this.groupOptions.Location = new System.Drawing.Point(6, 313);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(366, 230);
+            this.groupOptions.Size = new System.Drawing.Size(360, 230);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -1284,7 +1284,7 @@
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 85);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(345, 52);
+            this.groupTo.Size = new System.Drawing.Size(339, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1344,7 +1344,7 @@
             this.groupShipment.Controls.Add(this.serviceState);
             this.groupShipment.Location = new System.Drawing.Point(6, 142);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(345, 73);
+            this.groupShipment.Size = new System.Drawing.Size(339, 73);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -1438,7 +1438,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(345, 77);
+            this.groupBoxFrom.Size = new System.Drawing.Size(339, 77);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";

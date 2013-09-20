@@ -394,7 +394,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost;    
 
-            sectionSurePost.Visible = isSurePost;
+            sectionSurePost.Visible = isSurePost || isMi;
 
             carbonNeutralPanel.Visible = !isMi;
 

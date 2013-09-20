@@ -31,8 +31,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 636);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 679);
             this.sectionReturns.Size = new System.Drawing.Size(485, 24);
             // 
             // sectionShipment
@@ -361,7 +361,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.packageControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.packageControl.Location = new System.Drawing.Point(3, 61);
             this.packageControl.Name = "packageControl";
-            this.packageControl.Size = new System.Drawing.Size(1394, 275);
+            this.packageControl.Size = new System.Drawing.Size(1494, 275);
             this.packageControl.TabIndex = 3;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.PackageCountChanged += new System.EventHandler(this.OnPackageCountChanged);
@@ -603,7 +603,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(210, 21);
             this.referenceNumber.TabIndex = 79;
-            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelReference
             // 
@@ -644,7 +644,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.reference2Number.Name = "reference2Number";
             this.reference2Number.Size = new System.Drawing.Size(210, 21);
             this.reference2Number.TabIndex = 77;
-            this.reference2Number.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
+            this.reference2Number.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // label3
             // 
@@ -1147,19 +1147,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             this.sectionSurePost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionSurePost.Collapsed = true;
             // 
             // sectionSurePost.ContentPanel
             // 
             this.sectionSurePost.ContentPanel.Controls.Add(this.surePostClassification);
             this.sectionSurePost.ContentPanel.Controls.Add(this.labelClassification);
-            this.sectionSurePost.ExpandedHeight = 67;
             this.sectionSurePost.ExtraText = "";
             this.sectionSurePost.Location = new System.Drawing.Point(3, 607);
             this.sectionSurePost.Name = "sectionSurePost";
-            this.sectionSurePost.SectionName = "SurePost";
+            this.sectionSurePost.SectionName = "SurePost & Mail Innovations";
             this.sectionSurePost.SettingsKey = "{b36e5a50-de19-4dcf-b42f-81399e8f1137}";
-            this.sectionSurePost.Size = new System.Drawing.Size(485, 24);
+            this.sectionSurePost.Size = new System.Drawing.Size(485, 67);
             this.sectionSurePost.TabIndex = 10;
             this.sectionSurePost.Visible = false;
             // 

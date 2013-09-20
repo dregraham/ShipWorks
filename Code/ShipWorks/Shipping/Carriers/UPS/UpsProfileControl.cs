@@ -57,8 +57,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 insuranceControl.InsuredValueLabel = "Declared value:";
             }
 
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            bool isMIAvailable = settings.UpsMailInnovationsEnabled;
             bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
-            if (isSurePostAvailable)
+            
+            if (isSurePostAvailable || isMIAvailable)
             {
                 surePostGroup.Visible = true;
             }
@@ -66,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             LoadUpsAccounts();
             LoadOrigins();
 
-            EnumHelper.BindComboBox<UpsServiceType>(service, t => isSurePostAvailable || !UpsUtility.IsUpsSurePostService(t));
+            EnumHelper.BindComboBox<UpsServiceType>(service, t => ShowService(t, isMIAvailable, isSurePostAvailable));
             EnumHelper.BindComboBox<UpsDeliveryConfirmationType>(confirmationType);
             EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination, t => t != ResidentialDeterminationType.FedExAddressLookup);
             EnumHelper.BindComboBox<UpsPayorType>(payorType);
@@ -142,6 +146,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // SurePost
             AddValueMapping(ups, UpsProfileFields.Subclassification, surePostClassificationState, surePostClassification, labelSurePostClassification);
             AddValueMapping(ups, UpsProfileFields.Endorsement, uspsEndorsementState, uspsEndorsement, labelUspsEndorsement);
+        }
+
+        /// <summary>
+        /// Returns true if we should show the service. Else false.
+        /// </summary>
+        private bool ShowService(UpsServiceType upsServiceType, bool isMiAvailable, bool isSurePostAvailable)
+        {
+            if (UpsUtility.IsUpsSurePostService(upsServiceType))
+            {
+                return isSurePostAvailable;
+            }
+
+            if (UpsUtility.IsUpsMiService(upsServiceType))
+            {
+                return isMiAvailable;
+            }
+
+            return true;
         }
 
         /// <summary>
