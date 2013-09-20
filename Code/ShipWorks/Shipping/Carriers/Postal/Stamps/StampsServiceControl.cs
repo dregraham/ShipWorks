@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if(accounts.Count > 0)
             {
-                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
+                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();
                 stampsAccount.Enabled = true;
             }
             else
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? StampsAccountManager.GetAccount((long) stampsAccount.SelectedValue) : null;
                 if (account != null)
                 {
-                    text += account.Username;
+                    text += account.Description;
                 }
                 else
                 {

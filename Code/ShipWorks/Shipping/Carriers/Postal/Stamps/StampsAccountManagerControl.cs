@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(IsExpress1))
             {
-                GridRow row = new GridRow(new string[] { account.Username, "Checking..." });
+                GridRow row = new GridRow(new string[] { account.Description, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
                 "Note: This does not delete your account from {1}.",
-                account.Username, StampsAccountManager.GetResellerName(IsExpress1)));
+                account.Description, StampsAccountManager.GetResellerName(IsExpress1)));
 
             if (result == DialogResult.OK)
             {

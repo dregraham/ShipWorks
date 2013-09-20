@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
-            return new StampsProfileControl();
+            return new StampsProfileControl(ShipmentTypeCode);
         }
 
         /// <summary>

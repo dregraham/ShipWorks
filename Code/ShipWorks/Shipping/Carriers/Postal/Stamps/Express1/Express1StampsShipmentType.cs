@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -50,6 +51,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override SettingsControlBase CreateSettingsControl()
         {
             return new StampsSettingsControl(true);
+        }
+
+        /// <summary>
+        /// Create the UserControl used to handle Stamps w/ Express1 profiles
+        /// </summary>
+        public override ShippingProfileControlBase CreateProfileControl()
+        {
+            return new StampsProfileControl(ShipmentTypeCode);
         }
     }
 }

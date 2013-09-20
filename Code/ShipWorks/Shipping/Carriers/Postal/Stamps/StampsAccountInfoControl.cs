@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Cursor.Current = Cursors.WaitCursor;
 
             this.account = account;
-            this.accountName.Text = account.Username;
+            this.accountName.Text = account.Description;
 
             
             if (account.IsExpress1)
