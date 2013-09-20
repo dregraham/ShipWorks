@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// One-time control initialization
         /// </summary>
-        public void Initialize(ShipmentTypeCode shipmentTypeCode)
+        public void Initialize()
         {
             dimensionsControl.Initialize();
 
