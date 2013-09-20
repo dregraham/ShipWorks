@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             payorCountry.ValueMember = "Value";
             payorCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
-            packageControl.Initialize(ShipmentTypeCode);
+            packageControl.Initialize();
 
         }
 
