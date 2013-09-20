@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.Ups
 
             shipmentType.ConfigureNewShipment(shipment);
 
-            shipment.Ups.Subclassification = (int) UpsSurePostSubclassificationType.Irregular;
+            shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
 
             if (UspsEndorsement != "NULL")
             {
@@ -85,14 +85,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.Ups
             // Default to the Origin country code
             shipment.Ups.UpsAccountID = GetAccountId(AccountID);
 
-            UpsSurePostSubclassificationType subClassification;
-            if (UpsSurePostSubclassificationType.TryParse(Subclassification, true, out subClassification))
+            UpsPostalSubclassificationType subClassification;
+            if (UpsPostalSubclassificationType.TryParse(Subclassification, true, out subClassification))
             {
                 shipment.Ups.Subclassification = (int) subClassification;
             }
             else
             {
-                shipment.Ups.Subclassification = (int) UpsSurePostSubclassificationType.Irregular;
+                shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
             }
 
             UpsOltShipmentType upsOltShipmentType = new UpsOltShipmentType();

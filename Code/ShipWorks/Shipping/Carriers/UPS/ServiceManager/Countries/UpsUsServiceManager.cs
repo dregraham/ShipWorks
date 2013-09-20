@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Settings;
 using log4net;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <returns>A list of the available services.</returns>
         public List<UpsServiceMapping> GetServices(ShipmentEntity shipment)
         {
-            return GetServiceTypes((ShipmentTypeCode)shipment.ShipmentType, shipment.ShipCountryCode);
+            return GetServiceTypes(shipment.ShipCountryCode);
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <summary>
         /// Get the list of valid services for the given country
         /// </summary>
-        private static List<UpsServiceMapping> GetServiceTypes(ShipmentTypeCode? shipmentTypeCode, string countryCode)
+        private static List<UpsServiceMapping> GetServiceTypes(string countryCode)
         {
             // See if the requested country code has specific services defined
             bool hasCountryCode = upsServiceTypeMapping.Value.Any(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant());
@@ -147,10 +148,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                 countryCode = InternationalCountryCode;
             }
 
-            bool returnMiServices = shipmentTypeCode.HasValue && shipmentTypeCode == ShipmentTypeCode.UpsWorldShip &&
-                                    WorldShipUtility.ContractServiceEnabled(UpsContractService.MailInnovations);
-
-            if (returnMiServices)
+            if (ShippingSettings.Fetch().UpsMailInnovationsEnabled)
             {
                 return upsServiceTypeMapping.Value.Where(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
             }

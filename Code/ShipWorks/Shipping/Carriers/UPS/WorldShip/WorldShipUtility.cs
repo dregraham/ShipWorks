@@ -626,7 +626,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             if (UpsServiceType.UpsSurePostLessThan1Lb == (UpsServiceType)ups.Service)
             {
                 // The two options are Irregular and Machinable
-                worldshipPackage.PostalSubClass = (UpsSurePostSubclassificationType)ups.Subclassification == UpsSurePostSubclassificationType.Irregular ? "Irregular" : "Machinable";
+                worldshipPackage.PostalSubClass = (UpsPostalSubclassificationType)ups.Subclassification == UpsPostalSubclassificationType.Irregular ? "Irregular" : "Machinable";
             }
 
             worldshipPackage.ShipperRelease = ups.ShipperRelease ? "Y" : "N";

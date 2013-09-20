@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             EnumHelper.BindComboBox<UpsPayorType>(payorType);
             EnumHelper.BindComboBox<UpsEmailNotificationSubject>(emailSubject);
             EnumHelper.BindComboBox<UpsReturnServiceType>(returnService);
-            EnumHelper.BindComboBox<UpsSurePostSubclassificationType>(surePostClassification);
+            EnumHelper.BindComboBox<UpsPostalSubclassificationType>(surePostClassification);
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
 
             payorCountry.DisplayMember = "Key";

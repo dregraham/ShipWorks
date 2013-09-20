@@ -1467,7 +1467,7 @@
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsPickupOption.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsPrimaryReason.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsReturnServiceType.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Enums\UpsSurePostSubclassificationType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsPostalSubclassificationType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UspsEndorsementType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRatePackageServiceOptionsElementWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriter.cs" />

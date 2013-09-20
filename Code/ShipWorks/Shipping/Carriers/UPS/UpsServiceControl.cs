@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             EnumHelper.BindComboBox<UpsPayorType>(payorType);
             EnumHelper.BindComboBox<UpsEmailNotificationSubject>(emailSubject);
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
-            EnumHelper.BindComboBox<UpsSurePostSubclassificationType>(surePostClassification);
+            EnumHelper.BindComboBox<UpsPostalSubclassificationType>(surePostClassification);
 
             payorCountry.DisplayMember = "Key";
             payorCountry.ValueMember = "Value";
@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     codAmount.ApplyMultiAmount(shipment.Ups.CodAmount);
                     codPaymentType.ApplyMultiValue((UpsCodPaymentType) shipment.Ups.CodPaymentType);
 
-                    surePostClassification.ApplyMultiValue((UpsSurePostSubclassificationType)shipment.Ups.Subclassification);
+                    surePostClassification.ApplyMultiValue((UpsPostalSubclassificationType)shipment.Ups.Subclassification);
                     uspsEndorsement.ApplyMultiValue((UspsEndorsementType)shipment.Ups.Endorsement);
                 }
             }

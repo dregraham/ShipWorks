@@ -100,6 +100,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Write SurePost fields.
             WriteSurePostShipment(ups, xmlWriter);
 
+            // Write UspsEndorsement
+            WriteMiShipmentValues(ups, xmlWriter);
+
             // Return Service Code
             if (shipment.ReturnShipment && !isSurePost)
             {
@@ -490,7 +493,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 if (serviceType == UpsServiceType.UpsSurePostLessThan1Lb)
                 {
                     // If it's SurePost less than a pound, set the sub class
-                    xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsSurePostSubclassificationType) ups.Subclassification));
+                    xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType)ups.Subclassification));
                 }
 
                 // The documentation didn't give us a value for Carrier Leave if No Response.  It only says that if no endorsement is specified, 
@@ -502,6 +505,29 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                 // Close SurePostShipment
                 xmlWriter.WriteEndElement();
+            }
+        }
+
+        /// <summary>
+        /// Writes the MI xml values
+        /// </summary>
+        private static void WriteMiShipmentValues(UpsShipmentEntity ups, XmlTextWriter xmlWriter)
+        {
+            UpsServiceType serviceType = (UpsServiceType)ups.Service;
+
+            // Only write the fields if the service is an MI service
+            if (UpsUtility.IsUpsMiService(serviceType))
+            {
+                xmlWriter.WriteElementString("USPSEndorsement", EnumHelper.GetApiValue((UspsEndorsementType)ups.Endorsement));
+                
+                xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType)ups.Subclassification));
+                
+                xmlWriter.WriteElementString("IrregularIndicator", EnumHelper.GetApiValue((UpsIrregularIndicatorType)ups.IrregularIndicator));
+
+                // Blanks are not allowed
+                xmlWriter.WriteElementString("CostCenter", ups.CostCenter.Replace(" ", string.Empty));
+
+                xmlWriter.WriteElementString("PackageID", ups.Packages.First().UpsPackageID.ToString());
             }
         }
 

@@ -39,6 +39,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             upsPackagingCodes[UpsPackagingType.Box25Kg] = "24";
             upsPackagingCodes[UpsPackagingType.Box10Kg] = "25";
 
+            // Domestic MI package types
+            upsPackagingCodes[UpsPackagingType.FirstClassMail] = "59";
+            upsPackagingCodes[UpsPackagingType.PriorityMail] = "60";
+            upsPackagingCodes[UpsPackagingType.BPMFlats] = "66";
+            upsPackagingCodes[UpsPackagingType.BPMParcels] = "64";
+            upsPackagingCodes[UpsPackagingType.Irregulars] = "62";
+            upsPackagingCodes[UpsPackagingType.Machinables] = "61";
+            upsPackagingCodes[UpsPackagingType.MediaMail] = "65";
+            upsPackagingCodes[UpsPackagingType.ParcelPost] = "63";
+            upsPackagingCodes[UpsPackagingType.StandardFlats] = "67";
+
+            // International MI package types
+            upsPackagingCodes[UpsPackagingType.Flats] = "56";
+            upsPackagingCodes[UpsPackagingType.BPM] = "58";
+            upsPackagingCodes[UpsPackagingType.Parcels] = "57";
+
             // Code for Canada - according to UPS support Express Envelope & Letter service codes 
             // are interchangeable
             upsPackagingCodes[UpsPackagingType.BoxExpress] = "21";

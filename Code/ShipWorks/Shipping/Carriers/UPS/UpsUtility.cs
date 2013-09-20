@@ -130,14 +130,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets the packaging types that are conditionally avaiable for WorldShip
+        /// Gets the packaging types that are conditionally avaiable for Mail Innovations
         /// </summary>
-        /// <returns></returns>
-        public static List<UpsPackagingType> GetWorldShipConditionalPackagingType(UpsContractService? contractService)
+        public static List<UpsPackagingType> GetMailInnovationsPackagingTypes()
         {
             List<UpsPackagingType> types = new List<UpsPackagingType>();
 
-            if (!contractService.HasValue || contractService == UpsContractService.MailInnovations)
+            if (ShippingSettings.Fetch().UpsMailInnovationsEnabled)
             {
                 types.Add(UpsPackagingType.FirstClassMail);
                 types.Add(UpsPackagingType.PriorityMail);
@@ -161,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get hte valid package types based on the shipment type
         /// </summary>
-        public static List<UpsPackagingType> GetValidPackagingTypes(ShipmentTypeCode? shipmentTypeCode)
+        public static List<UpsPackagingType> GetValidPackagingTypes()
         {
             List<UpsPackagingType> packageTypes = new List<UpsPackagingType>();
 
@@ -179,13 +178,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageTypes.Add(UpsPackagingType.BoxExpress);
             packageTypes.Add(UpsPackagingType.ExpressEnvelope);
 
-            if (!shipmentTypeCode.HasValue || shipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
+            if (ShippingSettings.Fetch().UpsMailInnovationsEnabled)
             {
-                // Add Mail Innovations package types if it is enabled
-                if (WorldShipUtility.ContractServiceEnabled(UpsContractService.MailInnovations))
-                {
-                    packageTypes.AddRange(GetWorldShipConditionalPackagingType(UpsContractService.MailInnovations));
-                }
+                packageTypes.AddRange(GetMailInnovationsPackagingTypes());
             }
 
             return packageTypes.Distinct().ToList();
