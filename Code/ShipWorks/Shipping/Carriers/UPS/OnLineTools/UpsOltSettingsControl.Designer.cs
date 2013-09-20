@@ -35,11 +35,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pennyOneLink = new ShipWorks.UI.Controls.LinkControl();
             this.pennyOne = new System.Windows.Forms.CheckBox();
+            this.worldShipServicesControl = new ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipContractServicesControl();
+            this.labelInfo = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // accountControl
             // 
-            this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accountControl.Location = new System.Drawing.Point(12, 98);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(405, 168);
@@ -48,7 +51,7 @@
             // labelAccounts
             // 
             this.labelAccounts.AutoSize = true;
-            this.labelAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAccounts.Location = new System.Drawing.Point(9, 79);
             this.labelAccounts.Name = "labelAccounts";
             this.labelAccounts.Size = new System.Drawing.Size(84, 13);
@@ -57,7 +60,7 @@
             // 
             // optionsControl
             // 
-            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(8, 4);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(287, 70);
@@ -67,7 +70,7 @@
             // 
             this.insuranceProviderChooser.CarrierMessage = "(UPS Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "UPS Declared Value";
-            this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceProviderChooser.Location = new System.Drawing.Point(32, 293);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
@@ -77,7 +80,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(9, 274);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 13);
@@ -107,10 +110,40 @@
             this.pennyOne.Text = "Use ShipWorks Insurance for the first $100 of coverage.";
             this.pennyOne.UseVisualStyleBackColor = true;
             // 
+            // worldShipServicesControl
+            // 
+            this.worldShipServicesControl.Location = new System.Drawing.Point(29, 387);
+            this.worldShipServicesControl.Name = "worldShipServicesControl";
+            this.worldShipServicesControl.Size = new System.Drawing.Size(150, 46);
+            this.worldShipServicesControl.TabIndex = 11;
+            // 
+            // labelInfo
+            // 
+            this.labelInfo.AutoSize = true;
+            this.labelInfo.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelInfo.Location = new System.Drawing.Point(9, 366);
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(292, 13);
+            this.labelInfo.TabIndex = 10;
+            this.labelInfo.Text = "Select the services that are enabled on your UPS accounts.";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(9, 351);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "UPS Services";
+            // 
             // UpsOltSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.worldShipServicesControl);
+            this.Controls.Add(this.labelInfo);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.pennyOneLink);
             this.Controls.Add(this.pennyOne);
             this.Controls.Add(this.insuranceProviderChooser);
@@ -119,7 +152,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "UpsOltSettingsControl";
-            this.Size = new System.Drawing.Size(423, 363);
+            this.Size = new System.Drawing.Size(423, 459);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,5 +167,8 @@
         private System.Windows.Forms.Label label1;
         private UI.Controls.LinkControl pennyOneLink;
         private System.Windows.Forms.CheckBox pennyOne;
+        private WorldShip.WorldShipContractServicesControl worldShipServicesControl;
+        private System.Windows.Forms.Label labelInfo;
+        private System.Windows.Forms.Label label2;
     }
 }
