@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool IsCodAvailable(UpsServiceType service, string countryCode)
         {
-            if (IsUpsSurePostService(service))
+            if (IsUpsMiOrSurePostService(service))
             {
                 return false;
             }
