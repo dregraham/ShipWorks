@@ -297,10 +297,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 saturdayDelivery.ReadMultiCheck(c => shipment.Ups.SaturdayDelivery = c);
                
                 confirmation.ReadMultiValue(v => shipment.Ups.DeliveryConfirmation = (int) v);
-                referenceNumber.ReadMultiText(t => shipment.Ups.ReferenceNumber = t);
-                reference2Number.ReadMultiText(t => shipment.Ups.ReferenceNumber2 = t);
                 shipperRelease.ReadMultiCheck(c=> shipment.Ups.ShipperRelease = c);
                 carbonNeutral.ReadMultiCheck(c => shipment.Ups.CarbonNeutral = c);
+
+
+                referenceNumber.ReadMultiText(t => shipment.Ups.ReferenceNumber = DetermineReferenceNumber(shipment.Ups, t)); // shipment.Ups.ReferenceNumber = t);
+                reference2Number.ReadMultiText(t => shipment.Ups.ReferenceNumber2 = DetermineReferenceNumber(shipment.Ups, t)); // = t);
 
                 payorType.ReadMultiValue(v => shipment.Ups.PayorType = (int) v);
                 payorAccount.ReadMultiText(t => shipment.Ups.PayorAccount = t);
@@ -318,6 +320,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             ResumeRateCriteriaChangeEvent();
+        }
+
+        /// <summary>
+        /// Determines what reference number should be used for the specified shipment.
+        /// </summary>
+        /// <param name="upsShipmentEntity">The shipment to check.</param>
+        /// <param name="requestedReferenceNumber">The current reference number as it is.  </param>
+        /// <returns>A correct reference number for the shipment.</returns>
+        private static string DetermineReferenceNumber(UpsShipmentEntity upsShipmentEntity, string requestedReferenceNumber)
+        {
+            UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
+
+            return UpsUtility.IsUpsMiService(upsServiceType) ? string.Empty : requestedReferenceNumber;
         }
 
         /// <summary>
@@ -401,6 +416,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipperReleasePanel.Visible = !isSurePost && !isMi;
 
             sectionBilling.Visible = !isSurePost;
+
+            // Reference numbers are not allowed with Mail Innovations.
+            referencePanel.Visible = !isMi;
+            reference2Panel.Visible = !isMi;
 
             UpdateSectionOptionsHeight();
         }

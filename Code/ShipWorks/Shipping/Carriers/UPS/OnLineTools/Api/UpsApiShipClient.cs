@@ -840,6 +840,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Extract the package data
                 currentPackage.TrackingNumber = XPathUtility.Evaluate(packageNode, "TrackingNumber", "");
 
+                if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+                {
+                    currentPackage.UspsTrackingNumber = XPathUtility.Evaluate(packageNode, "USPSPICNumber", "");
+                    shipment.Ups.UspsTrackingNumber = currentPackage.UspsTrackingNumber;
+                }
+
                 if (shipment.ReturnShipment && !UpsUtility.ReturnServiceHasLabels((UpsReturnServiceType)shipment.Ups.ReturnService))
                 {
                     // no labels

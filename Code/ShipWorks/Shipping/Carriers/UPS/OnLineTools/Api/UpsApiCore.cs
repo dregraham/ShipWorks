@@ -233,8 +233,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Package Weight
                 weightElementWriter.WriteWeightElement(ups, package);
 
-                WritePackageReference(ups.ReferenceNumber, ups, xmlWriter, forLabels);
-                WritePackageReference(ups.ReferenceNumber2, ups, xmlWriter, forLabels);
+                // Mail Innovations doesn't support ReferenceNumbers
+                if (!UpsUtility.IsUpsMiService((UpsServiceType) ups.Service))
+                {
+                    WritePackageReference(ups.ReferenceNumber, ups, xmlWriter, forLabels);
+                    WritePackageReference(ups.ReferenceNumber2, ups, xmlWriter, forLabels);
+                }
 
                 // Additional handling
                 if (package.AdditionalHandlingEnabled)
