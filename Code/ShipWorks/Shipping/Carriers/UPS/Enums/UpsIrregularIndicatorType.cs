@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsIrregularIndicatorType
     {
-        [Description("NotApplicable")]
+        [Description("Not Applicable")]
         [ApiValue("3")]
         NotApplicable = 0,
 
