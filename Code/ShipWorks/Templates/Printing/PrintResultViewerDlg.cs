@@ -100,11 +100,22 @@ namespace ShipWorks.Templates.Printing
             // Get the resource that contains the content
             DataResourceReference contentResource = DataResourceManager.LoadResourceReference(printResult.ContentResourceID);
 
-            // Format the html for dispaly
-            htmlControl.Html = TemplateResultFormatter.FormatHtml(
-                new TemplateResult[] { new TemplateResult((TemplateXPathNavigator) null, contentResource.ReadAllText()) },
-                TemplateResultUsage.ShipWorksDisplay,
-                TemplateResultFormatSettings.FromPrintResult(printResult));
+            // If it was purged, show the placeholder.  We do this regardless of it was thermal or not.
+            if (contentResource.IsPurgedPlaceholder)
+            {
+                htmlControl.Html = string.Format(TemplateHelper.ContentPurgedDisplayHtml, "print job");
+
+                // Can't reprint a purged print job
+                reprint.Enabled = false;
+            }
+            else
+            {
+                // Format the html for dispaly
+                htmlControl.Html = TemplateResultFormatter.FormatHtml(
+                    new TemplateResult[] { new TemplateResult((TemplateXPathNavigator) null, contentResource.ReadAllText()) },
+                    TemplateResultUsage.ShipWorksDisplay,
+                    TemplateResultFormatSettings.FromPrintResult(printResult));
+            }
 
             // Process sure size now that its ready
             TemplateSureSizeProcessor.Process(htmlControl);

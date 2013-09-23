@@ -387,6 +387,25 @@ namespace ShipWorks.Templates
         }
 
         /// <summary>
+        /// Get the html to use when a resource has been purged
+        /// </summary>
+        public static string ContentPurgedDisplayHtml
+        {
+            get
+            {
+                return @"
+                    <html>
+                    <body style='font: normal 9pt tahoma; color: rgb(50, 50, 50); padding-left: 15px;' >"
+                    + HtmlControl.ZoomDivStartTag +
+                    @"<b>Content Removed</b><br/><br/>
+                    The content of this {0} has been deleted by the 'Delete old data' action task.
+                    </div>
+                    </body>
+                    </html>";
+            }
+        }
+
+        /// <summary>
         /// Get the html to be displayed when you view a thermal template
         /// </summary>
         public static string SnippetTemplateDisplayHtml
