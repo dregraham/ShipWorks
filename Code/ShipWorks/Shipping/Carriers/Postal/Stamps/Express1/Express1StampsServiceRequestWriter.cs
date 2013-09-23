@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Services.Protocols;
+﻿using System.Collections.Generic;
 using System.Xml;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -15,98 +11,65 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         // the writer being decorated
         XmlWriter wrappedWriter;
 
-        // Details about the remote method being called.  Data in here is used to translate between the two message types.
-        LogicalMethodInfo methodInfo;
-        
         // A list of namespaces from which we want to translate
-        private static readonly List<string> fromNamespaces = new List<string>
-            {
-                "xxxxxxxxxxxxxxxxxxx" //"www.envmgr.com/LabelService";
+        private static readonly Dictionary<string, string> express1NamespaceMap =
+            new Dictionary<string, string> {
+                { "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29", "http://www.express1.com/2011/08" }
             };
-
-        // The namespace to which we want to translate
-        private const string toNamespace = "zzzzzzzzzzzzzzzzzz"; //"http://www.express1.com/2010/06";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsServiceRequestWriter(LogicalMethodInfo webMethodInfo, XmlWriter originalWriter)
+        public Express1StampsServiceRequestWriter(XmlWriter originalWriter)
         {
             this.wrappedWriter = originalWriter;
-            this.methodInfo = webMethodInfo;
         }
 
         /// <summary>
-        /// Determines the name of the first parameter used in the target web method.  
-        /// We use this to see how we need to rename response nodes
+        /// Translates a Stamps namespace to Express1.
         /// </summary>
-        private string GetWebMethodParameterName()
+        private static string GetExpress1Namespace(string stampsNamespace)
         {
-            if (methodInfo.Parameters.Length > 0)
-            {
-                return methodInfo.Parameters[0].Name;
-            }
+            if(stampsNamespace == null)
+                return null;
 
-            return "";
+            string express1Namespace;
+            if(express1NamespaceMap.TryGetValue(stampsNamespace, out express1Namespace))
+                return express1Namespace;
+
+            return stampsNamespace;
         }
 
         /// <summary>
-        /// Translates the namespaces apprpriately
-        /// </summary>
-        private static string GetNamespace(string incomingNamespace)
-        {
-            string targetNamespace = incomingNamespace;
-
-            if (targetNamespace != null && fromNamespaces.Any(fn => targetNamespace.Contains(fn)))
-            {
-                targetNamespace = toNamespace;
-            }
-
-            return targetNamespace;
-        }
-
-        /// <summary>
-        /// Write an attribute under a namespace, but translate from Stamps to Express1
+        /// Writes an attribute under a namespace, but translate from Stamps to Express1.
         /// </summary>
         public override void WriteStartAttribute(string prefix, string localName, string ns)
         {
-            wrappedWriter.WriteStartAttribute(prefix, localName, GetNamespace(ns));
+            wrappedWriter.WriteStartAttribute(prefix, localName, GetExpress1Namespace(ns));
         }
 
         /// <summary>
-        /// Express1 parameters are named 'request', so when we see the node being written that is Stamps's parameter name then
-        /// we need to rewrite it as 'request'
+        /// Writes a qualified name under a namespace, but translates from Stamps to Express1.
         /// </summary>
         public override void WriteQualifiedName(string localName, string ns)
         {
-            if (String.Compare(localName, GetWebMethodParameterName(), StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                localName = "request";
-            }
-
-            wrappedWriter.WriteQualifiedName(localName, GetNamespace(ns));
+            wrappedWriter.WriteQualifiedName(localName, GetExpress1Namespace(ns));
         }
 
         /// <summary>
-        /// Express1 parameters are named 'request', so when we see the node being written that is Stamps's parameter name then
-        /// we need to rewrite it as 'request'
+        /// Writes an element under a namespace, but translate from Stamps to Express1.
         /// </summary>
         public override void WriteStartElement(string prefix, string localName, string ns)
         {
-            if (String.Compare(localName, GetWebMethodParameterName(), StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                localName = "request";
-            }
-
-            wrappedWriter.WriteStartElement(prefix, localName, GetNamespace(ns));
+            wrappedWriter.WriteStartElement(prefix, localName, GetExpress1Namespace(ns));
         }
 
         /// <summary>
-        /// Lookup the namespace prefix for a translated Stamps -> Express1 namespace
+        /// Looks up the namespace prefix for a translated Stamps to Express1 namespace.
         /// </summary>
         public override string LookupPrefix(string ns)
         {
-            return wrappedWriter.LookupPrefix(GetNamespace(ns));
+            return wrappedWriter.LookupPrefix(GetExpress1Namespace(ns));
         }
 
         #region pass through

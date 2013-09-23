@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         FieldInfo actionField;
 
         // the namespaces being swapped
-        string expressNamespace = "https://service.express1.com/Services/SDCV24Service.svc";
-        string stampsNamespace = "https://swsim.stamps.com/swsim/SwsimV24.asmx";
+        string expressNamespace = "http://www.express1.com/2011/08/ISDCV29Service";
+        string stampsNamespace = "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29";
 
         WebRequest webRequest = null;
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
 
             // see if the action on the message needs to be changed
-            if (String.Compare(newAction, message.Action, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(newAction, message.Action, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // use reflection to get access to the underlying object where we need to set the Action
                 if (methodField == null)
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             // Overwrite the SOAPAction header in the request every time, even if we didn't change the action.
             // This is due to a race condition relating to SoapClientMethod.action, which gets used as a prototype for
-            // creating SoapClientMessages.  If there are multiple simultineous Express1 calls made for the first time,
+            // creating SoapClientMessages.  If there are multiple simultaneous Express1 calls made for the first time,
             // some will get sent with an invalid SOAPAction if we don't overwrite it every time.
             webRequest.Headers["SOAPAction"] = '"' + newAction + '"';
         }
@@ -90,9 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         protected override WebRequest GetWebRequest(Uri uri)
         {
             // keep the webrequest so its headers can be changed as necessary
-            webRequest = base.GetWebRequest(uri);
-
-            return webRequest;
+            return webRequest = base.GetWebRequest(uri);
         }
 
         /// <summary>
@@ -113,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             FixupOutgoingSoapMessage(message);
 
             // return the custome XmlWriter
-            return new Express1StampsServiceRequestWriter(message.MethodInfo, base.GetWriterForMessage(message, bufferSize));
+            return new Express1StampsServiceRequestWriter(base.GetWriterForMessage(message, bufferSize));
         }
     }
 }
