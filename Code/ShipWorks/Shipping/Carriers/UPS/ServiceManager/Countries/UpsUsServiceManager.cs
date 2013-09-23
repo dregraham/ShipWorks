@@ -258,8 +258,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                                                                 InternationalCountryCode};
                 foreach (var countryCode in countryCodes)
                 {
-                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntEconomy, countryCode, "", "MIE", string.Empty, "MIE", WorldShipServiceDescriptions.UpsMailInnovationsIntEconomy, true, false));
-                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntPriority, countryCode, "", "MIP", string.Empty, "MIP", WorldShipServiceDescriptions.UpsMailInnovationsIntPriority, true, false));
+                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntEconomy, countryCode, "", "74", string.Empty, "MIE", WorldShipServiceDescriptions.UpsMailInnovationsIntEconomy, true, false));
+                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntPriority, countryCode, "", "73", string.Empty, "MIP", WorldShipServiceDescriptions.UpsMailInnovationsIntPriority, true, false));
                 }
             }
 

@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Write SurePost fields.
             WriteSurePostShipment(ups, xmlWriter);
 
-            // Write UspsEndorsement
+            // Write MI shipment values
             WriteMiShipmentValues(ups, xmlWriter);
 
             // Return Service Code
@@ -379,6 +379,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private static void WriteInternationalFormsXml(UpsAccountEntity account, UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
             bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType)ups.Service);
+            bool isMailInnovations = UpsUtility.IsUpsMiService((UpsServiceType)ups.Service);
             bool isMilitarySurePost = isSurePost && PostalUtility.IsMilitaryState(ups.Shipment.ShipStateProvCode);
 
             // Has to be internation or Military SurePost
@@ -387,7 +388,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 return;
             }
 
-            if (!isSurePost && ups.CommercialPaperlessInvoice)
+            if (!(isSurePost || isMailInnovations) && ups.CommercialPaperlessInvoice)
             {
                 xmlWriter.WriteStartElement("InternationalForms");
                 xmlWriter.WriteElementString("FormType", "01");
@@ -471,10 +472,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("CurrencyCode", UpsUtility.GetCurrency(account));
                 xmlWriter.WriteEndElement();
             }
-            else if (isSurePost)
+            else if (isSurePost || isMailInnovations)
             {
-                // Write any SurePost CN22 info needed
-                WriteSurePostCN22(ups, xmlWriter);   
+                // Write any Postal CN22 info needed
+                WritePostalCN22(ups, xmlWriter);   
             }
         }
 
@@ -518,7 +519,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Only write the fields if the service is an MI service
             if (UpsUtility.IsUpsMiService(serviceType))
             {
-                xmlWriter.WriteElementString("USPSEndorsement", EnumHelper.GetApiValue((UspsEndorsementType)ups.Endorsement));
+				// No Service Selected is the only valid value for international.
+                UspsEndorsementType uspsEndorsementType = (UspsEndorsementType)ups.Endorsement;
+                if (serviceType == UpsServiceType.UpsMailInnovationsIntEconomy ||
+                    serviceType == UpsServiceType.UpsMailInnovationsIntPriority)
+                {
+                    uspsEndorsementType = UspsEndorsementType.NoServiceSelected;
+                }
+
+                xmlWriter.WriteElementString("USPSEndorsement", EnumHelper.GetApiValue(uspsEndorsementType));
                 
                 xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType)ups.Subclassification));
                 
@@ -532,9 +541,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
-        /// Writes the appropriate SurePost CN22 xml
+        /// Writes the appropriate Postal CN22 xml
         /// </summary>
-        private static void WriteSurePostCN22(UpsShipmentEntity ups, XmlTextWriter xmlWriter)
+        private static void WritePostalCN22(UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
             UpsServiceType serviceType = (UpsServiceType)ups.Service;
 
@@ -547,112 +556,119 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 return;
             }
-
             // Only write the fields if the service is a SurePost service
-            if (UpsUtility.IsUpsSurePostService(serviceType))
+            if (!UpsUtility.IsUpsMiOrSurePostService(serviceType))
             {
-                xmlWriter.WriteStartElement("InternationalForms");
-                xmlWriter.WriteElementString("FormType", "09");
-                xmlWriter.WriteElementString("FormGroupIdName", "CN22 Form");
-
-                string otherDescription = string.Empty;
-
-                // Only 3 are allowed
-                foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(3))
-                {
-                    // Start Product
-                    xmlWriter.WriteStartElement("Product");
-                    xmlWriter.WriteElementString("Description", Regex.Replace(shipmentCustomsItem.Description, "[^A-Za-z0-9 _]", string.Empty));
-                    xmlWriter.WriteEndElement();
-
-                    otherDescription += string.Format("{0} ", shipmentCustomsItem.Description);
-                }
-
-                // Start CN22Form
-                xmlWriter.WriteStartElement("CN22Form");
-
-                //Fetch the latest shipping settings from the repository
-                UpsSettingsRepository upsSettingsRepository = new UpsSettingsRepository();
-                ShippingSettingsEntity shippingSettings = upsSettingsRepository.GetShippingSettings();
-                
-                // 6 = 4x6 
-                // 1 = 8.5x11
-                xmlWriter.WriteElementString("LabelSize", "6");
-
-                // Docs say only 1 per page is supported
-                xmlWriter.WriteElementString("PrintsPerPage", "1");
-
-                // Valid values are pdf,png,gif,zpl,star,epl2 and spl
-                if (shippingSettings.UpsThermal)
-                {
-                    xmlWriter.WriteElementString("LabelPrintType", shippingSettings.UpsThermalType == (int) ThermalLabelType.EPL ? "EPL2" : "ZPL");
-                }
-                else
-                {
-                    xmlWriter.WriteElementString("LabelPrintType", "gif");   
-                }
-
-                UpsCN22GoodsType cn22Type = ups.CustomsDocumentsOnly ? UpsCN22GoodsType.Documents : UpsCN22GoodsType.Other;
-                xmlWriter.WriteElementString("CN22Type", EnumHelper.GetApiValue(cn22Type));
-
-                // If CN22 Type is Other, CN22OtherDescription is required
-                if (cn22Type == UpsCN22GoodsType.Other)
-                {
-                    xmlWriter.WriteElementString("CN22OtherDescription", otherDescription);
-                }
-                
-                // Start InternationalForms
-                xmlWriter.WriteStartElement("CN22Content");
-
-                // Only 3 are allowed
-                foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(3))
-                {
-                    xmlWriter.WriteElementString("CN22ContentQuantity", shipmentCustomsItem.Quantity.ToString());
-                    xmlWriter.WriteElementString("CN22ContentDescription", shipmentCustomsItem.Description);
-
-                    // Start CN22ContentWeight
-                    xmlWriter.WriteStartElement("CN22ContentWeight");
-
-                    // Start UnitOfMeasurement
-                    xmlWriter.WriteStartElement("UnitOfMeasurement");
-
-
-                    double weight = shipmentCustomsItem.Weight;
-
-                    // Get the settings for this shipment/package type so we can determine weight unit of measure and declared value setting
-                    // Before calling this method, the shipment/package type should be validated so that a setting is always found if we make it this far.
-                    UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.First(s => s.ServiceType == (UpsServiceType)ups.Service &&
-                                                                s.PackageType == (UpsPackagingType)ups.Packages[0].PackagingType);
-
-                    weight = WeightUtility.Convert(WeightUnitOfMeasure.Pounds, upsSetting.WeightUnitOfMeasure, weight);
-
-                    // Weight unit of measure values are lbs and ozs
-                    xmlWriter.WriteElementString("Code", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? "LBS" : "OZS");
-                    
-                    // Close UnitOfMeasurement
-                    xmlWriter.WriteEndElement();
-
-                    xmlWriter.WriteElementString("Weight", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? weight.ToString("N4") : weight.ToString("N1"));
-
-                    // Close CN22ContentWeight
-                    xmlWriter.WriteEndElement();
-
-                    decimal totalValue = shipmentCustomsItem.UnitValue * (decimal)shipmentCustomsItem.Quantity;
-                    xmlWriter.WriteElementString("CN22ContentTotalValue", totalValue.ToString("N2"));
-
-                    // Currently only USD is supported
-                    xmlWriter.WriteElementString("CN22ContentCurrencyCode", "USD");
-                }
-
-                // Close CN22Content
-                xmlWriter.WriteEndElement();
-
-                // Close CN22Form
-                xmlWriter.WriteEndElement();
-
-                // Close InternationalForms
-                xmlWriter.WriteEndElement();
+                return;
             }
+
+            xmlWriter.WriteStartElement("InternationalForms");
+            xmlWriter.WriteElementString("FormType", "09");
+            xmlWriter.WriteElementString("FormGroupIdName", "CN22 Form");
+
+            string otherDescription = string.Empty;
+
+            // Only 3 are allowed
+            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(3))
+            {
+                // Start Product
+                xmlWriter.WriteStartElement("Product");
+                xmlWriter.WriteElementString("Description", Regex.Replace(shipmentCustomsItem.Description, "[^A-Za-z0-9 _]", string.Empty));
+                xmlWriter.WriteEndElement();
+
+                otherDescription += string.Format("{0} ", shipmentCustomsItem.Description);
+            }
+
+            // Start CN22Form
+            xmlWriter.WriteStartElement("CN22Form");
+
+            //Fetch the latest shipping settings from the repository
+            UpsSettingsRepository upsSettingsRepository = new UpsSettingsRepository();
+            ShippingSettingsEntity shippingSettings = upsSettingsRepository.GetShippingSettings();
+                
+            // 6 = 4x6 
+            // 1 = 8.5x11
+            xmlWriter.WriteElementString("LabelSize", "6");
+
+            // Docs say only 1 per page is supported
+            xmlWriter.WriteElementString("PrintsPerPage", "1");
+
+            // Valid values are pdf,png,gif,zpl,star,epl2 and spl
+            if (shippingSettings.UpsThermal)
+            {
+                xmlWriter.WriteElementString("LabelPrintType", shippingSettings.UpsThermalType == (int) ThermalLabelType.EPL ? "EPL2" : "ZPL");
+            }
+            else
+            {
+                xmlWriter.WriteElementString("LabelPrintType", "gif");   
+            }
+
+            UpsCN22GoodsType cn22Type = ups.CustomsDocumentsOnly ? UpsCN22GoodsType.Documents : UpsCN22GoodsType.Other;
+            xmlWriter.WriteElementString("CN22Type", EnumHelper.GetApiValue(cn22Type));
+
+            // If CN22 Type is Other, CN22OtherDescription is required
+            if (cn22Type == UpsCN22GoodsType.Other)
+            {
+                xmlWriter.WriteElementString("CN22OtherDescription", otherDescription);
+            }
+                
+            // Start InternationalForms
+            xmlWriter.WriteStartElement("CN22Content");
+
+            // Only 3 are allowed
+            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(3))
+            {
+                xmlWriter.WriteElementString("CN22ContentQuantity", shipmentCustomsItem.Quantity.ToString());
+                xmlWriter.WriteElementString("CN22ContentDescription", shipmentCustomsItem.Description);
+
+                // Start CN22ContentWeight
+                xmlWriter.WriteStartElement("CN22ContentWeight");
+
+                // Start UnitOfMeasurement
+                xmlWriter.WriteStartElement("UnitOfMeasurement");
+
+
+                double weight = shipmentCustomsItem.Weight;
+
+                // Get the settings for this shipment/package type so we can determine weight unit of measure and declared value setting
+                // Before calling this method, the shipment/package type should be validated so that a setting is always found if we make it this far.
+                UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.First(s => s.ServiceType == (UpsServiceType)ups.Service &&
+                                                            s.PackageType == (UpsPackagingType)ups.Packages[0].PackagingType);
+
+                weight = WeightUtility.Convert(WeightUnitOfMeasure.Pounds, upsSetting.WeightUnitOfMeasure, weight);
+
+                // Weight unit of measure values are lbs and ozs
+                xmlWriter.WriteElementString("Code", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? "LBS" : "OZS");
+                    
+                // Close UnitOfMeasurement
+                xmlWriter.WriteEndElement();
+
+                xmlWriter.WriteElementString("Weight", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? weight.ToString("N4") : weight.ToString("N1"));
+
+                // Close CN22ContentWeight
+                xmlWriter.WriteEndElement();
+
+                decimal totalValue = shipmentCustomsItem.UnitValue * (decimal)shipmentCustomsItem.Quantity;
+                xmlWriter.WriteElementString("CN22ContentTotalValue", totalValue.ToString("N2"));
+
+                // Currently only USD is supported
+                xmlWriter.WriteElementString("CN22ContentCurrencyCode", "USD");
+
+                // If we have a CN22ContentTariffNumber, write it out too
+                if (!string.IsNullOrWhiteSpace(ups.Cn22ContentTariffNumber))
+                {
+                    xmlWriter.WriteElementString("CN22ContentTariffNumber", "USD");
+                }
+            }
+
+            // Close CN22Content
+            xmlWriter.WriteEndElement();
+
+            // Close CN22Form
+            xmlWriter.WriteEndElement();
+
+            // Close InternationalForms
+            xmlWriter.WriteEndElement();
         }
 
         /// <summary>
@@ -844,6 +860,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 {
                     currentPackage.UspsTrackingNumber = XPathUtility.Evaluate(packageNode, "USPSPICNumber", "");
                     shipment.Ups.UspsTrackingNumber = currentPackage.UspsTrackingNumber;
+                    shipment.Ups.Cn22Number = XPathUtility.Evaluate(packageNode, "CN22Number", "");
+
+                    // If we have a CN22Number, use it for the shipment and package UspsTrackingNumber (if the shipment/package UspsTrackingNumber is blank)
+                    if (!string.IsNullOrWhiteSpace(shipment.Ups.Cn22Number))
+                    {
+                        if (string.IsNullOrWhiteSpace(shipment.Ups.UspsTrackingNumber))
+                        {
+                            shipment.Ups.UspsTrackingNumber = shipment.Ups.Cn22Number;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(currentPackage.UspsTrackingNumber))
+                        {
+                            currentPackage.UspsTrackingNumber = shipment.Ups.Cn22Number;
+                        }
+                    }
                 }
 
                 if (shipment.ReturnShipment && !UpsUtility.ReturnServiceHasLabels((UpsReturnServiceType)shipment.Ups.ReturnService))
