@@ -34,9 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         private const string InternationalCountryCode = "INTERNATIONAL";
 
         private readonly ILog log;
-
-        private static Lazy<List<UpsServiceMapping>> upsServiceTypeMapping = new Lazy<List<UpsServiceMapping>>(LoadUpsServiceMappings);
-        
+       
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsCanadaServiceManager"/> class.
         /// </summary>
@@ -84,13 +82,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <exception cref="System.NotImplementedException"></exception>
         public UpsServiceMapping GetServicesByRateCode(string rateCode, string destinationCountryCode)
         {
-            UpsServiceMapping mapping = upsServiceTypeMapping.Value.FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
+            UpsServiceMapping mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
                                                                && m.RateServiceCode == rateCode.Trim().ToUpperInvariant());
 
             if (mapping == null)
             {
                 // No services for the shipment were found based on the ship country code, so try to use the international mappings
-                mapping = upsServiceTypeMapping.Value.FirstOrDefault(m => m.RateServiceCode.ToUpperInvariant() == rateCode.ToUpperInvariant()
+                mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.RateServiceCode.ToUpperInvariant() == rateCode.ToUpperInvariant()
                                                     && m.DestinationCountryCode.ToUpperInvariant() == InternationalCountryCode.ToUpperInvariant());
             }
             
@@ -113,13 +111,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <exception cref="System.NotImplementedException"></exception>
         public UpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode)
         {
-            UpsServiceMapping mapping = upsServiceTypeMapping.Value.FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
+            UpsServiceMapping mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
                                                                && m.WorldShipDescription.ToUpperInvariant() == description.Trim().ToUpperInvariant());
 
             if (mapping == null)
             {
                 // No services for the shipment were found based on the ship country code, so try to use the international mappings
-                mapping = upsServiceTypeMapping.Value.FirstOrDefault(m => m.WorldShipDescription.ToUpperInvariant() == description.Trim().ToUpperInvariant()
+                mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.WorldShipDescription.ToUpperInvariant() == description.Trim().ToUpperInvariant()
                                                 && m.DestinationCountryCode.ToUpperInvariant() == InternationalCountryCode.ToUpperInvariant());
             }
 
@@ -139,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         private static List<UpsServiceMapping> GetServiceTypes(string countryCode)
         {
             // See if the requested country code has specific services defined
-            bool hasCountryCode = upsServiceTypeMapping.Value.Any(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant());
+            bool hasCountryCode = LoadUpsServiceMappings().Any(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant());
 
             // Add SurePost if enabled.
             if (!hasCountryCode)
@@ -150,11 +148,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
 
             if (ShippingSettings.Fetch().UpsMailInnovationsEnabled)
             {
-                return upsServiceTypeMapping.Value.Where(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
+                return LoadUpsServiceMappings().Where(stm => stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
             }
             else
             {
-                return upsServiceTypeMapping.Value.Where(stm => stm.IsMailInnovations == false && stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
+                return LoadUpsServiceMappings().Where(stm => stm.IsMailInnovations == false && stm.DestinationCountryCode == countryCode.ToUpperInvariant()).Distinct().ToList();
             }
         }
 
@@ -297,13 +295,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <exception cref="System.NotImplementedException"></exception>
         public UpsServiceMapping GetServiceByTransitCode(string transitCode, string destinationCountryCode)
         {
-            UpsServiceMapping mapping = upsServiceTypeMapping.Value.FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
+            UpsServiceMapping mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
                                                                && m.TransitServiceCode == transitCode.Trim().ToUpperInvariant());
 
             if (mapping == null)
             {
                 // No services for the shipment were found based on the ship country code, so try to use the international mappings
-                mapping = upsServiceTypeMapping.Value.FirstOrDefault(m => m.TransitServiceCode.ToUpperInvariant() == transitCode.ToUpperInvariant()
+                mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.TransitServiceCode.ToUpperInvariant() == transitCode.ToUpperInvariant()
                                                     && m.DestinationCountryCode.ToUpperInvariant() == InternationalCountryCode.ToUpperInvariant());
             }
 

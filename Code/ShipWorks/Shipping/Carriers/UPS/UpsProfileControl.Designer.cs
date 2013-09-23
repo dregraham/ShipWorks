@@ -29,12 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.surePostGroup = new System.Windows.Forms.GroupBox();
+            this.contentTariffNumber = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.contentTariffNumberState = new System.Windows.Forms.CheckBox();
+            this.labelContentTariffNumber = new System.Windows.Forms.Label();
+            this.irregularIndicatorState = new System.Windows.Forms.CheckBox();
+            this.irregularIndicator = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelIrregularIndicator = new System.Windows.Forms.Label();
+            this.costCenter = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.costCenterState = new System.Windows.Forms.CheckBox();
+            this.labelCostCenter = new System.Windows.Forms.Label();
             this.surePostClassificationState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge9 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.surePostClassification = new ShipWorks.UI.Controls.MultiValueComboBox();
@@ -209,17 +218,107 @@
             // 
             // surePostGroup
             // 
+            this.surePostGroup.Controls.Add(this.contentTariffNumber);
+            this.surePostGroup.Controls.Add(this.contentTariffNumberState);
+            this.surePostGroup.Controls.Add(this.labelContentTariffNumber);
+            this.surePostGroup.Controls.Add(this.irregularIndicatorState);
+            this.surePostGroup.Controls.Add(this.irregularIndicator);
+            this.surePostGroup.Controls.Add(this.labelIrregularIndicator);
+            this.surePostGroup.Controls.Add(this.costCenter);
+            this.surePostGroup.Controls.Add(this.costCenterState);
+            this.surePostGroup.Controls.Add(this.labelCostCenter);
             this.surePostGroup.Controls.Add(this.surePostClassificationState);
             this.surePostGroup.Controls.Add(this.kryptonBorderEdge9);
             this.surePostGroup.Controls.Add(this.surePostClassification);
             this.surePostGroup.Controls.Add(this.labelSurePostClassification);
             this.surePostGroup.Location = new System.Drawing.Point(6, 1127);
             this.surePostGroup.Name = "surePostGroup";
-            this.surePostGroup.Size = new System.Drawing.Size(405, 59);
+            this.surePostGroup.Size = new System.Drawing.Size(405, 127);
             this.surePostGroup.TabIndex = 11;
             this.surePostGroup.TabStop = false;
-            this.surePostGroup.Text = "SurePost & Mail Innovations";
+            this.surePostGroup.Text = "SurePost / Mail Innovations";
             this.surePostGroup.Visible = false;
+            // 
+            // contentTerriffNumber
+            // 
+            this.contentTariffNumber.Location = new System.Drawing.Point(178, 98);
+            this.contentTariffNumber.Name = "contentTariffNumber";
+            this.contentTariffNumber.Size = new System.Drawing.Size(200, 21);
+            this.contentTariffNumber.TabIndex = 108;
+            // 
+            // contentTerrifNumberState
+            // 
+            this.contentTariffNumberState.AutoSize = true;
+            this.contentTariffNumberState.Location = new System.Drawing.Point(9, 101);
+            this.contentTariffNumberState.Name = "contentTariffNumberState";
+            this.contentTariffNumberState.Size = new System.Drawing.Size(15, 14);
+            this.contentTariffNumberState.TabIndex = 110;
+            this.contentTariffNumberState.UseVisualStyleBackColor = true;
+            // 
+            // labelContentTerriffNumber
+            // 
+            this.labelContentTariffNumber.AutoSize = true;
+            this.labelContentTariffNumber.BackColor = System.Drawing.Color.Transparent;
+            this.labelContentTariffNumber.Location = new System.Drawing.Point(48, 101);
+            this.labelContentTariffNumber.Name = "labelContentTariffNumber";
+            this.labelContentTariffNumber.Size = new System.Drawing.Size(123, 13);
+            this.labelContentTariffNumber.TabIndex = 109;
+            this.labelContentTariffNumber.Text = "Content Tariff Number:";
+            // 
+            // irregularIndicatorState
+            // 
+            this.irregularIndicatorState.AutoSize = true;
+            this.irregularIndicatorState.Location = new System.Drawing.Point(9, 74);
+            this.irregularIndicatorState.Name = "irregularIndicatorState";
+            this.irregularIndicatorState.Size = new System.Drawing.Size(15, 14);
+            this.irregularIndicatorState.TabIndex = 107;
+            this.irregularIndicatorState.UseVisualStyleBackColor = true;
+            // 
+            // irregularIndicator
+            // 
+            this.irregularIndicator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.irregularIndicator.FormattingEnabled = true;
+            this.irregularIndicator.Location = new System.Drawing.Point(178, 71);
+            this.irregularIndicator.Name = "irregularIndicator";
+            this.irregularIndicator.PromptText = "(Multiple Values)";
+            this.irregularIndicator.Size = new System.Drawing.Size(200, 21);
+            this.irregularIndicator.TabIndex = 106;
+            // 
+            // labelIrregularIndicator
+            // 
+            this.labelIrregularIndicator.AutoSize = true;
+            this.labelIrregularIndicator.BackColor = System.Drawing.Color.Transparent;
+            this.labelIrregularIndicator.Location = new System.Drawing.Point(72, 74);
+            this.labelIrregularIndicator.Name = "labelIrregularIndicator";
+            this.labelIrregularIndicator.Size = new System.Drawing.Size(99, 13);
+            this.labelIrregularIndicator.TabIndex = 105;
+            this.labelIrregularIndicator.Text = "Irregular Indicator:";
+            // 
+            // costCenter
+            // 
+            this.costCenter.Location = new System.Drawing.Point(178, 44);
+            this.costCenter.Name = "costCenter";
+            this.costCenter.Size = new System.Drawing.Size(200, 21);
+            this.costCenter.TabIndex = 100;
+            // 
+            // costCenterState
+            // 
+            this.costCenterState.AutoSize = true;
+            this.costCenterState.Location = new System.Drawing.Point(9, 47);
+            this.costCenterState.Name = "costCenterState";
+            this.costCenterState.Size = new System.Drawing.Size(15, 14);
+            this.costCenterState.TabIndex = 104;
+            this.costCenterState.UseVisualStyleBackColor = true;
+            // 
+            // labelCostCenter
+            // 
+            this.labelCostCenter.AutoSize = true;
+            this.labelCostCenter.BackColor = System.Drawing.Color.Transparent;
+            this.labelCostCenter.Location = new System.Drawing.Point(102, 47);
+            this.labelCostCenter.Name = "labelCostCenter";
+            this.labelCostCenter.Size = new System.Drawing.Size(69, 13);
+            this.labelCostCenter.TabIndex = 102;
+            this.labelCostCenter.Text = "Cost Center:";
             // 
             // surePostClassificationState
             // 
@@ -238,7 +337,7 @@
             this.kryptonBorderEdge9.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge9.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge9.Name = "kryptonBorderEdge9";
-            this.kryptonBorderEdge9.Size = new System.Drawing.Size(1, 28);
+            this.kryptonBorderEdge9.Size = new System.Drawing.Size(1, 96);
             this.kryptonBorderEdge9.TabIndex = 99;
             this.kryptonBorderEdge9.Text = "kryptonBorderEdge1";
             // 
@@ -271,7 +370,7 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(6, 222);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(339, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(321, 82);
             this.groupInsurance.TabIndex = 10;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -352,7 +451,7 @@
             this.returnContents.Name = "returnContents";
             this.returnContents.Size = new System.Drawing.Size(200, 21);
             this.returnContents.TabIndex = 86;
-            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // returnService
             // 
@@ -1003,7 +1102,7 @@
             this.groupOptions.Controls.Add(this.labelReference);
             this.groupOptions.Location = new System.Drawing.Point(6, 313);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(360, 230);
+            this.groupOptions.Size = new System.Drawing.Size(342, 230);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -1167,7 +1266,7 @@
             this.referenceNumber2.Name = "referenceNumber2";
             this.referenceNumber2.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber2.TabIndex = 76;
-            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // labelReference2
             // 
@@ -1262,7 +1361,7 @@
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber.TabIndex = 3;
-            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
             // 
             // labelReference
             // 
@@ -1284,7 +1383,7 @@
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 85);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(339, 52);
+            this.groupTo.Size = new System.Drawing.Size(321, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1344,7 +1443,7 @@
             this.groupShipment.Controls.Add(this.serviceState);
             this.groupShipment.Location = new System.Drawing.Point(6, 142);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(339, 73);
+            this.groupShipment.Size = new System.Drawing.Size(321, 73);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -1438,7 +1537,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(339, 77);
+            this.groupBoxFrom.Size = new System.Drawing.Size(321, 77);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
@@ -1786,5 +1885,14 @@
         private System.Windows.Forms.CheckBox usePaperlessInvoice;
         private System.Windows.Forms.Label usePaperlessInvoiceLabel;
         private System.Windows.Forms.CheckBox usePaperlessInvoiceState;
+        private UI.Controls.MultiValueTextBox costCenter;
+        private System.Windows.Forms.CheckBox costCenterState;
+        private System.Windows.Forms.Label labelCostCenter;
+        private System.Windows.Forms.CheckBox irregularIndicatorState;
+        private UI.Controls.MultiValueComboBox irregularIndicator;
+        private System.Windows.Forms.Label labelIrregularIndicator;
+        private UI.Controls.MultiValueTextBox contentTariffNumber;
+        private System.Windows.Forms.CheckBox contentTariffNumberState;
+        private System.Windows.Forms.Label labelContentTariffNumber;
     }
 }

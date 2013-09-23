@@ -78,6 +78,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             EnumHelper.BindComboBox<UpsReturnServiceType>(returnService);
             EnumHelper.BindComboBox<UpsPostalSubclassificationType>(surePostClassification);
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
+            EnumHelper.BindComboBox<UpsIrregularIndicatorType>(irregularIndicator);
 
             payorCountry.DisplayMember = "Key";
             payorCountry.ValueMember = "Value";
@@ -146,6 +147,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // SurePost
             AddValueMapping(ups, UpsProfileFields.Subclassification, surePostClassificationState, surePostClassification, labelSurePostClassification);
             AddValueMapping(ups, UpsProfileFields.Endorsement, uspsEndorsementState, uspsEndorsement, labelUspsEndorsement);
+            AddValueMapping(ups, UpsProfileFields.CostCenter, costCenterState, costCenter, labelCostCenter);
+            AddValueMapping(ups, UpsProfileFields.IrregularIndicator, irregularIndicatorState, irregularIndicator, labelIrregularIndicator);
+            AddValueMapping(ups, UpsProfileFields.Cn22ContentTariffNumber, contentTariffNumberState, contentTariffNumber, labelContentTariffNumber);
         }
 
         /// <summary>
