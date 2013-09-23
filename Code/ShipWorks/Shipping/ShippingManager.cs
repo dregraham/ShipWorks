@@ -355,6 +355,8 @@ namespace ShipWorks.Shipping
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
             {
+                clonedShipment.Ups.UspsTrackingNumber = string.Empty;
+                clonedShipment.Ups.Cn22Number = string.Empty;
                 foreach (UpsPackageEntity package in clonedShipment.Ups.Packages)
                 {
                     package.TrackingNumber = string.Empty;

@@ -875,6 +875,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                             currentPackage.UspsTrackingNumber = shipment.Ups.Cn22Number;
                         }
                     }
+
+                    // Now that the USPS tracking number should be correct, we need to update the 
+                    // main tracking number to be the USPS tracking number.
+                    // From Bryan Cazan @ UPS:
+                    //   For domestic MI tracking, please use the USPSPICNumber as the tracking number that is passed on to marketplaces. 
+                    //   Please ignore the 8000 number given. That number will cause issues with tracking for customers. 
+                    if (!string.IsNullOrWhiteSpace(currentPackage.UspsTrackingNumber))
+                    {
+                        currentPackage.TrackingNumber = currentPackage.UspsTrackingNumber;
+                        shipment.TrackingNumber = currentPackage.TrackingNumber;
+                    }
                 }
 
                 if (shipment.ReturnShipment && !UpsUtility.ReturnServiceHasLabels((UpsReturnServiceType)shipment.Ups.ReturnService))
