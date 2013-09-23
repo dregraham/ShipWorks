@@ -414,9 +414,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             endorsementPanel.Visible = showEndorsement; 
 
             confirmationPanel.Visible = !isSurePost;
-            sectionCod.Visible = !isSurePost;
+            sectionCod.Visible = !isSurePost && !isMi;
 
-            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost;    
+            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost && !isMi;    
 
             sectionSurePost.Visible = isSurePost || isMi;
 
@@ -425,6 +425,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipperReleasePanel.Visible = !isSurePost && !isMi;
 
             sectionBilling.Visible = !isSurePost;
+
+            otherPackageDetails.Visible = !isSurePost && !isMi;
 
             // Reference numbers are not allowed with Mail Innovations.
             referencePanel.Visible = !isMi;
