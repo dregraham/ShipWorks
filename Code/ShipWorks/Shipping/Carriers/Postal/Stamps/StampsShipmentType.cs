@@ -310,6 +310,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
             commonDetail.OriginAccount = (account == null) ? "" : account.Username;
 
+            if(shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            {
+                commonDetail.OriginalShipmentType = ShipmentTypeCode.Stamps;
+            }
+
             return commonDetail;
         }
 
