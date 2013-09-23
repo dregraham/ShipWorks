@@ -48,13 +48,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                //return (TestServer) ? 
-                //    "http://www.express1dev.com/Services/SDCV24Service.svc" : 
-                //    "https://service.express1.com/Services/SDCV24Service.svc";
-
                 return (TestServer) ?
-                    "https://swsim.stamps.com/swsim/SwsimV29.asmx" :
-                    "https://swsim.stamps.com/swsim/SwsimV29.asmx";
+                    "http://www.express1dev.com/Services/SDCV29Service.svc" :
+                    "https://service.express1.com/Services/SDCV29Service.svc";
             }
         }
 
