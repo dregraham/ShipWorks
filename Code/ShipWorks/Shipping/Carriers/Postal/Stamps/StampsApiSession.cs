@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     string auth = webService.AuthenticateUser(new Credentials
                     {
-                        IntegrationID = integrationID,
+                        IntegrationID = isExpress1 ? new Guid(express1StampsConnectionDetails.ApiKey) : integrationID,
                         Username = username,
                         Password = password
                     }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired);

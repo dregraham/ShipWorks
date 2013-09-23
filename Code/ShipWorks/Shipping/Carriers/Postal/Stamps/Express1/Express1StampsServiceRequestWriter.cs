@@ -73,6 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         #region pass through
+
         public override void Close()
         {
             wrappedWriter.Close();
@@ -82,7 +83,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             wrappedWriter.Flush();
         }
-
 
         public override void WriteBase64(byte[] buffer, int index, int count)
         {
@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             wrappedWriter.WriteWhitespace(ws);
         }
-        #endregion
 
+        #endregion
     }
 }

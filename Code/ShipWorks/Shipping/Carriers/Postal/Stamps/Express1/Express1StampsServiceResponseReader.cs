@@ -12,64 +12,68 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         // the decorated XmlReader
         XmlReader wrappedReader;
 
-        // Details about the remote method being called.  Data in here is used to translate between the two message types.
-        LogicalMethodInfo methodInfo;
-
         // A list of namespaces from which we want to translate
-        private static readonly List<string> fromNamespaces = new List<string>
-            {
-                "xxxxxxxxxxxxxxx", // "www.express1.com/2010/06"
-                "yyyyyyyyyyyyyyy"  // ExpressOne.Services
+        private static readonly Dictionary<string, string> stampsNamespaceMap =
+            new Dictionary<string, string> {
+                { "http://www.express1.com/2011/08", "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29" }
             };
 
-        // The namespace to which we want to translate
-        private const string toNamespace = "zzzzzzzzzzzzzzzzzz";
+        // A list of element names we want to translate
+        private static readonly Dictionary<string, string> stampsLocalNameMap =
+            new Dictionary<string, string> {
+                { "AuthenticateUserResult", "Authenticator" }
+            };
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsServiceResponseReader(LogicalMethodInfo webMethodInfo, XmlReader original)
+        public Express1StampsServiceResponseReader(XmlReader originalReader)
         {
-            this.wrappedReader = original;
-            this.methodInfo = webMethodInfo;
+            this.wrappedReader = originalReader;
         }
 
         /// <summary>
-        /// Translates Xml Element names when appropriate
+        /// Translates the Express1 local name to Stamps.
         /// </summary>
         public override string LocalName
         {
             get
             {
-                string localName = wrappedReader.LocalName;
-                if (String.Compare(localName, methodInfo.Name + "Result", StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    // GetAccountStatusResult -> AccountStatusResponse
+                if(wrappedReader.LocalName == null)
+                    return null;
 
-                    // The XML Node for Stamps needs to be the name of the return type
-                    // note: have to get the Atomized version of the name or the caller will fail.
-                    localName = NameTable.Get(methodInfo.ReturnType.Name);
-                }
+                string stampsLocalName;
+                if(stampsLocalNameMap.TryGetValue(wrappedReader.LocalName, out stampsLocalName))
+                    return stampsLocalName;
 
-                return localName;
+                return wrappedReader.LocalName;
             }
         }
 
         /// <summary>
-        /// Translates the namespaces apprpriately
+        /// Translates the Express1 namespace to Stamps.
         /// </summary>
-        private static string GetNamespace(string incomingNamespace)
+        public override string NamespaceURI
         {
-            string targetNamespace = incomingNamespace;
-            if (targetNamespace != null)
+            get
             {
-                if (fromNamespaces.Any(fn => targetNamespace.Contains(fn)))
-                {
-                    targetNamespace = toNamespace;
-                }
+                return GetStampsNamespace(wrappedReader.NamespaceURI);
             }
+        }
 
-            return targetNamespace;
+        /// <summary>
+        /// Translates an Express1 namespace to Stamps.
+        /// </summary>
+        private static string GetStampsNamespace(string express1Namespace)
+        {
+            if(express1Namespace == null)
+                return null;
+
+            string stampsNamespace;
+            if(stampsNamespaceMap.TryGetValue(express1Namespace, out stampsNamespace))
+                return stampsNamespace;
+
+            return express1Namespace;
         }
 
         /// <summary>
@@ -77,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override bool MoveToAttribute(string name, string ns)
         {
-            return wrappedReader.MoveToAttribute(name, GetNamespace(ns));
+            return wrappedReader.MoveToAttribute(name, GetStampsNamespace(ns));
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override string GetAttribute(string name, string namespaceURI)
         {
-            return wrappedReader.GetAttribute(name, GetNamespace(namespaceURI));
+            return wrappedReader.GetAttribute(name, GetStampsNamespace(namespaceURI));
         }
 
         #region pass through
@@ -158,14 +162,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override XmlNameTable NameTable
         {
             get { return wrappedReader.NameTable; }
-        }
-
-        public override string NamespaceURI
-        {
-            get
-            {
-                return GetNamespace(wrappedReader.NamespaceURI);
-            }
         }
 
         public override XmlNodeType NodeType
