@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Services.Protocols;
+﻿using System.Collections.Generic;
 using System.Xml;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -18,10 +14,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 { "http://www.express1.com/2011/08", "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29" }
             };
 
-        // A list of element names we want to translate
+        // A list of local names we want to translate
         private static readonly Dictionary<string, string> stampsLocalNameMap =
             new Dictionary<string, string> {
-                { "AuthenticateUserResult", "Authenticator" }
+                { "AuthenticateUserResult", "Authenticator" },
+                { "GetRatesResult", "Authenticator" },
+                { "RateV11", "Rate" }
             };
 
         /// <summary>
@@ -77,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
-        /// Translate the MoveToAttribute call's namespace
+        /// Translates the MoveToAttribute call's namespace.
         /// </summary>
         public override bool MoveToAttribute(string name, string ns)
         {
@@ -85,11 +83,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
-        /// Translate the MoveToAttribute call's namespace
+        /// Translates the MoveToAttribute call's namespace.
         /// </summary>
         public override string GetAttribute(string name, string namespaceURI)
         {
             return wrappedReader.GetAttribute(name, GetStampsNamespace(namespaceURI));
+        }
+
+        /// <summary>
+        /// Translates the current value.
+        /// </summary>
+        public override string Value
+        {
+            get
+            {
+                var value = wrappedReader.Value;
+
+                // Express1 is sending zero times in date-only fields
+                var zeroTime = value.LastIndexOf("T00:00:00");
+                if(zeroTime > 0)
+                    return value.Remove(zeroTime);
+
+                return value;
+            }
         }
 
         #region pass through
@@ -192,11 +208,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override void ResolveEntity()
         {
             wrappedReader.ResolveEntity();
-        }
-
-        public override string Value
-        {
-            get { return wrappedReader.Value; }
         }
 
         #endregion
