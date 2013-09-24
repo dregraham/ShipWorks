@@ -132,6 +132,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionName);}
 		}
+		/// <summary>Creates a new ActionQueueEntity.ActionQueueType field instance</summary>
+		public static EntityField2 ActionQueueType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionQueueType);}
+		}
 		/// <summary>Creates a new ActionQueueEntity.ActionVersion field instance</summary>
 		public static EntityField2 ActionVersion
 		{
@@ -176,11 +181,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ContextLock
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ContextLock);}
-		}
-		/// <summary>Creates a new ActionQueueEntity.ActionQueueType field instance</summary>
-		public static EntityField2 ActionQueueType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ActionQueueType);}
 		}
 	}
 
@@ -15671,6 +15671,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UpsMailInnovationsEnabled
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsMailInnovationsEnabled);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.WorldShipMailInnovationsEnabled field instance</summary>
+		public static EntityField2 WorldShipMailInnovationsEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled);}
 		}
 	}
 

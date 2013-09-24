@@ -12,12 +12,15 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
+
     /// <summary>
     /// Control for enabling/disabling the availability of UPS contract-based 
     /// service types that are available through WorldShip.
     /// </summary>
     public partial class UpsMailInnovationsOptionsControl : UserControl
     {
+        private UpsShipmentType shipmentType;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -29,12 +32,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Loads the enabled UPS WorldShip services from the database
         /// </summary>
-        public void LoadSettings()
+        public void LoadSettings(UpsShipmentType shipmentType)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            this.shipmentType = shipmentType;
 
             // checking Mail Innovations actually includes all 3 Mail Innovations services. Key the UI off of the Domestic one
-            mailInnovations.Checked = settings.UpsMailInnovationsEnabled;
+            mailInnovations.Checked = shipmentType.IsMailInnovationsEnabled();
         }
 
         /// <summary>
@@ -47,7 +50,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 throw new ArgumentNullException("settings");
             }
 
-            settings.UpsMailInnovationsEnabled = mailInnovations.Checked;
+
+            if (shipmentType is WorldShipShipmentType)
+            {
+                settings.WorldShipMailInnovationsEnabled = mailInnovations.Checked;
+            }
+            else
+            {
+                settings.UpsMailInnovationsEnabled = mailInnovations.Checked;
+            }
         }
     }
 }

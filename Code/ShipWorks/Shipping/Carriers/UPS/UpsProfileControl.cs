@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
@@ -15,7 +10,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -50,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.LoadProfile(profile);
 
             UpsProfileEntity ups = profile.Ups;
-
+            
             if (ShippingSettings.Fetch().UpsInsuranceProvider == (int) InsuranceProvider.Carrier)
             {
                 insuranceControl.UseInsuranceBoxLabel = "UPS Declared Value";
@@ -59,7 +53,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            bool isMIAvailable = settings.UpsMailInnovationsEnabled;
+            UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType);
+
+            bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
+
             bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
             
             if (isSurePostAvailable || isMIAvailable)

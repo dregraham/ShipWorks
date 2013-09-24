@@ -55,7 +55,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// One-time control initialization
         /// </summary>
-        public void Initialize()
+        /// <param name="shipmentTypeCode"></param>
+        public void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
             dimensionsControl.Initialize();
 
@@ -77,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
 
             // Get valid packaging types
-            List<KeyValuePair<string, UpsPackagingType>> packaging = UpsUtility.GetValidPackagingTypes().Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
+            List<KeyValuePair<string, UpsPackagingType>> packaging = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
             packagingType.DataSource = packaging;
         }
 

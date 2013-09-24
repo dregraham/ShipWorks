@@ -16,12 +16,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsServiceManagerFactory"/> class.
         /// </summary>
-        public UpsServiceManagerFactory()
+        /// <param name="shipment"></param>
+        public UpsServiceManagerFactory(ShipmentEntity shipment)
         {
             serviceManagers = new List<IUpsServiceManager>
             {
                 new UpsCanadaServiceManager(),
-                new UpsUsServiceManager(),
+                new UpsUsServiceManager(shipment),
                 new UpsPuertoRicoServiceManager()
             };
         }

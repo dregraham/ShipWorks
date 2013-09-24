@@ -329,7 +329,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                     // The user may have changed the service type and package type in WS, update locally so we are in sync.
                                     string worldShipServiceType = import.ServiceType.ToUpperInvariant();
 
-                                    UpsServiceManagerFactory upsServiceManagerFactory = new UpsServiceManagerFactory();
+                                    UpsServiceManagerFactory upsServiceManagerFactory = new UpsServiceManagerFactory(upsShipment.Shipment);
                                     IUpsServiceManager upsServiceManager = upsServiceManagerFactory.Create(upsShipment.Shipment);
                                     UpsServiceMapping upsServiceMapping = null;
                                     try

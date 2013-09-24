@@ -37,8 +37,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsServiceControl(ShipmentTypeCode ShipmentTypeCode)
-            : base (ShipmentTypeCode)
+        public UpsServiceControl(ShipmentTypeCode shipmentTypeCode)
+            : base (shipmentTypeCode)
         {
             InitializeComponent();
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             payorCountry.ValueMember = "Value";
             payorCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
-            packageControl.Initialize();
+            packageControl.Initialize(shipmentTypeCode);
 
         }
 
@@ -208,7 +208,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 ShipmentEntity overriddenShipment = overriddenShipments.First();
 
-                var upsServiceManagerFactory = new UpsServiceManagerFactory();
+                var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
                 IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
                 List<UpsServiceType> serviceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
 

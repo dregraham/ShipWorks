@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteEndElement();
             }
 
-            UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory();
+            UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
             IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
             UpsServiceMapping upsServiceMapping = upsServiceManager.GetServices(shipment).Single(x => x.UpsServiceType == (UpsServiceType) ups.Service);
 

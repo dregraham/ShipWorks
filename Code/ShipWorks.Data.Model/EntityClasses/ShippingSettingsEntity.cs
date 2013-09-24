@@ -590,6 +590,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UpsMailInnovationsEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("WorldShipMailInnovationsEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -1236,6 +1239,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, value); }
+		}
+
+		/// <summary> The WorldShipMailInnovationsEnabled property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipMailInnovationsEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean WorldShipMailInnovationsEnabled
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, value); }
 		}
 
 

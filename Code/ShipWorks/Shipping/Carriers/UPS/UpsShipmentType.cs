@@ -486,7 +486,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // it may have effected the shipping services available (i.e. the eBay GSP program)            
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
-            var upsServiceManagerFactory = new UpsServiceManagerFactory();
+            var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
             IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
             List<UpsServiceType> serviceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
 
@@ -897,6 +897,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     upsShipmentEntity.PayorType = (int)UpsPayorType.Sender;
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether [is mail innovations enabled].
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsMailInnovationsEnabled()
+        {
+            return ShippingSettings.Fetch().UpsMailInnovationsEnabled;
         }
     }
 }
