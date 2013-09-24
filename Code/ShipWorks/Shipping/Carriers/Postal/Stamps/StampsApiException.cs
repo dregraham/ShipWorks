@@ -38,9 +38,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     case 0x80040414: return "There is not enough postage in your account.";
                 }
 
-                string message;
-
                 SoapException baseEx = base.InnerException as SoapException;
+                if (baseEx.Message.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
+                {
+                    // Handle the authentication exception from Express1 - there isn't any code to use with Express1;
+                    // the actual error message itself is the best thing we have to go off of
+
+                    // The exception message in the Express1 API ends up with portions of the stack trace, so show a friendlier 
+                    // message to the user.
+                    return "The username or password entered is not correct.";
+                }
+
+                string message;
                 message = baseEx.Detail.InnerText;
 
                 // Strip out the authenticator junk
