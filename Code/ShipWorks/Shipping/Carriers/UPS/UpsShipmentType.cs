@@ -900,7 +900,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Determines whether [is mail innovations enabled].
+        /// Determines whether [is mail innovations enabled] for OLT.
         /// </summary>
         /// <returns></returns>
         public virtual bool IsMailInnovationsEnabled()
