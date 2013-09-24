@@ -844,13 +844,59 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            if (UpsUtility.IsUpsSurePostService((UpsServiceType) shipment.Ups.Service) && 
+            UpsShipmentEntity upsShipmentEntity = shipment.Ups;
+            UpsServiceType upsServiceType = (UpsServiceType)upsShipmentEntity.Service;
+
+            if (UpsUtility.IsUpsSurePostService(upsServiceType) && 
                 (shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)  &&
-                shipment.Ups.Packages.Any(p=>p.Insurance && p.InsuranceValue > 0))
+                upsShipmentEntity.Packages.Any(p => p.Insurance && p.InsuranceValue > 0))
             {
                 throw new CarrierException("Ups declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable Shipworks Insurance for this Carrier.");
             }
 
+            // Clear out any values that aren't allowed for SurePost or MI
+            if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))
+            {
+                shipment.ReturnShipment = false;
+                upsShipmentEntity.ReturnContents = string.Empty;
+                upsShipmentEntity.ReturnService = (int)UpsReturnServiceType.ElectronicReturnLabel;
+                upsShipmentEntity.ReturnUndeliverableEmail = string.Empty;
+
+                upsShipmentEntity.CodEnabled = false;
+                upsShipmentEntity.CodAmount = 0;
+                upsShipmentEntity.CodPaymentType = (int)UpsCodPaymentType.Cash;
+
+                upsShipmentEntity.ShipperRelease = false;
+
+                UpsPackageEntity upsPackageEntity = upsShipmentEntity.Packages.FirstOrDefault();
+                upsPackageEntity.AdditionalHandlingEnabled = false;
+                upsPackageEntity.DryIceEnabled = false;
+                upsPackageEntity.DryIceIsForMedicalUse = false;
+                upsPackageEntity.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;
+                upsPackageEntity.DryIceWeight = 0;
+                upsPackageEntity.VerbalConfirmationEnabled = false;
+                upsPackageEntity.VerbalConfirmationName = string.Empty;
+                upsPackageEntity.VerbalConfirmationPhone = string.Empty;
+                upsPackageEntity.VerbalConfirmationPhoneExtension = string.Empty;
+
+                // Clear out any specific to MI
+                if (UpsUtility.IsUpsMiService(upsServiceType))
+                {
+                    upsShipmentEntity.CarbonNeutral = false;
+                    upsShipmentEntity.ReferenceNumber = string.Empty;
+                    upsShipmentEntity.ReferenceNumber2 = string.Empty;
+                }
+
+                // Clear out any specific to SurePost
+                if (UpsUtility.IsUpsSurePostService(upsServiceType))
+                {
+                    upsShipmentEntity.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
+                    upsShipmentEntity.PayorAccount = string.Empty;
+                    upsShipmentEntity.PayorCountryCode = string.Empty;
+                    upsShipmentEntity.PayorPostalCode = string.Empty;
+                    upsShipmentEntity.PayorType = (int)UpsPayorType.Sender;
+                }
+            }
         }
     }
 }

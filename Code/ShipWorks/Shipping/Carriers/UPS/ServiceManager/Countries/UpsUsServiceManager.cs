@@ -227,9 +227,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
            // Add all of the Mail Innovations services
             if (ShippingSettings.Fetch().UpsMailInnovationsEnabled)
             {
-                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, UsCountryCode, "", "M4", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
-                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, UsCountryCode, "", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
-                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsPriority, UsCountryCode, "", "M3", string.Empty, "MIT", WorldShipServiceDescriptions.UpsMailInnovationsPriority, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, UsCountryCode, "72", "72", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, UsCountryCode, "70", "70", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
+                tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsPriority, UsCountryCode, "71", "71", string.Empty, "MIT", WorldShipServiceDescriptions.UpsMailInnovationsPriority, true, false));
 
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsExpedited, PrCountryCode, "", "M4", string.Empty, "MID", WorldShipServiceDescriptions.UpsMailInnovationsExpedited, true, false));
                 tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsFirstClass, PrCountryCode, "", "M2", string.Empty, "MIF", WorldShipServiceDescriptions.UpsMailInnovationsFirstClass, true, false));
@@ -256,8 +256,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
                                                                 InternationalCountryCode};
                 foreach (var countryCode in countryCodes)
                 {
-                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntEconomy, countryCode, "", "74", string.Empty, "MIE", WorldShipServiceDescriptions.UpsMailInnovationsIntEconomy, true, false));
-                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntPriority, countryCode, "", "73", string.Empty, "MIP", WorldShipServiceDescriptions.UpsMailInnovationsIntPriority, true, false));
+                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntEconomy, countryCode, "74", "74", string.Empty, "MIE", WorldShipServiceDescriptions.UpsMailInnovationsIntEconomy, true, false));
+                    tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsMailInnovationsIntPriority, countryCode, "73", "73", string.Empty, "MIP", WorldShipServiceDescriptions.UpsMailInnovationsIntPriority, true, false));
                 }
             }
 
