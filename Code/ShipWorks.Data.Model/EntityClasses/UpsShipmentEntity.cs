@@ -638,9 +638,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Cn22Number", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Cn22ContentTariffNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -1255,17 +1252,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.Cn22Number, true); }
 			set	{ SetValue((int)UpsShipmentFieldIndex.Cn22Number, value); }
-		}
-
-		/// <summary> The Cn22ContentTariffNumber property of the Entity UpsShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UpsShipment"."Cn22ContentTariffNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 40<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Cn22ContentTariffNumber
-		{
-			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.Cn22ContentTariffNumber, true); }
-			set	{ SetValue((int)UpsShipmentFieldIndex.Cn22ContentTariffNumber, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageEntity' which are related to this entity via a relation of type '1:n'.

@@ -2499,7 +2499,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsProfileEntity", "CostCenter", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CostCenter, 30, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "IrregularIndicator", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.IrregularIndicator, 0, 0, 10);
 			base.AddElementFieldInfo("UpsProfileEntity", "Cn22Number", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.Cn22Number, 255, 0, 0);
-			base.AddElementFieldInfo("UpsProfileEntity", "Cn22ContentTariffNumber", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.Cn22ContentTariffNumber, 40, 0, 0);
 		}
 		/// <summary>Inits UpsProfilePackageEntity's FieldInfo objects</summary>
 		private void InitUpsProfilePackageEntityInfos()
@@ -2572,7 +2571,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsShipmentEntity", "CostCenter", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.CostCenter, 30, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "IrregularIndicator", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.IrregularIndicator, 0, 0, 10);
 			base.AddElementFieldInfo("UpsShipmentEntity", "Cn22Number", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.Cn22Number, 255, 0, 0);
-			base.AddElementFieldInfo("UpsShipmentEntity", "Cn22ContentTariffNumber", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.Cn22ContentTariffNumber, 40, 0, 0);
 		}
 		/// <summary>Inits UserEntity's FieldInfo objects</summary>
 		private void InitUserEntityInfos()

@@ -17842,11 +17842,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Cn22Number);}
 		}
-		/// <summary>Creates a new UpsProfileEntity.Cn22ContentTariffNumber field instance</summary>
-		public static EntityField2 Cn22ContentTariffNumber
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Cn22ContentTariffNumber);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -18176,11 +18171,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Cn22Number
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Cn22Number);}
-		}
-		/// <summary>Creates a new UpsShipmentEntity.Cn22ContentTariffNumber field instance</summary>
-		public static EntityField2 Cn22ContentTariffNumber
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Cn22ContentTariffNumber);}
 		}
 	}
 

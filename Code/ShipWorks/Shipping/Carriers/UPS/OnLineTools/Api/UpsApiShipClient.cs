@@ -654,11 +654,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Currently only USD is supported
                 xmlWriter.WriteElementString("CN22ContentCurrencyCode", "USD");
 
-                // If we have a CN22ContentTariffNumber, write it out too
-                if (!string.IsNullOrWhiteSpace(ups.Cn22ContentTariffNumber))
-                {
-                    xmlWriter.WriteElementString("CN22ContentTariffNumber", "USD");
-                }
             }
 
             // Close CN22Content

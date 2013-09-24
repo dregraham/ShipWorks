@@ -173,7 +173,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.CostCenter = string.Empty;
             shipment.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             shipment.Ups.Cn22Number = string.Empty;
-            shipment.Ups.Cn22ContentTariffNumber = string.Empty;
 
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
             shipment.Ups.Packages.Add(package);
@@ -291,7 +290,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.CostCenter = string.Empty;
             profile.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             profile.Ups.Cn22Number = string.Empty;
-            profile.Ups.Cn22ContentTariffNumber = string.Empty;
         }
 
         /// <summary>
@@ -430,7 +428,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.CostCenter, ups, UpsShipmentFields.CostCenter);
             ShippingProfileUtility.ApplyProfileValue(source.IrregularIndicator, ups, UpsShipmentFields.IrregularIndicator);
             ShippingProfileUtility.ApplyProfileValue(source.Cn22Number, ups, UpsShipmentFields.Cn22Number);
-            ShippingProfileUtility.ApplyProfileValue(source.Cn22ContentTariffNumber, ups, UpsShipmentFields.Cn22ContentTariffNumber);
 
             if (changedPackageWeights)
             {

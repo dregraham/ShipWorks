@@ -8436,8 +8436,6 @@ namespace ShipWorks.Data.Model
 		IrregularIndicator,
 		///<summary>Cn22Number. </summary>
 		Cn22Number,
-		///<summary>Cn22ContentTariffNumber. </summary>
-		Cn22ContentTariffNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8588,8 +8586,6 @@ namespace ShipWorks.Data.Model
 		IrregularIndicator,
 		///<summary>Cn22Number. </summary>
 		Cn22Number,
-		///<summary>Cn22ContentTariffNumber. </summary>
-		Cn22ContentTariffNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

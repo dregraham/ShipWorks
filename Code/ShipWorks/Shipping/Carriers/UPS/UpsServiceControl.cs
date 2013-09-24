@@ -262,7 +262,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     surePostClassification.ApplyMultiValue((UpsPostalSubclassificationType)shipment.Ups.Subclassification);
                     costCenter.ApplyMultiText(shipment.Ups.CostCenter);
                     irregularIndicator.ApplyMultiValue((UpsIrregularIndicatorType)shipment.Ups.IrregularIndicator);
-                    contentTariffNumber.ApplyMultiText(shipment.Ups.Cn22ContentTariffNumber);
 
                     uspsEndorsement.ApplyMultiValue((UspsEndorsementType)shipment.Ups.Endorsement);
                 }
@@ -323,7 +322,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int) v);
                 costCenter.ReadMultiText(t => shipment.Ups.CostCenter = t);
                 irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int)v);
-                contentTariffNumber.ReadMultiText(t => shipment.Ups.Cn22ContentTariffNumber = t);
 
                 uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
             }
