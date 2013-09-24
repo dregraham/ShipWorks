@@ -259,18 +259,93 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             ValidateShipment(shipment);
 
-            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int) PostalConfirmationType.None)
+            if (shipment.Postal.Service == (int)PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int)PostalConfirmationType.None)
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
 
-            try
+            bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) &&
+                Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
+                ShippingSettings.Fetch().StampsAutomaticExpress1;
+
+            StampsAccountEntity express1Account = StampsAccountManager.GetAccount(ShippingSettings.Fetch().StampsAutomaticExpress1Account);
+
+            if (useExpress1)
             {
-                StampsApiSession.ProcessShipment(shipment);
+                if (express1Account == null)
+                {
+                    throw new ShippingException("The Express1 account to automatically use when processing with Stamps.com has not been selected.");
+                }
+
+                int originalShipmentType = shipment.ShipmentType;
+                long? originalStampsAccountID = shipment.Postal.Stamps.OriginalStampsAccountID;
+                long stampsAccountID = shipment.Postal.Stamps.StampsAccountID;
+
+                try
+                {
+                    // Check Stamps.com amount
+                    List<RateResult> stampsRates = StampsApiSession.GetRates(shipment);
+                    RateResult stampsRate = stampsRates.Where(er => er.Selectable).FirstOrDefault(er =>
+                           ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
+                        && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
+
+                    // Check Express1 amount
+                    shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
+                    shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Endicia.EndiciaAccountID;
+                    shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
+
+                    List<RateResult> express1Rates = StampsApiSession.GetRates(shipment);
+                    RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
+                           ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
+                        && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
+
+                    // Now set useExpress1 to true only if the express 1 rate is less than the endicia amount
+                    if (stampsRate != null && express1Rate != null)
+                    {
+                        useExpress1 = express1Rate.Amount <= stampsRate.Amount;
+                    }
+                    else
+                    {
+                        // If we can't figure it out for sure, don't use it
+                        useExpress1 = false;
+                    }
+                }
+                finally
+                {
+                    // Reset back to the original values
+                    shipment.ShipmentType = originalShipmentType;
+                    shipment.Postal.Stamps.OriginalStampsAccountID = originalStampsAccountID;
+                    shipment.Postal.Stamps.StampsAccountID = stampsAccountID;
+                }
             }
-            catch (StampsException ex)
+
+            // See if this shipment should really go through Express1
+            if (useExpress1)
             {
-                throw new ShippingException(ex.Message, ex);
+                // Now we turn this into an Express1 shipment...
+                shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
+                shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
+                shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
+
+                Express1StampsShipmentType shipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(shipment);
+
+                // Process via Express1
+                shipmentType.UpdateDynamicShipmentData(shipment);
+                shipmentType.ProcessShipment(shipment);
+            }
+            else
+            {
+                // This would be set if they have tried to process as Express1 but it failed... make sure its clear since we are not using it.
+                shipment.Postal.Stamps.OriginalStampsAccountID = null;
+
+                try
+                {
+                    StampsApiSession.ProcessShipment(shipment);
+                }
+                catch (StampsException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
             }
         }
 
