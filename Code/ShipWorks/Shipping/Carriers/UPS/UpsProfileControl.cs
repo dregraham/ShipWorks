@@ -51,8 +51,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 insuranceControl.InsuredValueLabel = "Declared value:";
             }
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType);
 
             bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
