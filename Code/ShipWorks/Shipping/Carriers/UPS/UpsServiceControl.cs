@@ -430,12 +430,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             referencePanel.Visible = !isMi;
             reference2Panel.Visible = !isMi;
 
-            UpdateIrregularVisibility(serviceType);
+            UpdateIrregularVisibility();
 
             UpdateSectionOptionsHeight();
         }
 
-        private void UpdateIrregularVisibility(UpsServiceType? serviceType)
+        /// <summary>
+        /// Updates the irregular visibility.
+        /// </summary>
+        private void UpdateIrregularVisibility()
         {
             bool isOlt = ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools;
 
