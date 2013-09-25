@@ -135,11 +135,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private static AccountInfo GetAccountInfoInternal(StampsAccountEntity account)
         {
             AccountInfo accountInfo;
-            Address address;
-            string email;
 
             using (SwsimV29 webService = CreateWebService("GetAccountInfo", account.IsExpress1))
             {
+                // Address and CustomerEmail are not returned by Express1, so do not use them.
+                Address address;
+                string email;
+
                 string auth = webService.GetAccountInfo(GetAuthenticator(account), out accountInfo, out address, out email);
                 usernameAuthenticatorMap[account.Username] = auth;
             }
