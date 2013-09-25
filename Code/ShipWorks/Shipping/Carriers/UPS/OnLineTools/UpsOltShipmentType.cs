@@ -64,10 +64,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         {
             try
             {
-                UpsServicePackageTypeSetting.Validate(shipment);
-				
+                // Call the base class for setting default values as needed based on the service/package type of the shipment
                 base.ProcessShipment(shipment);
 
+                UpsServicePackageTypeSetting.Validate(shipment);
                 UpsApiShipClient.ProcessShipment(shipment);
             }
             catch (UpsApiException ex)
