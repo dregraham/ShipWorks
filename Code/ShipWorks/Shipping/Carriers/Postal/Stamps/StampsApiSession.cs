@@ -1149,7 +1149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
 
-                        if (triesLeft > 0 && IsStaleAuthenticator(ex))
+                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.IsExpress1))
                         {
                             AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), account.IsExpress1);
                         }
@@ -1185,23 +1185,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Indicates if the exception represents an authenticator that has gone stale
         /// </summary>
-        private static bool IsStaleAuthenticator(SoapException ex)
+        private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
         {
-            long code = StampsApiException.GetErrorCode(ex);
-
-            switch (code)
+            if(isExpress1)
             {
-                case 0x002b0201: // Invalid
-                case 0x002b0202: // Expired
-                case 0x004C0105: // Expired
-                case 0x00500102: // Expired
-                case 0x8004E112: // Expired
-                case 0x002b0203: // Invalid
-                case 0x002b0204: // Out of sync
-                    return true;
-            }
+                // Express1 does not return error codes...
+                switch(ex.Message)
+                {
+                    case "Invalid authentication info":
+                    case "Unable to authenticate user.":
+                        return true;
+                }
 
-            return false;
+                return false;
+            }
+            else
+            {
+                long code = StampsApiException.GetErrorCode(ex);
+
+                switch(code)
+                {
+                    case 0x002b0201: // Invalid
+                    case 0x002b0202: // Expired
+                    case 0x004C0105: // Expired
+                    case 0x00500102: // Expired
+                    case 0x8004E112: // Expired
+                    case 0x002b0203: // Invalid
+                    case 0x002b0204: // Out of sync
+                        return true;
+                }
+
+                return false;
+            }
         }
     }
 }
