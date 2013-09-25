@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             new Dictionary<string, string> {
                 { "AuthenticateUserResult", "Authenticator" },
                 { "GetRatesResult", "Authenticator" },
+                { "GetAccountInfoResult", "Authenticator" },
                 { "RateV11", "Rate" }
             };
 
