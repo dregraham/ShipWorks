@@ -1048,15 +1048,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 throw new ArgumentNullException("alternativeTracking");
             }
 
-            // Only appropriate for WorldShip shipments
-            if ((ShipmentTypeCode)shipment.ShipmentType == ShipmentTypeCode.UpsWorldShip)
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
+            if (shipmentTypeCode == ShipmentTypeCode.UpsWorldShip || shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
                 // we need to inspect the UPS-specific values, get them loaded
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
-                if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
                 {
-                    alternativeTracking(shipment.Ups.UspsTrackingNumber, (UpsServiceType)shipment.Ups.Service);
+                    alternativeTracking(shipment.Ups.UspsTrackingNumber, (UpsServiceType) shipment.Ups.Service);
                 }
             }
         }
