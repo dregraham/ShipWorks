@@ -215,25 +215,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             ThermalLabelType? thermalType;
-            bool thermalDocTab;
-            ThermalDocTabType thermalDocTabType;
 
             // Determine what thermal type, if any to use.  Use the Endicia settings if it is an Endicia shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
                 thermalType = settings.EndiciaThermal ? (ThermalLabelType) settings.EndiciaThermalType : (ThermalLabelType?) null;
-                thermalDocTab = settings.EndiciaThermalDocTab;
-                thermalDocTabType = (ThermalDocTabType) settings.EndiciaThermalDocTabType;
             }
             else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
                 thermalType = settings.Express1EndiciaThermal ? (ThermalLabelType) settings.Express1EndiciaThermalType : (ThermalLabelType?) null;
-                thermalDocTab = settings.Express1EndiciaThermalDocTab;
-                thermalDocTabType = (ThermalDocTabType) settings.Express1EndiciaThermalDocTabType;
             }
             else
             {
-                throw new InvalidOperationException("Unknown endicia reseller");
+                throw new InvalidOperationException("Unknown Endicia shipment type.");
             }
 
             // Critical mail does not support thermal

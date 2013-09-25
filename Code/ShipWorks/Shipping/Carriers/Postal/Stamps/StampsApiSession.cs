@@ -544,7 +544,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             rate.ToZIPCode = toAddress.ZIPCode;
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            ThermalLabelType? thermalType = settings.StampsThermal ? (ThermalLabelType)settings.StampsThermalType : (ThermalLabelType?)null;
+
+            ThermalLabelType? thermalType;
+
+            // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
+            if(shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            {
+                thermalType = settings.StampsThermal ? (ThermalLabelType)settings.StampsThermalType : (ThermalLabelType?)null;
+            }
+            else if(shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
+            {
+                thermalType = settings.Express1StampsThermal ? (ThermalLabelType)settings.Express1StampsThermalType : (ThermalLabelType?)null;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown Stamps.com shipment type.");
+            }
 
             // However, Stamps.com doesn't currently support thermal internationals
             if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
