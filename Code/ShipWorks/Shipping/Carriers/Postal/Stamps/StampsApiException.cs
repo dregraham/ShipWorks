@@ -68,6 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 message = message.Replace("http://stamps.com/xml/namespace/2008/01/swsim/swsimv1:", "");
                 message = message.Replace("http://stamps.com/xml/namespace/2011/9/swsim/swsimv18:", "");
                 message = message.Replace("http://stamps.com/xml/namespace/2011/11/swsim/swsimv20:", "");
+                message = message.Replace("http://stamps.com/xml/namespace/2013/05/swsim/swsimv29:", "");
             
                 string leftOver = string.Empty;
 
