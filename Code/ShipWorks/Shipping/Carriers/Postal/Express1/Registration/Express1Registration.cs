@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private readonly IExpress1RegistrationValidator registrationValidator;
         private readonly IExpress1RegistrationGateway registrationGateway;
         private readonly IExpress1RegistrationRepository registrationRepository;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1Registration"/> class using default values
         /// for the gateway, repository, and validator.
@@ -40,6 +41,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             registrationValidator = validator;
             registrationGateway = gateway;
             registrationRepository = repository;
+
+            UserName = string.Empty;
+            PlainTextPassword = string.Empty;
         }
 
         /// <summary>
@@ -54,10 +58,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         public string UserName { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        /// Gets or sets the password. 
         /// </summary>
         /// <value>The password.</value>
-        public string Password { get; set; }
+        public string PlainTextPassword { get; set; }
 
         /// <summary>
         /// Gets the email.
@@ -128,6 +132,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         public IList<Express1ValidationError> ValidationErrors { get; private set; }
 
         /// <summary>
+        /// Gets the encrypted password.
+        /// </summary>
+        public string EncryptedPassword
+        {
+            get { return SecureText.Encrypt(PlainTextPassword, UserName); }
+        }
+
+        /// <summary>
         /// Add an existing Express1 account to ShipWorks
         /// </summary>
         public void AddExistingAccount()
@@ -172,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 
                 // Note the account number and password from the registration result
                 UserName = registrationResult.AccountNumber;
-                Password = registrationResult.Password;
+                PlainTextPassword = registrationResult.Password;
 
                 // Use the the repository to save the registration in ShipWorks
                 SaveAccount();

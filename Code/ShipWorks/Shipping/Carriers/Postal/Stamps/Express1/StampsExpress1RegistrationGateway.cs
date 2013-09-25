@@ -41,7 +41,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 StampsApiSession.GetAccountInfo(new StampsAccountEntity
                 {
                     Username = registration.UserName,
-                    Password = registration.Password
+                    Password = registration.EncryptedPassword,
+                    IsExpress1 = true
                 });
             }
             catch (StampsException ex)

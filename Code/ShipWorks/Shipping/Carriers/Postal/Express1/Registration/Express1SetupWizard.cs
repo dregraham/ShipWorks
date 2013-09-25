@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 if (radioNewAccount.Checked)
                 {
                     accountDetailsTextBox.Text = String.Format("Express1 Account Number: {0}\r\nPassword: {1}",
-                        registration.UserName, registration.Password);
+                        registration.UserName, registration.PlainTextPassword);
                 }
             }
         }
@@ -383,7 +383,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             }
 
             registration.UserName = accountExisting.Text.Trim();
-            registration.Password = passwordExisting.Text;
+            registration.PlainTextPassword = passwordExisting.Text;
 
             try
             {
