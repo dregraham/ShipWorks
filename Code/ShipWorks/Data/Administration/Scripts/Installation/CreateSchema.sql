@@ -4309,10 +4309,6 @@ CREATE TABLE [dbo].[ShippingSettings]
 [iParcelInsurancePennyOne] [bit] NOT NULL,
 [Express1StampsThermal] [bit] NOT NULL,
 [Express1StampsThermalType] [int] NOT NULL,
-[Express1StampsCustomsCertify] [bit] NOT NULL,
-[Express1StampsCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Express1StampsThermalDocTab] [bit] NOT NULL,
-[Express1StampsThermalDocTabType] [int] NOT NULL,
 [Express1StampsSingleSource] [bit] NOT NULL
 )
 GO

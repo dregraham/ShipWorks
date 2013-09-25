@@ -7383,14 +7383,6 @@ namespace ShipWorks.Data.Model
 		Express1StampsThermal,
 		///<summary>Express1StampsThermalType. </summary>
 		Express1StampsThermalType,
-		///<summary>Express1StampsCustomsCertify. </summary>
-		Express1StampsCustomsCertify,
-		///<summary>Express1StampsCustomsSigner. </summary>
-		Express1StampsCustomsSigner,
-		///<summary>Express1StampsThermalDocTab. </summary>
-		Express1StampsThermalDocTab,
-		///<summary>Express1StampsThermalDocTabType. </summary>
-		Express1StampsThermalDocTabType,
 		///<summary>Express1StampsSingleSource. </summary>
 		Express1StampsSingleSource,
 		///<summary>StampsAutomaticExpress1. </summary>

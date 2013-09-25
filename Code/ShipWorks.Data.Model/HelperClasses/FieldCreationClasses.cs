@@ -15682,26 +15682,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermalType);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsCustomsCertify field instance</summary>
-		public static EntityField2 Express1StampsCustomsCertify
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsCustomsCertify);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsCustomsSigner field instance</summary>
-		public static EntityField2 Express1StampsCustomsSigner
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsCustomsSigner);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermalDocTab field instance</summary>
-		public static EntityField2 Express1StampsThermalDocTab
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermalDocTab);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermalDocTabType field instance</summary>
-		public static EntityField2 Express1StampsThermalDocTabType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermalDocTabType);}
-		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsSingleSource field instance</summary>
 		public static EntityField2 Express1StampsSingleSource
 		{

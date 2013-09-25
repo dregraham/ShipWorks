@@ -15,10 +15,6 @@ ALTER TABLE [ShippingSettings]
 ADD
 	[Express1StampsThermal] [bit] NOT NULL CONSTRAINT DF_Express1StampsThermal DEFAULT(0),
 	[Express1StampsThermalType] [int] NOT NULL CONSTRAINT DF_Express1StampsThermalType DEFAULT(0),
-	[Express1StampsCustomsCertify] [bit] NOT NULL CONSTRAINT DF_Express1StampsCustomsCertify DEFAULT(0),
-	[Express1StampsCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT DF_Express1StampsCustomsSigner DEFAULT(N''),
-	[Express1StampsThermalDocTab] [bit] NOT NULL CONSTRAINT DF_Express1StampsThermalDocTab DEFAULT(0),
-	[Express1StampsThermalDocTabType] [int] NOT NULL CONSTRAINT DF_Express1StampsThermalDocTabType DEFAULT(0),
 	[Express1StampsSingleSource] [bit] NOT NULL CONSTRAINT DF_Express1StampsSingleSource DEFAULT(0),
 	[StampsAutomaticExpress1] [bit] NOT NULL CONSTRAINT DF_StampsAutomaticExpress1 DEFAULT(0),
 	[StampsAutomaticExpress1Account] [bigint] NOT NULL CONSTRAINT DF_StampsAutomaticExpress1Account DEFAULT(0);
@@ -27,10 +23,6 @@ ALTER TABLE [ShippingSettings]
 DROP CONSTRAINT
 	DF_Express1StampsThermal,
 	DF_Express1StampsThermalType,
-	DF_Express1StampsCustomsCertify,
-	DF_Express1StampsCustomsSigner,
-	DF_Express1StampsThermalDocTab,
-	DF_Express1StampsThermalDocTabType,
 	DF_Express1StampsSingleSource,
 	DF_StampsAutomaticExpress1,
 	DF_StampsAutomaticExpress1Account;

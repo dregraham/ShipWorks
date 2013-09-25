@@ -598,18 +598,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Express1StampsThermalType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Express1StampsCustomsCertify", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Express1StampsCustomsSigner", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Express1StampsThermalDocTab", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Express1StampsThermalDocTabType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Express1StampsSingleSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1285,50 +1273,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalType, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalType, value); }
-		}
-
-		/// <summary> The Express1StampsCustomsCertify property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsCustomsCertify"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1StampsCustomsCertify
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsCustomsCertify, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsCustomsCertify, value); }
-		}
-
-		/// <summary> The Express1StampsCustomsSigner property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsCustomsSigner"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Express1StampsCustomsSigner
-		{
-			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.Express1StampsCustomsSigner, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsCustomsSigner, value); }
-		}
-
-		/// <summary> The Express1StampsThermalDocTab property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsThermalDocTab"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1StampsThermalDocTab
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalDocTab, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalDocTab, value); }
-		}
-
-		/// <summary> The Express1StampsThermalDocTabType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsThermalDocTabType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Express1StampsThermalDocTabType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalDocTabType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalDocTabType, value); }
 		}
 
 		/// <summary> The Express1StampsSingleSource property of the Entity ShippingSettings<br/><br/>

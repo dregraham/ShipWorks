@@ -184,10 +184,6 @@ namespace ShipWorks.Shipping.Settings
 
             settings.Express1StampsThermal = false;
             settings.Express1StampsThermalType = (int)ThermalLabelType.EPL;
-            settings.Express1StampsCustomsCertify = false;
-            settings.Express1StampsCustomsSigner = "";
-            settings.Express1StampsThermalDocTab = false;
-            settings.Express1StampsThermalDocTabType = (int)ThermalDocTabType.Leading;
             settings.Express1StampsSingleSource = false;
 
             settings.WorldShipLaunch = false;
@@ -195,6 +191,8 @@ namespace ShipWorks.Shipping.Settings
 
             settings.StampsThermal = false;
             settings.StampsThermalType = (int) ThermalLabelType.EPL;
+            settings.StampsAutomaticExpress1 = false;
+            settings.StampsAutomaticExpress1Account = 0;
 
             settings.EquaShipThermal = false;
             settings.EquaShipThermalType = (int) ThermalLabelType.EPL;
