@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 var value = wrappedReader.Value;
 
                 // Express1 is sending zero times in date-only fields
-                var zeroTime = value.LastIndexOf("T00:00:00", StringComparison.InvariantCulture);
+                var zeroTime = value.LastIndexOf("T00:00:00", StringComparison.Ordinal);
                 if(zeroTime > 0)
                     return value.Remove(zeroTime);
 
