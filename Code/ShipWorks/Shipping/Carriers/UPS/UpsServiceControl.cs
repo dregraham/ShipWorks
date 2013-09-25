@@ -430,7 +430,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             referencePanel.Visible = !isMi;
             reference2Panel.Visible = !isMi;
 
+            UpdateIrregularVisibility(serviceType);
+
             UpdateSectionOptionsHeight();
+        }
+
+        private void UpdateIrregularVisibility(UpsServiceType? serviceType)
+        {
+            bool isOlt = ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools;
+
+            labelIrregularIndicator.Visible = isOlt;
+            irregularIndicator.Visible = isOlt;
+
+            sectionSurePost.Height = (isOlt ?
+                                          irregularIndicator.Bottom : costCenter.Bottom) 
+                                          + (sectionSurePost.Height - sectionSurePost.ContentPanel.Height) + 8;
         }
 
         /// <summary>
