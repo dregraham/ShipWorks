@@ -4,6 +4,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -59,6 +60,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new StampsProfileControl(ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Processes a shipment.
+        /// </summary>
+        public override void ProcessShipment(ShipmentEntity shipment)
+        {
+            ValidateShipment(shipment);
+
+            try
+            {
+                StampsApiSession.ProcessShipment(shipment);
+            }
+            catch(StampsException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
         }
     }
 }

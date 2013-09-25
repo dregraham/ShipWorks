@@ -259,11 +259,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             ValidateShipment(shipment);
 
-            if (shipment.Postal.Service == (int)PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int)PostalConfirmationType.None)
-            {
-                throw new ShippingException("A confirmation option cannot be used with Express mail.");
-            }
-
             bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) &&
                 Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
                 ShippingSettings.Fetch().StampsAutomaticExpress1;
@@ -352,11 +347,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
-        private void ValidateShipment(ShipmentEntity shipment)
+        protected static void ValidateShipment(ShipmentEntity shipment)
         {
             if (shipment.TotalWeight == 0)
             {
                 throw new ShippingException("The shipment weight cannot be zero.");
+            }
+
+            if(shipment.Postal.Service == (int)PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int)PostalConfirmationType.None)
+            {
+                throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
         }
 
