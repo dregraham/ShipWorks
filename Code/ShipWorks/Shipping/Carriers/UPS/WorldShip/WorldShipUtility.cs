@@ -141,8 +141,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static void UpdateReferenceNumbers(ShipmentEntity shipment)
         {
             // Reference
-            shipment.Ups.ReferenceNumber = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber, (UpsServiceType)shipment.Ups.Service, shipment.Order.OrderNumber.ToString(), shipment.ShipmentID);
-            shipment.Ups.ReferenceNumber2 = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber2, (UpsServiceType)shipment.Ups.Service, shipment.Ups.ReferenceNumber, shipment.ShipmentID);
+            shipment.Ups.ReferenceNumber = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber, (UpsServiceType)shipment.Ups.Service, string.Empty, shipment.Order.OrderNumber.ToString(), shipment.ShipmentID);
+            shipment.Ups.ReferenceNumber2 = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber2, (UpsServiceType)shipment.Ups.Service, shipment.Ups.CostCenter, shipment.Ups.ReferenceNumber, shipment.ShipmentID);
         }
 
         /// <summary>
@@ -150,9 +150,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         /// <param name="referenceNumber">The reference number to fix.</param>
         /// <param name="serviceType">The UPS service type of this shipment.</param>
+        /// <param name="costCenter">If provided and serviceType is MI, used as the reference number.</param>
         /// <param name="defaultValue">If the reference number ends up being blank, use this value instead.</param>
         /// <param name="shipmentID">ShipmentID used for processing tokens.</param>
-        private static string FixReferenceNumberForWorldShip(string referenceNumber, UpsServiceType serviceType, string defaultValue, long shipmentID)
+        private static string FixReferenceNumberForWorldShip(string referenceNumber, UpsServiceType serviceType, string costCenter, string defaultValue, long shipmentID)
         {
             // Set the max length to 35 for non-MI shipments
             int maxLength = 35;
@@ -161,10 +162,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             referenceNumber = TemplateTokenProcessor.ProcessTokens(referenceNumber.Trim(), shipmentID);
 
             // WorldShip, for MI, doesn't allow non-alphanumerics for reference 1/2, so remove them
-            if (UpsUtility.IsUpsMiService(serviceType))
+            if (UpsUtility.IsUpsMiOrSurePostService(serviceType))
             {
+                if (!string.IsNullOrWhiteSpace(costCenter))
+                {
+                    referenceNumber = costCenter;
+                }
+
                 referenceNumber = Regex.Replace(referenceNumber, "[^a-zA-Z0-9]", string.Empty);
-                
+
                 // Fix the defaultValue in case we need to use it below.
                 defaultValue = Regex.Replace(defaultValue, "[^a-zA-Z0-9]", string.Empty);
 
