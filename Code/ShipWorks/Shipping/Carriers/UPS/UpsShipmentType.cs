@@ -848,7 +848,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 (shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)  &&
                 upsShipmentEntity.Packages.Any(p => p.Insurance && p.InsuranceValue > 0))
             {
-                throw new CarrierException("Ups declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable Shipworks Insurance for this Carrier.");
+                throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
             // Clear out any values that aren't allowed for SurePost or MI
