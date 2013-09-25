@@ -18,8 +18,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         private static readonly Dictionary<string, string> stampsLocalNameMap =
             new Dictionary<string, string> {
                 { "AuthenticateUserResult", "Authenticator" },
-                { "GetRatesResult", "Authenticator" },
                 { "GetAccountInfoResult", "Authenticator" },
+                { "PurchasePostageResult", "Authenticator" },
+                { "PurchasePostageViaProPayResult", "Authenticator" },
+                { "GetRatesResult", "Authenticator" },
+                { "CreateIndiciumResult", "Authenticator" },
+                { "CancelIndiciumResult", "Authenticator" },
+                { "CreateScanFormResult", "Authenticator" },
+                { "CleanseAddressResult", "Authenticator" },
                 { "RateV11", "Rate" }
             };
 
