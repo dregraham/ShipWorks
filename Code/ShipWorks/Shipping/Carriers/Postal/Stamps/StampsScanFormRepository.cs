@@ -18,12 +18,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsScanFormRepository : IScanFormRepository
     {
+        private readonly bool isStampsCarrier;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsScanFormRepository"/> class.
         /// </summary>
-        public StampsScanFormRepository()
-        { }
-
+        /// <param name="stampsCarrier">if set to <c>true</c> [is stamps carrier].</param>
+        public StampsScanFormRepository(bool stampsCarrier)
+        {
+            isStampsCarrier = stampsCarrier;
+        }
 
         /// <summary>
         /// Saves the specified scan form.
@@ -67,8 +71,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         /// <param name="batch">The batch.</param>
         /// <returns>A ScanFormBatchEntity populated using the ScanFormBatch object.</returns>
-        /// <exception cref="EndiciaException">The SCAN forms in the batch are not Stamps.com SCAN forms.</exception>
-        private static ScanFormBatchEntity BuildBatchEntity(ScanFormBatch batch)
+        /// <exception cref="StampsException">The SCAN forms in the batch are not Stamps.com SCAN forms.</exception>
+        private ScanFormBatchEntity BuildBatchEntity(ScanFormBatch batch)
         {
             ScanFormBatchEntity batchEntity = new ScanFormBatchEntity();
             batchEntity.CreatedDate = batch.CreatedDate;
@@ -80,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsScanFormEntity stampsScanFormEntity = scanForm.ScanFormEntity as StampsScanFormEntity;
                 if (stampsScanFormEntity == null)
                 {
-                    throw new StampsException("The SCAN form provided was not a Stamps.com SCAN form.");
+                    throw new StampsException(string.Format("The SCAN form provided was not {0} SCAN form.", isStampsCarrier ? "a Stamps.com" : "an Express1"));
                 }
 
                 batchEntity.StampsScanForms.Add(stampsScanFormEntity);
@@ -100,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             StampsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as StampsAccountEntity;
             if (accountEntity == null)
             {
-                throw new StampsException("ShipWorks was unable to retrieve existing SCAN forms: the Stamps.com account could not be loaded.");
+                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", isStampsCarrier ? "Stamps.com" : "Express1"));
             }
             
             List<ScanForm> scanForms = new List<ScanForm>();
@@ -117,7 +121,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             return scanForms;
         }
-
 
         /// <summary>
         /// Gets the IDs of the shipments based on the given query predicate.
@@ -144,7 +147,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
-
         /// <summary>
         /// Gets the existing scan form batches for a carrier account.
         /// </summary>
@@ -156,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             StampsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as StampsAccountEntity;
             if (accountEntity == null)
             {
-                throw new StampsException("ShipWorks was unable to retrieve existing SCAN forms: the Stamps.com account could not be loaded.");
+                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", isStampsCarrier ? "Stamps.com" : "Express1"));
             }
 
             List<ScanFormBatch> batches = new List<ScanFormBatch>();
@@ -172,7 +174,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 predicate.Relations.Add(ScanFormBatchEntity.Relations.StampsScanFormEntityUsingScanFormBatchID);
                 SqlAdapter.Default.FetchEntityCollection(batchEntities, predicate);
-
 
                 foreach (ScanFormBatchEntity batchEntity in batchEntities)
                 {

@@ -18,6 +18,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsScanFormGateway : IScanFormGateway
     {
+        protected string invalidCarrierMessage;
+        protected string invalidShipmentMessage;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsScanFormGateway()
+        {
+            invalidCarrierMessage = "An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.";
+            invalidShipmentMessage = "Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.";
+        }
+
         /// <summary>
         /// Gets the scan form from the shipping carrier and populates the properties of the given scan form.
         /// </summary>
@@ -29,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             StampsAccountEntity accountEntity = scanForm.CarrierAccount.GetAccountEntity() as StampsAccountEntity;
             if (accountEntity == null)
             {
-                throw new StampsException("An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.");
+                throw new StampsException(invalidCarrierMessage);
             }
 
             if (shipments == null || shipments.Count() == 0)
@@ -41,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             IEnumerable<StampsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Stamps).Where(s => s != null);
             if (stampsShipments.Count() != shipments.Count())
             {
-                throw new StampsException("Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.");
+                throw new StampsException(invalidShipmentMessage);
             }
 
             // We have our list of Stamps.com shipments, so call the API to create the SCAN form

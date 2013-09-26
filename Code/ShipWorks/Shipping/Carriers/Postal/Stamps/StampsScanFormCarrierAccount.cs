@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Gets the name of the shipping carrier.
         /// </summary>
         /// <value>The name of the shipping carrier.</value>
-        public string ShippingCarrierName
+        public virtual string ShippingCarrierName
         {
             get { return "Stamps.com"; }
         }
@@ -61,8 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Gets the shipment type code.
         /// </summary>
         /// <value>The shipment type code.</value>
-        public ShipmentTypeCode ShipmentTypeCode
-        {
+        public virtual ShipmentTypeCode ShipmentTypeCode 
+        { 
             get { return ShipmentTypeCode.Stamps; }
         }
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public IScanFormGateway GetGateway()
+        public virtual IScanFormGateway GetGateway()
         {
             return new StampsScanFormGateway();
         }
@@ -103,7 +103,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             return repository.GetExistingScanFormBatches(this);
         }
-
 
         /// <summary>
         /// Saves the specified scan form batch.
