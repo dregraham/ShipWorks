@@ -11,8 +11,8 @@
         /// </summary>
         public Express1StampsScanFormGateway()
         {
-            invalidCarrierMessage = "An attempt to create an Express1 SCAN form was made for a carrier other than Express1.";
-            invalidShipmentMessage = "Cannot create a Express1 SCAN form for a shipment that was not shipped with Express1.";
+            InvalidCarrierMessage = "An attempt to create an Express1 SCAN form was made for a carrier other than Express1.";
+            InvalidShipmentMessage = "Cannot create a Express1 SCAN form for a shipment that was not shipped with Express1.";
         }
     }
 }

@@ -16,13 +16,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>A collection of the ScanFormCarrierAccount objects.</returns>
         public IEnumerable<IScanFormCarrierAccount> GetAccounts()
         {
-            return Accounts.Select(CreateScanFormCarrierAccount).ToList();
+            return AccountList.Select(CreateScanFormCarrierAccount).ToList();
         }
 
         /// <summary>
         /// Gets the accounts that should have scan forms created for them
         /// </summary>
-        protected virtual IEnumerable<StampsAccountEntity> Accounts
+        protected virtual IEnumerable<StampsAccountEntity> AccountList
         {
             get { return StampsAccountManager.StampsAccounts; }
         }

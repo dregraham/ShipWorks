@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Gets the accounts that should have scan forms created for them
         /// </summary>
-        protected override IEnumerable<StampsAccountEntity> Accounts
+        protected override IEnumerable<StampsAccountEntity> AccountList
         {
             get { return StampsAccountManager.Express1Accounts; }
         }

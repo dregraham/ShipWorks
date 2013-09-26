@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsScanFormGateway : IScanFormGateway
     {
-        protected string invalidCarrierMessage;
-        protected string invalidShipmentMessage;
+        private string invalidCarrierMessage;
+        private string invalidShipmentMessage;
 
         /// <summary>
         /// Constructor
@@ -28,6 +28,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             invalidCarrierMessage = "An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.";
             invalidShipmentMessage = "Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.";
+        }
+
+        /// <summary>
+        /// Gets and sets the message that is displayed when an invalid shipment is used
+        /// </summary>
+        protected string InvalidShipmentMessage
+        {
+            get { return invalidShipmentMessage; }
+            set { invalidShipmentMessage = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the message that is displayed when an invalid carrier is used
+        /// </summary>
+        protected string InvalidCarrierMessage
+        {
+            get { return invalidCarrierMessage; }
+            set { invalidCarrierMessage = value; }
         }
 
         /// <summary>
