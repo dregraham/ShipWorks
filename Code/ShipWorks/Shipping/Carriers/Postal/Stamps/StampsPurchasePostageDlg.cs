@@ -52,13 +52,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.account = account;
             this.accountInfo = accountInfo ?? StampsApiSession.GetAccountInfo(account);
 
-            if (accountInfo == null)
+            if (this.accountInfo == null)
             {
                 string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
                 throw new StampsException(string.Format("ShipWorks could not retrieve your account information from {0}", carrierName));
             }
 
-            current.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
+            current.Text = this.accountInfo.PostageBalance.AvailablePostage.ToString("c");
         }
 
         /// <summary>
