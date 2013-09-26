@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
@@ -35,7 +36,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             string trackingNumber = shipment.TrackingNumber;
             if (InterapptiveOnly.MagicKeysDown)
             {
-                trackingNumber = "1Z7VW1630324312293";
+                if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                {
+                    trackingNumber = "9102084383041101186729";
+                }
+                else
+                {
+                    trackingNumber = "1Z7VW1630324312293";    
+                }
             }
 
             // Create the client for connecting to the UPS server
@@ -44,6 +52,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 // Only valid tag, the tracking number
                 xmlWriter.WriteElementString("TrackingNumber", trackingNumber);
+
+                if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                {
+                    xmlWriter.WriteElementString("TrackingOption", "03");
+                }
 
                 // Process the XML request
                 response = UpsWebClient.ProcessRequest(xmlWriter);
@@ -160,8 +173,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     }
                     catch (FormatException ex)
                     {
-                        Debug.Fail("Could not parse UPS date", ex.Message);
-
                         log.Warn("Could not parse UPS date: " + date, ex);
                     }
 
@@ -172,8 +183,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     }
                     catch (FormatException ex)
                     {
-                        Debug.Fail("Could not parse UPS time", ex.Message);
-
                         log.Warn("Could not parse UPS time: " + time, ex);
                     }
 
