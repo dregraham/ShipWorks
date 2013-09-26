@@ -168,7 +168,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 dlg.ShowDialog(this);
 
-                if (dlg.AccountChanged)
+                // Always reload Express1 accounts if OK is clicked, since the name is influenced by the address fields.
+                if (dlg.AccountChanged || (IsExpress1 && dlg.DialogResult == DialogResult.OK))
                 {
                     LoadAccounts();
                 }
