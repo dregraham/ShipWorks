@@ -241,5 +241,17 @@ namespace Interapptive.Shared.Utility
 
             return result;
         }
+
+
+        /// <summary>
+        /// Checks for changes needed.
+        /// </summary>
+        public static void RemoveFromCache(Type type)
+        {
+            if (enumMetadataCache.ContainsKey(type))
+            {
+                enumMetadataCache.Remove(type);
+            }
+        }
     }
 }
