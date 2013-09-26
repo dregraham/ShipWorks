@@ -615,7 +615,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // If CN22 Type is Other, CN22OtherDescription is required
             if (cn22Type == UpsCN22GoodsType.Other)
             {
-                xmlWriter.WriteElementString("CN22OtherDescription", otherDescription);
+                // CN22OtherDescription can only be at most 20 characters
+                xmlWriter.WriteElementString("CN22OtherDescription", otherDescription.Length > 20 ? otherDescription.Substring(0, 20) : otherDescription);
             }
                 
             // Start InternationalForms
