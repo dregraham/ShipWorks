@@ -51,6 +51,28 @@ namespace ShipWorks.Shipping
                         continue;
                     }
 
+                    if (typeCode == ShipmentTypeCode.Express1Stamps)
+                    {
+                        // We have an Express1 for Stamps shipment type which should be excluded if Stamps has never been setup
+                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Stamps))
+                        {
+                            // The Stamps.com type has never been setup, so we want to exclude the Express1 for Stamps.com type
+                            continue;
+                        }
+                    }
+                    else if (typeCode == ShipmentTypeCode.Express1Endicia)
+                    {
+                        // The only time Express1 for Endicia should be excluded is when Endicia has 
+                        // never been setup but Stamps has been setup
+                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && 
+                            !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps))
+                        {
+                            // Endicia has never been setup, so we want to exclude the Express1/Endicia type
+                            // since Stamps.com IS setup in ShipWorks
+                            continue;
+                        }
+                    }
+
                     shipmentTypes.Add(GetType(typeCode));
                 }
 
