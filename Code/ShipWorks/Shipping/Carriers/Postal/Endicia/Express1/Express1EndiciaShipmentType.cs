@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Shipment type for Express 1 shipments.
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = false)]
     public class Express1EndiciaShipmentType : EndiciaShipmentType
     {
         /// <summary>
@@ -25,11 +27,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
+        [Obfuscation(Exclude = true)]        
         public override string ShipmentTypeName
         {
             get
             {
-                return "Express1 Test Name";
+                return 
+                    (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps) || 
+                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Stamps)) ?
+                    "USPS (Express1 for Endicia)" : "USPS (Express1)";
             }
         }
 

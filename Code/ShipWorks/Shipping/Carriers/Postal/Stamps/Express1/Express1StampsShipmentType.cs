@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+﻿using System.Reflection;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -11,6 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// <summary>
     /// Shipment type for Express 1 for Stamps.com shipments.
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = false)]    
     public class Express1StampsShipmentType : StampsShipmentType
     {
         /// <summary>
@@ -21,6 +23,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             get
             {
                 return ShipmentTypeCode.Express1Stamps;
+            }
+        }
+
+        /// <summary>
+        /// The user-displayable name of the shipment type
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public override string ShipmentTypeName
+        {
+            get
+            {
+                return
+                    (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) ||
+                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia)) ?
+                    "USPS (Express1 for Stamps)" : "USPS (Express1)";
             }
         }
 

@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping
         [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Express1EndiciaShipmentType", "ShipmentTypeName")]
         Express1Endicia = 9,
 
-        [Description("USPS (Express1/Stamps.com)")]
+        [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsShipmentType", "ShipmentTypeName")]
         Express1Stamps = 13,
 
         [Description("FedEx")]
