@@ -537,6 +537,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("CostCenter", ups.CostCenter.Replace(" ", string.Empty));
 
                 xmlWriter.WriteElementString("PackageID", ups.Packages.First().UpsPackageID.ToString());
+
+                // If an international shipment, write out the MILabelCN22Indicator so that the label will be the combined label with CN22 form
+                if (!ShipmentType.IsDomestic(ups.Shipment))
+                {
+                    xmlWriter.WriteElementString("MILabelCN22Indicator", string.Empty);
+                }
             }
         }
 
