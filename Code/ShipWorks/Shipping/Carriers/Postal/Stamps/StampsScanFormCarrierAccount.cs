@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime()
             );
 
-            bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode.Stamps);
+            bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode);
 
             bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
             bucket.Relations.Add(PostalShipmentEntity.Relations.StampsShipmentEntityUsingShipmentID);

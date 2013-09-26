@@ -3194,9 +3194,9 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The endicia scan form popup is opening, we need to dynamically repopulate the print menu
+        /// The postal scan form popup is opening, we need to dynamically repopulate the print menu
         /// </summary>
-        private void OnEndiciaScanFormOpening(object sender, BeforePopupEventArgs e)
+        private void OnPostalScanFormOpening(object sender, BeforePopupEventArgs e)
         {
             List<IScanFormAccountRepository> repositories = new List<IScanFormAccountRepository>();
             repositories.Add(new EndiciaScanFormAccountRepository());
