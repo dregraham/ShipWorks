@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.ComponentModel;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping
 {
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping
         [Description("USPS (w/o Postage)")]
         PostalWebTools = 4,
 
-        [Description("USPS (Express1/Endicia)")]
+        [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Express1EndiciaShipmentType", "ShipmentTypeName")]
         Express1Endicia = 9,
 
         [Description("USPS (Express1/Stamps.com)")]

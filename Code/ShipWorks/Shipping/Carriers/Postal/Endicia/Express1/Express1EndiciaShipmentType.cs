@@ -23,6 +23,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
+        /// The user-displayable name of the shipment type
+        /// </summary>
+        public override string ShipmentTypeName
+        {
+            get
+            {
+                return "Express1 Test Name";
+            }
+        }
+
+        /// <summary>
         /// Reseller type
         /// </summary>
         public override EndiciaReseller EndiciaReseller
