@@ -76,6 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // Returns
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
 
+            groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType).SupportsReturns;
         }
 
         /// <summary>
