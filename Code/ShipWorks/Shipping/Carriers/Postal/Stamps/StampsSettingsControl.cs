@@ -41,17 +41,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             optionsControl.LoadSettings();
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            express1Settings = new Express1StampsSettingsFacade(settings);
-
             string reseller = StampsAccountManager.GetResellerName(isExpress1);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             express1Options.Visible = isExpress1;
             express1SettingsControl.Visible = !isExpress1;
-            
-            
-            if(isExpress1)
+
+            LoadExpress1Settings();
+        }
+
+        /// <summary>
+        /// Loads the Express1 settings.
+        /// </summary>
+        private void LoadExpress1Settings()
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            express1Settings = new Express1StampsSettingsFacade(settings);
+
+            if (isExpress1)
             {
                 express1Options.LoadSettings(settings);
                 panelBottom.Top = express1Options.Bottom + 5;
@@ -96,6 +103,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 accountControl.Initialize();
                 loadedAccounts = true;
             }
+
+            // Reload the Express1 settings in the event that an Express1 account was deleted to accurately
+            // show whether to sign-up, remove the deleted account from the list, etc.
+            LoadExpress1Settings();
         }
     }
 }
