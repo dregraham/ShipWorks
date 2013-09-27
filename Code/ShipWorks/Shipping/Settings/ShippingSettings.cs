@@ -201,6 +201,9 @@ namespace ShipWorks.Shipping.Settings
             settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.IParcelInsurancePennyOne = false;
 
+            settings.UpsMailInnovationsEnabled = false;
+            settings.WorldShipMailInnovationsEnabled = false;
+
             adapter.SaveAndRefetch(settings);
         }
     }

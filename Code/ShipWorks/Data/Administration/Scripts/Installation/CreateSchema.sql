@@ -3234,7 +3234,10 @@ CREATE TABLE [dbo].[UpsShipment]
 [Subclassification] [int] NOT NULL,
 [PaperlessAdditionalDocumentation] [bit] NOT NULL,
 [ShipperRelease] [bit] NOT NULL,
-[CarbonNeutral] [bit] NOT NULL
+[CarbonNeutral] [bit] NOT NULL,
+[CostCenter] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IrregularIndicator] [int] NOT NULL,
+[Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
@@ -3307,7 +3310,10 @@ CREATE TABLE [dbo].[UpsProfile]
 [PaperlessAdditionalDocumentation] [bit] NULL,
 [ShipperRelease] [bit] NULL,
 [CarbonNeutral] [bit] NULL,
-[CommercialPaperlessInvoice] [bit] NULL
+[CommercialPaperlessInvoice] [bit] NULL,
+[CostCenter] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[IrregularIndicator] [int] NULL,
+[Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfile] on [dbo].[UpsProfile]'
@@ -4284,7 +4290,6 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
-[WorldShipServices] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [StampsThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,
 [Express1Thermal] [bit] NOT NULL,
@@ -4303,7 +4308,9 @@ CREATE TABLE [dbo].[ShippingSettings]
 [iParcelThermal] [bit] NOT NULL,
 [iParcelThermalType] [int] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
-[iParcelInsurancePennyOne] [bit] NOT NULL
+[iParcelInsurancePennyOne] [bit] NOT NULL,
+[UpsMailInnovationsEnabled] [bit] NOT NULL,
+[WorldShipMailInnovationsEnabled] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
