@@ -80,23 +80,35 @@ namespace ShipWorks.Email.Outlook
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            if (email.HtmlPartResourceID != null)
+            DataResourceReference contentResource = (email.HtmlPartResourceID != null) ?
+                DataResourceManager.LoadResourceReference(email.HtmlPartResourceID.Value) :
+                DataResourceManager.LoadResourceReference(email.PlainPartResourceID);
+
+            // If it was purged, show the placeholder.  We do this regardless of it was thermal or not.
+            if (contentResource.IsPurgedPlaceholder)
             {
-                // Make sure all our image resources are loaded
-                DataResourceManager.LoadConsumerResourceReferences(emailID);
-
-                // We need to get our base href added for displaying images
-                TemplateHtmlDocument htmlDocument = new TemplateHtmlDocument(
-                    DataResourceManager.LoadResourceReference(email.HtmlPartResourceID.Value).ReadAllText(), 
-                    TemplateResultUsage.ShipWorksDisplay);
-
-                htmlControl.Html = htmlDocument.CompleteHtml;
+                htmlControl.Html = string.Format(TemplateHelper.ContentPurgedDisplayHtml, "email");
             }
             else
             {
-                htmlControl.Html = TemplateResultFormatter.EncodeForHtml(
-                    DataResourceManager.LoadResourceReference(email.PlainPartResourceID).ReadAllText(), 
-                    TemplateOutputFormat.Text);
+                if (email.HtmlPartResourceID != null)
+                {
+                    // Make sure all our image resources are loaded
+                    DataResourceManager.LoadConsumerResourceReferences(emailID);
+
+                    // We need to get our base href added for displaying images
+                    TemplateHtmlDocument htmlDocument = new TemplateHtmlDocument(
+                        contentResource.ReadAllText(),
+                        TemplateResultUsage.ShipWorksDisplay);
+
+                    htmlControl.Html = htmlDocument.CompleteHtml;
+                }
+                else
+                {
+                    htmlControl.Html = TemplateResultFormatter.EncodeForHtml(
+                        contentResource.ReadAllText(),
+                        TemplateOutputFormat.Text);
+                }
             }
         }
     }

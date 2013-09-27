@@ -10,6 +10,11 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.IO.Zip;
+using ShipWorks.Templates;
+using System.Drawing;
+using Divelements.SandGrid.Rendering;
+using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace ShipWorks.Data
 {
@@ -77,6 +82,17 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
+        /// Indicates if this is a placeholder resource for data that has been purged
+        /// </summary>
+        public bool IsPurgedPlaceholder
+        {
+            get
+            {
+                return filename.StartsWith("__purged_", StringComparison.InvariantCulture);
+            }
+        }
+
+        /// <summary>
         /// Read the entire contents of the resource as a text stream.
         /// </summary>
         public string ReadAllText()
@@ -135,6 +151,11 @@ namespace ShipWorks.Data
 
                     throw new NotFoundException(string.Format("Could not find resource: {0}", string.Format("{0} ({1})", referenceID, label)));
                 }
+                else if (IsPurgedPlaceholder)
+                {
+                    log.InfoFormat("Resource {0} is being cached to '{1}' [Purged].", referenceID, filename);
+                    WritePurgedPlaceholerContent(fullPath);
+                }
                 else
                 {
                     log.InfoFormat("Resource {0} is being cached to '{1}'.", referenceID, filename);
@@ -153,14 +174,94 @@ namespace ShipWorks.Data
         {
             lock (filename)
             {
-                string alternate = Path.GetFileNameWithoutExtension(filename) + "." + extension;
+                string existing = GetCachedFilename();
+                string alternate = Path.Combine(DataPath.CurrentResources, Path.GetFileNameWithoutExtension(filename) + "." + extension);
 
-                if (!File.Exists(Path.Combine(DataPath.CurrentResources, alternate)))
+                if (!File.Exists(alternate))
                 {
-                    File.Copy(GetCachedFilename(), Path.Combine(DataPath.CurrentResources, alternate));
+                    File.Copy(existing, alternate);
                 }
 
-                return alternate;
+                return Path.GetFileName(alternate);
+            }
+        }
+
+        /// <summary>
+        /// Write out the placeholder content to use for purges
+        /// </summary>
+        private void WritePurgedPlaceholerContent(string fullPath)
+        {
+            switch (Filename)
+            {
+                case "__purged_print_html.swr":
+                case "__purged_print_thermal.swr":
+                case "__purged_email_plain.swr":
+                case "__purged_email_html_swr":
+                    
+                    // All of these are special cased in the Email viewer and print result viewer to show the content, so the file contents don't really matter
+                    File.WriteAllText(fullPath, "[Purged]");
+
+                    break;
+
+                // PNG, GIF, or JPG shipping label image
+                case "__purged_label.png":
+                case "__purged_label.gif":
+                case "__purged_label.jpg":
+
+                    // Determine the format
+                    ImageFormat imageFormat = ImageFormat.Png;
+                    if (fullPath.EndsWith(".gif")) imageFormat = ImageFormat.Gif;
+                    if (fullPath.EndsWith(".jpg")) imageFormat = ImageFormat.Jpeg;
+
+                    using (Bitmap image = new Bitmap(500, 200))
+                    {
+                        using (Graphics g = Graphics.FromImage(image))
+                        {
+                            g.Clear(Color.White);
+
+                            using (Font font = new Font("Tahoma", 10.25f))
+                            {
+                                g.DrawString("Content Removed", font, Brushes.Black, new PointF(50, 50));
+                                g.DrawString("This label has been deleted by the 'Delete old data' action task.", font, Brushes.Black, new Rectangle(50, 90, 400, 100));
+                            }
+                        }
+
+                        image.Save(fullPath, imageFormat);
+                    }
+
+                    break;
+
+                // EPL
+                case "__purged_label_epl.swr":
+
+                    File.WriteAllText(fullPath,
+                        "N\r\n" +
+                        "ZB\r\n" +
+                        "R100,100\r\n" +
+                        "A0,0,0,3,1,1,N,\"Content Removed\"\r\n" +
+                        "A0,80,0,3,1,1,N,\"This label has been deleted by the\"\r\n" +
+                        "A0,120,0,3,1,1,N,\"'Delete old data' action task.\"\r\n" +
+                        "P1\r\n");
+
+                    break;
+
+                // ZPL
+                case "__purged_label_zpl.swr":
+
+                    File.WriteAllText(fullPath,
+                        "^XA^CFD\r\n" +
+                        "^FO100,100^AQ\r\n" +
+                        "^FDContent Removed^FS\r\n" +
+                        "^FO100,180\r\n" +
+                        "^AQ\r\n" +
+                        "^FDThis label has been deleted by the 'Delete old data' action task.^FS\r\n" +
+                        "^XZ");
+
+                    break;
+
+                default:
+                    throw new InvalidOperationException(string.Format("Filename {0} is not a recognized purged placeholder.", filename));
+
             }
         }
     }
