@@ -74,10 +74,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             EnumHelper.BindComboBox<UpsPostalSubclassificationType>(surePostClassification);
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
             EnumHelper.BindComboBox<UpsIrregularIndicatorType>(irregularIndicator);
+            EnumHelper.BindComboBox<UpsShipmentChargeType>(payorDuties);
 
             payorCountry.DisplayMember = "Key";
             payorCountry.ValueMember = "Value";
             payorCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
+
+            payorDutiesCountry.DisplayMember = "Key";
+            payorDutiesCountry.ValueMember = "Value";
+            payorDutiesCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
             AddValueMapping(ups, UpsProfileFields.UpsAccountID, accountState, upsAccount, labelAccount);
             AddValueMapping(profile, ShippingProfileFields.OriginID, senderState, originCombo, labelSender);
@@ -100,6 +105,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(ups, UpsProfileFields.PayorAccount, payorAccountState, payorAccount, labelPayorAccount);
             AddValueMapping(ups, UpsProfileFields.PayorPostalCode, payorAccountState, payorPostalCode, labelPayorPostalCode);
             AddValueMapping(ups, UpsProfileFields.PayorCountryCode, payorAccountState, payorCountry, labelPayorCountry);
+
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeType,        payorDutiesState,    payorDuties, labelPayorDuties);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeAccount,     payorDutiesAccountState, payorDutiesAccount, labelPayorDutiesAccount);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargePostalCode,  payorDutiesAccountState, payorDutiesPostalCode, labelPayorDutiesPostalCode);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeCountryCode, payorDutiesAccountState, payorDutiesCountry, labelPayorDutiesCountry);
 
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);

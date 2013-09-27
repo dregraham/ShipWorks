@@ -877,6 +877,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsIrregularIndicatorType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsShipmentChargeType.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
     <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipServiceType.cs" />

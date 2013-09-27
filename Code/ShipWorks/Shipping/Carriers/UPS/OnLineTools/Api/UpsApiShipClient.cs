@@ -239,46 +239,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteEndElement();
             }
 
-            // Payment info (SurePost must be sender)
-            if (ups.PayorType == (int) UpsPayorType.Sender || isSurePost)
-            {
-                xmlWriter.WriteStartElement("PaymentInformation");
-                xmlWriter.WriteStartElement("Prepaid");
-                xmlWriter.WriteStartElement("BillShipper");
-                xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-            }
-            else if (ups.PayorType == (int) UpsPayorType.ThirdParty)
-            {
-                xmlWriter.WriteStartElement("PaymentInformation");
-                xmlWriter.WriteStartElement("BillThirdParty");
-                xmlWriter.WriteStartElement("BillThirdPartyShipper");
-                xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
-                xmlWriter.WriteStartElement("ThirdParty");
-                xmlWriter.WriteStartElement("Address");
-                xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
-                xmlWriter.WriteElementString("CountryCode", ups.PayorCountryCode);
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-            }
-            else
-            {
-                xmlWriter.WriteStartElement("PaymentInformation");
-                xmlWriter.WriteStartElement("FreightCollect");
-                xmlWriter.WriteStartElement("BillReceiver");
-                xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
-                xmlWriter.WriteStartElement("Address");
-                xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteEndElement();
-            }
+            // Write billing options.  Each method makes sure it's domestic or international before writing anything.
+            WriteDomesticBilling(ups, account, xmlWriter);
+            WriteInternationalBilling(ups, account, xmlWriter);
 
             // Commercial invoice requires Sold To 
             if (!ShipmentType.IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
@@ -332,6 +295,172 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return UpsWebClient.ProcessRequest(xmlWriter);
+        }
+        
+        /// <summary>
+        /// Writes the Billing payment info for the shipment IF it's an International shipment.
+        /// </summary>
+        private static void WriteInternationalBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
+        {
+            if (!ShipmentType.IsDomestic(ups.Shipment))
+            {
+                // Payment info (SurePost must be sender)
+                if (ups.PayorType == (int) UpsPayorType.Sender || UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service))
+                {
+                    xmlWriter.WriteStartElement("ItemizedPaymentInformation");
+                        // Write the transportation shipment charge
+                        xmlWriter.WriteStartElement("ShipmentCharge");
+                            xmlWriter.WriteElementString("Type", "01");
+                            xmlWriter.WriteStartElement("BillShipper");
+                                xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
+                            xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndElement();
+
+                        // Now write the tax/duty shipment charge
+                        WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
+
+                    xmlWriter.WriteEndElement();
+                }
+                else if (ups.PayorType == (int) UpsPayorType.ThirdParty)
+                {
+                    xmlWriter.WriteStartElement("ItemizedPaymentInformation");
+                        // Write the transportation shipment charge
+                        xmlWriter.WriteStartElement("ShipmentCharge");
+                            xmlWriter.WriteElementString("Type", "01");
+                            xmlWriter.WriteStartElement("BillThirdParty");
+                                xmlWriter.WriteStartElement("BillThirdPartyShipper");
+                                    xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
+                                    xmlWriter.WriteStartElement("ThirdParty");
+                                        xmlWriter.WriteStartElement("Address");
+                                            xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
+                                            xmlWriter.WriteElementString("CountryCode", ups.PayorCountryCode);
+                                        xmlWriter.WriteEndElement();
+                                    xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                            xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndElement();
+
+                        // Now write the tax/duty shipment charge
+                        WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
+
+                    xmlWriter.WriteEndElement();
+                }
+                else
+                {
+                    xmlWriter.WriteStartElement("ItemizedPaymentInformation");
+                        // Write the transportation shipment charge
+                        xmlWriter.WriteStartElement("ShipmentCharge");
+                            xmlWriter.WriteElementString("Type", "01");
+                    
+                            xmlWriter.WriteStartElement("BillReceiver");
+                                xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
+                                xmlWriter.WriteStartElement("Address");
+                                    xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
+                                xmlWriter.WriteEndElement();
+                            xmlWriter.WriteEndElement();
+
+                        xmlWriter.WriteEndElement();
+
+                        // Now write the tax/duty shipment charge
+                        WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
+
+                    xmlWriter.WriteEndElement();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write the ShipmentCharge needed for the specific shipment charge type selected
+        /// </summary>
+        private static void WriteInternationalBillingDutiesTaxesShipmentCharge(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
+        {
+            UpsShipmentChargeType upsShipmentChargeType = (UpsShipmentChargeType)ups.ShipmentChargeType;
+
+            // Now write the tax/duty shipment charge
+            xmlWriter.WriteStartElement("ShipmentCharge");
+                xmlWriter.WriteElementString("Type", "02");
+
+                switch (upsShipmentChargeType)
+                {
+                    case UpsShipmentChargeType.BillShipper:
+                        xmlWriter.WriteStartElement("BillShipper");
+                            xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
+                        xmlWriter.WriteEndElement();
+                        break;
+                    case UpsShipmentChargeType.BillReceiver:
+                        xmlWriter.WriteStartElement("BillReceiver");
+                            xmlWriter.WriteElementString("AccountNumber", ups.ShipmentChargeAccount);
+                            xmlWriter.WriteStartElement("Address");
+                                xmlWriter.WriteElementString("PostalCode", ups.ShipmentChargePostalCode);
+                            xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndElement();
+                        break;
+                    case UpsShipmentChargeType.BillThirdParty:
+                        xmlWriter.WriteStartElement("BillThirdParty");
+                        xmlWriter.WriteStartElement("BillThirdPartyConsignee");
+                                xmlWriter.WriteElementString("AccountNumber", ups.ShipmentChargeAccount);
+                                xmlWriter.WriteStartElement("ThirdParty");
+                                    xmlWriter.WriteStartElement("Address");
+                                        xmlWriter.WriteElementString("PostalCode", ups.ShipmentChargePostalCode);
+                                        xmlWriter.WriteElementString("CountryCode", ups.ShipmentChargeCountryCode);
+                                    xmlWriter.WriteEndElement();
+                                xmlWriter.WriteEndElement();
+                            xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndElement();
+                        break;
+                }
+            xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Writes the Billing payment info for the shipment IF it's a domestic shipment.
+        /// </summary>
+        private static void WriteDomesticBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
+        {
+            if (ShipmentType.IsDomestic(ups.Shipment))
+            {
+                // Payment info (SurePost must be sender)
+                if (ups.PayorType == (int) UpsPayorType.Sender ||
+                    UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service))
+                {
+                    xmlWriter.WriteStartElement("PaymentInformation");
+                    xmlWriter.WriteStartElement("Prepaid");
+                    xmlWriter.WriteStartElement("BillShipper");
+                    xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                }
+                else if (ups.PayorType == (int) UpsPayorType.ThirdParty)
+                {
+                    xmlWriter.WriteStartElement("PaymentInformation");
+                    xmlWriter.WriteStartElement("BillThirdParty");
+                    xmlWriter.WriteStartElement("BillThirdPartyShipper");
+                    xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
+                    xmlWriter.WriteStartElement("ThirdParty");
+                    xmlWriter.WriteStartElement("Address");
+                    xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
+                    xmlWriter.WriteElementString("CountryCode", ups.PayorCountryCode);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                }
+                else
+                {
+                    xmlWriter.WriteStartElement("PaymentInformation");
+                    xmlWriter.WriteStartElement("FreightCollect");
+                    xmlWriter.WriteStartElement("BillReceiver");
+                    xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
+                    xmlWriter.WriteStartElement("Address");
+                    xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                }
+            }
         }
 
         /// <summary>

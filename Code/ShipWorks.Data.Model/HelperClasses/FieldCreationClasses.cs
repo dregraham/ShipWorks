@@ -17842,6 +17842,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Cn22Number);}
 		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargeType field instance</summary>
+		public static EntityField2 ShipmentChargeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeType);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargeAccount field instance</summary>
+		public static EntityField2 ShipmentChargeAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeAccount);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargePostalCode field instance</summary>
+		public static EntityField2 ShipmentChargePostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargePostalCode);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargeCountryCode field instance</summary>
+		public static EntityField2 ShipmentChargeCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeCountryCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -18171,6 +18191,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Cn22Number
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Cn22Number);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargeType field instance</summary>
+		public static EntityField2 ShipmentChargeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeType);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargeAccount field instance</summary>
+		public static EntityField2 ShipmentChargeAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeAccount);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargePostalCode field instance</summary>
+		public static EntityField2 ShipmentChargePostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargePostalCode);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargeCountryCode field instance</summary>
+		public static EntityField2 ShipmentChargeCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeCountryCode);}
 		}
 	}
 
