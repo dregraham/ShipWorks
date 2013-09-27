@@ -8436,6 +8436,14 @@ namespace ShipWorks.Data.Model
 		IrregularIndicator,
 		///<summary>Cn22Number. </summary>
 		Cn22Number,
+		///<summary>ShipmentChargeType. </summary>
+		ShipmentChargeType,
+		///<summary>ShipmentChargeAccount. </summary>
+		ShipmentChargeAccount,
+		///<summary>ShipmentChargePostalCode. </summary>
+		ShipmentChargePostalCode,
+		///<summary>ShipmentChargeCountryCode. </summary>
+		ShipmentChargeCountryCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8586,6 +8594,14 @@ namespace ShipWorks.Data.Model
 		IrregularIndicator,
 		///<summary>Cn22Number. </summary>
 		Cn22Number,
+		///<summary>ShipmentChargeType. </summary>
+		ShipmentChargeType,
+		///<summary>ShipmentChargeAccount. </summary>
+		ShipmentChargeAccount,
+		///<summary>ShipmentChargePostalCode. </summary>
+		ShipmentChargePostalCode,
+		///<summary>ShipmentChargeCountryCode. </summary>
+		ShipmentChargeCountryCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -638,6 +638,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Cn22Number", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentChargeType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentChargeAccount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentChargePostalCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentChargeCountryCode", fieldHashtable);
 		}
 		#endregion
 
@@ -1252,6 +1264,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.Cn22Number, true); }
 			set	{ SetValue((int)UpsShipmentFieldIndex.Cn22Number, value); }
+		}
+
+		/// <summary> The ShipmentChargeType property of the Entity UpsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."ShipmentChargeType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipmentChargeType
+		{
+			get { return (System.Int32)GetValue((int)UpsShipmentFieldIndex.ShipmentChargeType, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.ShipmentChargeType, value); }
+		}
+
+		/// <summary> The ShipmentChargeAccount property of the Entity UpsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."ShipmentChargeAccount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipmentChargeAccount
+		{
+			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.ShipmentChargeAccount, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.ShipmentChargeAccount, value); }
+		}
+
+		/// <summary> The ShipmentChargePostalCode property of the Entity UpsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."ShipmentChargePostalCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipmentChargePostalCode
+		{
+			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.ShipmentChargePostalCode, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.ShipmentChargePostalCode, value); }
+		}
+
+		/// <summary> The ShipmentChargeCountryCode property of the Entity UpsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."ShipmentChargeCountryCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipmentChargeCountryCode
+		{
+			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageEntity' which are related to this entity via a relation of type '1:n'.

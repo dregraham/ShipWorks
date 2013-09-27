@@ -174,6 +174,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             shipment.Ups.Cn22Number = string.Empty;
 
+            shipment.Ups.ShipmentChargeAccount = string.Empty;
+            shipment.Ups.ShipmentChargeCountryCode = string.Empty;
+            shipment.Ups.ShipmentChargePostalCode = string.Empty;
+            shipment.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillShipper;
+
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
             shipment.Ups.Packages.Add(package);
 
@@ -290,6 +295,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.CostCenter = string.Empty;
             profile.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             profile.Ups.Cn22Number = string.Empty;
+
+            profile.Ups.ShipmentChargeAccount = string.Empty;
+            profile.Ups.ShipmentChargeCountryCode = string.Empty;
+            profile.Ups.ShipmentChargePostalCode = string.Empty;
+            profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillShipper;
         }
 
         /// <summary>
@@ -428,6 +438,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.CostCenter, ups, UpsShipmentFields.CostCenter);
             ShippingProfileUtility.ApplyProfileValue(source.IrregularIndicator, ups, UpsShipmentFields.IrregularIndicator);
             ShippingProfileUtility.ApplyProfileValue(source.Cn22Number, ups, UpsShipmentFields.Cn22Number);
+
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeType, ups, UpsShipmentFields.ShipmentChargeType);
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargePostalCode, ups, UpsShipmentFields.ShipmentChargePostalCode);
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeCountryCode, ups, UpsShipmentFields.ShipmentChargeCountryCode);
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeAccount, ups, UpsShipmentFields.ShipmentChargeAccount);
 
             if (changedPackageWeights)
             {
