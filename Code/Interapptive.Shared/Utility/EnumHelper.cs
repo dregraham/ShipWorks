@@ -248,10 +248,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static void RemoveFromCache(Type type)
         {
-            if (enumMetadataCache.ContainsKey(type))
-            {
-                enumMetadataCache.Remove(type);
-            }
+            enumMetadataCache.Remove(type);
         }
     }
 }
