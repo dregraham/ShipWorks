@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Utility
 
         class EnumMetadata
         {
-            public string Description { get; set; }
+            public DescriptionAttribute DescriptionAttribute { get; set; }
             public Image Image { get; set; }
             public bool Deprecated { get; set; }
             public int? SortOrder { get; set; }
@@ -138,7 +138,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string GetDescription(Enum value)
         {
-            return GetEnumMetadata(value).Description;
+            return GetEnumMetadata(value).DescriptionAttribute.Description;
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Interapptive.Shared.Utility
                         throw new InvalidOperationException("Cannot use GetDescription on enum without DescriptionAttribute.");
                     }
 
-                    metadata.Description = attribute.Description;
+                    metadata.DescriptionAttribute = attribute;
 
                     ImageResourceAttribute imageAttribute = (ImageResourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ImageResourceAttribute));
                     if (imageAttribute != null)
@@ -240,15 +240,6 @@ namespace Interapptive.Shared.Utility
             }
 
             return result;
-        }
-
-
-        /// <summary>
-        /// Checks for changes needed.
-        /// </summary>
-        public static void RemoveFromCache(Type type)
-        {
-            enumMetadataCache.Remove(type);
         }
     }
 }

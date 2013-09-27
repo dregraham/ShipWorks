@@ -364,8 +364,6 @@ namespace ShipWorks.ApplicationCore
                 // what's already been stored in the database, so it's done after the various CheckForChangesNeeded calls above
                 // to ensure the latest data is being used.
                 DashboardManager.CheckForChanges();
-
-                RemoveCacheValues();
             }
 
             // Give any derived versions a chance to update the display of any changed data
@@ -373,14 +371,6 @@ namespace ShipWorks.ApplicationCore
 
             // We've now processed the pending change
             changeProcessingPending = false;
-        }
-
-        /// <summary>
-        /// Removes the cache values from EnumHelper.
-        /// </summary>
-        private static void RemoveCacheValues()
-        {
-            EnumHelper.RemoveFromCache(typeof(ShipmentTypeCode));
         }
 
         /// <summary>
