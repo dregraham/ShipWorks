@@ -63,14 +63,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             express1Accounts.Visible = (accounts.Count > 0);
             express1Signup.Visible = (accounts.Count == 0);
             express1LearnMore.Visible = (accounts.Count == 0);
-
+            
+            express1Accounts.DataSource = null;
             express1Accounts.DisplayMember = "Display";
             express1Accounts.ValueMember = "Value";
-            express1Accounts.DataSource = null;
 
             if (accounts.Count > 0)
             {
-                express1Accounts.DataSource = accounts.ToList();
+                express1Accounts.DataSource = accounts.Select(a => new { Display = a.Key, value = a.Value }).ToList();
                 express1Accounts.SelectedValue = accountId;
 
                 if (express1Accounts.SelectedIndex < 0)
