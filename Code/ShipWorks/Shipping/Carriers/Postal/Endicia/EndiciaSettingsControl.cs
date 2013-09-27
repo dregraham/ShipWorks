@@ -43,15 +43,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             optionsControl.LoadSettings(endiciaReseller);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             string reseller = EndiciaAccountManager.GetResellerName(endiciaReseller);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             endiciaOptions.Top = express1Options.Top;
             endiciaOptions.Visible = (endiciaReseller == EndiciaReseller.None);
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
-
+            
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            
             if (endiciaReseller == EndiciaReseller.None)
             {
                 endiciaOptions.LoadSettings();
@@ -105,6 +105,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 accountControl.Initialize(endiciaReseller);
                 loadedAccounts = true;
             }
+
+            endiciaOptions.LoadSettings();
         }
     }
 }

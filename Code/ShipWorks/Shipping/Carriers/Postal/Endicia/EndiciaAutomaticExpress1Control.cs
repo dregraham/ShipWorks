@@ -63,10 +63,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             express1Accounts.Visible = (accounts.Count > 0);
             express1Signup.Visible = (accounts.Count == 0);
             express1LearnMore.Visible = (accounts.Count == 0);
-
+            
+            express1Accounts.DataSource = null;
             express1Accounts.DisplayMember = "Display";
             express1Accounts.ValueMember = "Value";
-            express1Accounts.DataSource = null;
 
             if (accounts.Count > 0)
             {
