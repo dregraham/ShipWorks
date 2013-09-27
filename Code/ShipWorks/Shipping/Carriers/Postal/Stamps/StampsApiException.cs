@@ -34,23 +34,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 switch (code)
                 {
+                    // Errors coming from the Express1 version of the API (prior to hitting Stamps) always 
+                    // return an error code of 0
+                    case 0x00000000: return GetExpress1Message();
+
                     case 0x002b0601: return "The username or password entered is not correct.";
                     case 0x80040414: return "There is not enough postage in your account.";
                 }
-
+                
                 SoapException baseEx = base.InnerException as SoapException;
-                if (baseEx.Message.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
-                {
-                    // Handle the authentication exception from Express1 - there isn't any code to use with Express1;
-                    // the actual error message itself is the best thing we have to go off of
-
-                    // The exception message in the Express1 API ends up with portions of the stack trace, so show a friendlier 
-                    // message to the user.
-                    return "The username or password entered is not correct.";
-                }
-
-                string message;
-                message = baseEx.Detail.InnerText;
+                string message = baseEx.Detail.InnerText;
 
                 // Strip out the authenticator junk
                 var authNode = baseEx.Detail.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == "authenticator");
@@ -121,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Extract the numeric errror code from the Stamps.com exception
+        /// Extract the numeric error code from the Stamps.com exception
         /// </summary>
         public static long GetErrorCode(SoapException ex)
         {
@@ -141,6 +134,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             return code;
+        }
+
+        /// <summary>
+        /// Extracts a message that is specific to the Express1 version of the Stamps.com API (i.e. when the 
+        /// error code in the SoapException is 0).
+        /// </summary>
+        private string GetExpress1Message()
+        {
+            SoapException soapException = InnerException as SoapException;
+
+            // Just a generic message if the inner exception is not a SoapException for some reason
+            string message = "An error occurred communicating with Express1";
+
+            if (soapException != null)
+            {
+                if (soapException.Message.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
+                {
+                    // Use a more descriptive error message
+                    message = "The username or password entered is not correct.";
+                }
+                else
+                {
+                    // Errors coming from the Express1 version of the API (prior to hitting Stamps) have a decent error
+                    // message, so we can just return the exception message
+                    message = soapException.Message;
+                }
+            }
+
+            return message;
         }
     }
 }
