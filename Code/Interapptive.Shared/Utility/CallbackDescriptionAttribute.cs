@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Interapptive.Shared.Utility
 {
-    public class CallbackDescriptionAttribute:DescriptionAttribute
+    [AttributeUsage(AttributeTargets.All, Inherited = false)]
+    public sealed class CallbackDescriptionAttribute : DescriptionAttribute
     {
         private readonly string className;
         private readonly string memberName;
@@ -16,6 +14,11 @@ namespace Interapptive.Shared.Utility
         private MethodInfo method;
         private object instance;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CallbackDescriptionAttribute"/> class.
+        /// </summary>
+        /// <param name="className">Name of the class to be reflected on.</param>
+        /// <param name="memberName">Name of the class member (property or method) to use to get the description.</param>
         public CallbackDescriptionAttribute(string className, string memberName)
         {
             this.className = className;
@@ -23,9 +26,24 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Gets the name of the class being reflected on.
+        /// </summary>
+        public string ClassName
+        {
+            get { return className; }
+        }
+
+        /// <summary>
+        /// Gets the name of the member being invoked.
+        /// </summary>
+        public string MemberName
+        {
+            get { return memberName; }
+        }
+
+        /// <summary>
         /// Gets the description stored in this attribute.
         /// </summary>
-        /// <returns>The description stored in this attribute.</returns>
         public override string Description
         {
             get
@@ -62,11 +80,11 @@ namespace Interapptive.Shared.Utility
             // Create an instance of the type.
             instance = Activator.CreateInstance(type);
 
-            // Get the property defined by methodName and determine if it exists.
+            // Get the property defined by memberName and determine if it exists.
             property = type.GetProperty(memberName);
             if (property == null)
             {
-                // If the property called methodname doesn't exist, it must be a method.
+                // If the property doesn't exist, it must be a method.
                 method = type.GetMethod(memberName);
             }
         }
