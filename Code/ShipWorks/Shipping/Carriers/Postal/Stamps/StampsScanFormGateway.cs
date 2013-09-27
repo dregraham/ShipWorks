@@ -96,6 +96,64 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Creates scan forms from the shipping carrier
+        /// </summary>
+        /// <param name="scanFormBatch">The batch to which the created scan forms should belong.</param>
+        /// <param name="shipments">The shipments the scan form is being generated for.</param>
+        /// <returns>A carrier-specific collection of scan form entity object.</returns>
+        public IEnumerable<IEntity2> CreateScanForms(ScanFormBatch scanFormBatch, IEnumerable<ShipmentEntity> shipments)
+        {
+            StampsAccountEntity accountEntity = scanFormBatch.AccountEntity as StampsAccountEntity;
+            if (accountEntity == null)
+            {
+                throw new StampsException(invalidCarrierMessage);
+            }
+
+            if (shipments == null || shipments.Count() == 0)
+            {
+                throw new StampsException("There must be at least one shipment to create a SCAN form.");
+            }
+
+            // Grab all the stamps-specific shipments (this should be all of the shipments)
+            IEnumerable<StampsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Stamps).Where(s => s != null);
+            if (stampsShipments.Count() != shipments.Count())
+            {
+                throw new StampsException(invalidShipmentMessage);
+            }
+
+            // We have our list of Stamps.com shipments, so call the API to create the SCAN form
+            XDocument xDocument = StampsApiSession.CreateScanForm(stampsShipments, accountEntity);
+
+            // Ensure that we have the correct amount of transactions and urls
+            if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())
+            {
+                throw new StampsException("Transactions and SCAN forms must be equal length.");
+            }
+
+            // Create entities for each returned scan form
+            List<StampsScanFormEntity> entities = new List<StampsScanFormEntity>();
+
+            for (int i = 0; i < xDocument.Descendants("TransactionId").Count(); i++)
+            {
+                // Populate the stamps scan form entity based on the response from the API
+                StampsScanFormEntity scanEntity = new StampsScanFormEntity();
+                scanEntity.StampsAccountID = accountEntity.StampsAccountID;
+                scanEntity.CreatedDate = DateTime.UtcNow;
+                scanEntity.ShipmentCount = shipments.Count();
+                scanEntity.ScanFormTransactionID = xDocument.Descendants("TransactionId").ElementAt(i).Value;
+                scanEntity.ScanFormUrl = xDocument.Descendants("Url").ElementAt(i).Value;
+                scanEntity.Description = "Non-cubic shipments";
+
+                // Notify the batch of the new scan form
+                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, DownloadFormImage(scanEntity.ScanFormUrl));
+
+                entities.Add(scanEntity);
+            }
+
+            return entities;
+        }
+
+        /// <summary>
         /// Downloads the form image.
         /// </summary>
         /// <param name="url">The URL.</param>
