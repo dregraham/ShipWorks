@@ -14,6 +14,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public partial class AutomaticExpress1ControlBase : UserControl
     {
+        private IExpress1SettingsFacade express1Settings;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -21,8 +23,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             InitializeComponent();
         }
-
-        private IExpress1SettingsFacade express1Settings;
 
         /// <summary>
         /// Gets whether the use wants to use Express1
