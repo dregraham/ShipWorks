@@ -92,7 +92,9 @@ namespace ShipWorks.Actions.Tasks.Common
                 ShipWorksBackup backup = new ShipWorksBackup(SqlSession.Current, SuperUser.Instance);
                 backup.CreateBackup(BackupFilePath(DateTime.Now));
             }
-            catch (InvalidOperationException ex)
+            // Backups can cause a large number of exceptions.  The list just kept growing.  It was not safe to try to 
+            // determine the full list that should be caught.
+            catch (Exception ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }

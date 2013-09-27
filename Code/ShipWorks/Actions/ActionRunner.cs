@@ -162,7 +162,8 @@ namespace ShipWorks.Actions
             else
             {
                 // If its for a different computer we can't do it
-                if (queue.ComputerLimitedList.Length > 0 && !queue.ComputerLimitedList.Contains(UserSession.Computer.ComputerID))
+                ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(queue.InternalComputerLimitedList);
+                if (!computerActionPolicy.IsComputerAllowed(UserSession.Computer))
                 {
                     result = ActionRunnerResult.WrongComputer;
                     return null;

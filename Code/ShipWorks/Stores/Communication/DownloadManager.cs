@@ -28,6 +28,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Utility;
 using ShipWorks.Users.Security;
 using ShipWorks.Users.Audit;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -129,6 +130,12 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public static void StartAutoDownloadIfNeeded()
         {
+            // If we are a background process, and the UI process is open - then just let the UI do it
+            if (!Program.ExecutionMode.IsUISupported && UserInterfaceExecutionMode.IsProcessRunning)
+            {
+                return;
+            }
+
             // Don't check more often than every 15 seconds
             if (lastAutoDownloadCheck + TimeSpan.FromSeconds(15) > DateTime.UtcNow)
             {
@@ -204,6 +211,8 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public static void StartDownload(ICollection<StoreEntity> stores, DownloadInitiatedBy initiatedBy)
         {
+            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+
             foreach (StoreEntity store in stores)
             {
                 AddToDownloadedQueue(store, initiatedBy);
@@ -215,6 +224,8 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void AddToDownloadedQueue(StoreEntity store, DownloadInitiatedBy initiatedBy)
         {
+            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+
             lock (downloadQueueLock)
             {
                 log.InfoFormat("Adding store {0} to download queue.", store.StoreName);
@@ -248,8 +259,14 @@ namespace ShipWorks.Stores.Communication
                 {
                     Debug.Assert(busyToken == null);
 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // We only may not if we are running in the background.
+                    if (!ApplicationBusyManager.TryOperationStarting("downloading", out busyToken))
+                    {
+                        return;
+                    }
+
                     isDownloading = true;
-                    busyToken = ApplicationBusyManager.OperationStarting("downloading");
 
                     Thread thread = new Thread(ExceptionMonitor.WrapThread(DownloadWorkerThread));
                     thread.Name = "DownloadThread";

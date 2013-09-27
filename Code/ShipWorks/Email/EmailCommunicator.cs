@@ -26,6 +26,7 @@ using System.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Utility;
 using System.Net.Sockets;
+using ShipWorks.Users;
 
 namespace ShipWorks.Email
 {
@@ -166,7 +167,7 @@ namespace ShipWorks.Email
         /// </summary>
         public static bool StartEmailingAccounts(IEnumerable<long> accounts)
         {
-            Debug.Assert(!Program.ExecutionMode.IsUserInteractive || !Program.MainForm.InvokeRequired);
+            Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
 
             bool started = false;
 
@@ -206,6 +207,14 @@ namespace ShipWorks.Email
         /// </summary>
         public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages, bool skipDontSendBefore = true)
         {
+            Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
+
+            // Make sure the DB is in a state where we can start doing stuff
+            if (ConnectionSensitiveScope.IsActive || !UserSession.IsLoggedOn)
+            {
+                return;
+            }
+
             IEnumerable<EmailOutboundEntity> messagesToSend = messages;
 
             if (skipDontSendBefore)
@@ -237,6 +246,8 @@ namespace ShipWorks.Email
         /// </summary>
         private static void AddToEmailQueue(EmailOutboundThrottler throttler)
         {
+            Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
+
             lock (emailQueueLock)
             {
                 log.InfoFormat("Adding throttler for ({0}) to email queue.", throttler.EmailAccount.AccountName);
@@ -266,8 +277,14 @@ namespace ShipWorks.Email
                 {
                     Debug.Assert(busyToken == null);
 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // We only may not if we are running in the background.
+                    if (!ApplicationBusyManager.TryOperationStarting("emailing", out busyToken))
+                    {
+                        return;
+                    }
+
                     isEmailing = true;
-                    busyToken = ApplicationBusyManager.OperationStarting("emailing");
 
                     Thread thread = new Thread(ExceptionMonitor.WrapThread(EmailWorkerThread));
                     thread.Name = "EmailThread";

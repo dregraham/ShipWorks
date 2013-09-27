@@ -17,7 +17,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
     public class PurgeDatabaseTaskTest
     {
         private readonly string auditScript = EnumHelper.GetApiValue(PurgeDatabaseType.Audit);
-        private readonly string downloadScript = EnumHelper.GetApiValue(PurgeDatabaseType.Downloads);
         private readonly string emailScript = EnumHelper.GetApiValue(PurgeDatabaseType.Email);
         private readonly string labelScript = EnumHelper.GetApiValue(PurgeDatabaseType.Labels);
         private readonly string printResultScript = EnumHelper.GetApiValue(PurgeDatabaseType.PrintJobs);
@@ -42,7 +41,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.Purges.Add(PurgeDatabaseType.Downloads);
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
@@ -51,7 +49,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Run(null, null);
 
             scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
-            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
@@ -69,7 +66,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.Run(null, null);
 
             scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
             scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
             scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
@@ -87,7 +83,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, dateProvider.Object);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.Purges.Add(PurgeDatabaseType.Downloads);
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
@@ -100,7 +95,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
             scriptRunner.Verify(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
             scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
-            scriptRunner.Verify(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
         }
 
         [TestMethod]
@@ -114,7 +108,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.Purges.Add(PurgeDatabaseType.Downloads);
             testObject.Purges.Add(PurgeDatabaseType.Email);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
@@ -126,8 +119,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             Assert.AreEqual(printResultScript, calledPurges[1]);
             Assert.AreEqual(emailScript, calledPurges[2]);
             Assert.AreEqual(auditScript, calledPurges[3]);
-            Assert.AreEqual(downloadScript, calledPurges[4]);
-            Assert.AreEqual(abandonedResourcesScript, calledPurges[5]);
+            Assert.AreEqual(abandonedResourcesScript, calledPurges[4]);
         }
 
         [TestMethod]
@@ -141,7 +133,6 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Audit);
-            testObject.Purges.Add(PurgeDatabaseType.Downloads);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
             testObject.Purges.Add(PurgeDatabaseType.AbandonedResources);
 
@@ -149,8 +140,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             Assert.AreEqual(printResultScript, calledPurges[0]);
             Assert.AreEqual(auditScript, calledPurges[1]);
-            Assert.AreEqual(downloadScript, calledPurges[2]);
-            Assert.AreEqual(abandonedResourcesScript, calledPurges[3]);
+            Assert.AreEqual(abandonedResourcesScript, calledPurges[2]);
         }
 
         [TestMethod]
@@ -257,13 +247,13 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             scriptRunner.Setup(x => x.RunScript(labelScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
                 .Throws(new Mock<DbException>().Object);
-            scriptRunner.Setup(x => x.RunScript(downloadScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
+            scriptRunner.Setup(x => x.RunScript(emailScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
                 .Throws(new Mock<DbException>().Object);
 
             PurgeDatabaseTask testObject = new PurgeDatabaseTask(scriptRunner.Object, DefaultDateTimeProvider);
             testObject.Purges.Add(PurgeDatabaseType.Labels);
             testObject.Purges.Add(PurgeDatabaseType.PrintJobs);
-            testObject.Purges.Add(PurgeDatabaseType.Downloads);
+            testObject.Purges.Add(PurgeDatabaseType.Email);
 
             try
             {
@@ -272,7 +262,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             catch (ActionTaskRunException ex)
             {
                 Assert.IsTrue(ex.Message.ToLower().Contains("label"));
-                Assert.IsTrue(ex.Message.ToLower().Contains("download"));
+                Assert.IsTrue(ex.Message.ToLower().Contains("email"));
                 Assert.IsInstanceOfType(ex.InnerException, typeof (ExceptionCollection));
                 ExceptionCollection exceptions = (ExceptionCollection) ex.InnerException;
                 Assert.AreEqual(2, exceptions.Exceptions.OfType<DbException>().Count());

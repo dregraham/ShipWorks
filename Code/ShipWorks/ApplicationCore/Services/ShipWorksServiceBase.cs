@@ -17,202 +17,73 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
 using System.Timers;
+using System.Data.SqlClient;
+using Interapptive.Shared.Data;
+using ShipWorks.Stores;
+using ShipWorks.ApplicationCore.Interaction;
+using ThreadTimer = System.Threading.Timer;
+using Interapptive.Shared.UI;
+using System.IO;
+using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 
 namespace ShipWorks.ApplicationCore.Services
 {
+    /// <summary>
+    /// Base class for all ShipWorks services.  Right now there is only one, so really we could just have ShipWorskSchedulerService.
+    /// </summary>
     public partial class ShipWorksServiceBase : ServiceBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksServiceBase));
-        static Type[] serviceTypesCache;
+
+        // The entity we use to ping the database with checkins
+        ServiceStatusEntity serviceStatusEntity;
+
+        // The last known SQL Session configuration
+        bool lastConfigurationSuccess = false;
+
+        // Lock to make sure we aren't updating at the same time
+        object timerLock = new object();
+
+        // The timers to keep us checking for sql changes
+        ThreadTimer sqlSessionMonitorTimer;
+        ThreadTimer checkInTimer;
+
+        // The timespan for checking our connection
+        static readonly TimeSpan sqlMonitorTimespan = TimeSpan.FromSeconds(5);
+
+        // For log throttling so we don't fill up the background log so fast
+        string lastWarnMessage = null;
+        Stopwatch lastWarnMessageTime = Stopwatch.StartNew();
 
         /// <summary>
-        /// Gets service instances for all ShipWorks service types.
+        /// Consteructor
         /// </summary>
-        public static ShipWorksServiceBase[] GetAllServices()
-        {
-            if (serviceTypesCache == null)
-            {
-                serviceTypesCache = Assembly.GetExecutingAssembly().GetTypes()
-                    .Where(t => t.BaseType == typeof(ShipWorksServiceBase))
-                    .ToArray();
-            }
-
-            return serviceTypesCache
-                .Select(Activator.CreateInstance)
-                .Cast<ShipWorksServiceBase>()
-                .ToArray();
-        }
-
-        /// <summary>
-        /// Gets a service instance for a ShipWorks service type.
-        /// </summary>
-        public static ShipWorksServiceBase GetService(ShipWorksServiceType serviceType)
-        {
-            return GetAllServices().Single(s => s.ServiceType == serviceType);
-        }
-
-        /// <summary>
-        /// Gets a service instance for a ShipWorks service type name.
-        /// </summary>
-        public static ShipWorksServiceBase GetService(string serviceTypeName)
-        {
-            var results = EnumHelper.GetEnumList<ShipWorksServiceType>().Where(e => string.Compare(e.ApiValue, serviceTypeName, true) == 0).Select(e => e.Value);
-            if (results.Count() != 1)
-            {
-                throw new NotFoundException("A ShipWorks service of the name '" + serviceTypeName + "' was not found.");
-            }
-
-            return GetService(results.First());
-        }
-
-        /// <summary>
-        /// Gets the instance-specific service name for a ShipWorks service type.
-        /// </summary>
-        public static string GetServiceName(ShipWorksServiceType serviceType)
-        {
-            return GetServiceName(serviceType, ShipWorksSession.InstanceID);
-        }
-
-        /// <summary>
-        /// Gets the instance-specific service name for a ShipWorks service type.
-        /// </summary>
-        public static string GetServiceName(ShipWorksServiceType serviceType, Guid instanceID)
-        {
-            return "ShipWorks" + EnumHelper.GetApiValue(serviceType) + "$" + instanceID.ToString("N");
-        }
-
-        /// <summary>
-        /// Gets the instance-specific display name for a ShipWorks service type.
-        /// </summary>
-        public static string GetDisplayName(ShipWorksServiceType serviceType)
-        {
-            return GetDisplayName(serviceType, ShipWorksSession.InstanceID);
-        }
-
-        /// <summary>
-        /// Gets the instance-specific display name for a ShipWorks service type.
-        /// </summary>
-        public static string GetDisplayName(ShipWorksServiceType serviceType, Guid instanceID)
-        {
-            return EnumHelper.GetDescription(serviceType) + " " + instanceID.ToString("B").ToUpper();
-        }
-
-        /// <summary>
-        /// Self-hosts a ShipWorks service object as an instance-specific background process instead of via the SCM.
-        /// If the background process is already running, it is signaled to stop and will be superseded by this instance.
-        /// This is a blocking call for the lifetime of the running service.
-        /// </summary>
-        /// <returns>true if the service ran; otherwise, false.</returns>
-        /// <returns>true if the service ran to completion in the background; false if the service was already running and could not be stopped.</returns>
-        public static bool RunInBackground(ShipWorksServiceBase service)
-        {
-            if (null == service)
-                throw new ArgumentNullException("service");
-
-            // Suppress the nappy-headed Windows error dialogs
-            NativeMethods.SetErrorMode(NativeMethods.SEM_FAILCRITICALERRORS | NativeMethods.SEM_NOGPFAULTERRORBOX);
-
-            bool createdNew;
-            using (var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, service.ServiceName, out createdNew))
-            {
-                if (!createdNew)
-                {
-                    log.Warn("Service is already running in the background; sending stop signal.");
-                    if (!stopSignal.Set())
-                    {
-                        // MSDN gives no indication why or when this could happen...
-                        log.Error("Stop signal failed!");
-                        return false;
-                    }
-                }
-
-                service.OnStart(null);
-
-                stopSignal.Reset();
-                stopSignal.WaitOne();
-                log.Info("Stop signal received; shutting down service.");
-
-                service.OnStop();
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Hosts all ShipWorks services as new instance-specific background processes.
-        /// If a background process is already running, it is signaled to stop and will be superseded by the new process.
-        /// This is a non-blocking call as all running services are started in new processes.
-        /// </summary>
-        public static void RunAllInBackground()
-        {
-            foreach (var entry in EnumHelper.GetEnumList<ShipWorksServiceType>())
-            {
-                Process.Start(Program.AppFileName, "/s=" + entry.ApiValue).Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Signals an instance-specific ShipWorks background service process that it should shut down.
-        /// </summary>
-        /// <returns>true if the service was not running, or was running and signaled; false if the signal fails.</returns>
-        public static bool StopInBackground(ShipWorksServiceType serviceType)
-        {
-            return StopInBackground(serviceType, ShipWorksSession.InstanceID);
-        }
-
-        /// <summary>
-        /// Signals an instance-specific ShipWorks background service process that it should shut down.
-        /// </summary>
-        /// <returns>true if the service was not running, or was running and signaled; false if the signal fails.</returns>
-        public static bool StopInBackground(ShipWorksServiceType serviceType, Guid instanceID)
-        {
-            var serviceName = GetServiceName(serviceType, instanceID);
-
-            bool createdNew;
-            using (var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, serviceName, out createdNew))
-            {
-                if (!createdNew && !stopSignal.Set())
-                {
-                    // MSDN gives no indication why or when this could happen...
-                    log.Error("Stop signal failed!");
-                    return false;
-                }
-
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Signals all running instance-specific ShipWorks background processes to shut down.
-        /// </summary>
-        /// <returns>true if the all services were not running, or were running and signaled; false if any signal fails.</returns>
-        public static bool StopAllInBackground()
-        {
-            return StopAllInBackground(ShipWorksSession.InstanceID);
-        }
-
-        /// <summary>
-        /// Signals all running instance-specific ShipWorks background processes to shut down.
-        /// </summary>
-        /// <returns>true if the all services were not running, or were running and signaled; false if any signal fails.</returns>
-        public static bool StopAllInBackground(Guid instanceID)
-        {
-            return EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => e.Value)
-                .Select(serviceType => StopInBackground(serviceType, instanceID))
-                .Aggregate((all, stopped) => all && stopped);
-        }
-
-
-        private ServiceStatusEntity serviceStatusEntity;
-
         public ShipWorksServiceBase()
         {
             InitializeComponent();
-            checkInTimer.Interval = ServiceStatusManager.CheckInTimeSpan.TotalMilliseconds;
         }
 
-        [Description("The ShipWorks service type that this service implements.")]
-        public ShipWorksServiceType ServiceType { get; set; }
+        /// <summary>
+        /// Sets instance-specific properties for this service; must be called after InitializeComponent in a derived service class.
+        /// </summary>
+        protected void InitializeInstance()
+        {
+            ServiceName = ShipWorksServiceManager.GetServiceName(ServiceType);
+        }
 
+        /// <summary>
+        /// The ShipWorks Service type
+        /// </summary>
+        [Description("The ShipWorks service type that this service implements.")]
+        public ShipWorksServiceType ServiceType 
+        { 
+            get; 
+            set; 
+        }
+
+        /// <summary>
+        /// The name of the service, as displayed as the name in the SCM
+        /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public string ServiceName
@@ -238,11 +109,19 @@ namespace ShipWorks.ApplicationCore.Services
         }
 
         /// <summary>
-        /// Sets instance-specific properties for this service; must be called after InitializeComponent in a derived service class.
+        /// Provides access to initiating the "OnStart" method from a custom host
         /// </summary>
-        protected void InitializeInstance()
+        public void InternalHostStart()
         {
-            ServiceName = GetServiceName(ServiceType);
+            OnStart(null);
+        }
+
+        /// <summary>
+        /// Provides access to initiating the "OnStop" method from a custom host
+        /// </summary>
+        public void InternalHostStop()
+        {
+            OnStop();
         }
 
         /// <summary>
@@ -250,57 +129,221 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected sealed override void OnStart(string[] args)
         {
-            TryStart();
+            // One time initialization ever - regardless of database or user changes
+            DataProvider.InitializeForApplication();
+            AuditProcessor.InitializeForApplication();
+
+            // Required for printing
+            WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));
+
+            // Start the primary timer
+            sqlSessionMonitorTimer = new ThreadTimer(OnSqlSessionMonitorTimerElapsed, null, TimeSpan.Zero, sqlMonitorTimespan);
         }
 
         /// <summary>
-        /// Tries to connect to the database, and if successful, starts up the service core.
+        /// The timer for retrying the connection elapsed
         /// </summary>
-        void TryStart()
+        private void OnSqlSessionMonitorTimerElapsed(object state)
         {
-            if (!TryConnect())
+            if (!Monitor.TryEnter(timerLock))
             {
-                tryStartTimer.Start();
                 return;
             }
 
-            OnStartCore();
-            checkInTimer.Start();
+            try
+            {
+                // Are we running on entering this method
+                bool isRunning = checkInTimer != null;
+
+                // Check the SQL Session, and determine if it changed
+                bool hasChanged = CheckSqlSession();
+
+                // If the SQL Session is good, and we weren't already running, start it up
+                if (lastConfigurationSuccess)
+                {
+                    if (!isRunning)
+                    {
+                        // Do our core starting initialization
+                        OnStartCore();
+
+                        // Start the timer to periodically checkin
+                        checkInTimer = new ThreadTimer(OnCheckInTimerElapsed, null, ServiceStatusManager.CheckInTimeSpan, ServiceStatusManager.CheckInTimeSpan);
+                    }
+                    // It's already running, but the SQL config changed - we need to make sure the scheduler is now pointing to the correct database
+                    else if (hasChanged)
+                    {
+                        OnSqlConfigurationChanged();
+                    }
+                }
+                else
+                {
+                    if (isRunning)
+                    {
+                        // Not connected - stop
+                        OnStop();
+
+                        // Stop also stops the sql monitor timer - we need that to keep going so we can detect when it gets fixed
+                        sqlSessionMonitorTimer = new ThreadTimer(OnSqlSessionMonitorTimerElapsed, null, sqlMonitorTimespan, sqlMonitorTimespan);
+                    }
+                }
+            }
+            finally
+            {
+                Monitor.Exit(timerLock);
+            }
         }
 
         /// <summary>
-        /// Tries to connect to the database.
+        /// Check SQL Session for changes.  Updates 'lastConfiguration' and 'lastConfigurationSuccess', and returns true if the session has changed.
         /// </summary>
-        static bool TryConnect()
+        private bool CheckSqlSession()
         {
-            try
+            // Reloading the SQL Session and any other changes that may cause have to be within a connection scope, so we don't try to do it while other things are updating,
+            // and other things don't try to update while we are doing it.
+            using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("checking connection", null))
             {
-                SqlSession.Initialize();
-
-                if (!SqlSession.IsConfigured)
+                if (!scope.Acquired)
                 {
-                    log.Warn("SqlSession is not configured.");
+                    LogThrottledWarn("Could not acquire the connection scope to check for SQL Session updates: " + string.Join(", ", ApplicationBusyManager.GetActiveOperations()));
                     return false;
                 }
 
-                if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
+                // Load a SQL Session from disk
+                SqlSessionConfiguration diskConfiguration = new SqlSessionConfiguration();
+                diskConfiguration.Load();
+
+                // See if the SQL Session has changed
+                bool hasChanged = HasSqlSessionChanged(diskConfiguration);
+
+                // If it's changed, reload it
+                if (hasChanged)
                 {
-                    log.Warn("Schema is not the correct version.");
-                    return false;
+                    SqlSession.Initialize();
                 }
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error establishing SqlSession.", ex);
-                return false;
+                try
+                {
+                    // If the session hasn't changed, and it was succesful last time, no need to go through all of this again
+                    if (!hasChanged && lastConfigurationSuccess)
+                    {
+                        log.DebugFormat("SQL Session has not changed since last check");
+
+                        return false;
+                    }
+
+                    lastConfigurationSuccess = false;
+
+                    // The session has changed.  So first we need to clear the previous session info
+                    ClearUserSession();
+
+                    // SQL Sesion isn't configured
+                    if (!SqlSession.IsConfigured)
+                    {
+                        LogThrottledWarn("SqlSession is not configured.");
+                        return hasChanged;
+                    }
+
+                    // If the database is in SINGLE_USER, don't even try to connect
+                    SqlSession master = new SqlSession(SqlSession.Current);
+                    master.Configuration.DatabaseName = "master";
+                    using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                    {
+                        testConnection.Open();
+
+                        if (SqlUtility.IsSingleUser(testConnection, SqlSession.Current.Configuration.DatabaseName))
+                        {
+                            LogThrottledWarn(string.Format("Database {0} is in SINGLE_USER... leaving it alone.", SqlSession.Current.Configuration.DatabaseName));
+
+                            return hasChanged;
+                        }
+                    }
+
+                    if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
+                    {
+                        LogThrottledWarn("Schema is not the correct version.");
+                        return hasChanged;
+                    }
+
+                    if (MigrationController.IsMigrationInProgress())
+                    {
+                        LogThrottledWarn("A ShipWorks 2 upgrade is in progress.");
+                        return hasChanged;
+                    }
+
+                    if (StoreManager.GetDatabaseStoreCount() == 0)
+                    {
+                        LogThrottledWarn("There are no stores, nothing to do");
+                        return hasChanged;
+                    }
+
+                    UserSession.InitializeForCurrentDatabase();
+
+                    UserManager.InitializeForCurrentUser();
+                    UserSession.InitializeForCurrentSession();
+
+                    log.InfoFormat("The user session has been successfully loaded and initialized.");
+
+                    // This is the only spot we know it was a success
+                    lastConfigurationSuccess = true;
+                    return hasChanged;
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("An error occurred while connecting to SQL Server.", ex);
+
+                    return hasChanged;
+                }
             }
         }
 
-        void OnTryStartTimerElapsed(object sender, ElapsedEventArgs e)
+        /// <summary>
+        /// Indicates if the SQL Session has changed since the last time this function was called
+        /// </summary>
+        private bool HasSqlSessionChanged(SqlSessionConfiguration diskConfiguration)
         {
-            TryStart();
+            SqlSessionConfiguration currentConfiguration = SqlSession.IsConfigured ? SqlSession.Current.Configuration : new SqlSessionConfiguration();
+
+            // They are both null, haven't changed
+            if (diskConfiguration == null && currentConfiguration == null)
+            {
+                return false;
+            }
+
+            // They are both not null, check the properties
+            if (diskConfiguration != null && currentConfiguration != null)
+            {
+                // Same server and database
+                if (diskConfiguration.ServerInstance == currentConfiguration.ServerInstance && diskConfiguration.DatabaseName == currentConfiguration.DatabaseName)
+                {
+                    // Same auth (windows) so we can get out
+                    if (diskConfiguration.WindowsAuth && currentConfiguration.WindowsAuth)
+                    {
+                        return false;
+                    }
+
+                    // Same auth (password) so we can get out
+                    if (!diskConfiguration.WindowsAuth && !currentConfiguration.WindowsAuth &&
+                        diskConfiguration.Username == currentConfiguration.Username &&
+                        diskConfiguration.Password == currentConfiguration.Password)
+                    {
+                        return false;
+                    }
+                }
+
+                // Something changed
+                return true;
+            }
+
+            // One is null and one is not null, something changed
+            return true;
+        }
+
+        /// <summary>
+        /// Called when the service is in the middle of running, and the SQL Session configuration changes mid-stream
+        /// </summary>
+        protected virtual void OnSqlConfigurationChanged()
+        {
+
         }
 
         /// <summary>
@@ -308,36 +351,25 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected virtual void OnStartCore()
         {
-            // Setup the service for ShipWorks access.
-            InitializeForApplication();
-
             // Update the ServiceStatusEntity start and check in times.
             CurrentServiceStatusEntity.LastStartDateTime = DateTime.UtcNow;
-            CurrentServiceStatusEntity.LastCheckInDateTime = CurrentServiceStatusEntity.LastStartDateTime;
             CurrentServiceStatusEntity.ServiceFullName = ServiceName;
+            CurrentServiceStatusEntity.ServiceDisplayName = ShipWorksServiceManager.GetDisplayName(ServiceType);
 
-            var manager = new WindowsServiceController(this);       //TODO: refactor to remove host-specific knowledge
-            CurrentServiceStatusEntity.ServiceDisplayName =
-                manager.IsServiceInstalled() ? manager.GetServiceDisplayName() : GetDisplayName(ServiceType);
-
-            ServiceStatusManager.SaveServiceStatus(CurrentServiceStatusEntity);
+            // Check in right away
+            ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
         }
 
-        static void InitializeForApplication()
+        /// <summary>
+        /// The periodic check-in timer has elapsed
+        /// </summary>
+        void OnCheckInTimerElapsed(object state)
         {
-            LogSession.Initialize();
+            if (!UserSession.IsLoggedOn)
+            {
+                return;
+            }
 
-            DataProvider.InitializeForApplication();
-            AuditProcessor.InitializeForApplication();
-
-            UserSession.InitializeForCurrentDatabase();
-
-            UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentSession();
-        }
-
-        void OnCheckInTimerElapsed(object sender, ElapsedEventArgs e)
-        {
             ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
         }
 
@@ -346,13 +378,32 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected sealed override void OnStop()
         {
-            tryStartTimer.Stop();
-
-            if (checkInTimer.Enabled)
+            if (sqlSessionMonitorTimer != null)
             {
-                checkInTimer.Stop();
-                OnStopCore();
+                sqlSessionMonitorTimer.Dispose();
+                sqlSessionMonitorTimer = null;
             }
+
+            // If the checkin timer is on, that means we were running.
+            if (checkInTimer != null)
+            {
+                // Stop the timer
+                checkInTimer.Dispose();
+                checkInTimer = null;
+
+                // And shutdown
+                OnStopCore();
+
+                ClearUserSession();
+            }
+        }
+
+        /// <summary>
+        /// Clear the current user session
+        /// </summary>
+        private void ClearUserSession()
+        {
+            UserSession.Reset();
         }
 
         /// <summary>
@@ -360,10 +411,38 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         protected virtual void OnStopCore()
         {
-            // Update the ServiceStatusEntity stop and check in times.
-            CurrentServiceStatusEntity.LastStopDateTime = DateTime.UtcNow;
-            CurrentServiceStatusEntity.LastCheckInDateTime = CurrentServiceStatusEntity.LastStopDateTime;
-            ServiceStatusManager.SaveServiceStatus(CurrentServiceStatusEntity);
+            if (Program.IsCrashing)
+            {
+                return;
+            }
+
+            // Could be stopping due to losing the connection
+            if (lastConfigurationSuccess)
+            {
+                // Update the ServiceStatusEntity stop and check in times.
+                CurrentServiceStatusEntity.LastStopDateTime = DateTime.UtcNow;
+
+                // Check in with the stop time
+                ServiceStatusManager.CheckIn(CurrentServiceStatusEntity);
+            }
+        }
+
+        /// <summary>
+        /// Log a warning, but in a throttled way that doesn't fill up our background log so fast
+        /// </summary>
+        private void LogThrottledWarn(string message)
+        {
+            lock (log)
+            {
+                // Log anytime the message changes, or the same message if a minute has passed since the last time
+                if (message != lastWarnMessage || lastWarnMessageTime.Elapsed > TimeSpan.FromMinutes(1))
+                {
+                    log.Warn(message);
+
+                    lastWarnMessage = message;
+                    lastWarnMessageTime = Stopwatch.StartNew();
+                }
+            }
         }
     }
 }

@@ -492,28 +492,22 @@
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\Initialization\CommandLineExecutionModeInitializer.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
     <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
-    <Compile Include="ApplicationCore\Services\Hosting\DefaultServiceHostFactory.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeConfigurationException.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\Initialization\ExecutionModeInitializerBase.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\Initialization\IExecutionModeInitializer.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\Initialization\ServiceExecutionModeInitializer.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\Initialization\UserInterfaceExecutionModeInitializer.cs" />
-    <Compile Include="ApplicationCore\Services\Hosting\IServiceHostFactory.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\MultipleExecutionModeInstancesException.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\ServiceHostFactory.cs" />
+    <Compile Include="ApplicationCore\ExecutionMode\UserInterfaceAlreadyOpenException.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactory.cs" />
-    <Compile Include="ApplicationCore\ExecutionMode\IExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ServiceExecutionMode.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\IServiceHost.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\UserInterfaceExecutionMode.cs" />
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRetryConfigurator.cs" />
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceConfiguration.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceInstaller.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceHost.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
@@ -557,10 +551,10 @@
     <Compile Include="ApplicationCore\Help\ShipWorksAboutDlg.Designer.cs">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\AddUserRight.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\IServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
+    <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -568,12 +562,11 @@
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
       <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceChangeCredentials.cs" />
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.cs">
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.Designer.cs">
-      <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.Designer.cs">
+      <DependentUpon>WindowsServiceCredentialsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.cs">
       <SubType>Component</SubType>
@@ -5642,8 +5635,8 @@
     <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
       <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\GetWindowsCredentialsDlg.resx">
-      <DependentUpon>GetWindowsCredentialsDlg.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.resx">
+      <DependentUpon>WindowsServiceCredentialsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.resx">
       <DependentUpon>MasterInstaller.cs</DependentUpon>
@@ -10007,6 +10000,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.9.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.8.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.9.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.3.sql" />

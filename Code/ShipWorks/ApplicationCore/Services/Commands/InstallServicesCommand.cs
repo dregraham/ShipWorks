@@ -4,6 +4,8 @@ using ShipWorks.ApplicationCore.Services.Hosting.Background;
 using ShipWorks.ApplicationCore.Services.Hosting.Windows;
 using System.Collections.Generic;
 using System.Text;
+using System;
+using Common.Logging;
 
 
 namespace ShipWorks.ApplicationCore.Services.Installers
@@ -14,6 +16,9 @@ namespace ShipWorks.ApplicationCore.Services.Installers
     /// </summary>
     public class InstallServicesCommand : ICommandLineCommandHandler
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(InstallServicesCommand));
+
         /// <summary>
         /// Gets the name of this command.
         /// </summary>
@@ -48,11 +53,15 @@ namespace ShipWorks.ApplicationCore.Services.Installers
                 throw new CommandLineCommandArgumentException(CommandName, string.Empty, message.ToString());
             }
 
-            new List<IServiceRegistrar> {
+            List<IServiceRegistrar> registrars = new List<IServiceRegistrar> {
                 new WindowsServiceRegistrar(),
                 new BackgroundServiceRegistrar()
-            }.ForEach(x => x.UnregisterAll());
+            };
 
+            // In case there was anything previously registered, unregister it
+            registrars.ForEach(r => r.UnregisterAll());
+
+            // Register the current one
             registrar.RegisterAll();
         }
     }

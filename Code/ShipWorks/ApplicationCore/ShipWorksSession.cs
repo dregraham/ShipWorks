@@ -13,6 +13,7 @@ using ThreadTimer = System.Threading.Timer;
 using Interapptive.Shared.Win32;
 using NDesk.Options;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -41,11 +42,14 @@ namespace ShipWorks.ApplicationCore
         {
             string instanceID = null;
 
-            OptionSet optionSet = new OptionSet()
+            if (commandLine != null)
+            {
+                OptionSet optionSet = new OptionSet()
                 {
                     { "instanceID=", v =>  instanceID = v  }
                 };
-            optionSet.Parse(commandLine.ProgramOptions);
+                optionSet.Parse(commandLine.ProgramOptions);
+            }
 
             if (instanceID == null)
             {
@@ -53,8 +57,33 @@ namespace ShipWorks.ApplicationCore
             }
             else
             {
-                log.InfoFormat("Overriding InstanceID from command line: " + instanceID);
                 Initialize(Guid.Parse(instanceID));
+            }
+
+            // Data and logging can be initialized now that we have an instance ID
+            DataPath.Initialize();
+
+            string logSessionName = "";
+
+            // If there is a command line, see if we want to append to our log session name
+            if (commandLine != null)
+            {
+                if (commandLine.IsServiceSpecified)
+                {
+                    logSessionName = "Background";
+                }
+                else if (commandLine.IsCommandSpecified)
+                {
+                    logSessionName = "Command";
+                }
+            }
+
+            LogSession.Initialize(logSessionName);
+
+            // And now we can log...
+            if (instanceID != null)
+            {
+                log.Info("Overriding InstanceID from command line: " + instanceID);
             }
         }
 

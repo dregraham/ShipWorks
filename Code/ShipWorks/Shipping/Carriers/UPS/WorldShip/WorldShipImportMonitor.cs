@@ -110,7 +110,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     return;
                 }
 
-                busyToken = ApplicationBusyManager.OperationStarting("Importing from WorldShip.");
+                // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                // We only may not if we are running in the background.
+                if (!ApplicationBusyManager.TryOperationStarting("importing from WorldShip", out busyToken))
+                {
+                    return;
+                }
             }
 
             int importListCount = 0;

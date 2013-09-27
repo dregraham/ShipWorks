@@ -59,13 +59,6 @@ namespace ShipWorks
                     return false;
                 }
 
-                // Can't be within a connection sensitive scope.  If the connection might be changed, we can't be kicking off stuff
-                // and using the connection.
-                if (ConnectionSensitiveScope.IsActive)
-                {
-                    return false;
-                }
-
                 return base.CanBeat();
             }
 
@@ -211,6 +204,8 @@ namespace ShipWorks
             /// </summary>
             protected override void FinishHeartbeat()
             {
+                base.FinishHeartbeat();
+
                 // If the filter tree is showing some spinning, go ahead and have it update as their may be new counts loaded by now
                 if (mainForm.filterTree.HasCalculatingNodes())
                 {

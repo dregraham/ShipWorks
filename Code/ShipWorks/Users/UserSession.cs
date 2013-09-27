@@ -102,10 +102,18 @@ namespace ShipWorks.Users
                 // Get the unique id of the database to which we are attached
                 AcquireDatabaseID();
 
-                // If we were logged in, try to automatically log back in
-                if (wasLoggedIn)
+                // If there is no UI, then we just use the SuperUser
+                if (!Program.ExecutionMode.IsUISupported)
                 {
-                    Logon(lastUsername, lastPassword, lastRemember, lastDatabaseID != databaseID);
+                    loggedInUser = SuperUser.Instance;
+                }
+                else
+                {
+                    // If we were logged in, try to automatically log back in
+                    if (wasLoggedIn)
+                    {
+                        Logon(lastUsername, lastPassword, lastRemember, lastDatabaseID != databaseID);
+                    }
                 }
             }
         }
@@ -116,13 +124,9 @@ namespace ShipWorks.Users
         public static void InitializeForCurrentSession()
         {
             ServiceStatusManager.InitializeForCurrentSession();
-
             ObjectLabelManager.InitializeForCurrentSession();
 
-            if (UserSession.IsLoggedOn)
-            {
-                GridColumnDefinitionManager.InitializeForCurrentSession();
-            }
+            GridColumnDefinitionManager.InitializeForCurrentUser();
 
             FilterContentManager.InitializeForCurrentSession();
             ActionManager.InitializeForCurrentSession();
@@ -133,18 +137,10 @@ namespace ShipWorks.Users
             EmailAccountManager.InitializeForCurrentSession();
             SearchManager.InitializeForCurrentSession();
 
-            if (UserSession.IsLoggedOn)
-            {
-                ServerMessageManager.InitializeForCurrentSession();
-            }
+            ServerMessageManager.InitializeForCurrentUser();
 
             DownloadManager.InitializeForCurrentSession();
-
-            if (UserSession.IsLoggedOn)
-            {
-                FilterLayoutContext.InitializeForCurrentSession();
-            }
-
+            FilterLayoutContext.InitializeForCurrentSession();
             FilterNodeColumnManager.InitializeForCurrentSession();
             ShippingOriginManager.InitializeForCurrentSession();
             StampsAccountManager.InitializeForCurrentSession();
@@ -203,7 +199,8 @@ namespace ShipWorks.Users
         {
             get
             {
-                if (AuditBehaviorScope.IsSuperUserActive)
+                // The the behavior scope is active, or the SuperUser is actually logged in, use the super user security context
+                if (AuditBehaviorScope.IsSuperUserActive || (User != null && User.UserID == SuperUser.UserID))
                 {
                     return SuperUser.SecurityContext;
                 }
@@ -408,19 +405,23 @@ namespace ShipWorks.Users
 
             log.InfoFormat("Logging off '{0}'.", loggedInUser.Username);
 
-            try
+            // Nothing to do to logoff the SuperUser
+            if (loggedInUser.UserID != SuperUser.UserID)
             {
-                AuditUtility.Audit(AuditActionType.Logoff);
-            }
+                try
+                {
+                    AuditUtility.Audit(AuditActionType.Logoff);
+                }
                 // Catch everything here since we may be trying to logoff due to a crash
-            catch (Exception ex)
-            {
-                log.Error("Could not audit logoff to database.", ex);
-            }
+                catch (Exception ex)
+                {
+                    log.Error("Could not audit logoff to database.", ex);
+                }
 
-            if (clearRememberMe)
-            {
-                SaveLastUser(loggedInUser.Username, "", false);
+                if (clearRememberMe)
+                {
+                    SaveLastUser(loggedInUser.Username, "", false);
+                }
             }
 
             loggedInUser = null;

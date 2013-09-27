@@ -486,6 +486,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 log.WarnFormat("PlaySound task could not find file '{0}'", soundFile);
             }
 
+            playSoundTask.Entity.InputSource = (int) ActionTaskInputSource.Nothing;
+
             return playSoundTask;
         }
 

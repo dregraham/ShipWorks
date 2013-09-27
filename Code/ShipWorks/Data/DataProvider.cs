@@ -303,10 +303,17 @@ namespace ShipWorks.Data
                 orderHeaderProvider.InitiateHeaderLoading();
             }
 
-            Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
-                {
-                    RaiseEntityChangeDetected();
-                });
+            if (Program.ExecutionMode.IsUIDisplayed)
+            {
+                Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
+                    {
+                        RaiseEntityChangeDetected();
+                    });
+            }
+            else
+            {
+                RaiseEntityChangeDetected();
+            }
         }
 
         /// <summary>

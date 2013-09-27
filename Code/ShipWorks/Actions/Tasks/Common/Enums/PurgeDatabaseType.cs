@@ -10,9 +10,6 @@ namespace ShipWorks.Actions.Tasks.Common
         [Description("Audit Trail"), ApiValue("PurgeAudit")]
         Audit = 0,
 
-        [Description("Download Records"), ApiValue("PurgeDownload")]
-        Downloads = 1,
-
         [Description("Email"), ApiValue("PurgeEmailOutbound")]
         Email = 2,
 

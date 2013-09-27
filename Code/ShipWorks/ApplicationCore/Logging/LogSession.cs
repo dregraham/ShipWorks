@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Logging
         static readonly string filename = Path.Combine(DataPath.InstanceSettings, "logging.xml");
 
         // Base path for log files for this session
-        static readonly string logPath = Path.Combine(DataPath.LogRoot, DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"));
+        static string logPath;
 
         // Current logging options
         static LogOptions logOptions = new LogOptions();
@@ -57,10 +57,12 @@ namespace ShipWorks.ApplicationCore.Logging
         const string queryLayoutPattern = "%date{HH:mm:ss.fff} [%thread] %message%newline";
 
         /// <summary>
-        /// Initialize the configuration of the logger.
+        /// Initialize the configuration of the logger.  If sessionName is specified, it's appeneded to the default log folder name.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(string sessionName = "")
         {
+            logPath = Path.Combine(DataPath.LogRoot, DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + (!string.IsNullOrWhiteSpace(sessionName) ? " - " + sessionName : ""));
+
             // The thing gets initialized in the static contructor... this ensures it
             DynamicQueryEngine.ArithAbortOn = DynamicQueryEngine.ArithAbortOn ? true : false;
 

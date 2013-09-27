@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.ApplicationCore.ExecutionMode.Initialization;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
@@ -16,31 +15,33 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// <summary>
     /// An implementation of the IExecutionMode interface intended to be used when running on the command line.
     /// </summary>
-    public class CommandLineExecutionMode : IExecutionMode
+    public class CommandLineExecutionMode : ExecutionMode
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(CommandLineExecutionMode));
 
         readonly string commandName;
         readonly List<string> options;
-        private readonly IExecutionModeInitializer initializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLineExecutionMode"/> class.
         /// </summary>
         public CommandLineExecutionMode(string commandName, List<string> options)
-            : this(commandName, options, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandLineExecutionMode" /> class.
-        /// </summary>
-        public CommandLineExecutionMode(string commandName, List<string> options, IExecutionModeInitializer initializer)
         {
             if (null == commandName)
+            {
                 throw new ArgumentNullException("commandName");
+            }
 
             this.commandName = commandName;
             this.options = options ?? new List<string>();
-            this.initializer = initializer ?? new CommandLineExecutionModeInitializer();
+        }
+
+        /// <summary>
+        /// Indicates if this execution mode supports displaying a UI, whether or not one is currently displayed or not
+        /// </summary>
+        public override bool IsUISupported
+        {
+            get { return false; }
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <returns>
         ///   <c>true</c> ShipWorks is running in a mode that interacts with the user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsUserInteractive
+        public override bool IsUIDisplayed
         {
             get { return false; }
         }
@@ -58,9 +59,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// Executes ShipWorks within the context of a specific execution mode (e.g. Application.Run,
         /// ServiceBase.Run, etc.)
         /// </summary>
-        public void Execute()
+        public override void Execute()
         {
-            initializer.Initialize();
+            Initialize();
 
             log.InfoFormat("Running command '{0}'", commandName);
 
@@ -80,7 +81,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 string error = string.Format("'{0}' is not a valid command line command.", commandName);
 
                 log.ErrorFormat(error);
-                Console.Error.WriteLine(error);
 
                 Environment.ExitCode = -1;
                 return;
@@ -93,7 +93,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             catch (CommandLineCommandArgumentException ex)
             {
                 log.Error(ex.Message, ex);
-                Console.Error.WriteLine(ex.Message);
 
                 Environment.ExitCode = -1;
             }
@@ -105,14 +104,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        public void HandleException(Exception exception)
+        public override void HandleException(Exception exception, bool guiThread, string userEmail)
         {
-            if (UserSession.IsLoggedOn)
-            {
-                UserSession.Logoff(false);
-            }
-            UserSession.Reset();
-
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {
                 log.Info("Terminating due to unrecoverable connection.", exception);

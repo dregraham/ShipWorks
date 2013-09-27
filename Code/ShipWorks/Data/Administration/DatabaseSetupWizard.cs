@@ -1048,17 +1048,22 @@ namespace ShipWorks.Data.Administration
             // If we are already conected to or connecting to this exact session, then forget it.
             if (connectionSession != null)
             {
-                if ((connectionSession.Configuration.ServerInstance == selectedInstance) &&
-                    (
-                        connectionSession.Configuration.WindowsAuth == sqlSession.Configuration.WindowsAuth ||
-                        (
-                            connectionSession.Configuration.Username == sqlSession.Configuration.Username &&
-                            connectionSession.Configuration.Password == sqlSession.Configuration.Password
-                        )
-                    )
-                   )
+                // Same server
+                if (connectionSession.Configuration.ServerInstance == selectedInstance)
                 {
-                    return;
+                    // Same auth (windows) so we can get out
+                    if (sqlSession.Configuration.WindowsAuth && connectionSession.Configuration.WindowsAuth)
+                    {
+                        return;
+                    }
+
+                    // Same auth (password) so we can get out
+                    if (!sqlSession.Configuration.WindowsAuth && !connectionSession.Configuration.WindowsAuth &&
+                        connectionSession.Configuration.Username == sqlSession.Configuration.Username &&
+                        connectionSession.Configuration.Password == sqlSession.Configuration.Password)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -1160,6 +1165,11 @@ namespace ShipWorks.Data.Administration
                         sqlSession.Configuration.Username = configuration.Username;
                         sqlSession.Configuration.Password = configuration.Password;
                         sqlSession.Configuration.WindowsAuth = configuration.WindowsAuth;
+
+                        // We also have to save them to our connectionSession, so we can properly track when\if it changes
+                        connectionSession.Configuration.Username = configuration.Username;
+                        connectionSession.Configuration.Password = configuration.Password;
+                        connectionSession.Configuration.WindowsAuth = configuration.WindowsAuth;
 
                         LoadDatabaseList(databases, configuration);
                     }

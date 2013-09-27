@@ -136,10 +136,6 @@ namespace ShipWorks
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
 
-        // Indicates that we are already waiting for a heartbeat to be invoked to the UI thread
-        object pendingHeartbeatLock = new object();
-        HeartbeatOptions? pendingForceHeartbeatOptions = null;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -627,7 +623,7 @@ namespace ShipWorks
             filterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
 
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
-            UpdateUserInitiatedActionsUI();
+            UpdateCustomButtonsActionsUI();
 
             // We can now show the normal UI
             ApplyCurrentUserLayout();
@@ -1293,7 +1289,7 @@ namespace ShipWorks
         /// <summary>
         /// Update the UI that's based on user initiated actions
         /// </summary>
-        private void UpdateUserInitiatedActionsUI()
+        private void UpdateCustomButtonsActionsUI()
         {
             string ribbonChunkName = "Custom Actions";
 
@@ -1331,7 +1327,7 @@ namespace ShipWorks
                 // Maybe we need to create it
                 if (actionChunk == null)
                 {
-                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, Padding = new WidgetEdges(4, 2, 4, 0) };
+                    actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, ItemJustification = ItemJustification.Near };
                     ribbonTabHome.Chunks.Add(actionChunk);
                 }
 
@@ -1344,10 +1340,9 @@ namespace ShipWorks
                     // If it doesn't exist, create it
                     if (button == null)
                     {
-                        button = new SandButton(action.Action.Name);
+                        button = new SandButton();
                         button.Guid = action.Trigger.Guid;
                         button.Tag = action.Action.ActionID;
-                        button.Padding = new WidgetEdges(3, 2, 4, 14);
                         button.TextContentRelation = TextContentRelation.Underneath;
                         button.Activate += OnCustomActionButton;
 
@@ -1355,7 +1350,8 @@ namespace ShipWorks
                     }
 
                     // Update the properties
-                    button.Text = action.Action.Name;
+                    button.Text = string.Join("\r\n", StringUtility.SplitLines(action.Action.Name, 20, 2));
+                    button.Padding = button.Text.Contains("\r\n") ? new WidgetEdges(8, 2, 8, 2) : new WidgetEdges(3, 2, 4, 14);
                     button.Image = action.Trigger.LoadImage();
 
                     // Configure selection requirements
@@ -1519,6 +1515,15 @@ namespace ShipWorks
                     // If they were in the middle of upgrading MSDE to 08... and had to reboot, or whatever.  But then chose Setup Database and finished successfully
                     // then we need to forget about that MSDE upgrade that was in the middle of happening, the user has moved on.
                     SqlServerInstaller.CancelMsdeMigrationInProgress();
+                }
+
+                // If we need to logon, force the logout now.  This makes sure that when we exit the context scope, we don't still briefly look logged in to constantly 
+                // running background threads.  Being logged in asserts that the schema is correct - and at this point, we just connected to a random database, so we don't know what
+                // which is in fact why we are saying "needLogon" is true in the first place.
+                if (needLogon)
+                {
+                    // We can't use LogOff here, because that tries to audit the logoff.  We are now connected to a different database, so it wouldn't make any sense to do that audit.
+                    UserSession.Reset();
                 }
             }
 
@@ -1756,42 +1761,13 @@ namespace ShipWorks
         {
             if (InvokeRequired)
             {
-                lock (pendingHeartbeatLock)
-                {
-                    // If we already invoked a forced heartbeat, just update wether changes are expected
-                    if (pendingForceHeartbeatOptions != null)
-                    {
-                        pendingForceHeartbeatOptions |= options;
-                        return;
-                    }
-                    // Nothing pending so far just set the changes expected and proceed to invoke
-                    else
-                    {
-                        pendingForceHeartbeatOptions = options;
-                    }
-                }
-
                 // Put the heartbeat on the UI thread
-                BeginInvoke((MethodInvoker) delegate
-                {
-                    HeartbeatOptions optionsToCallWith;
-
-                    lock (pendingHeartbeatLock)
-                    {
-                        optionsToCallWith = pendingForceHeartbeatOptions ?? HeartbeatOptions.None;
-                        pendingForceHeartbeatOptions = null;
-                    }
-
-                    ForceHeartbeat(optionsToCallWith);
-                });
-
+                BeginInvoke((MethodInvoker) delegate { ForceHeartbeat(options);});
                 return;
             }
-            else
-            {
-                // Force it to go now, if it
-                heartBeat.ForceHeartbeat(options);
-            }
+
+            // Force it to go now, if it
+            heartBeat.ForceHeartbeat(options);
         }
 
         /// <summary>
@@ -2989,7 +2965,7 @@ namespace ShipWorks
                 dlg.ShowDialog(this);
             }
 
-            UpdateUserInitiatedActionsUI();
+            UpdateCustomButtonsActionsUI();
         }
 
         /// <summary>

@@ -8,13 +8,21 @@ namespace ShipWorks.ApplicationCore.Services
     public class ShipWorksServiceException : Exception
     {
         public ShipWorksServiceException(string message)
-            : base(message) { }
+            : base(message) 
+        { 
+        
+        }
 
         public ShipWorksServiceException(string message, Exception innerException)
-            : base(message, innerException) { }
-
+            : base(message, innerException) 
+        { 
+        
+        }
 
         protected ShipWorksServiceException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+            : base(info, context) 
+        { 
+        
+        }
     }
 }

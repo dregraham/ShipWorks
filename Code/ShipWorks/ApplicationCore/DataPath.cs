@@ -169,12 +169,6 @@ namespace ShipWorks.ApplicationCore
         {
             get
             {
-                // If we are running as the background process, log to the background folder
-                if (Program.ExecutionMode is ExecutionMode.ServiceExecutionMode)
-                {
-                    return Path.Combine(InstanceRoot, @"Log\Background");
-                }
-                
                 // Otherwise log to the normal folder.
                 return Path.Combine(InstanceRoot, "Log");
             }

@@ -29,6 +29,7 @@ using ShipWorks.Stores;
 using ShipWorks.Common.Threading;
 using System.Windows.Forms;
 using Interapptive.Shared.Data;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Actions
 {
@@ -78,7 +79,7 @@ namespace ShipWorks.Actions
 
                 if (ApplicationBusyManager.TryOperationStarting("running actions", out busyToken))
                 {
-                    if (Program.ExecutionMode.IsUserInteractive)
+                    if (Program.ExecutionMode.IsUIDisplayed)
                     {
                         ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
                     }
@@ -104,10 +105,15 @@ namespace ShipWorks.Actions
                     // First see if there are any to process
                     using (SqlCommand cmd = SqlCommandProvider.Create(con))
                     {
-                        // Always process the UI based actions (ActionQueueType = 0) and only process the scheduled actions
-                        // based on the action manager configuration (i.e. the schedule background process can process
-                        // any types of actions and the UI can only process UI based actions)
-                        cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue where ActionQueueType = 0 OR ActionQueueType = @ActionQueueType";
+                        // Only process the scheduled actions based on the action manager configuration
+                        cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue WHERE ActionQueueType = @ActionQueueType";
+
+                        if (!UserInterfaceExecutionMode.IsProcessRunning)
+                        {
+                            // Additionally process UI actions if the UI is not running
+                            cmd.CommandText += " OR ActionQueueType = 0";
+                        }
+
                         cmd.Parameters.AddWithValue("@ActionQueueType", (int) ActionManager.ActionQueueType);
 
                         if (SqlCommandProvider.ExecuteScalar(cmd) == null)

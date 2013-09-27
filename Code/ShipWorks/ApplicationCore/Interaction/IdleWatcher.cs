@@ -145,31 +145,11 @@ namespace ShipWorks.ApplicationCore.Interaction
                     {
                         // If we aren't configured for a database at all, or there is a scope active in which the connection could change (like Database Setup wizard),
                         // or we know something is wrong with the connection - bail.
-                        if (!SqlSession.IsConfigured ||
-                            ConnectionSensitiveScope.IsActive ||
+                        if (ConnectionSensitiveScope.IsActive || 
+                            !UserSession.IsLoggedOn ||
                             ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
                         {
                             return false;
-                        }
-
-                        // If we are user interactive, then we require a user to be logged on, which verifies that the schema version must be correct
-                        if (Program.ExecutionMode.IsUserInteractive)
-                        {
-                            // We can run if the user is logged in
-                            return UserSession.IsLoggedOn;
-                        }
-                        // In the background we don't have a user, but we still need to make sure the db schema version is correct
-                        else
-                        {
-                            try
-                            {
-                                return SqlSchemaUpdater.IsCorrectSchemaVersion();
-                            }
-                            catch (SqlException)
-                            {
-                                // If we fail to get the schema version in the background, it could be b\c the UI is upgrading or something.  Don't fail.  Just get out.
-                                return false;
-                            }
                         }
                     }
 
@@ -261,7 +241,19 @@ namespace ShipWorks.ApplicationCore.Interaction
                 // We need to prevent ui switching db state using the background operation manager if the task requires the database
                 if (databaseDependent)
                 {
-                    operationToken = ApplicationBusyManager.OperationStarting(uiOperationText);
+                    // If we can't start, then just get out
+                    if (!ApplicationBusyManager.TryOperationStarting(uiOperationText, out operationToken))
+                    {
+                        Finish(operationToken);
+                        return;
+                    }
+
+                    // If somethign changed that makes it so we can't run (like the user is now logged out), then get out
+                    if (!CanRun)
+                    {
+                        Finish(operationToken);
+                        return;
+                    }
                 }
 
                 lastRan = DateTime.Now;
@@ -274,11 +266,23 @@ namespace ShipWorks.ApplicationCore.Interaction
             /// </summary>
             private void AsyncRun(object state)
             {
-                // Do the work
-                workInvoker();
+                try
+                {
+                    // Do the work
+                    workInvoker();
+                }
+                finally
+                {
+                    Finish(state as ApplicationBusyToken);
+                }
+            }
 
+            /// <summary>
+            /// Finish running
+            /// </summary>
+            private void Finish(ApplicationBusyToken operationToken)
+            {
                 // See if we have to signal an operation complete
-                ApplicationBusyToken operationToken = state as ApplicationBusyToken;
                 if (operationToken != null)
                 {
                     ApplicationBusyManager.OperationComplete(operationToken);

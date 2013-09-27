@@ -97,5 +97,88 @@ namespace Interapptive.Shared.Utility
 
             return text.Substring(0, maxLength);
         }
+
+        /// <summary>
+        /// Split the given text into as many lines of ideal length of idealLineLength.  If the text is too long to fit in maxLines with lines of length idealLineLength,
+        /// then each line will be longer.
+        /// </summary>
+        public static string[] SplitLines(string text, int idealLineLength, int maxLines = Int32.MaxValue)
+        {
+            if (idealLineLength <= 0)
+            {
+                throw new ArgumentException("lineLength must be greater than 0", "idealLineLength");
+            }
+
+            if (text == null)
+            {
+                throw new ArgumentNullException("text");
+            }
+
+            List<string> lines = new List<string>();
+
+            // Split into words
+            string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            StringBuilder line = new StringBuilder();
+
+            // Create the lines, word by word
+            foreach (string word in words)
+            {
+                // If adding another word would exceed the length, create a new line
+                if (line.Length + word.Length > idealLineLength && line.Length != 0)
+                {
+                    lines.Add(line.ToString());
+                    line = new StringBuilder();
+                }
+
+                if (line.Length > 0)
+                {
+                    line.Append(" ");
+                }
+
+                line.Append(word);
+            }
+
+            // Add the final line
+            if (line.Length > 0)
+            {
+                lines.Add(line.ToString());
+            }
+
+            // If there are too many lines, we have to use a different algorithm based on the text and max lines
+            if (lines.Count > maxLines)
+            {
+                lines.Clear();
+                line = new StringBuilder();
+
+                int targetLineLength = (int) Math.Ceiling((double) text.Length / (double) maxLines);
+
+                // Create the lines, word by word
+                foreach (string word in words)
+                {
+                    // If the line length is still less than the target length, we add more.  This makes it so previous lines are typically a bit longer the following lines
+                    if (line.Length > targetLineLength && line.Length != 0)
+                    {
+                        lines.Add(line.ToString());
+                        line = new StringBuilder();
+                    }
+
+                    if (line.Length > 0)
+                    {
+                        line.Append(" ");
+                    }
+
+                    line.Append(word);
+                }
+
+                // Add the final line
+                if (line.Length > 0)
+                {
+                    lines.Add(line.ToString());
+                }
+            }
+
+            return lines.ToArray();
+        }
     }
 }

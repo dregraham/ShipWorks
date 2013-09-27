@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Win32;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
@@ -13,11 +14,12 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
     /// </summary>
     public class WindowsServiceController
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceController));
+       static readonly ILog log = LogManager.GetLogger(typeof(WindowsServiceController));
 
-        private readonly ServiceBase service;
+       readonly ServiceBase service;
 
-        private const int timeoutMilliseconds = 30000;
+        // Timeout for interacting with the windows service
+        TimeSpan serviceTimeout = TimeSpan.FromSeconds(30);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowsServiceController" /> class.
@@ -44,10 +46,8 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             try
             {
-                using (ServiceController controller =  GetServiceController())
+                using (ServiceController controller = GetServiceController())
                 {
-                    TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-
                     log.Info("Launching external process to elevate permissions to start service.");
                     
                     // We need to launch the process to elevate ourselves.  We'll just do it this way for XP too for code path
@@ -64,10 +64,10 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
                         }
 
                         process.Start();
-                        process.WaitForExit(timeoutMilliseconds);
+                        process.WaitForExit((int) serviceTimeout.TotalMilliseconds);
                     }
                     
-                    controller.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    controller.WaitForStatus(ServiceControllerStatus.Running, serviceTimeout);
                 }
             }
             catch (Win32Exception ex)
@@ -93,24 +93,23 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             try
             {
-                using (ServiceController controller =  GetServiceController())
+                using (ServiceController controller = GetServiceController())
                 {
                     int beforeStopService = Environment.TickCount;
-                    TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
 
                     ServiceControllerStatus serviceControllerStatus = GetServiceStatus();
                     if (serviceControllerStatus != ServiceControllerStatus.Stopped && serviceControllerStatus != ServiceControllerStatus.StopPending)
                     {
                         controller.Stop();
-                        controller.WaitForStatus(ServiceControllerStatus.Stopped, timeout);    
+                        controller.WaitForStatus(ServiceControllerStatus.Stopped, serviceTimeout);    
                     }
 
                     // count the rest of the timeout
                     int afterStopService = Environment.TickCount;
-                    timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds - (afterStopService - beforeStopService));
+                    TimeSpan remaining = TimeSpan.FromMilliseconds(Math.Min((int) serviceTimeout.TotalMilliseconds - (afterStopService - beforeStopService), 10000));
 
                     controller.Start();
-                    controller.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    controller.WaitForStatus(ServiceControllerStatus.Running, remaining);
                 }
             }
             catch (Exception ex)
@@ -128,12 +127,10 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         {
             try
             {
-                using (ServiceController controller =  GetServiceController())
+                using (ServiceController controller = GetServiceController())
                 {
-                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
-
                     controller.Stop();
-                    controller.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    controller.WaitForStatus(ServiceControllerStatus.Stopped, serviceTimeout);
                 }
             }
             catch (Exception ex)
@@ -156,9 +153,10 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             // While testing, no exception was thrown at construction and InvalidOperationException is thrown
             // when checking any field in serviceController. I'm leaving both in case Microsoft turns out to be right.
             bool serviceExists = false;
+
             try
             {
-                using (var controller =  GetServiceController())
+                using (var controller = GetServiceController())
                 {
                     try
                     {
@@ -169,11 +167,13 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
                     }
                     catch (InvalidOperationException)
                     {
+
                     }
                 }
             }
             catch (ArgumentException)
             {
+
             }
 
             return serviceExists;
@@ -185,7 +185,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// <returns>Status of the service.</returns>
         public ServiceControllerStatus GetServiceStatus()
         {
-            using (var controller =  GetServiceController())
+            using (var controller = GetServiceController())
             {
                 return controller.Status;
             }
@@ -196,7 +196,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// </summary>
         public string GetServiceDisplayName()
         {
-            using (var controller =  GetServiceController())
+            using (var controller = GetServiceController())
             {
                 return controller.DisplayName;
             }
@@ -207,10 +207,20 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
         /// </summary>
         public void ChangeCredentials(string domain, string userName, string password)
         {
-            AddUserRight.SetRight(domain, userName, "SeServiceLogonRight");
+            try
+            {
+                // The user will need the right to logon as a service
+                SecurityUtility.AddPrivilegeToAccount(domain, userName, "SeServiceLogonRight");
+            }
+            catch (Win32Exception ex)
+            {
+                throw new ShipWorksServiceException(ex.Message, ex);
+            }
 
-            WindowsServiceChangeCredentials.ServicePasswordChange(domain, userName, password, service.ServiceName);
+            // Now we can set the service account
+            WindowsServiceConfiguration.SetServiceAccount(domain, userName, password, service.ServiceName);
 
+            // And we have to restart the service
             RestartService();
         }
     }

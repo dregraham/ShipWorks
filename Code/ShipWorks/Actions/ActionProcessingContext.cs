@@ -130,7 +130,7 @@ namespace ShipWorks.Actions
             // If there are emails that were generated, we need to start emailing - but that has to be done on the UI
             if (EmailGenerated.Count > 0)
             {
-                if (Program.ExecutionMode.IsUserInteractive)
+                if (Program.ExecutionMode.IsUIDisplayed)
                 {
                     Program.MainForm.BeginInvoke(new MethodInvoker(StartEmailingOnUI));
                 }
@@ -146,12 +146,6 @@ namespace ShipWorks.Actions
         /// </summary>
         private void StartEmailingOnUI()
         {
-            // Make sure the DB is in a state where we can start doing stuff
-            if (ConnectionSensitiveScope.IsActive || !UserSession.IsLoggedOn)
-            {
-                return;
-            }
-
             // Initiate sending of all the email messages that were sent
             if (EmailGenerated.Count > 0)
             {

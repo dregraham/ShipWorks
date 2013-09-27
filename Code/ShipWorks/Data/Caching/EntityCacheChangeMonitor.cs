@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WindowsTimer = System.Windows.Forms.Timer;
+using ThreadTimer = System.Threading.Timer;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Connection;
@@ -13,6 +13,7 @@ using System.Threading;
 using ShipWorks.Users;
 using ShipWorks.Common.Threading;
 using ShipWorks.ApplicationCore.Interaction;
+using System.Timers;
 
 namespace ShipWorks.Data.Caching
 {
@@ -26,7 +27,7 @@ namespace ShipWorks.Data.Caching
 
         EntityChangeTrackingMonitor changeMonitor;
 
-        WindowsTimer changeMonitorTimer;
+        ThreadTimer changeMonitorTimer;
         TimeSpan changeMonitorFrequency = TimeSpan.FromSeconds(10);
 
         bool disposed = false;
@@ -63,10 +64,8 @@ namespace ShipWorks.Data.Caching
             changeMonitor = new EntityChangeTrackingMonitor();
             changeMonitor.Initialize(entityCache.EntityTypes);
 
-            changeMonitorTimer = new WindowsTimer();
-            changeMonitorTimer.Interval = (int) changeMonitorFrequency.TotalMilliseconds;
-            changeMonitorTimer.Tick += new EventHandler(OnChangeMonitorTimer);
-            changeMonitorTimer.Start();
+            // Create the timer.  This will execute the timer one time.
+            changeMonitorTimer = new ThreadTimer(OnChangeMonitorTimer, null, changeMonitorFrequency, TimeSpan.FromMilliseconds(-1));
         }
 
         /// <summary>
@@ -82,40 +81,82 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void Dispose()
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
-
-            // We don't own the cache - but we do own and have to destroy the timer
-            if (changeMonitorTimer != null)
-            {
-                changeMonitorTimer.Dispose();
-                changeMonitorTimer = null;
-            }
+            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (disposedLock)
             {
                 disposed = true;
+
+                // We don't own the cache - but we do own and have to destroy the timer
+                if (changeMonitorTimer != null)
+                {
+                    changeMonitorTimer.Dispose();
+                    changeMonitorTimer = null;
+                }
             }
         }
 
         /// <summary>
         /// Callback for the timer that monitors for entity changes
         /// </summary>
-        private void OnChangeMonitorTimer(object sender, EventArgs e)
+        private void OnChangeMonitorTimer(object state)
         {
-            Debug.Assert(!Program.MainForm.InvokeRequired);
+            ApplicationBusyToken operationToken = GetCheckForChangesOperationToken();
 
-            if (!UserSession.IsLoggedOn ||
-                ConnectionSensitiveScope.IsActive ||
+            // If we couldn't get the token, nothing to do until next time
+            if (operationToken == null)
+            {
+                // Kick off another interval if we aren't disposed
+                KickoffNextTimerInterval();
+            }
+            else
+            {
+                ThreadPool.QueueUserWorkItem(
+                    ExceptionMonitor.WrapWorkItem(AsyncMonitorChanges),
+                    operationToken);
+            }
+        }
+        
+        /// <summary>
+        /// Kickoff the next timer interval, as long as we haven't been disposed
+        /// </summary>
+        private void KickoffNextTimerInterval()
+        {
+            lock (disposedLock)
+            {
+                if (!disposed)
+                {
+                    changeMonitorTimer.Change(changeMonitorFrequency, TimeSpan.FromMilliseconds(-1));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the token to use while we check for changes
+        /// </summary>
+        private ApplicationBusyToken GetCheckForChangesOperationToken()
+        {
+            if (ConnectionSensitiveScope.IsActive ||
+                !UserSession.IsLoggedOn ||
                 ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
             {
-                return;
+                return null;
             }
 
-            changeMonitorTimer.Stop();
+            ApplicationBusyToken operationToken;
+            if (!ApplicationBusyManager.TryOperationStarting("synchronizing data", out operationToken))
+            {
+                return null;
+            }
 
-            ThreadPool.QueueUserWorkItem(
-                ExceptionMonitor.WrapWorkItem(AsyncMonitorChanges),
-                ApplicationBusyManager.OperationStarting("synchronizing data"));
+            // Recheck login after we've gotten the token
+            if (!UserSession.IsLoggedOn)
+            {
+                ApplicationBusyManager.OperationComplete(operationToken);
+                return null;
+            }
+
+            return operationToken;
         }
 
         /// <summary>
@@ -200,14 +241,19 @@ namespace ShipWorks.Data.Caching
 
             busyToken.Dispose();
 
-            Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
-                {
-                    // Could have been disposed
-                    if (changeMonitorTimer != null)
+            if (Program.ExecutionMode.IsUIDisplayed)
+            {
+                Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
                     {
-                        changeMonitorTimer.Start();
-                    }
-                });
+                        // Kick off another interval if we aren't disposed
+                        KickoffNextTimerInterval();
+                    });
+            }
+            else
+            {
+                // Kick off another interval if we aren't disposed
+                KickoffNextTimerInterval();
+            }
         }
     }
 }

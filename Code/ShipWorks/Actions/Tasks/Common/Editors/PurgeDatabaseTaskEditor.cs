@@ -42,7 +42,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             LoadPurgeTasks();
             audit.CheckedChanged += OnPurgeCheckChanged;
-            downloads.CheckedChanged += OnPurgeCheckChanged;
             email.CheckedChanged += OnPurgeCheckChanged;
             labels.CheckedChanged += OnPurgeCheckChanged;
             printJobs.CheckedChanged += OnPurgeCheckChanged;
@@ -59,12 +58,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             {
                 task.Purges.Add(PurgeDatabaseType.Audit);
             }
-            
-            if (downloads.Checked)
-            {
-                task.Purges.Add(PurgeDatabaseType.Downloads);
-            }
-
+ 
             if (email.Checked)
             {
                 task.Purges.Add(PurgeDatabaseType.Email);
@@ -90,7 +84,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
             if (task.Purges != null)
             {
                 audit.Checked = task.Purges.Contains(PurgeDatabaseType.Audit);
-                downloads.Checked = task.Purges.Contains(PurgeDatabaseType.Downloads);
                 email.Checked = task.Purges.Contains(PurgeDatabaseType.Email);
                 labels.Checked = task.Purges.Contains(PurgeDatabaseType.Labels);
                 printJobs.Checked = task.Purges.Contains(PurgeDatabaseType.PrintJobs);

@@ -69,14 +69,18 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
             log.InfoFormat("Stopping the '{0}' Windows service via the service manager.", service.ServiceName);
             if (controller.GetServiceStatus() == ServiceControllerStatus.Running)
+            {
                 controller.StopService();
+            }
         }
 
         /// <summary>
         /// Does nothing.  The exception is automatically logged to the system event logs
         /// if AutoLog is enabled for the service.
         /// </summary>
-        public void HandleServiceCrash(ServiceCrash serviceCrash) 
-        { }
+        public void HandleServiceCrash(int recoveryCount) 
+        { 
+        
+        }
     }
 }

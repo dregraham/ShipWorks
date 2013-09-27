@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting
         /// <summary>
         /// Intended to handle a service crash to perform any cleanup/recovery actions.
         /// </summary>
-        /// <param name="serviceCrash">The service crash.</param>
-        void HandleServiceCrash(ServiceCrash serviceCrash);
+        /// <param name="serviceCrash">The number of times we've crashed and tried to recover so far.</param>
+        void HandleServiceCrash(int recoveryCount);
     }
 }

@@ -32,6 +32,7 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Users;
 using log4net;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore
@@ -60,6 +61,13 @@ namespace ShipWorks.ApplicationCore
         // If we are in a forced heartbeat that caused the heart rate to change, this is how many fast beats are left
         int forcedFastRatesStart = 10;
         int forcedFastRatesLeft = 0;
+
+        // Tracks if we are in a heartbeat, so we don't beat twice at the same time
+        object doingHeartbeatLock = new object();
+        bool doingHeartbeat = false;
+
+        // Indicates that we are already waiting for a heartbeat to be invoked to the UI thread
+        HeartbeatOptions? pendingOptions = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Heartbeat"/> class.
@@ -123,6 +131,48 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         protected void DoHeartbeat(HeartbeatOptions options)
         {
+            // Prevent two heartbeats happening at once
+            lock (doingHeartbeatLock)
+            {
+                // If we are already doing a hearbeat, we need to save the options the user wanted, so we can use them when we get around to the next hearbeat
+                if (doingHeartbeat)
+                {
+                    if (pendingOptions == null)
+                    {
+                        pendingOptions = HeartbeatOptions.None;
+                    }
+
+                    pendingOptions |= options;
+
+                    // Just get out for now
+                    return;
+                }
+
+                doingHeartbeat = true;
+            }
+
+            // If there were any pending options, be sure to consider them too
+            options = options | (pendingOptions ?? HeartbeatOptions.None);
+            pendingOptions = null;
+
+            try
+            {
+                InternalDoHeartbeat(options);
+            }
+            finally
+            {
+                lock (doingHeartbeatLock)
+                {
+                    doingHeartbeat = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Private version of the heartbeat that's wrapped in a check to make sure it can't be called at the same time from two different threads
+        /// </summary>
+        private void InternalDoHeartbeat(HeartbeatOptions options)
+        {
             if (!CanBeat())
             {
                 return;
@@ -137,43 +187,65 @@ namespace ShipWorks.ApplicationCore
                 return;
             }
 
-            // Debugging \ Logging
-            Stopwatch sw = Stopwatch.StartNew();
-            long connections = ConnectionMonitor.TotalConnectionCount;
+            ApplicationBusyToken operationToken = null;
 
-            // Check for any change in the database. 
-            bool changesDetected = timestampTracker.CheckForChange();
-            log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
-
-            DownloadManager.StartAutoDownloadIfNeeded();
-            EmailCommunicator.StartAutoEmailingIfNeeded();
-
-            // If there was a heartbeat change detected, kick off actions and set the flag to process heartbeat changes
-            if (changesDetected)
+            // We have to make sure that the connection doesn't get swapped out from underneath use while we are beating.  Not an issue on the UI thread, where this is all on the UI thread, but
+            // it is an issue in the background service.
+            if (!ApplicationBusyManager.TryOperationStarting("refreshing", out operationToken))
             {
-                // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
-                ActionProcessor.StartProcessing();
-
-                // This flag stays true until section below sees it and resets to false.  The section in question only 
-                // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
-                // runs to ensure changes are not missed.
-                changeProcessingPending = true;
+                return;
             }
 
-            // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
-            FilterContentManager.CheckRelativeDateFilters();
+            try
+            {
+                // If somethign changed that makes it so we can't run (like the user is now logged out), then get out
+                if (!CanBeat())
+                {
+                    return;
+                }
 
-            // Make sure all our counts are up-to-date
-            FilterContentManager.CheckForChanges();
+                // Debugging \ Logging
+                Stopwatch sw = Stopwatch.StartNew();
+                long connections = ConnectionMonitor.TotalConnectionCount;
 
-            // Time to process the heartbeat
-            ProcessHeartbeat(changesDetected, forceReload);
+                // Check for any change in the database. 
+                bool changesDetected = timestampTracker.CheckForChange();
+                log.InfoFormat("[Heartbeat] Starting (Changes: {0})", changesDetected);
 
-            // Finalize this heartbeat
-            FinishHeartbeat();
+                DownloadManager.StartAutoDownloadIfNeeded();
+                EmailCommunicator.StartAutoEmailingIfNeeded();
 
-            // Logging
-            log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}, Interval: {2}s", sw.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections, currentRate / 1000);
+                // If there was a heartbeat change detected, kick off actions and set the flag to process heartbeat changes
+                if (changesDetected)
+                {
+                    // Changes and filters trigger actions to run, so any time there is a change, we need to check for actions.
+                    ActionProcessor.StartProcessing();
+
+                    // This flag stays true until section below sees it and resets to false.  The section in question only 
+                    // runs when there are no modal windows or popups open.  This flag has to stay true until that section 
+                    // runs to ensure changes are not missed.
+                    changeProcessingPending = true;
+                }
+
+                // Not dependant on DBTS, we need to make sure any filters that are affected by date changes are updated
+                FilterContentManager.CheckRelativeDateFilters();
+
+                // Make sure all our counts are up-to-date
+                FilterContentManager.CheckForChanges();
+
+                // Time to process the heartbeat
+                ProcessHeartbeat(changesDetected, forceReload);
+
+                // Finalize this heartbeat
+                FinishHeartbeat();
+
+                // Logging
+                log.DebugFormat("[Heartbeat] Finished. ({0}), Connections: {1}, Interval: {2}s", sw.Elapsed.TotalSeconds, ConnectionMonitor.TotalConnectionCount - connections, currentRate / 1000);
+            }
+            finally
+            {
+                ApplicationBusyManager.OperationComplete(operationToken);
+            }
         }
 
         /// <summary>
@@ -182,6 +254,19 @@ namespace ShipWorks.ApplicationCore
         protected virtual bool CanBeat()
         {
             if (Pace == HeartbeatPace.Stopped)
+            {
+                return false;
+            }
+
+            // Can't be within a connection sensitive scope.  If the connection might be changed, we can't be kicking off stuff
+            // and using the connection.
+            if (ConnectionSensitiveScope.IsActive)
+            {
+                return false;
+            }
+
+            // If we don't have a user, then we have to get out
+            if (!UserSession.IsLoggedOn)
             {
                 return false;
             }
@@ -200,10 +285,6 @@ namespace ShipWorks.ApplicationCore
             {
                 return false;
             }
-
-            // Shouldn't be able to get here while not logged in
-            Debug.Assert(SqlSession.IsConfigured);
-            Debug.Assert(UserSession.IsLoggedOn || !Program.ExecutionMode.IsUserInteractive);
 
             return true;
         }

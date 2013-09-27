@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/service=serviceName" });
             testObject = new ExecutionModeFactory(commandLine);
 
-            IExecutionMode executionMode = testObject.Create();
+            var executionMode = testObject.Create();
 
             Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
         }
@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/s=serviceName"});
             testObject = new ExecutionModeFactory(commandLine);
 
-            IExecutionMode executionMode = testObject.Create();
+            var executionMode = testObject.Create();
 
             Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
         }
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/command:opensqlfirewall" });
             testObject = new ExecutionModeFactory(commandLine);
 
-            IExecutionMode executionMode = testObject.Create();
+            var executionMode = testObject.Create();
 
             Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
         }
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/cmd:opensqlfirewall"});
             testObject = new ExecutionModeFactory(commandLine);
 
-            IExecutionMode executionMode = testObject.Create();
+            var executionMode = testObject.Create();
 
             Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
         }
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/c:opensqlfirewall" });
             testObject = new ExecutionModeFactory(commandLine);
 
-            IExecutionMode executionMode = testObject.Create();
+            var executionMode = testObject.Create();
 
             Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         {
             testObject = new ExecutionModeFactory(ShipWorksCommandLine.Empty);
 
-            IExecutionMode executionMode = testObject.Create();
+            var executionMode = testObject.Create();
 
             Assert.IsInstanceOfType(executionMode, typeof(UserInterfaceExecutionMode));
         }

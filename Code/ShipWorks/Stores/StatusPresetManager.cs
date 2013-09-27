@@ -20,7 +20,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Initialize when a user logs in
         /// </summary>
-        public static void InitializeForCurrentUser()
+        public static void InitializeForCurrentSession()
         {
             statusSynchronizer = new TableSynchronizer<StatusPresetEntity>();
             CheckForChanges();
