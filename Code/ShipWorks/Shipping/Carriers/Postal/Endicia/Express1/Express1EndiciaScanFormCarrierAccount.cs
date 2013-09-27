@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.ScanForms;
+﻿using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity)
-            : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1EndiciaScanFormCarrierAccount)))
+            : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1EndiciaScanFormCarrierAccount)), new ScanFormShipmentTypeName())
         { }
 
         /// <summary>
@@ -24,21 +25,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log)
-            : base(repository, accountEntity, log)
+        public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log, IScanFormShipmentTypeName scanFormShipmentTypeName)
+            : base(repository, accountEntity, log, scanFormShipmentTypeName)
         {
             // Just need to set the shipment type code for express 1 that 
             // gets used in the GetEligibleShipmentIDs method
             ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
-        }
-
-        /// <summary>
-        /// Gets the name of the shipping carrier.
-        /// </summary>
-        /// <value>The name of the shipping carrier.</value>
-        public override string ShippingCarrierName
-        {
-            get { return "Express 1"; }
         }
 
         /// <summary>

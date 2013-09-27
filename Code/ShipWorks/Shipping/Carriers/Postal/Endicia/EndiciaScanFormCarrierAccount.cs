@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using log4net;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -16,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private readonly EndiciaAccountEntity accountEntity;
         private readonly IScanFormRepository repository;
         private readonly ILog log;
+        private readonly IScanFormShipmentTypeName scanFormShipmentTypeName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaScanFormCarrierAccount"/> class.
@@ -23,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         public EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity)
-            : this(repository, accountEntity, LogManager.GetLogger(typeof(EndiciaScanFormCarrierAccount)))
+            : this(repository, accountEntity, LogManager.GetLogger(typeof(EndiciaScanFormCarrierAccount)), new ScanFormShipmentTypeName())
         { }
 
         /// <summary>
@@ -32,11 +35,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log)
+        /// <param name="scanFormShipmentTypeName"></param>
+        public EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log, IScanFormShipmentTypeName scanFormShipmentTypeName)
         {
             this.repository = repository;
             this.accountEntity = accountEntity;
             this.log = log;
+            this.scanFormShipmentTypeName = scanFormShipmentTypeName;
 
             ShipmentTypeCode = ShipmentTypeCode.Endicia;
         }
@@ -56,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <value>The name of the shipping carrier.</value>
         public virtual string ShippingCarrierName
         {
-            get { return "Endicia"; }
+            get { return scanFormShipmentTypeName.GetShipmentTypeName(ShipmentTypeCode); }
         }
 
         /// <summary>

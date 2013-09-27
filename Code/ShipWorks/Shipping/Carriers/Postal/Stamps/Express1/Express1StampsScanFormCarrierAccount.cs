@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ScanForms;
 using log4net;
 
@@ -27,15 +28,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity, ILog log)
             : base(repository, accountEntity, log)
         {
-        }
-
-        /// <summary>
-        /// Gets the name of the shipping carrier.
-        /// </summary>
-        /// <value>The name of the shipping carrier.</value>
-        public override string ShippingCarrierName
-        {
-            get { return "Express1/Stamps.com"; }
         }
 
         /// <summary>

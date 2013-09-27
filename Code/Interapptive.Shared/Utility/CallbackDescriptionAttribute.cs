@@ -5,6 +5,8 @@ using System.Reflection;
 namespace Interapptive.Shared.Utility
 {
     [AttributeUsage(AttributeTargets.All, Inherited = false)]
+    /// Allows for dynamic creation of enumeration description based the return of a class member.
+    /// </summary>
     public sealed class CallbackDescriptionAttribute : DescriptionAttribute
     {
         private readonly string className;
@@ -17,8 +19,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Initializes a new instance of the <see cref="CallbackDescriptionAttribute"/> class.
         /// </summary>
-        /// <param name="className">Name of the class to be reflected on.</param>
-        /// <param name="memberName">Name of the class member (property or method) to use to get the description.</param>
         public CallbackDescriptionAttribute(string className, string memberName)
         {
             this.className = className;
@@ -75,7 +75,8 @@ namespace Interapptive.Shared.Utility
         private void ReflectObjectAndMember()
         {
             // Get the type defined by className.
-            Type type = Assembly.GetEntryAssembly().GetType(className);
+            Assembly assembly = Assembly.Load("ShipWorks");
+            Type type = assembly.GetType(className);
 
             // Create an instance of the type.
             instance = Activator.CreateInstance(type);

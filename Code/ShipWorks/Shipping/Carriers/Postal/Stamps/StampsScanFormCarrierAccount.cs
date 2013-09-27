@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <value>The name of the shipping carrier.</value>
         public virtual string ShippingCarrierName
         {
-            get { return "Stamps.com"; }
+            get { return EnumHelper.GetDescription(ShipmentTypeCode); }
         }
 
         /// <summary>

@@ -22,6 +22,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         private Mock<IScanFormRepository> repository;
         private Mock<ILog> logger;
 
+        private string errorMessageFromLogger;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -34,9 +36,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             repository.Setup(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>())).Returns(new List<long>());
 
             logger = new Mock<ILog>();
-            logger.Setup(l => l.Error(It.IsAny<string>()));
+            logger
+                .Setup(l => l.Error(It.IsAny<string>()))
+                .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
 
-            testObject = new Express1EndiciaScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
+            Mock<IScanFormShipmentTypeName> scanFormShipmentTypeName = new Mock<IScanFormShipmentTypeName>();
+            scanFormShipmentTypeName
+                .Setup(x => x.GetShipmentTypeName(It.IsAny<ShipmentTypeCode>()))
+                .Returns("USPS (Express1 for Endicia)");
+
+            testObject = new Express1EndiciaScanFormCarrierAccount(repository.Object, accountEntity, logger.Object, scanFormShipmentTypeName.Object);
         }
 
 
@@ -49,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         [TestMethod]
         public void ShippingCarrierName_Test()
         {
-            Assert.AreEqual("Express 1", testObject.ShippingCarrierName);
+            Assert.AreEqual("USPS (Express1 for Endicia)", testObject.ShippingCarrierName);
         }
         
         [TestMethod]
@@ -127,8 +136,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             { }
 
             // Verify the correct message was logged
-            string expectedMessage = "ShipWorks was unable to create a SCAN form through Express 1 at this time. Please try again later. (A null scan form batch tried to be saved.)";
-            logger.Verify(l => l.Error(expectedMessage), Times.Once());
+            const string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS (Express1 for Endicia) at this time. Please try again later. (A null scan form batch tried to be saved.)";
+            Assert.AreEqual(expectedMessage,errorMessageFromLogger);
         }
     }
 }
