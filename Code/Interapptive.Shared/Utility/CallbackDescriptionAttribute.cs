@@ -4,9 +4,10 @@ using System.Reflection;
 
 namespace Interapptive.Shared.Utility
 {
-    [AttributeUsage(AttributeTargets.All, Inherited = false)]
+    /// <summary>
     /// Allows for dynamic creation of enumeration description based the return of a class member.
     /// </summary>
+    [AttributeUsage(AttributeTargets.All, Inherited = false)]    
     public sealed class CallbackDescriptionAttribute : DescriptionAttribute
     {
         private readonly string className;
