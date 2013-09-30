@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using System.Web.Services.Protocols;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -20,6 +22,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override Type ExtensionType
         {
             get { return typeof(RewriteScanFormMessageSoapExtension); }
+        }
+
+        /// <summary>
+        /// Checks the necessary code is information place.
+        /// This method will check that code for shipworks is in place. For instance, RewriteScanFromMessage is a required
+        /// attribute on ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CreateScanForm but is generated code
+        /// and might get lost, hence the check.
+        /// </summary>
+        public static void CheckNecessaryCodeIsInPlace()
+        {
+            Type stampsWebServiceType = typeof(SwsimV29);
+            MethodInfo createScanFormMethod = stampsWebServiceType.GetMethod("CreateScanForm");
+
+            Type attributeType = typeof(RewriteScanFormMessageAttribute);
+
+            RewriteScanFormMessageAttribute[] rewriteScanFormMessageAttributes = (RewriteScanFormMessageAttribute[])createScanFormMethod.GetCustomAttributes(attributeType, false);
+
+            if (rewriteScanFormMessageAttributes.Length == 0)
+            {
+                throw new Exception(@"CreateScanForm in \ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices\Reference.cs needs the attribute RewriteScanFormMessageAttribute.");
+            }
         }
     }
 }
