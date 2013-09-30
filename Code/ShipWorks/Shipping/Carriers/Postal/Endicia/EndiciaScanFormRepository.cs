@@ -57,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     foreach (ShipmentEntity shipment in scanForm.Shipments)
                     {
                         shipment.Postal.Endicia.ScanFormID = endiciaScanFormEntity.EndiciaScanFormID;
+                        shipment.Postal.Endicia.ScanFormBatchID = batchEntity.ScanFormBatchID;
                         adapter.SaveAndRefetch(shipment.Postal.Endicia);
                     }
                 }

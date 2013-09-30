@@ -56,6 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     foreach (ShipmentEntity shipment in scanForm.Shipments)
                     {
                         shipment.Postal.Stamps.ScanFormID = stampsScanFormEntity.StampsScanFormID;
+                        shipment.Postal.Stamps.ScanFormBatchID = batchEntity.ScanFormBatchID;
                         adapter.SaveAndRefetch(shipment.Postal.Stamps);
                     }
                 }
