@@ -370,11 +370,13 @@ namespace ShipWorks.Shipping
                 clonedShipment.Postal.Endicia.TransactionID = null;
                 clonedShipment.Postal.Endicia.RefundFormID = null;
                 clonedShipment.Postal.Endicia.ScanFormID = null;
+                clonedShipment.Postal.Endicia.ScanFormBatchID = null;
             }
 
             if (clonedShipment.Postal != null && clonedShipment.Postal.Stamps != null)
             {
                 clonedShipment.Postal.Stamps.ScanFormID = null;
+                clonedShipment.Postal.Stamps.ScanFormBatchID = null;
             }
 
             return clonedShipment;
