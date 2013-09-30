@@ -68,19 +68,47 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 throw new ArgumentNullException("message");
             }
 
-            // We only want to rewrite this message if we're about to process a response
-            if (message.Stage != SoapMessageStage.BeforeDeserialize)
+            switch (message.Stage)
             {
-                return;
+                case SoapMessageStage.BeforeSerialize:
+                    return;
+                case SoapMessageStage.AfterDeserialize:
+                    return;
+                case SoapMessageStage.AfterSerialize:
+                    // Copy the request without any rewriting
+                    newStream.Position = 0;
+                    Copy(newStream, oldStream);
+                    return;
+                case SoapMessageStage.BeforeDeserialize:
+                    if (message.Url.ToLower().Contains("express1"))
+                    {
+                        // Rewrite the response
+                        ReplaceArrayElements();
+                    }
+                    else
+                    {
+                        // We don't want to rewrite if this isn't a call to Express1
+                        Copy(oldStream, newStream);
+                        newStream.Position = 0;
+                    }
+                    
+                    return;
             }
 
-            // We don't want to rewrite unless this is a call to Express1
-            if (!message.Url.ToLower().Contains("express1"))
-            {
-                return;
-            }
+            throw new InvalidOperationException("invalid stage");
+        }
 
-            ReplaceArrayElements();
+        /// <summary>
+        /// Copy one stream into another
+        /// </summary>
+        /// <param name="from">Source stream</param>
+        /// <param name="to">Destination stream</param>
+        private static void Copy(Stream from, Stream to)
+        {
+            TextReader reader = new StreamReader(from);
+            TextWriter writer = new StreamWriter(to);
+            writer.WriteLine(reader.ReadToEnd());
+            writer.Flush();
         }
 
         /// <summary>
