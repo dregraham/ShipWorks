@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void GetDescription_Test()
         {
-            Assert.AreEqual("Stamps.com (testUsername), 1 Memorial Drive 63102", testObject.GetDescription());
+            Assert.AreEqual("USPS (Stamps.com) - testUsername", testObject.GetDescription());
         }
 
         [TestMethod]

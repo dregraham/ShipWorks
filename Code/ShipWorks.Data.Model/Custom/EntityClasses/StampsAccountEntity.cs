@@ -26,7 +26,7 @@ namespace ShipWorks.Data.Model.EntityClasses
                 // only shorten so long as we know they're still using long account numbers.
                 if (descriptionBase.Length == 36)
                 {
-                    descriptionBase = "Express1";
+                    descriptionBase = string.Empty;
                 }
 
                 StringBuilder description = new StringBuilder(descriptionBase);
