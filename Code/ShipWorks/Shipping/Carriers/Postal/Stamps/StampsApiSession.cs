@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using Interapptive.Shared.Utility;
@@ -469,17 +470,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 );
             }
 
-            if (scanFormUrl.Contains(" "))
+            if (stampsAccountEntity.IsExpress1)
             {
-                // According to the docs, there is a chance that there could be multiple URLs; the first
-                // URL contains the actual SCAN form though
-                scanFormUrl = scanFormUrl.Split(new char[] { ' ' })[0];
+                XDocument response = XDocument.Parse("<ScanForm/>");
+                response.Root.Add(scanFormStampsId.Split(new[] { ' ' }).Select(x => new XElement("TransactionId", x)));
+                response.Root.Add(scanFormUrl.Split(new[] { ' ' }).Select(x => new XElement("Url", x)));
+                return response;
             }
+            else
+            {
+                if (scanFormUrl.Contains(" "))
+                {
+                    // According to the docs, there is a chance that there could be multiple URLs; the first
+                    // URL contains the actual SCAN form though
+                    scanFormUrl = scanFormUrl.Split(new char[] { ' ' })[0];
+                }
 
-            string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormStampsId, scanFormUrl);
-            XDocument response = XDocument.Parse(responseXml);
+                string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormStampsId, scanFormUrl);
+                XDocument response = XDocument.Parse(responseXml);
 
-            return response;
+                return response;
+            }
         }
 
         /// <summary>
