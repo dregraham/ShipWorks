@@ -1,5 +1,7 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿using System.Reflection;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
@@ -13,6 +15,7 @@ using Interapptive.Shared.UI;
 using System.IO;
 using ShipWorks.UI.Controls;
 using ActiproSoftware.SyntaxEditor;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -79,6 +82,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // The installer uses this to know the app needs shutdown before the installation can continue.
             appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
 
+#if DEBUG
+            CheckNecessaryCodeIsInPlace();
+#endif
             SingleInstance.Register();
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
@@ -107,6 +113,28 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
+        }
+
+        /// <summary>
+        /// Checks the necessary code is information place.
+        /// This method will check that code for shipworks is in place. For instance, RewriteScanFromMessage is a required
+        /// attribute on ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CreateScanForm but is generated code
+        /// and might get lost, hence the check.
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private void CheckNecessaryCodeIsInPlace()
+        {
+            Type stampsWebServiceType = typeof(SwsimV29);
+            MethodInfo createScanFormMethod = stampsWebServiceType.GetMethod("CreateScanForm");
+
+            Type attributeType = typeof(RewriteScanFormMessageAttribute);
+
+            RewriteScanFormMessageAttribute[] rewriteScanFormMessageAttributes = (RewriteScanFormMessageAttribute[])createScanFormMethod.GetCustomAttributes(attributeType, false);
+
+            if (rewriteScanFormMessageAttributes.Length == 0)
+            {
+                throw new Exception(@"CreateScanForm in \ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices\Reference.cs needs the attribute RewriteScanFormMessageAttribute.");
+            }
         }
 
         /// <summary>
