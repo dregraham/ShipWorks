@@ -2365,6 +2365,8 @@ namespace ShipWorks.Data.Model
 		RefundFormID,
 		///<summary>ScanFormID. </summary>
 		ScanFormID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7863,6 +7865,8 @@ namespace ShipWorks.Data.Model
 		ScanFormID,
 		///<summary>OriginalStampsAccountID. </summary>
 		OriginalStampsAccountID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}
