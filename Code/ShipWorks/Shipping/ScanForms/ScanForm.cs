@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="batchId">The batch id.</param>
         /// <param name="description">The description.</param>
         public ScanForm(IScanFormCarrierAccount account, long batchId, string description)
-            : this(account, batchId, description, new List<ShipmentEntity>())
+            : this(account, batchId, description, new List<ShipmentEntity>(), null)
         { }
 
         /// <summary>
@@ -33,10 +33,12 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="batchId">The batch ID.</param>
         /// <param name="description">The description.</param>
         /// <param name="shipments">The shipments.</param>
-        public ScanForm(IScanFormCarrierAccount account, long batchId, string description, IEnumerable<ShipmentEntity> shipments)
+        /// <param name="scanFormEntity">Actual entity associated with this scan form.</param>
+        public ScanForm(IScanFormCarrierAccount account, long batchId, string description, IEnumerable<ShipmentEntity> shipments, IEntity2 scanFormEntity)
             : this(account, InvalidScanFormId, batchId, description, DateTime.MinValue, shipments == null ? 0 : shipments.Count())
         {
             Shipments = shipments;
+            ScanFormEntity = scanFormEntity;
         }
 
         /// <summary>
@@ -127,25 +129,6 @@ namespace ShipWorks.Shipping.ScanForms
 
             IScanFormPrinter printer = CarrierAccount.GetPrinter();            
             return printer.Print(owner, this);
-        }
-
-        /// <summary>
-        /// Requests a scan form from the carrier via the carrier's API.
-        /// </summary>
-        public void Generate()
-        {
-            if (Shipments == null || !Shipments.Any())
-            {
-                throw new ShippingException("There must be at least one shipment to create a SCAN form.");
-            }
-
-            // Obtain the scan form from the carrier API
-            ScanFormEntity = CarrierAccount.GetGateway().FetchScanForm(this, Shipments);
-
-            if (ScanFormEntity == null)
-            {
-                throw new ShippingException(string.Format("ShipWorks was unable to create a SCAN form through {0} at this time. Please try again later.", CarrierAccount.ShippingCarrierName));
-            }
         }
     }
 }

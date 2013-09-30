@@ -49,53 +49,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Gets the scan form from the shipping carrier and populates the properties of the given scan form.
-        /// </summary>
-        /// <param name="scanForm">The scan form being populated.</param>
-        /// <param name="shipments">The shipments the scan form is being generated for.</param>
-        /// <returns>A carrier-specific scan form entity object.</returns>
-        public IEntity2 FetchScanForm(ScanForm scanForm, IEnumerable<ShipmentEntity> shipments)
-        {
-            StampsAccountEntity accountEntity = scanForm.CarrierAccount.GetAccountEntity() as StampsAccountEntity;
-            if (accountEntity == null)
-            {
-                throw new StampsException(invalidCarrierMessage);
-            }
-
-            if (shipments == null || shipments.Count() == 0)
-            {
-                throw new StampsException("There must be at least one shipment to create a SCAN form.");
-            }
-
-            // Grab all the stamps-specific shipments (this should be all of the shipments)
-            IEnumerable<StampsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Stamps).Where(s => s != null);
-            if (stampsShipments.Count() != shipments.Count())
-            {
-                throw new StampsException(invalidShipmentMessage);
-            }
-
-            // We have our list of Stamps.com shipments, so call the API to create the SCAN form
-            XDocument xDocument = StampsApiSession.CreateScanForm(stampsShipments, accountEntity);
-
-            // Populate the stamps scan form entity based on the response from the API
-            StampsScanFormEntity scanEntity = new StampsScanFormEntity();
-            scanEntity.StampsAccountID = accountEntity.StampsAccountID;            
-            scanEntity.CreatedDate = DateTime.UtcNow;
-            scanEntity.ShipmentCount = shipments.Count();
-            scanEntity.ScanFormTransactionID = (string)xDocument.Descendants("TransactionId").Single();
-            scanEntity.ScanFormUrl = (string)xDocument.Descendants("Url").Single();
-            scanEntity.Description = scanForm.Description;
-
-            // Now populate the scan form object itself based on the entity values and the image
-            scanForm.CreatedDate = scanEntity.CreatedDate;
-            scanForm.ShipmentCount = scanEntity.ShipmentCount;
-            scanForm.Image = DownloadFormImage(scanEntity.ScanFormUrl);
-
-
-            return scanEntity;
-        }
-
-        /// <summary>
         /// Creates scan forms from the shipping carrier
         /// </summary>
         /// <param name="scanFormBatch">The batch to which the created scan forms should belong.</param>
@@ -145,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 scanEntity.Description = "Non-cubic shipments";
 
                 // Notify the batch of the new scan form
-                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, DownloadFormImage(scanEntity.ScanFormUrl));
+                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, scanEntity, DownloadFormImage(scanEntity.ScanFormUrl));
 
                 entities.Add(scanEntity);
             }

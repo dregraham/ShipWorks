@@ -143,9 +143,9 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="shipments">Collection of shipments that are associated with this SCAN form</param>
         /// <param name="image">Image of the actual SCAN form</param>
         /// <returns></returns>
-        public ScanForm CreateScanForm(string description, IEnumerable<ShipmentEntity> shipments, byte[] image)
+        public ScanForm CreateScanForm(string description, IEnumerable<ShipmentEntity> shipments, IEntity2 entity, byte[] image)
         {
-            ScanForm scanForm = new ScanForm(carrierAccount, BatchId, description, shipments)
+            ScanForm scanForm = new ScanForm(carrierAccount, BatchId, description, shipments, entity)
                 {
                     CreatedDate = CreatedDate,
                     Image = image

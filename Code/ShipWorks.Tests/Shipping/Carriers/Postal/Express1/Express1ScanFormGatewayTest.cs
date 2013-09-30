@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
     [TestClass]
     public class Express1ScanFormGatewayTest
     {
-        private ScanForm scanForm;
+        private ScanFormBatch scanFormBatch;
         private Mock<IScanFormCarrierAccount> carrierAccount;
 
         private Express1EndiciaScanFormGateway testObject;
@@ -26,33 +26,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new EndiciaAccountEntity());
 
-            scanForm = new ScanForm(carrierAccount.Object, 1000, string.Empty);
+            scanFormBatch = new ScanFormBatch(carrierAccount.Object, null);
 
             testObject = new Express1EndiciaScanFormGateway();
         }
 
         [TestMethod]
         [ExpectedException(typeof(Express1EndiciaException))]
-        public void FetchScanForm_ThrowsExpress1Exception_WhenAccountEntityIsNull_Test()
+        public void CreateScanForms_ThrowsExpress1Exception_WhenAccountEntityIsNull_Test()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
 
-            testObject.FetchScanForm(scanForm, new List<ShipmentEntity>());
+            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
         }
         
         [TestMethod]
         [ExpectedException(typeof(Express1EndiciaException))]
-        public void FetchScanForm_ThrowsExpress1Exception_WhenShipmentsIsNull_Test()
+        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsNull_Test()
         {
-            testObject.FetchScanForm(scanForm, null);
+            testObject.CreateScanForms(scanFormBatch, null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(Express1EndiciaException))]
-        public void FetchScanForm_ThrowsExpress1Exception_WhenShipmentsIsEmpty_Test()
+        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsEmpty_Test()
         {
-            testObject.FetchScanForm(scanForm, new List<ShipmentEntity>());
+            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
         }
 
         // Can't effectively unit test the rest of this class since it is calling into 
