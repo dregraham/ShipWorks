@@ -282,7 +282,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1UtilitiesTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\UnitTest1.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccountTest.cs" />
