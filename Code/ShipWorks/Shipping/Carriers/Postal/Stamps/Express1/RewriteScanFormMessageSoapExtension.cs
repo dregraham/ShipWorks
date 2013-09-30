@@ -42,9 +42,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Gets initialization data from the configuration file
         /// </summary>
-        /// <param name="webServiceType">Type of web service for which to initialize</param>
+        /// <param name="serviceType">Type of web service for which to initialize</param>
         /// <returns></returns>
-        public override object GetInitializer(Type webServiceType)
+        public override object GetInitializer(Type serviceType)
         {
             return typeof(RewriteScanFormMessageSoapExtension);
         }
@@ -63,6 +63,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="message">Message that should be processed</param>
         public override void ProcessMessage(SoapMessage message)
         {
+            if (message == null)
+            {
+                throw new ArgumentNullException("message");
+            }
+
             // We only want to rewrite this message if we're about to process a response
             if (message.Stage != SoapMessageStage.BeforeDeserialize)
             {

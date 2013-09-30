@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// Attribute that marks a method as needing to have its scanform data replaced
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class RewriteScanFormMessageAttribute : SoapExtensionAttribute
+    public sealed class RewriteScanFormMessageAttribute : SoapExtensionAttribute
     {
         /// <summary>
         /// Gets and sets the priority of the extension
