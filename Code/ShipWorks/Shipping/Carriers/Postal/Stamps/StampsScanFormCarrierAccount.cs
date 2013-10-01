@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -52,17 +53,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Gets the name of the shipping carrier.
         /// </summary>
         /// <value>The name of the shipping carrier.</value>
-        public string ShippingCarrierName
+        public virtual string ShippingCarrierName
         {
-            get { return "Stamps.com"; }
+            get { return EnumHelper.GetDescription(ShipmentTypeCode); }
         }
 
         /// <summary>
         /// Gets the shipment type code.
         /// </summary>
         /// <value>The shipment type code.</value>
-        public ShipmentTypeCode ShipmentTypeCode
-        {
+        public virtual ShipmentTypeCode ShipmentTypeCode 
+        { 
             get { return ShipmentTypeCode.Stamps; }
         }
 
@@ -73,14 +74,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public string GetDescription()
         {
             // The stamps account doesn't have a description field, so we'll just build it here
-            return string.Format("Stamps.com ({0}), {1} {2}", accountEntity.Username, accountEntity.Street1, accountEntity.PostalCode);
+            return string.Format("{0} - {1}", 
+                EnumHelper.GetDescription(ShipmentTypeCode),
+                accountEntity.Description);
         }
         
         /// <summary>
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public IScanFormGateway GetGateway()
+        public virtual IScanFormGateway GetGateway()
         {
             return new StampsScanFormGateway();
         }
@@ -103,7 +106,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             return repository.GetExistingScanFormBatches(this);
         }
-
 
         /// <summary>
         /// Saves the specified scan form batch.
@@ -147,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime()
             );
 
-            bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode.Stamps);
+            bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode);
 
             bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
             bucket.Relations.Add(PostalShipmentEntity.Relations.StampsShipmentEntityUsingShipmentID);

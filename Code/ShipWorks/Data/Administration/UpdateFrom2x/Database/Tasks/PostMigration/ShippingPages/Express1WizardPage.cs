@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Adapter.Custom;
@@ -45,7 +46,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
 
                 if (!anyExpress1)
                 {
-                    RelationPredicateBucket bucket = new RelationPredicateBucket(ShipmentFields.ShipmentType == (int)ShipmentTypeCode.PostalExpress1);
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(ShipmentFields.ShipmentType == (int)ShipmentTypeCode.Express1Endicia);
                     anyExpress1 = SqlAdapter.Default.GetDbCount(new ShipmentEntityFactory().CreateFields(), bucket) > 0;
                 }
             }
@@ -55,7 +56,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             {
                 e.Skip = true;
             }
-            else if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.PostalExpress1))
+            else if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Express1Endicia))
             {
                 ShowConfiguredUI();
             }
@@ -68,11 +69,11 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         {
             // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
             // if they canceled before getting there endicia account# emailed to them.
-            using (Express1SetupWizard wizard = new Express1SetupWizard())
+            using (Express1EndiciaSetupWizard wizard = new Express1EndiciaSetupWizard())
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.PostalExpress1);
+                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Endicia);
 
                     Wizard.MoveNext();
                 }
@@ -94,7 +95,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            ShippingSettings.MarkAsActivated(ShipmentTypeCode.PostalExpress1);
+            ShippingSettings.MarkAsActivated(ShipmentTypeCode.Express1Endicia);
         }
     }
 }

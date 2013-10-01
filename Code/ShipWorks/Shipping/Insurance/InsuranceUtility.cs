@@ -328,7 +328,8 @@ namespace ShipWorks.Shipping.Insurance
                         rate = 0.75m;
                     }
                     break;
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Stamps:
@@ -382,7 +383,8 @@ namespace ShipWorks.Shipping.Insurance
                     }
                     break;
 
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Stamps:
                     {

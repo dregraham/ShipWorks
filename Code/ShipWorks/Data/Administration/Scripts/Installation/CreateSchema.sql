@@ -3007,7 +3007,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [IntegratorTransactionID] [uniqueidentifier] NOT NULL,
 [StampsTransactionID] [uniqueidentifier] NOT NULL,
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ScanFormID] [bigint] NULL
+[ScanFormID] [bigint] NULL,
+[OriginalStampsAccountID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
@@ -4292,13 +4293,15 @@ CREATE TABLE [dbo].[ShippingSettings]
 [WorldShipLaunch] [bit] NOT NULL,
 [StampsThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,
-[Express1Thermal] [bit] NOT NULL,
-[Express1ThermalType] [int] NOT NULL,
-[Express1CustomsCertify] [bit] NOT NULL,
-[Express1CustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Express1ThermalDocTab] [bit] NOT NULL,
-[Express1ThermalDocTabType] [int] NOT NULL,
-[Express1SingleSource] [bit] NOT NULL,
+[StampsAutomaticExpress1] [bit] NOT NULL,
+[StampsAutomaticExpress1Account] [bigint] NOT NULL,
+[Express1EndiciaThermal] [bit] NOT NULL,
+[Express1EndiciaThermalType] [int] NOT NULL,
+[Express1EndiciaCustomsCertify] [bit] NOT NULL,
+[Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Express1EndiciaThermalDocTab] [bit] NOT NULL,
+[Express1EndiciaThermalDocTabType] [int] NOT NULL,
+[Express1EndiciaSingleSource] [bit] NOT NULL,
 [EquaShipThermal] [bit] NOT NULL,
 [EquaShipThermalType] [int] NOT NULL,
 [OnTracThermal] [bit] NOT NULL,
@@ -4309,6 +4312,9 @@ CREATE TABLE [dbo].[ShippingSettings]
 [iParcelThermalType] [int] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
 [iParcelInsurancePennyOne] [bit] NOT NULL,
+[Express1StampsThermal] [bit] NOT NULL,
+[Express1StampsThermalType] [int] NOT NULL,
+[Express1StampsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL
 )
@@ -4324,7 +4330,7 @@ CREATE TABLE [dbo].[StampsAccount]
 [StampsAccountID] [bigint] NOT NULL IDENTITY(1052, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -4339,7 +4345,8 @@ CREATE TABLE [dbo].[StampsAccount]
 [Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsExpress1] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalStampsAccount] on [dbo].[StampsAccount]'

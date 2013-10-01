@@ -46,7 +46,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             LoadServiceTypes();
             LoadConfirmationTypes();
 
-            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.PostalExpress1));
+            // Only Express 1 Endicia should see the cubic packaging type
+            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.Express1Endicia));
             EnumHelper.BindComboBox<PostalCustomsContentType>(contentType);
 
             dimensionsControl.Initialize();
@@ -75,6 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // Returns
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
 
+            groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType).SupportsReturns;
         }
 
         /// <summary>

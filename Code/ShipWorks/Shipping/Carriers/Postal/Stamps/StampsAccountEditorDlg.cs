@@ -28,6 +28,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             this.account = account;
             passwordUpdated = false;
+
+            // Adjust the note text based on the carrier/reseller
+            string carrierName = StampsAccountManager.GetResellerName(account.IsExpress1);
+            labelStamps.Text = carrierName;
+            labelNote.Text = string.Format("Any changes made to the address are only for ShipWorks. Your address information with {0} is not updated.", carrierName);
+            this.Text = string.Format("{0} Account", carrierName);
         }
 
         /// <summary>
@@ -38,6 +44,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnLoad(object sender, EventArgs e)
         {
             accountInfoControl.Initialize(account);
+
+            int originalTop = accountPanel.Top;
+            // The account info control is dynamic based on the account entity, so adjust 
+            // the account panel based on the info control to avoid empty space
+            accountPanel.Top = accountInfoControl.Bottom;
+            this.Height = this.Height - (originalTop - accountPanel.Top);
 
             if (account.CountryCode == string.Empty)
             {

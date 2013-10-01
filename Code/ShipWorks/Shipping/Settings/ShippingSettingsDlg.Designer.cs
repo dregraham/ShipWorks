@@ -47,7 +47,7 @@
             // 
             // close
             // 
-            this.close.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.close.Location = new System.Drawing.Point(656, 534);
             this.close.Name = "close";
@@ -58,11 +58,12 @@
             // 
             // optionControl
             // 
-            this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.optionControl.Controls.Add(this.optionPageGeneral);
             this.optionControl.Location = new System.Drawing.Point(12, 12);
+            this.optionControl.MenuListWidth = 160;
             this.optionControl.Name = "optionControl";
             this.optionControl.SelectedIndex = 0;
             this.optionControl.Size = new System.Drawing.Size(719, 516);
@@ -74,9 +75,9 @@
             // optionPageGeneral
             // 
             this.optionPageGeneral.Controls.Add(this.tabControl);
-            this.optionPageGeneral.Location = new System.Drawing.Point(153, 0);
+            this.optionPageGeneral.Location = new System.Drawing.Point(163, 0);
             this.optionPageGeneral.Name = "optionPageGeneral";
-            this.optionPageGeneral.Size = new System.Drawing.Size(566, 516);
+            this.optionPageGeneral.Size = new System.Drawing.Size(556, 516);
             this.optionPageGeneral.TabIndex = 1;
             this.optionPageGeneral.Text = "General";
             // 
@@ -88,7 +89,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(566, 516);
+            this.tabControl.Size = new System.Drawing.Size(556, 516);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageProviders
@@ -99,27 +100,27 @@
             this.tabPageProviders.Location = new System.Drawing.Point(4, 22);
             this.tabPageProviders.Name = "tabPageProviders";
             this.tabPageProviders.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageProviders.Size = new System.Drawing.Size(558, 490);
+            this.tabPageProviders.Size = new System.Drawing.Size(548, 490);
             this.tabPageProviders.TabIndex = 0;
             this.tabPageProviders.Text = "Providers";
             this.tabPageProviders.UseVisualStyleBackColor = true;
             // 
             // panelActiveProviders
             // 
-            this.panelActiveProviders.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelActiveProviders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelActiveProviders.Controls.Add(this.label2);
             this.panelActiveProviders.Controls.Add(this.panelProviders);
             this.panelActiveProviders.Controls.Add(this.labelProvidersInfo);
             this.panelActiveProviders.Location = new System.Drawing.Point(10, 169);
             this.panelActiveProviders.Name = "panelActiveProviders";
-            this.panelActiveProviders.Size = new System.Drawing.Size(546, 249);
+            this.panelActiveProviders.Size = new System.Drawing.Size(536, 249);
             this.panelActiveProviders.TabIndex = 28;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(0, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 13);
@@ -144,26 +145,26 @@
             // 
             // panelDefaultProvider
             // 
-            this.panelDefaultProvider.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelDefaultProvider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDefaultProvider.Controls.Add(this.providerRulesControl);
             this.panelDefaultProvider.Controls.Add(this.label5);
             this.panelDefaultProvider.Controls.Add(this.labelDefaultProvider);
             this.panelDefaultProvider.Location = new System.Drawing.Point(10, 12);
             this.panelDefaultProvider.Name = "panelDefaultProvider";
-            this.panelDefaultProvider.Size = new System.Drawing.Size(546, 151);
+            this.panelDefaultProvider.Size = new System.Drawing.Size(536, 151);
             this.panelDefaultProvider.TabIndex = 2;
             // 
             // providerRulesControl
             // 
-            this.providerRulesControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.providerRulesControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.providerRulesControl.AutoScroll = true;
-            this.providerRulesControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.providerRulesControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.providerRulesControl.Location = new System.Drawing.Point(23, 34);
             this.providerRulesControl.Name = "providerRulesControl";
-            this.providerRulesControl.Size = new System.Drawing.Size(520, 114);
+            this.providerRulesControl.Size = new System.Drawing.Size(510, 114);
             this.providerRulesControl.TabIndex = 2;
             this.providerRulesControl.SizeChanged += new System.EventHandler(this.OnProviderRulesSizeChanged);
             // 
@@ -179,7 +180,7 @@
             // labelDefaultProvider
             // 
             this.labelDefaultProvider.AutoSize = true;
-            this.labelDefaultProvider.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelDefaultProvider.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDefaultProvider.Location = new System.Drawing.Point(0, 0);
             this.labelDefaultProvider.Name = "labelDefaultProvider";
             this.labelDefaultProvider.Size = new System.Drawing.Size(99, 13);
@@ -198,25 +199,25 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(549, 418);
+            this.tabPageSettings.Size = new System.Drawing.Size(558, 490);
             this.tabPageSettings.TabIndex = 1;
             this.tabPageSettings.Text = "Global Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
             // originControl
             // 
-            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.originControl.Location = new System.Drawing.Point(30, 158);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(420, 116);
+            this.originControl.Size = new System.Drawing.Size(429, 116);
             this.originControl.TabIndex = 6;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(10, 137);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(102, 13);
@@ -233,7 +234,7 @@
             // labelBlankPhone
             // 
             this.labelBlankPhone.AutoSize = true;
-            this.labelBlankPhone.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelBlankPhone.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelBlankPhone.Location = new System.Drawing.Point(10, 12);
             this.labelBlankPhone.Name = "labelBlankPhone";
             this.labelBlankPhone.Size = new System.Drawing.Size(132, 13);
@@ -245,7 +246,7 @@
             this.radioBlankPhoneUseSpecified.AutoSize = true;
             this.radioBlankPhoneUseSpecified.Location = new System.Drawing.Point(52, 86);
             this.radioBlankPhoneUseSpecified.Name = "radioBlankPhoneUseSpecified";
-            this.radioBlankPhoneUseSpecified.Size = new System.Drawing.Size(181, 17);
+            this.radioBlankPhoneUseSpecified.Size = new System.Drawing.Size(183, 17);
             this.radioBlankPhoneUseSpecified.TabIndex = 3;
             this.radioBlankPhoneUseSpecified.TabStop = true;
             this.radioBlankPhoneUseSpecified.Text = "Use the specified phone number:";
@@ -257,7 +258,7 @@
             this.radioBlankPhoneUseShipper.AutoSize = true;
             this.radioBlankPhoneUseShipper.Location = new System.Drawing.Point(52, 63);
             this.radioBlankPhoneUseShipper.Name = "radioBlankPhoneUseShipper";
-            this.radioBlankPhoneUseShipper.Size = new System.Drawing.Size(198, 17);
+            this.radioBlankPhoneUseShipper.Size = new System.Drawing.Size(202, 17);
             this.radioBlankPhoneUseShipper.TabIndex = 2;
             this.radioBlankPhoneUseShipper.TabStop = true;
             this.radioBlankPhoneUseShipper.Text = "Use the phone number of the sender";
@@ -271,7 +272,7 @@
             this.labelBlankPhoneInfo.Size = new System.Drawing.Size(369, 31);
             this.labelBlankPhoneInfo.TabIndex = 1;
             this.labelBlankPhoneInfo.Text = "Some carriers require a recipient phone number for certain services.  When none i" +
-                "s provided:";
+    "s provided:";
             // 
             // ShippingSettingsDlg
             // 
@@ -281,7 +282,7 @@
             this.ClientSize = new System.Drawing.Size(743, 569);
             this.Controls.Add(this.optionControl);
             this.Controls.Add(this.close);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(759, 607);

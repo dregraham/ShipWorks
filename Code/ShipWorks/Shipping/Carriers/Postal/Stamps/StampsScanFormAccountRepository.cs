@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
-    /// A Stamps.com implementation of the ScanFormCarrierAccount class.
+    /// A Stamps.com implementation of the IScanFormAccountRepository interface.
     /// </summary>
     public class StampsScanFormAccountRepository : IScanFormAccountRepository
     {
@@ -18,16 +16,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>A collection of the ScanFormCarrierAccount objects.</returns>
         public IEnumerable<IScanFormCarrierAccount> GetAccounts()
         {
-            List<IScanFormCarrierAccount> carrierAccounts = new List<IScanFormCarrierAccount>();
+            return AccountList.Select(CreateScanFormCarrierAccount).ToList();
+        }
 
-            List<StampsAccountEntity> stampsAccountEntities = StampsAccountManager.Accounts;
-            foreach (StampsAccountEntity accountEntity in stampsAccountEntities)
-            {
-                StampsScanFormCarrierAccount carrierAccount = new StampsScanFormCarrierAccount(new StampsScanFormRepository(), accountEntity);
-                carrierAccounts.Add(carrierAccount);
-            }
+        /// <summary>
+        /// Gets the accounts that should have scan forms created for them
+        /// </summary>
+        protected virtual IEnumerable<StampsAccountEntity> AccountList
+        {
+            get { return StampsAccountManager.StampsAccounts; }
+        }
 
-            return carrierAccounts;
+        /// <summary>
+        /// Creates a ScanFormCarrierAccount from the account entity
+        /// </summary>
+        /// <param name="accountEntity">Account entity for which to create the scan form carrier account</param>
+        /// <returns>A new instance of IScanFormCarrierAccount</returns>
+        protected virtual IScanFormCarrierAccount CreateScanFormCarrierAccount(StampsAccountEntity accountEntity)
+        {
+            return new StampsScanFormCarrierAccount(new StampsScanFormRepository(true), accountEntity);
         }
     }
 }

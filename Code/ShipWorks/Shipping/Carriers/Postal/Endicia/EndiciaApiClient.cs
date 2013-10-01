@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using System.Web.Services.Protocols;
 using System.Net;
@@ -92,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        return Express1Utility.ApiKey;
+                        return Express1EndiciaUtility.ApiKey;
                     }
 
                 case EndiciaReseller.None:
@@ -138,8 +139,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Express1
                 case EndiciaReseller.Express1:
                     {
-                        webService = new Express1ServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1, logName));
-                        webService.Url = Express1Utility.UseTestServer ? Express1Utility.Express1DevelopmentUrl : Express1Utility.Express1ProductionUrl;
+                        webService = new Express1EndiciaServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
+                        webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
                         break;
                     }
 
@@ -185,15 +186,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             bool isInternational = PostalUtility.GetInternationalServices(ShipmentTypeCode.Endicia).Contains(serviceType);
 
             // Express1
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.PostalExpress1)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Endicia)
             {
-                request.Test = (Express1Utility.UseTestServer || account.TestAccount) ? "YES" : "NO";
+                request.Test = (Express1EndiciaUtility.UseTestServer || account.TestAccount) ? "YES" : "NO";
 
                 // If this is an Express1 shipment, and Single-Source is turned on, we need to make sure it is a packaging type Express1 supports or
-                if (settings.Express1SingleSource)
+                if (settings.Express1EndiciaSingleSource)
                 {
                     // If its not a postage saving service, express1 would automatically reroute to Endicia.  It's only when the service could save, but the packaging is goofed that there's a problem.
-                    if (Express1Utility.IsPostageSavingService(serviceType) && !Express1Utility.IsValidPackagingType(serviceType, packagingType))
+                    if (Express1Utilities.IsPostageSavingService(serviceType) && !Express1Utilities.IsValidPackagingType(serviceType, packagingType))
                     {
                         request.Provider = "Endicia";
                     }
@@ -214,25 +215,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             ThermalLabelType? thermalType;
-            bool thermalDocTab;
-            ThermalDocTabType thermalDocTabType;
 
             // Determine what thermal type, if any to use.  Use the Endicia settings if it is an Endicia shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
                 thermalType = settings.EndiciaThermal ? (ThermalLabelType) settings.EndiciaThermalType : (ThermalLabelType?) null;
-                thermalDocTab = settings.EndiciaThermalDocTab;
-                thermalDocTabType = (ThermalDocTabType) settings.EndiciaThermalDocTabType;
             }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1)
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                thermalType = settings.Express1Thermal ? (ThermalLabelType) settings.Express1ThermalType : (ThermalLabelType?) null;
-                thermalDocTab = settings.Express1ThermalDocTab;
-                thermalDocTabType = (ThermalDocTabType) settings.Express1ThermalDocTabType;
+                thermalType = settings.Express1EndiciaThermal ? (ThermalLabelType) settings.Express1EndiciaThermalType : (ThermalLabelType?) null;
             }
             else
             {
-                throw new InvalidOperationException("Unknown endicia reseller");
+                throw new InvalidOperationException("Unknown Endicia shipment type.");
             }
 
             // Critical mail does not support thermal
@@ -434,7 +429,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // If this is an Express1 shipment that was really an Endicia shipment auto-using Express1, we need to use the originally selected Endicia account setting,
             // as that is what the user will expect.
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1 && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
                 mailingPostOfficeAccount = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.OriginalEndiciaAccountID.Value) ?? account;
             }
@@ -615,10 +610,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.CustomsCertify = settings.EndiciaCustomsCertify ? "TRUE" : "FALSE";
                 request.CustomsSigner = settings.EndiciaCustomsSigner;
             }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1)
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                request.CustomsCertify = settings.Express1CustomsCertify ? "TRUE" : "FALSE";
-                request.CustomsSigner = settings.Express1CustomsSigner;
+                request.CustomsCertify = settings.Express1EndiciaCustomsCertify ? "TRUE" : "FALSE";
+                request.CustomsSigner = settings.Express1EndiciaCustomsSigner;
             }
             else
             {

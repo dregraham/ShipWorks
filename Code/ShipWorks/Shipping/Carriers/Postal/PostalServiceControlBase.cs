@@ -54,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
             confirmation.DisplayMember = "Key";
             confirmation.ValueMember = "Value";
 
-            // Only Express 1 should see the cubic packaging type
+            // Only Express 1 Endicia should see the cubic packaging type
             packagingType.SelectedIndexChanged -= this.OnChangePackaging;
-            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || ShipmentTypeCode == ShipmentTypeCode.PostalExpress1));
+            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || ShipmentTypeCode == ShipmentTypeCode.Express1Endicia));
             packagingType.SelectedIndexChanged += this.OnChangePackaging;
         }
 

@@ -36,11 +36,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnOK(object sender, EventArgs e)
         {
+            if(string.IsNullOrWhiteSpace(password.Text))
+            {
+                MessageHelper.ShowError(this, "Please enter a password.");
+                return;
+            }
+
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                StampsApiSession.AuthenticateUser(account.Username, password.Text);
+                StampsApiSession.AuthenticateUser(account.Username, password.Text, account.IsExpress1);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

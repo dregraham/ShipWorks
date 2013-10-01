@@ -20,6 +20,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         private Mock<IScanFormRepository> repository;
         private Mock<ILog> logger;
 
+        string errorMessageFromLogger;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -33,10 +35,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             };
 
             repository = new Mock<IScanFormRepository>();
-            repository.Setup(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>())).Returns(new List<long>());
+            repository
+                .Setup(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>()))
+                .Returns(new List<long>());
 
             logger = new Mock<ILog>();
-            logger.Setup(l => l.Error(It.IsAny<string>()));
+            logger.Setup(l => l.Error(It.IsAny<string>()))
+                  .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
 
             testObject = new StampsScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
         }
@@ -44,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void ShippingCarrierName_ReturnsStampsDotCom_Test()
         {
-            Assert.AreEqual("Stamps.com", testObject.ShippingCarrierName);
+            Assert.AreEqual("USPS (Stamps.com)", testObject.ShippingCarrierName);
         }
 
         [TestMethod]
@@ -56,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void GetDescription_Test()
         {
-            Assert.AreEqual("Stamps.com (testUsername), 1 Memorial Drive 63102", testObject.GetDescription());
+            Assert.AreEqual("USPS (Stamps.com) - testUsername", testObject.GetDescription());
         }
 
         [TestMethod]
@@ -134,8 +139,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             { }
 
             // Verify the correct message was logged
-            string expectedMessage = "ShipWorks was unable to create a SCAN form through Stamps.com at this time. Please try again later. (A null scan form batch tried to be saved.)";
-            logger.Verify(l => l.Error(expectedMessage), Times.Once());
+            string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS (Stamps.com) at this time. Please try again later. (A null scan form batch tried to be saved.)";
+            Assert.AreEqual(expectedMessage, errorMessageFromLogger);
         }
     }
 }

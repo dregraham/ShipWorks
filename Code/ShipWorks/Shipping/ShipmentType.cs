@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
-        public string ShipmentTypeName
+        public virtual string ShipmentTypeName
         {
             get
             {

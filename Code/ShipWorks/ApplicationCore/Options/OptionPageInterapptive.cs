@@ -13,6 +13,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
 using ShipWorks.Shipping.Carriers.OnTrac.Net;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using log4net;
 using ShipWorks.Data.Model;
 using Interapptive.Shared.Utility;
@@ -67,7 +69,8 @@ namespace ShipWorks.ApplicationCore.Options
             fedexTestServer.Checked = FedExApiCore.UseTestServer;
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
-            express1TestServer.Checked = Express1Utility.UseTestServer;
+            express1EndiciaTestServer.Checked = Express1EndiciaUtility.UseTestServer;
+            express1StampsTestServer.Checked = Express1StampsConnectionDetails.UseTestServer;
             equaShipTestServer.Checked = EquaShipClient.UseTestServer;
             onTracTestServer.Checked = OnTracRequest.UseTestServer;            
 
@@ -104,7 +107,8 @@ namespace ShipWorks.ApplicationCore.Options
             FedExApiCore.UseTestServer = fedexTestServer.Checked;
             UpsWebClient.UseTestServer = upsOnLineTools.Checked;
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
-            Express1Utility.UseTestServer = express1TestServer.Checked;
+            Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;
+            Express1StampsConnectionDetails.UseTestServer = express1StampsTestServer.Checked;
             EquaShipClient.UseTestServer = equaShipTestServer.Checked;
             OnTracRequest.UseTestServer = onTracTestServer.Checked;
 

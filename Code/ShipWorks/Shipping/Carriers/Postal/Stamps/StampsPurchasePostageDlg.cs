@@ -11,30 +11,74 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
 using log4net;
 using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
     /// Window for purchasing more stamps.com postage
     /// </summary>
-    public partial class StampsPurchasePostageDlg : Form
+    public partial class StampsPurchasePostageDlg : Form, IExpress1PurchasePostageDlg
     {
         static readonly ILog log = LogManager.GetLogger(typeof(StampsPurchasePostageDlg));
 
-        StampsAccountEntity account;
-        AccountInfo accountInfo;
+        private StampsAccountEntity account;
+        private AccountInfo accountInfo;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="StampsPurchasePostageDlg"/> class.
+        /// </summary>
+        public StampsPurchasePostageDlg()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StampsPurchasePostageDlg"/> class.
         /// </summary>
         public StampsPurchasePostageDlg(StampsAccountEntity account, AccountInfo accountInfo)
         {
             InitializeComponent();
+            InitializeAccountInfo(account, accountInfo);
+        }
 
+        /// <summary>
+        /// Initializes the account info.
+        /// </summary>
+        /// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
+        private void InitializeAccountInfo(StampsAccountEntity account, AccountInfo accountInfo)
+        {
             this.account = account;
-            this.accountInfo = accountInfo;
+            this.accountInfo = accountInfo ?? StampsApiSession.GetAccountInfo(account);
 
-            current.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
+            if (this.accountInfo == null)
+            {
+                string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
+                throw new StampsException(string.Format("ShipWorks could not retrieve your account information from {0}", carrierName));
+            }
+
+            current.Text = this.accountInfo.PostageBalance.AvailablePostage.ToString("c");
+        }
+
+        /// <summary>
+        /// An implementation of the IExpress1PostageDialog interface. This will show the dialog using the
+        /// information for the given Stamps account entity provided.
+        /// </summary>
+        /// <exception cref="StampsException">ShipWorks could not find information for this account.</exception>
+        public DialogResult ShowDialog(IWin32Window owner, long accountID)
+        {
+            StampsAccountEntity stampsAccountEntity = StampsAccountManager.GetAccount(accountID);
+            if (stampsAccountEntity == null)
+            {
+                // The account could have been deleted by another user/process
+                throw new StampsException("ShipWorks could not find information for this account.");
+            }
+
+            // We have a valid stamps account, so we can use it to initialize the account info
+            // and show the dialog
+            InitializeAccountInfo(stampsAccountEntity, null);
+            return ShowDialog(owner);
         }
 
         /// <summary>
@@ -43,20 +87,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnPurchase(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
+            string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
 
             try
             {
                 StampsApiSession.PurchasePostage(account, postage.Amount, accountInfo.PostageBalance.ControlTotal);
 
-                MessageHelper.ShowInformation(this, 
-                    "The purchase request has been submitted to Stamps.com.\n\n" +
-                    "It may take a few minutes before the amount is reflected in your available balance.");
+                string message = string.Format("The purchase request has been submitted to {0}.\n\n" +
+                                               "It may take a few minutes before the amount is reflected in your available balance.", carrierName);
+
+                MessageHelper.ShowInformation(this, message);
 
                 DialogResult = DialogResult.OK;
             }
             catch (StampsException ex)
             {
-                log.Error("Stamps.com purchase postage", ex);
+                string logMessage = string.Format("{0} purchase postage", carrierName);
+                log.ErrorFormat(logMessage, ex);
 
                 // Purchase "stale" (someone else has purchased in the meantime
                 if (ex.Code == 0x00450116)
@@ -82,7 +129,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             try
             {
                 accountInfo = StampsApiSession.GetAccountInfo(account);
-
                 current.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
             }
             catch (StampsException ex)

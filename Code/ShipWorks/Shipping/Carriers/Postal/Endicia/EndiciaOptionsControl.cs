@@ -46,14 +46,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        thermalPrinter.Checked = settings.Express1Thermal;
-                        thermalType.SelectedValue = (ThermalLabelType)settings.Express1ThermalType;
+                        thermalPrinter.Checked = settings.Express1EndiciaThermal;
+                        thermalType.SelectedValue = (ThermalLabelType)settings.Express1EndiciaThermalType;
 
-                        customsCertify.Checked = settings.Express1CustomsCertify;
-                        customsSigner.Text = settings.Express1CustomsSigner;
+                        customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
+                        customsSigner.Text = settings.Express1EndiciaCustomsSigner;
 
-                        thermalDocTab.Checked = settings.Express1ThermalDocTab;
-                        thermalDocTabType.SelectedValue = (ThermalDocTabType) settings.Express1ThermalDocTabType;
+                        thermalDocTab.Checked = settings.Express1EndiciaThermalDocTab;
+                        thermalDocTabType.SelectedValue = (ThermalDocTabType)settings.Express1EndiciaThermalDocTabType;
 
                         break;
                     }
@@ -97,14 +97,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        settings.Express1Thermal = thermalPrinter.Checked;
-                        settings.Express1ThermalType = (int)thermalType.SelectedValue;
+                        settings.Express1EndiciaThermal = thermalPrinter.Checked;
+                        settings.Express1EndiciaThermalType = (int)thermalType.SelectedValue;
 
-                        settings.Express1CustomsCertify = customsCertify.Checked;
-                        settings.Express1CustomsSigner = customsSigner.Text;
+                        settings.Express1EndiciaCustomsCertify = customsCertify.Checked;
+                        settings.Express1EndiciaCustomsSigner = customsSigner.Text;
 
-                        settings.Express1ThermalDocTab = thermalDocTab.Checked;
-                        settings.Express1ThermalDocTabType = (int) thermalDocTabType.SelectedValue;
+                        settings.Express1EndiciaThermalDocTab = thermalDocTab.Checked;
+                        settings.Express1EndiciaThermalDocTabType = (int)thermalDocTabType.SelectedValue;
 
                         break;
                     }

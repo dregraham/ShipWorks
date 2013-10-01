@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Utility;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
     /// UserControl for editing options specific to the Stamps.com integration
     /// </summary>
-    public partial class StampsOptionsControl : UserControl
+    public partial class StampsOptionsControl : PostalOptionsControlBase
     {
         /// <summary>
         /// Constructor
@@ -26,16 +19,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Whether the control is used for Express1.
+        /// </summary>
+        public bool IsExpress1 { get; set; }
+
+        /// <summary>
         /// Load the configured settings into the control
         /// </summary>
-        public void LoadSettings()
+        public override void LoadSettings()
         {
             EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            thermalPrinter.Checked = settings.StampsThermal;
-            thermalType.SelectedValue = (ThermalLabelType) settings.StampsThermalType;
+            if(IsExpress1)
+            {
+                thermalPrinter.Checked = settings.Express1StampsThermal;
+                thermalType.SelectedValue = (ThermalLabelType)settings.Express1StampsThermalType;
+            }
+            else
+            {
+                thermalPrinter.Checked = settings.StampsThermal;
+                thermalType.SelectedValue = (ThermalLabelType)settings.StampsThermalType;
+            }
         }
 
         /// <summary>
@@ -50,10 +56,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Save the settings to the database
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            settings.StampsThermal = thermalPrinter.Checked;
-            settings.StampsThermalType = (int) thermalType.SelectedValue;
+            if(IsExpress1)
+            {
+                settings.Express1StampsThermal = thermalPrinter.Checked;
+                settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
+            }
+            else
+            {
+                settings.StampsThermal = thermalPrinter.Checked;
+                settings.StampsThermalType = (int)thermalType.SelectedValue;    
+            }
         }
     }
 }

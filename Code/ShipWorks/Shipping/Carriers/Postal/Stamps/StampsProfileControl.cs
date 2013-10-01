@@ -17,12 +17,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsProfileControl : PostalProfileControlBase
     {
+        private ShipmentTypeCode shipmentTypeCode;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsProfileControl()
+        public StampsProfileControl(ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
+            this.shipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -50,9 +53,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            if (StampsAccountManager.Accounts.Count > 0)
+            bool isExpress1 = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
+            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(isExpress1);
+            if (accounts.Any())
             {
-                stampsAccount.DataSource = StampsAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
+                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();
                 stampsAccount.Enabled = true;
             }
             else

@@ -297,7 +297,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
                 case ShipmentTypeCode.Stamps:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
@@ -381,7 +382,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     break;
 
                 case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Stamps:
                     PostalServiceType uspsType = (PostalServiceType)shipmentEntity.Postal.Service;
