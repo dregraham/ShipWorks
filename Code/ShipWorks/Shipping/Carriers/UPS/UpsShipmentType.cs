@@ -842,6 +842,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
+                if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                {
+                    throw new ShippingException("Ups doesn't allow voiding Mail Innovation shipments.");
+                }
+
                 UpsApiVoidClient.VoidShipment(shipment);
             }
             catch (UpsException ex)
