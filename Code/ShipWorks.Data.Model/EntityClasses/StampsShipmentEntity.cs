@@ -487,9 +487,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Memo", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ScanFormID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("OriginalStampsAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -677,17 +674,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StampsShipmentFieldIndex.Memo, true); }
 			set	{ SetValue((int)StampsShipmentFieldIndex.Memo, value); }
-		}
-
-		/// <summary> The ScanFormID property of the Entity StampsShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "StampsShipment"."ScanFormID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ScanFormID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)StampsShipmentFieldIndex.ScanFormID, false); }
-			set	{ SetValue((int)StampsShipmentFieldIndex.ScanFormID, value); }
 		}
 
 		/// <summary> The OriginalStampsAccountID property of the Entity StampsShipment<br/><br/>

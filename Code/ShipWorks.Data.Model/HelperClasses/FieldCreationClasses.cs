@@ -5022,11 +5022,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RefundFormID);}
 		}
-		/// <summary>Creates a new EndiciaShipmentEntity.ScanFormID field instance</summary>
-		public static EntityField2 ScanFormID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanFormID);}
-		}
 		/// <summary>Creates a new EndiciaShipmentEntity.ScanFormBatchID field instance</summary>
 		public static EntityField2 ScanFormBatchID
 		{
@@ -16696,11 +16691,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Memo
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.Memo);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.ScanFormID field instance</summary>
-		public static EntityField2 ScanFormID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.ScanFormID);}
 		}
 		/// <summary>Creates a new StampsShipmentEntity.OriginalStampsAccountID field instance</summary>
 		public static EntityField2 OriginalStampsAccountID
