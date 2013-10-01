@@ -9854,6 +9854,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.8.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.1.sql" />
     <Content Include="Resources\add.png" />
