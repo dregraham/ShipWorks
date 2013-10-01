@@ -2388,7 +2388,7 @@ CREATE TABLE [dbo].[OrderMotionOrder]
 [OrderID] [bigint] NOT NULL,
 [OrderMotionShipmentID] [int] NOT NULL,
 [OrderMotionPromotion] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OrderMotionShipmentNumber] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[OrderMotionInvoiceNumber] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderMotionOrder] on [dbo].[OrderMotionOrder]'

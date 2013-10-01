@@ -17,12 +17,12 @@ CREATE TABLE [dbo].[tmp_rg_xx_OrderMotionOrder]
 [OrderID] [bigint] NOT NULL,
 [OrderMotionShipmentID] [int] NOT NULL,
 [OrderMotionPromotion] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OrderMotionShipmentNumber] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[OrderMotionInvoiceNumber] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 
 -- Backfill the OrderMotionShipmentNumber field
-INSERT INTO [dbo].[tmp_rg_xx_OrderMotionOrder]([OrderID], [OrderMotionShipmentID], [OrderMotionPromotion], [OrderMotionShipmentNumber]) 
+INSERT INTO [dbo].[tmp_rg_xx_OrderMotionOrder]([OrderID], [OrderMotionShipmentID], [OrderMotionPromotion], [OrderMotionInvoiceNumber]) 
 	SELECT 
 		[OrderMotionOrder].[OrderID], 
 		[OrderMotionShipmentID], 
