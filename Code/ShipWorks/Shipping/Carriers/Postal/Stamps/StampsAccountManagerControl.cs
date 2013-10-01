@@ -88,7 +88,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string result = "";
 
             GridRow row = (GridRow) state;
+
+            // Grab the account from the row and make a note of username for 
+            // exception handling purposes
             StampsAccountEntity account = (StampsAccountEntity) row.Tag;
+            string username = account.Username;
 
             if (account.Fields.State == EntityState.Fetched)
             {
@@ -102,6 +106,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName(account.IsExpress1));
                     log.Error(logMessage, ex);
+                }
+                catch (ORMEntityIsDeletedException ex)
+                {
+                    // The call to obtain account info from the Stmaps.com API has been known to 
+                    // take a few seconds, so a user could have deleted the account by the time
+                    // the call from Stamps.com completes.
+
+                    // We don't have the account info anymore, so we can only use the username value
+                    // that was cached above. 
+                    string logMessage = string.Format("The Stamps.com account ({0}) was deleted from ShipWorks while trying to obtain its account balance.", username);
+                    log.Warn(logMessage, ex);
                 }
             }
 
