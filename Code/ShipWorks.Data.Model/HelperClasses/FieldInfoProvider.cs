@@ -252,6 +252,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionQueueEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ActionQueueFieldIndex.RowVersion, 0, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "ActionID", typeof(System.Int64), false, true, false, false,  (int)ActionQueueFieldIndex.ActionID, 0, 0, 19);
 			base.AddElementFieldInfo("ActionQueueEntity", "ActionName", typeof(System.String), false, false, false, false,  (int)ActionQueueFieldIndex.ActionName, 50, 0, 0);
+			base.AddElementFieldInfo("ActionQueueEntity", "ActionQueueType", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.ActionQueueType, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "ActionVersion", typeof(System.Byte[]), false, false, false, false,  (int)ActionQueueFieldIndex.ActionVersion, 8, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "QueueVersion", typeof(System.Byte[]), false, false, true, false,  (int)ActionQueueFieldIndex.QueueVersion, 8, 0, 0);
 			base.AddElementFieldInfo("ActionQueueEntity", "TriggerDate", typeof(System.DateTime), false, false, false, false,  (int)ActionQueueFieldIndex.TriggerDate, 0, 0, 0);
@@ -261,7 +262,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionQueueEntity", "Status", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.Status, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
-			base.AddElementFieldInfo("ActionQueueEntity", "ActionQueueType", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.ActionQueueType, 0, 0, 10);
 		}
 		/// <summary>Inits ActionQueueSelectionEntity's FieldInfo objects</summary>
 		private void InitActionQueueSelectionEntityInfos()
@@ -1725,6 +1725,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderID, 0, 0, 19);
 			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionShipmentID", typeof(System.Int32), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionShipmentID, 0, 0, 10);
 			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionPromotion", typeof(System.String), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionPromotion, 50, 0, 0);
+			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionInvoiceNumber", typeof(System.String), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionInvoiceNumber, 64, 0, 0);
 		}
 		/// <summary>Inits OrderMotionStoreEntity's FieldInfo objects</summary>
 		private void InitOrderMotionStoreEntityInfos()

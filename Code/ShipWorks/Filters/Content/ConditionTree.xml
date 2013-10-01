@@ -104,6 +104,7 @@
         <Condition identifier="NeweggOrder.InvoiceNumber" />
         <Condition identifier="OrderMotionOrder.Promotion" />
         <Condition identifier="OrderMotionOrder.ShipmentID" />
+        <Condition identifier="OrderMotionOrder.InvoiceNumber" />
         <Condition identifier="PayPalOrder.PaymentStatus" />
         <Condition identifier="ProStoresOrder.Confirmation" />
         <Condition identifier="ProStoresOrder.Authorization" />

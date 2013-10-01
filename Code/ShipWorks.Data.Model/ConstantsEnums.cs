@@ -83,6 +83,8 @@ namespace ShipWorks.Data.Model
 		ActionID,
 		///<summary>ActionName. </summary>
 		ActionName,
+		///<summary>ActionQueueType. </summary>
+		ActionQueueType,
 		///<summary>ActionVersion. </summary>
 		ActionVersion,
 		///<summary>QueueVersion. </summary>
@@ -101,8 +103,6 @@ namespace ShipWorks.Data.Model
 		NextStep,
 		///<summary>ContextLock. </summary>
 		ContextLock,
-		///<summary>ActionQueueType. </summary>
-		ActionQueueType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5765,6 +5765,8 @@ namespace ShipWorks.Data.Model
 		OrderMotionShipmentID,
 		///<summary>OrderMotionPromotion. </summary>
 		OrderMotionPromotion,
+		///<summary>OrderMotionInvoiceNumber. </summary>
+		OrderMotionInvoiceNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

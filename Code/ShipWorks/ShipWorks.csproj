@@ -1964,6 +1964,7 @@
       <DependentUpon>NeweggDownloadCriteriaPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionShipmentIDCondition.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionInvoiceNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Actions\SearsShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Filters\SearsCustomerPickupCondition.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Filters\SearsPoNumberCondition.cs" />
@@ -9854,6 +9855,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.3.1.sql" />    
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
