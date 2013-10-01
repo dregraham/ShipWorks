@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [TestMethod]
         public void GetDescription_ReturnsDescriptionFieldValue_Test()
         {
-            Assert.AreEqual(accountEntity.Description, testObject.GetDescription());
+            Assert.AreEqual("USPS (Endicia) - this is a description", testObject.GetDescription());
         }
 
         [TestMethod]
