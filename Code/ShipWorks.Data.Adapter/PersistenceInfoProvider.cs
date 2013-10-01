@@ -1817,7 +1817,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionShipmentID", "OrderMotionShipmentID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionPromotion", "OrderMotionPromotion", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionShipmentNumber", "OrderMotionShipmentNumber", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "OrderMotionOrderEntity", "OrderMotionInvoiceNumber", "OrderMotionInvoiceNumber", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
 		/// <summary>Inits OrderMotionStoreEntity's mappings</summary>
 		private void InitOrderMotionStoreEntityMappings()

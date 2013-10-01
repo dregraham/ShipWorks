@@ -5765,8 +5765,8 @@ namespace ShipWorks.Data.Model
 		OrderMotionShipmentID,
 		///<summary>OrderMotionPromotion. </summary>
 		OrderMotionPromotion,
-		///<summary>OrderMotionShipmentNumber. </summary>
-		OrderMotionShipmentNumber,
+		///<summary>OrderMotionInvoiceNumber. </summary>
+		OrderMotionInvoiceNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

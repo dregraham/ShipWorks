@@ -237,8 +237,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // promotion code
                 order.OrderMotionPromotion = XPathUtility.Evaluate(xpath, "/OrderInformationResponse/OrderHeader/Promotion", "");
 
-                // Build the order motion shipment number based on the order number and shipment ID
-                order.OrderMotionShipmentNumber = string.Format("{0}-{1}", order.OrderNumber, order.OrderMotionShipmentID);
+                // The order motion invoice ID
+                order.OrderMotionInvoiceNumber = invoiceId;
 
                 // no customer ID
                 int customerID = XPathUtility.Evaluate(xpath, "/OrderInformationResponse/Customer/@number", 0);

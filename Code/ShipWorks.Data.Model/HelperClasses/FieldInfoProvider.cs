@@ -1725,7 +1725,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderID, 0, 0, 19);
 			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionShipmentID", typeof(System.Int32), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionShipmentID, 0, 0, 10);
 			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionPromotion", typeof(System.String), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionPromotion, 50, 0, 0);
-			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionShipmentNumber", typeof(System.String), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionShipmentNumber, 64, 0, 0);
+			base.AddElementFieldInfo("OrderMotionOrderEntity", "OrderMotionInvoiceNumber", typeof(System.String), false, false, false, false,  (int)OrderMotionOrderFieldIndex.OrderMotionInvoiceNumber, 64, 0, 0);
 		}
 		/// <summary>Inits OrderMotionStoreEntity's FieldInfo objects</summary>
 		private void InitOrderMotionStoreEntityInfos()

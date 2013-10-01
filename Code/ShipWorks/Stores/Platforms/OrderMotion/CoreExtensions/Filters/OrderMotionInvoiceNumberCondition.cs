@@ -10,11 +10,11 @@ using ShipWorks.Filters.Content.SqlGeneration;
 namespace ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Filters
 {
     /// <summary>
-    /// An OrderMotion filter to search orders based on the OrderMotionOrder.ShipmentNumber value.
+    /// An OrderMotion filter to search orders based on the OrderMotionOrder.OrderMotionInvoiceNumber value.
     /// </summary>
-    [ConditionElement("OrderMotion Shipment Number", "OrderMotionOrder.ShipmentNumber")]
+    [ConditionElement("OrderMotion Invoice Number", "OrderMotionOrder.InvoiceNumber")]
     [ConditionStoreType(StoreTypeCode.OrderMotion)]
-    public class OrderMotionShipmentNumberCondition : StringCondition
+    public class OrderMotionInvoiceNumberCondition : StringCondition
     {
         /// <summary>
         /// Generate the SQL for the condition element
@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Filters
             // First we have to get from Order -> OrderMotionOrder           
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, OrderMotionOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderFields.OrderMotionShipmentNumber), context));
+                return scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderFields.OrderMotionInvoiceNumber), context));
             }
         }
     }

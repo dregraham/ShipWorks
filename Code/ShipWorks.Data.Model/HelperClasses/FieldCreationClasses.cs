@@ -12312,10 +12312,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.OrderMotionPromotion);}
 		}
-		/// <summary>Creates a new OrderMotionOrderEntity.OrderMotionShipmentNumber field instance</summary>
-		public static EntityField2 OrderMotionShipmentNumber
+		/// <summary>Creates a new OrderMotionOrderEntity.OrderMotionInvoiceNumber field instance</summary>
+		public static EntityField2 OrderMotionInvoiceNumber
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.OrderMotionShipmentNumber);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.OrderMotionInvoiceNumber);}
 		}
 	}
 
