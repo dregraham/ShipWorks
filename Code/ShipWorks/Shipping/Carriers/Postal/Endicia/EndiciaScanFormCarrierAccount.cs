@@ -76,7 +76,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>A string describing the account</returns>
         public string GetDescription()
         {
-            return accountEntity.Description;
+            return string.Format("{0} - {1}", 
+                EnumHelper.GetDescription(ShipmentTypeCode),
+                accountEntity.Description);
         }        
         
         /// <summary>
