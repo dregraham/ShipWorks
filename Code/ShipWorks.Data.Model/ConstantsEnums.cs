@@ -7343,20 +7343,24 @@ namespace ShipWorks.Data.Model
 		StampsThermal,
 		///<summary>StampsThermalType. </summary>
 		StampsThermalType,
-		///<summary>Express1Thermal. </summary>
-		Express1Thermal,
-		///<summary>Express1ThermalType. </summary>
-		Express1ThermalType,
-		///<summary>Express1CustomsCertify. </summary>
-		Express1CustomsCertify,
-		///<summary>Express1CustomsSigner. </summary>
-		Express1CustomsSigner,
-		///<summary>Express1ThermalDocTab. </summary>
-		Express1ThermalDocTab,
-		///<summary>Express1ThermalDocTabType. </summary>
-		Express1ThermalDocTabType,
-		///<summary>Express1SingleSource. </summary>
-		Express1SingleSource,
+		///<summary>StampsAutomaticExpress1. </summary>
+		StampsAutomaticExpress1,
+		///<summary>StampsAutomaticExpress1Account. </summary>
+		StampsAutomaticExpress1Account,
+		///<summary>Express1EndiciaThermal. </summary>
+		Express1EndiciaThermal,
+		///<summary>Express1EndiciaThermalType. </summary>
+		Express1EndiciaThermalType,
+		///<summary>Express1EndiciaCustomsCertify. </summary>
+		Express1EndiciaCustomsCertify,
+		///<summary>Express1EndiciaCustomsSigner. </summary>
+		Express1EndiciaCustomsSigner,
+		///<summary>Express1EndiciaThermalDocTab. </summary>
+		Express1EndiciaThermalDocTab,
+		///<summary>Express1EndiciaThermalDocTabType. </summary>
+		Express1EndiciaThermalDocTabType,
+		///<summary>Express1EndiciaSingleSource. </summary>
+		Express1EndiciaSingleSource,
 		///<summary>EquaShipThermal. </summary>
 		EquaShipThermal,
 		///<summary>EquaShipThermalType. </summary>
@@ -7377,6 +7381,12 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
+		///<summary>Express1StampsThermal. </summary>
+		Express1StampsThermal,
+		///<summary>Express1StampsThermalType. </summary>
+		Express1StampsThermalType,
+		///<summary>Express1StampsSingleSource. </summary>
+		Express1StampsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>
 		UpsMailInnovationsEnabled,
 		///<summary>WorldShipMailInnovationsEnabled. </summary>
@@ -7776,6 +7786,8 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
+		///<summary>IsExpress1. </summary>
+		IsExpress1,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7851,6 +7863,8 @@ namespace ShipWorks.Data.Model
 		Memo,
 		///<summary>ScanFormID. </summary>
 		ScanFormID,
+		///<summary>OriginalStampsAccountID. </summary>
+		OriginalStampsAccountID,
 		/// <summary></summary>
 		AmountOfFields
 	}

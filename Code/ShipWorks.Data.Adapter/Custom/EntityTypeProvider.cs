@@ -89,7 +89,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "UpsAccountEntity": return EntityType.UpsAccountEntity;
 				case "PostalProfileEntity": return EntityType.PostalProfileEntity;
 				case "StampsProfileEntity": return EntityType.StampsProfileEntity;
-				case "ShippingSettingsEntity": return EntityType.ShippingSettingsEntity;
 				case "OtherProfileEntity": return EntityType.OtherProfileEntity;
 				case "ShippingPrintOutputRuleEntity": return EntityType.ShippingPrintOutputRuleEntity;
 				case "ShippingPrintOutputEntity": return EntityType.ShippingPrintOutputEntity;
@@ -179,6 +178,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ScanFormBatchEntity": return EntityType.ScanFormBatchEntity;
 				case "ServiceStatusEntity": return EntityType.ServiceStatusEntity;
 				case "ActionQueueSelectionEntity": return EntityType.ActionQueueSelectionEntity;
+				case "ShippingSettingsEntity": return EntityType.ShippingSettingsEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
