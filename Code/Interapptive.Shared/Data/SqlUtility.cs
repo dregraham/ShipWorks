@@ -75,7 +75,7 @@ namespace Interapptive.Shared.Data
             }
 
             SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandText = string.Format("ALTER DATABASE {0} SET COMPATIBILITY_LEVEL = 100", con.Database);
+            cmd.CommandText = string.Format("ALTER DATABASE [{0}] SET COMPATIBILITY_LEVEL = 100", con.Database);
 
             log.Info(cmd.CommandText);
 
@@ -93,7 +93,7 @@ namespace Interapptive.Shared.Data
             }
 
             log.Info("Altering database to SINGLE_USER");
-            SqlCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE " + con.Database + " SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+            SqlCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Interapptive.Shared.Data
             }
 
             log.Info("Altering database to MULTI_USER");
-            SqlCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE " + con.Database + " SET MULTI_USER WITH ROLLBACK IMMEDIATE");
+            SqlCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE");
         }
         
         /// <summary>
@@ -283,7 +283,7 @@ namespace Interapptive.Shared.Data
                 try
                 {
                     SqlCommand truncateCmd = con.CreateCommand();
-                    truncateCmd.CommandText = "TRUNCATE TABLE " + table;
+                    truncateCmd.CommandText = "TRUNCATE TABLE [" + table;
                     truncateCmd.ExecuteNonQuery();
 
                     return;
