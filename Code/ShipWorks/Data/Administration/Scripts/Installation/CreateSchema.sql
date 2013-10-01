@@ -3238,7 +3238,11 @@ CREATE TABLE [dbo].[UpsShipment]
 [CarbonNeutral] [bit] NOT NULL,
 [CostCenter] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IrregularIndicator] [int] NOT NULL,
-[Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipmentChargeType] [int] NOT NULL,
+[ShipmentChargeAccount] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
@@ -3314,7 +3318,11 @@ CREATE TABLE [dbo].[UpsProfile]
 [CommercialPaperlessInvoice] [bit] NULL,
 [CostCenter] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [IrregularIndicator] [int] NULL,
-[Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ShipmentChargeType] [int] NULL,
+[ShipmentChargeAccount] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfile] on [dbo].[UpsProfile]'
