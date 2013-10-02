@@ -518,6 +518,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.OrderMotion
                         },
 
+                    new GridColumnDefinition("{BE34737A-52C9-4DFE-927E-4B259C2495E9}",
+                        new GridTextDisplayType(), "Invoice #", "1234567-1",
+                        OrderMotionOrderFields.OrderMotionInvoiceNumber)
+                        {
+                            StoreTypeCode = StoreTypeCode.OrderMotion
+                        },
+
                     new GridColumnDefinition("{6766679C-B0FC-4cdb-B3F8-A73AD4DE87EB}", true,
                         new GridMoneyDisplayType(), "Total", 1024.18m,
                         OrderFields.OrderTotal), 

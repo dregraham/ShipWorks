@@ -12312,6 +12312,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.OrderMotionPromotion);}
 		}
+		/// <summary>Creates a new OrderMotionOrderEntity.OrderMotionInvoiceNumber field instance</summary>
+		public static EntityField2 OrderMotionInvoiceNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.OrderMotionInvoiceNumber);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderMotionStoreEntity</summary>

@@ -141,7 +141,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             var order = new Lazy<OrderMotionOrderEntity>(() => (OrderMotionOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("OrderMotion");
-            outline.AddElement("ShipmentNumber", () => string.Format("{0}-{1}", order.Value.OrderNumber, order.Value.OrderMotionShipmentID));
+
+            // Outputting both elements despite using the same value for historical purposes so existing templates
+            // do not break. The shipment number value was originally built by combining the order motion ID and 
+            // the order motion shipment ID values which were parsed out of the INVOICE_NO field from the order download.
+            outline.AddElement("ShipmentNumber", () => order.Value.OrderMotionInvoiceNumber);
+            outline.AddElement("InvoiceNumber", () => order.Value.OrderMotionInvoiceNumber);
+            
             outline.AddElement("Promotion", () => order.Value.OrderMotionPromotion);
         }
 
