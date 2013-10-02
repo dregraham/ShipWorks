@@ -212,6 +212,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Listen for finish
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+
+            // Add in the first page
+            SetCurrent(0);
         }
 
 
