@@ -150,7 +150,12 @@ namespace ShipWorks.Email
 
             try
             {
-                smtp.Connect(account.OutgoingServer, account.OutgoingPort, tls, (SmtpSecurity) account.OutgoingSecurityType);
+                smtp.Connect(account.OutgoingServer, account.OutgoingPort, tls, (SmtpSecurity)account.OutgoingSecurityType);
+            }
+            catch (UriFormatException ex)
+            {
+                log.Error(string.Format("Cannot parse hostname {0}", account.OutgoingServer), ex);
+                throw new EmailLogonException(ex.Message, ex);
             }
             catch (SmtpException ex)
             {
