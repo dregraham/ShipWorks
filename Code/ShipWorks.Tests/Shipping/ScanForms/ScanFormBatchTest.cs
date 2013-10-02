@@ -19,10 +19,12 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
         private Mock<IScanFormBatchPrinter> batchPrinter;
         private Mock<IScanFormPrinter> formPrinter;
+        private Mock<IScanFormBatchShipmentRepository> batchShipmentRepository;
 
         private Mock<IScanFormCarrierAccount> carrierAccount;
         private Mock<IScanFormGateway> gateway;
 
+        
         private Mock<IWin32Window> window;
 
         [TestInitialize]
@@ -33,6 +35,9 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             formPrinter = new Mock<IScanFormPrinter>();
             formPrinter.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanForm>())).Returns(true);
+
+            batchShipmentRepository = new Mock<IScanFormBatchShipmentRepository>();
+            batchShipmentRepository.Setup(r => r.GetShipmentCount(It.IsAny<ScanFormBatch>())).Returns(1);
 
             gateway = new Mock<IScanFormGateway>();
             gateway.Setup(g => g.CreateScanForms(It.IsAny<ScanFormBatch>(), It.IsAny<IEnumerable<ShipmentEntity>>()))
@@ -45,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             window = new Mock<IWin32Window>();
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, batchShipmentRepository.Object);
         }
 
         [TestMethod]
@@ -105,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         //}
 
         [TestMethod]
-        public void Create_DelegatesCreationToGateway()
+        public void Create_DelegatesCreationToGateway_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
@@ -118,7 +123,20 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [TestMethod]
-        public void Create_DelegatesSaveToCarrierAccount()
+        public void Create_AssignsShipmentCount_Test()
+        {
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>
+                {
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                };
+
+            testObject.Create(shipments);
+
+            Assert.AreEqual(1, testObject.ShipmentCount);
+        }
+
+        [TestMethod]
+        public void Create_DelegatesSaveToCarrierAccount_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
@@ -131,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [TestMethod]
-        public void CreateScanForm_InstantiatesScanForm()
+        public void CreateScanForm_InstantiatesScanForm_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -146,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [TestMethod]
-        public void CreateScanForm_AddsScanFormToList()
+        public void CreateScanForm_AddsScanFormToList_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -214,7 +232,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 new ScanForm(carrierAccount.Object, batchId, batchName)
             };
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             testObject.Print(window.Object);
 
             batchPrinter.Verify(p => p.Print(window.Object, testObject), Times.Once());
@@ -232,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 new ScanForm(carrierAccount.Object, batchId, batchName)
             };
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             testObject.Print(window.Object);
 
             formPrinter.Verify(p => p.Print(window.Object, It.IsAny<ScanForm>()), Times.Never());
@@ -249,7 +267,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 new ScanForm(carrierAccount.Object, batchId, batchName)
             };
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             testObject.Print(window.Object);
 
             formPrinter.Verify(p => p.Print(window.Object, scanForms[0]), Times.Once());
@@ -266,7 +284,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 new ScanForm(carrierAccount.Object, batchId, batchName)
             };
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             testObject.Print(window.Object);
 
             batchPrinter.Verify(p => p.Print(window.Object, It.IsAny<ScanFormBatch>()), Times.Never());
@@ -277,7 +295,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ScanForm> scanForms = new List<ScanForm>();
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             testObject.Print(window.Object);
 
             formPrinter.Verify(p => p.Print(window.Object, It.IsAny<ScanForm>()), Times.Never());
@@ -288,7 +306,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ScanForm> scanForms = new List<ScanForm>();
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             testObject.Print(window.Object);
 
             batchPrinter.Verify(p => p.Print(window.Object, It.IsAny<ScanFormBatch>()), Times.Never());
@@ -299,7 +317,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ScanForm> scanForms = new List<ScanForm>();
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
             Assert.IsTrue(printed);
@@ -320,7 +338,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             // value returned by the printer is the same as the value returned from out test object
             formPrinter.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanForm>())).Returns(true);
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
             Assert.IsTrue(printed);
@@ -341,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             // value returned by the printer is the same as the value returned from out test object
             formPrinter.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanForm>())).Returns(false);
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
             Assert.IsFalse(printed);
@@ -363,7 +381,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             // value returned by the printer is the same as the value returned from out test object
             batchPrinter.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanFormBatch>())).Returns(true);
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
             Assert.IsTrue(printed);
@@ -385,10 +403,29 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             // value returned by the printer is the same as the value returned from out test object
             batchPrinter.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanFormBatch>())).Returns(false);
 
-            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms);
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
             Assert.IsFalse(printed);
+        }
+
+        [TestMethod]
+        public void ShipmentCount_DelegatesToShipmentRepository_WhenShipmentCountIsZero_Test()
+        {
+            testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, batchShipmentRepository.Object);
+            int count = testObject.ShipmentCount;
+
+            batchShipmentRepository.Verify(r => r.GetShipmentCount(testObject), Times.Once());
+        }
+
+        [TestMethod]
+        public void ShipmentCount_DoesNotDelegateToShipmentRepository_WhenShipmentCountIsNotZero_Test()
+        {
+
+            // Call the create method, so the shipment count will be initialized
+            testObject.Create(new List<ShipmentEntity> { new ShipmentEntity()});
+            
+            batchShipmentRepository.Verify(r => r.GetShipmentCount(testObject), Times.Never());
         }
     }
 }

@@ -24,6 +24,11 @@ namespace ShipWorks.Shipping.ScanForms
         /// <returns>The total number of shipments associated with the batch.</returns>
         public int GetShipmentCount(ScanFormBatch batch)
         {
+            if (batch == null)
+            {
+                throw new ArgumentNullException("batch");
+            }
+
             ScanFormBatchEntity batchEntity = new ScanFormBatchEntity(batch.BatchId);
             SqlAdapter.Default.FetchEntity(batchEntity);
 

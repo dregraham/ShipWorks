@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new StampsAccountEntity());
 
-            scanFormBatch = new ScanFormBatch(carrierAccount.Object, null);
+            scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
             testObject = new StampsScanFormGateway();
         }

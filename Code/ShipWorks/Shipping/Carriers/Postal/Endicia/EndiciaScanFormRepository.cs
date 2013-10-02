@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
 
                     // Create a general scan form using the data from the Endicia-specific form
-                    ScanFormBatch batch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), scanForms)
+                    ScanFormBatch batch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), scanForms, new DefaultScanFormBatchShipmentRepository())
                     {
                         BatchId = batchEntity.ScanFormBatchID,
                         CreatedDate = batchEntity.CreatedDate,

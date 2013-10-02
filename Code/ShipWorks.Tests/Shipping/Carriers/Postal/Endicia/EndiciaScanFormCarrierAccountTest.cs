@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [TestMethod]
         public void Save_DelegatesToRepository_Test()
         {
-            ScanFormBatch batch = new ScanFormBatch(null, null);
+            ScanFormBatch batch = new ScanFormBatch(null, null, null);
             testObject.Save(batch);
 
             repository.Verify(r => r.Save(batch), Times.Once());

@@ -26,27 +26,18 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         /// <param name="carrierAccount">The carrier account.</param>
         /// <param name="printer">The printer.</param>
-        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer)
-            : this(carrierAccount, printer, new List<ScanForm>(), new DefaultScanFormBatchShipmentRepository())
+        /// <param name="shipmentRepository">The shipment repository to use for finding shipments related to this batch.</param>
+        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, IScanFormBatchShipmentRepository shipmentRepository)
+            : this(carrierAccount, printer, new List<ScanForm>(), shipmentRepository)
         { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScanFormBatch"/> class.
-        /// </summary>
-        /// <param name="carrierAccount">The carrier account.</param>
-        /// <param name="printer">The printer.</param>
-        /// <param name="scanForms">The scan forms.</param>
-        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms)
-            : this(carrierAccount, printer, scanForms, new DefaultScanFormBatchShipmentRepository())
-        { }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanFormBatch" /> class.
         /// </summary>
         /// <param name="carrierAccount">The carrier account.</param>
         /// <param name="printer">The printer.</param>
         /// <param name="scanForms">The scan forms.</param>
-        /// <param name="shipmentRepository">The shipment repository.</param>
+        /// <param name="shipmentRepository">The shipment repository to use for finding shipments related to this batch.</param>
         public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms, IScanFormBatchShipmentRepository shipmentRepository)
         {
             this.scanForms = scanForms;
@@ -141,7 +132,7 @@ namespace ShipWorks.Shipping.ScanForms
 
         /// <summary>
         /// Creates the SCAN form object(s) for the given list of shipments. The SCAN forms
-        /// that are created are aded to the ScanForms list.
+        /// that are created are added to the ScanForms list.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         public void Create(List<ShipmentEntity> shipments)
@@ -173,8 +164,9 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         /// <param name="description">Description of the shipment type</param>
         /// <param name="shipments">Collection of shipments that are associated with this SCAN form</param>
+        /// <param name="entity">The entity.</param>
         /// <param name="image">Image of the actual SCAN form</param>
-        /// <returns></returns>
+        /// <returns>A ScanForm object.</returns>
         public ScanForm CreateScanForm(string description, IEnumerable<ShipmentEntity> shipments, IEntity2 entity, byte[] image)
         {
             ScanForm scanForm = new ScanForm(carrierAccount, BatchId, description, shipments, entity)

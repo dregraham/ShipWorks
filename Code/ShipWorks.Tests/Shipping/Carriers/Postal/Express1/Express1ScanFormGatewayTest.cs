@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new EndiciaAccountEntity());
 
-            scanFormBatch = new ScanFormBatch(carrierAccount.Object, null);
+            scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
             testObject = new Express1EndiciaScanFormGateway();
         }
