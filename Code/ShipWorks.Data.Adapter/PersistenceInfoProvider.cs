@@ -827,7 +827,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RubberStamp3", "RubberStamp3", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 8 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "TransactionID", "TransactionID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RefundFormID", "RefundFormID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanFormID", "ScanFormID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 11 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 11 );
 		}
 		/// <summary>Inits EquaShipAccountEntity's mappings</summary>
 		private void InitEquaShipAccountEntityMappings()
@@ -2407,8 +2407,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "StampsShipmentEntity", "IntegratorTransactionID", "IntegratorTransactionID", false, (int)SqlDbType.UniqueIdentifier, 0, 0, 0, false, "", null, typeof(System.Guid), 4 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "StampsTransactionID", "StampsTransactionID", false, (int)SqlDbType.UniqueIdentifier, 0, 0, 0, false, "", null, typeof(System.Guid), 5 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "Memo", "Memo", false, (int)SqlDbType.NVarChar, 200, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "StampsShipmentEntity", "ScanFormID", "ScanFormID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
-			base.AddElementFieldMapping( "StampsShipmentEntity", "OriginalStampsAccountID", "OriginalStampsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
+			base.AddElementFieldMapping( "StampsShipmentEntity", "OriginalStampsAccountID", "OriginalStampsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
+			base.AddElementFieldMapping( "StampsShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
 		}
 		/// <summary>Inits StatusPresetEntity's mappings</summary>
 		private void InitStatusPresetEntityMappings()

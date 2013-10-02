@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ShipmentFields.Processed == true & ShipmentFields.Voided == false &
 
                 // Has to not have been scanned yet and is for the selected account
-                EndiciaShipmentFields.ScanFormID == DBNull.Value &
+                EndiciaShipmentFields.ScanFormBatchID == DBNull.Value &
                 EndiciaShipmentFields.EndiciaAccountID == accountEntity.EndiciaAccountID &
 
                 // And has to have been processed today.  This will get all shipments that were processed since midnight locally.
