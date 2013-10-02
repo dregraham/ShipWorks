@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="shipments">The shipments.</param>
         /// <param name="scanFormEntity">Actual entity associated with this scan form.</param>
         public ScanForm(IScanFormCarrierAccount account, long batchId, string description, IEnumerable<ShipmentEntity> shipments, IEntity2 scanFormEntity)
-            : this(account, InvalidScanFormId, batchId, description, DateTime.MinValue, shipments == null ? 0 : shipments.Count())
+            : this(account, InvalidScanFormId, batchId, description, DateTime.MinValue)
         {
             Shipments = shipments;
             ScanFormEntity = scanFormEntity;
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="scanFormId">The scan form ID.</param>
         /// <param name="createdDate">The created date.</param>
         /// <param name="shipmentCount">The shipment count.</param>
-        public ScanForm(IScanFormCarrierAccount account, long scanFormId, long batchId, string description, DateTime createdDate, int shipmentCount)
+        public ScanForm(IScanFormCarrierAccount account, long scanFormId, long batchId, string description, DateTime createdDate)
         {
             this.CarrierAccount = account;
             
@@ -61,8 +61,6 @@ namespace ShipWorks.Shipping.ScanForms
 
             ScanFormId = scanFormId;
             CreatedDate = createdDate;
-
-            ShipmentCount = shipmentCount;
         }
 
         /// <summary>
@@ -82,12 +80,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// Gets the created date.
         /// </summary>
         public DateTime CreatedDate { get; set; }
-
-        /// <summary>
-        /// Gets the shipment count.
-        /// </summary>
-        public int ShipmentCount { get; set; }
-
+        
         /// <summary>
         /// Gets the scan form ID.
         /// </summary>

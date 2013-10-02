@@ -476,9 +476,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ScanFormUrl", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipmentCount", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -636,17 +633,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StampsScanFormFieldIndex.ScanFormUrl, true); }
 			set	{ SetValue((int)StampsScanFormFieldIndex.ScanFormUrl, value); }
-		}
-
-		/// <summary> The ShipmentCount property of the Entity StampsScanForm<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "StampsScanForm"."ShipmentCount"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ShipmentCount
-		{
-			get { return (System.Int32)GetValue((int)StampsScanFormFieldIndex.ShipmentCount, true); }
-			set	{ SetValue((int)StampsScanFormFieldIndex.ShipmentCount, value); }
 		}
 
 		/// <summary> The CreatedDate property of the Entity StampsScanForm<br/><br/>

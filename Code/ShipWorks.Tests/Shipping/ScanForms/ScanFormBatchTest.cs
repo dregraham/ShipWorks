@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             gateway = new Mock<IScanFormGateway>();
             gateway.Setup(g => g.CreateScanForms(It.IsAny<ScanFormBatch>(), It.IsAny<IEnumerable<ShipmentEntity>>()))
-                                .Returns((ScanFormBatch form, IEnumerable<ShipmentEntity> shipments) => new List<IEntity2> { new EndiciaScanFormEntity { ShipmentCount = shipments.Count() } });
+                                .Returns((ScanFormBatch form, IEnumerable<ShipmentEntity> shipments) => new List<IEntity2> { new EndiciaScanFormEntity() });
 
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(a => a.GetPrinter()).Returns(formPrinter.Object);

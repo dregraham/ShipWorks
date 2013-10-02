@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             foreach (EndiciaScanFormEntity endiciaForm in endiciaForms)
             {
                 // Create a general scan form using the data from the Endicia-specific form
-                ScanForm scanForm = new ScanForm(carrierAccount, endiciaForm.EndiciaScanFormID, endiciaForm.ScanFormBatchID, endiciaForm.Description, endiciaForm.CreatedDate, endiciaForm.ShipmentCount);
+                ScanForm scanForm = new ScanForm(carrierAccount, endiciaForm.EndiciaScanFormID, endiciaForm.ScanFormBatchID, endiciaForm.Description, endiciaForm.CreatedDate);
                 scanForms.Add(scanForm);
             }
 
@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     foreach (EndiciaScanFormEntity scanFormEntity in endiciaForms)
                     {
-                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.EndiciaScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate, scanFormEntity.ShipmentCount);
+                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.EndiciaScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate);
                         scanForms.Add(scanForm);
                     }
 

@@ -2324,8 +2324,6 @@ namespace ShipWorks.Data.Model
 		SubmissionID,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
-		///<summary>ShipmentCount. </summary>
-		ShipmentCount,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
 		///<summary>Description. </summary>
@@ -7830,8 +7828,6 @@ namespace ShipWorks.Data.Model
 		ScanFormTransactionID,
 		///<summary>ScanFormUrl. </summary>
 		ScanFormUrl,
-		///<summary>ShipmentCount. </summary>
-		ShipmentCount,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
 		///<summary>ScanFormBatchID. </summary>

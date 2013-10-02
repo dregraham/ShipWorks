@@ -72,7 +72,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             scanEntity.EndiciaAccountNumber = accountEntity.AccountNumber;
             scanEntity.SubmissionID = (string) xDocument.Descendants("SubmissionID").Single();
             scanEntity.CreatedDate = DateTime.UtcNow;
-            scanEntity.ShipmentCount = shipments.Count();
             scanEntity.Description = description;
 
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String((string) xDocument.Descendants("SCANForm").Single())))

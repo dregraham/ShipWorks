@@ -479,9 +479,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipmentCount", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -647,17 +644,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)EndiciaScanFormFieldIndex.CreatedDate, true); }
 			set	{ SetValue((int)EndiciaScanFormFieldIndex.CreatedDate, value); }
-		}
-
-		/// <summary> The ShipmentCount property of the Entity EndiciaScanForm<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaScanForm"."ShipmentCount"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ShipmentCount
-		{
-			get { return (System.Int32)GetValue((int)EndiciaScanFormFieldIndex.ShipmentCount, true); }
-			set	{ SetValue((int)EndiciaScanFormFieldIndex.ShipmentCount, value); }
 		}
 
 		/// <summary> The ScanFormBatchID property of the Entity EndiciaScanForm<br/><br/>

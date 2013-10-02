@@ -17,6 +17,9 @@ namespace ShipWorks.Shipping.ScanForms
         private readonly List<ScanForm> scanForms;
         private readonly IScanFormBatchPrinter printer;
         private readonly IScanFormCarrierAccount carrierAccount;
+        private readonly IScanFormBatchShipmentRepository shipmentRepository;
+
+        private int shipmentCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanFormBatch" /> class.
@@ -24,7 +27,17 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="carrierAccount">The carrier account.</param>
         /// <param name="printer">The printer.</param>
         public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer)
-            : this(carrierAccount, printer, new List<ScanForm>())
+            : this(carrierAccount, printer, new List<ScanForm>(), new DefaultScanFormBatchShipmentRepository())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScanFormBatch"/> class.
+        /// </summary>
+        /// <param name="carrierAccount">The carrier account.</param>
+        /// <param name="printer">The printer.</param>
+        /// <param name="scanForms">The scan forms.</param>
+        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms)
+            : this(carrierAccount, printer, scanForms, new DefaultScanFormBatchShipmentRepository())
         { }
 
         /// <summary>
@@ -33,11 +46,15 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="carrierAccount">The carrier account.</param>
         /// <param name="printer">The printer.</param>
         /// <param name="scanForms">The scan forms.</param>
-        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms)
+        /// <param name="shipmentRepository">The shipment repository.</param>
+        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms, IScanFormBatchShipmentRepository shipmentRepository)
         {
             this.scanForms = scanForms;
             this.printer = printer;
             this.carrierAccount = carrierAccount;
+            this.shipmentRepository = shipmentRepository;
+
+            shipmentCount = 0;
         }
 
         /// <summary>
@@ -64,7 +81,21 @@ namespace ShipWorks.Shipping.ScanForms
         /// <value>The shipment count.</value>
         public int ShipmentCount 
         {
-            get { return ScanForms.Sum(f => f.ShipmentCount); }
+            get
+            {
+                if (shipmentCount == 0)
+                {
+                    // Double check with the repository to make sure the shipment count is 
+                    // actually zero. Having zero shipments should never occur in practice.
+                    // The only way the shipment count could be zero is if this batch was
+                    // populated from a previously persisted state where the scan form objects
+                    // no longer have a handle to the shipments they correspond with.
+                    shipmentCount = shipmentRepository.GetShipmentCount(this);
+                }
+
+                return shipmentCount;
+            }
+            private set { shipmentCount = value; }
         }
 
         /// <summary>
@@ -120,6 +151,7 @@ namespace ShipWorks.Shipping.ScanForms
                 // Create batch record
                 CreatedDate = DateTime.UtcNow;
                 ShipmentType = (ShipmentTypeCode)shipments.First().ShipmentType;
+                ShipmentCount = shipments.Count;
 
                 // Obtain the scan form from the carrier API
                 IEnumerable<IEntity2> scanFormEntities = carrierAccount.GetGateway().CreateScanForms(this, shipments);

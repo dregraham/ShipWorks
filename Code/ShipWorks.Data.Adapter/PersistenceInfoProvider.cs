@@ -802,15 +802,14 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits EndiciaScanFormEntity's mappings</summary>
 		private void InitEndiciaScanFormEntityMappings()
 		{
-			base.AddElementMapping( "EndiciaScanFormEntity", "ShipWorksLocal", @"dbo", "EndiciaScanForm", 8 );
+			base.AddElementMapping( "EndiciaScanFormEntity", "ShipWorksLocal", @"dbo", "EndiciaScanForm", 7 );
 			base.AddElementFieldMapping( "EndiciaScanFormEntity", "EndiciaScanFormID", "EndiciaScanFormID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "EndiciaScanFormEntity", "EndiciaAccountID", "EndiciaAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "EndiciaScanFormEntity", "EndiciaAccountNumber", "EndiciaAccountNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "EndiciaScanFormEntity", "SubmissionID", "SubmissionID", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "EndiciaScanFormEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
-			base.AddElementFieldMapping( "EndiciaScanFormEntity", "ShipmentCount", "ShipmentCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
-			base.AddElementFieldMapping( "EndiciaScanFormEntity", "ScanFormBatchID", "ScanFormBatchID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
-			base.AddElementFieldMapping( "EndiciaScanFormEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "EndiciaScanFormEntity", "ScanFormBatchID", "ScanFormBatchID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 5 );
+			base.AddElementFieldMapping( "EndiciaScanFormEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 6 );
 		}
 		/// <summary>Inits EndiciaShipmentEntity's mappings</summary>
 		private void InitEndiciaShipmentEntityMappings()
@@ -2388,15 +2387,14 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits StampsScanFormEntity's mappings</summary>
 		private void InitStampsScanFormEntityMappings()
 		{
-			base.AddElementMapping( "StampsScanFormEntity", "ShipWorksLocal", @"dbo", "StampsScanForm", 8 );
+			base.AddElementMapping( "StampsScanFormEntity", "ShipWorksLocal", @"dbo", "StampsScanForm", 7 );
 			base.AddElementFieldMapping( "StampsScanFormEntity", "StampsScanFormID", "StampsScanFormID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "StampsScanFormEntity", "StampsAccountID", "StampsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "StampsScanFormEntity", "ScanFormTransactionID", "ScanFormTransactionID", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "StampsScanFormEntity", "ScanFormUrl", "ScanFormUrl", false, (int)SqlDbType.VarChar, 2048, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "StampsScanFormEntity", "ShipmentCount", "ShipmentCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
-			base.AddElementFieldMapping( "StampsScanFormEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
-			base.AddElementFieldMapping( "StampsScanFormEntity", "ScanFormBatchID", "ScanFormBatchID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
-			base.AddElementFieldMapping( "StampsScanFormEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "StampsScanFormEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 4 );
+			base.AddElementFieldMapping( "StampsScanFormEntity", "ScanFormBatchID", "ScanFormBatchID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 5 );
+			base.AddElementFieldMapping( "StampsScanFormEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 6 );
 		}
 		/// <summary>Inits StampsShipmentEntity's mappings</summary>
 		private void InitStampsShipmentEntityMappings()

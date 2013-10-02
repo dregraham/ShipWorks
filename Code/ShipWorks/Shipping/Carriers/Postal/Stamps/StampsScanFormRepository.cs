@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             foreach (StampsScanFormEntity stampsForm in stampsForms)
             {
-                ScanForm scanForm = new ScanForm(carrierAccount, stampsForm.StampsScanFormID, stampsForm.ScanFormBatchID, stampsForm.Description, stampsForm.CreatedDate, stampsForm.ShipmentCount);
+                ScanForm scanForm = new ScanForm(carrierAccount, stampsForm.StampsScanFormID, stampsForm.ScanFormBatchID, stampsForm.Description, stampsForm.CreatedDate);
                 scanForms.Add(scanForm);
             }
 
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     foreach (StampsScanFormEntity scanFormEntity in stampsForms)
                     {
-                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.StampsScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate, scanFormEntity.ShipmentCount);
+                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.StampsScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate);
                         scanForms.Add(scanForm);
                     }
 

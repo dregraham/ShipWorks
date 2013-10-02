@@ -38,7 +38,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<EndiciaScanFormEntity> _endiciaScanForms;
+		private EntityCollection<EndiciaShipmentEntity> _endiciaShipment;
 		private EntityCollection<StampsScanFormEntity> _stampsScanForms;
+		private EntityCollection<StampsShipmentEntity> _stampsShipment;
 
 
 
@@ -57,8 +59,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			/// <summary>Member name EndiciaScanForms</summary>
 			public static readonly string EndiciaScanForms = "EndiciaScanForms";
+			/// <summary>Member name EndiciaShipment</summary>
+			public static readonly string EndiciaShipment = "EndiciaShipment";
 			/// <summary>Member name StampsScanForms</summary>
 			public static readonly string StampsScanForms = "StampsScanForms";
+			/// <summary>Member name StampsShipment</summary>
+			public static readonly string StampsShipment = "StampsShipment";
 
 
 		}
@@ -120,7 +126,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_endiciaScanForms = (EntityCollection<EndiciaScanFormEntity>)info.GetValue("_endiciaScanForms", typeof(EntityCollection<EndiciaScanFormEntity>));
+				_endiciaShipment = (EntityCollection<EndiciaShipmentEntity>)info.GetValue("_endiciaShipment", typeof(EntityCollection<EndiciaShipmentEntity>));
 				_stampsScanForms = (EntityCollection<StampsScanFormEntity>)info.GetValue("_stampsScanForms", typeof(EntityCollection<StampsScanFormEntity>));
+				_stampsShipment = (EntityCollection<StampsShipmentEntity>)info.GetValue("_stampsShipment", typeof(EntityCollection<StampsShipmentEntity>));
 
 
 
@@ -164,8 +172,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "EndiciaScanForms":
 					this.EndiciaScanForms.Add((EndiciaScanFormEntity)entity);
 					break;
+				case "EndiciaShipment":
+					this.EndiciaShipment.Add((EndiciaShipmentEntity)entity);
+					break;
 				case "StampsScanForms":
 					this.StampsScanForms.Add((StampsScanFormEntity)entity);
+					break;
+				case "StampsShipment":
+					this.StampsShipment.Add((StampsShipmentEntity)entity);
 					break;
 
 
@@ -194,8 +208,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "EndiciaScanForms":
 					toReturn.Add(ScanFormBatchEntity.Relations.EndiciaScanFormEntityUsingScanFormBatchID);
 					break;
+				case "EndiciaShipment":
+					toReturn.Add(ScanFormBatchEntity.Relations.EndiciaShipmentEntityUsingScanFormBatchID);
+					break;
 				case "StampsScanForms":
 					toReturn.Add(ScanFormBatchEntity.Relations.StampsScanFormEntityUsingScanFormBatchID);
+					break;
+				case "StampsShipment":
+					toReturn.Add(ScanFormBatchEntity.Relations.StampsShipmentEntityUsingScanFormBatchID);
 					break;
 
 
@@ -238,8 +258,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "EndiciaScanForms":
 					this.EndiciaScanForms.Add((EndiciaScanFormEntity)relatedEntity);
 					break;
+				case "EndiciaShipment":
+					this.EndiciaShipment.Add((EndiciaShipmentEntity)relatedEntity);
+					break;
 				case "StampsScanForms":
 					this.StampsScanForms.Add((StampsScanFormEntity)relatedEntity);
+					break;
+				case "StampsShipment":
+					this.StampsShipment.Add((StampsShipmentEntity)relatedEntity);
 					break;
 
 				default:
@@ -260,8 +286,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "EndiciaScanForms":
 					base.PerformRelatedEntityRemoval(this.EndiciaScanForms, relatedEntity, signalRelatedEntityManyToOne);
 					break;
+				case "EndiciaShipment":
+					base.PerformRelatedEntityRemoval(this.EndiciaShipment, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				case "StampsScanForms":
 					base.PerformRelatedEntityRemoval(this.StampsScanForms, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "StampsShipment":
+					base.PerformRelatedEntityRemoval(this.StampsShipment, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 
 				default:
@@ -295,7 +327,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.EndiciaScanForms);
+			toReturn.Add(this.EndiciaShipment);
 			toReturn.Add(this.StampsScanForms);
+			toReturn.Add(this.StampsShipment);
 
 			return toReturn;
 		}
@@ -311,7 +345,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_endiciaScanForms", ((_endiciaScanForms!=null) && (_endiciaScanForms.Count>0) && !this.MarkedForDeletion)?_endiciaScanForms:null);
+				info.AddValue("_endiciaShipment", ((_endiciaShipment!=null) && (_endiciaShipment.Count>0) && !this.MarkedForDeletion)?_endiciaShipment:null);
 				info.AddValue("_stampsScanForms", ((_stampsScanForms!=null) && (_stampsScanForms.Count>0) && !this.MarkedForDeletion)?_stampsScanForms:null);
+				info.AddValue("_stampsShipment", ((_stampsShipment!=null) && (_stampsShipment.Count>0) && !this.MarkedForDeletion)?_stampsShipment:null);
 
 
 
@@ -360,12 +396,32 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'EndiciaShipment' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoEndiciaShipment()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(EndiciaShipmentFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entities of type 'StampsScanForm' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoStampsScanForms()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StampsScanFormFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'StampsShipment' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoStampsShipment()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StampsShipmentFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
 			return bucket;
 		}
 
@@ -400,7 +456,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._endiciaScanForms);
+			collectionsQueue.Enqueue(this._endiciaShipment);
 			collectionsQueue.Enqueue(this._stampsScanForms);
+			collectionsQueue.Enqueue(this._stampsShipment);
 
 		}
 		
@@ -410,7 +468,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._endiciaScanForms = (EntityCollection<EndiciaScanFormEntity>) collectionsQueue.Dequeue();
+			this._endiciaShipment = (EntityCollection<EndiciaShipmentEntity>) collectionsQueue.Dequeue();
 			this._stampsScanForms = (EntityCollection<StampsScanFormEntity>) collectionsQueue.Dequeue();
+			this._stampsShipment = (EntityCollection<StampsShipmentEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -422,7 +482,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return true;
 			}
+			if (this._endiciaShipment != null)
+			{
+				return true;
+			}
 			if (this._stampsScanForms != null)
+			{
+				return true;
+			}
+			if (this._stampsShipment != null)
 			{
 				return true;
 			}
@@ -437,7 +505,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EndiciaScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EndiciaScanFormEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EndiciaShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EndiciaShipmentEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<StampsScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(StampsScanFormEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<StampsShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(StampsShipmentEntityFactory))) : null);
 
 		}
 #endif
@@ -450,7 +520,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
 			toReturn.Add("EndiciaScanForms", _endiciaScanForms);
+			toReturn.Add("EndiciaShipment", _endiciaShipment);
 			toReturn.Add("StampsScanForms", _stampsScanForms);
+			toReturn.Add("StampsShipment", _stampsShipment);
 
 
 			return toReturn;
@@ -463,9 +535,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_endiciaScanForms.ActiveContext = base.ActiveContext;
 			}
+			if(_endiciaShipment!=null)
+			{
+				_endiciaShipment.ActiveContext = base.ActiveContext;
+			}
 			if(_stampsScanForms!=null)
 			{
 				_stampsScanForms.ActiveContext = base.ActiveContext;
+			}
+			if(_stampsShipment!=null)
+			{
+				_stampsShipment.ActiveContext = base.ActiveContext;
 			}
 
 
@@ -477,7 +557,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 			_endiciaScanForms = null;
+			_endiciaShipment = null;
 			_stampsScanForms = null;
+			_stampsShipment = null;
 
 
 
@@ -556,6 +638,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 					(IEntityRelation)GetRelationsForField("EndiciaScanForms")[0], (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, (int)ShipWorks.Data.Model.EntityType.EndiciaScanFormEntity, 0, null, null, null, null, "EndiciaScanForms", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
 			}
 		}
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EndiciaShipment' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathEndiciaShipment
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<EndiciaShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EndiciaShipmentEntityFactory))),
+					(IEntityRelation)GetRelationsForField("EndiciaShipment")[0], (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, (int)ShipWorks.Data.Model.EntityType.EndiciaShipmentEntity, 0, null, null, null, null, "EndiciaShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'StampsScanForm' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -565,6 +658,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return new PrefetchPathElement2( new EntityCollection<StampsScanFormEntity>(EntityFactoryCache2.GetEntityFactory(typeof(StampsScanFormEntityFactory))),
 					(IEntityRelation)GetRelationsForField("StampsScanForms")[0], (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, (int)ShipWorks.Data.Model.EntityType.StampsScanFormEntity, 0, null, null, null, null, "StampsScanForms", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'StampsShipment' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathStampsShipment
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<StampsShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(StampsShipmentEntityFactory))),
+					(IEntityRelation)GetRelationsForField("StampsShipment")[0], (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, (int)ShipWorks.Data.Model.EntityType.StampsShipmentEntity, 0, null, null, null, null, "StampsShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
 			}
 		}
 
@@ -655,6 +759,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
+		/// <summary> Gets the EntityCollection with the related entities of type 'EndiciaShipmentEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(EndiciaShipmentEntity))]
+		public virtual EntityCollection<EndiciaShipmentEntity> EndiciaShipment
+		{
+			get
+			{
+				if(_endiciaShipment==null)
+				{
+					_endiciaShipment = new EntityCollection<EndiciaShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EndiciaShipmentEntityFactory)));
+					_endiciaShipment.SetContainingEntityInfo(this, "ScanFormBatch");
+				}
+				return _endiciaShipment;
+			}
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'StampsScanFormEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
 		[TypeContainedAttribute(typeof(StampsScanFormEntity))]
@@ -668,6 +788,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 					_stampsScanForms.SetContainingEntityInfo(this, "ScanFormBatch");
 				}
 				return _stampsScanForms;
+			}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'StampsShipmentEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(StampsShipmentEntity))]
+		public virtual EntityCollection<StampsShipmentEntity> StampsShipment
+		{
+			get
+			{
+				if(_stampsShipment==null)
+				{
+					_stampsShipment = new EntityCollection<StampsShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(StampsShipmentEntityFactory)));
+					_stampsShipment.SetContainingEntityInfo(this, "ScanFormBatch");
+				}
+				return _stampsShipment;
 			}
 		}
 

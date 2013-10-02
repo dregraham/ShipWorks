@@ -92,7 +92,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsScanFormEntity scanEntity = new StampsScanFormEntity();
                 scanEntity.StampsAccountID = accountEntity.StampsAccountID;
                 scanEntity.CreatedDate = DateTime.UtcNow;
-                scanEntity.ShipmentCount = shipments.Count();
                 scanEntity.ScanFormTransactionID = xDocument.Descendants("TransactionId").ElementAt(i).Value;
                 scanEntity.ScanFormUrl = xDocument.Descendants("Url").ElementAt(i).Value;
                 scanEntity.Description = "Non-cubic shipments";

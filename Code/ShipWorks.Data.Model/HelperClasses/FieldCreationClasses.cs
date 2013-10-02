@@ -4947,11 +4947,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaScanFormFieldIndex.CreatedDate);}
 		}
-		/// <summary>Creates a new EndiciaScanFormEntity.ShipmentCount field instance</summary>
-		public static EntityField2 ShipmentCount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaScanFormFieldIndex.ShipmentCount);}
-		}
 		/// <summary>Creates a new EndiciaScanFormEntity.ScanFormBatchID field instance</summary>
 		public static EntityField2 ScanFormBatchID
 		{
@@ -16641,11 +16636,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ScanFormUrl
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ScanFormUrl);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.ShipmentCount field instance</summary>
-		public static EntityField2 ShipmentCount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ShipmentCount);}
 		}
 		/// <summary>Creates a new StampsScanFormEntity.CreatedDate field instance</summary>
 		public static EntityField2 CreatedDate

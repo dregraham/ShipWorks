@@ -771,7 +771,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaScanFormEntity", "EndiciaAccountNumber", typeof(System.String), false, false, false, false,  (int)EndiciaScanFormFieldIndex.EndiciaAccountNumber, 50, 0, 0);
 			base.AddElementFieldInfo("EndiciaScanFormEntity", "SubmissionID", typeof(System.String), false, false, false, false,  (int)EndiciaScanFormFieldIndex.SubmissionID, 100, 0, 0);
 			base.AddElementFieldInfo("EndiciaScanFormEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)EndiciaScanFormFieldIndex.CreatedDate, 0, 0, 0);
-			base.AddElementFieldInfo("EndiciaScanFormEntity", "ShipmentCount", typeof(System.Int32), false, false, false, false,  (int)EndiciaScanFormFieldIndex.ShipmentCount, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaScanFormEntity", "ScanFormBatchID", typeof(System.Int64), false, true, false, false,  (int)EndiciaScanFormFieldIndex.ScanFormBatchID, 0, 0, 19);
 			base.AddElementFieldInfo("EndiciaScanFormEntity", "Description", typeof(System.String), false, false, false, false,  (int)EndiciaScanFormFieldIndex.Description, 100, 0, 0);
 		}
@@ -789,7 +788,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "RubberStamp3", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RubberStamp3, 300, 0, 0);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "TransactionID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.TransactionID, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "RefundFormID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.RefundFormID, 0, 0, 10);
-			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
+			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)EndiciaShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 		}
 		/// <summary>Inits EquaShipAccountEntity's FieldInfo objects</summary>
 		private void InitEquaShipAccountEntityInfos()
@@ -2264,7 +2263,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsScanFormEntity", "StampsAccountID", typeof(System.Int64), false, false, false, false,  (int)StampsScanFormFieldIndex.StampsAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("StampsScanFormEntity", "ScanFormTransactionID", typeof(System.String), false, false, false, false,  (int)StampsScanFormFieldIndex.ScanFormTransactionID, 100, 0, 0);
 			base.AddElementFieldInfo("StampsScanFormEntity", "ScanFormUrl", typeof(System.String), false, false, false, false,  (int)StampsScanFormFieldIndex.ScanFormUrl, 2048, 0, 0);
-			base.AddElementFieldInfo("StampsScanFormEntity", "ShipmentCount", typeof(System.Int32), false, false, false, false,  (int)StampsScanFormFieldIndex.ShipmentCount, 0, 0, 10);
 			base.AddElementFieldInfo("StampsScanFormEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)StampsScanFormFieldIndex.CreatedDate, 0, 0, 0);
 			base.AddElementFieldInfo("StampsScanFormEntity", "ScanFormBatchID", typeof(System.Int64), false, true, false, false,  (int)StampsScanFormFieldIndex.ScanFormBatchID, 0, 0, 19);
 			base.AddElementFieldInfo("StampsScanFormEntity", "Description", typeof(System.String), false, false, false, false,  (int)StampsScanFormFieldIndex.Description, 100, 0, 0);
@@ -2280,7 +2278,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsShipmentEntity", "StampsTransactionID", typeof(System.Guid), false, false, false, false,  (int)StampsShipmentFieldIndex.StampsTransactionID, 0, 0, 0);
 			base.AddElementFieldInfo("StampsShipmentEntity", "Memo", typeof(System.String), false, false, false, false,  (int)StampsShipmentFieldIndex.Memo, 200, 0, 0);
 			base.AddElementFieldInfo("StampsShipmentEntity", "OriginalStampsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StampsShipmentFieldIndex.OriginalStampsAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StampsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
+			base.AddElementFieldInfo("StampsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)StampsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()

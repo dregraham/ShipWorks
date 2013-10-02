@@ -43,7 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             scanEntity.EndiciaAccountNumber = accountEntity.AccountNumber;
             scanEntity.SubmissionID = (string)xDocument.Descendants("SubmissionID").Single();
             scanEntity.CreatedDate = DateTime.UtcNow;
-            scanEntity.ShipmentCount = shipments.Count();
             scanEntity.Description = "Non-cubic shipments";
 
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String((string)xDocument.Descendants("SCANForm").Single())))
