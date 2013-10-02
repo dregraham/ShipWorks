@@ -169,7 +169,7 @@ namespace ShipWorks.ApplicationCore.Services
                         // Start the timer to periodically checkin
                         checkInTimer = new ThreadTimer(OnCheckInTimerElapsed, null, ServiceStatusManager.CheckInTimeSpan, ServiceStatusManager.CheckInTimeSpan);
                     }
-                    // It's already running, but the SQL config changed - we need to make sure the scheduler is now pointing to the correct database
+                        // It's already running, but the SQL config changed - we need to make sure the scheduler is now pointing to the correct database
                     else if (hasChanged)
                     {
                         OnSqlConfigurationChanged();
@@ -186,6 +186,11 @@ namespace ShipWorks.ApplicationCore.Services
                         sqlSessionMonitorTimer = new ThreadTimer(OnSqlSessionMonitorTimerElapsed, null, sqlMonitorTimespan, sqlMonitorTimespan);
                     }
                 }
+            }
+            catch (InvalidShipWorksDatabaseException ex)
+            {
+                log.Error("Invalid Shipworks Database", ex);
+                Stop();
             }
             finally
             {
