@@ -1243,7 +1243,7 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
-[ScanFormID] [bigint] NULL
+[ScanFormBatchID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'
@@ -3008,8 +3008,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [IntegratorTransactionID] [uniqueidentifier] NOT NULL,
 [StampsTransactionID] [uniqueidentifier] NOT NULL,
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ScanFormID] [bigint] NULL,
-[OriginalStampsAccountID] [bigint] NULL
+[OriginalStampsAccountID] [bigint] NULL,
+[ScanFormBatchID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
