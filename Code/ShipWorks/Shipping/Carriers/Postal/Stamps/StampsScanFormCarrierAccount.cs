@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 ShipmentFields.Processed == true & ShipmentFields.Voided == false &
 
                 // Has to not have been scanned yet and is for the selected account
-                StampsShipmentFields.ScanFormID == DBNull.Value &
+                StampsShipmentFields.ScanFormBatchID == DBNull.Value &
                 StampsShipmentFields.StampsAccountID == accountEntity.StampsAccountID &
 
                 // And has to have been processed today.  This will get all shipments that were processed since midnight locally.

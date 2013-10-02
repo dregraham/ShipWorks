@@ -53,10 +53,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Should have the scan form ID populated now so save the image to the data source
                     DataResourceManager.CreateFromBytes(scanForm.Image, endiciaScanFormEntity.EndiciaScanFormID, "SCAN Form");
 
-                    // Now we have to update each shipment with the scan record ID
+                    // Now we have to update each shipment with the scan form record ID
                     foreach (ShipmentEntity shipment in scanForm.Shipments)
                     {
-                        shipment.Postal.Endicia.ScanFormID = endiciaScanFormEntity.EndiciaScanFormID;
+                        shipment.Postal.Endicia.ScanFormBatchID = batchEntity.ScanFormBatchID;
                         adapter.SaveAndRefetch(shipment.Postal.Endicia);
                     }
                 }

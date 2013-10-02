@@ -2363,8 +2363,8 @@ namespace ShipWorks.Data.Model
 		TransactionID,
 		///<summary>RefundFormID. </summary>
 		RefundFormID,
-		///<summary>ScanFormID. </summary>
-		ScanFormID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7861,10 +7861,10 @@ namespace ShipWorks.Data.Model
 		StampsTransactionID,
 		///<summary>Memo. </summary>
 		Memo,
-		///<summary>ScanFormID. </summary>
-		ScanFormID,
 		///<summary>OriginalStampsAccountID. </summary>
 		OriginalStampsAccountID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}

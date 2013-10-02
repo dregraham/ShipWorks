@@ -487,10 +487,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Memo", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ScanFormID", fieldHashtable);
+			_fieldsCustomProperties.Add("OriginalStampsAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("OriginalStampsAccountID", fieldHashtable);
+			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
 		}
 		#endregion
 
@@ -676,17 +676,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)StampsShipmentFieldIndex.Memo, value); }
 		}
 
-		/// <summary> The ScanFormID property of the Entity StampsShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "StampsShipment"."ScanFormID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ScanFormID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)StampsShipmentFieldIndex.ScanFormID, false); }
-			set	{ SetValue((int)StampsShipmentFieldIndex.ScanFormID, value); }
-		}
-
 		/// <summary> The OriginalStampsAccountID property of the Entity StampsShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "StampsShipment"."OriginalStampsAccountID"<br/>
@@ -696,6 +685,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)StampsShipmentFieldIndex.OriginalStampsAccountID, false); }
 			set	{ SetValue((int)StampsShipmentFieldIndex.OriginalStampsAccountID, value); }
+		}
+
+		/// <summary> The ScanFormBatchID property of the Entity StampsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "StampsShipment"."ScanFormBatchID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ScanFormBatchID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)StampsShipmentFieldIndex.ScanFormBatchID, false); }
+			set	{ SetValue((int)StampsShipmentFieldIndex.ScanFormBatchID, value); }
 		}
 
 
