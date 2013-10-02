@@ -67,6 +67,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
                 // Call the base class for setting default values as needed based on the service/package type of the shipment
                 base.ProcessShipment(shipment);
 
+                UpsOltShipmentValidator upsOltShipmentValidator = new UpsOltShipmentValidator();
+
+                upsOltShipmentValidator.ValidateShipment(shipment);
+
                 UpsServicePackageTypeSetting.Validate(shipment);
                 UpsApiShipClient.ProcessShipment(shipment);
             }
