@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.ScanForms
 {
@@ -22,6 +16,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         /// <param name="batch">The batch.</param>
         /// <returns>The total number of shipments associated with the batch.</returns>
+        /// <exception cref="ShippingException">Thrown when the batch cannot be retrieved from the database.</exception>
         public int GetShipmentCount(ScanFormBatch batch)
         {
             if (batch == null)
@@ -29,10 +24,18 @@ namespace ShipWorks.Shipping.ScanForms
                 throw new ArgumentNullException("batch");
             }
 
-            ScanFormBatchEntity batchEntity = new ScanFormBatchEntity(batch.BatchId);
-            SqlAdapter.Default.FetchEntity(batchEntity);
+            try
+            {
+                ScanFormBatchEntity batchEntity = new ScanFormBatchEntity(batch.BatchId);
+                SqlAdapter.Default.FetchEntity(batchEntity);
 
-            return batchEntity.ShipmentCount;
+                return batchEntity.ShipmentCount;
+            }
+            catch (ORMEntityOutOfSyncException ex)
+            {
+                string message = string.Format("The scan form batch having batch ID {0} has been deleted.", batch.BatchId);
+                throw new ShippingException(message, ex);
+            }   
         }
     }
 }
