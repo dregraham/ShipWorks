@@ -283,7 +283,7 @@ namespace Interapptive.Shared.Data
                 try
                 {
                     SqlCommand truncateCmd = con.CreateCommand();
-                    truncateCmd.CommandText = "TRUNCATE TABLE [" + table;
+                    truncateCmd.CommandText = "TRUNCATE TABLE [" + table + "]";
                     truncateCmd.ExecuteNonQuery();
 
                     return;
