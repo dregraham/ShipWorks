@@ -446,22 +446,34 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 worldship.Qvn1ShipNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
                 worldship.Qvn1DeliveryNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
                 worldship.Qvn1ExceptionNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
-                worldship.Qvn1ContactName = new PersonName(from).FullName;
-                worldship.Qvn1Email = GetWorldShipValidEmail(from.Email);
+                if (ups.EmailNotifySender > 0)
+                {
+                    // Only write this info out if notify sender was selected.  Otherwise, WorldShip fails on hands off.
+                    worldship.Qvn1ContactName = new PersonName(from).FullName;
+                    worldship.Qvn1Email = GetWorldShipValidEmail(from.Email);
+                }
 
                 // Recipient QVN
                 worldship.Qvn2ShipNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
                 worldship.Qvn2DeliveryNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
                 worldship.Qvn2ExceptionNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
-                worldship.Qvn2ContactName = new PersonName(to).FullName;
-                worldship.Qvn2Email = GetWorldShipValidEmail(to.Email);
+                if (ups.EmailNotifyRecipient > 0)
+                {
+                    // Only write this info out if notify recipient was selected.  Otherwise, WorldShip fails on hands off.
+                    worldship.Qvn2ContactName = new PersonName(to).FullName;
+                    worldship.Qvn2Email = GetWorldShipValidEmail(to.Email);
+                }
 
                 // Other QVN
                 worldship.Qvn3ShipNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
                 worldship.Qvn3DeliveryNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
                 worldship.Qvn3ExceptionNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
-                worldship.Qvn3ContactName = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
-                worldship.Qvn3Email = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                if (ups.EmailNotifyOther > 0)
+                {
+                    // Only write this info out if notify other was selected.  Otherwise, WorldShip fails on hands off.
+                    worldship.Qvn3ContactName = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                    worldship.Qvn3Email = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                }
             }
         }
 
