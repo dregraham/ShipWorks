@@ -187,11 +187,6 @@ namespace ShipWorks.ApplicationCore.Services
                     }
                 }
             }
-            catch (InvalidShipWorksDatabaseException ex)
-            {
-                log.Error("Invalid Shipworks Database", ex);
-                Stop();
-            }
             finally
             {
                 Monitor.Exit(timerLock);
@@ -290,6 +285,12 @@ namespace ShipWorks.ApplicationCore.Services
 
                     // This is the only spot we know it was a success
                     lastConfigurationSuccess = true;
+                    return hasChanged;
+                }
+                catch (InvalidShipWorksDatabaseException ex)
+                {
+                    log.Error("Invalid Shipworks Database", ex);
+
                     return hasChanged;
                 }
                 catch (SqlException ex)
