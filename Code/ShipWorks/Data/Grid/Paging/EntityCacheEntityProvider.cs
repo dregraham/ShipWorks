@@ -50,13 +50,13 @@ namespace ShipWorks.Data.Grid.Paging
         }
 
         /// <summary>
-        /// Dipose of resources held by the change tracker
+        /// Dispose of resources held by the change tracker
         /// </summary>
         public void Dispose()
         {
             if (cacheChangeMonitor != null)
             {
-                cacheChangeMonitor.CacheChanged += new EntityCacheChangeMonitoredChangedEventHandler(OnChangeMonitorChangedCache);
+                cacheChangeMonitor.CacheChanged -= new EntityCacheChangeMonitoredChangedEventHandler(OnChangeMonitorChangedCache);
                 cacheChangeMonitor.Dispose();
                 cacheChangeMonitor = null;
             }
