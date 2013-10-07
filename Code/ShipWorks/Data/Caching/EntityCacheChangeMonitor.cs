@@ -42,9 +42,19 @@ namespace ShipWorks.Data.Caching
         public event EntityCacheChangeMonitoredChangedEventHandler CacheChanged;
 
         /// <summary>
-        /// Contruct a new montior that will use the given cache as its backing store
+        /// Construct a new monitor that will use the given cache as its backing store
         /// </summary>
-        public EntityCacheChangeMonitor(EntityCache entityCache, EntityRelationCache relationCache = null, ExecutionMode executionMode = null)
+        public EntityCacheChangeMonitor(EntityCache entityCache, EntityRelationCache relationCache = null)
+            : this(entityCache, relationCache, Program.ExecutionMode)
+        { }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityCacheChangeMonitor"/> class. This is version of the 
+        /// constructor is primarily for integration testing as it allows consumers to provide a specific execution mode
+        /// rather than having the expectation of Program.ExecutionMode being assigned.
+        /// </summary>
+        public EntityCacheChangeMonitor(EntityCache entityCache, EntityRelationCache relationCache, ExecutionMode executionMode)
         {
             if (entityCache == null)
             {
@@ -53,6 +63,8 @@ namespace ShipWorks.Data.Caching
 
             this.entityCache = entityCache;
             this.relationCache = relationCache;
+
+            // Fall back to Program.ExecutionMode if none is provided
             this.executionMode = executionMode ?? Program.ExecutionMode;
 
             // If they were both specified, they have to support the same types

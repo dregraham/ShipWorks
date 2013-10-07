@@ -80,6 +80,12 @@ namespace ShipWorks.Users
         /// </summary>
         public static void InitializeForCurrentDatabase(ExecutionMode executionMode)
         {
+            if (executionMode == null)
+            {
+                // Fall back to use the program's execution mode if none is provided
+                executionMode = Program.ExecutionMode;
+            }
+
             SystemData.InitializeForCurrentDatabase();
 
             // Reset any cached entity data
@@ -93,6 +99,7 @@ namespace ShipWorks.Users
 
             bool wasLoggedIn = (User != null);
 
+            
             Reset();
 
             if (!SqlSession.IsConfigured)
