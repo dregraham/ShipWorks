@@ -74,6 +74,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 case "MSTest-vm":
                     swInstance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
                     break;
+                case "benz-pc":
+                    swInstance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
+                    break;
                 default:
                     throw new ApplicationException("Enter your machine and ShipWorks instance guid in FedExPrototypeFixture()");
             }
