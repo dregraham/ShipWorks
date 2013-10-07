@@ -36,11 +36,15 @@ using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using ShipWorks.Users.Security;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using Moq;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 {   
-    public class FedExPrototypeFixture 
+    public class FedExPrototypeFixture
     {
+        private Mock<ExecutionMode> executionMode;
+
         public FedExPrototypeFixture()
         {
             // Sleep to allow time to attach the debugger to runner.exe if needed
@@ -62,7 +66,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     swInstance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
                     break;
                 case "john-pc":
-                    swInstance = Guid.Parse("{00000000-143F-4C2B-A80F-5CF0E121A909}");
+                    swInstance = Guid.Parse("{358e8025-ba77-43c7-8a4e-66af9860bd2c}");
                     break;
                 case "kevin-pc":
                     swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
@@ -74,6 +78,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     throw new ApplicationException("Enter your machine and ShipWorks instance guid in FedExPrototypeFixture()");
             }
 
+            // Mock an execution mode for the various dependencies that use the execution
+            // mode to determine at whether the UI is running
+            executionMode = new Mock<ExecutionMode>();
+            executionMode.Setup(m => m.IsUIDisplayed).Returns(false);
+            executionMode.Setup(m => m.IsUISupported).Returns(true);
+
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
                 ApplicationCore.ShipWorksSession.Initialize(swInstance);
@@ -82,7 +92,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
                 Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
 
-                DataProvider.InitializeForApplication();
+                DataProvider.InitializeForApplication(executionMode.Object);
                 AuditProcessor.InitializeForApplication();
 
                 FedExAccountManager.InitializeForCurrentSession();
@@ -95,7 +105,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
                 UserManager.InitializeForCurrentUser();
 
-                UserSession.InitializeForCurrentDatabase();
+                UserSession.InitializeForCurrentDatabase(executionMode.Object);
                 UserSession.Logon("shipworks", "shipworks", true);
 
                 ShippingManager.InitializeForCurrentDatabase();

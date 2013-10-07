@@ -9,6 +9,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -71,10 +72,18 @@ namespace ShipWorks.Users
         /// </summary>
         public static void InitializeForCurrentDatabase()
         {
+            InitializeForCurrentDatabase(Program.ExecutionMode);
+        }
+
+        /// <summary>
+        /// One-time initialization of the session overloaded to be used for integration testing purposes.
+        /// </summary>
+        public static void InitializeForCurrentDatabase(ExecutionMode executionMode)
+        {
             SystemData.InitializeForCurrentDatabase();
 
             // Reset any cached entity data
-            DataProvider.InitializeForCurrentDatabase();
+            DataProvider.InitializeForCurrentDatabase(executionMode);
             ShippingManager.InitializeForCurrentDatabase();
 
             // Initialize database scope things
@@ -103,7 +112,7 @@ namespace ShipWorks.Users
                 AcquireDatabaseID();
 
                 // If there is no UI, then we just use the SuperUser
-                if (!Program.ExecutionMode.IsUISupported)
+                if (!executionMode.IsUISupported)
                 {
                     loggedInUser = SuperUser.Instance;
                 }

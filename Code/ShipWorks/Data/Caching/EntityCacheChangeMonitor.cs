@@ -14,6 +14,7 @@ using ShipWorks.Users;
 using ShipWorks.Common.Threading;
 using ShipWorks.ApplicationCore.Interaction;
 using System.Timers;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data.Caching
 {
@@ -30,6 +31,8 @@ namespace ShipWorks.Data.Caching
         ThreadTimer changeMonitorTimer;
         TimeSpan changeMonitorFrequency = TimeSpan.FromSeconds(10);
 
+        private ExecutionMode executionMode;
+
         bool disposed = false;
         object disposedLock = new object();
 
@@ -41,7 +44,7 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Contruct a new montior that will use the given cache as its backing store
         /// </summary>
-        public EntityCacheChangeMonitor(EntityCache entityCache, EntityRelationCache relationCache = null)
+        public EntityCacheChangeMonitor(EntityCache entityCache, EntityRelationCache relationCache = null, ExecutionMode executionMode = null)
         {
             if (entityCache == null)
             {
@@ -50,6 +53,7 @@ namespace ShipWorks.Data.Caching
 
             this.entityCache = entityCache;
             this.relationCache = relationCache;
+            this.executionMode = executionMode ?? Program.ExecutionMode;
 
             // If they were both specified, they have to support the same types
             if (relationCache != null)
@@ -241,7 +245,7 @@ namespace ShipWorks.Data.Caching
 
             busyToken.Dispose();
 
-            if (Program.ExecutionMode.IsUIDisplayed)
+            if (executionMode.IsUIDisplayed)
             {
                 Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
                     {

@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExUSGroundDomestic"),
          DeploymentItem("DataSources\\FedExUSGroundDomestic.xlsx"),
          TestMethod()]
-        [Ignore]
+        //[Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
             FedExUSGroundFixture testObject = new FedExUSGroundFixture();
