@@ -28,6 +28,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExUSGroundDomestic"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
             FedExUSGroundFixture testObject = new FedExUSGroundFixture();
@@ -48,6 +49,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
             FedExUSGroundFixture testObject = new FedExUSGroundFixture();
@@ -68,6 +70,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExSmartPost"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExSmartPost()
         {
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
@@ -88,6 +91,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExExpressInternationalAlcohol()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
@@ -108,6 +112,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExExpressInternational"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
@@ -128,6 +133,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExExpressDomesticAlcohol()
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
@@ -148,6 +154,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExExpressDomestic"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExExpressDomestic()
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
@@ -168,6 +175,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternational testObject = new FedExCAGroundDomesticInternational();
@@ -188,6 +196,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExCanadaExpressInternational"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExCanadaExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
@@ -208,6 +217,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
+        [Ignore]
         public void Ship_FedExCanadaExpressDomestic()
         {
             System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
