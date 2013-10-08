@@ -128,34 +128,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="DataSources\FedExCanadaExpressDomestic.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExCanadaExpressInternational.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExCanadaGroundDomIntl.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExExpressDomestic.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExExpressDomesticAlcohol.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExExpressInternational.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExExpressInternationalAlcohol.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExGroundDomesticAlcohol.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExSmartPost.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSources\FedExUSGroundDomestic.xlsx">
+    <None Include="DataSources\FedExAll.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\iParcel.xlsx">

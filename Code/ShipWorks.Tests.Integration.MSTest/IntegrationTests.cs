@@ -14,13 +14,20 @@ using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.Ups;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
+    /*
+     * To fix the spreadsheet columns
+     *  - Insert a new row at the top
+     *  - Paste the following into every cell in the new first row:   = CONCATENATE(A2, A3, A4,"", "")
+     *  - Insert a new row above the first row of data
+     *  - Copy the VALUES of the row with the forumal and paste the VALUES into the new row
+     *  - Delete the rows above the new value row
+     */
     [TestClass]
     public class IntegrationTests : IntegrationTestBase
     {
         [DataSource("DataSource_Ship_FedExUSGroundDomestic"),
-         DeploymentItem("DataSources\\FedExUSGroundDomestic.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        //[Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
             FedExUSGroundFixture testObject = new FedExUSGroundFixture();
@@ -39,9 +46,8 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol"),
-         DeploymentItem("DataSources\\FedExGroundDomesticAlcohol.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
             FedExUSGroundFixture testObject = new FedExUSGroundFixture();
@@ -60,34 +66,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExSmartPost"),
-         DeploymentItem("DataSources\\FedExSmartPost.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExSmartPost()
         {
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
             try
             {
-                PopulateValues(testObject, this.TestContext.DataRow);
-
-                testObject.Ship();
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                throw;
-            }
-        }
-
-        [DataSource("DataSource_Ship_iParcel"),
-         DeploymentItem("DataSources\\iParcel.xlsx"),
-         TestMethod()]
-        [Ignore]
-        public void Ship_iParcel()
-        {
-            iParcelFixture testObject = new iParcelFixture();
-            try
-            {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -100,14 +86,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol"),
-         DeploymentItem("DataSources\\FedExExpressInternationalAlcohol.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExExpressInternationalAlcohol()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
             try
             {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -120,14 +106,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExExpressInternational"),
-         DeploymentItem("DataSources\\FedExExpressInternational.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
             try
             {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -140,14 +126,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol"),
-         DeploymentItem("DataSources\\FedExExpressDomesticAlcohol.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExExpressDomesticAlcohol()
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
             try
             {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -160,14 +146,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExExpressDomestic"),
-         DeploymentItem("DataSources\\FedExExpressDomestic.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExExpressDomestic()
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
             try
             {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -180,14 +166,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl"),
-         DeploymentItem("DataSources\\FedExCanadaGroundDomIntl.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternational testObject = new FedExCAGroundDomesticInternational();
             try
             {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -200,14 +186,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExCanadaExpressInternational"),
-         DeploymentItem("DataSources\\FedExCanadaExpressInternational.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExCanadaExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
             try
             {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
                 PopulateValues(testObject, this.TestContext.DataRow);
 
                 testObject.Ship();
@@ -220,14 +206,39 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic"),
-         DeploymentItem("DataSources\\FedExCanadaExpressDomestic.xlsx"),
+         DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExCanadaExpressDomestic()
         {
+            System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
             PopulateValues(testObject, this.TestContext.DataRow);
             testObject.Ship();
+        }
+
+
+
+
+
+        [DataSource("DataSource_Ship_iParcel"),
+         DeploymentItem("DataSources\\iParcel.xlsx"),
+         TestMethod()]
+        [Ignore]
+        public void Ship_iParcel()
+        {
+            iParcelFixture testObject = new iParcelFixture();
+            try
+            {
+                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
+                PopulateValues(testObject, this.TestContext.DataRow);
+
+                testObject.Ship();
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                throw;
+            }
         }
 
         [DataSource("DataSource_Ship_UPSRecert"),
@@ -236,6 +247,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [Ignore]
         public void Ship_UPSRecert()
         {
+            System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
             UpsFixture testObject = new UpsFixture();
             PopulateValues(testObject, this.TestContext.DataRow);
             testObject.Ship();
@@ -247,6 +259,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         [Ignore]
         public void Ship_UPSRecert_MI()
         {
+            System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
             UpsMIFixture testObject = new UpsMIFixture();
             PopulateValues(testObject, this.TestContext.DataRow);
             testObject.Ship();
