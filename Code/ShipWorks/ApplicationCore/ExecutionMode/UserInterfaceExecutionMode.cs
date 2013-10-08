@@ -82,9 +82,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // The installer uses this to know the app needs shutdown before the installation can continue.
             appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
 
-#if DEBUG
+            // Make sure overwritten generated code has not changed
             RewriteScanFormMessageAttribute.CheckNecessaryCodeIsInPlace();
-#endif
+
             SingleInstance.Register();
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)

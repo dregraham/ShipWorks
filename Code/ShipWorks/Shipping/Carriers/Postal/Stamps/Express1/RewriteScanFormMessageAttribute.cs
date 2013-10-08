@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Web.Services.Protocols;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
@@ -30,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// attribute on ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CreateScanForm but is generated code
         /// and might get lost, hence the check.
         /// </summary>
+        [Conditional("DEBUG")]
         public static void CheckNecessaryCodeIsInPlace()
         {
             Type stampsWebServiceType = typeof(SwsimV29);
