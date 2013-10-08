@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps {
         
         /// <remarks/>
         public SDCV24Service() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service;
+            this.Url = "https://service.express1.com/Services/SDCV24Service.svc";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
