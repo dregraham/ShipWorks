@@ -77,7 +77,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void InitializeForApplication()
         {
-            InitializeForCurrentDatabase(Program.ExecutionMode);
+            InitializeForApplication(Program.ExecutionMode);
         }
 
         /// <summary>
