@@ -251,6 +251,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                         signatureType = (int) FedExSignatureType.Adult;
                         break;
 
+                    case "SERVICE_DEFAULT":
+                        signatureType = (int)FedExSignatureType.ServiceDefault;
+                        break;
+
                     case "":
                         signatureType = 0;
                         break;

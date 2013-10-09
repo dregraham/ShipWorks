@@ -154,16 +154,17 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExExpressDomestic"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
         public void Ship_FedExExpressDomestic()
         {
-            FedExPrototypeFixture testObject = new FedExPrototypeFixture();
+            FedExPrototypeFixture testObject = new FedExUSGroundFixture();
             try
             {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-
-                if (PopulateTestObject(testObject, null))
+                if (PopulateTestObject(testObject, FedExUsExpressDomesticMapping.UsExpDomesticMapping))
                 {
+                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
+                    
                     testObject.Ship();
                 }
             }

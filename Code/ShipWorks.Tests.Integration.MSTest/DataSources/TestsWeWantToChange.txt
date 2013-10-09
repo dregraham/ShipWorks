@@ -1,0 +1,1 @@
+﻿Since we don't support FEDEX_FIRST_FREIGHT, I would like to skip test 323395.

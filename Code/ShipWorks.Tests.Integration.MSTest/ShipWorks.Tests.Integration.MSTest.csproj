@@ -91,6 +91,7 @@
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExPrototypeFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExSmartPostFixture.cs" />
+    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUsExpressDomesticMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSExpressInternationalFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSGroundFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsMIFixture.cs" />
@@ -130,6 +131,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataSources\TestsWeWantToChange.txt" />
     <Content Include="Utilities\GenerateTestData.sql" />
   </ItemGroup>
   <ItemGroup>
