@@ -11,7 +11,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipulators

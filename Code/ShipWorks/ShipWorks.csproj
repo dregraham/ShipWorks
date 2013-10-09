@@ -5534,7 +5534,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -7417,11 +7417,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -7546,6 +7541,8 @@
     </None>
     <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\TrackService_v6.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\UploadDocumentService_v1.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Wsdl\GlobalShipAddressService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Wsdl\ShipService_v13.wsdl" />
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -7613,6 +7610,21 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\SearchLocationsReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelPendingShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CreatePendingShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\CloseServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseDocumentsReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -7631,26 +7643,11 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CancelPendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CreatePendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessTagReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\Reference.map">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -10642,7 +10639,6 @@
     <None Include="Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Wsdl\RateService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Wsdl\RegistrationService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\ShipService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Wsdl\TrackService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl" />
     <None Include="Stores\Platforms\Magento\shipworks3.php" />
@@ -10728,47 +10724,6 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\VersionCaptureReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelEMailLabelReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelPendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CloseReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CreatePendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessEMailLabelReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ReprintCloseReportsReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -11525,10 +11480,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl</UpdateFromURL>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\ShipService_v13.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\ShipService_v13.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11733,17 +11688,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_RegistrationService_RegistrationService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\ShipService_v7.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\ShipService_v7.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_WebReference_ShipService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl">
       <UrlBehavior>Static</UrlBehavior>
@@ -11974,7 +11918,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -23,7 +23,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Void.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Void.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
 {

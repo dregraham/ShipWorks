@@ -9,7 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping;
 
-using Ship2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using Ship2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Registration2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
 using PackageMovement2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
 

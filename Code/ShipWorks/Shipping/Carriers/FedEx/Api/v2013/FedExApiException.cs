@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ShipWorks.Shipping.Carriers.Api;
 using RegistrationNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.Notification;
-using ShipNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.Notification;
+using ShipNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Notification;
 using RateNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
 using TrackNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Track.Notification;
 using PackageMovementNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement.Notification;

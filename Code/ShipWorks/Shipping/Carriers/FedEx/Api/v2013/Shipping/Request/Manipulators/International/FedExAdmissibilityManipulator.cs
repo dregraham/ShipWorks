@@ -5,7 +5,7 @@ using System.Text;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators.International

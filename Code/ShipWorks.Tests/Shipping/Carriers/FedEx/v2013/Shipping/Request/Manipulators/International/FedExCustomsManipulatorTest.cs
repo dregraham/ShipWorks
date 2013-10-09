@@ -10,7 +10,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using Moq;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;

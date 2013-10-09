@@ -6,7 +6,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using System;

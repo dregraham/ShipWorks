@@ -6,12 +6,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Templates.Tokens;
-using RequestedShipment = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.RequestedShipment;
-using SmartPostAncillaryEndorsementType = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.SmartPostAncillaryEndorsementType;
-using SmartPostIndiciaType = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.SmartPostIndiciaType;
-using SmartPostShipmentDetail = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship.SmartPostShipmentDetail;
+using RequestedShipment = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.RequestedShipment;
+using SmartPostAncillaryEndorsementType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.SmartPostAncillaryEndorsementType;
+using SmartPostIndiciaType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.SmartPostIndiciaType;
+using SmartPostShipmentDetail = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.SmartPostShipmentDetail;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators
 {
