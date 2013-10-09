@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response
         {
             if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(nativeResponse.Notifications);
+                throw new FedExApiCarrierException(nativeResponse.Notifications);
             }
 
             // This should never happen, but our users will let us know if it does

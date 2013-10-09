@@ -1396,7 +1396,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
             // the "basic" rates as well, so the exception is not thrown when a null value is supplied
             Notification[] notifications = new Notification[1] { new Notification { Message = "message"} };
 
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiException(notifications));
+            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiCarrierException(notifications));
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
 
             testObject.GetRates(shipmentEntity);
@@ -1410,7 +1410,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
             // the "basic" rates as well, so the exception is not thrown when a null value is supplied
             Notification[] notifications = new Notification[1] { new Notification { Message = "message" } };
 
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiException(notifications));
+            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiCarrierException(notifications));
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
 
             testObject.GetRates(shipmentEntity);

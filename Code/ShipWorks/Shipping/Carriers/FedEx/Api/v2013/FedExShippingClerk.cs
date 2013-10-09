@@ -611,7 +611,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
                 // Just eat any FedEx exception, so we can still display the basic rates
                 log.Warn("Error getting SmartPost rates: " + ex.Message);
             }
-            catch (FedExApiException ex)
+            catch (FedExApiCarrierException ex)
             {
                 // Just eat the FedEx API exception, so we can still display the basic rates
                 log.Warn("Error getting SmartPost rates: " + ex.Message);

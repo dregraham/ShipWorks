@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.GlobalShipAddress.Respon
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExApiException))]
+        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ErrorThrown_ErrorInReply_Test()
         {
             reply.Notifications = new[]

@@ -1068,7 +1068,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Response\FedExGlobalShipAddressResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExRequestFactory.cs" />
     <Compile Include="Shipping\Api\ICarrierResponseFactory.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExApiException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExApiCarrierException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExShipmentTokenProcessor.cs" />
     <Compile Include="Shipping\Api\IShippingClerk.cs" />

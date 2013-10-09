@@ -63,13 +63,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Response
         /// <summary>
         /// Verifies the response from carrier
         /// </summary>
-        /// <exception cref="FedExApiException"></exception>
+        /// <exception cref="FedExApiCarrierException"></exception>
         /// <exception cref="CarrierException">No locations found.</exception>
         private void Verify()
         {
             if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(nativeResponse.Notifications);
+                throw new FedExApiCarrierException(nativeResponse.Notifications);
             }
 
             if (nativeResponse.ResultsReturned == "0")

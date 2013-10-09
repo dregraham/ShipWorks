@@ -60,12 +60,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Registration.Response
         /// <summary>
         /// Performs any processing required based on the response from the carrier.
         /// </summary>
-        /// <exception cref="FedExApiException"></exception>
+        /// <exception cref="FedExApiCarrierException"></exception>
         public void Process()
         {
             if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(nativeResponse.Notifications);
+                throw new FedExApiCarrierException(nativeResponse.Notifications);
             }
 
             // Save the user name and password from the response back to the shipping settings

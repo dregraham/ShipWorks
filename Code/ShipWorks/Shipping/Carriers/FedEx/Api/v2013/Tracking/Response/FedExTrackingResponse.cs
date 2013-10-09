@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Response
             // Check for errors
             if (trackingReply.HighestSeverity == NotificationSeverityType.ERROR || trackingReply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(trackingReply.Notifications);
+                throw new FedExApiCarrierException(trackingReply.Notifications);
             }
           
             foreach (IFedExTrackingResponseManipulator manipulator in manipulators)

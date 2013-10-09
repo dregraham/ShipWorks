@@ -22,12 +22,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
     /// Exception occured that FedEx returned a non Soap-fault error to
     /// </summary>
     [Serializable]
-    public class FedExApiException : CarrierException
+    public class FedExApiCarrierException : CarrierException
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(ShipNotification[] notifications)
+        public FedExApiCarrierException(ShipNotification[] notifications)
             : base(GenerateMessage(GetOneError(notifications.Select(x=> new KeyValuePair<string,string>(x.Code,x.Message)))))
         {
         }
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(RegistrationNotification[] notifications)
+        public FedExApiCarrierException(RegistrationNotification[] notifications)
             :base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(TrackNotification2013[] notifications)
+        public FedExApiCarrierException(TrackNotification2013[] notifications)
             : base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(PackageMovementNotification[] notifications)
+        public FedExApiCarrierException(PackageMovementNotification[] notifications)
             : base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(GlobalShipAddressNotification[] notifications)
+        public FedExApiCarrierException(GlobalShipAddressNotification[] notifications)
             : base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(CloseNotification2013[] notifications)
+        public FedExApiCarrierException(CloseNotification2013[] notifications)
                 :base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(RateNotification2013[] notifications)
+        public FedExApiCarrierException(RateNotification2013[] notifications)
             : base(GenerateMessage(GetOneError(notifications.Select(x=> new KeyValuePair<string,string>(x.Code,x.Message)))))
         {
         }

@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Close.Response
             // Check for errors
             if (smartPostCloseReply.HighestSeverity == NotificationSeverityType.ERROR || smartPostCloseReply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(smartPostCloseReply.Notifications);
+                throw new FedExApiCarrierException(smartPostCloseReply.Notifications);
             }
 
             // There are items to process so create a new close entity

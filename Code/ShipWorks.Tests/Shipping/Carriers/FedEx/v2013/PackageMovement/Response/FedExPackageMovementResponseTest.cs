@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.PackageMovement.Response
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExApiException))]
+        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ExceptionWillBeThrown_ReplyWillContainErrorInHighestSeverity_Test()
         {
             reply.HighestSeverity=NotificationSeverityType.FAILURE;

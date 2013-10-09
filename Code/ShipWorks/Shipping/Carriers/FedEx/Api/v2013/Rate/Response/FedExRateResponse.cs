@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Rate.Response
             // Nothing really to process within the response other than checking for any errors 
             if (rateReply.HighestSeverity == NotificationSeverityType.ERROR || rateReply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(rateReply.Notifications);
+                throw new FedExApiCarrierException(rateReply.Notifications);
             }
 
             if (rateReply.RateReplyDetails == null)

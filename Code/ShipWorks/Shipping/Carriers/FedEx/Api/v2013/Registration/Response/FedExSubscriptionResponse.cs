@@ -48,12 +48,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Registration.Response
         /// Performs any processing required based on the response from the carrier. FedEx will supply a meter number
         /// for the account; this value is saved back to the account entity in the original request.
         /// </summary>
-        /// <exception cref="FedExApiException"></exception>
+        /// <exception cref="FedExApiCarrierException"></exception>
         public void Process()
         {
             if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(nativeResponse.Notifications);
+                throw new FedExApiCarrierException(nativeResponse.Notifications);
             }
 
             // Save the meter number back to the account in the original request

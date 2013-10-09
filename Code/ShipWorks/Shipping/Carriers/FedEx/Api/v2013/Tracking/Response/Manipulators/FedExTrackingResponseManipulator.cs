@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Response.Manipula
 
             if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(reply.Notifications);
+                throw new FedExApiCarrierException(reply.Notifications);
             }
 
             if (reply.TrackDetails == null || reply.TrackDetails.Length == 0)

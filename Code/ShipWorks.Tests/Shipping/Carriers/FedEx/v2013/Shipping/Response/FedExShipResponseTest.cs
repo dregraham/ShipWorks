@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Response
             {
                 testObject.Process();
             }
-            catch (FedExApiException ex)
+            catch (FedExApiCarrierException ex)
             {
                 Assert.IsTrue(ex.Message.Contains("TestFailure"));
             }

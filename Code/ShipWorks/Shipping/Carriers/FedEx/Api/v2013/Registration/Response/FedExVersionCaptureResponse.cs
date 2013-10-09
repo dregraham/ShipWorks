@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Registration.Response
         {
             if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(reply.Notifications);
+                throw new FedExApiCarrierException(reply.Notifications);
             }
         }
 

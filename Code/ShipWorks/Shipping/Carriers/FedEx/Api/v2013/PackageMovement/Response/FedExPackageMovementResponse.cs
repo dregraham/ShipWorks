@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Response
         {
             if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                throw new FedExApiException(nativeResponse.Notifications);
+                throw new FedExApiCarrierException(nativeResponse.Notifications);
             }
         }
 

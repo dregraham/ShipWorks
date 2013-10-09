@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Tracking.Response.Manipu
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExApiException))]
+        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsError_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Tracking.Response.Manipu
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExApiException))]
+        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsFailure_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;

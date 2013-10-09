@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Close.Response
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExApiException))]
+        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.ERROR;
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Close.Response
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExApiException))]
+        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.FAILURE;
