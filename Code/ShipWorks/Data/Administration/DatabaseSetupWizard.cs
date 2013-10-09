@@ -425,6 +425,25 @@ namespace ShipWorks.Data.Administration
                 sqlInstanceChooseDatabase = true;
                 e.NextPage = wizardPageSelectSqlServerInstance;
             }
+            else if (radioRestoreBackupLocalDb.Checked)
+            {
+                e.NextPage = wizardPageRestoreOption;
+            }
+            else
+            {
+                e.NextPage = wizardPageUpgradeLocalDb;
+            }
+        }
+
+        /// <summary>
+        /// Show advanced options on the choose wisely page
+        /// </summary>
+        private void OnManageLocalDbAdvancedOptions(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            linkAdvancedOptionsLocalDb.Visible = false;
+
+            radioRestoreBackupLocalDb.Visible = true;
+            radioRestoreBackupLocalDb.Top = linkAdvancedOptionsLocalDb.Top;
         }
 
         #endregion
@@ -614,6 +633,18 @@ namespace ShipWorks.Data.Administration
             {
                 // Force new option
                 radioRestoreIntoNewDatabase.Checked = true;
+            }
+            else
+            {
+                // If it's local DB, then we can't allow the option to restore into a new database
+                if (SqlSession.Current.Configuration.IsLocalDb())
+                {
+                    radioRestoreIntoCurrent.Checked = true;
+
+                    // And we just automatically move on
+                    e.Skip = true;
+                    e.RaiseStepEventWhenSkipping = true;
+                }
             }
         }
         

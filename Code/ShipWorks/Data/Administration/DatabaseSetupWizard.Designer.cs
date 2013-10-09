@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer3 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DatabaseSetupWizard));
             this.wizardPageChooseWisely2012 = new ShipWorks.UI.Wizard.WizardPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -122,7 +122,7 @@ namespace ShipWorks.Data.Administration
             this.labelBackupFile = new System.Windows.Forms.Label();
             this.wizardPageRestoreOption = new ShipWorks.UI.Wizard.WizardPage();
             this.label12 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
+            this.labelRestoreIntoNewDatabase = new System.Windows.Forms.Label();
             this.radioRestoreIntoNewDatabase = new System.Windows.Forms.RadioButton();
             this.radioRestoreIntoCurrent = new System.Windows.Forms.RadioButton();
             this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -149,6 +149,8 @@ namespace ShipWorks.Data.Administration
             this.pictureBoxConnectRunningDatabase = new System.Windows.Forms.PictureBox();
             this.labelSetupNewDatabase = new System.Windows.Forms.Label();
             this.wizardPageManageLocalDb = new ShipWorks.UI.Wizard.WizardPage();
+            this.linkAdvancedOptionsLocalDb = new System.Windows.Forms.LinkLabel();
+            this.radioRestoreBackupLocalDb = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.linkHelpEnableRemote = new ShipWorks.UI.Controls.LinkControl();
             this.labelLocalDbEnableRemote2 = new System.Windows.Forms.Label();
@@ -231,7 +233,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageSelectSqlServerInstance);
+            this.mainPanel.Controls.Add(this.wizardPageRestoreOption);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -597,7 +599,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabses.ImageTextSeparation = 1;
             this.gridDatabses.Location = new System.Drawing.Point(22, 46);
             this.gridDatabses.Name = "gridDatabses";
-            this.gridDatabses.Renderer = windowsXPRenderer2;
+            this.gridDatabses.Renderer = windowsXPRenderer3;
             this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
             this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
@@ -1228,7 +1230,7 @@ namespace ShipWorks.Data.Administration
             // wizardPageRestoreOption
             // 
             this.wizardPageRestoreOption.Controls.Add(this.label12);
-            this.wizardPageRestoreOption.Controls.Add(this.label15);
+            this.wizardPageRestoreOption.Controls.Add(this.labelRestoreIntoNewDatabase);
             this.wizardPageRestoreOption.Controls.Add(this.radioRestoreIntoNewDatabase);
             this.wizardPageRestoreOption.Controls.Add(this.radioRestoreIntoCurrent);
             this.wizardPageRestoreOption.Description = "Choose where the database will be restored to.";
@@ -1251,14 +1253,14 @@ namespace ShipWorks.Data.Administration
             this.label12.TabIndex = 11;
             this.label12.Text = "All of the data in the current database will be overwritten.";
             // 
-            // label15
+            // labelRestoreIntoNewDatabase
             // 
-            this.label15.ForeColor = System.Drawing.Color.DimGray;
-            this.label15.Location = new System.Drawing.Point(43, 77);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(406, 15);
-            this.label15.TabIndex = 18;
-            this.label15.Text = "Select this option to create a new ShipWorks database to load the backup into.";
+            this.labelRestoreIntoNewDatabase.ForeColor = System.Drawing.Color.DimGray;
+            this.labelRestoreIntoNewDatabase.Location = new System.Drawing.Point(43, 77);
+            this.labelRestoreIntoNewDatabase.Name = "labelRestoreIntoNewDatabase";
+            this.labelRestoreIntoNewDatabase.Size = new System.Drawing.Size(406, 15);
+            this.labelRestoreIntoNewDatabase.TabIndex = 18;
+            this.labelRestoreIntoNewDatabase.Text = "Select this option to create a new ShipWorks database to load the backup into.";
             // 
             // radioRestoreIntoNewDatabase
             // 
@@ -1266,10 +1268,10 @@ namespace ShipWorks.Data.Administration
             this.radioRestoreIntoNewDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioRestoreIntoNewDatabase.Location = new System.Drawing.Point(23, 57);
             this.radioRestoreIntoNewDatabase.Name = "radioRestoreIntoNewDatabase";
-            this.radioRestoreIntoNewDatabase.Size = new System.Drawing.Size(188, 17);
+            this.radioRestoreIntoNewDatabase.Size = new System.Drawing.Size(187, 17);
             this.radioRestoreIntoNewDatabase.TabIndex = 13;
             this.radioRestoreIntoNewDatabase.TabStop = true;
-            this.radioRestoreIntoNewDatabase.Text = "Restore into a New Database";
+            this.radioRestoreIntoNewDatabase.Text = "Restore into a new database";
             this.radioRestoreIntoNewDatabase.UseVisualStyleBackColor = true;
             // 
             // radioRestoreIntoCurrent
@@ -1279,10 +1281,10 @@ namespace ShipWorks.Data.Administration
             this.radioRestoreIntoCurrent.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioRestoreIntoCurrent.Location = new System.Drawing.Point(23, 8);
             this.radioRestoreIntoCurrent.Name = "radioRestoreIntoCurrent";
-            this.radioRestoreIntoCurrent.Size = new System.Drawing.Size(224, 17);
+            this.radioRestoreIntoCurrent.Size = new System.Drawing.Size(222, 17);
             this.radioRestoreIntoCurrent.TabIndex = 0;
             this.radioRestoreIntoCurrent.TabStop = true;
-            this.radioRestoreIntoCurrent.Text = "Restore over the Current Database";
+            this.radioRestoreIntoCurrent.Text = "Restore over the current database";
             this.radioRestoreIntoCurrent.UseVisualStyleBackColor = true;
             // 
             // openBackupFileDialog
@@ -1510,6 +1512,8 @@ namespace ShipWorks.Data.Administration
             // 
             // wizardPageManageLocalDb
             // 
+            this.wizardPageManageLocalDb.Controls.Add(this.linkAdvancedOptionsLocalDb);
+            this.wizardPageManageLocalDb.Controls.Add(this.radioRestoreBackupLocalDb);
             this.wizardPageManageLocalDb.Controls.Add(this.label2);
             this.wizardPageManageLocalDb.Controls.Add(this.linkHelpEnableRemote);
             this.wizardPageManageLocalDb.Controls.Add(this.labelLocalDbEnableRemote2);
@@ -1527,6 +1531,29 @@ namespace ShipWorks.Data.Administration
             this.wizardPageManageLocalDb.TabIndex = 0;
             this.wizardPageManageLocalDb.Title = "Database Configuration";
             this.wizardPageManageLocalDb.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextManageLocalDb);
+            // 
+            // linkAdvancedOptionsLocalDb
+            // 
+            this.linkAdvancedOptionsLocalDb.AutoSize = true;
+            this.linkAdvancedOptionsLocalDb.Location = new System.Drawing.Point(22, 151);
+            this.linkAdvancedOptionsLocalDb.Name = "linkAdvancedOptionsLocalDb";
+            this.linkAdvancedOptionsLocalDb.Size = new System.Drawing.Size(121, 13);
+            this.linkAdvancedOptionsLocalDb.TabIndex = 56;
+            this.linkAdvancedOptionsLocalDb.TabStop = true;
+            this.linkAdvancedOptionsLocalDb.Text = "Show advanced options";
+            this.linkAdvancedOptionsLocalDb.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnManageLocalDbAdvancedOptions);
+            // 
+            // radioRestoreBackupLocalDb
+            // 
+            this.radioRestoreBackupLocalDb.AutoSize = true;
+            this.radioRestoreBackupLocalDb.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioRestoreBackupLocalDb.Location = new System.Drawing.Point(23, 172);
+            this.radioRestoreBackupLocalDb.Name = "radioRestoreBackupLocalDb";
+            this.radioRestoreBackupLocalDb.Size = new System.Drawing.Size(210, 17);
+            this.radioRestoreBackupLocalDb.TabIndex = 55;
+            this.radioRestoreBackupLocalDb.Text = "Restore a ShipWorks database backup";
+            this.radioRestoreBackupLocalDb.UseVisualStyleBackColor = true;
+            this.radioRestoreBackupLocalDb.Visible = false;
             // 
             // label2
             // 
@@ -1844,7 +1871,7 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.RadioButton radioRestoreIntoCurrent;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.RadioButton radioRestoreIntoNewDatabase;
-        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label labelRestoreIntoNewDatabase;
         private ShipWorks.UI.Controls.PathTextBox backupFile;
         private System.Windows.Forms.Button browseForBackupFile;
         private System.Windows.Forms.Label labelBackupFile;
@@ -1947,5 +1974,7 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.PictureBox searchSqlServersPicture;
         private System.Windows.Forms.Label searchSqlServersLabel;
         private System.Windows.Forms.Panel panelSearchSqlServers;
+        private System.Windows.Forms.LinkLabel linkAdvancedOptionsLocalDb;
+        private System.Windows.Forms.RadioButton radioRestoreBackupLocalDb;
     }
 }
