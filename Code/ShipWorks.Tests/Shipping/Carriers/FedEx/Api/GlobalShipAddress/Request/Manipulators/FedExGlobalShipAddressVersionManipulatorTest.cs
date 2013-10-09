@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((SearchLocationsRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(1, version.Major);
+            Assert.AreEqual(2, version.Major);
         }
 
         [TestMethod]
