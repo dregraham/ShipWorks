@@ -1058,7 +1058,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExShipmentTokenProcessor.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExShippingClerk.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExSoapException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExSoapCarrierException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\FedExGlobalShipAddressRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressClientDetailManipulator.cs" />

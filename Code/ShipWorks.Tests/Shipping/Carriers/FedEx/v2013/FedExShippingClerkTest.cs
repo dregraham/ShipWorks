@@ -387,7 +387,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExSoapException))]
+        [ExpectedException(typeof(FedExSoapCarrierException))]
         public void Ship_CatchesSoapException_AndThrowsFedExSoapException_Test()
         {
             // Setup the ship request to throw a soap exception
@@ -585,7 +585,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExSoapException))]
+        [ExpectedException(typeof(FedExSoapCarrierException))]
         public void CloseGround_CatchesSoapException_AndThrowsFedExSoapException_Test()
         {
             groundCloseRequest.Setup(r => r.Submit()).Throws(new SoapException());
@@ -709,7 +709,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExSoapException))]
+        [ExpectedException(typeof(FedExSoapCarrierException))]
         public void CloseSmartPost_CatchesSoapException_AndThrowsFedExSoapException_Test()
         {
             smartPostCloseRequest.Setup(r => r.Submit()).Throws(new SoapException());
@@ -898,7 +898,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FedExSoapException))]
+        [ExpectedException(typeof(FedExSoapCarrierException))]
         public void RegisterAccount_CatchesSoapException_AndThrowsFedExSoapException_Test()
         {
             // Just throw a soap exception
@@ -917,7 +917,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
                 testObject.RegisterAccount(new FedExAccountEntity());
             }
-            catch (FedExSoapException)
+            catch (FedExSoapCarrierException)
             {}
 
             finally
@@ -1246,7 +1246,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
         }
         
         [TestMethod]
-        [ExpectedException(typeof(FedExSoapException))]
+        [ExpectedException(typeof(FedExSoapCarrierException))]
         public void GetRates_CatchesSoapException_AndThrowsFedExSoapException_Test()
         {
             // Just throw a soap exception
@@ -1265,7 +1265,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 
                 testObject.GetRates(shipmentEntity);
             }
-            catch (FedExSoapException)
+            catch (FedExSoapCarrierException)
             { }
 
             finally

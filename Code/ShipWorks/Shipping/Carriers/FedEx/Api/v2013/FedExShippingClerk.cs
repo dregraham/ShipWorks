@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// entity accordingly.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <exception cref="FedExSoapException"></exception>
+        /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
         public void Ship(ShipmentEntity shipmentEntity)
         {
@@ -316,7 +316,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A FedExEndOfDayCloseEntity object containing the details of each closing; a null value is returned if there weren't any shipments closed.</returns>
-        /// <exception cref="FedExSoapException"></exception>
+        /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException">An error occurred while closing ground shipments.</exception>
         public FedExEndOfDayCloseEntity CloseGround(FedExAccountEntity account)
         {
@@ -354,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A FedExEndOfDayCloseEntity object containing the details of each closing; a null value is returned if there weren't any shipments closed.</returns>
-        /// <exception cref="FedExSoapException"></exception>
+        /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException">An error occurred while closing ground shipments.</exception>
         public FedExEndOfDayCloseEntity CloseSmartPost(FedExAccountEntity account)
         {
@@ -739,7 +739,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             if (exception is SoapException)
             {
                 log.Error(exception.Message);
-                return new FedExSoapException(exception as SoapException);
+                return new FedExSoapCarrierException(exception as SoapException);
             }
             else if (exception is CarrierException)
             {

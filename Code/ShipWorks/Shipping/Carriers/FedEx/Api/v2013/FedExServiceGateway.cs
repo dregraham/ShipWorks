@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// The ProcessShipmentReply receivied from FedEx.
         /// </returns>
         /// <exception cref="System.ArgumentException">nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.</exception>
-        /// <exception cref="FedExSoapException"></exception>
+        /// <exception cref="FedExSoapCarrierException"></exception>
         public IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest)
         {
             try
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// <summary>
         /// Communicates with FedEx getting drop off locations near the destination address.
         /// </summary>
-        /// <exception cref="FedExSoapException"></exception>
+        /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
         public SearchLocationsReply GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest)
         {
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
         /// </summary>
         /// <param name="groundCloseRequest">The ground close request.</param>
         /// <returns>The GroundCloseReply recevied from FedEx.</returns>
-        /// <exception cref="FedExSoapException"></exception>
+        /// <exception cref="FedExSoapCarrierException"></exception>
         public GroundCloseReply Close(GroundCloseRequest groundCloseRequest)
         {
             try
@@ -215,7 +215,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -285,7 +285,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -321,7 +321,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -356,7 +356,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
@@ -434,7 +434,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapException(ex);
+                throw new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
