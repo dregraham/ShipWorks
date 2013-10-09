@@ -1,6 +1,6 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Response
 {

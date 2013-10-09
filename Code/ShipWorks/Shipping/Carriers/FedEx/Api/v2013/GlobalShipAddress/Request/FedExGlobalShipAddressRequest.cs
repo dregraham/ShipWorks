@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Request

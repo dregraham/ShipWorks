@@ -18,7 +18,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate;
 using ShipWorks.Shipping.Tracking;
 using log4net;

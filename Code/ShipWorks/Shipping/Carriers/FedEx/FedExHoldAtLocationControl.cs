@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using System.Collections.Generic;
 

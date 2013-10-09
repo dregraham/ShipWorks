@@ -3945,7 +3945,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration
     }
 }		
 
-namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress
+namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging

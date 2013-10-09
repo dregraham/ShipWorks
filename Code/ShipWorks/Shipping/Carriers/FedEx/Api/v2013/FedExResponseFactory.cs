@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Void.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Close;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Close.Response.Manipulators;
