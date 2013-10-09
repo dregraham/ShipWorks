@@ -24,55 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiException(ShipNotification[] notifications)
-        {
-            GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExApiException(RegistrationNotification[] notifications)
-        {
-            GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExApiException(RateNotification[] notifications)
-        {
-            GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExApiException(TrackNotification[] notifications)
-        {
-            GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExApiException(PackageMovementNotification[] notifications)
-        {
-            GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public FedExApiException(AddressValidationNotification[] notifications)
-        {
-            GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExApiException(CloseNotification[] notifications)
         {
             GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
         }

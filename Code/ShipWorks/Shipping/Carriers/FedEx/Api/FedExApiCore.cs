@@ -76,18 +76,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Acquire the user credentials to use.  Only one set of user-credentials is needed per shipworks install.
-        /// </summary>
-        public static T GetUserCredentials<T>() where T: new()
-        {
-            T credential = new T();
-
-            FillUserCredentials(credential);
-
-            return credential;
-        }
-
-        /// <summary>
         /// Fill the given user credentials object
         /// </summary>
         private static object FillUserCredentials(object credential)
