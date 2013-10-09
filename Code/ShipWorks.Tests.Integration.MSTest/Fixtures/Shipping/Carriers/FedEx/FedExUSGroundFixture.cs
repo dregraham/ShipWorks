@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
@@ -12,38 +13,55 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 {
     public class FedExUSGroundFixture : FedExInternationalPrototypeFixture
     {
-        public string PackageDangerousGoodsDetail { get; set; }
-        public string HazardProperShippingName { get; set; }
+        public string CustomsRegulatoryControls { get; set; }
+        public string DangerCounts { get; set; }
+        public string DangerEmergencyContactNumber { get; set; }
+        public string DangerOfferor { get; set; }
+        public string DangerUnits { get; set; }
+        public string EMailNotificationRecipientType { get; set; } // varies between recipient, shipper, broker, and other
         public string HazardClass { get; set; }
         public string HazardDescriptionID { get; set; }
         public string HazardousPackingGroup { get; set; }
+        public string HazardProperShippingName { get; set; }
         public string HazardQuantityAmount { get; set; }
         public string HazardQuantityUnits { get; set; }
-        public string DangerEmergencyContactNumber { get; set; }
-        public string DangerOfferor { get; set; }
-        public string DangerCounts { get; set; }
-        public string DangerUnits { get; set; }
-
-        public string PackageSignatureOptionType { get; set; }
-        public string HomeDeliveryPremiumType { get; set; }
         public string HomeDeliveryDate { get; set; }
         public string HomeDeliveryPhoneNumber { get; set; }
-
-        public string EMailNotificationRecipientType { get; set; } // varies between recipient, shipper, broker, and other
-        public string NotifyEMailAddress { get; set; } //always abc@xyx
-        public string NotifyOnDelivery { get; set; } // always false
-        public string NotifyEmailFormat { get; set; } // always html
-        public string NotifyEmailLanguageCode { get; set; }  // always en
-
-        public string NaftaPreferenceCriterion { get; set; }  
-        public string NaftaProducerDetermination { get; set; }
-        public string NaftaProducerId { get; set; }  
-        public string NaftaNetCostMethod { get; set; }
+        public string HomeDeliveryPremiumType { get; set; }
         public string NaftaCostDateBegins { get; set; }  // always blank
         public string NaftaCostDateEnds { get; set; }  // always blank
-        public string CustomsRegulatoryControls { get; set; }
-
+        public string NaftaNetCostMethod { get; set; }
+        public string NaftaPreferenceCriterion { get; set; }
+        public string NaftaProducerDetermination { get; set; }
+        public string NaftaProducerId { get; set; }
+        public string NotifyEMailAddress { get; set; } //always abc@xyx
+        public string NotifyEmailFormat { get; set; } // always html
+        public string NotifyEmailLanguageCode { get; set; }  // always en
+        public string NotifyOnDelivery { get; set; } // always false
+        public string PackageDangerousGoodsDetail { get; set; }
         public string PackageLineItemDimensionUnits { get; set; }
+        public string PackageSignatureOptionType { get; set; }
+
+        //public FedExUSGroundFixture(TestContext testContext)
+        //{
+        //    DataRow testDataRow = testContext.DataRow;
+        //    int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
+        //    System.Diagnostics.Debug.WriteLine(rowIndex);
+
+        //    if (rowIndex == 0)
+        //    {
+        //        List<ColumnPropertyMapDefinition> columnPropertyMap = FedExUSGroundFixture.UsGroundDomesticMapping;
+        //        IntegrationTestBase.PopulateTranslationMap(testContext.DataConnection.Database, "US Grn Dom", columnPropertyMap);
+        //        return;
+        //    }
+        //    else if (rowIndex == 1)
+        //    {
+        //        return;
+        //    }
+
+        //    IntegrationTestBase.PopulateValues(this, testDataRow, FedExUSGroundFixture.UsGroundDomesticMapping);
+        //    this.IsPopulated = true;
+        //}
 
         /// <summary>
         /// Creates the shipment.
@@ -333,6 +351,133 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             }
 
             return unitInt;
+        }
+
+        private static List<ColumnPropertyMapDefinition> usGroundDomesticMapping = new List<ColumnPropertyMapDefinition>();
+        public static List<ColumnPropertyMapDefinition> UsGroundDomesticMapping
+        {
+            get
+            {
+                if (usGroundDomesticMapping == null || usGroundDomesticMapping.Count == 0)
+                {
+                    usGroundDomesticMapping = new List<ColumnPropertyMapDefinition>();
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CodRecipient.Contact.Title", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Commodities.CustomsValue.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Commodities.CustomsValue.Currency", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Commodities.UnitPrice.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Commodities.UnitPrice.Currency", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.CountryOfManufacture", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.Description", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.HarmonizedCode", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NaftaDetail.NetCostDateRange.Begins", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NaftaDetail.NetCostDateRange.Ends", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NaftaDetail.NetCostMethod", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NaftaDetail.PreferenceCriterion", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NaftaDetail.ProducerDetermination", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NaftaDetail.ProducerId", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.NumberOfPieces", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.Quantity", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.QuantityUnits", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.Weight.Units", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.Commodities.Weight.Value", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.CustomsValue.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.CustomsValue.Currency", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.DocumentContent", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.DutiesPayment.PaymentType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.RegulatoryControls", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Containers.HazardousCommodities.Description.HazardClass", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Containers.HazardousCommodities.Description.Id", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingGroup", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Containers.HazardousCommodities.Description.ProperShippingName", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Units", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.EmergencyContactNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.HazardousCommodities.LabelType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Offeror", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Packaging.Counts", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DangerousGoodsDetail.Packaging.Units", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DutiesPayment.Payor.ResponsibleParty.AccountNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DutiesPayment.Payor.ResponsibleParty.Address.CountryCode", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DutiesPayment.Payor.ResponsibleParty.Contact.PersonName", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "EMailNotificationDetail.Localization.LanguageCode", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "EMailNotificationDetail.Recipients..Format", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "EMailNotificationDetail.Recipients.EMailAddress", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "EMailNotificationDetail.Recipients.NotifyOnDelivery", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Express Label.TC #", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "GROUND.Service Code #", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "HoldAtLocationDetail.LocationContactAndAddress.Address.Residential", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.DropoffType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.PackagingType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RateRequestTypes", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.ServiceType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.Shipper.Contact.PersonName", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalWeight.Value", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.ReturnShipmentDetail.ReturnType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.CustomerReferences.Value", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested (Repetitions).SpecialServiceTypes", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.CodDetail.AddTransportationCharges", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.CodDetail.CodCollectionAmount.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.CodDetail.CodCollectionAmount.Currency", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.CodDetail.CollectionType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.ContainerType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.HazardClass", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.ID", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.CargoAircraftOnly", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.PackingInstructions", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingGroup", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.ProperShippingName", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.SequenceNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Units", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.NumberOfContainers", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.ContactName", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.EmergencyContactNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.Place", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.Title", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.PriorityAlertDetail.Content", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.PriorityAlertDetail.EnhancementTypes", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.SignatureOptionDetail.OptionType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.DropoffType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.LabelSpecification.ImageType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.LabelSpecification.LabelFormatType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.PackagingType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Requestedshipment.RateRequestTypes", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.SpecialServiceTypes", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.ServiceType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.Shipper.Contact.PersonName", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.ShippingChargesPayment.PaymentType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.ShippingChargesPayment.Payor.ResponsibleParty.AccountNumber", PropertyName = "FedExAccountNumber", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.ShippingChargesPayment.Payor.ResponsibleParty.PaymentType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.SpecialServicesRequested.EMailNotificationDetail.Recipients.EMailNotificationRecipientType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail.PhoneNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.TotalWeight.Value", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ReturnShipmentDetail.ReturnEMailDetail.AllowedSpecialServices", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Reuestedshipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ShippingChargesPayment.Payor.ResponsibleParty.AccountNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.coddetail.CodCollectionAmount.Amount", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.coddetail.CodCollectionAmount.Currency", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.CodDetail.CollectionType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.DryIceWeight.Units", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.DryIceWeight.Value", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.EMailNotificationDetail.Localization.LanguageCode", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.EMailNotificationDetail.Recipients.EMailAddress", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.EMailNotificationDetail.Recipients.EMailNotificationRecipientType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.EMailNotificationDetail.Recipients.Format", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.EMailNotificationDetail.Recipients.NotifyOnDelivery", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.HoldAtLocationDetail.PhoneNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.HomeDeliveryPremiumDetail.Date", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.HomeDeliveryPremiumDetail.Phone Number", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.SignatureOptionDetail.OptionType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+
+                }
+
+                return usGroundDomesticMapping;
+            }
+            set
+            {
+                usGroundDomesticMapping = value;
+            }
         }
     }
 }

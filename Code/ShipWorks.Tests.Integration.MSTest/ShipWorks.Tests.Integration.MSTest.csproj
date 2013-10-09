@@ -48,6 +48,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Excel">
+      <HintPath>..\..\Components\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\Components\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
@@ -79,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Actions\Scheduling\ActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
+    <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCAGroundDomesticInternational.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExPrototypeFixture.cs" />
