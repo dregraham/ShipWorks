@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             if (rowIndex == 0)
             {
-                PopulateTranslationMap(TestContext.DataConnection.Database, "US Grn Dom", columnPropertyMap);
+                PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
                 return false;
             }
             
@@ -56,6 +56,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
         private void PopulateTranslationMap(string fileName, string tabName, List<ColumnPropertyMapDefinition> columnPropertyMap )
         {
+            tabName = tabName.Replace("$", "");
             FileStream workBook = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             IExcelDataReader reader = ExcelReaderFactory.CreateOpenXmlReader(workBook);
             reader.IsFirstRowAsColumnNames = false;
@@ -126,6 +127,20 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
 
             Debug.Write(populationCode.ToString());
+        }
+
+        public void GetPropertyNames<T>(T testObject)
+        {
+            List<PropertyInfo> properties = (from c in testObject.GetType().GetProperties()
+                                         where c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
+                                            && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
+                                            && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant()
+                                         select c).OrderBy(pi => pi.Name).ToList();
+            
+            StringBuilder propertyNames = new StringBuilder();
+            properties.ForEach(pi => propertyNames.AppendLine(pi.Name));
+
+            Debug.Write(propertyNames.ToString());
         }
 
         /// <summary>
