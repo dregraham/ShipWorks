@@ -132,18 +132,18 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
-        [Ignore]
+        [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod()]
         public void Ship_FedExExpressDomesticAlcohol()
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
+
             try
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, null))
+                if (PopulatTestObject(testObject, FedExPrototypeFixture.Mapping))
                 {
                     testObject.Ship();
                 }

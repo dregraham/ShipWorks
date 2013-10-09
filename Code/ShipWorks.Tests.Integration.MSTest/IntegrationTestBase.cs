@@ -135,11 +135,10 @@ namespace ShipWorks.Tests.Integration.MSTest
 
         public void GetPropertyNames<T>(T testObject)
         {
-            List<PropertyInfo> properties = (from c in testObject.GetType().GetProperties()
-                                         where c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
-                                            && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
-                                            && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant()
-                                         select c).OrderBy(pi => pi.Name).ToList();
+            List<PropertyInfo> properties = (testObject.GetType().GetProperties().Where(c => c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
+                                                                                             && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
+                                                                                             && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant()
+                                                                                             && c.Name.ToUpperInvariant() != "Mapping".ToUpperInvariant())).OrderBy(pi => pi.Name).ToList();
             
             StringBuilder propertyNames = new StringBuilder();
             properties.ForEach(pi => propertyNames.AppendLine(pi.Name));
