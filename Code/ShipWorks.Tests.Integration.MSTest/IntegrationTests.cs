@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                 FedExUSGroundFixture testObject = new FedExUSGroundFixture();
 
                 GetPropertyNames(testObject);
-                GenerateColumnPropertyListCode("US Grn Dom", FedExUSGroundFixture.UsGroundDomesticMapping);
+                GenerateColumnPropertyListCode();
 
                 if (PopulatTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
                 {

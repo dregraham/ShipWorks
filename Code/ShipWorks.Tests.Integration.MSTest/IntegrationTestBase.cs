@@ -110,9 +110,13 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        public void GenerateColumnPropertyListCode(string tabName, List<ColumnPropertyMapDefinition> columnPropertyMap)
+        public void GenerateColumnPropertyListCode()
         {
             StringBuilder populationCode = new StringBuilder();
+            List<ColumnPropertyMapDefinition> columnPropertyMap = new List<ColumnPropertyMapDefinition>();
+
+            PopulateTranslationMap(TestContext.DataConnection.Database, TestContext.DataRow.Table.TableName, columnPropertyMap);
+
             if (columnPropertyMap.Any(cpm => cpm.SpreadsheetColumnIndex == -1))
             {
                 string populationCodeFormat = @"columnPropertyMap.Add(new ColumnPropertyMapDefinition {SpreadsheetColumnName = {0},PropertyName = "",SpreadsheetColumnIndex = -1});";
