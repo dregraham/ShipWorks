@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Request.
             nativeRequest.Version = new VersionId()
             {
                 ServiceId = "gsai",
-                Major = 1,
+                Major = 2,
                 Intermediate = 0,
                 Minor = 0
             };
