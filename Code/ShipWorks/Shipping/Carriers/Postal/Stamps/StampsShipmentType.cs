@@ -121,13 +121,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             // See if this shipment should really go through Express1
-            if(shipment.ShipmentType == (int)ShipmentTypeCode.Stamps &&
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps &&
                settings.StampsAutomaticExpress1 &&
                Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
             {
                 var express1Account = StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account);
 
-                if(express1Account == null)
+                if (express1Account == null)
                 {
                     throw new ShippingException("The Express1 account to automatically use when processing with Stamps.com has not been selected.");
                 }
@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 List<RateResult> stampsRates = StampsApiSession.GetRates(shipment);
 
                 // For Stamps, we want to either promote Express1 or show the Express1 savings
-                if(shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
+                if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
 
@@ -167,18 +167,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         PostalRateSelection stampsRateDetail = (PostalRateSelection)stampsRate.Tag;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if(stampsRate.Selectable && stampsRateDetail != null && Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
+                        if (stampsRate.Selectable && stampsRateDetail != null && Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
                         {
                             // See if Express1 returned a rate for this servie
                             RateResult express1Rate = null;
-                            if(express1Rates != null)
+                            if (express1Rates != null)
                             {
                                 express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
                                     ((PostalRateSelection)e1r.Tag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection)e1r.Tag).ConfirmationType == stampsRateDetail.ConfirmationType);
                             }
 
                             // If Express1 returned a rate, check to make sure it is a lower amount
-                            if(express1Rate != null && express1Rate.Amount <= stampsRate.Amount)
+                            if (express1Rate != null && express1Rate.Amount <= stampsRate.Amount)
                             {
                                 finalRates.Add(express1Rate);
                                 hasExpress1Savings = true;
@@ -194,10 +194,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             RateResult rate = finalRates[finalRates.Count - 1];
 
                             // If user wanted Express 1 rates
-                            if(settings.StampsAutomaticExpress1)
+                            if (settings.StampsAutomaticExpress1)
                             {
                                 // If they actually got the rate, show the check
-                                if(express1Rate != null)
+                                if (express1Rate != null)
                                 {
                                     rate.AmountFootnote = Resources.check2;
                                 }
@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             else
                             {
                                 // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                if(Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.Tag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.Tag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
                                 {
                                     rate.AmountFootnote = Resources.star_green;
                                 }
@@ -219,9 +219,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     RateGroup finalGroup = new RateGroup(finalRates);
 
-                    if(settings.StampsAutomaticExpress1)
+                    if (settings.StampsAutomaticExpress1)
                     {
-                        if(hasExpress1Savings)
+                        if (hasExpress1Savings)
                         {
                             finalGroup.FootnoteCreator = () => new Express1RateDiscountedFootnote(stampsRates, express1Rates);
                         }
@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
                     else
                     {
-                        if(Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
+                        if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
                             finalGroup.FootnoteCreator = () => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings));
                         }
@@ -354,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new ShippingException("The shipment weight cannot be zero.");
             }
 
-            if(shipment.Postal.Service == (int)PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int)PostalConfirmationType.None)
+            if (shipment.Postal.Service == (int)PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int)PostalConfirmationType.None)
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
@@ -385,7 +385,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
             commonDetail.OriginAccount = (account == null) ? "" : account.Username;
 
-            if(shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
                 commonDetail.OriginalShipmentType = ShipmentTypeCode.Stamps;
             }

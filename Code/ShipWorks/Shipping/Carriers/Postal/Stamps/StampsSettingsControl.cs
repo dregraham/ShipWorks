@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             optionsControl.SaveSettings(settings);
 
-            if(isExpress1)
+            if (isExpress1)
             {
                 express1Options.SaveSettings(settings);
             }

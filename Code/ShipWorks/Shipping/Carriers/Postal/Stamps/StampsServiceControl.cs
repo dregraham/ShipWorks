@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             var accounts = StampsAccountManager.GetAccounts(isExpress1, false);
 
-            if(accounts.Count > 0)
+            if (accounts.Count > 0)
             {
                 stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();
                 stampsAccount.Enabled = true;

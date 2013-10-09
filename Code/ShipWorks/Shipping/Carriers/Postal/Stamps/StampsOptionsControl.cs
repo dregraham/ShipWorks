@@ -21,7 +21,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Whether the control is used for Express1.
         /// </summary>
-        public bool IsExpress1 { get; set; }
+        public bool IsExpress1 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Load the configured settings into the control
