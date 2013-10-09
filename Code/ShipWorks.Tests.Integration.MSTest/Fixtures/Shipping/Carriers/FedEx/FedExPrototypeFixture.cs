@@ -19,8 +19,9 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
@@ -35,7 +36,6 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 

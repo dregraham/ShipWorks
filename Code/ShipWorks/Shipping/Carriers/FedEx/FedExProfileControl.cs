@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
@@ -16,7 +17,6 @@ using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

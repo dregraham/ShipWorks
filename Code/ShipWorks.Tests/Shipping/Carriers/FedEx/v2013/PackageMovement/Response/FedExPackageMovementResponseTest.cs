@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Response;
 using Moq;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.PackageMovement.Response
 {

@@ -7,9 +7,8 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 

@@ -3,10 +3,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using Moq;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping;
 
 using Ship2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;

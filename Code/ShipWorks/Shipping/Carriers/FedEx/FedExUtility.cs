@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Xml.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx

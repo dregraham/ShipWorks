@@ -5,12 +5,11 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Close.Response.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using Moq;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Close.Response;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Close.Response.Manipulators

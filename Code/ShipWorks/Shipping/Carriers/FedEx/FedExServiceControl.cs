@@ -6,7 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;

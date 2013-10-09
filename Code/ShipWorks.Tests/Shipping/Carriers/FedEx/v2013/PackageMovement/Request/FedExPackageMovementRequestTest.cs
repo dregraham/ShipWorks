@@ -2,9 +2,9 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using System.Collections.Generic;
 

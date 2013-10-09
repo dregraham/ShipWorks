@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using Moq;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.GlobalShipAddress.Response

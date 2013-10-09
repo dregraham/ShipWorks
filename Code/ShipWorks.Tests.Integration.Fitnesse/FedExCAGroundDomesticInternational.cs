@@ -6,7 +6,6 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Integration.Fitnesse

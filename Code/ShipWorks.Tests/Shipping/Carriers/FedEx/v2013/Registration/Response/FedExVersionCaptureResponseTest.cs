@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Registration.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Registration.Response
 {

@@ -8,11 +8,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Response;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Response.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Tracking.Response

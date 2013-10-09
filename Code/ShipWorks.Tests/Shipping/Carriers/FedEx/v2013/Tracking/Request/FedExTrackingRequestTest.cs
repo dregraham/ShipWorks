@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Tracking.Request;
 using Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Tracking.Request

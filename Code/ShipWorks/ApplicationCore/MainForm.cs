@@ -107,7 +107,6 @@ using ShipWorks.FileTransfer;
 using ShipWorks.ApplicationCore.Help;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Actions.Triggers;
 
 namespace ShipWorks

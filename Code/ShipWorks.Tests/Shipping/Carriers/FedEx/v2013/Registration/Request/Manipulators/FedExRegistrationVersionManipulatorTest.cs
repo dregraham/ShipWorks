@@ -4,8 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Registration.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Registration.Request.Manipulators
