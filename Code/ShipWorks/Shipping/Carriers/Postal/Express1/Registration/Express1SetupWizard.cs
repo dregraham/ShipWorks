@@ -385,6 +385,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             registration.UserName = accountExisting.Text.Trim();
             registration.PlainTextPassword = passwordExisting.Text;
 
+            Cursor.Current = Cursors.WaitCursor;
+
             try
             {
                 registration.AddExistingAccount();
@@ -399,7 +401,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             }
         }
     
-
         /// <summary>
         /// Buy postage for the account
         /// </summary>
