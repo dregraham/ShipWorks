@@ -36,7 +36,6 @@
 		"ShipWorks.Shipping.Carriers.EquaShip.WebServices", "EquashipAPI",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement", "PackageMovementInformationService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration", "RegistrationService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress", "GlobalShipAddressService",
 		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",

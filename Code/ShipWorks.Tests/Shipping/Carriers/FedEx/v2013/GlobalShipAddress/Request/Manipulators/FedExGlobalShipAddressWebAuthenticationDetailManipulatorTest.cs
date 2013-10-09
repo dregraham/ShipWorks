@@ -5,11 +5,10 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.GlobalShipAddress.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using WebAuthenticationDetail = ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress.WebAuthenticationDetail;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.GlobalShipAddress.Request.Manipulators

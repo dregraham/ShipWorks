@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track;

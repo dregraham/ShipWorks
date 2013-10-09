@@ -13,7 +13,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx;
 using System.Xml;
 using log4net;
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
             reply = new PostalCodeInquiryReply()
             {
                 ExpressDescription = new PostalCodeServiceAreaDescription() {LocationId = "ABC"},
-                HighestSeverity = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement.NotificationSeverityType.SUCCESS
+                HighestSeverity = ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement.NotificationSeverityType.SUCCESS
             };
             
             packageMovementRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);

@@ -11,7 +11,7 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping;
 
 using Ship2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Registration2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
-using PackageMovement2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
+using PackageMovement2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013
 {

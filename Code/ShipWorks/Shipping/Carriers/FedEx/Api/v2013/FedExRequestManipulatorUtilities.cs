@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Environment;
 
 using Ship2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Registration2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
-using PackageMovement2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
+using PackageMovement2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using Close2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Close;
 using Track2013 = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;

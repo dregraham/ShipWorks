@@ -5,7 +5,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.PackageMovement.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.PackageMovement.Request
