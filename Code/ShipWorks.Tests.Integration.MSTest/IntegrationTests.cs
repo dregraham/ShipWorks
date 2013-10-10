@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             try
             {
-                if (PopulatTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
+                if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
                 {
                     testObject.Ship();
                 }
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 FedExUSGroundFixture testObject = new FedExUSGroundFixture();
 
-                if (PopulatTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
+                if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
                 {
                     testObject.Ship();
                 }
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             try
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-                PopulatTestObject(testObject, null);
+                PopulateTestObject(testObject, null);
 
                 testObject.Ship();
             }
@@ -98,10 +98,12 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             try
             {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-
-                if (PopulatTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
+                if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
                 {
+                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(string.Format("Executing test ID {0}", this.TestContext.DataRow["TestID"]));
+                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+
                     testObject.Ship();
                 }
             }
@@ -123,7 +125,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, null))
+                if (PopulateTestObject(testObject, null))
                 {
                     testObject.Ship();
                 }
@@ -146,7 +148,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, FedExPrototypeFixture.Mapping))
+                if (PopulateTestObject(testObject, FedExPrototypeFixture.Mapping))
                 {
                     testObject.Ship();
                 }
@@ -169,7 +171,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, null))
+                if (PopulateTestObject(testObject, null))
                 {
                     testObject.Ship();
                 }
@@ -192,7 +194,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, null))
+                if (PopulateTestObject(testObject, null))
                 {
                     testObject.Ship();
                 }
@@ -215,7 +217,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, null))
+                if (PopulateTestObject(testObject, null))
                 {
                     testObject.Ship();
                 }
@@ -236,7 +238,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
 
-            if (PopulatTestObject(testObject, null))
+            if (PopulateTestObject(testObject, null))
             {
                 testObject.Ship();
             }
@@ -255,10 +257,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             iParcelFixture testObject = new iParcelFixture();
             try
             {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-
-                if (PopulatTestObject(testObject, null))
+                if (PopulateTestObject(testObject, null))
                 {
+                    Console.WriteLine(string.Format("Executing test ID {0}", this.TestContext.DataRow["TestID"]));
                     testObject.Ship();
                 }
             }
@@ -278,7 +279,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
             UpsFixture testObject = new UpsFixture();
 
-            if (PopulatTestObject(testObject, null))
+            if (PopulateTestObject(testObject, null))
             {
                 testObject.Ship();
             }
@@ -293,7 +294,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
             UpsMIFixture testObject = new UpsMIFixture();
 
-            if (PopulatTestObject(testObject, null))
+            if (PopulateTestObject(testObject, null))
             {
                 testObject.Ship();
             }

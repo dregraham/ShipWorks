@@ -33,23 +33,23 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        public bool PopulatTestObject<T>(T testObject, List<ColumnPropertyMapDefinition> columnPropertyMap)
+        /// <summary>
+        /// Populates the test object based on the mapping of a spreadsheet columns to the test object's properties.
+        /// </summary>
+        /// <returns>Returns true when a row needs to be tests (i.e. the current row is not the headers); otherwise false.</returns>
+        public bool PopulateTestObject<T>(T testObject, List<ColumnPropertyMapDefinition> columnPropertyMap)
         {
             DataRow testDataRow = TestContext.DataRow;
             int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
-            System.Diagnostics.Debug.WriteLine(rowIndex);
+            Debug.WriteLine(rowIndex);
 
             if (rowIndex == 0)
             {
+                // Build the translation map using the column headers in the first row
                 PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
                 return false;
             }
             
-            if (rowIndex == 1)
-            {
-                return false;
-            }
-
             PopulateValues(testObject, testDataRow, columnPropertyMap);
             return true;
         }
