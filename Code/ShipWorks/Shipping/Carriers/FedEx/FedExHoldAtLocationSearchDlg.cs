@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     previousAddress = currentAddress;
                 }
 
-                topLabel.Text = "Select a Hold At Location:";
+                topLabel.Text = "Select a Hold At FedEx Location:";
                 ResizeDialog();
             }
             catch (CarrierException ex)
