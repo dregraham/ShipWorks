@@ -18,9 +18,6 @@ namespace ShipWorks.Tests.Integration.MSTest
     [TestClass]
     public class IntegrationTests : IntegrationTestBase
     {
-        //private static List<ColumnPropertyMapDefinition> usGroundDomesticMapping = FedExUSGroundFixture.UsGroundDomesticMapping;
-
-
         [DataSource("DataSource_Ship_FedExUSGroundDomestic"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
@@ -31,8 +28,8 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 FedExUSGroundFixture testObject = new FedExUSGroundFixture();
 
-                //GetPropertyNames(testObject);
-                //GenerateColumnPropertyListCode();
+                GetPropertyNames(testObject);
+                GenerateColumnPropertyListCode();
 
                 if (PopulatTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
                 {
@@ -41,10 +38,8 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
             catch (Exception ex)
             {
-                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow[5], ex.Message);
-                throw new Exception(msg, ex);
-
-                //throw;
+                string msg = ex.Message;
+                throw;
             }
         }
 
@@ -91,18 +86,18 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
-        [Ignore]
+        [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         public void Ship_FedExExpressInternationalAlcohol()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
+
             try
             {
                 System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulatTestObject(testObject, null))
+                if (PopulatTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
                 {
                     testObject.Ship();
                 }
