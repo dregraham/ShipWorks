@@ -1306,6 +1306,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 case "FEDEX_1_DAY_FREIGHT": return FedExServiceType.FedEx1DayFreight;
                 case "FEDEX_2_DAY_FREIGHT": return FedExServiceType.FedEx2DayFreight;
                 case "FEDEX_3_DAY_FREIGHT": return FedExServiceType.FedEx3DayFreight;
+                case "FEDEX_FIRST_FREIGHT": return FedExServiceType.FirstFreight;
                 case "FEDEX_GROUND": return FedExServiceType.FedExGround;
                 case "GROUND_HOME_DELIVERY": return FedExServiceType.GroundHomeDelivery;
                 case "INTERNATIONAL_PRIORITY_FREIGHT": return FedExServiceType.InternationalPriorityFreight;

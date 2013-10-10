@@ -159,6 +159,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.InternationalPriorityFreight:
                 case FedExServiceType.InternationalEconomyFreight:
+                case FedExServiceType.FirstFreight:
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
                 case FedExServiceType.SmartPost:
@@ -721,6 +722,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.SMART_POST: return FedExServiceType.SmartPost;
                 case ServiceType.FEDEX_2_DAY_AM: return FedExServiceType.FedEx2DayAM;
                 case ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY: return FedExServiceType.FedExEuropeFirstInternationalPriority;
+                case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
             }
 
             throw new CarrierException("Invalid FedEx ServiceType " + serviceType);

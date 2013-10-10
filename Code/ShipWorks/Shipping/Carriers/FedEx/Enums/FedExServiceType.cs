@@ -65,7 +65,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         FedExEuropeFirstInternationalPriority = 17,
 
         [Description("FedEx 2Day A.M.")]
-        FedEx2DayAM = 18
+        FedEx2DayAM = 18,
+
+        [Description("FedEx First Overnight Freight")]
+        FirstFreight = 19
 
     }
 }

@@ -97,6 +97,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalEconomyFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
                 case FedExServiceType.SmartPost: return WebServices.Ship.ServiceType.SMART_POST;
                 case FedExServiceType.FedEx2DayAM: return WebServices.Ship.ServiceType.FEDEX_2_DAY_AM;
+                case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);

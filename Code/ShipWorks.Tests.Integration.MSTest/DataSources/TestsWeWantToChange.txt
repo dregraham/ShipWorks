@@ -1,1 +1,5 @@
-﻿Since we don't support FEDEX_FIRST_FREIGHT, I would like to skip test 323395.
+﻿323393 doesn't have a length/width/height
+323394 doesn't have a length/width/height
+2D2 doesn't have a length/width/height
+323201 account number was missing a 0 in the front.
+

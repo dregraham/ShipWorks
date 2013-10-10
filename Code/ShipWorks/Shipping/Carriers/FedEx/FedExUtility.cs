@@ -71,6 +71,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FedExExpressSaver,
                 FedExServiceType.FedEx1DayFreight,
                 FedExServiceType.FedEx2DayAM,
+                FedExServiceType.FirstFreight
             };
 
             // Since all shipments are going to the same country, just pick out the first one
@@ -80,6 +81,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.GroundHomeDelivery);
                 serviceTypes.Add(FedExServiceType.StandardOvernight);
                 serviceTypes.Add(FedExServiceType.SmartPost);
+                serviceTypes.Add(FedExServiceType.FirstFreight);
                 serviceTypes.Add(FedExServiceType.FedEx2DayFreight);
                 serviceTypes.Add(FedExServiceType.FedEx3DayFreight);
             }
@@ -215,6 +217,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             switch (serviceType)
             {
+                case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
@@ -237,6 +240,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.StandardOvernight:
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
@@ -252,7 +256,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool CanDeliverOnSaturday(FedExServiceType serviceType, DateTime shipDate)
         {
-            if ((serviceType == FedExServiceType.PriorityOvernight || serviceType == FedExServiceType.FedEx1DayFreight)
+            if ((serviceType == FedExServiceType.PriorityOvernight || serviceType == FedExServiceType.FedEx1DayFreight || serviceType == FedExServiceType.FirstFreight)
                 && shipDate.DayOfWeek == DayOfWeek.Friday)
             {
                 return true;
