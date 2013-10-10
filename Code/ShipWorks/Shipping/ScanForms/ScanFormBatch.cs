@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -144,10 +145,12 @@ namespace ShipWorks.Shipping.ScanForms
                 ShipmentType = (ShipmentTypeCode)shipments.First().ShipmentType;
                 ShipmentCount = shipments.Count;
 
-                // Obtain the scan form from the carrier API
-                IEnumerable<IEntity2> scanFormEntities = carrierAccount.GetGateway().CreateScanForms(this, shipments);
+                // Process SCAN forms in batches to try and avoid connection timeouts.
+                IEnumerable<IEntity2> scanFormEntities = shipments.SplitIntoChunksOf(100)
+                    .SelectMany(shipmentChunk => carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk))
+                    .ToList();
 
-                if (scanFormEntities == null || !scanFormEntities.Any())
+                if (!scanFormEntities.Any())
                 {
                     throw new ShippingException(string.Format("ShipWorks was unable to create a SCAN form through {0} at this time. Please try again later.", carrierAccount.ShippingCarrierName));
                 }
