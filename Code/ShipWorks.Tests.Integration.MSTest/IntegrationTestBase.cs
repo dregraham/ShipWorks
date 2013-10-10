@@ -183,7 +183,8 @@ namespace ShipWorks.Tests.Integration.MSTest
                         value = value.Replace("Each Package", "");
                         value = value.Replace("each package", "");
                         value = value.Replace("(Each Package)", "");
-                        
+                        value = value.Trim();
+
                         if (!string.IsNullOrWhiteSpace(value))
                         {
                             item.SetValue(testObject, Convert.ChangeType(value, item.PropertyType), null);

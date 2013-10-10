@@ -43,8 +43,6 @@ namespace ShipWorks.Tests.Integration.MSTest
 
                 string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow[5], ex.Message);
                 throw new Exception(msg, ex);
-
-                //throw;
             }
         }
 
