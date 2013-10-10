@@ -24,13 +24,10 @@ namespace ShipWorks.Tests.Integration.MSTest
         //[Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
+            FedExUSGroundFixture testObject = new FedExUSGroundFixture();
+
             try
             {
-                FedExUSGroundFixture testObject = new FedExUSGroundFixture();
-
-                GetPropertyNames(testObject);
-                GenerateColumnPropertyListCode();
-
                 if (PopulatTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping))
                 {
                     testObject.Ship();
@@ -38,8 +35,16 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
             catch (Exception ex)
             {
-                string msg = ex.Message;
-                throw;
+                // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
+                if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                {
+                    return;
+                }
+
+                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow[5], ex.Message);
+                throw new Exception(msg, ex);
+
+                //throw;
             }
         }
 
