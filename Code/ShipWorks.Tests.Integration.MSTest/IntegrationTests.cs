@@ -41,7 +41,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
             catch (Exception ex)
             {
-                string msg = ex.Message;
+                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow[5], ex.Message);
+                throw new Exception(msg, ex);
+
                 //throw;
             }
         }
