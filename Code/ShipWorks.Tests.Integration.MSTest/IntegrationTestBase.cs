@@ -108,6 +108,14 @@ namespace ShipWorks.Tests.Integration.MSTest
                         });
                 }
             }
+
+            if (columnPropertyMap.Any(cpm => cpm.SpreadsheetColumnIndex == -1))
+            {
+                columnPropertyMap.Where(cpm => cpm.SpreadsheetColumnIndex == -1)
+                                 .ToList()
+                                 .ForEach(
+                                     cpm => Debug.WriteLine(cpm.SpreadsheetColumnName + " has invalid column index."));
+            }
         }
 
         public void GenerateColumnPropertyListCode()
@@ -167,7 +175,15 @@ namespace ShipWorks.Tests.Integration.MSTest
 
                     if (cpm != null)
                     {
+                        if (cpm.SpreadsheetColumnIndex == -1)
+                        {
+                            throw new Exception(cpm.SpreadsheetColumnName + " has an invalid column index.");
+                        }
                         string value = testDataRow[cpm.SpreadsheetColumnIndex].ToString().Trim();
+                        value = value.Replace("Each Package", "");
+                        value = value.Replace("each package", "");
+                        value = value.Replace("(Each Package)", "");
+                        
                         if (!string.IsNullOrWhiteSpace(value))
                         {
                             item.SetValue(testObject, Convert.ChangeType(value, item.PropertyType), null);
