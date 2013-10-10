@@ -96,21 +96,13 @@ namespace ShipWorks.Tests.Integration.MSTest
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
-            try
+            if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
             {
-                if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
-                {
-                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                    Console.WriteLine(string.Format("Executing test ID {0}", this.TestContext.DataRow["TestID"]));
-                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+                Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow[5]));
+                Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);                
 
-                    testObject.Ship();
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                throw;
+                testObject.Ship();
             }
         }
 
@@ -144,19 +136,13 @@ namespace ShipWorks.Tests.Integration.MSTest
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
 
-            try
+            if (PopulateTestObject(testObject, FedExPrototypeFixture.Mapping))
             {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
+                Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow[5]));
+                Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
 
-                if (PopulateTestObject(testObject, FedExPrototypeFixture.Mapping))
-                {
-                    testObject.Ship();
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                throw;
+                testObject.Ship();
             }
         }
 
