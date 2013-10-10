@@ -89,8 +89,8 @@ namespace ShipWorks.Data
 
             entityTypeChangeVersions = changeMonitoredEntityTypes.ToDictionary(e => e, e => new EntityTypeChangeVersion(e));
 
-            entityCache = new EntityCache(changeMonitoredEntityTypes);
-            relationCache = new EntityRelationCache(entityCache);
+            entityCache = new EntityCache(changeMonitoredEntityTypes, executionMode);
+            relationCache = new EntityRelationCache(entityCache, executionMode);
 
             orderHeaderProvider = new OrderHeaderProvider(entityCache);
 

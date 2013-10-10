@@ -6,6 +6,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Web.Caching;
 using System.ComponentModel;
 using System.Diagnostics;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using log4net;
 using System.Web;
 using System.Threading;
@@ -43,11 +44,13 @@ namespace ShipWorks.Data.Caching
         // System wide lock
         static SemaphoreSlim semaphore = new SemaphoreSlim(1);
 
+        private readonly ExecutionMode executionMode;
+
         /// <summary>
         /// Creates a cache that can hold the given entity types
         /// </summary>
-        public EntityCache(IEnumerable<EntityType> entityTypes)
-            : this(entityTypes, null)
+        public EntityCache(IEnumerable<EntityType> entityTypes, ExecutionMode executionMode)
+            : this(entityTypes, null, executionMode)
         {
 
         }
@@ -57,9 +60,10 @@ namespace ShipWorks.Data.Caching
         /// each time the associated entity type is checked. Prefetch should really only be used for child data that is not change monitored, otherwise
         /// the standard cache approach should be used.
         /// </summary>
-        public EntityCache(IEnumerable<EntityType> entityTypes, IEnumerable<PrefetchPath2> prefetchPaths)
+        public EntityCache(IEnumerable<EntityType> entityTypes, IEnumerable<PrefetchPath2> prefetchPaths, ExecutionMode executionMode)
         {
             this.entityTypes = entityTypes.ToArray();
+            this.executionMode = executionMode;
 
             changeNotifiers = entityTypes.ToDictionary(e => e, e => new EntityTypeChangeNotifier(e));
 
@@ -90,7 +94,7 @@ namespace ShipWorks.Data.Caching
         }
 
         /// <summary>
-        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded if fetchIfMissing is sture
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded if fetchIfMissing is true
         /// </summary>
         public EntityBase2 GetEntity(long entityID, bool fetchIfMissing)
         {
@@ -98,7 +102,7 @@ namespace ShipWorks.Data.Caching
 
             if (entity == null && fetchIfMissing)
             {
-                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
+                bool tookLock = semaphore.Wait((executionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
 
                 try
                 {
@@ -162,7 +166,7 @@ namespace ShipWorks.Data.Caching
 
             if (needsFetched.Count > 0)
             {
-                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
+                bool tookLock = semaphore.Wait((executionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
 
                 try
                 {
