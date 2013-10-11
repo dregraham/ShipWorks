@@ -117,8 +117,6 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             if (columnPropertyMap.Any(cpm => cpm.SpreadsheetColumnIndex == -1))
             {
-                string populationCodeFormat = @"columnPropertyMap.Add(new ColumnPropertyMapDefinition {SpreadsheetColumnName = {0},PropertyName = "",SpreadsheetColumnIndex = -1});";
-
                 foreach (ColumnPropertyMapDefinition cpm in columnPropertyMap.Where(cpm => cpm.SpreadsheetColumnIndex == -1).OrderBy(cpm => cpm.SpreadsheetColumnName).ToList())
                 {
                     populationCode.AppendLine("columnPropertyMap.Add(new ColumnPropertyMapDefinition {SpreadsheetColumnName = \""

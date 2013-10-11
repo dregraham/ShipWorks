@@ -97,9 +97,9 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
             {
-                Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
-                Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);                
+                Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);                
 
                 testObject.Ship();
             }
@@ -137,9 +137,9 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             if (PopulateTestObject(testObject, FedExUSExpressDomesticAlcoholMapping.Mapping))
             {
-                Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
-                Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
+                Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
 
                 testObject.Ship();
             }
@@ -155,9 +155,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 if (PopulateTestObject(testObject, FedExUsExpressDomesticMapping.UsExpDomesticMapping))
                 {
-                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
-                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
+                    Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
                     
                     testObject.Ship();
                 }
@@ -229,14 +229,14 @@ namespace ShipWorks.Tests.Integration.MSTest
 
                 if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping))
                 {
-                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
-                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+                    Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                     testObject.Ship();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
                 {
@@ -260,18 +260,11 @@ namespace ShipWorks.Tests.Integration.MSTest
         public void Ship_iParcel()
         {
             iParcelFixture testObject = new iParcelFixture();
-            try
+
+            if (PopulateTestObject(testObject, null))
             {
-                if (PopulateTestObject(testObject, null))
-                {
-                    Console.WriteLine(string.Format("Executing test ID {0}", this.TestContext.DataRow["TestID"]));
-                    testObject.Ship();
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                throw;
+                Console.WriteLine(string.Format("Executing test ID {0}", this.TestContext.DataRow["TestID"]));
+                testObject.Ship();
             }
         }
 
