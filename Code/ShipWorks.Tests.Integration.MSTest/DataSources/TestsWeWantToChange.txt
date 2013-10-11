@@ -4,3 +4,24 @@
 323201 account number was missing a 0 in the front.
 
 In CA Exp Intl, RequestedShipment.ShipTimestamp (column BJ) had invalid dates. I blanked them out.
+
+=================================================================================
+CHANGES (US Exp Intl)
+=================================================================================
+[Customer Transaction]  [Row]	[Column]	[Original Value]  [New Value]      [Reason]
+ 413229                  44      DJ                            50               FedEx: Weight - weight must be greater than 0 in RequestedPackage 1.
+ 413229                  44      K           500               50
+ 413229                  44      DK          50                20               FedEx: Girth of package 1 exceeds the max girth for this service/packaging combination.
+ 413229                  44      DL          50                20               FedEx: Girth of package 1 exceeds the max girth for this service/packaging combination.
+ 413229                  44      DM          50                20               FedEx: Girth of package 1 exceeds the max girth for this service/packaging combination.
+ 413230                  54      DN          IN                CM               FedEx: Package 1 weight is inconsistent with dimension units , please use only English or Metric.
+ 413210                  50      DN          IN                CM               FedEx: Package 1 weight is inconsistent with dimension units , please use only English or Metric.
+ 413223                  38      BB                            1                decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
+ 413223                  38      BC                            101              decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
+ 413223                  38      BD                            101              FedEx: Invalid booking confirmation number.
+ 413224                  39      BB                            1                decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
+ 413224                  39      BC                            101              decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
+ 413224                  39      BD                            101              FedEx: Invalid booking confirmation number.
+ 413213                  52      DK          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.
+ 413213                  52      DL          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.
+ 413213                  52      DM          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.

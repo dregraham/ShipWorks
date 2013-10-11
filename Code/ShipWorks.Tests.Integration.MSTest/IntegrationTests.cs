@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
+            if (PopulateTestObject(testObject, FedExUsExpressInternationalAlcoholMapping.Mapping))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
@@ -112,19 +112,14 @@ namespace ShipWorks.Tests.Integration.MSTest
         public void Ship_FedExExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
-            try
-            {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
 
-                if (PopulateTestObject(testObject, null))
-                {
-                    testObject.Ship();
-                }
-            }
-            catch (Exception ex)
+            if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping))
             {
-                string msg = ex.Message;
-                throw;
+                Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", testObject.CustomerTransactionId));
+                Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);  
+
+                testObject.Ship();
             }
         }
 

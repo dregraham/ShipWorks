@@ -89,6 +89,7 @@
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCaExpressInternationalMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCanadaExpressDomesticFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSExpressDomesticAlcoholMapping.cs" />
+    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUsExpressInternationalAlcoholMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSGroundAlcoholFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCAGroundDomesticInternational.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
