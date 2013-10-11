@@ -178,23 +178,27 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl"),
          DeploymentItem("DataSources\\FedExAll.xlsx"),
          TestMethod()]
-        [Ignore]
+        //[Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternational testObject = new FedExCAGroundDomesticInternational();
             try
             {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-
-                if (PopulateTestObject(testObject, null))
+                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping))
                 {
                     testObject.Ship();
                 }
             }
             catch (Exception ex)
             {
-                string msg = ex.Message;
-                throw;
+                // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
+                if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                {
+                    return;
+                }
+
+                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"], ex.Message);
+                throw new Exception(msg, ex);
             }
         }
 

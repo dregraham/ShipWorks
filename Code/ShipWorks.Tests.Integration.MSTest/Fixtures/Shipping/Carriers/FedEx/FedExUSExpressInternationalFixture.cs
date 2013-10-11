@@ -198,7 +198,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             shipment.FedEx.TrafficInArmsLicenseNumber = TrafficInArmsLicenseOrExemptionNumber;
             shipment.FedEx.WeightUnitType = ShipmentWeightUnits.ToLower() == "lb" ? (int)WeightUnitOfMeasure.Pounds : (int)WeightUnitOfMeasure.Kilograms;
 
-
             SetupCustomsData(shipment);
 
             SetupCommercialInvoice(shipment);

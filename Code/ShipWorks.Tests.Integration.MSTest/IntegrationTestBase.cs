@@ -106,14 +106,6 @@ namespace ShipWorks.Tests.Integration.MSTest
                         });
                 }
             }
-
-            if (columnPropertyMap.Any(cpm => cpm.SpreadsheetColumnIndex == -1))
-            {
-                columnPropertyMap.Where(cpm => cpm.SpreadsheetColumnIndex == -1)
-                                 .ToList()
-                                 .ForEach(
-                                     cpm => Debug.WriteLine(cpm.SpreadsheetColumnName + " has invalid column index."));
-            }
         }
 
         public void GenerateColumnPropertyListCode()

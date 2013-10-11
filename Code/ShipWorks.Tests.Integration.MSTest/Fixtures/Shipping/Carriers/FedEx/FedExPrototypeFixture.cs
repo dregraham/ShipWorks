@@ -707,7 +707,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         
         protected virtual void SetLinearUnits(ShipmentEntity shipment)
         {
-            shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            if (string.IsNullOrWhiteSpace(PackageLineItemUnits) || PackageLineItemUnits == "IN")
+            {
+                shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            }
+            else
+            {
+                shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.CM;
+            }
         }
 
         protected virtual void SetHoldLocationData(ShipmentEntity shipment)
@@ -807,6 +814,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 // Return the fedex account number of our account
                 accountNumber = "224813333";
             }
+            else
+                if (accountNumber.ToLower() == "canadian test account number")
+                {
+                    // Return the canadian fedex account number of our account
+                    accountNumber = "602611841";
+                }
 
             return accountNumber;
         }
