@@ -47,6 +47,11 @@ namespace ShipWorks.Tests.Integration.MSTest
                 PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
                 return false;
             }
+
+            if (rowIndex == 1)
+            {
+                return false;
+            }
             
             PopulateValues(testObject, testDataRow, columnPropertyMap);
             return true;

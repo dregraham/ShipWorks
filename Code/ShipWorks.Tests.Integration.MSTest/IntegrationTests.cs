@@ -225,18 +225,34 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExCanadaExpressDomestic"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
-        [Ignore]
+        [DataSource("DataSource_Ship_FedExCanadaExpressDomestic")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         public void Ship_FedExCanadaExpressDomestic()
         {
-            System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-            FedExPrototypeFixture testObject = new FedExPrototypeFixture();
+            try
+            {                
+                FedExCanadaExpressDomesticFixture testObject = new FedExCanadaExpressDomesticFixture();
 
-            if (PopulateTestObject(testObject, null))
+                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping))
+                {
+                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+
+                    testObject.Ship();
+                }
+            }
+            catch (Exception ex)
             {
-                testObject.Ship();
+                if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                {
+                    // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
+                    return;
+                }
+
+                // We have a legitimate exception
+                throw;
             }
         }
 
