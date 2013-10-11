@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Reflection;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32;
-using Moq;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.Tests.Integration.MSTest.Fixtures;
 using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
 using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.iParcel;
 using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.Ups;
