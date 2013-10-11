@@ -148,16 +148,18 @@ end
 ########################################################################
 namespace :test do
 
-	desc "Execute all test lists"
+	desc "Execute all unit tests and integration tests"
 	task :all do 
-		puts "Executing ShipWorks unit tests"
+		puts "Starting ShipWorks unit tests...\r\n\r\n"
 		Rake::Task['test:units'].execute
-
-		# If we ever wanted to include integration tests in the build we would uncomment
-		# the following two lines and add a section for "integration" below. Until then
-		# running rake test:all and rake test:units are equivalent.
-		# puts "Executing ShipWorks integration tests"
-		# Rake::Task['test:integration'].execute		
+		
+		puts "Starting ShipWorks integration tests...\r\n\r\n"
+		Rake::Task['test:integration'].execute
+		
+		# If we ever wanted to include UI/acceptance tests in the build we would add
+		# another section below and uncomment the following two lines
+		# puts "Starting ShipWorks acceptance tests...\r\n\r\n"
+		# Rake::Task['test:acceptance'].execute
 	end
 
 	desc "Execute unit tests"
@@ -170,4 +172,14 @@ namespace :test do
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
 	end	
+	
+	desc "Execute integration tests"
+	mstest :integration do |mstest|
+		print "Deleting previous result...\r\n\r\n"
+		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
+		File.delete("TestResults/integration-results.trx") if File.exist?("TestResults/integration-results.trx")
+		
+		print "Executing ShipWorks integrations tests...\r\n\r\n"
+		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", "/resultsfile:TestResults/integration-results.trx"
+	end
 end
