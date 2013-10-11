@@ -12,7 +12,6 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        //[Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
             FedExUSGroundFixture testObject = new FedExUSGroundFixture();
@@ -40,7 +39,6 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        //[Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
             FedExUSGroundAlcoholFixture testObject = new FedExUSGroundAlcoholFixture();
@@ -67,7 +65,6 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExSmartPost")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        //[Ignore]
         public void Ship_FedExSmartPost()
         {
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
@@ -138,7 +135,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
 
-            if (PopulateTestObject(testObject, FedExPrototypeFixture.Mapping))
+            if (PopulateTestObject(testObject, FedExUSExpressDomesticAlcoholMapping.Mapping))
             {
                 Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));

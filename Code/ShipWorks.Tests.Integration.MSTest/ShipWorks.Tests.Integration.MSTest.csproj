@@ -87,6 +87,7 @@
     <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCanadaExpressDomesticFixture.cs" />
+    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSExpressDomesticAlcoholMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSGroundAlcoholFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCAGroundDomesticInternational.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
