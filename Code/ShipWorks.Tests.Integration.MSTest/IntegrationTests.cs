@@ -18,9 +18,9 @@ namespace ShipWorks.Tests.Integration.MSTest
     [TestClass]
     public class IntegrationTests : IntegrationTestBase
     {
-        [DataSource("DataSource_Ship_FedExUSGroundDomestic"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         //[Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
@@ -46,9 +46,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         //[Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
@@ -73,9 +73,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExSmartPost"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_FedExSmartPost")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         [Ignore]
         public void Ship_FedExSmartPost()
         {
@@ -111,9 +111,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressInternational"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_FedExExpressInternational")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         [Ignore]
         public void Ship_FedExExpressInternational()
         {
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
         [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [TestMethod()]
+        [TestMethod]
         public void Ship_FedExExpressDomesticAlcohol()
         {
             FedExPrototypeFixture testObject = new FedExPrototypeFixture();
@@ -151,9 +151,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressDomestic"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_FedExExpressDomestic")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         public void Ship_FedExExpressDomestic()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
@@ -175,10 +175,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
-        //[Ignore]
+        [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod()]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternational testObject = new FedExCAGroundDomesticInternational();
@@ -202,9 +201,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_FedExCanadaExpressInternational"),
-         DeploymentItem("DataSources\\FedExAll.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_FedExCanadaExpressInternational")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
         [Ignore]
         public void Ship_FedExCanadaExpressInternational()
         {
@@ -260,9 +259,9 @@ namespace ShipWorks.Tests.Integration.MSTest
 
 
 
-        [DataSource("DataSource_Ship_iParcel"),
-         DeploymentItem("DataSources\\iParcel.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_iParcel")]
+        [DeploymentItem("DataSources\\iParcel.xlsx")]
+        [TestMethod]
         [Ignore]
         public void Ship_iParcel()
         {
@@ -282,9 +281,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_UPSRecert"),
-         DeploymentItem("DataSources\\UPSRecert.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_UPSRecert")]
+        [DeploymentItem("DataSources\\UPSRecert.xlsx")]
+        [TestMethod]
         [Ignore]
         public void Ship_UPSRecert()
         {
@@ -297,9 +296,9 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
         }
 
-        [DataSource("DataSource_Ship_UPSRecert_MI"),
-         DeploymentItem("DataSources\\UPSRecert.xlsx"),
-         TestMethod()]
+        [DataSource("DataSource_Ship_UPSRecert_MI")]
+        [DeploymentItem("DataSources\\UPSRecert.xlsx")]
+        [TestMethod]
         [Ignore]
         public void Ship_UPSRecert_MI()
         {
