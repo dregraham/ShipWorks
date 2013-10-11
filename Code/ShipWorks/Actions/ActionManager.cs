@@ -266,9 +266,9 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Gets the ActionQueueType based on UserInteractive.
+        /// Gets the ActionQueueType for this process based on if it's background or not
         /// </summary>
-        public static ActionQueueType ActionQueueType
+        public static ActionQueueType ExecutionModeActionQueueType
         {
             get
             {

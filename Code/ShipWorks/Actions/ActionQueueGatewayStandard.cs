@@ -15,6 +15,8 @@ namespace ShipWorks.Actions
     /// </summary>
     public class ActionQueueGatewayStandard : ActionQueueGateway
     {
+        const int pageSize = 100;
+
         /// <summary>
         /// Indicates if new queues can be added to the gateway source while the gateway is being processed
         /// </summary>
@@ -34,48 +36,64 @@ namespace ShipWorks.Actions
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                ResultsetFields resultFields = new ResultsetFields(3);
-                resultFields.DefineField(ActionQueueFields.ActionID, 0, "ActionID", "");
-                resultFields.DefineField(ActionQueueFields.ActionQueueID, 1, "ActionQueueID", "");
-                resultFields.DefineField(ActionQueueFields.InternalComputerLimitedList, 2, "InternalComputerLimitedList", "");
+                ResultsetFields resultFields = new ResultsetFields(2);
+                resultFields.DefineField(ActionQueueFields.ActionQueueID, 0, "ActionQueueID", "");
+                resultFields.DefineField(ActionQueueFields.InternalComputerLimitedList, 1, "InternalComputerLimitedList", "");
 
-                // Only process the scheduled actions based on the action manager configuration
-                Predicate isProcessableQueueType = ActionQueueFields.ActionQueueType == (int) ActionManager.ActionQueueType;
+                // By default only process the queue type that matches this process
+                Predicate isProcessableQueueType = ActionQueueFields.ActionQueueType == (int) ActionManager.ExecutionModeActionQueueType;
 
-                if(!UserInterfaceExecutionMode.IsProcessRunning)
+                // If the UI isn't running somehwere, and we are the background process, go ahead and do UI actions too since it's not open
+                if (!Program.ExecutionMode.IsUISupported && !UserInterfaceExecutionMode.IsProcessRunning)
                 {
                     // Additionally process UI actions if the UI is not running
-                    isProcessableQueueType |= ActionQueueFields.ActionQueueType == (int)ActionQueueType.UserInterface;
+                    isProcessableQueueType |= ActionQueueFields.ActionQueueType == (int) ActionQueueType.UserInterface;
                 }
 
-                RelationPredicateBucket bucket = new RelationPredicateBucket(
-                    isProcessableQueueType &
-                    (ActionQueueFields.ActionQueueID > lastQueueID) &
-                    (ActionQueueFields.Status == (int) ActionQueueStatus.Dispatched |
-                     ActionQueueFields.Status == (int) ActionQueueStatus.Incomplete |
-                     ActionQueueFields.Status == (int) ActionQueueStatus.ResumeFromPostponed));
-
-                // Process the actions as they came into the queue regardless of the action queue type
-                SortExpression sortExpression = new SortExpression();
-                sortExpression.Add(ActionQueueFields.ActionQueueID | SortOperator.Ascending);
-
-                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 100, sortExpression, true))
+                // We need to keep going until there are no more, or until we find some that we can process.  If we didn't do this, if the first 100 (or whatever our page size is) were
+                // not allowed to run on this computer, then we'd return an empty list as the result set, and ignore any that WERE for us that were after the first 100.  In other words, 
+                // instead of just looking through the first 100 for something meant for this computer, we need to keep going all the way until the end until we find some.
+                while (true)
                 {
-                    List<long> keys = new List<long>();
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(
+                        isProcessableQueueType &
+                        (ActionQueueFields.ActionQueueID > lastQueueID) &
+                        (ActionQueueFields.Status == (int) ActionQueueStatus.Dispatched |
+                         ActionQueueFields.Status == (int) ActionQueueStatus.Incomplete |
+                         ActionQueueFields.Status == (int) ActionQueueStatus.ResumeFromPostponed));
 
-                    while (reader.Read())
+                    // Process the actions as they came into the queue regardless of the action queue type
+                    SortExpression sortExpression = new SortExpression();
+                    sortExpression.Add(ActionQueueFields.ActionQueueID | SortOperator.Ascending);
+
+                    using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, pageSize, sortExpression, true))
                     {
-                        string internalComputerLimitedList = reader.GetString(2);
+                        List<long> keys = new List<long>();
+                        int results = 0;
 
-                        ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(internalComputerLimitedList);
-                        if (computerActionPolicy.IsComputerAllowed(UserSession.Computer))
+                        while (reader.Read())
                         {
-                            // Add the ActionQueueID
-                            keys.Add(reader.GetInt64(1));
+                            long actionQueueID = reader.GetInt64(0);
+                            string computerList = reader.GetString(1);
+
+                            // Locally this is now our next highest known actionQueueID, and where we will start if we end up having to loop back around due to this page not having any for us to process
+                            lastQueueID = actionQueueID;
+                            results++;
+
+                            // If it matches the policy add, add it
+                            ComputerActionPolicy computerActionPolicy = new ComputerActionPolicy(computerList);
+                            if (computerActionPolicy.IsComputerAllowed(UserSession.Computer))
+                            {
+                                keys.Add(actionQueueID);
+                            }
+                        }
+                        
+                        // If we found some keys, or if there just aren't any more, then we are ready to return the result
+                        if (keys.Count > 0 || results < pageSize)
+                        {
+                            return keys;
                         }
                     }
-
-                    return keys;
                 }
             }
         }

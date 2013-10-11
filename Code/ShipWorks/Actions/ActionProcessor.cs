@@ -106,15 +106,16 @@ namespace ShipWorks.Actions
                     using (SqlCommand cmd = SqlCommandProvider.Create(con))
                     {
                         // Only process the scheduled actions based on the action manager configuration
-                        cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue WHERE ActionQueueType = @ActionQueueType";
+                        cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue WHERE ActionQueueType = @ExecutionModeActionQueueType";
+                        cmd.Parameters.AddWithValue("@ExecutionModeActionQueueType", (int) ActionManager.ExecutionModeActionQueueType);
 
-                        if (!UserInterfaceExecutionMode.IsProcessRunning)
+                        // If the UI isn't running somehwere, and we are the background process, go ahead and do UI actions too since it's not open
+                        if (!Program.ExecutionMode.IsUISupported && !UserInterfaceExecutionMode.IsProcessRunning)
                         {
                             // Additionally process UI actions if the UI is not running
-                            cmd.CommandText += " OR ActionQueueType = 0";
+                            cmd.CommandText += " OR ActionQueueType = @UIActionQueueType";
+                            cmd.Parameters.AddWithValue("@UIActionQueueType", (int) ActionQueueType.UserInterface);
                         }
-
-                        cmd.Parameters.AddWithValue("@ActionQueueType", (int) ActionManager.ActionQueueType);
 
                         if (SqlCommandProvider.ExecuteScalar(cmd) == null)
                         {
