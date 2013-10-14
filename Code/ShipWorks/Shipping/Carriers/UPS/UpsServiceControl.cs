@@ -663,24 +663,38 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 sectionBilling.ExtraText = "";
             }
 
-            if (payorDuties.MultiValued)
-            {
-                sectionBilling.ExtraText += "     Bill duties/Fees to: (Multiple)";
-            }
-            else if (payorDuties.SelectedValue != null)
-            {
-                sectionBilling.ExtraText += "     Bill duties/Fees to: ";
-                sectionBilling.ExtraText += EnumHelper.GetDescription((UpsShipmentChargeType)payorDuties.SelectedValue);
-            }
+            // See if we have any customs to determine if we are domestic/international.  LoadedShipments can be null when being called
+            // from some of the index changed events, so we'll default to no customs in those cases.  Eventually, this will get called
+            // after LoadShipmentDetails.
+            bool hasCustoms = LoadedShipments != null ? LoadedShipments.Any(s => CustomsManager.IsCustomsRequired(s)) : false;
 
-            if (panelTransportAccount.Visible)
+            if (hasCustoms)
             {
-                panelPayorDuties.Top = panelTransportAccount.Bottom + 4;
+                panelPayorDuties.Visible = true;
+                if (payorDuties.MultiValued)
+                {
+                    sectionBilling.ExtraText += "     Bill duties/Fees to: (Multiple)";
+                }
+                else if (payorDuties.SelectedValue != null)
+                {
+                    sectionBilling.ExtraText += "     Bill duties/Fees to: ";
+                    sectionBilling.ExtraText += EnumHelper.GetDescription((UpsShipmentChargeType)payorDuties.SelectedValue);
+                }
+
+                if (panelTransportAccount.Visible)
+                {
+                    panelPayorDuties.Top = panelTransportAccount.Bottom + 4;
+                }
+                else
+                {
+                    panelPayorDuties.Top = panelPayorTransport.Bottom + 4; 
+                }
             }
             else
             {
-                panelPayorDuties.Top = panelPayorTransport.Bottom + 4; 
+                panelPayorDuties.Visible = false;
             }
+
 
             int bottom = panelTransportAccount.Visible ? panelTransportAccount.Bottom : panelPayorTransport.Bottom + 4;
             bottom = panelPayorDuties.Visible ? panelPayorDuties.Bottom : bottom + 4;
