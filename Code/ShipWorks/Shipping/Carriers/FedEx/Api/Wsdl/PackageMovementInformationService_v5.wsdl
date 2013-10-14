@@ -301,7 +301,7 @@
             <xs:annotation>
               <xs:documentation>Identifies the FedEx location identifier of the package destination.</xs:documentation>
               <xs:appinfo>
-                <xs:MaxLength>4</xs:MaxLength>
+                <xs:MaxLength>5</xs:MaxLength>
               </xs:appinfo>
             </xs:annotation>
           </xs:element>
@@ -412,9 +412,15 @@
           <xs:enumeration value="FEDEX_2_DAY_AM"/>
           <xs:enumeration value="FEDEX_2_DAY_FREIGHT"/>
           <xs:enumeration value="FEDEX_3_DAY_FREIGHT"/>
+          <xs:enumeration value="FEDEX_DISTANCE_DEFERRED"/>
           <xs:enumeration value="FEDEX_EXPRESS_SAVER"/>
           <xs:enumeration value="FEDEX_FIRST_FREIGHT"/>
           <xs:enumeration value="FEDEX_GROUND"/>
+          <xs:enumeration value="FEDEX_NEXT_DAY_AFTERNOON"/>
+          <xs:enumeration value="FEDEX_NEXT_DAY_EARLY_MORNING"/>
+          <xs:enumeration value="FEDEX_NEXT_DAY_END_OF_DAY"/>
+          <xs:enumeration value="FEDEX_NEXT_DAY_FREIGHT"/>
+          <xs:enumeration value="FEDEX_NEXT_DAY_MID_MORNING"/>
           <xs:enumeration value="FIRST_OVERNIGHT"/>
           <xs:enumeration value="GROUND_HOME_DELIVERY"/>
           <xs:enumeration value="INTERNATIONAL_DISTRIBUTION_FREIGHT"/>
@@ -426,6 +432,8 @@
           <xs:enumeration value="INTERNATIONAL_PRIORITY_DISTRIBUTION"/>
           <xs:enumeration value="INTERNATIONAL_PRIORITY_FREIGHT"/>
           <xs:enumeration value="PRIORITY_OVERNIGHT"/>
+          <xs:enumeration value="SAME_DAY"/>
+          <xs:enumeration value="SAME_DAY_CITY"/>
           <xs:enumeration value="STANDARD_OVERNIGHT"/>
         </xs:restriction>
       </xs:simpleType>
@@ -495,7 +503,7 @@
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Intermediate" type="xs:int" fixed="0" minOccurs="1">
+          <xs:element name="Intermediate" type="xs:int" fixed="1" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the service interface level.</xs:documentation>
             </xs:annotation>
@@ -534,7 +542,7 @@
   <binding name="PackageMovementInformationServiceSoapBinding" type="ns:PackageMovementInformationPortType">
     <s1:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="postalCodeInquiry">
-      <s1:operation soapAction="postalCodeInquiry" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/packagemovementinformationservice/v5/postalCodeInquiry" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -543,7 +551,7 @@
       </output>
     </operation>
     <operation name="serviceAvailability">
-      <s1:operation soapAction="serviceAvailability" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/packagemovementinformationservice/v5/serviceAvailability" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
