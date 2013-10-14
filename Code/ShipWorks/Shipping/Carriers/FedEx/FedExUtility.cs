@@ -70,8 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FedEx2Day,
                 FedExServiceType.FedExExpressSaver,
                 FedExServiceType.FedEx1DayFreight,
-                FedExServiceType.FedEx2DayAM,
-                FedExServiceType.FirstFreight
+                FedExServiceType.FedEx2DayAM
             };
 
             // Since all shipments are going to the same country, just pick out the first one
