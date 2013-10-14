@@ -17,12 +17,12 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using log4net;
-using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate.Notification;
-using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate.ServiceType;
+using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
+using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {

@@ -68,14 +68,14 @@
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/ship</Value>
     </Setting>
-    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/rate</Value>
-    </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://service.express1.com/Services/SDCV24Service.svc</Value>
     </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://gatewaybeta.fedex.com:443/web-services/close</Value>
+    </Setting>
+    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/rate</Value>
     </Setting>
   </Settings>
 </SettingsFile>

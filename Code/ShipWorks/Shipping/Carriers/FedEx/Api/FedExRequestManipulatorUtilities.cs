@@ -211,17 +211,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail for a rate API request.</returns>
-        public static WebServices.v2013.Rate.WebAuthenticationDetail CreateRateWebAuthenticationDetail(FedExSettings settings)
+        public static WebServices.Rate.WebAuthenticationDetail CreateRateWebAuthenticationDetail(FedExSettings settings)
         {
-            return new WebServices.v2013.Rate.WebAuthenticationDetail
+            return new WebServices.Rate.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.v2013.Rate.WebAuthenticationCredential
+                CspCredential = new WebServices.Rate.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
                 },
 
-                UserCredential = new WebServices.v2013.Rate.WebAuthenticationCredential
+                UserCredential = new WebServices.Rate.WebAuthenticationCredential
                 {
                     Key = settings.UserCredentialsKey,
                     Password = settings.UserCredentialsPassword
@@ -294,9 +294,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="account">The account.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a rate API request.</returns>
-        public static WebServices.v2013.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account, FedExSettings settings)
         {
-            return new WebServices.v2013.Rate.ClientDetail
+            return new WebServices.Rate.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
                 ClientProductId = settings.ClientProductId,

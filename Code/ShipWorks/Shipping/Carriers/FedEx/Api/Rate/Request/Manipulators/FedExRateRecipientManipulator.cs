@@ -2,7 +2,7 @@ using System;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {

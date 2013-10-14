@@ -239,16 +239,6 @@ namespace ShipWorks.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/rate")]
-        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService {
-            get {
-                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("https://service.express1.com/Services/SDCV24Service.svc")]
         public string ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service {
             get {
@@ -263,6 +253,16 @@ namespace ShipWorks.Properties {
         public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService {
             get {
                 return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/rate")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService"]));
             }
         }
     }
