@@ -39,7 +39,6 @@
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration", "RegistrationService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress", "GlobalShipAddressService",
 		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Close", "CloseService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate", "RateService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track", "TrackService",
 		"ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount", "OpenAccountService",

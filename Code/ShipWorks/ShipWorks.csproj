@@ -5507,17 +5507,17 @@
     <Compile Include="Data\Administration\DatabaseSetupWizard.Designer.cs">
       <DependentUpon>DatabaseSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -7395,11 +7395,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -7596,6 +7591,23 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseDocumentsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReportsReprintReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\SmartPostCloseReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\SearchLocationsReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -7620,16 +7632,6 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\CloseServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseDocumentsReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseReportsReprintReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -7648,13 +7650,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\xmlsoap.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\SmartPostCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\GlobalShipAddressServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -10641,20 +10636,6 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReportsReprintReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\SmartPostCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -11401,6 +11382,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v5.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
@@ -11466,17 +11458,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_OnLineTools_WebServices_RegisterMgrAcctService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\CloseService_v2.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\</RelPath>
-      <UpdateFromURL>E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\GlobalShipAddressService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
@@ -11598,17 +11579,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_AmeriCommerce_WebServices_AmeriCommerceDatabaseIO</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\CloseService_v2.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Development\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\AddressValidationService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>

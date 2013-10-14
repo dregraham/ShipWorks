@@ -59,9 +59,6 @@
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_GlobalShipAddress_GlobalShipAddressService" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/globalshipaddress</Value>
     </Setting>
-    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Close_CloseService" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://gatewaybeta.fedex.com:443/web-services/close</Value>
-    </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Track_TrackService" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/track</Value>
     </Setting>
@@ -76,6 +73,9 @@
     </Setting>
     <Setting Name="ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://service.express1.com/Services/SDCV24Service.svc</Value>
+    </Setting>
+    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://gatewaybeta.fedex.com:443/web-services/close</Value>
     </Setting>
   </Settings>
 </SettingsFile>

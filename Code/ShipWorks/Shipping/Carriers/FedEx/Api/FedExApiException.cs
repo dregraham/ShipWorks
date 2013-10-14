@@ -10,7 +10,7 @@ using RateNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Noti
 using TrackNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Track.Notification;
 using PackageMovementNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement.Notification;
 using AddressValidationNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation.Notification;
-using CloseNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification;
+using CloseNotification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.CloseService;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {

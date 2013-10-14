@@ -209,15 +209,6 @@ namespace ShipWorks.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://gatewaybeta.fedex.com:443/web-services/close")]
-        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Close_CloseService {
-            get {
-                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Close_CloseService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/track")]
         public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Track_TrackService {
             get {
@@ -262,6 +253,16 @@ namespace ShipWorks.Properties {
         public string ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service {
             get {
                 return ((string)(this["ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://gatewaybeta.fedex.com:443/web-services/close")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService"]));
             }
         }
     }
