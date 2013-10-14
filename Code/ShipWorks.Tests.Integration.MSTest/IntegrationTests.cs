@@ -108,7 +108,6 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExExpressInternational")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
