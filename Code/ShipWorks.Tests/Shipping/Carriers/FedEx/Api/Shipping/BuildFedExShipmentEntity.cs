@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
             shipment.ShipPostalCode = "44202";
             shipment.ShipStateProvCode = "OH";
             shipment.ShipStreet1 = "1751 THOMPSON ST";
-            shipment.ShipStreet2 = "";
+            shipment.ShipStreet2 = "Suite 200";
             shipment.ShipNameParseStatus = 0;
 
             shipment.OriginCity = "NORTH LAS VEGAS";
@@ -69,7 +69,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
             shipment.OriginPostalCode = "89030";
             shipment.OriginStateProvCode = "NV";
             shipment.OriginStreet1 = "78 Fedex parkway";
-            shipment.OriginStreet2 = "";
+            shipment.OriginStreet2 = "Suite 2000";
+            shipment.OriginStreet3 = "Fruit cube";
             shipment.OriginNameParseStatus = 0;
 
             shipment.ShipDate = DateTime.Now;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -28,19 +29,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             // Get the contact and address for the shipment
             ShipmentEntity shipment = request.ShipmentEntity;
-            Address address = FedExApiCore.CreateAddress<Address>(new PersonAdapter(shipment, "Origin"));
-
-            // Create the shipper
-            Party shipper = new Party()
-            {
-                Address = address
-            };
-
-            // Not using the ResidentialDeterminationService here since the determination is for the 
-            // origin address and not the ship address. 
-            DetermineAddressType(shipper, shipment);
-
-            nativeRequest.RequestedShipment.Shipper = shipper;
+            ConfigureShipper(nativeRequest, shipment);
         }
 
         /// <summary>
@@ -71,6 +60,44 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         /// <summary>
+        /// Configures the shipper information on the native FedEx RateRequest based on the shipment's origin info.
+        /// </summary>
+        /// <param name="nativeRequest">The native request.</param>
+        /// <param name="shipment">The shipment.</param>
+        private void ConfigureShipper(RateRequest nativeRequest, ShipmentEntity shipment)
+        {
+            PersonAdapter person = new PersonAdapter(shipment, "Origin");
+
+            List<string> streetLines = new List<string>();
+            streetLines.Add(person.Street1);
+
+            if (!string.IsNullOrEmpty(person.Street2))
+            {
+                streetLines.Add(person.Street2);
+            }
+
+            if (!string.IsNullOrEmpty(person.Street3))
+            {
+                streetLines.Add(person.Street3);
+            }
+
+            Address address = new Address
+            {
+                StreetLines = streetLines.ToArray(),
+                City = person.City,
+                PostalCode = person.PostalCode,
+                StateOrProvinceCode = person.StateProvCode,
+                CountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(person.CountryCode)
+            };
+
+            nativeRequest.RequestedShipment.Shipper = new Party { Address = address };
+
+            // Not using the ResidentialDeterminationService here since the determination is for the 
+            // origin address and not the ship address. 
+            DetermineAddressType(nativeRequest.RequestedShipment.Shipper, shipment);
+        }
+
+        /// <summary>
         /// Determines whether the origin address is a residential address for the specified shipment. This is
         /// performed here and not in some other class since the residential status of the origin address only
         /// applies to FedEx shipments at this time.
@@ -92,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             if (residentialDeterminationType == ResidentialDeterminationType.CommercialIfCompany)
             {
                 // We need to inspect the origin address further to determine whether the address is a residential
-                // address based on the presense of a company name
+                // address based on the presence of a company name
                 isResidentialAddress = string.IsNullOrEmpty(shipment.OriginCompany);
             }
 

@@ -56,6 +56,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
+        /// Adjust the country code for what FedEx requires expects
+        /// </summary>
+        public static string AdjustFedExCountryCode(string code)
+        {
+            // FedEx wants GB
+            if (code == "UK")
+            {
+                code = "GB";
+            }
+
+            return code;
+        }
+
+        /// <summary>
         /// Gets the FedEx Drop off type for the shipment
         /// </summary>
         public static WebServices.Ship.DropoffType GetShipmentDropoffType(FedExDropoffType dropoffType)
