@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             nativeRequest.Version = new VersionId
             {
                 ServiceId = "crs",
-                Major = 12,
+                Major = 14,
                 Intermediate = 0,
                 Minor = 0
             };
