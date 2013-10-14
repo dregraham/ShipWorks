@@ -144,14 +144,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             switch (service)
             {
                 case FedExServiceType.InternationalPriority:
-                case FedExServiceType.InternationalEconomy:
-                case FedExServiceType.InternationalFirst:
-                    {
-                        types.Add(FedExPackagingType.Box10Kg);
-                        types.Add(FedExPackagingType.Box25Kg);
+                {
+                    types.Add(FedExPackagingType.Box10Kg);
+                    types.Add(FedExPackagingType.Box25Kg);
 
-                        break;
-                    }
+                    break;
+                }
             }
 
             types.Add(FedExPackagingType.Custom);
