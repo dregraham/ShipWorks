@@ -128,24 +128,21 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             if (!string.IsNullOrEmpty(CommoditiesQuantity))
             {
                 int numberOfItems = int.Parse(CommoditiesQuantity);
-
-                for (int i = 0; i < numberOfItems; i++)
+                
+                // Add the customs items to the shipment
+                ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
                 {
-                    // Add the customs items to the shipment
-                    ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
-                    {
-                        Description = CommoditiesDescription,
-                        Weight = double.Parse(CommoditiesWeightValue),
-                        HarmonizedCode = CommoditiesHarmonizedCode ?? string.Empty,
-                        CountryOfOrigin = CommoditiesCountryOfManufacture,
-                        Quantity = int.Parse(CommoditiesQuantity),
-                        UnitValue = decimal.Parse(CommoditiesCustomsValueAmount),
-                        UnitPriceAmount = decimal.Parse(CommoditiesUnitPriceAmount),
-                        NumberOfPieces = int.Parse(CommoditiesNumberOfPieces)
-                    };
+                    Description = CommoditiesDescription,
+                    Weight = double.Parse(CommoditiesWeightValue),
+                    HarmonizedCode = CommoditiesHarmonizedCode ?? string.Empty,
+                    CountryOfOrigin = CommoditiesCountryOfManufacture,
+                    Quantity = int.Parse(CommoditiesQuantity),
+                    UnitValue = decimal.Parse(CommoditiesCustomsValueAmount),
+                    UnitPriceAmount = decimal.Parse(CommoditiesUnitPriceAmount),
+                    NumberOfPieces = int.Parse(CommoditiesNumberOfPieces)
+                };
 
-                    shipment.CustomsItems.Add(customsItem);
-                }
+                shipment.CustomsItems.Add(customsItem);
             }
         }
 

@@ -3,3 +3,4 @@
 2D2 doesn't have a length/width/height
 323201 account number was missing a 0 in the front.
 
+In CA Exp Intl, RequestedShipment.ShipTimestamp (column BJ) had invalid dates. I blanked them out.

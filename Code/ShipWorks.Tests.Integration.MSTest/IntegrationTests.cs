@@ -198,16 +198,18 @@ namespace ShipWorks.Tests.Integration.MSTest
         [DataSource("DataSource_Ship_FedExCanadaExpressInternational")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExCanadaExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
+            
             try
             {
-                System.Diagnostics.Debug.WriteLine(this.TestContext.DataRow["TestID"].ToString());
-
-                if (PopulateTestObject(testObject, null))
+                if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping))
                 {
+                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+
                     testObject.Ship();
                 }
             }
@@ -248,9 +250,6 @@ namespace ShipWorks.Tests.Integration.MSTest
                 throw;
             }
         }
-
-
-
 
 
         [DataSource("DataSource_Ship_iParcel")]
