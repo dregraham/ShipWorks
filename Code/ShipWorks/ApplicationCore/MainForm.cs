@@ -248,7 +248,7 @@ namespace ShipWorks
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
-                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
                 {
                     dlg.ShowDialog(this);
                 }
@@ -283,14 +283,14 @@ namespace ShipWorks
                 // If we aren't configured and 2012 is supported, open the fast track setup wizard
                 if (SqlServerInstaller.IsSqlServer2012Supported)
                 {
-                    using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                    using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard())
                     {
                         return wizard.ShowDialog(this) == DialogResult.OK;
                     }
                 }
                 else
                 {
-                    using (DatabaseSetupWizard wizard = new DatabaseSetupWizard())
+                    using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard())
                     {
                         return wizard.ShowDialog(this) == DialogResult.OK;
                     }

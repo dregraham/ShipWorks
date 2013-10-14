@@ -23,10 +23,10 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Wizard for setting up ShipWorks
     /// </summary>
-    public partial class ShipWorksSetupWizard : WizardForm
+    public partial class SimpleDatabaseSetupWizard : WizardForm
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksSetupWizard));
+        static readonly ILog log = LogManager.GetLogger(typeof(SimpleDatabaseSetupWizard));
 
         // The sql installer
         SqlServerInstaller sqlInstaller;
@@ -64,7 +64,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksSetupWizard()
+        public SimpleDatabaseSetupWizard()
         {
             InitializeComponent();
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnOpenDetailedSetup(object sender, EventArgs e)
         {
-            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
             {
                 BeginInvoke(new MethodInvoker(Hide));
 

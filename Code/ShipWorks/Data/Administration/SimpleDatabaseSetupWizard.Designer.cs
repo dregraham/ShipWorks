@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Data.Administration
 {
-    partial class ShipWorksSetupWizard
+    partial class SimpleDatabaseSetupWizard
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShipWorksSetupWizard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimpleDatabaseSetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
             this.startFromScratch = new ShipWorks.UI.Controls.ShieldButton();
             this.detailedSetup = new System.Windows.Forms.Button();
