@@ -279,6 +279,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("UPScarbonneutralIndicator", string.Empty);
             }
 
+            // Write out Delivery Confirmation, if valid
+            UpsDeliveryConfirmationElementWriter upsDeliveryConfirmationElementWriter = new UpsDeliveryConfirmationElementWriter(xmlWriter);
+            upsDeliveryConfirmationElementWriter.WriteShipmentDeliveryConfirmationElement(shipment.Ups);
+
             // Close element
             xmlWriter.WriteEndElement();
 
