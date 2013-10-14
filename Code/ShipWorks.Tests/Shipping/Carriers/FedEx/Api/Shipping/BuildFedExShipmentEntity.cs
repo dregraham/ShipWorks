@@ -56,6 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
             shipment.ShipStateProvCode = "OH";
             shipment.ShipStreet1 = "1751 THOMPSON ST";
             shipment.ShipStreet2 = "Suite 200";
+            shipment.ShipStreet3 = "Next to the furnace";
             shipment.ShipNameParseStatus = 0;
 
             shipment.OriginCity = "NORTH LAS VEGAS";

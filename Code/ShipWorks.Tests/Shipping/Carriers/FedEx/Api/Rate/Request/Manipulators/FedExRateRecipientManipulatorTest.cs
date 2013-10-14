@@ -39,6 +39,29 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [TestMethod]
+        public void Manipulate_FedExShipperManipulator_ReturnsValidStreetLines_Test()
+        {
+            testObject.Manipulate(carrierRequest.Object);
+            
+            // Make sure Address fields match
+            string[] addressLines = nativeRequest.RequestedShipment.Recipient.Address.StreetLines;
+
+            Assert.AreEqual(shipmentEntity.ShipStreet1, addressLines[0]);
+
+            if (addressLines.Length > 1)
+            {
+                // Check address line 2
+                Assert.AreEqual(shipmentEntity.ShipStreet2, addressLines[1]);
+            }
+
+            if (addressLines.Length > 2)
+            {
+                // Check address line 3
+                Assert.AreEqual(shipmentEntity.ShipStreet3, addressLines[2]);
+            }
+        }
+
+        [TestMethod]
         public void Manipulate_FedExRecipientManipulator_ReturnsValidRequestedShipmentRecipient_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

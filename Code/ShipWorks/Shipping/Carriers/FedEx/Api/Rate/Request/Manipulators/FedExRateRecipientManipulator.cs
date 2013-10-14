@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -6,9 +7,11 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
+    /// <summary>
+    /// A manipulator for configuring the recipient information of a rate request.
+    /// </summary>
     public class FedExRateRecipientManipulator : ICarrierRequestManipulator
     {
-
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
@@ -23,23 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             // Get the contact and address for the shipment
             ShipmentEntity shipment = request.ShipmentEntity;
-            Address address = FedExApiCore.CreateAddress<Address>(new PersonAdapter(shipment, "Ship"));
-
-            // Create the shipper
-            Party recipient = new Party()
-            {
-                Address = address
-            };
-
-            // Set residential info
-            if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipment))
-            {
-                recipient.Address.Residential = shipment.ResidentialResult;
-                recipient.Address.ResidentialSpecified = true;
-            }
-
-            // Set the shipper on the requested shipment
-            nativeRequest.RequestedShipment.Recipient = recipient;
+            ConfigureRecipient(nativeRequest, shipment);
         }
 
         /// <summary>
@@ -67,6 +54,51 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             {
                 nativeRequest.RequestedShipment = new RequestedShipment();
             }
+        }
+
+        /// <summary>
+        /// Configures the recipient information on the native FedEx RateRequest based on the shipment's ship address info.
+        /// </summary>
+        /// <param name="nativeRequest">The native request.</param>
+        /// <param name="shipment">The shipment.</param>
+        private void ConfigureRecipient(RateRequest nativeRequest, ShipmentEntity shipment)
+        {
+            PersonAdapter person = new PersonAdapter(shipment, "Ship");
+
+            List<string> streetLines = new List<string>();
+            streetLines.Add(person.Street1);
+
+            if (!string.IsNullOrEmpty(person.Street2))
+            {
+                streetLines.Add(person.Street2);
+            }
+
+            if (!string.IsNullOrEmpty(person.Street3))
+            {
+                streetLines.Add(person.Street3);
+            }
+
+            Address address = new Address
+            {
+                StreetLines = streetLines.ToArray(),
+                City = person.City,
+                PostalCode = person.PostalCode,
+                StateOrProvinceCode = person.StateProvCode,
+                CountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(person.CountryCode)
+            };
+
+            // Use the address to create the party/recipient
+            Party recipient = new Party { Address = address };
+
+            // Set residential info
+            if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipment))
+            {
+                recipient.Address.Residential = shipment.ResidentialResult;
+                recipient.Address.ResidentialSpecified = true;
+            }
+
+            // Set the recipient on the FedEx WSDL object
+            nativeRequest.RequestedShipment.Recipient = recipient;
         }
     }
 }
