@@ -62,7 +62,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 packageRequest.GroupPackageCount = "1";
 
                 // Package weight and value
-                packageRequest.Weight = new Weight { Units = GetApiWeightUnit(request.ShipmentEntity), Value = FedExUtility.GetPackageTotalWeight(fedExPackage) };
+                packageRequest.Weight = new Weight
+                {
+                    Units = GetApiWeightUnit(request.ShipmentEntity), 
+                    UnitsSpecified = true,
+                    Value = FedExUtility.GetPackageTotalWeight(fedExPackage),
+                    ValueSpecified = true
+                };
                 packageRequest.InsuredValue = new Money { Amount = fedExPackage.DeclaredValue, Currency = GetShipmentCurrencyType(request.ShipmentEntity)};
 
                 // If custom, add dimensions
@@ -71,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     packageRequest.Dimensions = new Dimensions
                     {
                         Units = GetApiLinearUnit(request.ShipmentEntity),
+                        UnitsSpecified = true,
                         Length = ((int)fedExPackage.DimsLength).ToString(),
                         Height = ((int)fedExPackage.DimsHeight).ToString(),
                         Width = ((int)fedExPackage.DimsWidth).ToString()
