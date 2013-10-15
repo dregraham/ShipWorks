@@ -778,10 +778,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         private void SetAlcoholData(ShipmentEntity shipment)
         {
+            bool hasAlcohol = ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "alcohol") ||
+                               (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "alcohol") ||
+                               (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol"));
+
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
-                // TODO: populate based on test data
-                package.ContainsAlcohol = false;
+                package.ContainsAlcohol = hasAlcohol;
             }
         }
 
