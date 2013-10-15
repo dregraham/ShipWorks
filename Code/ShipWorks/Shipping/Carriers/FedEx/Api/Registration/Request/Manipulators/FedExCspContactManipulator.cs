@@ -27,11 +27,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
             PersonAdapter person = new PersonAdapter(account, string.Empty);
 
-            nativeRequest.BillingAddress = FedExApiCore.CreateAddress<Address>(person);
+            nativeRequest.BillingAddress = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
 
             nativeRequest.UserContactAndAddress = new ParsedContactAndAddress();
-            nativeRequest.UserContactAndAddress.Address = FedExApiCore.CreateAddress<Address>(person);
-            nativeRequest.UserContactAndAddress.Contact = FedExApiCore.CreateParsedContact<ParsedContact>(person);
+            nativeRequest.UserContactAndAddress.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
+            nativeRequest.UserContactAndAddress.Contact = FedExRequestManipulatorUtilities.CreateParsedContact<ParsedContact>(person);
         }
 
         /// <summary>

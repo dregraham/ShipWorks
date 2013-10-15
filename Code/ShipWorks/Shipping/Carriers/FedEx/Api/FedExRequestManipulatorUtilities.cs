@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -43,16 +45,83 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw new CarrierException(request.NativeRequest.ToString() + " is not a valid request type.");
             }
 
-            WebServices.Ship.RequestedShipment requestedShipment = (WebServices.Ship.RequestedShipment)FedExApiCore.DuckGetProperty(request.NativeRequest, "RequestedShipment");
+            WebServices.Ship.RequestedShipment requestedShipment = (WebServices.Ship.RequestedShipment)DuckGetProperty(request.NativeRequest, "RequestedShipment");
 
             // Create a new one if it doesn't already exist.
             if (requestedShipment == null)
             {
                 requestedShipment = new WebServices.Ship.RequestedShipment();
-                FedExApiCore.Duck(request.NativeRequest, "RequestedShipment", requestedShipment);
+                Duck(request.NativeRequest, "RequestedShipment", requestedShipment);
             }
 
             return requestedShipment;
+        }
+
+        /// <summary>
+        /// Create a FedEx API contact object from the given person
+        /// </summary>
+        public static T CreateContact<T>(PersonAdapter person) where T : new()
+        {
+            T contact = new T();
+
+            Duck(contact, "PersonName", new PersonName(person).FullName);
+            Duck(contact, "CompanyName", person.Company);
+            Duck(contact, "EMailAddress", person.Email);
+            Duck(contact, "FaxNumber", person.Fax);
+            Duck(contact, "PhoneNumber", person.Phone);
+
+            return contact;
+        }
+
+        /// <summary>
+        /// Create a FedEx API "Parsed" contact
+        /// </summary>
+        public static T CreateParsedContact<T>(PersonAdapter person) where T : new()
+        {
+            T contact = new T();
+
+            // We need to know what "ParsedPersonName" type to create
+            object parsedPerson = Activator.CreateInstance(typeof(T).GetProperty("PersonName").PropertyType);
+
+            Duck(parsedPerson, "FirstName", person.FirstName);
+            Duck(parsedPerson, "LastName", person.LastName);
+            Duck(contact, "PersonName", parsedPerson);
+
+            Duck(contact, "CompanyName", person.Company);
+            Duck(contact, "EMailAddress", person.Email);
+            Duck(contact, "FaxNumber", person.Fax);
+            Duck(contact, "PhoneNumber", person.Phone);
+
+            return contact;
+        }
+
+        /// <summary>
+        /// Create a FedEx API address object from the given person
+        /// </summary>
+        public static T CreateAddress<T>(PersonAdapter person) where T : new()
+        {
+            T address = new T();
+
+            List<string> streetLines = new List<string>();
+            streetLines.Add(person.Street1);
+
+            if (!string.IsNullOrEmpty(person.Street2))
+            {
+                streetLines.Add(person.Street2);
+            }
+
+            if (!string.IsNullOrEmpty(person.Street3))
+            {
+                streetLines.Add(person.Street3);
+            }
+
+            Duck(address, "StreetLines", streetLines.ToArray());
+            Duck(address, "City", person.City);
+            Duck(address, "PostalCode", person.PostalCode);
+            Duck(address, "StateOrProvinceCode", person.StateProvCode);
+            Duck(address, "CountryCode", AdjustFedExCountryCode(person.CountryCode));
+
+            return address;
         }
 
         /// <summary>
@@ -67,6 +136,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
 
             return code;
+        }
+
+        /// <summary>
+        /// Our pseudo duck typing that sets the given property to the specified value on the given object
+        /// </summary>
+        private static void Duck(object duck, string property, object value)
+        {
+            duck.GetType().GetProperty(property).SetValue(duck, value, null);
+        }
+
+        /// <summary>
+        /// Our pseudo duck typing that gets the given property of the given object
+        /// </summary>
+        public static object DuckGetProperty(object duck, string property)
+        {
+            return duck.GetType().GetProperty(property).GetValue(duck, null);
         }
 
         /// <summary>

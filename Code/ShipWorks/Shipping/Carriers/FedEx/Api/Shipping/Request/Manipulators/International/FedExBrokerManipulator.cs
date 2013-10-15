@@ -63,8 +63,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                     Broker = new Party()
                     {
                         AccountNumber = request.ShipmentEntity.FedEx.BrokerAccount,
-                        Address = FedExApiCore.CreateAddress<Address>(person),
-                        Contact = FedExApiCore.CreateContact<Contact>(person)
+                        Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person),
+                        Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(person)
                     },
                     Type = BrokerType.IMPORT,
                     TypeSpecified = true

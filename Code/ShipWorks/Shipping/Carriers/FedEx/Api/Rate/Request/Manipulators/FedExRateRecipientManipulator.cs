@@ -64,28 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private static void ConfigureRecipient(RateRequest nativeRequest, ShipmentEntity shipment)
         {
             PersonAdapter person = new PersonAdapter(shipment, "Ship");
-
-            List<string> streetLines = new List<string>();
-            streetLines.Add(person.Street1);
-
-            if (!string.IsNullOrEmpty(person.Street2))
-            {
-                streetLines.Add(person.Street2);
-            }
-
-            if (!string.IsNullOrEmpty(person.Street3))
-            {
-                streetLines.Add(person.Street3);
-            }
-
-            Address address = new Address
-            {
-                StreetLines = streetLines.ToArray(),
-                City = person.City,
-                PostalCode = person.PostalCode,
-                StateOrProvinceCode = person.StateProvCode,
-                CountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(person.CountryCode)
-            };
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address> (person);
 
             // Use the address to create the party/recipient
             Party recipient = new Party { Address = address };

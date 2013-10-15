@@ -54,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             PersonAdapter person = new PersonAdapter(account, string.Empty);
 
             nativeRequest.Subscriber.AccountNumber = account.AccountNumber;
-            nativeRequest.Subscriber.Address = FedExApiCore.CreateAddress<Address>(person);
-            nativeRequest.Subscriber.Contact = FedExApiCore.CreateContact<Contact>(person);
-            nativeRequest.AccountShippingAddress = FedExApiCore.CreateAddress<Address>(person);
+            nativeRequest.Subscriber.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
+            nativeRequest.Subscriber.Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(person);
+            nativeRequest.AccountShippingAddress = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
 
             // CSP 
             nativeRequest.CspSolutionId = settings.CspSolutionId;

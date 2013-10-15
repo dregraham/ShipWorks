@@ -39,8 +39,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             // Get the contact and address for the shipment
             ShipmentEntity shipment = request.ShipmentEntity;
-            Contact contact = FedExApiCore.CreateContact<Contact>(new PersonAdapter(shipment, "Origin"));
-            Address address = FedExApiCore.CreateAddress<Address>(new PersonAdapter(shipment, "Origin"));
+            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment, "Origin"));
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment, "Origin"));
 
             // Create the shipper
             Party shipper = new Party()

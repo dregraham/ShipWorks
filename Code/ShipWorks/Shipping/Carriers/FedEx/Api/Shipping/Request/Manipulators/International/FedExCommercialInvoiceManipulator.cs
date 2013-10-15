@@ -76,8 +76,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 Party importer = new Party();
                 PersonAdapter importerPerson = new PersonAdapter(fedExShipment, "Importer");
 
-                importer.Address = FedExApiCore.CreateAddress<Address>(importerPerson);
-                importer.Contact = FedExApiCore.CreateContact<Contact>(importerPerson);
+                importer.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(importerPerson);
+                importer.Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(importerPerson);
                 importer.AccountNumber = fedExShipment.ImporterAccount;
                 importer.Tins = new TaxpayerIdentification[] { new TaxpayerIdentification { Number = fedExShipment.ImporterTIN } };
 

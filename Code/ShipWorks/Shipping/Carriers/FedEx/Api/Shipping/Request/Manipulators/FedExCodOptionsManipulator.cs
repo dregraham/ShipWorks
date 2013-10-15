@@ -107,8 +107,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             // Recipient
             codDetail.CodRecipient = new Party();
-            codDetail.CodRecipient.Address = FedExApiCore.CreateAddress<Address>(new PersonAdapter(shipmentEntity.FedEx, "Cod"));
-            codDetail.CodRecipient.Contact = FedExApiCore.CreateContact<Contact>(new PersonAdapter(shipmentEntity.FedEx, "Cod"));
+            codDetail.CodRecipient.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipmentEntity.FedEx, "Cod"));
+            codDetail.CodRecipient.Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipmentEntity.FedEx, "Cod"));
             
             if (!string.IsNullOrEmpty(shipmentEntity.FedEx.CodAccountNumber))
             {
