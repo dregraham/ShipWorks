@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// </summary>
         public FedExRatePackageDetailsManipulator()
             : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRatePackageDetailsManipulator" /> class.
@@ -28,8 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// <param name="fedExSettings">The fed ex settings.</param>
         public FedExRatePackageDetailsManipulator(FedExSettings fedExSettings)
             : base(fedExSettings)
-        {
-        }
+        { }
 
         /// <summary>
         /// Manipulates the specified request.
@@ -69,7 +68,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     Value = FedExUtility.GetPackageTotalWeight(fedExPackage),
                     ValueSpecified = true
                 };
-                packageRequest.InsuredValue = new Money { Amount = fedExPackage.DeclaredValue, Currency = GetShipmentCurrencyType(request.ShipmentEntity)};
+
+                packageRequest.InsuredValue = new Money
+                {
+                    Amount = fedExPackage.DeclaredValue, 
+                    AmountSpecified = true,
+                    Currency = GetShipmentCurrencyType(request.ShipmentEntity)
+                };
 
                 // If custom, add dimensions
                 if (fedex.PackagingType == (int)FedExPackagingType.Custom)

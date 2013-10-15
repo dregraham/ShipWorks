@@ -171,6 +171,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             ValidateValue(carrierRequest.Object.ShipmentEntity.FedEx.Packages[0], nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
+        [TestMethod]
+        public void Manipulate_InsuredValueAmountSpecifiedIsTrue_Test()
+        {
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.IsTrue(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].InsuredValue.AmountSpecified);
+        }
+
         private void ValidateValue(FedExPackageEntity fedExPackageEntity, RequestedPackageLineItem requestedPackageLineItem)
         {
             Assert.AreEqual("USD", requestedPackageLineItem.InsuredValue.Currency.ToString());
