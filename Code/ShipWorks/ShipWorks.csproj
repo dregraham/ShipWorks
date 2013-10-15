@@ -555,6 +555,7 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -594,6 +595,12 @@
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Administration\DatabaseFileInfo.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupWizard.Designer.cs">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Administration\SqlDatabaseDetail.cs" />
     <Compile Include="Data\Administration\SimpleDatabaseSetupWizard.cs">
       <SubType>Form</SubType>
@@ -2805,7 +2812,7 @@
     <Compile Include="Stores\Management\OnlineUpdateActionControlBase.Designer.cs">
       <DependentUpon>OnlineUpdateActionControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Management\AddStoreWizardLock.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupLock.cs" />
     <Compile Include="Stores\Management\AddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5663,6 +5670,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DatabaseDetailsDlg.resx">
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Setup\ShipWorksSetupWizard.resx">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\SimpleDatabaseSetupWizard.resx">
       <DependentUpon>SimpleDatabaseSetupWizard.cs</DependentUpon>

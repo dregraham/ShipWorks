@@ -17,6 +17,7 @@ using System.IO;
 using log4net;
 using ShipWorks.Email;
 using ShipWorks.Users;
+using ShipWorks.ApplicationCore.Setup;
 
 namespace ShipWorks.Data.Administration
 {
@@ -358,7 +359,6 @@ namespace ShipWorks.Data.Administration
             string username = swUsername.Text.Trim();
 
             // Default to not moving on
-            WizardPage nextPage = e.NextPage;
             e.NextPage = CurrentPage;
 
             if (username.Length == 0)
@@ -379,15 +379,14 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
+            Cursor.Current = Cursors.WaitCursor;
+
             try
             {
                 using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                 {
                     UserUtility.CreateUser(username, swEmail.Text, swPassword.Text, true);
                 }
-
-                // Now we can move on
-                e.NextPage = nextPage;
             }
             catch (SqlException ex)
             {
@@ -402,15 +401,8 @@ namespace ShipWorks.Data.Administration
             createdDatabase = false;
             sqlSession.SaveAsCurrent();
 
-            // Initialize the session
-            UserSession.InitializeForCurrentDatabase();
-
-            // Logon the user
-            UserSession.Logon(username, swPassword.Text, true);
-
-            // We're done - the AddStoreWizard should open next
-            e.NextPage = CurrentPage;
-            DialogResult = DialogResult.OK;
+            // Now we propel them right into our ShipWorks Setup Wizard
+            ShipWorksSetupWizard.ContinueAfterCreateDatabase(this, username, swPassword.Text);
         }
 
         /// <summary>

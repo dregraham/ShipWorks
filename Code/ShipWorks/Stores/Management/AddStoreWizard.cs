@@ -40,6 +40,7 @@ using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Editions.Brown;
+using ShipWorks.ApplicationCore.Setup;
 
 namespace ShipWorks.Stores.Management
 {
@@ -88,7 +89,7 @@ namespace ShipWorks.Stores.Management
         {
             try
             {
-                using (AddStoreWizardLock wizardLock = new AddStoreWizardLock())
+                using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
                 {
                     using (AddStoreWizard wizard = new AddStoreWizard())
                     {
@@ -101,7 +102,7 @@ namespace ShipWorks.Stores.Management
             }
             catch (SqlAppResourceLockException)
             {
-                MessageHelper.ShowInformation(owner, "The Add Store Wizard is open on another computer running ShipWorks.  Only one Add Store Wizard can be open at a time.");
+                MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks.  This can only be done on one computer at a time.");
                 return null;
             }
 

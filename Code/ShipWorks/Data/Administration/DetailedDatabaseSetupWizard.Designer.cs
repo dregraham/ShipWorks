@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Administration
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer3 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailedDatabaseSetupWizard));
             this.wizardPageChooseWisely2012 = new ShipWorks.UI.Wizard.WizardPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -221,7 +221,9 @@ namespace ShipWorks.Data.Administration
             // 
             // next
             // 
+            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(380, 343);
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -233,7 +235,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageRestoreOption);
+            this.mainPanel.Controls.Add(this.wizardPageComplete);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -599,7 +601,7 @@ namespace ShipWorks.Data.Administration
             this.gridDatabses.ImageTextSeparation = 1;
             this.gridDatabses.Location = new System.Drawing.Point(22, 46);
             this.gridDatabses.Name = "gridDatabses";
-            this.gridDatabses.Renderer = windowsXPRenderer3;
+            this.gridDatabses.Renderer = windowsXPRenderer1;
             this.gridDatabses.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
             this.gridDatabses.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
@@ -980,7 +982,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageComplete.Size = new System.Drawing.Size(548, 271);
             this.wizardPageComplete.TabIndex = 0;
             this.wizardPageComplete.Title = "Database Configuration Complete";
-            this.wizardPageComplete.PageShown += new System.EventHandler<ShipWorks.UI.Wizard.WizardPageShownEventArgs>(this.OnShownComplete);
+            this.wizardPageComplete.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoComplete);
             // 
             // labelSetupComplete
             // 
@@ -1734,13 +1736,14 @@ namespace ShipWorks.Data.Administration
             // 
             this.progressLocalDbTimer.Tick += new System.EventHandler(this.OnUpgradeLocalDbProgressTimer);
             // 
-            // DatabaseSetupWizard
+            // DetailedDatabaseSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(548, 378);
+            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(554, 406);
-            this.Name = "DatabaseSetupWizard";
+            this.Name = "DetailedDatabaseSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageChooseWisely2012,

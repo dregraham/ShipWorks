@@ -78,8 +78,9 @@
             // 
             // next
             // 
+            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(380, 343);
-            this.next.ShowShield = true;
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -91,7 +92,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Controls.Add(this.wizardPageFinishExisting);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -280,7 +281,7 @@
             this.wizardPageFinishExisting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinishExisting.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinishExisting.Name = "wizardPageFinishExisting";
-            this.wizardPageFinishExisting.Size = new System.Drawing.Size(526, 278);
+            this.wizardPageFinishExisting.Size = new System.Drawing.Size(548, 271);
             this.wizardPageFinishExisting.TabIndex = 0;
             this.wizardPageFinishExisting.Title = "ShipWorks Setup";
             // 
@@ -289,10 +290,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(65, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(437, 13);
+            this.label2.Size = new System.Drawing.Size(293, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "We found your ShipWorks data already installed on this computer.  You\'re all read" +
-    "y to go.";
+            this.label2.Text = "You\'re ShipWorks data is already installed on this computer.";
             // 
             // label1
             // 
@@ -436,14 +436,15 @@
             this.label10.TabIndex = 189;
             this.label10.Text = "Create your ShipWorks username:";
             // 
-            // ShipWorksSetupWizard
+            // SimpleDatabaseSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 378);
+            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MinimumSize = new System.Drawing.Size(554, 406);
-            this.Name = "ShipWorksSetupWizard";
+            this.MinimumSize = new System.Drawing.Size(564, 416);
+            this.Name = "SimpleDatabaseSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageWelcome,
