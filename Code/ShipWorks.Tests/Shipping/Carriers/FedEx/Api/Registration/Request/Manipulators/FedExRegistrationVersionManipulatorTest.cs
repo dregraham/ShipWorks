@@ -79,12 +79,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [TestMethod]
-        public void Manipulate_SetsMajorTo2_AndRequestIsVersionCapture_Test()
+        public void Manipulate_SetsMajorTo3_AndRequestIsVersionCapture_Test()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             VersionId version = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(2, version.Major);
+            Assert.AreEqual(3, version.Major);
         }
 
         [TestMethod]
@@ -120,12 +120,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [TestMethod]
-        public void Manipulate_SetsMajorTo2_AndRequestIsRegistration_Test()
+        public void Manipulate_SetsMajorTo3_AndRequestIsRegistration_Test()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
             VersionId version = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(2, version.Major);
+            Assert.AreEqual(3, version.Major);
         }
 
         [TestMethod]
@@ -162,12 +162,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [TestMethod]
-        public void Manipulate_SetsMajorTo2_AndRequestIsSubscription_Test()
+        public void Manipulate_SetsMajorTo3_AndRequestIsSubscription_Test()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             VersionId version = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(2, version.Major);
+            Assert.AreEqual(3, version.Major);
         }
 
         [TestMethod]
