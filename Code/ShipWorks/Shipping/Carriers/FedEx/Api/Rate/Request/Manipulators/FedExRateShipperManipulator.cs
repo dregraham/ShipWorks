@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="shipment">The shipment.</param>
-        private void ConfigureShipper(RateRequest nativeRequest, ShipmentEntity shipment)
+        private static void ConfigureShipper(RateRequest nativeRequest, ShipmentEntity shipment)
         {
             PersonAdapter person = new PersonAdapter(shipment, "Origin");
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// <param name="shipper">The shipper.</param>
         /// <param name="shipment">The shipment.</param>
         /// <exception cref="System.InvalidOperationException">FedExAddressLookup is not a valid residential determination type for the shipment's origin address.</exception>
-        private void DetermineAddressType(Party shipper, ShipmentEntity shipment)
+        private static void DetermineAddressType(Party shipper, ShipmentEntity shipment)
         {
             ResidentialDeterminationType residentialDeterminationType = (ResidentialDeterminationType)shipment.FedEx.OriginResidentialDetermination;
             if (residentialDeterminationType == ResidentialDeterminationType.FedExAddressLookup)

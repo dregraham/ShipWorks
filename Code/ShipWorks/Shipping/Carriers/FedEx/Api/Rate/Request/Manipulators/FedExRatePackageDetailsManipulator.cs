@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="lineItemIndex">Index of the line item.</param>
-        private void InitializeLineItem(RateRequest nativeRequest, int lineItemIndex)
+        private static void InitializeLineItem(RateRequest nativeRequest, int lineItemIndex)
         {
             if (nativeRequest.RequestedShipment.RequestedPackageLineItems.Length <= lineItemIndex)
             {

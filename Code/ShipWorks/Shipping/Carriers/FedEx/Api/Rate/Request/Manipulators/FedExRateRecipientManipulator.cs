@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="shipment">The shipment.</param>
-        private void ConfigureRecipient(RateRequest nativeRequest, ShipmentEntity shipment)
+        private static void ConfigureRecipient(RateRequest nativeRequest, ShipmentEntity shipment)
         {
             PersonAdapter person = new PersonAdapter(shipment, "Ship");
 

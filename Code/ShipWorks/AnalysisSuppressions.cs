@@ -12193,3 +12193,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountSoapException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Users.Security.PermissionException")]
 ﻿// This file is used by Code Analysis to maintain SuppressMessage 
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "FedExAddressLookup", Scope = "member", Target = "ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators.FedExRateShipperManipulator.#DetermineAddressType(ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Party,ShipWorks.Data.Model.EntityClasses.ShipmentEntity)")]

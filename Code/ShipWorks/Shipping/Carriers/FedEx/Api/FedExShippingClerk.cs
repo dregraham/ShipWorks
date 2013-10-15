@@ -624,7 +624,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipment">The shipment.</param>
         /// <param name="rateDetails">The rate details.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private List<RateResult> BuildRateResults(ShipmentEntity shipment, List<RateReplyDetail> rateDetails)
+        private static List<RateResult> BuildRateResults(ShipmentEntity shipment, List<RateReplyDetail> rateDetails)
         {
             List<RateResult> results = new List<RateResult>();
 
@@ -725,7 +725,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
             }
 
-            throw new CarrierException("Invalid FedEx ServiceType " + serviceType);
+            throw new CarrierException("Invalid FedEx Service Type " + serviceType);
         }
 
         /// <summary>
