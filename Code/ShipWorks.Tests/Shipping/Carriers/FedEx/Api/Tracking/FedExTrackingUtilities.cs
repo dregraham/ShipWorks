@@ -21,32 +21,32 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking
                         Severity = NotificationSeverityType.SUCCESS
                     }
                 },
-                TrackDetails = new TrackDetail[1]
-                    {
-                        new TrackDetail
-                            {
-                                TrackingNumber =  "999999999999999",
-                                Events = new TrackEvent[1]
-                                    {
-                                       new TrackEvent
-                                           {
-                                               Timestamp = DateTime.Now.ToUniversalTime(),
-                                               EventType = "AR",
-                                               EventDescription = "Arrived at FedEx location",
-                                               Address = new Address
-                                                   {
-                                                       City = "CHICAGO",
-                                                       StateOrProvinceCode = "IL",
-                                                       PostalCode = "60638",
-                                                       CountryCode = "US",
-                                                       Residential = false
-                                                   }
-                                           }
+                //TrackDetails = new TrackDetail[1]
+                //    {
+                //        new TrackDetail
+                //            {
+                //                TrackingNumber =  "999999999999999",
+                //                Events = new TrackEvent[1]
+                //                    {
+                //                       new TrackEvent
+                //                           {
+                //                               Timestamp = DateTime.Now.ToUniversalTime(),
+                //                               EventType = "AR",
+                //                               EventDescription = "Arrived at FedEx location",
+                //                               Address = new Address
+                //                                   {
+                //                                       City = "CHICAGO",
+                //                                       StateOrProvinceCode = "IL",
+                //                                       PostalCode = "60638",
+                //                                       CountryCode = "US",
+                //                                       Residential = false
+                //                                   }
+                //                           }
 
-                                    }
-                            }
+                //                    }
+                //            }
 
-                    }
+                //    }
             };
 
             return trackReply;
