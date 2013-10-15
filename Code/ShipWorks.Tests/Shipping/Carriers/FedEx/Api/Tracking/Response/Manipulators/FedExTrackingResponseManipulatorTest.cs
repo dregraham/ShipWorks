@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         [TestMethod]
         public void Manipulate_ResultSummaryIsNoTrackingInfoReturned_WhenTrackDetailsStatusDescriptionIsEmpty_Test()
         {
-            //nativeResponse.TrackDetails[0].StatusDescription = string.Empty;
+            nativeResponse.CompletedTrackDetails[0].TrackDetails[0].StatusDetail.Description = string.Empty;
             
             testObject.Manipulate(fedExTrackingResponse);
             
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             shipment.OriginCountryCode = "US";
 
             // Change the country code in the native response to Canada
-            //nativeResponse.TrackDetails[0].Events[0].Address.CountryCode = "CA";
+            nativeResponse.CompletedTrackDetails[0].TrackDetails[0].Events[0].Address.CountryCode = "CA";
 
             testObject.Manipulate(fedExTrackingResponse);
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             shipment.OriginCountryCode = "CA";
 
             // Change the country code in the native response to Canada
-            //nativeResponse.TrackDetails[0].Events[0].Address.CountryCode = "CA";
+            nativeResponse.CompletedTrackDetails[0].TrackDetails[0].Events[0].Address.CountryCode = "CA";
 
             testObject.Manipulate(fedExTrackingResponse);
 
