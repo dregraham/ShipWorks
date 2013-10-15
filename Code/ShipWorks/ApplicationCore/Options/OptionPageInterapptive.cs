@@ -41,6 +41,7 @@ using ShipWorks.ApplicationCore.Options.PrintResultCleanup;
 using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Stores.Platforms.Newegg.Net;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -66,15 +67,17 @@ namespace ShipWorks.ApplicationCore.Options
         {
             postalWebTestServer.Checked = PostalWebUtility.UseTestServer;
             stampsTestServer.Checked = StampsApiSession.UseTestServer;
-            fedexTestServer.Checked = FedExApiCore.UseTestServer;
+            
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
             express1EndiciaTestServer.Checked = Express1EndiciaUtility.UseTestServer;
             express1StampsTestServer.Checked = Express1StampsConnectionDetails.UseTestServer;
             equaShipTestServer.Checked = EquaShipClient.UseTestServer;
-            onTracTestServer.Checked = OnTracRequest.UseTestServer;            
+            onTracTestServer.Checked = OnTracRequest.UseTestServer;
 
-            fedexListRates.Checked = FedExApiCore.UseListRates;
+            FedExSettingsRepository fedExSettingsRepo = new FedExSettingsRepository();
+            fedexListRates.Checked = fedExSettingsRepo.UseListRates;
+            fedexTestServer.Checked = fedExSettingsRepo.UseTestServer;
 
             ebay.Checked = !EbayUrlUtilities.UseLiveServer;
             marketplaceAdvisor.Checked = !MarketplaceAdvisorOmsClient.UseLiveServer;
@@ -104,7 +107,6 @@ namespace ShipWorks.ApplicationCore.Options
 
             PostalWebUtility.UseTestServer = postalWebTestServer.Checked;
             StampsApiSession.UseTestServer = stampsTestServer.Checked;
-            FedExApiCore.UseTestServer = fedexTestServer.Checked;
             UpsWebClient.UseTestServer = upsOnLineTools.Checked;
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
             Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;
@@ -112,7 +114,9 @@ namespace ShipWorks.ApplicationCore.Options
             EquaShipClient.UseTestServer = equaShipTestServer.Checked;
             OnTracRequest.UseTestServer = onTracTestServer.Checked;
 
-            FedExApiCore.UseListRates = fedexListRates.Checked;
+            FedExSettingsRepository fedexSettingsRepo = new FedExSettingsRepository();
+            fedexSettingsRepo.UseListRates = fedexListRates.Checked;
+            fedexSettingsRepo.UseTestServer = fedexTestServer.Checked;
 
             EbayUrlUtilities.UseLiveServer = !ebay.Checked;
             MarketplaceAdvisorOmsClient.UseLiveServer = !marketplaceAdvisor.Checked;
