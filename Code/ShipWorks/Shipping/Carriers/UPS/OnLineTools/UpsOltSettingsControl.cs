@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
+            upsMailInnovationsOptions.LoadSettings((UpsShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools));
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.UpsInsuranceProvider;
             pennyOne.Checked = settings.UpsInsurancePennyOne;
         }
@@ -44,6 +45,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
+            upsMailInnovationsOptions.SaveSettings(settings);
+
             optionsControl.SaveSettings(settings);
 
             settings.UpsInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;

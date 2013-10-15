@@ -57,20 +57,5 @@ namespace ShipWorks.Data.Model.EntityClasses
                 InternalExcluded = ArrayUtility.FormatCommaSeparatedList(value);
             }
         }
-
-        /// <summary>
-        /// List of the Worldship-specific shipping services that are enabled in ShipWorks by the user.
-        /// </summary>
-        public int[] WorldShipServices
-        {
-            get
-            {
-                return ArrayUtility.ParseCommaSeparatedList<int>(InternalWorldShipServices);
-            }
-            set
-            {
-                InternalWorldShipServices = ArrayUtility.FormatCommaSeparatedList(value);
-            }
-        }
     }
 }

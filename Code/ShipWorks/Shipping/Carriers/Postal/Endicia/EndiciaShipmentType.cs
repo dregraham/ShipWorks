@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using ShipWorks.Templates.Processing.TemplateXml;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Editing;
-using System.Windows.Forms;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using Interapptive.Shared.Business;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Properties;
-using ShipWorks.Shipping.Insurance;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -302,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia 
-                && Express1Utility.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
+                && Express1Utilities.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
                 && (settings = ShippingSettings.Fetch()).EndiciaAutomaticExpress1)
             {
                 var express1Account = EndiciaAccountManager.GetAccount(settings.EndiciaAutomaticExpress1Account);
@@ -312,10 +307,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException("The Express1 account to automatically use when processing with Endicia has not been selected.");
                 }
                 
-                var originalType = shipment.ShipmentType;
-
                 // We temporarily turn this into an Exprss1 shipment to get rated
-                shipment.ShipmentType = (int) ShipmentTypeCode.PostalExpress1;
+                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
@@ -326,7 +319,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 finally
                 {
-                    shipment.ShipmentType = originalType;
+                    shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
                     shipment.Postal.Endicia.EndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID.Value;
                     shipment.Postal.Endicia.OriginalEndiciaAccountID = null;
                 }
@@ -353,7 +346,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         PostalRateSelection endiciaRateDetail = (PostalRateSelection) endiciaRate.Tag;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (endiciaRate.Selectable && endiciaRateDetail != null && Express1Utility.IsPostageSavingService(endiciaRateDetail.ServiceType))
+                        if (endiciaRate.Selectable && endiciaRateDetail != null && Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
                         {
                             // See if Express1 returned a rate for this servie
                             RateResult express1Rate = null;
@@ -364,25 +357,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             }
 
                             // If Express1 returned a rate, check to make sure it is a lower amount
-                            if (express1Rate != null)
+                            if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
                             {
-                                if (express1Rate.Amount <= endiciaRate.Amount)
-                                {
-                                    finalRates.Add(express1Rate);
-                                    hasExpress1Savings = true;
-                                }
-                                else
-                                {
-                                    finalRates.Add(endiciaRate);
-
-                                    // Set the express rate to null so that it doesn't add the icon later
-                                    express1Rate = null;
-                                }
+                                finalRates.Add(express1Rate);
+                                hasExpress1Savings = true;
                             }
                             else
                             {
-                                // Otherwise just use the Endicia rate
                                 finalRates.Add(endiciaRate);
+
+                                // Set the express rate to null so that it doesn't add the icon later
+                                express1Rate = null;
                             }
 
                             RateResult rate = finalRates[finalRates.Count - 1];
@@ -399,7 +384,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             else
                             {
                                 // Endicia rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                if (Express1Utility.IsValidPackagingType(((PostalRateSelection) rate.Tag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
+                                if (Express1Utilities.IsValidPackagingType(((PostalRateSelection) rate.Tag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
                                 {
                                     rate.AmountFootnote = Resources.star_green;
                                 }
@@ -426,7 +411,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
                     else
                     {
-                        if (Express1Utility.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
+                        if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
                         {
                             finalGroup.FootnoteCreator = () => new EndiciaExpress1RatePromotionFootnote();
                         }
@@ -439,7 +424,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Express1 rages - return as-is
                     return new RateGroup(endiciaRates);
                 }
-
             }
             catch (EndiciaException ex)
             {
@@ -454,8 +438,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             ValidateShipment(shipment);
 
-            bool useExpress1 = Express1Utility.IsPostageSavingService(shipment) &&
-                Express1Utility.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
+            bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) &&
+                Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
                 ShippingSettings.Fetch().EndiciaAutomaticExpress1;
 
             var express1Account = EndiciaAccountManager.GetAccount(ShippingSettings.Fetch().EndiciaAutomaticExpress1Account);
@@ -480,7 +464,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation); 
 
                     // Check Express1 amount
-                    shipment.ShipmentType = (int)ShipmentTypeCode.PostalExpress1;
+                    shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
                     shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                     shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
@@ -513,11 +497,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (useExpress1)
             {
                 // Now we turn this into an Express1 shipment...
-                shipment.ShipmentType = (int) ShipmentTypeCode.PostalExpress1;
+                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
-                Express1ShipmentType shipmentType = (Express1ShipmentType) ShipmentTypeManager.GetType(shipment);
+                Express1EndiciaShipmentType shipmentType = (Express1EndiciaShipmentType) ShipmentTypeManager.GetType(shipment);
 
                 // Process via Express1
                 shipmentType.UpdateDynamicShipmentData(shipment);
@@ -576,7 +560,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             commonDetail.OriginAccount = (account == null) ? "" : account.AccountNumber;
 
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.PostalExpress1 && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
                 commonDetail.OriginalShipmentType = ShipmentTypeCode.Endicia;
             }

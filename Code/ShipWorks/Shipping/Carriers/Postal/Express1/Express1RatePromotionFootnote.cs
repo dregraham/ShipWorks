@@ -1,0 +1,41 @@
+﻿using System;
+using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Editing;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Express1
+{
+    /// <summary>
+    /// User control for promoting Express1 discounted rates
+    /// </summary>
+    public partial class Express1RatePromotionFootnote : RateFootnoteControl
+    {
+        private readonly IExpress1SettingsFacade express1Settings;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="settings">Express1 settings facade</param>
+        public Express1RatePromotionFootnote(IExpress1SettingsFacade settings)
+        {
+            InitializeComponent();
+
+            express1Settings = settings;
+        }
+
+        /// <summary>
+        /// Link to activate the Express1 discount
+        /// </summary>
+        private void OnActivateDiscount(object sender, EventArgs e)
+        {
+            using (Express1ActivateDiscountDlg dlg = new Express1ActivateDiscountDlg(express1Settings))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    RaiseRateCriteriaChanged();
+                }
+            }
+        }
+    }
+}

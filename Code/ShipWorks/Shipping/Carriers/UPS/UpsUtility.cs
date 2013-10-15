@@ -130,30 +130,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets the packaging types that are conditionally avaiable for WorldShip
+        /// Gets the packaging types that are conditionally avaiable for Mail Innovations
         /// </summary>
-        /// <returns></returns>
-        public static List<UpsPackagingType> GetWorldShipConditionalPackagingType(UpsContractService? contractService)
+        private static List<UpsPackagingType> GetMailInnovationsPackagingTypes()
         {
             List<UpsPackagingType> types = new List<UpsPackagingType>();
+            types.Add(UpsPackagingType.FirstClassMail);
+            types.Add(UpsPackagingType.PriorityMail);
+            types.Add(UpsPackagingType.BPMFlats);
+            types.Add(UpsPackagingType.BPMParcels);
+            types.Add(UpsPackagingType.Irregulars);
+            types.Add(UpsPackagingType.Machinables);
+            types.Add(UpsPackagingType.MediaMail);
+            types.Add(UpsPackagingType.ParcelPost);
+            types.Add(UpsPackagingType.StandardFlats);
 
-            if (!contractService.HasValue || contractService == UpsContractService.MailInnovations)
-            {
-                types.Add(UpsPackagingType.FirstClassMail);
-                types.Add(UpsPackagingType.PriorityMail);
-                types.Add(UpsPackagingType.BPMFlats);
-                types.Add(UpsPackagingType.BPMParcels);
-                types.Add(UpsPackagingType.Irregulars);
-                types.Add(UpsPackagingType.Machinables);
-                types.Add(UpsPackagingType.MediaMail);
-                types.Add(UpsPackagingType.ParcelPost);
-                types.Add(UpsPackagingType.StandardFlats);
+            // Mail Innovaitons International, not going to filter out based on country
+            types.Add(UpsPackagingType.Flats);
+            types.Add(UpsPackagingType.BPM);
+            types.Add(UpsPackagingType.Parcels);
 
-                // Mail Innovaitons International, not going to filter out based on country
-                types.Add(UpsPackagingType.Flats);
-                types.Add(UpsPackagingType.BPM);
-                types.Add(UpsPackagingType.Parcels);
-            }
 
             return types;
         }
@@ -161,7 +157,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get hte valid package types based on the shipment type
         /// </summary>
-        public static List<UpsPackagingType> GetValidPackagingTypes(ShipmentTypeCode? shipmentTypeCode)
+        /// <param name="shipmentTypeCode"></param>
+        public static List<UpsPackagingType> GetValidPackagingTypes(ShipmentTypeCode shipmentTypeCode)
         {
             List<UpsPackagingType> packageTypes = new List<UpsPackagingType>();
 
@@ -179,13 +176,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageTypes.Add(UpsPackagingType.BoxExpress);
             packageTypes.Add(UpsPackagingType.ExpressEnvelope);
 
-            if (!shipmentTypeCode.HasValue || shipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
+            UpsShipmentType upsShipmentType = (UpsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+            if (upsShipmentType.IsMailInnovationsEnabled())
             {
-                // Add Mail Innovations package types if it is enabled
-                if (WorldShipUtility.ContractServiceEnabled(UpsContractService.MailInnovations))
-                {
-                    packageTypes.AddRange(GetWorldShipConditionalPackagingType(UpsContractService.MailInnovations));
-                }
+                packageTypes.AddRange(GetMailInnovationsPackagingTypes());
             }
 
             return packageTypes.Distinct().ToList();
@@ -249,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool IsCodAvailable(UpsServiceType service, string countryCode)
         {
-            if (IsUpsSurePostService(service))
+            if (IsUpsMiOrSurePostService(service))
             {
                 return false;
             }

@@ -140,7 +140,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnEnableRemoteConnections(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard(DatabaseSetupWizard.SetupMode.EnableRemoteConnections))
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(DetailedDatabaseSetupWizard.SetupMode.EnableRemoteConnections))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -156,7 +156,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnConfigureDatabase(object sender, EventArgs e)
         {
-            using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

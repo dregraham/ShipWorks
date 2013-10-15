@@ -174,19 +174,25 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
-            settings.Express1Thermal = false;
-            settings.Express1ThermalType = (int) ThermalLabelType.EPL;
-            settings.Express1CustomsCertify = false;
-            settings.Express1CustomsSigner = "";
-            settings.Express1ThermalDocTab = false;
-            settings.Express1ThermalDocTabType = (int) ThermalDocTabType.Leading;
-            settings.Express1SingleSource = false;
+            settings.Express1EndiciaThermal = false;
+            settings.Express1EndiciaThermalType = (int)ThermalLabelType.EPL;
+            settings.Express1EndiciaCustomsCertify = false;
+            settings.Express1EndiciaCustomsSigner = "";
+            settings.Express1EndiciaThermalDocTab = false;
+            settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
+            settings.Express1EndiciaSingleSource = false;
+
+            settings.Express1StampsThermal = false;
+            settings.Express1StampsThermalType = (int)ThermalLabelType.EPL;
+            settings.Express1StampsSingleSource = false;
 
             settings.WorldShipLaunch = false;
-            settings.WorldShipServices = new int[0];
+            settings.UpsMailInnovationsEnabled = false;
 
             settings.StampsThermal = false;
             settings.StampsThermalType = (int) ThermalLabelType.EPL;
+            settings.StampsAutomaticExpress1 = false;
+            settings.StampsAutomaticExpress1Account = 0;
 
             settings.EquaShipThermal = false;
             settings.EquaShipThermalType = (int) ThermalLabelType.EPL;
@@ -200,6 +206,9 @@ namespace ShipWorks.Shipping.Settings
             settings.IParcelThermalType = (int)ThermalLabelType.EPL;
             settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.IParcelInsurancePennyOne = false;
+
+            settings.UpsMailInnovationsEnabled = false;
+            settings.WorldShipMailInnovationsEnabled = false;
 
             adapter.SaveAndRefetch(settings);
         }

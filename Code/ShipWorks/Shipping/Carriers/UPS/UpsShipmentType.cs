@@ -170,6 +170,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.ShipperRelease = false;
             shipment.Ups.CarbonNeutral = false;
 
+            shipment.Ups.CostCenter = string.Empty;
+            shipment.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
+            shipment.Ups.Cn22Number = string.Empty;
+
+            shipment.Ups.ShipmentChargeAccount = string.Empty;
+            shipment.Ups.ShipmentChargeCountryCode = string.Empty;
+            shipment.Ups.ShipmentChargePostalCode = string.Empty;
+            shipment.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillShipper;
+
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
             shipment.Ups.Packages.Add(package);
 
@@ -282,6 +291,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.CommercialPaperlessInvoice = false;
             profile.Ups.PaperlessAdditionalDocumentation = false;
             profile.Ups.CarbonNeutral = false;
+
+            profile.Ups.CostCenter = string.Empty;
+            profile.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
+            profile.Ups.Cn22Number = string.Empty;
+
+            profile.Ups.ShipmentChargeAccount = string.Empty;
+            profile.Ups.ShipmentChargeCountryCode = string.Empty;
+            profile.Ups.ShipmentChargePostalCode = string.Empty;
+            profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillShipper;
         }
 
         /// <summary>
@@ -417,6 +435,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.ShipperRelease, ups, UpsShipmentFields.ShipperRelease);
             ShippingProfileUtility.ApplyProfileValue(source.CarbonNeutral, ups, UpsShipmentFields.CarbonNeutral);
 
+            ShippingProfileUtility.ApplyProfileValue(source.CostCenter, ups, UpsShipmentFields.CostCenter);
+            ShippingProfileUtility.ApplyProfileValue(source.IrregularIndicator, ups, UpsShipmentFields.IrregularIndicator);
+            ShippingProfileUtility.ApplyProfileValue(source.Cn22Number, ups, UpsShipmentFields.Cn22Number);
+
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeType, ups, UpsShipmentFields.ShipmentChargeType);
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargePostalCode, ups, UpsShipmentFields.ShipmentChargePostalCode);
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeCountryCode, ups, UpsShipmentFields.ShipmentChargeCountryCode);
+            ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeAccount, ups, UpsShipmentFields.ShipmentChargeAccount);
+
             if (changedPackageWeights)
             {
                 UpdateTotalWeight(shipment);
@@ -471,7 +498,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // it may have effected the shipping services available (i.e. the eBay GSP program)            
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
-            var upsServiceManagerFactory = new UpsServiceManagerFactory();
+            var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
             IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
             List<UpsServiceType> serviceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
 
@@ -815,7 +842,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                UpsApiVoidClient.VoidShipment(shipment);
+                if (!UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                {
+                    UpsApiVoidClient.VoidShipment(shipment);
+                }
             }
             catch (UpsException ex)
             {
@@ -829,13 +859,68 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            if (UpsUtility.IsUpsSurePostService((UpsServiceType) shipment.Ups.Service) && 
+            UpsShipmentEntity upsShipmentEntity = shipment.Ups;
+            UpsServiceType upsServiceType = (UpsServiceType)upsShipmentEntity.Service;
+
+            if (UpsUtility.IsUpsSurePostService(upsServiceType) && 
                 (shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)  &&
-                shipment.Ups.Packages.Any(p=>p.Insurance && p.InsuranceValue > 0))
+                upsShipmentEntity.Packages.Any(p => p.Insurance && p.InsuranceValue > 0))
             {
-                throw new CarrierException("Ups declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable Shipworks Insurance for this Carrier.");
+                throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
+            // Clear out any values that aren't allowed for SurePost or MI
+            if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))
+            {
+                shipment.ReturnShipment = false;
+                upsShipmentEntity.ReturnContents = string.Empty;
+                upsShipmentEntity.ReturnService = (int)UpsReturnServiceType.ElectronicReturnLabel;
+                upsShipmentEntity.ReturnUndeliverableEmail = string.Empty;
+
+                upsShipmentEntity.CodEnabled = false;
+                upsShipmentEntity.CodAmount = 0;
+                upsShipmentEntity.CodPaymentType = (int)UpsCodPaymentType.Cash;
+
+                upsShipmentEntity.ShipperRelease = false;
+
+                UpsPackageEntity upsPackageEntity = upsShipmentEntity.Packages.FirstOrDefault();
+                upsPackageEntity.AdditionalHandlingEnabled = false;
+                upsPackageEntity.DryIceEnabled = false;
+                upsPackageEntity.DryIceIsForMedicalUse = false;
+                upsPackageEntity.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;
+                upsPackageEntity.DryIceWeight = 0;
+                upsPackageEntity.VerbalConfirmationEnabled = false;
+                upsPackageEntity.VerbalConfirmationName = string.Empty;
+                upsPackageEntity.VerbalConfirmationPhone = string.Empty;
+                upsPackageEntity.VerbalConfirmationPhoneExtension = string.Empty;
+
+                // Clear out any specific to MI
+                if (UpsUtility.IsUpsMiService(upsServiceType))
+                {
+                    upsShipmentEntity.CarbonNeutral = false;
+                    upsShipmentEntity.ReferenceNumber = string.Empty;
+                    upsShipmentEntity.ReferenceNumber2 = string.Empty;
+                }
+
+                // Clear out any specific to SurePost
+                if (UpsUtility.IsUpsSurePostService(upsServiceType))
+                {
+                    upsShipmentEntity.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
+                    upsShipmentEntity.PayorAccount = string.Empty;
+                    upsShipmentEntity.PayorCountryCode = string.Empty;
+                    upsShipmentEntity.PayorPostalCode = string.Empty;
+                    upsShipmentEntity.PayorType = (int)UpsPayorType.Sender;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines whether [is mail innovations enabled] for OLT.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsMailInnovationsEnabled()
+        {
+            return ShippingSettings.Fetch().UpsMailInnovationsEnabled;
         }
     }
 }

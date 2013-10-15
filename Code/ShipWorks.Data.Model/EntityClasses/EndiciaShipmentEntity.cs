@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 
 
-
+		private ScanFormBatchEntity _scanFormBatch;
 		private PostalShipmentEntity _postalShipment;
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -53,7 +53,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-
+			/// <summary>Member name ScanFormBatch</summary>
+			public static readonly string ScanFormBatch = "ScanFormBatch";
 
 
 			/// <summary>Member name PostalShipment</summary>
@@ -118,7 +119,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				_scanFormBatch = (ScanFormBatchEntity)info.GetValue("_scanFormBatch", typeof(ScanFormBatchEntity));
+				if(_scanFormBatch!=null)
+				{
+					_scanFormBatch.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				_postalShipment = (PostalShipmentEntity)info.GetValue("_postalShipment", typeof(PostalShipmentEntity));
 				if(_postalShipment!=null)
 				{
@@ -140,6 +145,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case EndiciaShipmentFieldIndex.ShipmentID:
 					DesetupSyncPostalShipment(true, false);
+					break;
+				case EndiciaShipmentFieldIndex.ScanFormBatchID:
+					DesetupSyncScanFormBatch(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -163,7 +171,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-
+				case "ScanFormBatch":
+					this.ScanFormBatch = (ScanFormBatchEntity)entity;
+					break;
 
 
 				case "PostalShipment":
@@ -190,7 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
+				case "ScanFormBatch":
+					toReturn.Add(EndiciaShipmentEntity.Relations.ScanFormBatchEntityUsingScanFormBatchID);
+					break;
 
 
 				case "PostalShipment":
@@ -231,7 +243,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "ScanFormBatch":
+					SetupSyncScanFormBatch(relatedEntity);
+					break;
 
 				case "PostalShipment":
 					SetupSyncPostalShipment(relatedEntity);
@@ -250,7 +264,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "ScanFormBatch":
+					DesetupSyncScanFormBatch(false, true);
+					break;
 
 				case "PostalShipment":
 					DesetupSyncPostalShipment(false, true);
@@ -276,7 +292,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
+			if(_scanFormBatch!=null)
+			{
+				toReturn.Add(_scanFormBatch);
+			}
 			if(_postalShipment!=null)
 			{
 				toReturn.Add(_postalShipment);
@@ -307,7 +326,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				info.AddValue("_scanFormBatch", (!this.MarkedForDeletion?_scanFormBatch:null));
 				info.AddValue("_postalShipment", (!this.MarkedForDeletion?_postalShipment:null));
 			}
 			
@@ -345,6 +364,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'ScanFormBatch' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoScanFormBatch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ScanFormBatchFields.ScanFormBatchID, null, ComparisonOperator.Equal, this.ScanFormBatchID));
+			return bucket;
+		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'PostalShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
@@ -422,7 +450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-
+			toReturn.Add("ScanFormBatch", _scanFormBatch);
 
 
 			toReturn.Add("PostalShipment", _postalShipment);
@@ -434,7 +462,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			if(_scanFormBatch!=null)
+			{
+				_scanFormBatch.ActiveContext = base.ActiveContext;
+			}
 			if(_postalShipment!=null)
 			{
 				_postalShipment.ActiveContext = base.ActiveContext;
@@ -447,7 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
+			_scanFormBatch = null;
 			_postalShipment = null;
 			PerformDependencyInjection();
 			
@@ -499,10 +530,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("RefundFormID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ScanFormID", fieldHashtable);
+			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _scanFormBatch</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncScanFormBatch(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _scanFormBatch, new PropertyChangedEventHandler( OnScanFormBatchPropertyChanged ), "ScanFormBatch", EndiciaShipmentEntity.Relations.ScanFormBatchEntityUsingScanFormBatchID, true, signalRelatedEntity, "EndiciaShipment", resetFKFields, new int[] { (int)EndiciaShipmentFieldIndex.ScanFormBatchID } );		
+			_scanFormBatch = null;
+		}
+
+		/// <summary> setups the sync logic for member _scanFormBatch</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncScanFormBatch(IEntity2 relatedEntity)
+		{
+			if(_scanFormBatch!=relatedEntity)
+			{
+				DesetupSyncScanFormBatch(true, true);
+				_scanFormBatch = (ScanFormBatchEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _scanFormBatch, new PropertyChangedEventHandler( OnScanFormBatchPropertyChanged ), "ScanFormBatch", EndiciaShipmentEntity.Relations.ScanFormBatchEntityUsingScanFormBatchID, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnScanFormBatchPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 		/// <summary> Removes the sync logic for member _postalShipment</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -571,6 +634,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ScanFormBatch' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathScanFormBatch
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ScanFormBatchEntityFactory))),
+					(IEntityRelation)GetRelationsForField("ScanFormBatch")[0], (int)ShipWorks.Data.Model.EntityType.EndiciaShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ScanFormBatchEntity, 0, null, null, null, null, "ScanFormBatch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+			}
+		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PostalShipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
@@ -729,19 +803,53 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EndiciaShipmentFieldIndex.RefundFormID, value); }
 		}
 
-		/// <summary> The ScanFormID property of the Entity EndiciaShipment<br/><br/>
+		/// <summary> The ScanFormBatchID property of the Entity EndiciaShipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaShipment"."ScanFormID"<br/>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."ScanFormBatchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ScanFormID
+		public virtual Nullable<System.Int64> ScanFormBatchID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)EndiciaShipmentFieldIndex.ScanFormID, false); }
-			set	{ SetValue((int)EndiciaShipmentFieldIndex.ScanFormID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)EndiciaShipmentFieldIndex.ScanFormBatchID, false); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.ScanFormBatchID, value); }
 		}
 
 
 
+		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual ScanFormBatchEntity ScanFormBatch
+		{
+			get
+			{
+				return _scanFormBatch;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncScanFormBatch(value);
+				}
+				else
+				{
+					if(value==null)
+					{
+						if(_scanFormBatch != null)
+						{
+							_scanFormBatch.UnsetRelatedEntity(this, "EndiciaShipment");
+						}
+					}
+					else
+					{
+						if(_scanFormBatch!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "EndiciaShipment");
+						}
+					}
+				}
+			}
+		}
 
 		/// <summary> Gets / sets related entity of type 'PostalShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>

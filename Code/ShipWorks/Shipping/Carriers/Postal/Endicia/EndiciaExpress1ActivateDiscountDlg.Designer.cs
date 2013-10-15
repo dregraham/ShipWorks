@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.express1Control = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaAutomaticExpress1Control();
+            this.express1Control = new EndiciaAutomaticExpress1Control();
             this.close = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 

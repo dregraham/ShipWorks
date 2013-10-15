@@ -3939,63 +3939,6 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of ShippingSettingsEntity
-	/// </summary>
-	public class ShippingSettingsCollection : EntityCollection<ShippingSettingsEntity>
-	{
-        /// <summary>
-        /// Gets the count of all ShippingSettingsEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all ShippingSettingsEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new ShippingSettingsEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static ShippingSettingsCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static ShippingSettingsCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            ShippingSettingsCollection collection = new ShippingSettingsCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
 	/// Strongly typed collection of OtherProfileEntity
 	/// </summary>
 	public class OtherProfileCollection : EntityCollection<OtherProfileEntity>
@@ -9053,6 +8996,63 @@ namespace ShipWorks.Data.Adapter.Custom
         public static ActionQueueSelectionCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             ActionQueueSelectionCollection collection = new ActionQueueSelectionCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of ShippingSettingsEntity
+	/// </summary>
+	public class ShippingSettingsCollection : EntityCollection<ShippingSettingsEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ShippingSettingsEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ShippingSettingsEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ShippingSettingsEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ShippingSettingsCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ShippingSettingsCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ShippingSettingsCollection collection = new ShippingSettingsCollection();
 
             RelationPredicateBucket bucket = null;
 

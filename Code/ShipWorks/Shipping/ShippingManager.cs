@@ -355,6 +355,8 @@ namespace ShipWorks.Shipping
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
             {
+                clonedShipment.Ups.UspsTrackingNumber = string.Empty;
+                clonedShipment.Ups.Cn22Number = string.Empty;
                 foreach (UpsPackageEntity package in clonedShipment.Ups.Packages)
                 {
                     package.TrackingNumber = string.Empty;
@@ -363,18 +365,18 @@ namespace ShipWorks.Shipping
                 }
             }
 
-            // Clear out post-processed data on a per shipmenttype basis.  could probably be factored out into base classes per shipment type if 
+            // Clear out post-processed data on a per shipment-type basis.  could probably be factored out into base classes per shipment type if 
             // we expand this past endicia
             if (clonedShipment.Postal != null && clonedShipment.Postal.Endicia != null)
             {
                 clonedShipment.Postal.Endicia.TransactionID = null;
                 clonedShipment.Postal.Endicia.RefundFormID = null;
-                clonedShipment.Postal.Endicia.ScanFormID = null;
+                clonedShipment.Postal.Endicia.ScanFormBatchID = null;
             }
 
             if (clonedShipment.Postal != null && clonedShipment.Postal.Stamps != null)
             {
-                clonedShipment.Postal.Stamps.ScanFormID = null;
+                clonedShipment.Postal.Stamps.ScanFormBatchID = null;
             }
 
             return clonedShipment;

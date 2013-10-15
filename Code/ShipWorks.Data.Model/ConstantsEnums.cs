@@ -2324,8 +2324,6 @@ namespace ShipWorks.Data.Model
 		SubmissionID,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
-		///<summary>ShipmentCount. </summary>
-		ShipmentCount,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
 		///<summary>Description. </summary>
@@ -2363,8 +2361,8 @@ namespace ShipWorks.Data.Model
 		TransactionID,
 		///<summary>RefundFormID. </summary>
 		RefundFormID,
-		///<summary>ScanFormID. </summary>
-		ScanFormID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7341,26 +7339,28 @@ namespace ShipWorks.Data.Model
 		EndiciaInsuranceProvider,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>InternalWorldShipServices. </summary>
-		InternalWorldShipServices,
 		///<summary>StampsThermal. </summary>
 		StampsThermal,
 		///<summary>StampsThermalType. </summary>
 		StampsThermalType,
-		///<summary>Express1Thermal. </summary>
-		Express1Thermal,
-		///<summary>Express1ThermalType. </summary>
-		Express1ThermalType,
-		///<summary>Express1CustomsCertify. </summary>
-		Express1CustomsCertify,
-		///<summary>Express1CustomsSigner. </summary>
-		Express1CustomsSigner,
-		///<summary>Express1ThermalDocTab. </summary>
-		Express1ThermalDocTab,
-		///<summary>Express1ThermalDocTabType. </summary>
-		Express1ThermalDocTabType,
-		///<summary>Express1SingleSource. </summary>
-		Express1SingleSource,
+		///<summary>StampsAutomaticExpress1. </summary>
+		StampsAutomaticExpress1,
+		///<summary>StampsAutomaticExpress1Account. </summary>
+		StampsAutomaticExpress1Account,
+		///<summary>Express1EndiciaThermal. </summary>
+		Express1EndiciaThermal,
+		///<summary>Express1EndiciaThermalType. </summary>
+		Express1EndiciaThermalType,
+		///<summary>Express1EndiciaCustomsCertify. </summary>
+		Express1EndiciaCustomsCertify,
+		///<summary>Express1EndiciaCustomsSigner. </summary>
+		Express1EndiciaCustomsSigner,
+		///<summary>Express1EndiciaThermalDocTab. </summary>
+		Express1EndiciaThermalDocTab,
+		///<summary>Express1EndiciaThermalDocTabType. </summary>
+		Express1EndiciaThermalDocTabType,
+		///<summary>Express1EndiciaSingleSource. </summary>
+		Express1EndiciaSingleSource,
 		///<summary>EquaShipThermal. </summary>
 		EquaShipThermal,
 		///<summary>EquaShipThermalType. </summary>
@@ -7381,6 +7381,16 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
+		///<summary>Express1StampsThermal. </summary>
+		Express1StampsThermal,
+		///<summary>Express1StampsThermalType. </summary>
+		Express1StampsThermalType,
+		///<summary>Express1StampsSingleSource. </summary>
+		Express1StampsSingleSource,
+		///<summary>UpsMailInnovationsEnabled. </summary>
+		UpsMailInnovationsEnabled,
+		///<summary>WorldShipMailInnovationsEnabled. </summary>
+		WorldShipMailInnovationsEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7776,6 +7786,8 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
+		///<summary>IsExpress1. </summary>
+		IsExpress1,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7816,8 +7828,6 @@ namespace ShipWorks.Data.Model
 		ScanFormTransactionID,
 		///<summary>ScanFormUrl. </summary>
 		ScanFormUrl,
-		///<summary>ShipmentCount. </summary>
-		ShipmentCount,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
 		///<summary>ScanFormBatchID. </summary>
@@ -7849,8 +7859,10 @@ namespace ShipWorks.Data.Model
 		StampsTransactionID,
 		///<summary>Memo. </summary>
 		Memo,
-		///<summary>ScanFormID. </summary>
-		ScanFormID,
+		///<summary>OriginalStampsAccountID. </summary>
+		OriginalStampsAccountID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8430,6 +8442,20 @@ namespace ShipWorks.Data.Model
 		CarbonNeutral,
 		///<summary>CommercialPaperlessInvoice. </summary>
 		CommercialPaperlessInvoice,
+		///<summary>CostCenter. </summary>
+		CostCenter,
+		///<summary>IrregularIndicator. </summary>
+		IrregularIndicator,
+		///<summary>Cn22Number. </summary>
+		Cn22Number,
+		///<summary>ShipmentChargeType. </summary>
+		ShipmentChargeType,
+		///<summary>ShipmentChargeAccount. </summary>
+		ShipmentChargeAccount,
+		///<summary>ShipmentChargePostalCode. </summary>
+		ShipmentChargePostalCode,
+		///<summary>ShipmentChargeCountryCode. </summary>
+		ShipmentChargeCountryCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8574,6 +8600,20 @@ namespace ShipWorks.Data.Model
 		ShipperRelease,
 		///<summary>CarbonNeutral. </summary>
 		CarbonNeutral,
+		///<summary>CostCenter. </summary>
+		CostCenter,
+		///<summary>IrregularIndicator. </summary>
+		IrregularIndicator,
+		///<summary>Cn22Number. </summary>
+		Cn22Number,
+		///<summary>ShipmentChargeType. </summary>
+		ShipmentChargeType,
+		///<summary>ShipmentChargeAccount. </summary>
+		ShipmentChargeAccount,
+		///<summary>ShipmentChargePostalCode. </summary>
+		ShipmentChargePostalCode,
+		///<summary>ShipmentChargeCountryCode. </summary>
+		ShipmentChargeCountryCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

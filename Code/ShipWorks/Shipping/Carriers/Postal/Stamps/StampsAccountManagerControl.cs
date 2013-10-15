@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// <summary>
     /// UserControl for managing\editing stamps.com accounts
     /// </summary>
-    public partial class StampsAccountManagerControl : UserControl
+    public partial class StampsAccountManagerControl : PostalAccountManagerControlBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(StampsAccountManagerControl));
 
@@ -40,11 +40,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Load the current list of accounts into the control
         /// </summary>
-        public void Initialize()
+        public override void Initialize()
         {
             LoadAccounts();
             UpdateButtonState();
         }
+
+        /// <summary>
+        /// Gets and sets whether this control will work with Express1 Stamps accounts or regular Stamps accounts
+        /// </summary>
+        public bool IsExpress1 { get; set; }
 
         /// <summary>
         /// Load all the shippers into the grid
@@ -55,9 +60,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             sandGrid.Rows.Clear();
 
-            foreach (StampsAccountEntity account in StampsAccountManager.Accounts)
+            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(IsExpress1))
             {
-                GridRow row = new GridRow(new string[] { account.Username, "Checking..." });
+                GridRow row = new GridRow(new string[] { account.Description, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
@@ -83,7 +88,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string result = "";
 
             GridRow row = (GridRow) state;
+
+            // Grab the account from the row and make a note of username for 
+            // exception handling purposes
             StampsAccountEntity account = (StampsAccountEntity) row.Tag;
+            string username = account.Username;
 
             if (account.Fields.State == EntityState.Fetched)
             {
@@ -95,7 +104,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 catch (StampsException ex)
                 {
-                    log.Error("Error updating grid with stamps account balance.", ex);
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName(account.IsExpress1));
+                    log.Error(logMessage, ex);
+                }
+                catch (ORMEntityIsDeletedException ex)
+                {
+                    // The call to obtain account info from the Stmaps.com API has been known to 
+                    // take a few seconds, so a user could have deleted the account by the time
+                    // the call from Stamps.com completes.
+
+                    // We don't have the account info anymore, so we can only use the username value
+                    // that was cached above. 
+                    string logMessage = string.Format("The Stamps.com account ({0}) was deleted from ShipWorks while trying to obtain its account balance.", username);
+                    log.Warn(logMessage, ex);
                 }
             }
 
@@ -145,7 +166,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnActivate(object sender, GridRowEventArgs e)
         {
-            //OnView(sender, EventArgs.Empty);
             OnEdit(sender, EventArgs.Empty);
         }
 
@@ -163,7 +183,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 dlg.ShowDialog(this);
 
-                if (dlg.AccountChanged)
+                // Always reload Express1 accounts if OK is clicked, since the name is influenced by the address fields.
+                if (dlg.AccountChanged || (IsExpress1 && dlg.DialogResult == DialogResult.OK))
                 {
                     LoadAccounts();
                 }
@@ -171,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Remvoe the selected account
+        /// Remove the selected account
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {
@@ -179,8 +200,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
-                "Note: This does not delete your account from Stamps.com.",
-                account.Username));
+                "Note: This does not delete your account from {1}.",
+                account.Description, StampsAccountManager.GetResellerName(IsExpress1)));
 
             if (result == DialogResult.OK)
             {
@@ -190,16 +211,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Add a stamps.com account for use with shipworks
+        /// Add a stamps.com account for use with ShipWorks
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
-            using (StampsSetupWizard wizard = new StampsSetupWizard())
+            if (StampsAccountManager.DisplaySetupWizard(this, IsExpress1))
             {
-                if (wizard.ShowDialog(this) == DialogResult.OK)
-                {
-                    LoadAccounts();
-                }
+                LoadAccounts();
             }
         }
     }

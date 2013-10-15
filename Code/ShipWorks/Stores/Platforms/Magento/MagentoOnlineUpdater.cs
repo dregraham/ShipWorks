@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 tempCarrier = CreateCarrierString(shipment);
 
                 // Adjust tracking details per Mail Innovations and others
-                WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                     {
                         if (track.Length > 0)
                         {
@@ -80,7 +80,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     break;
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
                     code = "usps";
                     break;

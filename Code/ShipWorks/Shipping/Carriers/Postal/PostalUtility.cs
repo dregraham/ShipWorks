@@ -37,7 +37,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                     return true;
             }
 
@@ -92,7 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if (shipmentType == ShipmentTypeCode.PostalExpress1 && !settings.Express1SingleSource)
+            if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
+               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1StampsSingleSource))
             {
                 return new List<PostalServiceType>
                     {
@@ -114,7 +116,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         PostalServiceType.StandardPost
                     };
 
-                if (shipmentType == ShipmentTypeCode.Stamps || shipmentType == ShipmentTypeCode.PostalExpress1)
+                if (shipmentType == ShipmentTypeCode.Stamps ||
+                    shipmentType == ShipmentTypeCode.Express1Stamps ||
+                    shipmentType == ShipmentTypeCode.Express1Endicia)
                 {
                     // As of the 01/28/2013 changes, Stamps.com does not support Parcel Post (now Standard Post)
                     services.Remove(PostalServiceType.StandardPost);
@@ -146,7 +150,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if (shipmentType == ShipmentTypeCode.PostalExpress1 && !settings.Express1SingleSource)
+            if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
+               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1StampsSingleSource))
             {
                 return new List<PostalServiceType>
                     {

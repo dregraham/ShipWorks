@@ -65,8 +65,17 @@ namespace ShipWorks.Shipping.Settings
         {
             int top = 3;
             int left = 3;
+            
+            // This is called more than once since we may need to add an Express1 entry depending on 
+            // whether we need to show both Express1 for Endicia and Express1 for Stamps, so we need
+            // to clear and reload any existing check boxes
+            foreach (CheckBox checkBox in panelProviders.Controls.OfType<CheckBox>())
+            {
+                checkBox.CheckedChanged -= OnChangeEnabledShipmentTypes;
+            }
+            panelProviders.Controls.Clear();
 
-            // Add a checkbox for each shipment type
+            // Add a check box for each shipment type
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes.Where(st => st.ShipmentTypeCode != ShipmentTypeCode.None))
             {
                 CheckBox checkBox = new CheckBox();
@@ -179,7 +188,10 @@ namespace ShipWorks.Shipping.Settings
         private void OnShipmentTypeSetupComplete(object sender, EventArgs e)
         {
             ShipmentTypeCode? selected = optionControl.SelectedPage.Tag != null ? (ShipmentTypeCode) optionControl.SelectedPage.Tag : (ShipmentTypeCode?) null;
-
+            
+            // Reload the providers panel in case a new entry for Express1 needs to be added (in the case
+            // where ShipWorks now needs to show both Express1 for Endicia and Express1 for Stamps
+            LoadProvidersPanel();
             LoadShipmentTypePages();
 
             if (selected != null)

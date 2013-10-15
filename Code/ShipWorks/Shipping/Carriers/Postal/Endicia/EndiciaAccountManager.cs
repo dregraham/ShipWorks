@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -60,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         /// <summary>
         /// Get the endicia accounts in the system.  Optionally include those that have not yet totally completed signup where
-        /// the user is yet to enter the account id
+        /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<EndiciaAccountEntity> GetAccounts(EndiciaReseller reseller, bool includedIncomplete)
+        public static List<EndiciaAccountEntity> GetAccounts(EndiciaReseller reseller, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includedIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int)reseller)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int)reseller)));
             }
         }
 
@@ -195,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (endiciaReseller == EndiciaReseller.Express1)
             {
-                using (Express1SetupWizard dlg = new Express1SetupWizard(true))
+                using (Express1EndiciaSetupWizard dlg = new Express1EndiciaSetupWizard(true))
                 {
                     return (dlg.ShowDialog(owner) == DialogResult.OK);
                 }

@@ -4947,11 +4947,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaScanFormFieldIndex.CreatedDate);}
 		}
-		/// <summary>Creates a new EndiciaScanFormEntity.ShipmentCount field instance</summary>
-		public static EntityField2 ShipmentCount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaScanFormFieldIndex.ShipmentCount);}
-		}
 		/// <summary>Creates a new EndiciaScanFormEntity.ScanFormBatchID field instance</summary>
 		public static EntityField2 ScanFormBatchID
 		{
@@ -5022,10 +5017,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RefundFormID);}
 		}
-		/// <summary>Creates a new EndiciaShipmentEntity.ScanFormID field instance</summary>
-		public static EntityField2 ScanFormID
+		/// <summary>Creates a new EndiciaShipmentEntity.ScanFormBatchID field instance</summary>
+		public static EntityField2 ScanFormBatchID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanFormID);}
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanFormBatchID);}
 		}
 	}
 
@@ -15577,11 +15572,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipLaunch);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.InternalWorldShipServices field instance</summary>
-		public static EntityField2 InternalWorldShipServices
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.InternalWorldShipServices);}
-		}
 		/// <summary>Creates a new ShippingSettingsEntity.StampsThermal field instance</summary>
 		public static EntityField2 StampsThermal
 		{
@@ -15592,40 +15582,50 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsThermalType);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1Thermal field instance</summary>
-		public static EntityField2 Express1Thermal
+		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpress1 field instance</summary>
+		public static EntityField2 StampsAutomaticExpress1
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1Thermal);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpress1);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1ThermalType field instance</summary>
-		public static EntityField2 Express1ThermalType
+		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpress1Account field instance</summary>
+		public static EntityField2 StampsAutomaticExpress1Account
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1ThermalType);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpress1Account);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1CustomsCertify field instance</summary>
-		public static EntityField2 Express1CustomsCertify
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaThermal field instance</summary>
+		public static EntityField2 Express1EndiciaThermal
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1CustomsCertify);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaThermal);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1CustomsSigner field instance</summary>
-		public static EntityField2 Express1CustomsSigner
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaThermalType field instance</summary>
+		public static EntityField2 Express1EndiciaThermalType
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1CustomsSigner);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaThermalType);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1ThermalDocTab field instance</summary>
-		public static EntityField2 Express1ThermalDocTab
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaCustomsCertify field instance</summary>
+		public static EntityField2 Express1EndiciaCustomsCertify
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1ThermalDocTab);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaCustomsCertify);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1ThermalDocTabType field instance</summary>
-		public static EntityField2 Express1ThermalDocTabType
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaCustomsSigner field instance</summary>
+		public static EntityField2 Express1EndiciaCustomsSigner
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1ThermalDocTabType);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaCustomsSigner);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1SingleSource field instance</summary>
-		public static EntityField2 Express1SingleSource
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaThermalDocTab field instance</summary>
+		public static EntityField2 Express1EndiciaThermalDocTab
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1SingleSource);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaThermalDocTab);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaThermalDocTabType field instance</summary>
+		public static EntityField2 Express1EndiciaThermalDocTabType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaThermalDocTabType);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaSingleSource field instance</summary>
+		public static EntityField2 Express1EndiciaSingleSource
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaSingleSource);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.EquaShipThermal field instance</summary>
 		public static EntityField2 EquaShipThermal
@@ -15676,6 +15676,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IParcelInsurancePennyOne
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermal field instance</summary>
+		public static EntityField2 Express1StampsThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermal);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermalType field instance</summary>
+		public static EntityField2 Express1StampsThermalType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermalType);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsSingleSource field instance</summary>
+		public static EntityField2 Express1StampsSingleSource
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsSingleSource);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.UpsMailInnovationsEnabled field instance</summary>
+		public static EntityField2 UpsMailInnovationsEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsMailInnovationsEnabled);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.WorldShipMailInnovationsEnabled field instance</summary>
+		public static EntityField2 WorldShipMailInnovationsEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled);}
 		}
 	}
 
@@ -16552,6 +16577,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
 		}
+		/// <summary>Creates a new StampsAccountEntity.IsExpress1 field instance</summary>
+		public static EntityField2 IsExpress1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.IsExpress1);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity StampsProfileEntity</summary>
@@ -16606,11 +16636,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ScanFormUrl
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ScanFormUrl);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.ShipmentCount field instance</summary>
-		public static EntityField2 ShipmentCount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ShipmentCount);}
 		}
 		/// <summary>Creates a new StampsScanFormEntity.CreatedDate field instance</summary>
 		public static EntityField2 CreatedDate
@@ -16667,10 +16692,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.Memo);}
 		}
-		/// <summary>Creates a new StampsShipmentEntity.ScanFormID field instance</summary>
-		public static EntityField2 ScanFormID
+		/// <summary>Creates a new StampsShipmentEntity.OriginalStampsAccountID field instance</summary>
+		public static EntityField2 OriginalStampsAccountID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.ScanFormID);}
+			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.OriginalStampsAccountID);}
+		}
+		/// <summary>Creates a new StampsShipmentEntity.ScanFormBatchID field instance</summary>
+		public static EntityField2 ScanFormBatchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.ScanFormBatchID);}
 		}
 	}
 
@@ -17827,6 +17857,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CommercialPaperlessInvoice);}
 		}
+		/// <summary>Creates a new UpsProfileEntity.CostCenter field instance</summary>
+		public static EntityField2 CostCenter
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CostCenter);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.IrregularIndicator field instance</summary>
+		public static EntityField2 IrregularIndicator
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.IrregularIndicator);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.Cn22Number field instance</summary>
+		public static EntityField2 Cn22Number
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.Cn22Number);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargeType field instance</summary>
+		public static EntityField2 ShipmentChargeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeType);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargeAccount field instance</summary>
+		public static EntityField2 ShipmentChargeAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeAccount);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargePostalCode field instance</summary>
+		public static EntityField2 ShipmentChargePostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargePostalCode);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.ShipmentChargeCountryCode field instance</summary>
+		public static EntityField2 ShipmentChargeCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeCountryCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -18141,6 +18206,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CarbonNeutral
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CarbonNeutral);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.CostCenter field instance</summary>
+		public static EntityField2 CostCenter
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.CostCenter);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.IrregularIndicator field instance</summary>
+		public static EntityField2 IrregularIndicator
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.IrregularIndicator);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.Cn22Number field instance</summary>
+		public static EntityField2 Cn22Number
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.Cn22Number);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargeType field instance</summary>
+		public static EntityField2 ShipmentChargeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeType);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargeAccount field instance</summary>
+		public static EntityField2 ShipmentChargeAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeAccount);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargePostalCode field instance</summary>
+		public static EntityField2 ShipmentChargePostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargePostalCode);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipmentChargeCountryCode field instance</summary>
+		public static EntityField2 ShipmentChargeCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeCountryCode);}
 		}
 	}
 

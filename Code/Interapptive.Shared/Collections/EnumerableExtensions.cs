@@ -11,6 +11,41 @@ namespace Interapptive.Shared.Collections
     public static class EnumerableExtensions
     {
         /// <summary>
+        /// Breaks a collection up into chunks of the selected size
+        /// </summary>
+        /// <typeparam name="T">Type of data in the collection</typeparam>
+        /// <param name="source">Collection that will be broken into chunks</param>
+        /// <param name="size">Size of each chunk</param>
+        /// <returns>Collection of chunks of the specified type</returns>
+        public static IEnumerable<IEnumerable<T>> SplitIntoChunksOf<T>(this IEnumerable<T> source, int size)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            if (size < 1)
+            {
+                throw new ArgumentOutOfRangeException("size");
+            }
+
+            using (IEnumerator<T> iter = source.GetEnumerator())
+            {
+                while (iter.MoveNext())
+                {
+                    var chunk = new List<T>(size) { iter.Current };
+
+                    for (int i = 1; i < size && iter.MoveNext(); i++)
+                    {
+                        chunk.Add(iter.Current);
+                    }
+                    
+                    yield return chunk;
+                }
+            }
+        }
+
+        /// <summary>
         /// Repeats the items in the collection
         /// </summary>
         /// <typeparam name="T">Type of object in the collection</typeparam>

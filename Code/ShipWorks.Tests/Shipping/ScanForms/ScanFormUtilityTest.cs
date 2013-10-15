@@ -15,7 +15,9 @@ namespace ShipWorks.Tests.Shipping.ScanForms
     {
         private Mock<IScanFormAccountRepository> accountRepository;
         private Mock<IScanFormCarrierAccount> carrierAccount;
+        
         private Mock<IScanFormBatchPrinter> printer;
+        private Mock<IScanFormBatchShipmentRepository> batchShipmentRepository;
 
         private List<IScanFormAccountRepository> repositories;
 
@@ -40,8 +42,14 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             printer = new Mock<IScanFormBatchPrinter>();
             printer.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanFormBatch>())).Returns(true);
 
-            ScanForm sampleForm = new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/26/2012 3:30 PM"), 1);
-            ScanFormBatch sampleBatch = new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { sampleForm }) { CreatedDate = DateTime.Parse("10/26/2012 3:30 PM") };
+            batchShipmentRepository = new Mock<IScanFormBatchShipmentRepository>();
+            batchShipmentRepository.Setup(b => b.GetShipmentCount(It.IsAny<ScanFormBatch>())).Returns(1);
+
+            ScanForm sampleForm = new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/26/2012 3:30 PM"));
+            ScanFormBatch sampleBatch = new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { sampleForm }, batchShipmentRepository.Object)
+            {
+                CreatedDate = DateTime.Parse("10/26/2012 3:30 PM")
+            };
 
             carrierAccount.Setup(c => c.GetDescription()).Returns("Carrier Description");
             carrierAccount.Setup(c => c.GetExistingScanFormBatches()).Returns(new List<ScanFormBatch> { sampleBatch });
@@ -169,9 +177,9 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                                         (
                                             new List<ScanFormBatch>
                                             {
-                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/26/2012 3:30 PM"), 1) }) { CreatedDate = DateTime.Parse("10/26/2012 3:30 PM")},
-                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/22/2012 5:48 AM"), 1) }) { CreatedDate = DateTime.Parse("10/22/2012 5:48 AM")},
-                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/28/2012 8:24 PM"), 1) }) { CreatedDate = DateTime.Parse("10/28/2012 8:24 PM")}
+                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/26/2012 3:30 PM")) }, batchShipmentRepository.Object) { CreatedDate = DateTime.Parse("10/26/2012 3:30 PM")},
+                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/22/2012 5:48 AM")) }, batchShipmentRepository.Object) { CreatedDate = DateTime.Parse("10/22/2012 5:48 AM")},
+                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/28/2012 8:24 PM")) }, batchShipmentRepository.Object) { CreatedDate = DateTime.Parse("10/28/2012 8:24 PM")}
                                             }
                                         );
 
@@ -191,9 +199,9 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             // Make our lives easier and order the forms by create date so we don't have to figure it out in the assertions
             List<ScanFormBatch> batches = new List<ScanFormBatch>
                                             {
-                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/26/2012 3:30 PM"), 1) }) { CreatedDate = DateTime.Parse("10/26/2012 3:30 PM")},
-                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/22/2012 5:48 AM"), 5) }) { CreatedDate = DateTime.Parse("10/22/2012 5:48 AM")},
-                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/28/2012 8:24 PM"), 6) }) { CreatedDate = DateTime.Parse("10/28/2012 8:24 PM")}
+                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/26/2012 3:30 PM")) }, batchShipmentRepository.Object) { CreatedDate = DateTime.Parse("10/26/2012 3:30 PM")},
+                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/22/2012 5:48 AM")) }, batchShipmentRepository.Object) { CreatedDate = DateTime.Parse("10/22/2012 5:48 AM")},
+                                                new ScanFormBatch(carrierAccount.Object, printer.Object, new List<ScanForm> { new ScanForm(carrierAccount.Object, 123, 1000, string.Empty, DateTime.Parse("10/28/2012 8:24 PM")) }, batchShipmentRepository.Object) { CreatedDate = DateTime.Parse("10/28/2012 8:24 PM")}
                                             }.OrderByDescending(b => b.CreatedDate).ToList();
 
             carrierAccount.Setup(c => c.GetExistingScanFormBatches()).Returns(batches.OrderByDescending(f => f.CreatedDate));

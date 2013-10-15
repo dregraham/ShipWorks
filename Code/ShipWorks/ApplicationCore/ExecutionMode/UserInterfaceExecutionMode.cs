@@ -1,5 +1,7 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿using System.Reflection;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
@@ -13,6 +15,7 @@ using Interapptive.Shared.UI;
 using System.IO;
 using ShipWorks.UI.Controls;
 using ActiproSoftware.SyntaxEditor;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -79,6 +82,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // The installer uses this to know the app needs shutdown before the installation can continue.
             appMutex = new Mutex(false, "{AX70DA71-2A39-4f8c-8F97-7F5348493F57}");
 
+            // Make sure overwritten generated code has not changed
+            RewriteScanFormMessageAttribute.CheckNecessaryCodeIsInPlace();
+
             SingleInstance.Register();
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
@@ -108,7 +114,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
         }
-
+        
         /// <summary>
         /// Overridden to provide custom UI initialization
         /// </summary>

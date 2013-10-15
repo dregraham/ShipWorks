@@ -31,7 +31,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             optionsControl.LoadSettings();
             accountControl.Initialize(ShipmentTypeCode.UpsWorldShip);
-            worldShipServicesControl.LoadSettings();
+
+            upsMailInnovationsOptions.LoadSettings((UpsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip));
         }
 
         /// <summary>
@@ -39,8 +40,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
+            upsMailInnovationsOptions.SaveSettings(settings);
+
             optionsControl.SaveSettings(settings);
-            worldShipServicesControl.SaveSettings(settings);
         }
     }
 }

@@ -14,11 +14,14 @@ using System.Drawing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.UI;
+using log4net;
 
 namespace ShipWorks.Shipping.ScanForms
 {
     public static class ScanFormUtility
     {
+        private static ILog log = LogManager.GetLogger(typeof(ScanFormUtility));
+
         /// <summary>
         /// Populate the menu used to create scan forms
         /// </summary>
@@ -181,13 +184,24 @@ namespace ShipWorks.Shipping.ScanForms
             List<ScanFormBatch> batches = account.GetExistingScanFormBatches().OrderByDescending(b => b.CreatedDate).ToList();
             foreach (ScanFormBatch batch in batches)
             {
-                string batchName = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", batch.CreatedDate.ToLocalTime(), batch.ShipmentCount);
-                
-                SandMenuItem formMenuItem = new SandMenuItem(batchName);
-                formMenuItem.Tag = batch;
+                try
+                {
+                    string batchName = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", batch.CreatedDate.ToLocalTime(), batch.ShipmentCount);
 
-                formMenuItem.Activate += new EventHandler(OnPrintScanForm);
-                menu.Items.Add(formMenuItem);
+                    SandMenuItem formMenuItem = new SandMenuItem(batchName);
+                    formMenuItem.Tag = batch;
+
+                    formMenuItem.Activate += new EventHandler(OnPrintScanForm);
+                    menu.Items.Add(formMenuItem);
+                }
+                catch (ShippingException ex)
+                {
+                    // This could occur if the batch was deleted. We just want to move on and not show this item in the menu
+                    string message = string.Format("An exception was encountered while populating the scan form menu for account {0}. " +
+                                                   "Skipping this scan form batch and continuing to load the menu.", account.GetDescription());
+
+                    log.Error(message, ex);
+                }
             }
 
             if (menu.Items.Count == 0)

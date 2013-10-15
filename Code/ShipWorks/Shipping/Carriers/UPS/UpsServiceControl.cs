@@ -37,8 +37,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsServiceControl(ShipmentTypeCode ShipmentTypeCode)
-            : base (ShipmentTypeCode)
+        public UpsServiceControl(ShipmentTypeCode shipmentTypeCode)
+            : base (shipmentTypeCode)
         {
             InitializeComponent();
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
@@ -52,17 +52,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             EnumHelper.BindComboBox<UpsCodPaymentType>(codPaymentType);
             EnumHelper.BindComboBox<UpsDeliveryConfirmationType>(confirmation);
-            EnumHelper.BindComboBox<UpsPayorType>(payorType);
+            EnumHelper.BindComboBox<UpsPayorType>(payorTransport);
             EnumHelper.BindComboBox<UpsEmailNotificationSubject>(emailSubject);
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
-            EnumHelper.BindComboBox<UpsSurePostSubclassificationType>(surePostClassification);
+            EnumHelper.BindComboBox<UpsPostalSubclassificationType>(surePostClassification);
+            EnumHelper.BindComboBox<UpsIrregularIndicatorType>(irregularIndicator);
+            EnumHelper.BindComboBox<UpsShipmentChargeType>(payorDuties);
 
             payorCountry.DisplayMember = "Key";
             payorCountry.ValueMember = "Value";
             payorCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
-            packageControl.Initialize(ShipmentTypeCode);
+            dutiesCountryCode.DisplayMember = "Key";
+            dutiesCountryCode.ValueMember = "Value";
+            dutiesCountryCode.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
+            packageControl.Initialize(shipmentTypeCode);
         }
 
         public override void Initialize()
@@ -207,7 +212,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 ShipmentEntity overriddenShipment = overriddenShipments.First();
 
-                var upsServiceManagerFactory = new UpsServiceManagerFactory();
+                var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
                 IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
                 List<UpsServiceType> serviceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
 
@@ -247,10 +252,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     shipperRelease.ApplyMultiCheck(shipment.Ups.ShipperRelease);
                     carbonNeutral.ApplyMultiCheck(shipment.Ups.CarbonNeutral);
                     
-                    payorType.ApplyMultiValue((UpsPayorType) shipment.Ups.PayorType);
+                    payorTransport.ApplyMultiValue((UpsPayorType) shipment.Ups.PayorType);
                     payorAccount.ApplyMultiText(shipment.Ups.PayorAccount);
                     payorPostalCode.ApplyMultiText(shipment.Ups.PayorPostalCode);
                     payorCountry.ApplyMultiValue(shipment.Ups.PayorCountryCode);
+
+                    payorDuties.ApplyMultiValue((UpsShipmentChargeType) shipment.Ups.ShipmentChargeType);
+                    dutiesAccount.ApplyMultiText(shipment.Ups.ShipmentChargeAccount);
+                    dutiesPostalCode.ApplyMultiText(shipment.Ups.ShipmentChargePostalCode);
+                    dutiesCountryCode.ApplyMultiValue(shipment.Ups.ShipmentChargeCountryCode);
 
                     LoadEmailNotificationSettings(shipment.Ups);
 
@@ -258,7 +268,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     codAmount.ApplyMultiAmount(shipment.Ups.CodAmount);
                     codPaymentType.ApplyMultiValue((UpsCodPaymentType) shipment.Ups.CodPaymentType);
 
-                    surePostClassification.ApplyMultiValue((UpsSurePostSubclassificationType)shipment.Ups.Subclassification);
+                    surePostClassification.ApplyMultiValue((UpsPostalSubclassificationType)shipment.Ups.Subclassification);
+                    costCenter.ApplyMultiText(shipment.Ups.CostCenter);
+                    irregularIndicator.ApplyMultiValue((UpsIrregularIndicatorType)shipment.Ups.IrregularIndicator);
+
                     uspsEndorsement.ApplyMultiValue((UspsEndorsementType)shipment.Ups.Endorsement);
                 }
             }
@@ -297,15 +310,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 saturdayDelivery.ReadMultiCheck(c => shipment.Ups.SaturdayDelivery = c);
                
                 confirmation.ReadMultiValue(v => shipment.Ups.DeliveryConfirmation = (int) v);
-                referenceNumber.ReadMultiText(t => shipment.Ups.ReferenceNumber = t);
-                reference2Number.ReadMultiText(t => shipment.Ups.ReferenceNumber2 = t);
                 shipperRelease.ReadMultiCheck(c=> shipment.Ups.ShipperRelease = c);
                 carbonNeutral.ReadMultiCheck(c => shipment.Ups.CarbonNeutral = c);
 
-                payorType.ReadMultiValue(v => shipment.Ups.PayorType = (int) v);
+
+                referenceNumber.ReadMultiText(t => shipment.Ups.ReferenceNumber = DetermineReferenceNumber(shipment.Ups, t)); // shipment.Ups.ReferenceNumber = t);
+                reference2Number.ReadMultiText(t => shipment.Ups.ReferenceNumber2 = DetermineReferenceNumber(shipment.Ups, t)); // = t);
+
+                payorTransport.ReadMultiValue(v => shipment.Ups.PayorType = (int) v);
                 payorAccount.ReadMultiText(t => shipment.Ups.PayorAccount = t);
                 payorPostalCode.ReadMultiText(t => shipment.Ups.PayorPostalCode = t);
                 payorCountry.ReadMultiValue(v => shipment.Ups.PayorCountryCode = (string) v);
+
+                payorDuties.ReadMultiValue(v => shipment.Ups.ShipmentChargeType = (int) v);
+                dutiesAccount.ReadMultiText(t => shipment.Ups.ShipmentChargeAccount = t);
+                dutiesPostalCode.ReadMultiText(t => shipment.Ups.ShipmentChargePostalCode = t);
+                dutiesCountryCode.ReadMultiValue(v => shipment.Ups.ShipmentChargeCountryCode = (string) v);
 
                 SaveEmailNotificationSettings(shipment.Ups);
 
@@ -314,10 +334,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 codPaymentType.ReadMultiValue(v => shipment.Ups.CodPaymentType = (int) v);
 
                 surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int) v);
+                costCenter.ReadMultiText(t => shipment.Ups.CostCenter = t);
+                irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int)v);
+
                 uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
             }
 
             ResumeRateCriteriaChangeEvent();
+        }
+
+        /// <summary>
+        /// Determines what reference number should be used for the specified shipment.
+        /// </summary>
+        /// <param name="upsShipmentEntity">The shipment to check.</param>
+        /// <param name="requestedReferenceNumber">The current reference number as it is.  </param>
+        /// <returns>A correct reference number for the shipment.</returns>
+        private static string DetermineReferenceNumber(UpsShipmentEntity upsShipmentEntity, string requestedReferenceNumber)
+        {
+            UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
+
+            return UpsUtility.IsUpsMiService(upsServiceType) ? string.Empty : requestedReferenceNumber;
         }
 
         /// <summary>
@@ -390,11 +426,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             endorsementPanel.Visible = showEndorsement; 
 
             confirmationPanel.Visible = !isSurePost;
-            sectionCod.Visible = !isSurePost;
+            sectionCod.Visible = !isSurePost && !isMi;
 
-            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost;    
+            sectionReturns.Visible = ShipmentTypeManager.GetType(ShipmentTypeCode).SupportsReturns && !isSurePost && !isMi;    
 
-            sectionSurePost.Visible = isSurePost;
+            sectionSurePost.Visible = isSurePost || isMi;
 
             carbonNeutralPanel.Visible = !isMi;
 
@@ -402,7 +438,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             sectionBilling.Visible = !isSurePost;
 
+            otherPackageDetails.Visible = !isSurePost && !isMi;
+
+            // Reference numbers are not allowed with Mail Innovations.
+            referencePanel.Visible = !isMi;
+            reference2Panel.Visible = !isMi;
+
+            UpdateIrregularVisibility();
+
             UpdateSectionOptionsHeight();
+        }
+
+        /// <summary>
+        /// Updates the irregular visibility.
+        /// </summary>
+        private void UpdateIrregularVisibility()
+        {
+            bool isOlt = ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools;
+
+            labelIrregularIndicator.Visible = isOlt;
+            irregularIndicator.Visible = isOlt;
+
+            sectionSurePost.Height = (isOlt ?
+                                          irregularIndicator.Bottom : costCenter.Bottom) 
+                                          + (sectionSurePost.Height - sectionSurePost.ContentPanel.Height) + 8;
         }
 
         /// <summary>
@@ -590,20 +649,55 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void UpdateBillingSectionDisplay()
         {
-            if (payorType.MultiValued)
+            sectionBilling.ExtraText = "Bill shipment to: ";
+            if (payorTransport.MultiValued)
             {
-                sectionBilling.ExtraText = "(Multiple)";
+                sectionBilling.ExtraText += "(Multiple)";
             }
-            else if (payorType.SelectedValue != null)
+            else if (payorTransport.SelectedValue != null)
             {
-                sectionBilling.ExtraText = EnumHelper.GetDescription((UpsPayorType) payorType.SelectedValue);
+                sectionBilling.ExtraText += EnumHelper.GetDescription((UpsPayorType) payorTransport.SelectedValue);
             }
             else
             {
                 sectionBilling.ExtraText = "";
             }
 
-            int bottom = panelPayorThirdParty.Visible ? panelPayorThirdParty.Bottom : payorType.Bottom + 4;
+            // See if we have any customs to determine if we are domestic/international.  LoadedShipments can be null when being called
+            // from some of the index changed events, so we'll default to no customs in those cases.  Eventually, this will get called
+            // after LoadShipmentDetails.
+            bool hasCustoms = LoadedShipments != null ? LoadedShipments.Any(s => CustomsManager.IsCustomsRequired(s)) : false;
+
+            if (hasCustoms)
+            {
+                panelPayorDuties.Visible = true;
+                if (payorDuties.MultiValued)
+                {
+                    sectionBilling.ExtraText += "     Bill duties/Fees to: (Multiple)";
+                }
+                else if (payorDuties.SelectedValue != null)
+                {
+                    sectionBilling.ExtraText += "     Bill duties/Fees to: ";
+                    sectionBilling.ExtraText += EnumHelper.GetDescription((UpsShipmentChargeType)payorDuties.SelectedValue);
+                }
+
+                if (panelTransportAccount.Visible)
+                {
+                    panelPayorDuties.Top = panelTransportAccount.Bottom + 4;
+                }
+                else
+                {
+                    panelPayorDuties.Top = panelPayorTransport.Bottom + 4; 
+                }
+            }
+            else
+            {
+                panelPayorDuties.Visible = false;
+            }
+
+
+            int bottom = panelTransportAccount.Visible ? panelTransportAccount.Bottom : panelPayorTransport.Bottom + 4;
+            bottom = panelPayorDuties.Visible ? panelPayorDuties.Bottom : bottom + 4;
 
             sectionBilling.Height = bottom + (sectionBilling.Height - sectionBilling.ContentPanel.Height) + 4;
         }
@@ -674,21 +768,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Changing the payor transport account
-        /// </summary>
-        private void OnChangePayorType(object sender, EventArgs e)
-        {
-            panelPayorThirdParty.Visible = payorType.MultiValued ||
-                (payorType.SelectedValue != null && (UpsPayorType) payorType.SelectedValue != UpsPayorType.Sender);
-
-            bool countryVisible = payorType.MultiValued || (UpsPayorType) payorType.SelectedValue == UpsPayorType.ThirdParty;
-            labelPayorCountry.Visible = countryVisible;
-            payorCountry.Visible = countryVisible;
-
-            UpdateBillingSectionDisplay();
-        }
-
-        /// <summary>
         /// One of the values that affects rates has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e)
@@ -719,5 +798,94 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             //LoadInsuranceValueUI(true);
         }
+
+        private void OnPayorDutiesFeesChanged(object sender, EventArgs e)
+        {
+            bool countryVisible = false;
+
+            if (payorDuties.MultiValued)
+            {
+                labelDutiesCountryCode.Visible = true;
+                dutiesCountryCode.Visible = true;
+                panelDutiesAccount.Visible = true;
+                panelDutiesAccount.Height = dutiesCountryCode.Bottom + 4;
+                panelPayorDuties.Height = panelDutiesAccount.Bottom + 4;
+            }
+            else
+            {
+                UpsShipmentChargeType selectedShipmentChargeType = (UpsShipmentChargeType)payorDuties.SelectedValue;
+
+                switch (selectedShipmentChargeType)
+                {
+                    case UpsShipmentChargeType.BillShipper:
+                        panelDutiesAccount.Visible = false;
+                        panelPayorDuties.Height = panelDutiesAccount.Visible ? panelDutiesAccount.Bottom + 4 : payorDuties.Bottom + 4;
+                        countryVisible = false;
+                        break;
+                    case UpsShipmentChargeType.BillReceiver:
+                        panelDutiesAccount.Visible = true;
+                        countryVisible = false;
+                        panelDutiesAccount.Height = dutiesPostalCode.Bottom + 4;
+                        panelPayorDuties.Height = panelDutiesAccount.Bottom + 4;
+                        break;
+                    case UpsShipmentChargeType.BillThirdParty:
+                        panelDutiesAccount.Visible = true;
+                        countryVisible = true;
+                        panelDutiesAccount.Height = dutiesCountryCode.Bottom + 4;
+                        panelPayorDuties.Height = panelDutiesAccount.Bottom + 4;
+                        break;
+                }
+
+                labelDutiesCountryCode.Visible = countryVisible;
+                dutiesCountryCode.Visible = countryVisible;
+            }
+
+            UpdateBillingSectionDisplay();
+        }
+
+        /// <summary>
+        /// Changing the payor transport account
+        /// </summary>
+        private void OnChangePayorType(object sender, EventArgs e)
+        {
+            bool countryVisible = false;
+
+            if (payorTransport.MultiValued)
+            {
+                labelPayorCountry.Visible = true;
+                payorCountry.Visible = true;
+                panelTransportAccount.Visible = true;
+                panelTransportAccount.Height = payorCountry.Bottom + 4;
+            }
+            else
+            {
+                UpsPayorType selectedPayorType = (UpsPayorType)payorTransport.SelectedValue;
+
+                switch (selectedPayorType)
+                {
+                    case UpsPayorType.Sender:
+                        panelTransportAccount.Visible = false;
+                        countryVisible = false;
+                        break;
+                    case UpsPayorType.Receiver:
+                        panelTransportAccount.Visible = true;
+                        countryVisible = false;
+                        panelTransportAccount.Height = payorPostalCode.Bottom + 4;
+                        break;
+                    case UpsPayorType.ThirdParty:
+                        panelTransportAccount.Visible = true;
+                        countryVisible = true;
+                        panelTransportAccount.Height = payorCountry.Bottom + 4;
+                        break;
+                }
+
+                labelPayorCountry.Visible = countryVisible;
+                payorCountry.Visible = countryVisible;
+            }
+
+            UpdateBillingSectionDisplay();
+        }
+    
+    
     }
 }

@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
@@ -209,7 +211,7 @@ namespace ShipWorks
             // Initialize ribbon security
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + StampsAccountManager.Accounts.Count) > 0);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + StampsAccountManager.StampsAccounts.Count + StampsAccountManager.Express1Accounts.Count) > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
             ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
 
@@ -246,7 +248,7 @@ namespace ShipWorks
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
-                using (DatabaseSetupWizard dlg = new DatabaseSetupWizard())
+                using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
                 {
                     dlg.ShowDialog(this);
                 }
@@ -281,14 +283,14 @@ namespace ShipWorks
                 // If we aren't configured and 2012 is supported, open the fast track setup wizard
                 if (SqlServerInstaller.IsSqlServer2012Supported)
                 {
-                    using (ShipWorksSetupWizard wizard = new ShipWorksSetupWizard())
+                    using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard())
                     {
                         return wizard.ShowDialog(this) == DialogResult.OK;
                     }
                 }
                 else
                 {
-                    using (DatabaseSetupWizard wizard = new DatabaseSetupWizard())
+                    using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard())
                     {
                         return wizard.ShowDialog(this) == DialogResult.OK;
                     }
@@ -3168,14 +3170,15 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The endicia scan form popup is opening, we need to dynamically repopulate the print menu
+        /// The postal scan form popup is opening, we need to dynamically repopulate the print menu
         /// </summary>
-        private void OnEndiciaScanFormOpening(object sender, BeforePopupEventArgs e)
+        private void OnPostalScanFormOpening(object sender, BeforePopupEventArgs e)
         {
             List<IScanFormAccountRepository> repositories = new List<IScanFormAccountRepository>();
             repositories.Add(new EndiciaScanFormAccountRepository());
-            repositories.Add(new Express1ScanFormAccountRepository());
+            repositories.Add(new Express1EndiciaScanFormAccountRepository());
             repositories.Add(new StampsScanFormAccountRepository());
+            repositories.Add(new Express1StampsScanFormAccountRepository());
 
             ScanFormUtility.PopulateCreateScanFormMenu(menuCreateEndiciaScanForm, repositories);
             ScanFormUtility.PopulatePrintScanFormMenu(menuPrintEndiciaScanForm, repositories);

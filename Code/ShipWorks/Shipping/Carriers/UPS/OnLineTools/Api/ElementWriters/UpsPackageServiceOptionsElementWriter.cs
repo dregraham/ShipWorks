@@ -34,13 +34,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // Service options
             xmlWriter.WriteStartElement("PackageServiceOptions");
 
-            // Delivery confirmation
-            if (upsShipment.DeliveryConfirmation != (int)UpsDeliveryConfirmationType.None)
-            {
-                xmlWriter.WriteStartElement("DeliveryConfirmation");
-                xmlWriter.WriteElementString("DCISType", UpsApiCore.GetDeliveryConfirmationCode((UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation));
-                xmlWriter.WriteEndElement();
-            }
+            // Write out Delivery Confirmation, if valid
+            UpsDeliveryConfirmationElementWriter upsDeliveryConfirmationElementWriter = new UpsDeliveryConfirmationElementWriter(xmlWriter);
+            upsDeliveryConfirmationElementWriter.WritePackageDeliveryConfirmationElement(upsShipment);
 
             // COD
             if (upsShipment.CodEnabled && UpsUtility.IsCodAvailable(upsShipment.Shipment))

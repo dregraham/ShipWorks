@@ -22,9 +22,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAccountManagerDlg()
+        public StampsAccountManagerDlg(bool isExpress1)
         {
             InitializeComponent();
+
+            accountControl.IsExpress1 = isExpress1;
         }
 
         /// <summary>

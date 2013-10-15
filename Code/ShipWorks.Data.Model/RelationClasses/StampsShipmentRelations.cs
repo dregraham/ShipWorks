@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 
 			toReturn.Add(this.PostalShipmentEntityUsingShipmentID);
-
+			toReturn.Add(this.ScanFormBatchEntityUsingScanFormBatchID);
 			return toReturn;
 		}
 
@@ -58,6 +58,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between StampsShipmentEntity and ScanFormBatchEntity over the m:1 relation they have, using the relation between the fields:
+		/// StampsShipment.ScanFormBatchID - ScanFormBatch.ScanFormBatchID
+		/// </summary>
+		public virtual IEntityRelation ScanFormBatchEntityUsingScanFormBatchID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "ScanFormBatch", false);
+				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, StampsShipmentFields.ScanFormBatchID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsShipmentEntity", true);
+				return relation;
+			}
+		}
 
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }

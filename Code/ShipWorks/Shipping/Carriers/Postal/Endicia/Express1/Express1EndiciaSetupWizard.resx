@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="licenseAgreement.Text" xml:space="preserve">
+    <value>EXPRESS TERMS AND CONDITIONS OF CARRIAGE
+
+("Terms and Conditions")
+IMPORTANT NOTICE
+
+When ordering CARRIER's services you, as "Shipper", are agreeing, on your behalf and on behalf of anyone else with an interest in the Shipment, that the Terms and Conditions shall apply from the time that CARRIER accepts the Shipment unless otherwise agreed in writing by an authorized officer of CARRIER. Your statutory rights and entitlements under any defined service feature (for which additional payment has been made) are not affected.
+
+"Shipment" means all documents or parcels that travel under one waybill and may be carried by any means CARRIER chooses, including air, road or any other carrier. A "waybill" shall include any label produced by CARRIER's automated systems, air waybill, or consignment note and shall incorporate these Terms and Conditions. Every Shipment is transported on a limited liability basis as provided herein. If Shipper requires greater protection, then Shipment Value Protection may be arranged at an additional cost. (Please see below for further information). "CARRIER" means any member of the CARRIER Network. 
+
+
+1. Customs, Exports and Imports
+ CARRIER may perform any of the following activities on Shipper's behalf in order to provide its services to Shipper: (1) complete and transmit (manually or electronically) any documents, amend product or service codes, and pay any duties or taxes required under applicable laws and regulations,(2) act as Shipper's forwarding agent for customs and export control purposes and as Receiver solely for the purpose of designating a customs broker to perform customs clearance and entry and (3) redirect the Shipment to Receiver's import broker or other address upon request by any person who CARRIER believes in its reasonable opinion to be authorized. 
+
+
+2. Unacceptable Shipments
+ Shipper agrees that its Shipment is acceptable for transportation and is deemed unacceptable if: 
+It is classified as hazardous material, dangerous goods, prohibited or restricted articles by IATA (International Air Transport Association), ICAO (International Civil Aviation Organization), any applicable government department or other relevant organization;
+
+ No customs declaration is made when required by applicable customs regulations; or 
+
+CARRIER decides it cannot transport an item safely or legally (such items include but are not limited to: animals, bullion, currency, bearer form negotiable instruments, precious metals and stones, firearms, parts thereof and ammunition, human remains, pornography and illegal narcotics/drugs). 
+
+
+3. Deliveries &amp; Undeliverables
+ Shipments cannot be delivered to PO boxes or postal codes. Shipments are delivered to the Receiver's address given by Shipper (which in the case of mail services shall be deemed to be the first receiving postal service) but not necessarily to the named Receiver personally. Shipments to addresses with a central receiving area will be delivered to that area. If Receiver refuses delivery or to pay for delivery, or the Shipment is deemed to be unacceptable, or it has been undervalued for customs purposes, or Receiver cannot be reasonably identified or located, CARRIER shall use reasonable efforts to return the Shipment to Shipper at Shipper's cost, failing which the Shipment may be released, disposed of or sold by CARRIER without incurring any liability whatsoever to Shipper or anyone else, with the proceeds applied against service charges and related administrative costs and the balance of the proceeds of a sale to be returned to Shipper. 
+
+
+4. Inspection
+ CARRIER has the right to open and inspect a Shipment without prior notice to Shipper. 
+
+
+5. Shipment Charges &amp; Billing
+ CARRIER's Shipment charges may be based on the higher of customer designated weight, the actual or volumetric weight, or a default weight where appropriate. Any Shipment may be re-weighed and re-measured by CARRIER to confirm this calculation. If the Shipper does not record a weight on the waybill at the time of shipment tender and the shipment is not re-weighed or re-measured, then a default weight will be applied to the shipment. If the shipper fails to indicate both the shipment weight and package type as required on the waybill, then CARRIER may, at its discretion, apply a default weight. Shipper shall pay or reimburse Express 1 for all Shipment charges, storage charges, duties and taxes owed for services provided by CARRIER or incurred by CARRIER on Shipper's or Receiver's or any third party's behalf and all claims, damages, fines and expenses incurred if the Shipment is deemed unacceptable for transport as described in Section 2. 
+
+Claims for overcharges, credits and invoice charges must be made in writing to Express 1 within fifteen (15) days after the date of acceptance of the shipment by CARRIER. The amount of the overcharge and/or credit claim may not be deducted from transportation charges. 
+
+
+6. CARRIER's Liability
+CARRIER's liability is strictly limited to direct loss only and to the per kg. /lb. limits in this Section 6. If Shipper regards these limits as insufficient it must make a special declaration of value and request Shipment Value Protection as described in section 8 (Shipment Value Protection) or make its own insurance arrangements. All other types of loss or damage are excluded (including but not limited to lost profits, income, interest, future business), whether such loss or damage is special or indirect, and even if the risk of such loss or damage was brought to CARRIER's attention before or after acceptance of the Shipment since special risks can be insured by Shipper. If a Shipment combines carriage by air, road or other mode of transport, it shall be presumed that any loss or damage occurred during the air period of such carriage unless proven otherwise. CARRIER's liability in respect of any one Shipment transported, without prejudice to Sections 7-11, is limited to its actual cash value and shall not exceed the greater of; 
+
+$US 100; or 
+
+For certain international Shipments in which the Warsaw Convention applies, approximately $US 20.00/kg. or $US 9.07/lb., depending on the applicable law; or 
+
+$US 10.00/kg. or $US 4.54/lb. for Shipments transported by road (not applicable to the US).
+
+
+7. Claims
+ Claims are limited to one claim per Shipment, settlement of which will be full and final settlement for all loss or damage in connection therewith. 
+
+All claims for international shipments must be submitted in writing to Express 1 and CARRIER within fifteen (15) days from the date that CARRIER accepted the Shipment, failing which Express 1 shall have no liability whatsoever. All claims for domestic U.S. shipments must be submitted in writing to Express 1 and CARRIER within fifteen (15) days from the date that CARRIER accepted the Shipment, failing which CARRIER shall have no liability whatsoever. 
+
+All of the original shipping cartons, packing and contents must be made available for CARRIER's inspection and retained until the claim is concluded. 
+
+Express 1 and CARRIER are not obligated to act on any claim until all transportation charges have been paid. 
+
+
+8. Shipment Value Protection
+ If the Shipment has an actual value greater than the liability limits listed in Section 6, CARRIER can arrange shipment value protection for Shipper covering the actual cash value in respect of loss of or physical damage to the Shipment provided Shipper completes the Declared Value for Carriage section on the front of the waybill or requests it via CARRIER's automated systems and pays the applicable premium. Shipment Value Protection does not cover indirect loss or damage, or loss or damage caused by delays. If Shipper does not declare a value for carriage and pay the appropriate charge, Shipper assumes all risks of loss or damage over the amount of CARRIER's liability as stated in Section 6. 
+
+
+9. Delayed Shipments
+ CARRIER will make every reasonable effort to deliver the Shipment according to CARRIER's regular delivery schedules, but these are not guaranteed and do not form part of the contract. CARRIER and Express 1 are not liable for any damages or loss caused by delays. 
+
+
+10. Circumstances Beyond CARRIER's Control
+ Express 1 and CARRIER are not liable for any loss or damage arising out of circumstances beyond CARRIER's control. These include but are not limited to: "Act of God" - e.g. earthquake, cyclone, storm, flood, fog; "Force Majeure" - e.g. war, plane crash or embargo; any defect or characteristic related to the nature of the Shipment, even if known to CARRIER; riot or civil commotion; any act or omission by a person not employed or contracted by CARRIER, e.g. Shipper, Receiver, third party, Customs or other government official; labor strike; and electrical or magnetic damage to, or erasure of, electronic or photographic images, data or recordings. 
+
+
+11. Warsaw Convention
+ If the Shipment is transported by air and involves an ultimate destination or stop in a country other than the country of departure, the Warsaw Convention, if applicable, governs and in most cases limits CARRIER's liability for loss or damage. 
+
+
+12. Shipper's Warranties and Indemnity
+ Shipper shall indemnify and hold Express 1 and CARRIER harmless for any loss or damage arising out of Shipper's failure to comply with any applicable laws or regulations and for Shipper's breach of the following warranties and representations: •all information provided by Shipper or its representatives is complete and accurate; 
+•Shipper protected the Shipment against unauthorized interference during preparation, storage and transportation to CARRIER; 
+•the Shipment is properly marked and addressed and packed to ensure safe transportation with ordinary care in handling; 
+•all applicable Customs, import, export and other laws and regulations have been complied with; and 
+•the waybill has been signed by Shipper's authorized representative and the Terms and Conditions constitute binding and enforceable obligations of Shipper.
+
+13. Routing
+ Shipper agrees to all routing and diversion, including the possibility that the Shipment may be carried via intermediate stopping places which CARRIER deems appropriate. 
+
+
+14. Governing Law
+ Any dispute arising under or in any way connected with these Terms and Conditions shall be subject to the non-exclusive jurisdiction of the courts of, and governed by the law of, the country of origin of the Shipment. 
+
+
+15. Severability Law
+ The invalidity or unenforceability of any provision shall not affect any other part of these Terms and Conditions.
+ 
+
+
+TERMS AND CONDITIONS OF SERVICE
+
+("Terms and Conditions")
+IMPORTANT NOTICE
+
+When ordering CARRIER's services you, as "Shipper", are agreeing, on your behalf and on behalf of anyone else with an interest in the Shipment, that the Terms and Conditions shall apply from the time that CARRIER accepts the Shipment unless otherwise agreed in writing by an authorized officer of CARRIER. 
+
+"Shipment" means all documents or parcels that travel under one waybill and which may be carried by any means CARRIER chooses, including air, road or any other carrier. A "waybill" shall include any bill of lading, label produced by CARRIER's automated systems, air waybill, or consignment note and shall incorporate these Terms and Conditions. Every Shipment shall be transported on a limited liability basis as provided herein. If Shipper requires greater protection, then Shipment Value Protection may be arranged at an additional cost. (Please see below for further information). "CARRIER" means any member of the CARRIER Network.
+
+All Shipments are governed by CARRIER's Ground Tariff in effect as of the date of execution of this Ground Waybill.
+
+
+1. Unacceptable Shipments
+ Shipper warrants that its Shipment is acceptable for transportation and that it does not contain:
+
+ any article classified as hazardous material, dangerous goods, prohibited or restricted by the DOT (Department of Transportation), TSA (Transportation Security Administration), IATA (International Air Transport Association), or any applicable government agency or other relevant organization; 
+
+animals; articles of extraordinary value such as but not limited to bullion, currency, bearer form negotiable instruments, precious metals and stones; firearms, parts thereof and ammunition; human remains; pornography or illegal narcotics/drugs. 
+
+CARRIER will not accept any Shipment that contains the articles listed above, or that contains any articles that CARRIER decides cannot be transported safely or legally, as stated in Unacceptable Items of CARRIER's Ground Tariff. 
+
+
+2. Deliveries and Undeliverables
+ Shipments cannot be delivered to PO boxes or postal codes. If Receiver refuses delivery or to pay for delivery, or the Shipment is deemed to be unacceptable, or Receiver cannot be reasonably identified or located, CARRIER shall use reasonable efforts to return the Shipment to Shipper at Shipper's cost, failing which the Shipment may be released, disposed of or sold by CARRIER without incurring any liability whatsoever to Shipper or anyone else, with the proceeds applied against freight charges, storage charges and related administrative costs incurred by CARRIER, and the balance of the proceeds of a sale to be returned to Shipper. 
+
+
+3. Inspection
+ CARRIER has the right to open and inspect a Shipment without prior notice to Shipper. 
+
+
+4. Shipment Charges &amp; Billing
+ CARRIER's freight charges are calculated according to the higher of the customer designated weight, actual or volumetric weight, or a default weight where appropriate. Any Shipment may be reweighed and re-measured by CARRIER to confirm this calculation. If the Shipper does not record a weight on the waybill at the time of shipment tender and the shipment is not re-weighed or re- measured, then a default weight will be applied to the shipment. Shipper shall pay or reimburse Express 1 for all freight charges, storage charges, and taxes owed for services provided by CARRIER or incurred by CARRIER on Shipper's or Receiver's or any third party's behalf and all claims, damages, fines and expenses incurred if the Shipment is deemed unacceptable for transport as described in Section 1. 
+
+Claims for overcharges, credits and invoice charges must be made in writing to CARRIER within fifteen (15) days after the date of acceptance of the shipment by CARRIER. The amount of the overcharge and/or credit claim may not be deducted from transportation charges. 
+
+
+5. CARRIER's Liability
+ Unless Shipper requests and pays for Shipment Value Protection, and makes a special declaration of value as described in Section 7 at the time of shipment, CARRIER's liability for loss or damage to any Shipment or any portion thereof is limited to the lesser of (i) $100.00 or (ii) the actual cash value of the article(s) lost or damaged. In no event shall Express 1 or CARRIER be liable for special, incidental or consequential damages, such as but not limited to lost profits, income, interest or loss of future business, even if the risk of such damages was brought to CARRIER's attention before or after acceptance of the Shipment. Should any article of extraordinary value as defined in Section 1 be inadvertently accepted for shipment, CARRIER's liability for loss or damage thereto shall be limited to $100.00. 
+
+
+6. Claims
+ Claims are limited to one claim per Shipment, settlement of which will be full and final settlement for all loss or damage in connection therewith. Claims must be submitted in writing to Express 1 and CARRIER within fifteen (15) days after the delivery of the Shipment. Claims for failure to make delivery must be submitted in writing within fifteen (15) days after a reasonable time for delivery has elapsed. Written notice of concealed loss or damage must be given to Express 1 and CARRIER within fifteen (15) days after the delivery of the Shipment. Claims and notices shall be submitted to . Suit for loss of or damage to a Shipment must be instituted against CARRIER no later than two (2) years and one (1) day from the date when CARRIER gives written denial of any part of the claim. All of the original shipping cartons, packing and contents must be made available for CARRIER's inspection and retained until the claim is concluded. Express 1 and CARRIER are not obligated to act on any claim until all transportation charges have been paid. 
+
+
+7. Shipment Value Protection
+ If the Shipment has an actual value greater than the liability limits listed in Section 5, CARRIER can arrange Shipment Value Protection for Shipper covering the actual cash value with respect to loss of or physical damage to the Shipment, subject to Section 9 herein, provided Shipper completes the Shipment Value Protection section on the front of the Ground Waybill or requests it via CARRIER's automated systems and pays the applicable excess value charge. Shipment Value Protection does not cover consequential damages or indirect loss or damage, or any loss or damage caused by delays. If Shipper does not request Shipment Value Protection and pay the appropriate charge, Shipper assumes all risks of loss or damage over the amount of CARRIER's liability as stated in Section 5. 
+
+
+8. Delayed Shipments
+ CARRIER will make every reasonable effort to deliver the Shipment according to CARRIER's regular delivery schedules, but these delivery schedules are not guaranteed and do not form part of the contract. Express 1 or CARRIER is not liable for any damages or loss caused by delays. 
+
+
+9. Exclusion
+ Express 1 or CARRIER is not liable for any loss or damage arising out of acts of God, e.g., earthquake, cyclone, storm, flood, fog; force majeure events, e.g., war, plane crash or embargo; acts of the public enemy; acts of government; acts of public authorities possessing actual or apparent authority; any defect, characteristic or vice inherent in the Shipment; any act or default of the Shipper, consignee or other party who claims an interest in the Shipment; or any other cause beyond CARRIER's control. 
+
+
+10. Shipper's Warranties and Indemnity
+ Shipper shall indemnify and hold Express 1 and CARRIER harmless for any loss or damage arising out of Shipper's failure to comply with any applicable laws or regulations and for Shipper's breach of the following warranties and representations: •all information provided by Shipper or its representatives is complete and accurate; 
+•Shipper protected the Shipment against unauthorized interference during preparation, storage and transportation to CARRIER; 
+•the Shipment is properly marked and addressed and packed to ensure safe transportation with ordinary care in handling; 
+•all applicable laws and regulations have been complied with; 
+•the waybill has been signed by Shipper's authorized representative and the Terms and Conditions constitute binding and enforceable obligations of Shipper; and 
+•the materials constituting the Shipment are properly classified, described, packaged, marked and labeled and are in proper condition for transportation according to the applicable regulations of the DOT and TSA. 
+Violation of any of these warranties will excuse Express 1 and CARRIER from any liability whatsoever for loss of or damage to a Shipment incurred as a result of the violation. Furthermore, Shipper shall be liable to Express 1 and CARRIER for all claims, fines, penalties, damages, and costs incurred by or imposed upon CARRIER as a result of a violation of these warranties. 
+
+
+11. Severability
+ The invalidity or unenforceability of any provision shall not affect any other part of these Terms and Conditions. </value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBox.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        RK5CYII=
+</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Your postage fees can be charged to either your credit card or a checking account.  If you need to use a checking account, first signup here with a credit card, then call Express1 to setup payment from your checking account.</value>
+  </data>
+</root>

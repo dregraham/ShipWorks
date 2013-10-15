@@ -48,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Help
         /// </summary>
         private void OnGetSupport(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/getsupport.php", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/", this);
         }
 
         /// <summary>

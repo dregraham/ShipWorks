@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Dashboard;
@@ -32,6 +33,7 @@ using ShipWorks.Templates.Media;
 using ShipWorks.Users;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore
 {

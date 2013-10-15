@@ -222,7 +222,7 @@ namespace ShipWorks
             this.buttonFedExClose = new Divelements.SandRibbon.Button();
             this.popupFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.buttonEndiciaSCAN = new Divelements.SandRibbon.Button();
-            this.popupEndiciaScanForm = new Divelements.SandRibbon.Popup();
+            this.popupPostalScanForm = new Divelements.SandRibbon.Popup();
             this.menuEndiciaScanForm = new Divelements.SandRibbon.Menu();
             this.menuCreateEndiciaScanForm = new Divelements.SandRibbon.MenuItem();
             this.menuPrintScanForm = new Divelements.SandRibbon.MenuItem();
@@ -2112,16 +2112,16 @@ namespace ShipWorks
             this.buttonEndiciaSCAN.Guid = new System.Guid("fc07d31c-fd5b-4324-9515-81cb1619447e");
             this.buttonEndiciaSCAN.Image = global::ShipWorks.Properties.Resources.graphics_tablet;
             this.ribbonSecurityProvider.SetPermission(this.buttonEndiciaSCAN, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonEndiciaSCAN.PopupWidget = this.popupEndiciaScanForm;
+            this.buttonEndiciaSCAN.PopupWidget = this.popupPostalScanForm;
             this.buttonEndiciaSCAN.QuickAccessKey = "N";
             this.buttonEndiciaSCAN.Text = "SCAN Form";
             this.buttonEndiciaSCAN.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             // 
-            // popupEndiciaScanForm
+            // popupPostalScanForm
             // 
-            this.popupEndiciaScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.popupPostalScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.menuEndiciaScanForm});
-            this.popupEndiciaScanForm.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnEndiciaScanFormOpening);
+            this.popupPostalScanForm.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnPostalScanFormOpening);
             // 
             // menuEndiciaScanForm
             // 
@@ -2907,7 +2907,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.MenuItem menuFedExEndDayPrintPlaceholder;
         private Divelements.SandRibbon.Menu menuFedExPrintReports;
         private Divelements.SandRibbon.Button buttonEndiciaSCAN;
-        private Divelements.SandRibbon.Popup popupEndiciaScanForm;
+        private Divelements.SandRibbon.Popup popupPostalScanForm;
         private Divelements.SandRibbon.MenuItem menuCreateEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuPrintScanForm;
         private Divelements.SandRibbon.MenuItem menuEndiciaScanFormNone;

@@ -145,7 +145,8 @@ namespace ShipWorks.Stores.Platforms.Infopia
 
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
 
@@ -172,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
             string tempShipper = GetInfopiaShipperCode(shipment);
 
             // Handle Mail Innovations et. al.
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                {
                    if (track.Length > 0)
                    {

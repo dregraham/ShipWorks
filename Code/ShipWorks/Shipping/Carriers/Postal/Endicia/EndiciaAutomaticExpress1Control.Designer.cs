@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EndiciaAutomaticExpress1Control));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Postal.Express1.AutomaticExpress1ControlBase));
             this.panelExpress1Account = new System.Windows.Forms.Panel();
             this.labelExpress1Account = new System.Windows.Forms.Label();
             this.express1Accounts = new System.Windows.Forms.ComboBox();

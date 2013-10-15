@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
@@ -42,15 +43,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             optionsControl.LoadSettings(endiciaReseller);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             string reseller = EndiciaAccountManager.GetResellerName(endiciaReseller);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             endiciaOptions.Top = express1Options.Top;
             endiciaOptions.Visible = (endiciaReseller == EndiciaReseller.None);
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
-
+            
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            
             if (endiciaReseller == EndiciaReseller.None)
             {
                 endiciaOptions.LoadSettings();
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                express1Options.LoadSettings();
+                express1Options.LoadSettings(settings);
                 panelBottom.Top = express1Options.Bottom + 5;
 
                 // Doesn't make sense to show Endicia insurance choosing to Express1
@@ -104,6 +105,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 accountControl.Initialize(endiciaReseller);
                 loadedAccounts = true;
             }
+
+            endiciaOptions.LoadSettings();
         }
     }
 }

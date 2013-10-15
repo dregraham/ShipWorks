@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
             {
-                UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory();
+                UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                 IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
                 IEnumerable<UpsServiceType> surePostServiceTypes = upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
 
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <param name="rateServiceCode">The rate service code.</param>
         private static UpsServiceType GetServiceTypeByRateServiceCode(ShipmentEntity shipment, string rateServiceCode)
         {
-            UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory();
+            UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
 
             // Defer to the service manager to get the service type for this shipment
             IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);

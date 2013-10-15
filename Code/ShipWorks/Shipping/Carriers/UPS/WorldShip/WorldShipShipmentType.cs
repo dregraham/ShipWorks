@@ -160,5 +160,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             return base.TrackShipment(shipment);
         }
+
+        /// <summary>
+        /// Determines whether [is mail innovations enabled] for WorldShip.
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsMailInnovationsEnabled()
+        {
+            return ShippingSettings.Fetch().WorldShipMailInnovationsEnabled;
+        }
     }
 }

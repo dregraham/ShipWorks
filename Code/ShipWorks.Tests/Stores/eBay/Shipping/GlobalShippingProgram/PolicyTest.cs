@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             express1Shipment = new ShipmentEntity()
             {
                 Order = shipmentOrder,
-                ShipmentType = (int)ShipmentTypeCode.PostalExpress1,
+                ShipmentType = (int)ShipmentTypeCode.Express1Endicia,
 
                 ShipFirstName = "John",
                 ShipMiddleName = "Paul",

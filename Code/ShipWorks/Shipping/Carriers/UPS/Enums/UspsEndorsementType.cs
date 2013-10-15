@@ -36,6 +36,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
 
         [Description("Change Service Requested")]
         [ApiValue("4")]
-        ChangeServiceRequested = 5
+        ChangeServiceRequested = 5,
+
+        [Description("No Service Selected")]
+        [ApiValue("5")]
+        NoServiceSelected = 6
     }
 }

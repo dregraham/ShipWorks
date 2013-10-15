@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
-using Interapptive.Shared.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -20,12 +13,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsServiceControl : PostalServiceControlBase
     {
+        readonly bool isExpress1;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public StampsServiceControl()
-            : base(ShipmentTypeCode.Stamps)
+            : this(ShipmentTypeCode.Stamps, false) { }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected StampsServiceControl(ShipmentTypeCode shipmentTypeCode, bool isExpress1)
+            : base(shipmentTypeCode)
         {
+            this.isExpress1 = isExpress1;
+
             InitializeComponent();
         }
 
@@ -36,9 +39,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             base.Initialize();
 
-            originControl.Initialize(ShipmentTypeCode.Stamps);
+            originControl.Initialize(ShipmentTypeCode);
 
-            
             linkManageStampsAccounts.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
             LoadStampsAccounts();
         }
@@ -51,9 +53,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            if (StampsAccountManager.Accounts.Count > 0)
+            var accounts = StampsAccountManager.GetAccounts(isExpress1, false);
+
+            if (accounts.Count > 0)
             {
-                stampsAccount.DataSource = StampsAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Username, a.StampsAccountID)).ToList();
+                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();
                 stampsAccount.Enabled = true;
             }
             else
@@ -130,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? StampsAccountManager.GetAccount((long) stampsAccount.SelectedValue) : null;
                 if (account != null)
                 {
-                    text += account.Username;
+                    text += account.Description;
                 }
                 else
                 {
@@ -146,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnManageStampsAccounts(object sender, EventArgs e)
         {
-            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg())
+            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg(isExpress1))
             {
                 dlg.ShowDialog(this);
             }

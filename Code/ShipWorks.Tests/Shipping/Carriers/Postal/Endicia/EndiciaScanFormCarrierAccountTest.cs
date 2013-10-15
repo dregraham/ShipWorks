@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -21,7 +22,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         private Mock<ILog> logger;
 
         private EndiciaScanFormCarrierAccount testObject;
-        
+
+        string errorMessageFromLogger;
 
         [TestInitialize]
         public void Initialize()
@@ -36,15 +38,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             repository.Setup(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>())).Returns(new List<long>());
 
             logger = new Mock<ILog>();
-            logger.Setup(l => l.Error(It.IsAny<string>()));
+            logger
+                .Setup(l => l.Error(It.IsAny<string>()))
+                .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
+            
+            Mock<IScanFormShipmentTypeName> scanFormShipmentTypeName = new Mock<IScanFormShipmentTypeName>();
+            scanFormShipmentTypeName
+                .Setup(x => x.GetShipmentTypeName(It.IsAny<ShipmentTypeCode>()))
+                .Returns("USPS (Endicia)");
 
-            testObject = new EndiciaScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
+            testObject = new EndiciaScanFormCarrierAccount(repository.Object, accountEntity, logger.Object, scanFormShipmentTypeName.Object);
         }
 
         [TestMethod]
         public void ShippingCarrierName_Test()
         {
-            Assert.AreEqual("Endicia", testObject.ShippingCarrierName);
+            Assert.AreEqual("USPS (Endicia)", testObject.ShippingCarrierName);
         }
 
         [TestMethod]
@@ -56,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [TestMethod]
         public void GetDescription_ReturnsDescriptionFieldValue_Test()
         {
-            Assert.AreEqual(accountEntity.Description, testObject.GetDescription());
+            Assert.AreEqual("USPS (Endicia) - this is a description", testObject.GetDescription());
         }
 
         [TestMethod]
@@ -108,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [TestMethod]
         public void Save_DelegatesToRepository_Test()
         {
-            ScanFormBatch batch = new ScanFormBatch(null, null);
+            ScanFormBatch batch = new ScanFormBatch(null, null, null);
             testObject.Save(batch);
 
             repository.Verify(r => r.Save(batch), Times.Once());
@@ -133,8 +142,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             { }
 
             // Verify the correct message was logged
-            string expectedMessage = "ShipWorks was unable to create a SCAN form through Endicia at this time. Please try again later. (A null scan form batch tried to be saved.)";
-            logger.Verify(l => l.Error(expectedMessage), Times.Once());
+            const string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS (Endicia) at this time. Please try again later. (A null scan form batch tried to be saved.)";
+            Assert.AreEqual(expectedMessage, errorMessageFromLogger);
         }
     }
 }

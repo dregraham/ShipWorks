@@ -429,7 +429,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             string trackingNumber = shipment.TrackingNumber;
 
             // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                 {
                     if (track.Length > 0)
                     {

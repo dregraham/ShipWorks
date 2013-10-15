@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 // Interapptive: OK. Do you know if I send a mail innovations tracking number with UPS as the carrier, 
                 // will the user get a tracking link to ups.com's tracking page?
                 // Veronica M: Yes.
-                WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                     {
                         if (track.Length > 0)
                         {
@@ -227,7 +227,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
 
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";

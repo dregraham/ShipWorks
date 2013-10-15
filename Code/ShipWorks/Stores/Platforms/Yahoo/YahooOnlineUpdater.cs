@@ -216,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             string tempShipperString = GetShipperString(shipment);
 
             // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                 {
                     if (track.Length > 0)
                     {
@@ -254,7 +254,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                         return "Usps";
                     }
 
-                case ShipmentTypeCode.PostalExpress1:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "Usps";

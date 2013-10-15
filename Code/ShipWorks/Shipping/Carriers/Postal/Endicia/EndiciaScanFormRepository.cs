@@ -53,10 +53,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Should have the scan form ID populated now so save the image to the data source
                     DataResourceManager.CreateFromBytes(scanForm.Image, endiciaScanFormEntity.EndiciaScanFormID, "SCAN Form");
 
-                    // Now we have to update each shipment with the scan record ID
+                    // Now we have to update each shipment with the scan form record ID
                     foreach (ShipmentEntity shipment in scanForm.Shipments)
                     {
-                        shipment.Postal.Endicia.ScanFormID = endiciaScanFormEntity.EndiciaScanFormID;
+                        shipment.Postal.Endicia.ScanFormBatchID = batchEntity.ScanFormBatchID;
                         adapter.SaveAndRefetch(shipment.Postal.Endicia);
                     }
                 }
@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             foreach (EndiciaScanFormEntity endiciaForm in endiciaForms)
             {
                 // Create a general scan form using the data from the Endicia-specific form
-                ScanForm scanForm = new ScanForm(carrierAccount, endiciaForm.EndiciaScanFormID, endiciaForm.ScanFormBatchID, endiciaForm.Description, endiciaForm.CreatedDate, endiciaForm.ShipmentCount);
+                ScanForm scanForm = new ScanForm(carrierAccount, endiciaForm.EndiciaScanFormID, endiciaForm.ScanFormBatchID, endiciaForm.Description, endiciaForm.CreatedDate);
                 scanForms.Add(scanForm);
             }
 
@@ -191,12 +191,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     foreach (EndiciaScanFormEntity scanFormEntity in endiciaForms)
                     {
-                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.EndiciaScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate, scanFormEntity.ShipmentCount);
+                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.EndiciaScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate);
                         scanForms.Add(scanForm);
                     }
 
                     // Create a general scan form using the data from the Endicia-specific form
-                    ScanFormBatch batch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), scanForms)
+                    ScanFormBatch batch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), scanForms, new DefaultScanFormBatchShipmentRepository())
                     {
                         BatchId = batchEntity.ScanFormBatchID,
                         CreatedDate = batchEntity.CreatedDate,

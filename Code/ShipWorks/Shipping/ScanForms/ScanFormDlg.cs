@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.ScanForms
                 List<ShipmentEntity> selectedShipments = sandGrid.Rows.Cast<GridRow>().Where(r => r.Checked).Select(r => (ShipmentEntity)r.Tag).ToList();
                 if (selectedShipments.Count > 0)
                 {
-                    ScanFormBatch scanFormBatch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter());
+                    ScanFormBatch scanFormBatch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), new DefaultScanFormBatchShipmentRepository());
                     scanFormBatch.Create(selectedShipments);
 
                     // Allow the user to print all the scan forms at once by passing entire batch to the dialog

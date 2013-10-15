@@ -141,8 +141,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static void UpdateReferenceNumbers(ShipmentEntity shipment)
         {
             // Reference
-            shipment.Ups.ReferenceNumber = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber, (UpsServiceType)shipment.Ups.Service, shipment.Order.OrderNumber.ToString(), shipment.ShipmentID);
-            shipment.Ups.ReferenceNumber2 = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber2, (UpsServiceType)shipment.Ups.Service, shipment.Ups.ReferenceNumber, shipment.ShipmentID);
+            shipment.Ups.ReferenceNumber = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber, (UpsServiceType)shipment.Ups.Service, string.Empty, shipment.Order.OrderNumber.ToString(), shipment.ShipmentID);
+            shipment.Ups.ReferenceNumber2 = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber2, (UpsServiceType)shipment.Ups.Service, shipment.Ups.CostCenter, shipment.Ups.ReferenceNumber, shipment.ShipmentID);
         }
 
         /// <summary>
@@ -150,9 +150,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         /// <param name="referenceNumber">The reference number to fix.</param>
         /// <param name="serviceType">The UPS service type of this shipment.</param>
+        /// <param name="costCenter">If provided and serviceType is MI, used as the reference number.</param>
         /// <param name="defaultValue">If the reference number ends up being blank, use this value instead.</param>
         /// <param name="shipmentID">ShipmentID used for processing tokens.</param>
-        private static string FixReferenceNumberForWorldShip(string referenceNumber, UpsServiceType serviceType, string defaultValue, long shipmentID)
+        private static string FixReferenceNumberForWorldShip(string referenceNumber, UpsServiceType serviceType, string costCenter, string defaultValue, long shipmentID)
         {
             // Set the max length to 35 for non-MI shipments
             int maxLength = 35;
@@ -161,10 +162,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             referenceNumber = TemplateTokenProcessor.ProcessTokens(referenceNumber.Trim(), shipmentID);
 
             // WorldShip, for MI, doesn't allow non-alphanumerics for reference 1/2, so remove them
-            if (UpsUtility.IsUpsMiService(serviceType))
+            if (UpsUtility.IsUpsMiOrSurePostService(serviceType))
             {
+                if (!string.IsNullOrWhiteSpace(costCenter))
+                {
+                    referenceNumber = costCenter;
+                }
+
                 referenceNumber = Regex.Replace(referenceNumber, "[^a-zA-Z0-9]", string.Empty);
-                
+
                 // Fix the defaultValue in case we need to use it below.
                 defaultValue = Regex.Replace(defaultValue, "[^a-zA-Z0-9]", string.Empty);
 
@@ -440,22 +446,34 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 worldship.Qvn1ShipNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
                 worldship.Qvn1DeliveryNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
                 worldship.Qvn1ExceptionNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
-                worldship.Qvn1ContactName = new PersonName(from).FullName;
-                worldship.Qvn1Email = GetWorldShipValidEmail(from.Email);
+                if (ups.EmailNotifySender > 0)
+                {
+                    // Only write this info out if notify sender was selected.  Otherwise, WorldShip fails on hands off.
+                    worldship.Qvn1ContactName = new PersonName(from).FullName;
+                    worldship.Qvn1Email = GetWorldShipValidEmail(from.Email);
+                }
 
                 // Recipient QVN
                 worldship.Qvn2ShipNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
                 worldship.Qvn2DeliveryNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
                 worldship.Qvn2ExceptionNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
-                worldship.Qvn2ContactName = new PersonName(to).FullName;
-                worldship.Qvn2Email = GetWorldShipValidEmail(to.Email);
+                if (ups.EmailNotifyRecipient > 0)
+                {
+                    // Only write this info out if notify recipient was selected.  Otherwise, WorldShip fails on hands off.
+                    worldship.Qvn2ContactName = new PersonName(to).FullName;
+                    worldship.Qvn2Email = GetWorldShipValidEmail(to.Email);
+                }
 
                 // Other QVN
                 worldship.Qvn3ShipNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
                 worldship.Qvn3DeliveryNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
                 worldship.Qvn3ExceptionNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
-                worldship.Qvn3ContactName = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
-                worldship.Qvn3Email = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                if (ups.EmailNotifyOther > 0)
+                {
+                    // Only write this info out if notify other was selected.  Otherwise, WorldShip fails on hands off.
+                    worldship.Qvn3ContactName = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                    worldship.Qvn3Email = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                }
             }
         }
 
@@ -626,7 +644,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             if (UpsServiceType.UpsSurePostLessThan1Lb == (UpsServiceType)ups.Service)
             {
                 // The two options are Irregular and Machinable
-                worldshipPackage.PostalSubClass = (UpsSurePostSubclassificationType)ups.Subclassification == UpsSurePostSubclassificationType.Irregular ? "Irregular" : "Machinable";
+                worldshipPackage.PostalSubClass = (UpsPostalSubclassificationType)ups.Subclassification == UpsPostalSubclassificationType.Irregular ? "Irregular" : "Machinable";
             }
 
             worldshipPackage.ShipperRelease = ups.ShipperRelease ? "Y" : "N";
@@ -999,16 +1017,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Determines if a given contract service is enabled.
-        /// </summary>
-        public static bool ContractServiceEnabled(UpsContractService contractService)
-        {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            return settings.WorldShipServices.Contains((int)contractService);
-        }
-
-        /// <summary>
         /// Luanch worldship.  If an error occurs the message will be parented to the given owner window
         /// </summary>
         public static void LaunchWorldShip(IWin32Window errorOwner)
@@ -1052,15 +1060,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 throw new ArgumentNullException("alternativeTracking");
             }
 
-            // Only appropriate for WorldShip shipments
-            if ((ShipmentTypeCode)shipment.ShipmentType == ShipmentTypeCode.UpsWorldShip)
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
+            if (shipmentTypeCode == ShipmentTypeCode.UpsWorldShip || shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
                 // we need to inspect the UPS-specific values, get them loaded
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
-                if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
                 {
-                    alternativeTracking(shipment.Ups.UspsTrackingNumber, UpsContractService.MailInnovations, (UpsServiceType)shipment.Ups.Service);
+                    alternativeTracking(shipment.Ups.UspsTrackingNumber, (UpsServiceType) shipment.Ups.Service);
                 }
             }
         }

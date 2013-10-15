@@ -20,8 +20,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpsApiTransitTimeClient));
 
-        static readonly ICarrierServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory();
-
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -159,6 +157,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 try
                 {
                     // Use the service manager to try to identify the service by the transit code
+                    ICarrierServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                     IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);
                     UpsServiceType service = serviceManager.GetServiceByTransitCode(serviceCode, shipment.ShipCountryCode).UpsServiceType;
 

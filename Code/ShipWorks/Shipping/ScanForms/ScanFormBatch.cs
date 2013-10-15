@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 
@@ -16,28 +18,35 @@ namespace ShipWorks.Shipping.ScanForms
         private readonly List<ScanForm> scanForms;
         private readonly IScanFormBatchPrinter printer;
         private readonly IScanFormCarrierAccount carrierAccount;
+        private readonly IScanFormBatchShipmentRepository shipmentRepository;
+
+        private int shipmentCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanFormBatch" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="carrierAccount">The carrier account.</param>
         /// <param name="printer">The printer.</param>
-        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer)
-            : this(carrierAccount, printer, new List<ScanForm>())
+        /// <param name="shipmentRepository">The shipment repository to use for finding shipments related to this batch.</param>
+        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, IScanFormBatchShipmentRepository shipmentRepository)
+            : this(carrierAccount, printer, new List<ScanForm>(), shipmentRepository)
         { }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanFormBatch" /> class.
         /// </summary>
         /// <param name="carrierAccount">The carrier account.</param>
         /// <param name="printer">The printer.</param>
         /// <param name="scanForms">The scan forms.</param>
-        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms)
+        /// <param name="shipmentRepository">The shipment repository to use for finding shipments related to this batch.</param>
+        public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, List<ScanForm> scanForms, IScanFormBatchShipmentRepository shipmentRepository)
         {
             this.scanForms = scanForms;
             this.printer = printer;
             this.carrierAccount = carrierAccount;
+            this.shipmentRepository = shipmentRepository;
+
+            shipmentCount = 0;
         }
 
         /// <summary>
@@ -64,7 +73,21 @@ namespace ShipWorks.Shipping.ScanForms
         /// <value>The shipment count.</value>
         public int ShipmentCount 
         {
-            get { return ScanForms.Sum(f => f.ShipmentCount); }
+            get
+            {
+                if (shipmentCount == 0)
+                {
+                    // Double check with the repository to make sure the shipment count is 
+                    // actually zero. Having zero shipments should never occur in practice.
+                    // The only way the shipment count could be zero is if this batch was
+                    // populated from a previously persisted state where the scan form objects
+                    // no longer have a handle to the shipments they correspond with.
+                    shipmentCount = shipmentRepository.GetShipmentCount(this);
+                }
+
+                return shipmentCount;
+            }
+            private set { shipmentCount = value; }
         }
 
         /// <summary>
@@ -74,6 +97,14 @@ namespace ShipWorks.Shipping.ScanForms
         public IEnumerable<ScanForm> ScanForms
         {
             get { return scanForms; }
+        }
+
+        /// <summary>
+        /// Gets the account entity for the batch
+        /// </summary>
+        public IEntity2 AccountEntity
+        {
+            get { return carrierAccount.GetAccountEntity(); }
         }
 
         /// <summary>
@@ -102,33 +133,26 @@ namespace ShipWorks.Shipping.ScanForms
 
         /// <summary>
         /// Creates the SCAN form object(s) for the given list of shipments. The SCAN forms
-        /// that are created are aded to the ScanForms list.
+        /// that are created are added to the ScanForms list.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         public void Create(List<ShipmentEntity> shipments)
         {
             if (shipments != null && shipments.Any())
             {
-                // Express 1 cubic shipments are created on a separate Endicia account on the Express 1 backend, so we need 
-                // to separate the Express 1 cubic shipments into a separate SCAN form and request a scan form for those separately
-                // (we don't want the user to have to split these out)
-                List<ShipmentEntity> express1CubicShipments = shipments.Where(selected => (ShipmentTypeCode)selected.ShipmentType == ShipmentTypeCode.PostalExpress1 && (PostalPackagingType)selected.Postal.PackagingType == PostalPackagingType.Cubic).ToList();
-                List<ShipmentEntity> allOtherShipments = shipments.Except(express1CubicShipments).ToList();
-
                 // Create batch record
                 CreatedDate = DateTime.UtcNow;
                 ShipmentType = (ShipmentTypeCode)shipments.First().ShipmentType;
+                ShipmentCount = shipments.Count;
 
-                if (express1CubicShipments.Any())
-                {
-                    // Notate that this scan form contains shipments with the cubic packaging type
-                    scanForms.Add(GenerateScanForm(express1CubicShipments, "Cubic shipments"));
-                }
+                // Process SCAN forms in batches to try and avoid connection timeouts.
+                IEnumerable<IEntity2> scanFormEntities = shipments.SplitIntoChunksOf(100)
+                    .SelectMany(shipmentChunk => carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk))
+                    .ToList();
 
-                if (allOtherShipments.Any())
+                if (!scanFormEntities.Any())
                 {
-                    // The description for the scan form could be better
-                    scanForms.Add(GenerateScanForm(allOtherShipments, "Non-cubic shipments"));
+                    throw new ShippingException(string.Format("ShipWorks was unable to create a SCAN form through {0} at this time. Please try again later.", carrierAccount.ShippingCarrierName));
                 }
 
                 // We need to set the batch ID which comes from the batch entity (which this 
@@ -139,18 +163,22 @@ namespace ShipWorks.Shipping.ScanForms
         }
 
         /// <summary>
-        /// A helper/factory method that generates a scan form for the given set of shipments.
+        /// Creates a scan form object that is managed by the batch
         /// </summary>
-        /// <param name="shipmentsForScanForm">The shipments for scan form.</param>
-        /// <param name="description">The description.</param>
+        /// <param name="description">Description of the shipment type</param>
+        /// <param name="shipments">Collection of shipments that are associated with this SCAN form</param>
+        /// <param name="entity">The entity.</param>
+        /// <param name="image">Image of the actual SCAN form</param>
         /// <returns>A ScanForm object.</returns>
-        private ScanForm GenerateScanForm(IEnumerable<ShipmentEntity> shipmentsForScanForm, string description)
+        public ScanForm CreateScanForm(string description, IEnumerable<ShipmentEntity> shipments, IEntity2 entity, byte[] image)
         {
-            // We have shipments selected, so we'll reach out to the carrier API to get the
-            // scan form via the scan form gateway
-            ScanForm scanForm = new ScanForm(carrierAccount, BatchId, description, shipmentsForScanForm);
-            scanForm.Generate();
+            ScanForm scanForm = new ScanForm(carrierAccount, BatchId, description, shipments, entity)
+                {
+                    CreatedDate = CreatedDate,
+                    Image = image
+                };
 
+            scanForms.Add(scanForm);
             return scanForm;
         }
     }

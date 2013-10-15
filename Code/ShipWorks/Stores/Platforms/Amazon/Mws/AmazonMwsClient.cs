@@ -479,7 +479,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     string carrier = GetCarrierName(shipment, shipmentType);
 
                     // Adjust tracking details per Mail Innovations and others
-                    WorldShipUtility.DetermineAlternateTracking(shipment, (track, upsContractService, service) =>
+                    WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                     {
                         if (track.Length > 0)
                         {

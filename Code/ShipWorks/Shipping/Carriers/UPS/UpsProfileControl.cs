@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
@@ -15,7 +10,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -50,15 +44,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.LoadProfile(profile);
 
             UpsProfileEntity ups = profile.Ups;
-
+            
             if (ShippingSettings.Fetch().UpsInsuranceProvider == (int) InsuranceProvider.Carrier)
             {
                 insuranceControl.UseInsuranceBoxLabel = "UPS Declared Value";
                 insuranceControl.InsuredValueLabel = "Declared value:";
             }
 
+            UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType);
+
+            bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
+
             bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
-            if (isSurePostAvailable)
+            
+            if (isSurePostAvailable || isMIAvailable)
             {
                 surePostGroup.Visible = true;
             }
@@ -66,18 +65,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
             LoadUpsAccounts();
             LoadOrigins();
 
-            EnumHelper.BindComboBox<UpsServiceType>(service, t => isSurePostAvailable || !UpsUtility.IsUpsSurePostService(t));
+            EnumHelper.BindComboBox<UpsServiceType>(service, t => ShowService(t, isMIAvailable, isSurePostAvailable));
             EnumHelper.BindComboBox<UpsDeliveryConfirmationType>(confirmationType);
             EnumHelper.BindComboBox<ResidentialDeterminationType>(residentialDetermination, t => t != ResidentialDeterminationType.FedExAddressLookup);
             EnumHelper.BindComboBox<UpsPayorType>(payorType);
             EnumHelper.BindComboBox<UpsEmailNotificationSubject>(emailSubject);
             EnumHelper.BindComboBox<UpsReturnServiceType>(returnService);
-            EnumHelper.BindComboBox<UpsSurePostSubclassificationType>(surePostClassification);
+            EnumHelper.BindComboBox<UpsPostalSubclassificationType>(surePostClassification);
             EnumHelper.BindComboBox<UspsEndorsementType>(uspsEndorsement);
+            EnumHelper.BindComboBox<UpsIrregularIndicatorType>(irregularIndicator);
+            EnumHelper.BindComboBox<UpsShipmentChargeType>(payorDuties);
 
             payorCountry.DisplayMember = "Key";
             payorCountry.ValueMember = "Value";
             payorCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
+
+            payorDutiesCountry.DisplayMember = "Key";
+            payorDutiesCountry.ValueMember = "Value";
+            payorDutiesCountry.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
             AddValueMapping(ups, UpsProfileFields.UpsAccountID, accountState, upsAccount, labelAccount);
             AddValueMapping(profile, ShippingProfileFields.OriginID, senderState, originCombo, labelSender);
@@ -100,6 +105,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(ups, UpsProfileFields.PayorAccount, payorAccountState, payorAccount, labelPayorAccount);
             AddValueMapping(ups, UpsProfileFields.PayorPostalCode, payorAccountState, payorPostalCode, labelPayorPostalCode);
             AddValueMapping(ups, UpsProfileFields.PayorCountryCode, payorAccountState, payorCountry, labelPayorCountry);
+
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeType,        payorDutiesState,    payorDuties, labelPayorDuties);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeAccount,     payorDutiesAccountState, payorDutiesAccount, labelPayorDutiesAccount);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargePostalCode,  payorDutiesAccountState, payorDutiesPostalCode, labelPayorDutiesPostalCode);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeCountryCode, payorDutiesAccountState, payorDutiesCountry, labelPayorDutiesCountry);
 
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
@@ -142,6 +152,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // SurePost
             AddValueMapping(ups, UpsProfileFields.Subclassification, surePostClassificationState, surePostClassification, labelSurePostClassification);
             AddValueMapping(ups, UpsProfileFields.Endorsement, uspsEndorsementState, uspsEndorsement, labelUspsEndorsement);
+            AddValueMapping(ups, UpsProfileFields.CostCenter, costCenterState, costCenter, labelCostCenter);
+            AddValueMapping(ups, UpsProfileFields.IrregularIndicator, irregularIndicatorState, irregularIndicator, labelIrregularIndicator);
+        }
+
+        /// <summary>
+        /// Returns true if we should show the service. Else false.
+        /// </summary>
+        private bool ShowService(UpsServiceType upsServiceType, bool isMiAvailable, bool isSurePostAvailable)
+        {
+            if (UpsUtility.IsUpsSurePostService(upsServiceType))
+            {
+                return isSurePostAvailable;
+            }
+
+            if (UpsUtility.IsUpsMiService(upsServiceType))
+            {
+                return isMiAvailable;
+            }
+
+            return true;
         }
 
         /// <summary>

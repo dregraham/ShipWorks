@@ -8,7 +8,7 @@ using System.Text;
 namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 {
     /// <summary>
-    /// The various return service methods UPS offers
+    /// The various return service methods FedEx offers
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedExReturnType

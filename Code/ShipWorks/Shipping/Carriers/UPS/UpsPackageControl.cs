@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Connection;
@@ -54,6 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// One-time control initialization
         /// </summary>
+        /// <param name="shipmentTypeCode"></param>
         public void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
             dimensionsControl.Initialize();
@@ -77,21 +79,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Get valid packaging types
             List<KeyValuePair<string, UpsPackagingType>> packaging = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
-            if (shipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
-            {
-                // Worldship could possibly have some "invalid" values that need to be allowed in the combobox. This can happen when
-                // the user enables Mail Innovations, sets a package type to a Mail Innovations-only one, then disables Mail Innovations.
-                // Using a custom Binding Source to achieve this.
-                List<KeyValuePair<string, UpsPackagingType>> specialPackages = UpsUtility.GetWorldShipConditionalPackagingType(null).Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
-
-                // binding to a binding source that allows missing enum values in the UI
-                EnumerationSubsetBindingSource bindingSource = EnumerationSubsetBindingSource.Create<UpsPackagingType>(packaging, specialPackages);
-                packagingType.DataSource = bindingSource;
-            }
-            else
-            {
-                packagingType.DataSource = packaging;
-            }
+            packagingType.DataSource = packaging;
         }
 
         /// <summary>

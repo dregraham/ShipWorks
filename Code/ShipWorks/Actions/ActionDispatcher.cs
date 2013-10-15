@@ -102,15 +102,6 @@ namespace ShipWorks.Actions
 
                 ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
 
-                // Endicia\Express1 kludge.  The setting in Endicia that allows auto-changing to Express1 if its a profitable transaction
-                // converts the shipment to Express1.  But for ease of configuration, and to match what the user expects, we want the actions 
-                // to process as if they are Endicia.  This is where we test for if the Express1 shipment was really originally an Endicia shipment,
-                // and force Endicia actions to run.
-                if (shipmentType == ShipmentTypeCode.PostalExpress1 && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
-                {
-                    shipmentType = ShipmentTypeCode.Endicia;
-                }
-
                 // Honor the Shipment Type limitation
                 if (trigger.RestrictType && trigger.ShipmentType != shipmentType)
                 {
