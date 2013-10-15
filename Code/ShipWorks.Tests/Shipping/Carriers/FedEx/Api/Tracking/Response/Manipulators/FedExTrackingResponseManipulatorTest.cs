@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         [TestMethod]
         public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsNull_Test()
         {
-            //nativeResponse.TrackDetails = null;
+            nativeResponse.CompletedTrackDetails[0].TrackDetails = null;
             
             testObject.Manipulate(fedExTrackingResponse);
             
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         [TestMethod]
         public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsEmpty_Test()
         {
-            //nativeResponse.TrackDetails = new TrackDetail[0];
+            nativeResponse.CompletedTrackDetails[0].TrackDetails = new TrackDetail[0];
             
             testObject.Manipulate(fedExTrackingResponse);
             
@@ -79,8 +79,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             nativeResponse.CompletedTrackDetails[0].TrackDetails[0].StatusDetail.Description = string.Empty;
             
             testObject.Manipulate(fedExTrackingResponse);
-            
-            //Assert.AreEqual("No tracking information was returned.", fedExTrackingResponse.TrackingResult.Summary);
+
+            Assert.AreEqual("No tracking information was returned.", fedExTrackingResponse.TrackingResult.Summary);
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             testObject.Manipulate(fedExTrackingResponse);
 
-//            Assert.IsTrue(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
+            Assert.IsTrue(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             testObject.Manipulate(fedExTrackingResponse);
 
-//            Assert.IsFalse(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
+            Assert.IsFalse(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
     }
 }
