@@ -41,13 +41,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     smartPostDetail.AncillaryEndorsementSpecified = true;
                 }
                 
-                // Pulled in from code interacting with previous version of API; latest version does not have this option
-                // TODO: Remove if there is not a suitable replacement for this option
-                //if (smartPostDetail.Indicia == SmartPostIndiciaType.PARCEL_SELECT || request.ShipmentEntity.FedEx.SmartPostConfirmation)
-                //{
-                //     smartPost.SpecialServices = new SmartPostShipmentSpecialServiceType[] { SmartPostShipmentSpecialServiceType.USPS_DELIVERY_CONFIRMATION };
-                //}
-                
                 // Smart Post rates are only retreived by explicitly setting the service type
                 nativeRequest.RequestedShipment.ServiceType = ServiceType.SMART_POST;
                 nativeRequest.RequestedShipment.ServiceTypeSpecified = true;
