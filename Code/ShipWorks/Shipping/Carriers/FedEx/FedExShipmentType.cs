@@ -833,48 +833,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             try
             {
                 return new FedExShippingClerk().GetRates(shipment);
-                //List<RateResult> results = new List<RateResult>();
-
-                //// Get the rates
-                //List<RateReplyDetail> fedexRates = FedExApiRate.GetRates(shipment);
-
-                //if (fedexRates == null)
-                //{
-                //    fedexRates = new List<RateReplyDetail>();
-                //}
-
-                //// Translate them to rate results
-                //foreach (RateReplyDetail rateDetail in fedexRates)
-                //{
-                //    // Service
-                //    FedExServiceType serviceType = FedExApiRate.GetFedExServiceType(rateDetail.ServiceType);
-
-                //    int transitDays = 0;
-
-                //    if (rateDetail.DeliveryTimestampSpecified)
-                //    {
-                //        // Transite time
-                //        DateTime deliveryDate = rateDetail.DeliveryTimestamp;
-                //        transitDays = (deliveryDate.Date - shipment.ShipDate.Date).Days;
-                //    }
-
-                //    else if (rateDetail.TransitTimeSpecified)
-                //    {
-                //        transitDays = FedExApiRate.GetTransitDays(rateDetail.TransitTime);
-                //    }
-
-                //    // Cost
-                //    decimal cost = rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetCharge.Amount;
-
-                //    // Add the shipworks rate object
-                //    results.Add(new RateResult(
-                //        EnumHelper.GetDescription(serviceType),
-                //        transitDays == 0 ? "" : transitDays.ToString(),
-                //        cost,
-                //        new FedExRateSelection(serviceType)));
-                //}
-
-                //return new RateGroup(results);
             }
             catch (FedExException ex)
             {
