@@ -112,5 +112,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             Assert.IsFalse(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
+
+        [TestMethod]
+        public void Manipulate_DetailIsEmpty_WhenTrackingEventsIsNull_Test()
+        {
+            nativeResponse.CompletedTrackDetails[0].TrackDetails[0].Events = null;
+
+            testObject.Manipulate(fedExTrackingResponse);
+
+            Assert.AreEqual(0, fedExTrackingResponse.TrackingResult.Details.Count);
+        }
     }
 }
