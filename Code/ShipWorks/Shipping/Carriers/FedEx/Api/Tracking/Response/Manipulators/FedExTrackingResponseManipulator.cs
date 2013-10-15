@@ -51,21 +51,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
 
             result.Summary = GetTrackingSummary(trackDetail);
 
-            foreach (TrackEvent trackEvent in trackDetail.Events)
+            if (trackDetail.Events != null)
             {
-                TrackingResultDetail resultDetail = new TrackingResultDetail();
-                resultDetail.Activity = GetTrackEventActivity(trackEvent);
-                resultDetail.Location = GetTrackEventLocation(trackEvent);
-
-                if (trackEvent.TimestampSpecified)
+                foreach (TrackEvent trackEvent in trackDetail.Events)
                 {
-                    resultDetail.Date = trackEvent.Timestamp.ToString("M/dd/yyy");
-                    resultDetail.Time = trackEvent.Timestamp.ToString("h:mm tt");
+                    TrackingResultDetail resultDetail = new TrackingResultDetail();
+                    resultDetail.Activity = GetTrackEventActivity(trackEvent);
+                    resultDetail.Location = GetTrackEventLocation(trackEvent);
+
+                    if (trackEvent.TimestampSpecified)
+                    {
+                        resultDetail.Date = trackEvent.Timestamp.ToString("M/dd/yyy");
+                        resultDetail.Time = trackEvent.Timestamp.ToString("h:mm tt");
+                    }
+
+                    result.Details.Add(resultDetail);
                 }
-
-                result.Details.Add(resultDetail);
             }
-
 
             trackingResponse.TrackingResult = result;
         }
