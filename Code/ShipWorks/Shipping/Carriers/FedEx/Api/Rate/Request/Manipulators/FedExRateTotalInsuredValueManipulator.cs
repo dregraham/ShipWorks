@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// </summary>
         public FedExRateTotalInsuredValueManipulator()
             : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRateTotalInsuredValueManipulator" /> class.
@@ -26,8 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// <param name="fedExSettings">The fed ex settings.</param>
         public FedExRateTotalInsuredValueManipulator(FedExSettings fedExSettings)
             : base(fedExSettings)
-        {
-        }
+        { }
 
         /// <summary>
         /// Manipulates the specified request.
@@ -43,10 +42,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             // Just need to assign the weight value in pounds
             nativeRequest.RequestedShipment.TotalInsuredValue = new Money
-                {
-                    Currency = GetShipmentCurrencyType(request.ShipmentEntity), 
-                    Amount = request.ShipmentEntity.FedEx.Packages.Sum(p => p.DeclaredValue)
-                };
+            {
+                Currency = GetShipmentCurrencyType(request.ShipmentEntity),
+                Amount = request.ShipmentEntity.FedEx.Packages.Sum(p => p.DeclaredValue),
+                AmountSpecified = true
+            };
         }
 
         /// <summary>

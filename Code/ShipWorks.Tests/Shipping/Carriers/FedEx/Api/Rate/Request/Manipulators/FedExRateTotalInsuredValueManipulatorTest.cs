@@ -117,5 +117,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Money totalInsuredValue = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
             Assert.AreEqual(expectedTotal, totalInsuredValue.Amount);
         }
+
+        [TestMethod]
+        public void Manipulate_SetsAmountSpecified_Test()
+        {
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m });
+            
+            testObject.Manipulate(carrierRequest.Object);
+
+            Money totalInsuredValue = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
+            Assert.IsTrue(totalInsuredValue.AmountSpecified);
+        }
     }
 }
