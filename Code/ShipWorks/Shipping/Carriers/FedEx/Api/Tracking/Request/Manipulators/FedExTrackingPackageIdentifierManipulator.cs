@@ -2,7 +2,7 @@ using System;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
@@ -34,13 +34,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
                 trackingNumber = "999999999999999";
             }
 
-            nativeRequest.IncludeDetailedScans = true;
-            nativeRequest.IncludeDetailedScansSpecified = true;
-
-            nativeRequest.PackageIdentifier = new TrackPackageIdentifier
+            nativeRequest.SelectionDetails = new[]
             {
-                Type = TrackIdentifierType.TRACKING_NUMBER_OR_DOORTAG,
-                Value = trackingNumber
+                new TrackSelectionDetail()
+                {
+                    PackageIdentifier = new TrackPackageIdentifier()
+                    {
+                        Type = TrackIdentifierType.TRACKING_NUMBER_OR_DOORTAG,
+                        Value = trackingNumber
+                    }
+                }
+            };
+
+            nativeRequest.ProcessingOptions = new[]
+            {
+                TrackRequestProcessingOptionType.INCLUDE_DETAILED_SCANS
             };
         }
 

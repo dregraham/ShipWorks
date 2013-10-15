@@ -5526,17 +5526,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -7399,11 +7399,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -7519,7 +7514,7 @@
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ReturnTagService_v1.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v6.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v1.wsdl" />
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
@@ -7639,6 +7634,23 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SendNotificationsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryFaxReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryLetterReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -7668,23 +7680,6 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\VersionCaptureReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\SignatureProofOfDeliveryFaxReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\SignatureProofOfDeliveryLetterReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\TrackNotificationReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\TrackReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\TrackServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ChallengeQuestionResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -10653,23 +10648,6 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\VersionCaptureReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryFaxReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryLetterReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackNotificationReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\ELSServices.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -11387,6 +11365,17 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v5.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
@@ -11585,17 +11574,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_RegistrationService_RegistrationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
@@ -11760,17 +11738,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_PayPal_WebServices_PayPalAPIInterfaceService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\TrackService_v6.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\TrackService_v6.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Track_TrackService</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>

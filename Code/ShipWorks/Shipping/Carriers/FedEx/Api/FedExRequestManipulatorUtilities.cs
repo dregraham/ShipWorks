@@ -449,17 +449,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail for a registration API request.</returns>
-        public static WebServices.v2013.Track.WebAuthenticationDetail CreateTrackWebAuthenticationDetail(FedExSettings settings)
+        public static WebServices.Track.WebAuthenticationDetail CreateTrackWebAuthenticationDetail(FedExSettings settings)
         {
-            return new WebServices.v2013.Track.WebAuthenticationDetail
+            return new WebServices.Track.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.v2013.Track.WebAuthenticationCredential
+                CspCredential = new WebServices.Track.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
                 },
 
-                UserCredential = new WebServices.v2013.Track.WebAuthenticationCredential
+                UserCredential = new WebServices.Track.WebAuthenticationCredential
                 {
                     Key = settings.UserCredentialsKey,
                     Password = settings.UserCredentialsPassword
@@ -473,9 +473,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="account">The account.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a void API request.</returns>
-        public static WebServices.v2013.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account, FedExSettings settings)
         {
-            return new WebServices.v2013.Track.ClientDetail
+            return new WebServices.Track.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
                 ClientProductId = settings.ClientProductId,

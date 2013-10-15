@@ -14,7 +14,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 using CreatePendingShipmentRequest = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest;
 using ProcessShipmentRequest = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest;
 

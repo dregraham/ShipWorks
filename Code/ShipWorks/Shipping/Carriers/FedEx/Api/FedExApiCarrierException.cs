@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiCarrierException(WebServices.v2013.Track.Notification[] notifications)
+        public FedExApiCarrierException(WebServices.Track.Notification[] notifications)
             : base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
