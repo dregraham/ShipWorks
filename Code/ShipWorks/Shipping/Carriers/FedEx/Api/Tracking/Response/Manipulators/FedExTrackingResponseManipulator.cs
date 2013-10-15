@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
                 throw new FedExApiCarrierException(reply.Notifications);
             }
 
-            if (reply.CompletedTrackDetails == null || reply.CompletedTrackDetails.Length == 0)
+            if (reply.CompletedTrackDetails == null || reply.CompletedTrackDetails.Length == 0 || reply.CompletedTrackDetails[0].TrackDetails == null || reply.CompletedTrackDetails[0].TrackDetails.Length == 0)
             {
                 result.Summary = "Unknown";
                 trackingResponse.TrackingResult = result;
@@ -40,119 +40,112 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
             }
 
             // Hardcode to use the first one
-            //CompletedTrackDetail detail = reply.CompletedTrackDetails[0];
+            CompletedTrackDetail detail = reply.CompletedTrackDetails[0];
 
             if (reply.CompletedTrackDetails.Length > 1)
             {
                 log.InfoFormat("Ignoring additional TrackDetails records (Total of {0})", reply.CompletedTrackDetails.Length);
             }
 
-            //result.Summary = GetTrackingSummary(detail);
+            TrackDetail trackDetail = detail.TrackDetails[0];
 
-            //if (detail.TrackDetails != null)
-            //{
-            //    foreach (TrackDetail trackEvent in detail.TrackDetails)
-            //    {
-            //        //TrackingResultDetail resultDetail = new TrackingResultDetail();
-            //        //resultDetail.Activity = GetTrackEventActivity(trackEvent);
-            //        //resultDetail.Location = GetTrackEventLocation(trackEvent);
+            result.Summary = GetTrackingSummary(trackDetail);
 
-            //        //if (trackEvent.TimestampSpecified)
-            //        //{
-            //        //    resultDetail.Date = trackEvent.Timestamp.ToString("M/dd/yyy");
-            //        //    resultDetail.Time = trackEvent.Timestamp.ToString("h:mm tt");
-            //        //}
+            foreach (TrackEvent trackEvent in trackDetail.Events)
+            {
+                TrackingResultDetail resultDetail = new TrackingResultDetail();
+                resultDetail.Activity = GetTrackEventActivity(trackEvent);
+                resultDetail.Location = GetTrackEventLocation(trackEvent);
 
-            //        //result.Details.Add(resultDetail);
-            //    }
-            //}
+                if (trackEvent.TimestampSpecified)
+                {
+                    resultDetail.Date = trackEvent.Timestamp.ToString("M/dd/yyy");
+                    resultDetail.Time = trackEvent.Timestamp.ToString("h:mm tt");
+                }
+
+                result.Details.Add(resultDetail);
+            }
 
 
             trackingResponse.TrackingResult = result;
         }
 
-        ///// <summary>
-        ///// Get the tracking summary for the given detail
-        ///// </summary>
-        //private static string GetTrackingSummary(CompletedTrackDetail detail)
-        //{
-        //    if (string.IsNullOrWhiteSpace(detail.StatusDescription))
-        //    {
-        //        return "No tracking information was returned.";
-        //    }
+        /// <summary>
+        /// Get the tracking summary for the given detail
+        /// </summary>
+        private static string GetTrackingSummary(TrackDetail detail)
+        {
+            if (detail.StatusDetail == null || string.IsNullOrWhiteSpace(detail.StatusDetail.Description))
+            {
+                return "No tracking information was returned.";
+            }
 
-        //    string status = string.Format("<b>{0}</b>", detail.StatusDescription);
+            string status = string.Format("<b>{0}</b>", detail.StatusDetail.Description);
 
-        //    if (detail.ActualDeliveryTimestampSpecified)
-        //    {
-        //        DateTime delivered = detail.ActualDeliveryTimestamp;
-        //        status += string.Format(" on {0:M/dd/yyyy h:mm tt}", delivered);
-        //    }
+            if (detail.ActualDeliveryTimestampSpecified)
+            {
+                DateTime delivered = detail.ActualDeliveryTimestamp;
+                status += string.Format(" on {0:M/dd/yyyy h:mm tt}", delivered);
+            }
 
-        //    if (detail.EstimatedDeliveryTimestampSpecified)
-        //    {
-        //        DateTime estimate = detail.EstimatedDeliveryTimestamp;
-        //        status += string.Format("<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {0:M/dd/yyyy}</span>", estimate);
-        //    }
+            if (detail.EstimatedDeliveryTimestampSpecified)
+            {
+                DateTime estimate = detail.EstimatedDeliveryTimestamp;
+                status += string.Format("<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {0:M/dd/yyyy}</span>", estimate);
+            }
 
-        //    if (!string.IsNullOrEmpty(detail.DeliverySignatureName))
-        //    {
-        //        status += string.Format("<br/><span style='color: rgb(80, 80, 80);'>Signed by: {0}</span>", AddressCasing.Apply(detail.DeliverySignatureName));
-        //    }
+            if (!string.IsNullOrEmpty(detail.DeliverySignatureName))
+            {
+                status += string.Format("<br/><span style='color: rgb(80, 80, 80);'>Signed by: {0}</span>", AddressCasing.Apply(detail.DeliverySignatureName));
+            }
 
-        //    return status;
-        //}
+            return status;
+        }
 
-        ///// <summary>
-        ///// Get the activity information for the given track event
-        ///// </summary>
-        //private static string GetTrackEventActivity(TrackDetail trackDetail)
-        //{
-        //    string activity = trackDetail.StatusDetail.Description;
+        /// <summary>
+        /// Get the activity information for the given track event
+        /// </summary>
+        private static string GetTrackEventActivity(TrackEvent trackEvent)
+        {
+            string activity = trackEvent.EventDescription;
+            
+            if (!string.IsNullOrEmpty(trackEvent.StatusExceptionDescription))
+            {
+                activity += "<br/>" + trackEvent.StatusExceptionDescription;
+            }
 
-        //    if (trackDetail.Events != null)
-        //    {
-        //        foreach (var trackEvent in trackDetail.Events)
-        //        {
-        //            activity += "<br/>" + trackDetail.;
-        //        }
-        //    }
-        //    if (!string.IsNullOrEmpty(trackDetail.Events))
-        //    {
-        //        activity += "<br/>" + trackDetail.StatusExceptionDescription;
-        //    }
+            return activity;
 
-        //    return activity;
-        //}
+        }
 
-        ///// <summary>
-        ///// Get descriptive location text for the given track event
-        ///// </summary>
-        //private string GetTrackEventLocation(TrackEvent trackEvent)
-        //{
-        //    string location = AddressCasing.Apply(trackEvent.Address.City) ?? string.Empty;
+        /// <summary>
+        /// Get descriptive location text for the given track event
+        /// </summary>
+        private string GetTrackEventLocation(TrackEvent trackEvent)
+        {
+            string location = AddressCasing.Apply(trackEvent.Address.City) ?? string.Empty;
 
-        //    if (!string.IsNullOrEmpty(trackEvent.Address.StateOrProvinceCode))
-        //    {
-        //        if (location.Length > 0)
-        //        {
-        //            location += ", ";
-        //        }
+            if (!string.IsNullOrEmpty(trackEvent.Address.StateOrProvinceCode))
+            {
+                if (location.Length > 0)
+                {
+                    location += ", ";
+                }
 
-        //        location += trackEvent.Address.StateOrProvinceCode;
-        //    }
+                location += trackEvent.Address.StateOrProvinceCode;
+            }
 
-        //    if (!ShipmentType.IsDomestic(shipment))
-        //    {
-        //        if (location.Length > 0)
-        //        {
-        //            location += ", ";
-        //        }
+            if (!ShipmentType.IsDomestic(shipment))
+            {
+                if (location.Length > 0)
+                {
+                    location += ", ";
+                }
 
-        //        location += Geography.GetCountryName(trackEvent.Address.CountryCode);
-        //    }
+                location += Geography.GetCountryName(trackEvent.Address.CountryCode);
+            }
 
-        //    return location;
-        //}
+            return location;
+        }
     }
 }
