@@ -247,17 +247,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail for a registration API request.</returns>
-        public static WebServices.v2013.Registration.WebAuthenticationDetail CreateRegistrationWebAuthenticationDetail(FedExSettings settings)
+        public static WebServices.Registration.WebAuthenticationDetail CreateRegistrationWebAuthenticationDetail(FedExSettings settings)
         {
-            return new WebServices.v2013.Registration.WebAuthenticationDetail
+            return new WebServices.Registration.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.v2013.Registration.WebAuthenticationCredential
+                CspCredential = new WebServices.Registration.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
                 },
 
-                UserCredential = new WebServices.v2013.Registration.WebAuthenticationCredential
+                UserCredential = new WebServices.Registration.WebAuthenticationCredential
                 {
                     Key = settings.UserCredentialsKey,
                     Password = settings.UserCredentialsPassword
@@ -271,9 +271,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="account">The account.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static WebServices.v2013.Registration.ClientDetail CreateRegistrationClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Registration.ClientDetail CreateRegistrationClientDetail(FedExAccountEntity account, FedExSettings settings)
         {
-            return new WebServices.v2013.Registration.ClientDetail
+            return new WebServices.Registration.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
                 ClientProductId = settings.ClientProductId,

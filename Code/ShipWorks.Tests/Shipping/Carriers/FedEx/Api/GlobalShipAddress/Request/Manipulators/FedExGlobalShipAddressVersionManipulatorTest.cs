@@ -6,7 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using VersionId = ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress.VersionId;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators

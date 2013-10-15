@@ -5,7 +5,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
             // The act of actually setting the individual fields of the billing address is deferred to
             // another object, so we just want to make sure it is not empty
-            Assert.IsNotNull(nativeRequest.BillingAddress);
+            Assert.IsNotNull(nativeRequest.ShippingAddress);
         }
 
         [TestMethod]

@@ -4,7 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 {
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             nativeResponse = new SubscriptionReply()
             {
                 HighestSeverity = NotificationSeverityType.SUCCESS,
-                MeterNumber = "98765"
+                MeterDetail = new MeterDetail() { MeterNumber = "98765" }
             };
 
             account = new FedExAccountEntity();
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject.Process();
 
             FedExAccountEntity requestAccount = carrierRequest.Object.CarrierAccountEntity as FedExAccountEntity;
-            Assert.AreEqual(nativeResponse.MeterNumber, requestAccount.MeterNumber);
+            Assert.AreEqual(nativeResponse.MeterDetail.MeterNumber, requestAccount.MeterNumber);
         }
     }
 }

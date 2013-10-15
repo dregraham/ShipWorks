@@ -168,7 +168,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
             Assert.AreEqual(detail.UserCredential.Password, settings.UserCredentialsPassword);
         }
@@ -181,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
             Assert.AreEqual(detail.CspCredential.Key, settings.CspCredentialKey);
         }
@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
             Assert.AreEqual(detail.CspCredential.Password, settings.CspCredentialPassword);
         }
@@ -207,7 +207,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
             Assert.AreEqual(detail.UserCredential.Key, settings.UserCredentialsKey);
         }
@@ -339,7 +339,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
 
             Assert.AreEqual(account.AccountNumber, detail.AccountNumber);
         }
@@ -352,7 +352,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
 
             Assert.AreEqual(account.MeterNumber, detail.MeterNumber);
         }
@@ -365,7 +365,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
 
             Assert.AreEqual(settings.ClientProductId, detail.ClientProductId);
         }
@@ -378,7 +378,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
 
             Assert.AreEqual(settings.ClientProductVersion, detail.ClientProductVersion);
         }

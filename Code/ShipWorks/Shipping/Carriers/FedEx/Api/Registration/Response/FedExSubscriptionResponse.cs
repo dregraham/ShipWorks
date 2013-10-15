@@ -1,7 +1,7 @@
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response
 {
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response
 
             // Save the meter number back to the account in the original request
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
-            account.MeterNumber = nativeResponse.MeterNumber;
+            account.MeterNumber = nativeResponse.MeterDetail.MeterNumber;
         }
 
         /// <summary>

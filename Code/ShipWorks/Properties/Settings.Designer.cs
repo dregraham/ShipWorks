@@ -189,16 +189,6 @@ namespace ShipWorks.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://gatewaybeta.fedex.com:443/web-services")]
-        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Registration_RegistrationService {
-            get {
-                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Registration_RegistrationServ" +
-                    "ice"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/globalshipaddress")]
         public string ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_GlobalShipAddress_GlobalShipAddressService {
             get {
@@ -264,6 +254,16 @@ namespace ShipWorks.Properties {
         public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService {
             get {
                 return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService"]));
             }
         }
     }

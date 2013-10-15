@@ -2,7 +2,7 @@ using System;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
             PersonAdapter person = new PersonAdapter(account, string.Empty);
 
-            nativeRequest.BillingAddress = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
+            nativeRequest.ShippingAddress = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
 
             nativeRequest.UserContactAndAddress = new ParsedContactAndAddress();
             nativeRequest.UserContactAndAddress.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);

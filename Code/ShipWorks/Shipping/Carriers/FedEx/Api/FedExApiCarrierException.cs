@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExApiCarrierException(WebServices.v2013.Registration.Notification[] notifications)
+        public FedExApiCarrierException(WebServices.Registration.Notification[] notifications)
             :base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
