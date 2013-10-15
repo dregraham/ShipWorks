@@ -10,6 +10,9 @@ using System.Net;
 using ShipWorks.Data;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -17,14 +20,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// API entry point for the address validation service
     /// </summary>
     public static class FedExApiAddressValidation
-    {        
+    {
+        private const string testingUrl = "https://wsbeta.fedex.com:443/web-services/";
+        private const string liveUrl = "https://gateway.fedex.com/web-services";
+
+        // Values provided by fedex
+        static string cspCredentialKey = "U17ZWjkTkNxIFLhT";
+        static string cspCredentialPassword = SecureText.Decrypt("q4GaWogM20TrRxtAmYbTktTNQqvcG7vOyfNDIynBAug=", "apptive");
+        static string clientProductID = "ITSW";
+        static string clientProductVersion = "9558";
+
         /// <summary>
-        /// Create the webserivce instance with the appropriate URL
+        /// Get the FedEx server URL to use
+        /// </summary>
+        private static string ServerUrl
+        {
+            get { return new FedExSettingsRepository().UseTestServer ? testingUrl : liveUrl; }
+        }
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
         /// </summary>
         private static AddressValidationService CreateWebService(string logName)
         {
             AddressValidationService webService = new AddressValidationService(new ApiLogEntry(ApiLogSource.FedEx, logName));
-            webService.Url = FedExApiCore.ServerUrl;
+            webService.Url = ServerUrl;
 
             return webService;
         }
@@ -45,10 +65,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             AddressValidationRequest request = new AddressValidationRequest();
 
             // Authentication
-            request.WebAuthenticationDetail = FedExApiCore.GetWebAuthenticationDetail<WebAuthenticationDetail>();
+            request.WebAuthenticationDetail = GetWebAuthenticationDetail();
 
             // Client
-            request.ClientDetail = FedExApiCore.GetClientDetail<ClientDetail>(account);
+            request.ClientDetail = GetClientDetail(account);
 
             // Version
             request.Version = new VersionId
@@ -64,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             { 
                 new AddressToValidate()
                 {
-                    Address = FedExApiCore.CreateAddress<Address>(new PersonAdapter(shipment, "Ship")),
+                    Address = CreateAddress(new PersonAdapter(shipment, "Ship")),
                     CompanyName = shipment.ShipCompany.Length > 0 ? shipment.ShipCompany : null
                 }
             };
@@ -125,6 +145,87 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 throw WebHelper.TranslateWebException(ex, typeof(FedExException));
             }
+        }
+
+        /// <summary>
+        /// Get the common client detail info
+        /// </summary>
+        private static ClientDetail GetClientDetail(FedExAccountEntity account)
+        {
+            ClientDetail clientDetail = new ClientDetail();
+
+            clientDetail.AccountNumber = account.AccountNumber;
+            clientDetail.ClientProductId = clientProductID;
+            clientDetail.ClientProductVersion = clientProductVersion;
+            clientDetail.MeterNumber = account.MeterNumber;
+
+            return clientDetail;
+        }
+
+        /// <summary>
+        /// Get the common WebAuthenticationDetail info
+        /// </summary>
+        private static WebAuthenticationDetail GetWebAuthenticationDetail()
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            WebAuthenticationDetail credential = new WebAuthenticationDetail();
+
+            credential.CspCredential = new WebAuthenticationCredential
+            {
+                Key = cspCredentialKey,
+                Password = cspCredentialPassword
+            };
+
+            credential.UserCredential = new WebAuthenticationCredential
+            {
+                Key = settings.FedExUsername,
+                Password = SecureText.Decrypt(settings.FedExPassword, "FedEx")
+            };
+            
+            return credential;
+        }
+
+        /// <summary>
+        /// Create a FedEx API address object from the given person
+        /// </summary>
+        private static Address CreateAddress(PersonAdapter person)
+        {
+            Address address = new Address();
+
+            List<string> streetLines = new List<string>();
+            streetLines.Add(person.Street1);
+
+            if (!string.IsNullOrEmpty(person.Street2))
+            {
+                streetLines.Add(person.Street2);
+            }
+
+            if (!string.IsNullOrEmpty(person.Street3))
+            {
+                streetLines.Add(person.Street3);
+            }
+            
+            address.StreetLines = streetLines.ToArray();
+            address.City = person.City;
+            address.PostalCode = person.PostalCode;
+            address.StateOrProvinceCode = person.StateProvCode;
+            address.CountryCode = AdjustFedExCountryCode(person.CountryCode);
+
+            return address;
+        }
+
+        /// <summary>
+        /// Adjust the country code for what FedEx requires expects
+        /// </summary>
+        private static string AdjustFedExCountryCode(string code)
+        {
+            // FedEx wants GB
+            if (code == "UK")
+            {
+                code = "GB";
+            }
+
+            return code;
         }
     }
 }
