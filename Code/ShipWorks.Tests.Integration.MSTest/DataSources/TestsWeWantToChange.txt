@@ -27,7 +27,7 @@ CHANGES (US Exp Intl)
  413213                  52      DM          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.
 
 Us Grn Dom
-	BJ:17 chan
+	BJ:17 changed to CSP
 
 Grn Alcohol
 	AF:2  changed to SpecialServiceTypes2 to make it uniquely named
