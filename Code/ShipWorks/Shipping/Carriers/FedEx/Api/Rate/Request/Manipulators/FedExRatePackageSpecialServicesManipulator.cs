@@ -53,6 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     specialServicesRequested.SignatureOptionDetail = new SignatureOptionDetail
                     {
                         OptionType = GetApiSignatureType(fedExSignatureType),
+                        OptionTypeSpecified = true,
                         SignatureReleaseNumber = fedExAccount.SignatureRelease
                     };
 
