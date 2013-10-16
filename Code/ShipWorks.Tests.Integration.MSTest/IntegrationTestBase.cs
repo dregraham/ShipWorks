@@ -49,6 +49,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
             
             PopulateValues(testObject, testDataRow, columnPropertyMap);
+
             return true;
         }
 

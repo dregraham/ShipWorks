@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "U17ZWjkTkNxIFLhT";
+                return "bSOSlZqj6TCaKrAv";
             }
         }
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return SecureText.Decrypt("q4GaWogM20TrRxtAmYbTktTNQqvcG7vOyfNDIynBAug=", "apptive");
+                return SecureText.Decrypt("BKRdYnlc8rjM4IYwWxdz3tYZ9IXSFg6FJGkjW72d5Ew=", "apptive");
             }
         }
 

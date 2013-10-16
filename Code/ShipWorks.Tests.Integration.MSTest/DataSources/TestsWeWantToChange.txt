@@ -1,7 +1,8 @@
-﻿323393 doesn't have a length/width/height
-323394 doesn't have a length/width/height
-2D2 doesn't have a length/width/height
-323201 account number was missing a 0 in the front.
+﻿Us Exp Dom:
+	323393 added a length/width/height
+	323394 added a length/width/height
+	323402 added a length/width/height
+	323201 account number was missing a 0 in the front.
 
 In CA Exp Intl, RequestedShipment.ShipTimestamp (column BJ) had invalid dates. I blanked them out.
 

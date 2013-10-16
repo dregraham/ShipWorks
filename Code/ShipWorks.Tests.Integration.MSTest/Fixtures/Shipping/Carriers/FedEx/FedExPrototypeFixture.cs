@@ -409,11 +409,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
             shipment.FedEx.DropoffType = GetDropoffType();
 
-            if (string.IsNullOrWhiteSpace(FedExAccountNumber))
-            {
-                FedExAccountNumber = ShipperCountryCode == "CA" ? "602611841" : "602344126";
-            }
-
             // Default to the shipper country code
             shipment.FedEx.FedExAccountID = GetFedExAccountId(FedExAccountNumber, ShipperCountryCode); 
 
