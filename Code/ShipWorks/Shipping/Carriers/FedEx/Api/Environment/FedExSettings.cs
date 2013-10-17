@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "ITSW";
+                return "DYJU";
             }
         }
 
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "9558";
+                return "2272";
             }
         }
 

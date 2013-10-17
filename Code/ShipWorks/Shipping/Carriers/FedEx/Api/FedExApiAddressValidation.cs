@@ -24,11 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private const string testingUrl = "https://wsbeta.fedex.com:443/web-services/";
         private const string liveUrl = "https://gateway.fedex.com/web-services";
 
-        // Values provided by fedex
-        static string cspCredentialKey = "U17ZWjkTkNxIFLhT";
-        static string cspCredentialPassword = SecureText.Decrypt("q4GaWogM20TrRxtAmYbTktTNQqvcG7vOyfNDIynBAug=", "apptive");
-        static string clientProductID = "ITSW";
-        static string clientProductVersion = "9558";
+        private static FedExSettings fedExSettings = new FedExSettings();
 
         /// <summary>
         /// Get the FedEx server URL to use
@@ -155,8 +151,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             ClientDetail clientDetail = new ClientDetail();
 
             clientDetail.AccountNumber = account.AccountNumber;
-            clientDetail.ClientProductId = clientProductID;
-            clientDetail.ClientProductVersion = clientProductVersion;
+            clientDetail.ClientProductId = fedExSettings.ClientProductId;
+            clientDetail.ClientProductVersion = fedExSettings.ClientProductVersion;
             clientDetail.MeterNumber = account.MeterNumber;
 
             return clientDetail;
@@ -172,8 +168,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             credential.CspCredential = new WebAuthenticationCredential
             {
-                Key = cspCredentialKey,
-                Password = cspCredentialPassword
+                Key = fedExSettings.CspCredentialKey,
+                Password = fedExSettings.CspCredentialPassword
             };
 
             credential.UserCredential = new WebAuthenticationCredential
