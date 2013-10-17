@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
+            this.wizardPageOnlineStore = new ShipWorks.UI.Wizard.WizardPage();
             this.wizardPage2 = new ShipWorks.UI.Wizard.WizardPage();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
+            this.wizardPageOnlineStore.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -49,7 +52,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPage1);
+            this.mainPanel.Controls.Add(this.wizardPageOnlineStore);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -68,16 +71,18 @@
             // 
             this.topPanel.Size = new System.Drawing.Size(548, 56);
             // 
-            // wizardPage1
+            // wizardPageOnlineStore
             // 
-            this.wizardPage1.Description = "The description of the page.";
-            this.wizardPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPage1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPage1.Location = new System.Drawing.Point(0, 0);
-            this.wizardPage1.Name = "wizardPage1";
-            this.wizardPage1.Size = new System.Drawing.Size(548, 271);
-            this.wizardPage1.TabIndex = 0;
-            this.wizardPage1.Title = "Wizard page 1.";
+            this.wizardPageOnlineStore.Controls.Add(this.radioButton2);
+            this.wizardPageOnlineStore.Controls.Add(this.radioButton1);
+            this.wizardPageOnlineStore.Description = "What platform do you sell on?";
+            this.wizardPageOnlineStore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageOnlineStore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageOnlineStore.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageOnlineStore.Name = "wizardPageOnlineStore";
+            this.wizardPageOnlineStore.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageOnlineStore.TabIndex = 0;
+            this.wizardPageOnlineStore.Title = "Online Store";
             // 
             // wizardPage2
             // 
@@ -90,6 +95,28 @@
             this.wizardPage2.TabIndex = 0;
             this.wizardPage2.Title = "Wizard page 2.";
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(23, 12);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(184, 17);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Get connected to my online store";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(23, 82);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(299, 17);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Just give me some sample orders and let me start playing";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
             // ShipWorksSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -100,21 +127,25 @@
             this.Name = "ShipWorksSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
-            ((ShipWorks.UI.Wizard.WizardPage)(this.wizardPage1)),
-            ((ShipWorks.UI.Wizard.WizardPage)(this.wizardPage2))});
+            this.wizardPageOnlineStore,
+            this.wizardPage2});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
+            this.wizardPageOnlineStore.ResumeLayout(false);
+            this.wizardPageOnlineStore.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private UI.Wizard.WizardPage wizardPage1;
+        private UI.Wizard.WizardPage wizardPageOnlineStore;
         private UI.Wizard.WizardPage wizardPage2;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }

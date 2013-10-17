@@ -2075,6 +2075,7 @@ namespace ShipWorks
                 {
                     Divelements.SandRibbon.MenuItem menuItem = new Divelements.SandRibbon.MenuItem(store.StoreName);
                     menuItem.Tag = store;
+                    menuItem.Image = EnumHelper.GetImage((StoreTypeCode) store.TypeCode);
                     menuItem.Activate += new EventHandler(OnDownloadOrdersSingleStore);
                     menu.Items.Add(menuItem);
                 }

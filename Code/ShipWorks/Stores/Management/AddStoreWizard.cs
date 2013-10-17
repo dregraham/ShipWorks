@@ -41,6 +41,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Editions.Brown;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Stores.Management
 {
@@ -135,7 +136,7 @@ namespace ShipWorks.Stores.Management
 
                 // Force this StoreType and it's wizard
                 comboStoreType.Items.Clear();
-                comboStoreType.Items.Add(storeType);
+                comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
                 comboStoreType.SelectedIndex = 0;
 
                 // Setup for the configured single store type
@@ -199,7 +200,7 @@ namespace ShipWorks.Stores.Management
             // Add each store type as a radio
             foreach (StoreType storeType in StoreTypeManager.StoreTypes)
             {
-                comboStoreType.Items.Add(storeType);
+                comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
             }
 
             comboStoreType.SelectedIndex = 0;
@@ -252,7 +253,9 @@ namespace ShipWorks.Stores.Management
             {
                 if (comboStoreType.SelectedIndex > 0)
                 {
-                    return (StoreType) comboStoreType.SelectedItem;
+                    ImageComboBoxItem item = (ImageComboBoxItem) comboStoreType.SelectedItem;
+
+                    return (StoreType) item.Value;
                 }
 
                 return null;

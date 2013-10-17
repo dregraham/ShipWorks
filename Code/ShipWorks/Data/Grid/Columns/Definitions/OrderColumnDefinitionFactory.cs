@@ -21,6 +21,7 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
+using ShipWorks.Stores.Platforms;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -37,33 +38,34 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             GridColumnDefinitionCollection definitions = new GridColumnDefinitionCollection
                 {
                     new GridColumnDefinition("{13E940CA-945B-4c23-83F5-50F758AD4456}", true, 
-                        new GridTextDisplayType(), "Order #", "10894",
+                        new GridOrderNumberDisplayType(), "Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.GenericModule),
                         OrderFields.OrderNumberComplete, 
                         OrderFields.OrderNumber) { DefaultWidth = 75 },
 
                     new GridColumnDefinition("{B65D5682-EEE7-40FC-BE26-06F9D5A16ABE}", true,
-                        new NeweggInvoiceNumberDisplayType(), "Invoice #", "87448975", NeweggOrderFields.InvoiceNumber)
+                        new NeweggInvoiceNumberDisplayType(), "Invoice #", "87448975", 
+                        NeweggOrderFields.InvoiceNumber)
                         {
                             StoreTypeCode = StoreTypeCode.NeweggMarketplace,
                             DefaultWidth = 70
                         },
                     
                     new GridColumnDefinition("{E93AA547-6F6C-46c5-AEA1-9090127F2C70}", true,
-                        new GridTextDisplayType(), "Client Order #", "10894",
+                        new GridOrderNumberDisplayType(), "Client Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.ChannelAdvisor),
                         ChannelAdvisorOrderFields.CustomOrderIdentifier)                        
                         {  
                             StoreTypeCode = StoreTypeCode.ChannelAdvisor
                         },
                     
                     new GridColumnDefinition("{DC90E6D4-70F8-465c-B182-5F081DF42782}", true,
-                        new GridTextDisplayType(), "Transaction ID", "X239493824",
+                        new GridOrderNumberDisplayType(), "Transaction ID", GridOrderNumberDisplayType.SampleData(StoreTypeCode.PayPal, "X239493824"),
                         PayPalOrderFields.TransactionID)
                         {
                             StoreTypeCode = StoreTypeCode.PayPal 
                         },
 
                     new GridColumnDefinition("{99CB4A0C-56B5-411a-A2D6-3547E4DA92BB}", true,
-                        new GridAmazonOrderDisplayType(), "Amazon Order #", "123-1234567-1234567",
+                        new GridAmazonOrderDisplayType(), "Amazon Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.Amazon, "123-1234567-1234567"),
                         AmazonOrderFields.AmazonOrderID)
                         {
                             StoreTypeCode = StoreTypeCode.Amazon
@@ -77,42 +79,43 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{CA3ECAB1-B96A-4c17-BC66-9EC7D0DF1035}", true,
-                        new GridTextDisplayType(), "ClickCartPro #", "ORD100002", 
+                        new GridOrderNumberDisplayType(), "ClickCartPro #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.ClickCartPro, "ORD100002"), 
                         ClickCartProOrderFields.ClickCartProOrderID)
                         {
                             StoreTypeCode = StoreTypeCode.ClickCartPro
                         },
 
                     new GridColumnDefinition("{24BD1068-74DD-4a0f-9736-08AA8A01065B}", true,
-                        new GridTextDisplayType(), "CommerceInterface #", "100002", 
+                        new GridOrderNumberDisplayType(), "CommerceInterface #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.CommerceInterface), 
                         CommerceInterfaceOrderFields.CommerceInterfaceOrderNumber)
                         {
                             StoreTypeCode = StoreTypeCode.CommerceInterface
                         },
 
                     new GridColumnDefinition("{4FC7E6AD-8FA5-4fe3-9F0E-DBF792959E80}", true,
-                        new GridTextDisplayType(), "Seller Order #", "45",
+                        new GridOrderNumberDisplayType(), "Seller Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.MarketplaceAdvisor),
                         MarketplaceAdvisorOrderFields.SellerOrderNumber)
                         {
                             StoreTypeCode = StoreTypeCode.MarketplaceAdvisor
                         },
 
                     new GridColumnDefinition("{113FF63F-5081-42a5-9CF9-3C7DB7970656}",
-                        new GridTextDisplayType(), "Invoice #", "XJ-10645",
+                        new GridOrderNumberDisplayType(), "Invoice #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.MarketplaceAdvisor, "XJ-10645"),
                         MarketplaceAdvisorOrderFields.InvoiceNumber)
                         {
                             StoreTypeCode = StoreTypeCode.MarketplaceAdvisor
                         },
 
                     new GridColumnDefinition("{0194877F-62AD-4715-8E9D-BB80DBB613B9}",
-                        new GridTextDisplayType(), "Confirmation #", "AXJ10645",
+                        new GridOrderNumberDisplayType(), "Confirmation #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.MarketplaceAdvisor, "AXJ10645"),
                         ProStoresOrderFields.ConfirmationNumber)
                         {
                             StoreTypeCode = StoreTypeCode.ProStores
                         },
 
                     new GridColumnDefinition("{CE36E374-3B10-4F33-9911-B38768CBC505}", true,
-                        new GridTextDisplayType(), "PO Number", "19864", SearsOrderFields.PoNumber)
+                        new GridOrderNumberDisplayType(), "PO Number", GridOrderNumberDisplayType.SampleData(StoreTypeCode.Sears), 
+                        SearsOrderFields.PoNumber)
                         {
                             StoreTypeCode = StoreTypeCode.Sears
                         },
@@ -181,12 +184,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.ProStores
                         },
                     new GridColumnDefinition("{BCBE522D-76E6-4a37-90A3-50BA62E51DC2}",
-                        new GridStoreDisplayType(StoreProperty.StoreName), "Store Name", "My Store",
+                        new GridStoreDisplayType(StoreProperty.StoreName), "Store Name", new GridStoreDisplayType.DisplayData { StoreText = "My Store", StoreIcon = StoreIcons.genericmodule },
                         OrderFields.StoreID,
                         StoreFields.StoreName),
 
                     new GridColumnDefinition("{D82CB513-4956-48ac-B2BB-5D0AC45F4CE4}",
-                        new GridStoreDisplayType(StoreProperty.StoreType), "Store Type", "osCommerce",
+                        new GridStoreDisplayType(StoreProperty.StoreType), "Store Type", new GridStoreDisplayType.DisplayData { StoreText = "Magento", StoreIcon = StoreIcons.magento },
                         OrderFields.StoreID,
                         CreateStoreTypeSortField()),
 
@@ -496,7 +499,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         }, 
 
                     new GridColumnDefinition("{CD0A9D25-E486-4D19-B517-3824E722CD6A}", 
-                        new GridEbayGlobalShippingProgramEligibilityDisplayType(), "Eligible for GSP", "Yes", 
+                        new GridEbayGlobalShippingProgramEligibilityDisplayType(), "Eligible for GSP", true, 
                         EbayOrderFields.GspEligible)
                         {
                             StoreTypeCode = StoreTypeCode.Ebay,

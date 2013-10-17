@@ -667,6 +667,19 @@
     <Compile Include="Data\Controls\PersonException.cs" />
     <Compile Include="Data\Connection\SqlSessionPermissionSet.cs" />
     <Compile Include="Data\Grid\Columns\Definitions\ServiceStatusColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.Designer.cs">
+      <DependentUpon>GridOrderNumberDisplayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridOrderNumberDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.Designer.cs">
+      <DependentUpon>GridStoreDisplayEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridComputerLimitedListDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\Decorators\GridServiceStopTimeDecorator.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridBooleanDisplayType.cs" />
@@ -2130,6 +2143,11 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.Designer.cs">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\StoreIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreIcons.resx</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\IApiQueryProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\MSAccessQueryProvider.cs" />
@@ -6587,6 +6605,12 @@
     <EmbeddedResource Include="Data\Connection\SingleUserModeDlg.resx">
       <DependentUpon>SingleUserModeDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.resx">
+      <DependentUpon>GridOrderNumberDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.resx">
+      <DependentUpon>GridStoreDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Import\Spreadsheet\Types\Csv\Editing\GenericCsvChangeSourceSchemaDlg.resx">
       <DependentUpon>GenericCsvChangeSourceSchemaDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -6994,6 +7018,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\StoreIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StoreIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\CoreExtensions\Actions\ThreeDCartOrderUpdateTaskEditor.resx">
       <DependentUpon>ThreeDCartOrderUpdateTaskEditor.cs</DependentUpon>
@@ -10216,6 +10244,41 @@
     <None Include="Resources\wrench.png" />
     <None Include="Resources\yinyang.png" />
     <None Include="Resources\shoppingcart - Copy.png" />
+    <None Include="Resources\Stores\Icons\3dcart.png" />
+    <None Include="Resources\Stores\Icons\amazon.png" />
+    <None Include="Resources\Stores\Icons\americommerce.png" />
+    <None Include="Resources\Stores\Icons\bigcommerce.png" />
+    <None Include="Resources\Stores\Icons\channeladvisor.png" />
+    <None Include="Resources\Stores\Icons\clickcartpro.png" />
+    <None Include="Resources\Stores\Icons\commerceinterface.png" />
+    <None Include="Resources\Stores\Icons\creloaded.png" />
+    <None Include="Resources\Stores\Icons\ebay.png" />
+    <None Include="Resources\Stores\Icons\etsy.png" />
+    <None Include="Resources\Stores\Icons\genericfile.png" />
+    <None Include="Resources\Stores\Icons\genericmodule.png" />
+    <None Include="Resources\Stores\Icons\infopia.png" />
+    <None Include="Resources\Stores\Icons\magento.png" />
+    <None Include="Resources\Stores\Icons\manual.png" />
+    <None Include="Resources\Stores\Icons\miva.png" />
+    <None Include="Resources\Stores\Icons\networksolutions.png" />
+    <None Include="Resources\Stores\Icons\newegg.png" />
+    <None Include="Resources\Stores\Icons\orderdynamics.png" />
+    <None Include="Resources\Stores\Icons\ordermotion.png" />
+    <None Include="Resources\Stores\Icons\oscommerce.png" />
+    <None Include="Resources\Stores\Icons\paypal.png" />
+    <None Include="Resources\Stores\Icons\prostores.png" />
+    <None Include="Resources\Stores\Icons\rakuten.png" />
+    <None Include="Resources\Stores\Icons\searchfit.png" />
+    <None Include="Resources\Stores\Icons\sears.png" />
+    <None Include="Resources\Stores\Icons\sellervantage.png" />
+    <None Include="Resources\Stores\Icons\shopify.png" />
+    <None Include="Resources\Stores\Icons\shopsite.png" />
+    <None Include="Resources\Stores\Icons\virtuemart.png" />
+    <None Include="Resources\Stores\Icons\volusion.png" />
+    <None Include="Resources\Stores\Icons\webshopmanager.png" />
+    <None Include="Resources\Stores\Icons\xcart.png" />
+    <None Include="Resources\Stores\Icons\yahoo.png" />
+    <None Include="Resources\Stores\Icons\zencart.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />

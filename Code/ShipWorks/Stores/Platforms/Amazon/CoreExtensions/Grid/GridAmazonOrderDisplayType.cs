@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
     /// <summary>
     /// Hyperlink column definition for displaying the amazon orderID and pulling up the order info on amazon
     /// </summary>
-    public class GridAmazonOrderDisplayType : GridColumnDisplayType
+    public class GridAmazonOrderDisplayType : GridOrderNumberDisplayType
     {
         private static ILog log = LogManager.GetLogger(typeof (GridAmazonOrderDisplayType));
 

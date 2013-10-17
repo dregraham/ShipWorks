@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Management
             this.tryRadio = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.comboStoreType = new System.Windows.Forms.ComboBox();
+            this.comboStoreType = new ShipWorks.UI.Controls.ImageComboBox();
             this.licenseRadio = new System.Windows.Forms.RadioButton();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.licenseKey = new System.Windows.Forms.TextBox();
@@ -985,7 +985,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.RadioButton tryRadio;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ComboBox comboStoreType;
+        private ShipWorks.UI.Controls.ImageComboBox comboStoreType;
         private System.Windows.Forms.RadioButton licenseRadio;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TextBox licenseKey;
