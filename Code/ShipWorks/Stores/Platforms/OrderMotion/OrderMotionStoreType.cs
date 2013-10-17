@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             // Outputting both elements despite using the same value for historical purposes so existing templates
             // do not break. The shipment number value was originally built by combining the order motion ID and 
             // the order motion shipment ID values which were parsed out of the INVOICE_NO field from the order download.
-            outline.AddElement("ShipmentNumber", () => order.Value.OrderMotionInvoiceNumber);
+            outline.AddElementLegacy2x("ShipmentNumber", () => order.Value.OrderMotionInvoiceNumber);
             outline.AddElement("InvoiceNumber", () => order.Value.OrderMotionInvoiceNumber);
             
             outline.AddElement("Promotion", () => order.Value.OrderMotionPromotion);

@@ -99,7 +99,15 @@ namespace ShipWorks.Data.Grid.Columns
                 throw new InvalidOperationException("Cannot create sort clauses since SortField is null.");
             }
 
-            return new List<SortClause> { new SortClause(SortField, null, direction) };
+            SortClause sortClause = new SortClause(sortField, null, direction);
+
+            // To get sorting based on expressions to work, this has to be set.  I figured this out with Reflector on LLBLGen's code.  Not sure why, but it is.
+            if (sortField.ExpressionToApply != null)
+            {
+                sortClause.EmitAliasForExpressionAggregateField = false;
+            }
+
+            return new List<SortClause> { sortClause };
         }
     }
 }
