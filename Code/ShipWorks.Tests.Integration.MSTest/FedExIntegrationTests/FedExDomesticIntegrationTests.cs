@@ -8,7 +8,7 @@ using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
 namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
 {
     [TestClass]
-    internal class FedExDomesticIntegrationTests : IntegrationTestBase
+    public class FedExDomesticIntegrationTests : IntegrationTestBase
     {
         private const string fedExTestAccountNumber = "603103343";
         private const string ecodAccountNumber = "603157745";
