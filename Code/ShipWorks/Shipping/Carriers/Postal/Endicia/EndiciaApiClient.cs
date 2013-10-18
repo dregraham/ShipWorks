@@ -31,6 +31,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -214,16 +215,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
-            ThermalLabelType? thermalType;
+            ThermalLanguage? thermalType;
 
             // Determine what thermal type, if any to use.  Use the Endicia settings if it is an Endicia shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
-                thermalType = settings.EndiciaThermal ? (ThermalLabelType) settings.EndiciaThermalType : (ThermalLabelType?) null;
+                thermalType = settings.EndiciaThermal ? (ThermalLanguage) settings.EndiciaThermalType : (ThermalLanguage?) null;
             }
             else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                thermalType = settings.Express1EndiciaThermal ? (ThermalLabelType) settings.Express1EndiciaThermalType : (ThermalLabelType?) null;
+                thermalType = settings.Express1EndiciaThermal ? (ThermalLanguage) settings.Express1EndiciaThermalType : (ThermalLanguage?) null;
             }
             else
             {
@@ -336,7 +337,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Set the thermal type for the shipment
             shipment.ThermalType = (int?) thermalType;
-            request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLabelType.EPL) ? "EPL2" : "ZPLII";
+            request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
 
             // Set if this is reply postage
             if (shipment.ReturnShipment)

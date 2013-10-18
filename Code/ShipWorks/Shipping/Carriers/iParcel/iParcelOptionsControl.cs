@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             settings.IParcelThermal = thermalPrinter.Checked;
 
             // i-parcel only supports EPL
-            settings.IParcelThermalType = (int) ThermalLabelType.EPL;
+            settings.IParcelThermalType = (int) ThermalLanguage.EPL;
         }
     }
 }

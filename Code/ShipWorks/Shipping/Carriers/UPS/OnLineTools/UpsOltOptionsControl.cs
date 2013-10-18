@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -30,12 +31,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             thermalPrinter.Checked = settings.UpsThermal;
-            thermalType.SelectedValue = (ThermalLabelType) settings.UpsThermalType;
+            thermalType.SelectedValue = (ThermalLanguage) settings.UpsThermalType;
         }
 
         /// <summary>

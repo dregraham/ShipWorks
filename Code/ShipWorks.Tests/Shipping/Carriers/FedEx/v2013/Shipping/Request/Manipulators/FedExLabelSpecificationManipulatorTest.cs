@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
 using ShipWorks.Shipping;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipulators
 {
@@ -41,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipul
             // Initialize the shipment entity that we'll be testing with
             shipmentEntity = new ShipmentEntity()
             {
-                ThermalType = (int)ThermalLabelType.EPL,
+                ThermalType = (int)ThermalLanguage.EPL,
                 FedEx = new FedExShipmentEntity()
                 {
                     Shipment = new ShipmentEntity()
@@ -199,18 +200,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.v2013.Shipping.Request.Manipul
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual((int)ThermalLabelType.EPL, shipmentEntity.ThermalType);
+            Assert.AreEqual((int)ThermalLanguage.EPL, shipmentEntity.ThermalType);
         }
 
         [TestMethod]
         public void Manipulate_ConfiguresShipmentEntityThermalLabel_WithZPL_WhenFexExThermalSettingIsTrueAndConfiguredWithZPL_Test()
         {
             // Setup
-            shippingSettings.FedExThermalType = (int)ThermalLabelType.ZPL;
+            shippingSettings.FedExThermalType = (int)ThermalLanguage.ZPL;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual((int)ThermalLabelType.ZPL, shipmentEntity.ThermalType);
+            Assert.AreEqual((int)ThermalLanguage.ZPL, shipmentEntity.ThermalType);
         }
 
         [TestMethod]

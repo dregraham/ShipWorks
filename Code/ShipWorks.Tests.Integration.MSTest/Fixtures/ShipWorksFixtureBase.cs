@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using log4net;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 {
@@ -323,11 +324,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
             }
             else if (LabelType.ToUpperInvariant() == "ZPL")
             {
-                shipment.ThermalType = (int) ThermalLabelType.ZPL;
+                shipment.ThermalType = (int) ThermalLanguage.ZPL;
             }
             else if (LabelType.ToUpperInvariant() == "EPL")
             {
-                shipment.ThermalType = (int) ThermalLabelType.EPL;
+                shipment.ThermalType = (int) ThermalLanguage.EPL;
             }
 
             // Set the ship date to now if the timestamp is not specified otherwise find the date of the day specified by the timestamp

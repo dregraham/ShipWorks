@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -152,7 +153,7 @@ namespace ShipWorks.Shipping.Settings
             settings.FedExPassword = null;
             settings.FedExMaskAccount = true;
             settings.FedExThermal = false;
-            settings.FedExThermalType = (int) ThermalLabelType.EPL;
+            settings.FedExThermalType = (int) ThermalLanguage.EPL;
             settings.FedExThermalDocTab = false;
             settings.FedExThermalDocTabType = (int) ThermalDocTabType.Leading;
             settings.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks;
@@ -160,12 +161,12 @@ namespace ShipWorks.Shipping.Settings
 
             settings.UpsAccessKey = null;
             settings.UpsThermal = false;
-            settings.UpsThermalType = (int) ThermalLabelType.EPL;
+            settings.UpsThermalType = (int) ThermalLanguage.EPL;
             settings.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.UpsInsurancePennyOne = false;
 
             settings.EndiciaThermal = false;
-            settings.EndiciaThermalType = (int) ThermalLabelType.EPL;
+            settings.EndiciaThermalType = (int) ThermalLanguage.EPL;
             settings.EndiciaCustomsCertify = false;
             settings.EndiciaCustomsSigner = "";
             settings.EndiciaThermalDocTab = false;
@@ -175,7 +176,7 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             settings.Express1EndiciaThermal = false;
-            settings.Express1EndiciaThermalType = (int)ThermalLabelType.EPL;
+            settings.Express1EndiciaThermalType = (int)ThermalLanguage.EPL;
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
             settings.Express1EndiciaThermalDocTab = false;
@@ -183,27 +184,27 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaSingleSource = false;
 
             settings.Express1StampsThermal = false;
-            settings.Express1StampsThermalType = (int)ThermalLabelType.EPL;
+            settings.Express1StampsThermalType = (int)ThermalLanguage.EPL;
             settings.Express1StampsSingleSource = false;
 
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
 
             settings.StampsThermal = false;
-            settings.StampsThermalType = (int) ThermalLabelType.EPL;
+            settings.StampsThermalType = (int) ThermalLanguage.EPL;
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;
 
             settings.EquaShipThermal = false;
-            settings.EquaShipThermalType = (int) ThermalLabelType.EPL;
+            settings.EquaShipThermalType = (int) ThermalLanguage.EPL;
 
             settings.OnTracThermal = false;
-            settings.OnTracThermalType = (int) ThermalLabelType.EPL;
+            settings.OnTracThermalType = (int) ThermalLanguage.EPL;
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;
 
             settings.IParcelThermal = false;
-            settings.IParcelThermalType = (int)ThermalLabelType.EPL;
+            settings.IParcelThermalType = (int)ThermalLanguage.EPL;
             settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.IParcelInsurancePennyOne = false;
 

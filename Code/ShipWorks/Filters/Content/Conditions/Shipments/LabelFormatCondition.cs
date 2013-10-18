@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
@@ -85,10 +86,10 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
                     return string.Format("{0} IS NOT NULL", thermalColumn);
 
                 case LabelFormatType.EPL:
-                    return string.Format("{0} = {1}", thermalColumn, (int) ThermalLabelType.EPL);
+                    return string.Format("{0} = {1}", thermalColumn, (int) ThermalLanguage.EPL);
 
                 case LabelFormatType.ZPL:
-                    return string.Format("{0} = {1}", thermalColumn, (int) ThermalLabelType.ZPL);
+                    return string.Format("{0} = {1}", thermalColumn, (int) ThermalLanguage.ZPL);
             }
 
             return "";

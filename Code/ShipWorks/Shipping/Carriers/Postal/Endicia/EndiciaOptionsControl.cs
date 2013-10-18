@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // remember the reseller for use when saving
             endiciaReseller = reseller;
 
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
             EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.Express1:
                     {
                         thermalPrinter.Checked = settings.Express1EndiciaThermal;
-                        thermalType.SelectedValue = (ThermalLabelType)settings.Express1EndiciaThermalType;
+                        thermalType.SelectedValue = (ThermalLanguage)settings.Express1EndiciaThermalType;
 
                         customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
                         customsSigner.Text = settings.Express1EndiciaCustomsSigner;
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 default:
                     {
                         thermalPrinter.Checked = settings.EndiciaThermal;
-                        thermalType.SelectedValue = (ThermalLabelType)settings.EndiciaThermalType;
+                        thermalType.SelectedValue = (ThermalLanguage)settings.EndiciaThermalType;
 
                         customsCertify.Checked = settings.EndiciaCustomsCertify;
                         customsSigner.Text = settings.EndiciaCustomsSigner;

@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -32,19 +33,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if(IsExpress1)
             {
                 thermalPrinter.Checked = settings.Express1StampsThermal;
-                thermalType.SelectedValue = (ThermalLabelType)settings.Express1StampsThermalType;
+                thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
             }
             else
             {
                 thermalPrinter.Checked = settings.StampsThermal;
-                thermalType.SelectedValue = (ThermalLabelType)settings.StampsThermalType;
+                thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
             }
         }
 
