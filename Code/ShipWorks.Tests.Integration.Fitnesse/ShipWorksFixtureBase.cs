@@ -32,6 +32,7 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using ShipWorks.Users.Security;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 
 

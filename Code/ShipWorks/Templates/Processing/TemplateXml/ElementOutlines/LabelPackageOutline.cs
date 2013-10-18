@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {

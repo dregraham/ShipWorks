@@ -10,6 +10,7 @@ using ShipWorks.Shipping;
 using System.IO;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {

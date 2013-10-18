@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {

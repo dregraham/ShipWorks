@@ -29,6 +29,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {

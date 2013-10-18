@@ -10,6 +10,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

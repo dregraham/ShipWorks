@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore;
 using log4net;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {

@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {

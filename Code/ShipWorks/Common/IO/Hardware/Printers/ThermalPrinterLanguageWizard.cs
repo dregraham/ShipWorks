@@ -204,7 +204,7 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         {
             if (success)
             {
-                TestComplete(Shipping.ThermalLanguage.ZPL, args);
+                TestComplete(Printers.ThermalLanguage.ZPL, args);
             }
         }
 
@@ -215,11 +215,11 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         {
             if (success)
             {
-                TestComplete(Shipping.ThermalLanguage.EPL, args);
+                TestComplete(Printers.ThermalLanguage.EPL, args);
             }
             else
             {
-                TestComplete(Shipping.ThermalLanguage.None, args);
+                TestComplete(Printers.ThermalLanguage.None, args);
             }
         }
 

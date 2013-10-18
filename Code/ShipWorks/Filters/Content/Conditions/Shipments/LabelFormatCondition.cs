@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {

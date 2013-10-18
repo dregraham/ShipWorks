@@ -3840,7 +3840,7 @@
       <DependentUpon>ShipmentVoidConfirmDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\TemplateLabelCategory.cs" />
-    <Compile Include="Shipping\ThermalLabelType.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\ThermalLanguage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

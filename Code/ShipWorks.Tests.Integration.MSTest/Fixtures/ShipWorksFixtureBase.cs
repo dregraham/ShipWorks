@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using log4net;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 {

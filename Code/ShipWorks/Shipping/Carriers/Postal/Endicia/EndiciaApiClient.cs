@@ -31,6 +31,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {

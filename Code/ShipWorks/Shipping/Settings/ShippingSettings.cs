@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Settings
 {

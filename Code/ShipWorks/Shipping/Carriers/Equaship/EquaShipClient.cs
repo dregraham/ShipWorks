@@ -21,6 +21,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.EquaShip
 {

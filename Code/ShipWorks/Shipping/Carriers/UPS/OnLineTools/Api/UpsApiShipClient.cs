@@ -23,6 +23,7 @@ using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {

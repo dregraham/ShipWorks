@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
