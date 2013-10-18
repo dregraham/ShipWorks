@@ -170,7 +170,7 @@ namespace :test do
 
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
+		mstest.parameters = "/noisolation", "/detail:errormessage", "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
 	end	
 	
 	desc "Execute integration tests"
