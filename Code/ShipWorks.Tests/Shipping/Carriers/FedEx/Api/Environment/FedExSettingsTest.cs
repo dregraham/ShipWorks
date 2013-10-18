@@ -71,14 +71,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         public void ClientProductionId_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("ITSW", testObject.ClientProductId);
+            Assert.AreEqual("DYJU", testObject.ClientProductId);
         }
 
         [TestMethod]
         public void ClientProductionVersion_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("9558", testObject.ClientProductVersion);
+            Assert.AreEqual("2272", testObject.ClientProductVersion);
         }
 
         [TestMethod]
