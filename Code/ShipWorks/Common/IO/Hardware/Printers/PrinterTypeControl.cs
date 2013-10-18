@@ -33,7 +33,7 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalLanguage);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalLanguage, null, true);
             thermalLanguage.SelectedIndex = -1;
         }
 

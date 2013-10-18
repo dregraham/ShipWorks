@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.ComponentModel;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping
 {
@@ -13,6 +14,7 @@ namespace ShipWorks.Shipping
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ThermalLanguage
     {
+        [Hidden]
         [Description("Standard")]
         None = -1,
 

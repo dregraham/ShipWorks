@@ -22,6 +22,7 @@ namespace Interapptive.Shared.Utility
             public DescriptionAttribute DescriptionAttribute { get; set; }
             public Image Image { get; set; }
             public bool Deprecated { get; set; }
+            public bool Hidden { get; set; }
             public int? SortOrder { get; set; }
             public string ApiValue { get; set; }
         }
@@ -37,12 +38,20 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Bind the ComboBox to the specified Enum type.
         /// </summary>
-        public static void BindComboBox<T>(ComboBox comboBox, Func<T, bool> include) where T: struct
+        public static void BindComboBox<T>(ComboBox comboBox, Func<T, bool> includer) where T: struct
+        {
+            BindComboBox<T>(comboBox, includer, false);
+        }
+
+        /// <summary>
+        /// Bind the ComboBox to the specified Enum type.
+        /// </summary>
+        public static void BindComboBox<T>(ComboBox comboBox, Func<T, bool> includer, bool includeHidden) where T : struct
         {
             comboBox.DataSource = null;
             comboBox.DisplayMember = "Key";
             comboBox.ValueMember = "Value";
-            comboBox.DataSource = GetEnumList<T>(include);
+            comboBox.DataSource = GetEnumList<T>(includer, includeHidden);
         }
 
         /// <summary>
@@ -56,14 +65,22 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Gets a List of KeyValuePair where the key is the Description, and the Enum is the Value.
         /// </summary>
-        public static EnumList<T> GetEnumList<T>(Func<T, bool> include) where T : struct
+        public static EnumList<T> GetEnumList<T>(Func<T, bool> includer) where T : struct
+        {
+            return GetEnumList(includer, false);
+        }
+
+        /// <summary>
+        /// Gets a List of KeyValuePair where the key is the Description, and the Enum is the Value.
+        /// </summary>
+        public static EnumList<T> GetEnumList<T>(Func<T, bool> includer, bool includeHidden) where T : struct
         {
             EnumList<T> result = new EnumList<T>();
 
             // Add each enum to the list
             foreach (T value in Enum.GetValues(typeof(T)))
             {
-                if (include != null && !include(value))
+                if (includer != null && !includer(value))
                 {
                     continue;
                 }
@@ -75,9 +92,14 @@ namespace Interapptive.Shared.Utility
                 // the exception will be thrown right when trying to bind in the first place.
                 EnumMetadata metadata = GetEnumMetadata((Enum) (object) value);
 
+                // We never show deprecated
                 if (!metadata.Deprecated)
                 {
-                    result.Add(new EnumEntry<T>(value));
+                    // We only show hidden if asked
+                    if (!metadata.Hidden || includeHidden)
+                    {
+                        result.Add(new EnumEntry<T>(value));
+                    }
                 }
             }
 
@@ -150,6 +172,14 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Gets whether or not the enum value has been marked to be hidden from users by default
+        /// </summary>
+        public static bool GetHidden(Enum value)
+        {
+            return GetEnumMetadata(value).Hidden;
+        }
+
+        /// <summary>
         /// Gets the Image associated with the enum value, or null if no ImageResourceAttribute was applied.
         /// </summary>
         public static Image GetImage(Enum value)
@@ -218,6 +248,12 @@ namespace Interapptive.Shared.Utility
                     if (obsoleteAttribute != null)
                     {
                         metadata.Deprecated = true;
+                    }
+
+                    HiddenAttribute hiddenAttribute = (HiddenAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(HiddenAttribute));
+                    if (hiddenAttribute != null)
+                    {
+                        metadata.Hidden = true;
                     }
 
                     ApiValueAttribute apiInfoAttribute = (ApiValueAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(ApiValueAttribute));

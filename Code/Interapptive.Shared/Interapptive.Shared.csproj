@@ -324,6 +324,7 @@
     <Compile Include="Utility\DeprecatedAttribute.cs" />
     <Compile Include="Utility\CallbackDescriptionAttribute.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
+    <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
