@@ -36,3 +36,16 @@ Grn Alcohol
 	U:5   changed to 38125
 
 
+
+
+
+
+
+	
+=================================================================================
+CHANGES (US Exp Intl)
+=================================================================================
+[Customer Transaction]  [Row]	[Column]	[Original Value]  [New Value]      [Reason]
+ 413139                  22      G           Friday            Wednesday        FedEx: Saturday shipment is not available for friday
+ 413235                  59      AO          42080             3/6/2015         Date was in an invalid format
+ 413236                  60      AO          42080             3/6/2015         Date was in an invalid format
