@@ -343,6 +343,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap box_closed_with_label {
+            get {
+                object obj = ResourceManager.GetObject("box_closed_with_label", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap box_closed16 {
             get {
                 object obj = ResourceManager.GetObject("box_closed16", resourceCulture);

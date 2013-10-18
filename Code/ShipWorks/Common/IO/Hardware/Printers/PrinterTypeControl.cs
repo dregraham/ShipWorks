@@ -9,37 +9,21 @@ using System.Windows.Forms;
 using ShipWorks.UI.Utility;
 using ShipWorks.Shipping;
 
-namespace ShipWorks.Templates.Printing.Configuration
+namespace ShipWorks.Common.IO.Hardware.Printers
 {
     /// <summary>
     /// Control for selecting the primary printers that will be used by shipworks
     /// </summary>
-    public partial class PrinterFormatControl : UserControl
+    public partial class PrinterTypeControl : UserControl
     {
-        const string notSelected = "";
+        string printerName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PrinterFormatControl()
+        public PrinterTypeControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Initialization
-        /// </summary>
-        private void OnLoad(object sender, EventArgs e)
-        {
-            printer.LoadPrinters(notSelected, -1, Media.PrinterSelectionInvalidPrinterBehavior.OnNotChosenPreserve);
-        }
-
-        /// <summary>
-        /// The selected printer has changed
-        /// </summary>
-        private void OnPrinterChanged(object sender, EventArgs e)
-        {
-            panelPaperType.Visible = printer.PrinterName != notSelected;
         }
 
         /// <summary>
@@ -49,6 +33,17 @@ namespace ShipWorks.Templates.Printing.Configuration
         {
             radioPaper.Checked = (sender == picturePaper);
             radioThermal.Checked = (sender == pictureThermal);
+        }
+
+        /// <summary>
+        /// The printer name that is selected, which will be used for the thermal determination wizard
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public string PrinterName
+        {
+            get { return printerName; }
+            set { printerName = value; }
         }
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace ShipWorks.Templates.Printing.Configuration
         {
             if (thermalLanguage.SelectedIndex == 0)
             {
-                using (PrinterThermalLanguageWizard dlg = new PrinterThermalLanguageWizard(printer.PrinterName))
+                using (ThermalPrinterLanguageWizard dlg = new ThermalPrinterLanguageWizard(printerName))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {

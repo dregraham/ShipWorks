@@ -31,14 +31,20 @@
             this.wizardPageOnlineStore = new ShipWorks.UI.Wizard.WizardPage();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.wizardPagePrinters = new ShipWorks.UI.Wizard.WizardPage();
-            this.printerSelectionControl1 = new ShipWorks.Templates.Printing.Configuration.PrinterFormatControl();
+            this.wizardPageLabelPrinter = new ShipWorks.UI.Wizard.WizardPage();
+            this.labelPrinter = new ShipWorks.Templates.Media.PrinterSelectionControl();
+            this.labelLabelPrinter = new System.Windows.Forms.Label();
+            this.pictureLabelPrinter = new System.Windows.Forms.PictureBox();
+            this.printerFormatControl = new ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl();
             this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
+            this.wizardPageDocumentPrinter = new ShipWorks.UI.Wizard.WizardPage();
+            this.wizardPage2 = new ShipWorks.UI.Wizard.WizardPage();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageOnlineStore.SuspendLayout();
-            this.wizardPagePrinters.SuspendLayout();
+            this.wizardPageLabelPrinter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureLabelPrinter)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -55,7 +61,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePrinters);
+            this.mainPanel.Controls.Add(this.wizardPageLabelPrinter);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -109,25 +115,61 @@
             this.radioButton1.Text = "Get connected to my online store";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // wizardPagePrinters
+            // wizardPageLabelPrinter
             // 
-            this.wizardPagePrinters.Controls.Add(this.printerSelectionControl1);
-            this.wizardPagePrinters.Description = "Select the printer you will use for shipping labels.";
-            this.wizardPagePrinters.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPagePrinters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPagePrinters.Location = new System.Drawing.Point(0, 0);
-            this.wizardPagePrinters.Name = "wizardPagePrinters";
-            this.wizardPagePrinters.Size = new System.Drawing.Size(548, 271);
-            this.wizardPagePrinters.TabIndex = 0;
-            this.wizardPagePrinters.Title = "Printer Selection";
+            this.wizardPageLabelPrinter.Controls.Add(this.labelPrinter);
+            this.wizardPageLabelPrinter.Controls.Add(this.labelLabelPrinter);
+            this.wizardPageLabelPrinter.Controls.Add(this.pictureLabelPrinter);
+            this.wizardPageLabelPrinter.Controls.Add(this.printerFormatControl);
+            this.wizardPageLabelPrinter.Description = "Select the printer you will use for shipping labels.";
+            this.wizardPageLabelPrinter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageLabelPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageLabelPrinter.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageLabelPrinter.Name = "wizardPageLabelPrinter";
+            this.wizardPageLabelPrinter.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageLabelPrinter.TabIndex = 0;
+            this.wizardPageLabelPrinter.Title = "Printer Selection";
+            this.wizardPageLabelPrinter.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoLabelPrinter);
             // 
-            // printerSelectionControl1
+            // labelPrinter
             // 
-            this.printerSelectionControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.printerSelectionControl1.Location = new System.Drawing.Point(23, 8);
-            this.printerSelectionControl1.Name = "printerSelectionControl1";
-            this.printerSelectionControl1.Size = new System.Drawing.Size(427, 246);
-            this.printerSelectionControl1.TabIndex = 0;
+            this.labelPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPrinter.Location = new System.Drawing.Point(80, 29);
+            this.labelPrinter.Name = "labelPrinter";
+            this.labelPrinter.ShowLabels = false;
+            this.labelPrinter.ShowPaperSource = false;
+            this.labelPrinter.Size = new System.Drawing.Size(280, 28);
+            this.labelPrinter.TabIndex = 62;
+            this.labelPrinter.PrinterChanged += new System.EventHandler(this.OnPrinterChanged);
+            // 
+            // labelLabelPrinter
+            // 
+            this.labelLabelPrinter.AutoSize = true;
+            this.labelLabelPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLabelPrinter.Location = new System.Drawing.Point(78, 9);
+            this.labelLabelPrinter.Name = "labelLabelPrinter";
+            this.labelLabelPrinter.Size = new System.Drawing.Size(258, 13);
+            this.labelLabelPrinter.TabIndex = 61;
+            this.labelLabelPrinter.Text = "What printer should shipping labels print on?";
+            // 
+            // pictureLabelPrinter
+            // 
+            this.pictureLabelPrinter.Image = global::ShipWorks.Properties.Resources.box_closed_with_label;
+            this.pictureLabelPrinter.Location = new System.Drawing.Point(24, 9);
+            this.pictureLabelPrinter.Name = "pictureLabelPrinter";
+            this.pictureLabelPrinter.Size = new System.Drawing.Size(48, 48);
+            this.pictureLabelPrinter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureLabelPrinter.TabIndex = 60;
+            this.pictureLabelPrinter.TabStop = false;
+            // 
+            // printerFormatControl
+            // 
+            this.printerFormatControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.printerFormatControl.Location = new System.Drawing.Point(71, 59);
+            this.printerFormatControl.Name = "printerFormatControl";
+            this.printerFormatControl.Size = new System.Drawing.Size(427, 162);
+            this.printerFormatControl.TabIndex = 0;
+            this.printerFormatControl.Visible = false;
             // 
             // wizardPage1
             // 
@@ -140,6 +182,28 @@
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Title = "Wizard page 3.";
             // 
+            // wizardPageDocumentPrinter
+            // 
+            this.wizardPageDocumentPrinter.Description = "Select the printer you will use for documents";
+            this.wizardPageDocumentPrinter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageDocumentPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageDocumentPrinter.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageDocumentPrinter.Name = "wizardPageDocumentPrinter";
+            this.wizardPageDocumentPrinter.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageDocumentPrinter.TabIndex = 0;
+            this.wizardPageDocumentPrinter.Title = "Printer Selection";
+            // 
+            // wizardPage2
+            // 
+            this.wizardPage2.Description = "The description of the page.";
+            this.wizardPage2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPage2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPage2.Location = new System.Drawing.Point(0, 0);
+            this.wizardPage2.Name = "wizardPage2";
+            this.wizardPage2.Size = new System.Drawing.Size(548, 271);
+            this.wizardPage2.TabIndex = 0;
+            this.wizardPage2.Title = "Printer Selection";
+            // 
             // ShipWorksSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,9 +215,11 @@
             this.Name = "ShipWorksSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
-            this.wizardPagePrinters,
+            this.wizardPageLabelPrinter,
+            this.wizardPageDocumentPrinter,
             this.wizardPageOnlineStore,
-            this.wizardPage1});
+            this.wizardPage1,
+            this.wizardPage2});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
             this.mainPanel.ResumeLayout(false);
@@ -162,7 +228,9 @@
             this.topPanel.PerformLayout();
             this.wizardPageOnlineStore.ResumeLayout(false);
             this.wizardPageOnlineStore.PerformLayout();
-            this.wizardPagePrinters.ResumeLayout(false);
+            this.wizardPageLabelPrinter.ResumeLayout(false);
+            this.wizardPageLabelPrinter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureLabelPrinter)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -170,10 +238,15 @@
         #endregion
 
         private UI.Wizard.WizardPage wizardPageOnlineStore;
-        private UI.Wizard.WizardPage wizardPagePrinters;
+        private UI.Wizard.WizardPage wizardPageLabelPrinter;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private UI.Wizard.WizardPage wizardPage1;
-        private Templates.Printing.Configuration.PrinterFormatControl printerSelectionControl1;
+        private ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl printerFormatControl;
+        private UI.Wizard.WizardPage wizardPageDocumentPrinter;
+        private UI.Wizard.WizardPage wizardPage2;
+        private Templates.Media.PrinterSelectionControl labelPrinter;
+        private System.Windows.Forms.Label labelLabelPrinter;
+        private System.Windows.Forms.PictureBox pictureLabelPrinter;
     }
 }

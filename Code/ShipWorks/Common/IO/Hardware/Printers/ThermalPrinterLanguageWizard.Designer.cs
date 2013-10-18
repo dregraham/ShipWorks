@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Templates.Printing.Configuration
+﻿namespace ShipWorks.Common.IO.Hardware.Printers
 {
-    partial class PrinterThermalLanguageWizard
+    partial class ThermalPrinterLanguageWizard
     {
         /// <summary>
         /// Required designer variable.

@@ -12,12 +12,12 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Templates.Printing.Configuration
+namespace ShipWorks.Common.IO.Hardware.Printers
 {
     /// <summary>
     /// Wizard for helping a user choose the thermal language of a printer
     /// </summary>
-    public partial class PrinterThermalLanguageWizard : WizardForm
+    public partial class ThermalPrinterLanguageWizard : WizardForm
     {
         string printer;
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Templates.Printing.Configuration
         /// <summary>
         /// Constructor
         /// </summary>
-        public PrinterThermalLanguageWizard(string printer)
+        public ThermalPrinterLanguageWizard(string printer)
         {
             InitializeComponent();
 

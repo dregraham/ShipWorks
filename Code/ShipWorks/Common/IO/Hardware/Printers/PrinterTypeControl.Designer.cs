@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Templates.Printing.Configuration
+﻿namespace ShipWorks.Common.IO.Hardware.Printers
 {
-    partial class PrinterFormatControl
+    partial class PrinterTypeControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,9 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrinterFormatControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrinterTypeControl));
             this.labelPaperType = new System.Windows.Forms.Label();
-            this.labelPrinter = new System.Windows.Forms.Label();
             this.radioThermal = new System.Windows.Forms.RadioButton();
             this.radioPaper = new System.Windows.Forms.RadioButton();
             this.labelThermalLanguage = new System.Windows.Forms.Label();
@@ -38,40 +37,25 @@
             this.panelThermal = new System.Windows.Forms.Panel();
             this.picturePaper = new System.Windows.Forms.PictureBox();
             this.pictureThermal = new System.Windows.Forms.PictureBox();
-            this.picturePrinter = new System.Windows.Forms.PictureBox();
-            this.panelPaperType = new System.Windows.Forms.Panel();
-            this.printer = new ShipWorks.Templates.Media.PrinterSelectionControl();
             this.panelThermal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePaper)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureThermal)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picturePrinter)).BeginInit();
-            this.panelPaperType.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelPaperType
             // 
             this.labelPaperType.AutoSize = true;
             this.labelPaperType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPaperType.Location = new System.Drawing.Point(47, 1);
+            this.labelPaperType.Location = new System.Drawing.Point(10, 6);
             this.labelPaperType.Name = "labelPaperType";
             this.labelPaperType.Size = new System.Drawing.Size(241, 13);
             this.labelPaperType.TabIndex = 51;
             this.labelPaperType.Text = "What type of paper does this printer use?";
             // 
-            // labelPrinter
-            // 
-            this.labelPrinter.AutoSize = true;
-            this.labelPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPrinter.Location = new System.Drawing.Point(57, 9);
-            this.labelPrinter.Name = "labelPrinter";
-            this.labelPrinter.Size = new System.Drawing.Size(258, 13);
-            this.labelPrinter.TabIndex = 49;
-            this.labelPrinter.Text = "What printer should shipping labels print on?";
-            // 
             // radioThermal
             // 
             this.radioThermal.AutoSize = true;
-            this.radioThermal.Location = new System.Drawing.Point(126, 34);
+            this.radioThermal.Location = new System.Drawing.Point(89, 39);
             this.radioThermal.Name = "radioThermal";
             this.radioThermal.Size = new System.Drawing.Size(110, 17);
             this.radioThermal.TabIndex = 54;
@@ -83,7 +67,7 @@
             // radioPaper
             // 
             this.radioPaper.AutoSize = true;
-            this.radioPaper.Location = new System.Drawing.Point(127, 115);
+            this.radioPaper.Location = new System.Drawing.Point(90, 120);
             this.radioPaper.Name = "radioPaper";
             this.radioPaper.Size = new System.Drawing.Size(162, 17);
             this.radioPaper.TabIndex = 55;
@@ -122,7 +106,7 @@
             this.panelThermal.Controls.Add(this.labelThermalLanguage);
             this.panelThermal.Controls.Add(this.thermalLanguage);
             this.panelThermal.Enabled = false;
-            this.panelThermal.Location = new System.Drawing.Point(134, 53);
+            this.panelThermal.Location = new System.Drawing.Point(97, 58);
             this.panelThermal.Name = "panelThermal";
             this.panelThermal.Size = new System.Drawing.Size(298, 27);
             this.panelThermal.TabIndex = 58;
@@ -130,7 +114,7 @@
             // picturePaper
             // 
             this.picturePaper.Image = ((System.Drawing.Image)(resources.GetObject("picturePaper.Image")));
-            this.picturePaper.Location = new System.Drawing.Point(67, 94);
+            this.picturePaper.Location = new System.Drawing.Point(30, 99);
             this.picturePaper.Name = "picturePaper";
             this.picturePaper.Size = new System.Drawing.Size(53, 62);
             this.picturePaper.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -141,7 +125,7 @@
             // pictureThermal
             // 
             this.pictureThermal.Image = global::ShipWorks.Properties.Resources.thermal_label_roll;
-            this.pictureThermal.Location = new System.Drawing.Point(67, 21);
+            this.pictureThermal.Location = new System.Drawing.Point(30, 26);
             this.pictureThermal.Name = "pictureThermal";
             this.pictureThermal.Size = new System.Drawing.Size(60, 65);
             this.pictureThermal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -149,60 +133,23 @@
             this.pictureThermal.TabStop = false;
             this.pictureThermal.Click += new System.EventHandler(this.OnClickPaperTypeImage);
             // 
-            // picturePrinter
-            // 
-            this.picturePrinter.Image = global::ShipWorks.Properties.Resources.printer21;
-            this.picturePrinter.Location = new System.Drawing.Point(3, 9);
-            this.picturePrinter.Name = "picturePrinter";
-            this.picturePrinter.Size = new System.Drawing.Size(48, 48);
-            this.picturePrinter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picturePrinter.TabIndex = 48;
-            this.picturePrinter.TabStop = false;
-            // 
-            // panelPaperType
-            // 
-            this.panelPaperType.Controls.Add(this.picturePaper);
-            this.panelPaperType.Controls.Add(this.labelPaperType);
-            this.panelPaperType.Controls.Add(this.panelThermal);
-            this.panelPaperType.Controls.Add(this.radioThermal);
-            this.panelPaperType.Controls.Add(this.radioPaper);
-            this.panelPaperType.Controls.Add(this.pictureThermal);
-            this.panelPaperType.Location = new System.Drawing.Point(10, 65);
-            this.panelPaperType.Name = "panelPaperType";
-            this.panelPaperType.Size = new System.Drawing.Size(442, 171);
-            this.panelPaperType.TabIndex = 60;
-            this.panelPaperType.Visible = false;
-            // 
-            // printer
-            // 
-            this.printer.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.printer.Location = new System.Drawing.Point(77, 29);
-            this.printer.Name = "printer";
-            this.printer.ShowLabels = false;
-            this.printer.ShowPaperSource = false;
-            this.printer.Size = new System.Drawing.Size(280, 28);
-            this.printer.TabIndex = 59;
-            this.printer.PrinterChanged += new System.EventHandler(this.OnPrinterChanged);
-            // 
-            // PrinterFormatControl
+            // PrinterTypeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelPaperType);
-            this.Controls.Add(this.printer);
-            this.Controls.Add(this.labelPrinter);
-            this.Controls.Add(this.picturePrinter);
+            this.Controls.Add(this.radioThermal);
+            this.Controls.Add(this.picturePaper);
+            this.Controls.Add(this.labelPaperType);
+            this.Controls.Add(this.pictureThermal);
+            this.Controls.Add(this.panelThermal);
+            this.Controls.Add(this.radioPaper);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "PrinterFormatControl";
-            this.Size = new System.Drawing.Size(464, 250);
-            this.Load += new System.EventHandler(this.OnLoad);
+            this.Name = "PrinterTypeControl";
+            this.Size = new System.Drawing.Size(410, 170);
             this.panelThermal.ResumeLayout(false);
             this.panelThermal.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePaper)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureThermal)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picturePrinter)).EndInit();
-            this.panelPaperType.ResumeLayout(false);
-            this.panelPaperType.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -211,16 +158,12 @@
         #endregion
 
         private System.Windows.Forms.Label labelPaperType;
-        private System.Windows.Forms.Label labelPrinter;
-        private System.Windows.Forms.PictureBox picturePrinter;
         private System.Windows.Forms.PictureBox pictureThermal;
         private System.Windows.Forms.PictureBox picturePaper;
         private System.Windows.Forms.RadioButton radioThermal;
         private System.Windows.Forms.RadioButton radioPaper;
         private System.Windows.Forms.Label labelThermalLanguage;
         private System.Windows.Forms.ComboBox thermalLanguage;
-        private Media.PrinterSelectionControl printer;
         private System.Windows.Forms.Panel panelThermal;
-        private System.Windows.Forms.Panel panelPaperType;
     }
 }

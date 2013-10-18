@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;
+using ShipWorks.Templates.Media;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -27,6 +28,8 @@ namespace ShipWorks.ApplicationCore.Setup
         {
             InitializeComponent();
         }
+
+        #region Opening
 
         /// <summary>
         /// Run the setup wizard.  Will return false if the user doesn't have permissions, the user canceled, or if the Wizard was not able to run because
@@ -102,5 +105,29 @@ namespace ShipWorks.ApplicationCore.Setup
             // Counts as a cancel on the original wizard if they didn't complete the setup.
             originalWizard.DialogResult = complete ? DialogResult.OK : DialogResult.Cancel;
         }
+
+        #endregion
+
+        #region Label Printer
+
+        /// <summary>
+        /// Stepping into the label printer page
+        /// </summary>
+        private void OnSteppingIntoLabelPrinter(object sender, WizardSteppingIntoEventArgs e)
+        {
+            labelPrinter.LoadPrinters(labelPrinter.PrinterName, -1, PrinterSelectionInvalidPrinterBehavior.AlwaysPreserve);
+        }
+
+        /// <summary>
+        /// The selected printer has changed
+        /// </summary>
+        private void OnPrinterChanged(object sender, EventArgs e)
+        {
+            printerFormatControl.Visible = !string.IsNullOrEmpty(labelPrinter.PrinterName);
+            printerFormatControl.PrinterName = labelPrinter.PrinterName;
+        }
+
+        #endregion
+
     }
 }

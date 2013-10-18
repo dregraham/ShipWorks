@@ -245,7 +245,7 @@ namespace ShipWorks.Templates.Media
             {
                 PrinterInfo printerInfo = (PrinterInfo) printer.SelectedItem;
 
-                return printerInfo.Name;
+                return printerInfo != null ? printerInfo.Name : string.Empty;
             }
         }
 
@@ -368,7 +368,7 @@ namespace ShipWorks.Templates.Media
             panelSource.Visible = showPaperSource;
             panelCalibrate.Visible = showPrinterCalibration;
 
-            Height = Controls.OfType<Panel>().Where(p => p.Visible).Max(p => p.Bottom);
+            Height = Controls.OfType<Panel>().Where(p => p.Visible).Select(p => p.Bottom).DefaultIfEmpty().Max();
         }
 
         /// <summary>
