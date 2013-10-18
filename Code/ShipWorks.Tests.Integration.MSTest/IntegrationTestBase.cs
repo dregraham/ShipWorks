@@ -38,6 +38,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         public bool PopulateTestObject<T>(T testObject, List<ColumnPropertyMapDefinition> columnPropertyMap)
         {
             DataRow testDataRow = TestContext.DataRow;
+
             int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
             Debug.WriteLine(rowIndex);
 
@@ -48,6 +49,11 @@ namespace ShipWorks.Tests.Integration.MSTest
                 return false;
             }
             
+            if (string.IsNullOrWhiteSpace(testDataRow[0].ToString()))
+            {
+                return false;
+            }
+
             PopulateValues(testObject, testDataRow, columnPropertyMap);
 
             return true;
