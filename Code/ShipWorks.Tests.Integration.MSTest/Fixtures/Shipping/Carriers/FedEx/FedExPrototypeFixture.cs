@@ -637,9 +637,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
         protected virtual void SetHoldLocationData(ShipmentEntity shipment)
         {
-            if (!string.IsNullOrEmpty(HoldLocationType))
+            // Check all three locations because some of the tabs of the spreadsheet don't have a column for the hold at location type
+            if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToLower() == "hold_at_location") 
+                || (!string.IsNullOrEmpty(SpecialServiceType2) && SpecialServiceType2.ToLower() == "hold_at_location")
+                || (!string.IsNullOrEmpty(HoldLocationType)))
             {
-                shipment.FedEx.HoldLocationType = (int) GetLocationType();
+                // Default to the FedEx Express Station if there isn't a location type pulled in from the spreadsheet
+                shipment.FedEx.HoldLocationType = string.IsNullOrEmpty(HoldLocationType) ? (int)FedExLocationType.FedExExpressStation : (int) GetLocationType();
                 
                 shipment.FedEx.HoldCity = HoldCity;
                 shipment.FedEx.HoldCompanyName = HoldCompanyName;
