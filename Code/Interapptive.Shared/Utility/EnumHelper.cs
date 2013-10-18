@@ -30,7 +30,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Bind the ComboBox to the specified Enum type.
         /// </summary>
-        public static void BindComboBox<T>(ComboBox comboBox) where T: struct
+        public static void BindComboBox<T>(ComboBox comboBox) where T : struct
         {
             BindComboBox<T>(comboBox, null);
         }
@@ -129,7 +129,7 @@ namespace Interapptive.Shared.Utility
             // Iterate through each enum value and see if ApiValue matches
             foreach (T value in Enum.GetValues(typeof(T)))
             {
-                EnumMetadata metadata = GetEnumMetadata((Enum)(object)value);
+                EnumMetadata metadata = GetEnumMetadata((Enum) (object) value);
                 if (!string.IsNullOrWhiteSpace(metadata.ApiValue) && metadata.ApiValue.ToLowerInvariant() == apiValue.ToLowerInvariant() && !metadata.Deprecated)
                 {
                     return value;
@@ -244,7 +244,7 @@ namespace Interapptive.Shared.Utility
                         metadata.SortOrder = sortAttribute.Position;
                     }
 
-                    DeprecatedAttribute obsoleteAttribute = (DeprecatedAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(DeprecatedAttribute));
+                    DeprecatedAttribute obsoleteAttribute = (DeprecatedAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DeprecatedAttribute));
                     if (obsoleteAttribute != null)
                     {
                         metadata.Deprecated = true;
@@ -256,7 +256,7 @@ namespace Interapptive.Shared.Utility
                         metadata.Hidden = true;
                     }
 
-                    ApiValueAttribute apiInfoAttribute = (ApiValueAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(ApiValueAttribute));
+                    ApiValueAttribute apiInfoAttribute = (ApiValueAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ApiValueAttribute));
                     if (apiInfoAttribute != null)
                     {
                         metadata.ApiValue = apiInfoAttribute.ApiValue;
