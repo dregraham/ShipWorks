@@ -2249,6 +2249,18 @@
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Yahoo\YahooOnlineUpdater.cs" />
+    <Compile Include="Templates\Printing\Configuration\PrinterFormatControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Templates\Printing\Configuration\PrinterFormatControl.Designer.cs">
+      <DependentUpon>PrinterFormatControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Printing\Configuration\PrinterThermalLanguageWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Templates\Printing\Configuration\PrinterThermalLanguageWizard.Designer.cs">
+      <DependentUpon>PrinterThermalLanguageWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceChoiceOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceOutline.cs" />
     <Compile Include="Templates\Tokens\ITokenSuggestionFactory.cs" />
@@ -7063,6 +7075,12 @@
     <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooAccountSettingsControl.resx">
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Printing\Configuration\PrinterFormatControl.resx">
+      <DependentUpon>PrinterFormatControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Printing\Configuration\PrinterThermalLanguageWizard.resx">
+      <DependentUpon>PrinterThermalLanguageWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\DecimalTextBox.resx">
       <DependentUpon>DecimalTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -10088,6 +10106,7 @@
     <None Include="Resources\brush4.png" />
     <None Include="Resources\camera.png" />
     <None Include="Resources\barcode - Copy.png" />
+    <None Include="Resources\blank_paper.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10196,6 +10215,7 @@
     <None Include="Resources\paperclip - Copy.png" />
     <None Include="Resources\pin_blue - Copy.png" />
     <None Include="Resources\refresh - Copy.png" />
+    <None Include="Resources\printer21.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -10279,6 +10299,7 @@
     <None Include="Resources\Stores\Icons\xcart.png" />
     <None Include="Resources\Stores\Icons\yahoo.png" />
     <None Include="Resources\Stores\Icons\zencart.png" />
+    <None Include="Resources\thermal_label_roll.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />

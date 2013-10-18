@@ -29,13 +29,16 @@
         private void InitializeComponent()
         {
             this.wizardPageOnlineStore = new ShipWorks.UI.Wizard.WizardPage();
-            this.wizardPage2 = new ShipWorks.UI.Wizard.WizardPage();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.wizardPagePrinters = new ShipWorks.UI.Wizard.WizardPage();
+            this.printerSelectionControl1 = new ShipWorks.Templates.Printing.Configuration.PrinterFormatControl();
+            this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageOnlineStore.SuspendLayout();
+            this.wizardPagePrinters.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -52,7 +55,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOnlineStore);
+            this.mainPanel.Controls.Add(this.wizardPagePrinters);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -84,16 +87,16 @@
             this.wizardPageOnlineStore.TabIndex = 0;
             this.wizardPageOnlineStore.Title = "Online Store";
             // 
-            // wizardPage2
+            // radioButton2
             // 
-            this.wizardPage2.Description = "The description of the page.";
-            this.wizardPage2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPage2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPage2.Location = new System.Drawing.Point(0, 0);
-            this.wizardPage2.Name = "wizardPage2";
-            this.wizardPage2.Size = new System.Drawing.Size(548, 271);
-            this.wizardPage2.TabIndex = 0;
-            this.wizardPage2.Title = "Wizard page 2.";
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(23, 82);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(299, 17);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Just give me some sample orders and let me start playing";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // radioButton1
             // 
@@ -106,16 +109,36 @@
             this.radioButton1.Text = "Get connected to my online store";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // wizardPagePrinters
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(23, 82);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(299, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Just give me some sample orders and let me start playing";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.wizardPagePrinters.Controls.Add(this.printerSelectionControl1);
+            this.wizardPagePrinters.Description = "Select the printer you will use for shipping labels.";
+            this.wizardPagePrinters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPagePrinters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPagePrinters.Location = new System.Drawing.Point(0, 0);
+            this.wizardPagePrinters.Name = "wizardPagePrinters";
+            this.wizardPagePrinters.Size = new System.Drawing.Size(548, 271);
+            this.wizardPagePrinters.TabIndex = 0;
+            this.wizardPagePrinters.Title = "Printer Selection";
+            // 
+            // printerSelectionControl1
+            // 
+            this.printerSelectionControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.printerSelectionControl1.Location = new System.Drawing.Point(23, 8);
+            this.printerSelectionControl1.Name = "printerSelectionControl1";
+            this.printerSelectionControl1.Size = new System.Drawing.Size(427, 246);
+            this.printerSelectionControl1.TabIndex = 0;
+            // 
+            // wizardPage1
+            // 
+            this.wizardPage1.Description = "The description of the page.";
+            this.wizardPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPage1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPage1.Location = new System.Drawing.Point(0, 0);
+            this.wizardPage1.Name = "wizardPage1";
+            this.wizardPage1.Size = new System.Drawing.Size(548, 271);
+            this.wizardPage1.TabIndex = 0;
+            this.wizardPage1.Title = "Wizard page 3.";
             // 
             // ShipWorksSetupWizard
             // 
@@ -123,12 +146,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 378);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximumSize = new System.Drawing.Size(564, 416);
             this.MinimumSize = new System.Drawing.Size(564, 416);
             this.Name = "ShipWorksSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
+            this.wizardPagePrinters,
             this.wizardPageOnlineStore,
-            this.wizardPage2});
+            this.wizardPage1});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
             this.mainPanel.ResumeLayout(false);
@@ -137,6 +162,7 @@
             this.topPanel.PerformLayout();
             this.wizardPageOnlineStore.ResumeLayout(false);
             this.wizardPageOnlineStore.PerformLayout();
+            this.wizardPagePrinters.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -144,8 +170,10 @@
         #endregion
 
         private UI.Wizard.WizardPage wizardPageOnlineStore;
-        private UI.Wizard.WizardPage wizardPage2;
+        private UI.Wizard.WizardPage wizardPagePrinters;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
+        private UI.Wizard.WizardPage wizardPage1;
+        private Templates.Printing.Configuration.PrinterFormatControl printerSelectionControl1;
     }
 }
