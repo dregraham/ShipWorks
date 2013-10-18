@@ -432,7 +432,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             request.Weight = shipment.TotalWeight;
 
             // locate and set the desired thermal type
-            ThermalLabelType? thermalType = settings.EquaShipThermal ? (ThermalLabelType) settings.EquaShipThermalType : (ThermalLabelType?) null;
+            ThermalLanguage? thermalType = settings.EquaShipThermal ? (ThermalLanguage) settings.EquaShipThermalType : (ThermalLanguage?) null;
 
             // adjust thermal type based on service used?
 
@@ -443,7 +443,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             if (shipment.ThermalType.HasValue)
             {
                 // 1 for epl, 3 for zebra
-                request.LabelType = shipment.ThermalType.Value == (int)ThermalLabelType.EPL ? 1 : 3;
+                request.LabelType = shipment.ThermalType.Value == (int)ThermalLanguage.EPL ? 1 : 3;
             }
             else
             {

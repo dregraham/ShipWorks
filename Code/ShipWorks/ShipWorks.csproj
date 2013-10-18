@@ -588,6 +588,8 @@
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterDetail.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTechnology.cs" />
     <Compile Include="Data\Administration\DatabaseDetailsDlg.cs">
       <SubType>Form</SubType>
     </Compile>

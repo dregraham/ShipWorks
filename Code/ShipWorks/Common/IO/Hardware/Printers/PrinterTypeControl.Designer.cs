@@ -35,6 +35,7 @@
             this.labelThermalLanguage = new System.Windows.Forms.Label();
             this.thermalLanguage = new System.Windows.Forms.ComboBox();
             this.panelThermal = new System.Windows.Forms.Panel();
+            this.linkThermalHelp = new ShipWorks.UI.Controls.LinkControl();
             this.picturePaper = new System.Windows.Forms.PictureBox();
             this.pictureThermal = new System.Windows.Forms.PictureBox();
             this.panelThermal.SuspendLayout();
@@ -90,26 +91,34 @@
             // 
             this.thermalLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.thermalLanguage.FormattingEnabled = true;
-            this.thermalLanguage.Items.AddRange(new object[] {
-            "Help me figure it out...",
-            "ZPL",
-            "EPL",
-            "Standard"});
             this.thermalLanguage.Location = new System.Drawing.Point(106, 1);
             this.thermalLanguage.Name = "thermalLanguage";
-            this.thermalLanguage.Size = new System.Drawing.Size(167, 21);
+            this.thermalLanguage.Size = new System.Drawing.Size(110, 21);
             this.thermalLanguage.TabIndex = 57;
-            this.thermalLanguage.SelectedIndexChanged += new System.EventHandler(this.OnChangeThermalType);
             // 
             // panelThermal
             // 
+            this.panelThermal.Controls.Add(this.linkThermalHelp);
             this.panelThermal.Controls.Add(this.labelThermalLanguage);
             this.panelThermal.Controls.Add(this.thermalLanguage);
             this.panelThermal.Enabled = false;
             this.panelThermal.Location = new System.Drawing.Point(97, 58);
             this.panelThermal.Name = "panelThermal";
-            this.panelThermal.Size = new System.Drawing.Size(298, 27);
+            this.panelThermal.Size = new System.Drawing.Size(348, 27);
             this.panelThermal.TabIndex = 58;
+            // 
+            // linkThermalHelp
+            // 
+            this.linkThermalHelp.AutoSize = true;
+            this.linkThermalHelp.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkThermalHelp.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkThermalHelp.ForeColor = System.Drawing.Color.Blue;
+            this.linkThermalHelp.Location = new System.Drawing.Point(222, 4);
+            this.linkThermalHelp.Name = "linkThermalHelp";
+            this.linkThermalHelp.Size = new System.Drawing.Size(94, 13);
+            this.linkThermalHelp.TabIndex = 58;
+            this.linkThermalHelp.Text = "Help me choose...";
+            this.linkThermalHelp.Click += new System.EventHandler(this.OnHelpMeChooseThermalLanguage);
             // 
             // picturePaper
             // 
@@ -145,7 +154,8 @@
             this.Controls.Add(this.radioPaper);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PrinterTypeControl";
-            this.Size = new System.Drawing.Size(410, 170);
+            this.Size = new System.Drawing.Size(448, 170);
+            this.Load += new System.EventHandler(this.OnLoad);
             this.panelThermal.ResumeLayout(false);
             this.panelThermal.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picturePaper)).EndInit();
@@ -165,5 +175,6 @@
         private System.Windows.Forms.Label labelThermalLanguage;
         private System.Windows.Forms.ComboBox thermalLanguage;
         private System.Windows.Forms.Panel panelThermal;
+        private UI.Controls.LinkControl linkThermalHelp;
     }
 }

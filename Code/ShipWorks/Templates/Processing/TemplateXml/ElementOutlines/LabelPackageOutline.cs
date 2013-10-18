@@ -55,7 +55,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         private IEnumerable<object> GetThermalLabels(IEnumerable<TemplateLabelData> source)
         {
-            return (shipment.ThermalType == null) ? null : source.Select(l => Tuple.Create(l, (ThermalLabelType) shipment.ThermalType));
+            return (shipment.ThermalType == null) ? null : source.Select(l => Tuple.Create(l, (ThermalLanguage) shipment.ThermalType));
         }
 
         /// <summary>

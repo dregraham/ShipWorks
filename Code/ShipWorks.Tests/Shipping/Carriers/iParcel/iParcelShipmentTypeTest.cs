@@ -97,23 +97,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL_Test()
         {
             // ZPL is not actually supported, but it's value is not zero, so we can make sure that the value is set
-            ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = true, IParcelThermalType = (int) ThermalLabelType.ZPL};
+            ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = true, IParcelThermalType = (int) ThermalLanguage.ZPL};
             repository.Setup(r => r.GetShippingSettings()).Returns(settings);
 
             testObject.ProcessShipment(shipment);
 
-            Assert.AreEqual((int) ThermalLabelType.ZPL, shipment.ThermalType);
+            Assert.AreEqual((int) ThermalLanguage.ZPL, shipment.ThermalType);
         }
 
         [TestMethod]
         public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL_Test()
         {
-            ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = true, IParcelThermalType = (int)ThermalLabelType.EPL };
+            ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = true, IParcelThermalType = (int)ThermalLanguage.EPL };
             repository.Setup(r => r.GetShippingSettings()).Returns(settings);
 
             testObject.ProcessShipment(shipment);
 
-            Assert.AreEqual((int)ThermalLabelType.EPL, shipment.ThermalType);
+            Assert.AreEqual((int)ThermalLanguage.EPL, shipment.ThermalType);
         }
 
         [TestMethod]

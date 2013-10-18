@@ -24,12 +24,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             thermalPrinter.Checked = settings.OnTracThermal;
-            thermalType.SelectedValue = (ThermalLabelType) settings.OnTracThermalType;
+            thermalType.SelectedValue = (ThermalLanguage) settings.OnTracThermalType;
         }
 
         /// <summary>

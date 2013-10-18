@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping;
 using ShipWorks.UI.Wizard;
@@ -21,7 +22,7 @@ namespace ShipWorks.Common.IO.Hardware.Printers
     {
         string printer;
 
-        ThermalLabelType? thermalLanguage = null;
+        ThermalLanguage thermalLanguage = ThermalLanguage.None;
 
         class PrinterTest
         {
@@ -111,7 +112,7 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         /// <summary>
         /// The thermal language that has been determined.  Only valid if DialogResult is OK
         /// </summary>
-        public ThermalLabelType? ThermalLanguage
+        public ThermalLanguage ThermalLanguage
         {
             get
             {
@@ -203,7 +204,7 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         {
             if (success)
             {
-                TestComplete(ThermalLabelType.ZPL, args);
+                TestComplete(Shipping.ThermalLanguage.ZPL, args);
             }
         }
 
@@ -214,33 +215,21 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         {
             if (success)
             {
-                TestComplete(ThermalLabelType.EPL, args);
+                TestComplete(Shipping.ThermalLanguage.EPL, args);
             }
             else
             {
-                TestComplete(null, args);
+                TestComplete(Shipping.ThermalLanguage.None, args);
             }
         }
 
         /// <summary>
-        /// Called once we know what the thermal type is
+        /// Called once we know what the thermal language is
         /// </summary>
-        private void TestComplete(ThermalLabelType? type, WizardStepEventArgs args)
+        private void TestComplete(ThermalLanguage language, WizardStepEventArgs args)
         {
-            this.thermalLanguage = type;
-
-            if (type == ThermalLabelType.EPL)
-            {
-                labelLanguage.Text = "EPL";
-            }
-            else if (type == ThermalLabelType.ZPL)
-            {
-                labelLanguage.Text = "ZPL";
-            }
-            else
-            {
-                labelLanguage.Text = "Standard";
-            }
+            this.thermalLanguage = language;
+            labelLanguage.Text = EnumHelper.GetDescription(language);
 
             args.NextPage = wizardPageFinish;
         }

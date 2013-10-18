@@ -30,12 +30,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             thermalPrinter.Checked = settings.UpsThermal;
-            thermalType.SelectedValue = (ThermalLabelType) settings.UpsThermalType;
+            thermalType.SelectedValue = (ThermalLanguage) settings.UpsThermalType;
         }
 
         /// <summary>

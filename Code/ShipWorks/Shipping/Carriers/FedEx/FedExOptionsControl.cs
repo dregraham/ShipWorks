@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
             EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             maskAccountNumber.Checked = settings.FedExMaskAccount;
 
             thermalPrinter.Checked = settings.FedExThermal;
-            thermalType.SelectedValue = (ThermalLabelType) settings.FedExThermalType;
+            thermalType.SelectedValue = (ThermalLanguage) settings.FedExThermalType;
 
             thermalDocTab.Checked = settings.FedExThermalDocTab;
             thermalDocTabType.SelectedValue = (ThermalDocTabType) settings.FedExThermalDocTabType;

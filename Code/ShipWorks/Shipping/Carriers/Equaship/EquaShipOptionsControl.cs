@@ -30,12 +30,12 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLabelType>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             thermalPrinter.Checked = settings.EquaShipThermal;
-            thermalType.SelectedValue = (ThermalLabelType)settings.EquaShipThermalType;
+            thermalType.SelectedValue = (ThermalLanguage)settings.EquaShipThermalType;
         }
 
         /// <summary>

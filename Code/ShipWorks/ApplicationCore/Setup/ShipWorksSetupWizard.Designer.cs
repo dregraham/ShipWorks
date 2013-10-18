@@ -35,7 +35,7 @@
             this.labelPrinter = new ShipWorks.Templates.Media.PrinterSelectionControl();
             this.labelLabelPrinter = new System.Windows.Forms.Label();
             this.pictureLabelPrinter = new System.Windows.Forms.PictureBox();
-            this.printerFormatControl = new ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl();
+            this.printerTypeControl = new ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl();
             this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
             this.wizardPageDocumentPrinter = new ShipWorks.UI.Wizard.WizardPage();
             this.wizardPage2 = new ShipWorks.UI.Wizard.WizardPage();
@@ -120,7 +120,7 @@
             this.wizardPageLabelPrinter.Controls.Add(this.labelPrinter);
             this.wizardPageLabelPrinter.Controls.Add(this.labelLabelPrinter);
             this.wizardPageLabelPrinter.Controls.Add(this.pictureLabelPrinter);
-            this.wizardPageLabelPrinter.Controls.Add(this.printerFormatControl);
+            this.wizardPageLabelPrinter.Controls.Add(this.printerTypeControl);
             this.wizardPageLabelPrinter.Description = "Select the printer you will use for shipping labels.";
             this.wizardPageLabelPrinter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageLabelPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -129,6 +129,7 @@
             this.wizardPageLabelPrinter.Size = new System.Drawing.Size(548, 271);
             this.wizardPageLabelPrinter.TabIndex = 0;
             this.wizardPageLabelPrinter.Title = "Printer Selection";
+            this.wizardPageLabelPrinter.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextLabelPrinter);
             this.wizardPageLabelPrinter.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoLabelPrinter);
             // 
             // labelPrinter
@@ -164,12 +165,12 @@
             // 
             // printerFormatControl
             // 
-            this.printerFormatControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.printerFormatControl.Location = new System.Drawing.Point(71, 59);
-            this.printerFormatControl.Name = "printerFormatControl";
-            this.printerFormatControl.Size = new System.Drawing.Size(427, 162);
-            this.printerFormatControl.TabIndex = 0;
-            this.printerFormatControl.Visible = false;
+            this.printerTypeControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.printerTypeControl.Location = new System.Drawing.Point(71, 59);
+            this.printerTypeControl.Name = "printerFormatControl";
+            this.printerTypeControl.Size = new System.Drawing.Size(427, 162);
+            this.printerTypeControl.TabIndex = 0;
+            this.printerTypeControl.Visible = false;
             // 
             // wizardPage1
             // 
@@ -242,7 +243,7 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private UI.Wizard.WizardPage wizardPage1;
-        private ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl printerFormatControl;
+        private ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl printerTypeControl;
         private UI.Wizard.WizardPage wizardPageDocumentPrinter;
         private UI.Wizard.WizardPage wizardPage2;
         private Templates.Media.PrinterSelectionControl labelPrinter;

@@ -8,15 +8,18 @@ using System.ComponentModel;
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Thermal printer types supported by ShipWorks
+    /// Thermal languages
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum ThermalLabelType
+    public enum ThermalLanguage
     {
-        [Description("Eltron (EPL)")]
+        [Description("Standard")]
+        None = -1,
+
+        [Description("EPL")]
         EPL = 0,
 
-        [Description("Zebra (ZPL)")]
+        [Description("ZPL")]
         ZPL = 1
     }
 }

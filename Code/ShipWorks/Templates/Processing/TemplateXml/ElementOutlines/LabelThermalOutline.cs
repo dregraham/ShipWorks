@@ -16,7 +16,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
     /// </summary>
     public class LabelThermalOutline : ElementOutline
     {
-        ThermalLabelType thermalType;
+        ThermalLanguage thermalType;
         TemplateLabelData labelData;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             : base(context)
         {
             AddAttribute("name", () => labelData.Name);
-            AddAttribute("thermal", () => (thermalType == ThermalLabelType.EPL) ? "EPL" : "ZPL");
+            AddAttribute("thermal", () => (thermalType == ThermalLanguage.EPL) ? "EPL" : "ZPL");
 
             AddTextContent(() => Convert.ToBase64String(File.ReadAllBytes(labelData.Resource.GetCachedFilename())));
         }
@@ -36,7 +36,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         public override ElementOutline CreateDataBoundClone(object data)
         {
-            var tuple = (Tuple<TemplateLabelData, ThermalLabelType>) data;
+            var tuple = (Tuple<TemplateLabelData, ThermalLanguage>) data;
 
             return new LabelThermalOutline(Context) { labelData = tuple.Item1, thermalType = tuple.Item2 };
         }

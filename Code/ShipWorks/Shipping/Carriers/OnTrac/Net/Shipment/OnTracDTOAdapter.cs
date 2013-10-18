@@ -133,11 +133,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
                 return 4; // GIF
             }
 
-            switch ((ThermalLabelType) thermalType)
+            switch ((ThermalLanguage) thermalType)
             {
-                case ThermalLabelType.EPL:
+                case ThermalLanguage.EPL:
                     return 6; //4x5 epl label
-                case ThermalLabelType.ZPL:
+                case ThermalLanguage.ZPL:
                     return 7; //4x5 zpl label
                 default:
                     throw new ArgumentOutOfRangeException("thermalType");

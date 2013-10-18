@@ -556,16 +556,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            ThermalLabelType? thermalType;
+            ThermalLanguage? thermalType;
 
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
             if(shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
-                thermalType = settings.StampsThermal ? (ThermalLabelType)settings.StampsThermalType : (ThermalLabelType?)null;
+                thermalType = settings.StampsThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
             }
             else if(shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
-                thermalType = settings.Express1StampsThermal ? (ThermalLabelType)settings.Express1StampsThermalType : (ThermalLabelType?)null;
+                thermalType = settings.Express1StampsThermal ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
             }
             else
             {
@@ -635,7 +635,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         null,
                         customs,
                         isSampleOnly,
-                        thermalType == null ? ImageType.Png : ((thermalType == ThermalLabelType.EPL) ? ImageType.Epl : ImageType.Zpl),
+                        thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
                         memo, // Memo
                         0, // Cost Code

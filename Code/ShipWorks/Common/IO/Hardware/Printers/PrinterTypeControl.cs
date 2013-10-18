@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Utility;
 using ShipWorks.Shipping;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Common.IO.Hardware.Printers
 {
@@ -24,6 +26,15 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         public PrinterTypeControl()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Initialization
+        /// </summary>
+        private void OnLoad(object sender, EventArgs e)
+        {
+            EnumHelper.BindComboBox<ThermalLanguage>(thermalLanguage);
+            thermalLanguage.SelectedIndex = -1;
         }
 
         /// <summary>
@@ -47,6 +58,34 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         }
 
         /// <summary>
+        /// Gets the selcted printer type. If the user hasn't made a selection, the message will be shown and null will be returned.
+        /// </summary>
+        public PrinterType GetPrinterType()
+        {
+            if (!radioPaper.Checked && !radioThermal.Checked)
+            {
+                MessageHelper.ShowMessage(this, "Please select what type of paper your printer uses.");
+                return null;
+            }
+
+            if (radioThermal.Checked && thermalLanguage.SelectedIndex < 0)
+            {
+                MessageHelper.ShowMessage(this, "Please select the thermal language supported by your printer.");
+                return null;
+            }
+
+            PrinterTechnology technology = radioThermal.Checked ? PrinterTechnology.Thermal : PrinterTechnology.Standard;
+            ThermalLanguage language = ThermalLanguage.None;
+
+            if (technology == PrinterTechnology.Thermal)
+            {
+                language = (ThermalLanguage) thermalLanguage.SelectedValue;
+            }
+
+            return new PrinterType(technology, language);
+        }
+
+        /// <summary>
         /// The selected paper type has changed
         /// </summary>
         private void OnPaperTypeChanged(object sender, EventArgs e)
@@ -55,33 +94,19 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         }
 
         /// <summary>
-        /// The type of thermal labels is changing
+        /// User wants help choosing their thermal language
         /// </summary>
-        private void OnChangeThermalType(object sender, EventArgs e)
+        private void OnHelpMeChooseThermalLanguage(object sender, EventArgs e)
         {
-            if (thermalLanguage.SelectedIndex == 0)
+            using (ThermalPrinterLanguageWizard dlg = new ThermalPrinterLanguageWizard(printerName))
             {
-                using (ThermalPrinterLanguageWizard dlg = new ThermalPrinterLanguageWizard(printerName))
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        if (dlg.ThermalLanguage == ThermalLabelType.EPL)
-                        {
-                            thermalLanguage.SelectedIndex = 2;
-                        }
-                        else if (dlg.ThermalLanguage == ThermalLabelType.ZPL)
-                        {
-                            thermalLanguage.SelectedIndex = 1;
-                        }
-                        else
-                        {
-                            thermalLanguage.SelectedIndex = 3;
-                        }
-                    }
-                    else
-                    {
-                        thermalLanguage.SelectedIndex = -1;
-                    }
+                    thermalLanguage.SelectedValue = dlg.ThermalLanguage;
+                }
+                else
+                {
+                    thermalLanguage.SelectedIndex = -1;
                 }
             }
         }

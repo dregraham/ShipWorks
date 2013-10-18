@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             settings.IParcelThermal = thermalPrinter.Checked;
 
             // i-parcel only supports EPL
-            settings.IParcelThermalType = (int) ThermalLabelType.EPL;
+            settings.IParcelThermalType = (int) ThermalLanguage.EPL;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;
 using ShipWorks.Templates.Media;
@@ -21,6 +22,8 @@ namespace ShipWorks.ApplicationCore.Setup
     /// </summary>
     public partial class ShipWorksSetupWizard : WizardForm
     {
+        PrinterType labelPrinterType;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -123,8 +126,29 @@ namespace ShipWorks.ApplicationCore.Setup
         /// </summary>
         private void OnPrinterChanged(object sender, EventArgs e)
         {
-            printerFormatControl.Visible = !string.IsNullOrEmpty(labelPrinter.PrinterName);
-            printerFormatControl.PrinterName = labelPrinter.PrinterName;
+            printerTypeControl.Visible = !string.IsNullOrEmpty(labelPrinter.PrinterName);
+            printerTypeControl.PrinterName = labelPrinter.PrinterName;
+        }
+
+        /// <summary>
+        /// Stepping next from the label printer page
+        /// </summary>
+        private void OnStepNextLabelPrinter(object sender, WizardStepEventArgs e)
+        {
+            // If there are printers on the system, make sure they've selected one
+            if (string.IsNullOrEmpty(labelPrinter.PrinterName) && PrintUtility.InstalledPrinters.Count > 0)
+            {
+                MessageHelper.ShowInformation(this, "Please select a printer before continuing.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
+            labelPrinterType = printerTypeControl.GetPrinterType();
+            if (labelPrinterType == null)
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
         }
 
         #endregion
