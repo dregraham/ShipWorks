@@ -43,10 +43,11 @@
             this.pictureLabelPrinter = new System.Windows.Forms.PictureBox();
             this.printerTypeControl = new ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl();
             this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
-            this.wizardPageDocumentPrinter = new ShipWorks.UI.Wizard.WizardPage();
-            this.printerSelectionControl1 = new ShipWorks.Templates.Media.PrinterSelectionControl();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.wizardPagePackingSlip = new ShipWorks.UI.Wizard.WizardPage();
+            this.picturePackingSlip = new System.Windows.Forms.PictureBox();
+            this.includePackingSlip = new System.Windows.Forms.CheckBox();
+            this.labelPackingSlip = new System.Windows.Forms.Label();
+            this.labelPicturePackingSlip = new System.Windows.Forms.PictureBox();
             this.wizardPage2 = new ShipWorks.UI.Wizard.WizardPage();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -56,8 +57,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureStandardPrinterHelp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStandardPrinter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLabelPrinter)).BeginInit();
-            this.wizardPageDocumentPrinter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.wizardPagePackingSlip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picturePackingSlip)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.labelPicturePackingSlip)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -74,7 +76,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePrinters);
+            this.mainPanel.Controls.Add(this.wizardPagePackingSlip);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -158,7 +160,7 @@
             this.labelStandardPrinterHelp.Name = "labelStandardPrinterHelp";
             this.labelStandardPrinterHelp.Size = new System.Drawing.Size(298, 13);
             this.labelStandardPrinterHelp.TabIndex = 70;
-            this.labelStandardPrinterHelp.Text = "Select an inket or laser printer that uses regular sized paper.";
+            this.labelStandardPrinterHelp.Text = "Select an inkjet or laser printer that uses regular sized paper.";
             // 
             // pictureStandardPrinterHelp
             // 
@@ -251,49 +253,64 @@
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Title = "Wizard page 3.";
             // 
-            // wizardPageDocumentPrinter
+            // wizardPagePackingSlip
             // 
-            this.wizardPageDocumentPrinter.Controls.Add(this.printerSelectionControl1);
-            this.wizardPageDocumentPrinter.Controls.Add(this.label1);
-            this.wizardPageDocumentPrinter.Controls.Add(this.pictureBox1);
-            this.wizardPageDocumentPrinter.Description = "Select the printer you will use for documents";
-            this.wizardPageDocumentPrinter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageDocumentPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageDocumentPrinter.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageDocumentPrinter.Name = "wizardPageDocumentPrinter";
-            this.wizardPageDocumentPrinter.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageDocumentPrinter.TabIndex = 0;
-            this.wizardPageDocumentPrinter.Title = "Printer Selection";
+            this.wizardPagePackingSlip.Controls.Add(this.picturePackingSlip);
+            this.wizardPagePackingSlip.Controls.Add(this.includePackingSlip);
+            this.wizardPagePackingSlip.Controls.Add(this.labelPackingSlip);
+            this.wizardPagePackingSlip.Controls.Add(this.labelPicturePackingSlip);
+            this.wizardPagePackingSlip.Description = "Configure ShipWorks to print packing slips with shipping labels.";
+            this.wizardPagePackingSlip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPagePackingSlip.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPagePackingSlip.Location = new System.Drawing.Point(0, 0);
+            this.wizardPagePackingSlip.Name = "wizardPagePackingSlip";
+            this.wizardPagePackingSlip.Size = new System.Drawing.Size(548, 271);
+            this.wizardPagePackingSlip.TabIndex = 0;
+            this.wizardPagePackingSlip.Title = "Packing Slip";
+            this.wizardPagePackingSlip.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoPackingSlips);
             // 
-            // printerSelectionControl1
+            // picturePackingSlip
             // 
-            this.printerSelectionControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.printerSelectionControl1.Location = new System.Drawing.Point(80, 29);
-            this.printerSelectionControl1.Name = "printerSelectionControl1";
-            this.printerSelectionControl1.ShowLabels = false;
-            this.printerSelectionControl1.ShowPaperSource = false;
-            this.printerSelectionControl1.Size = new System.Drawing.Size(280, 28);
-            this.printerSelectionControl1.TabIndex = 65;
+            this.picturePackingSlip.Image = global::ShipWorks.Properties.Resources.document_plain_shipping_labels;
+            this.picturePackingSlip.Location = new System.Drawing.Point(92, 56);
+            this.picturePackingSlip.Name = "picturePackingSlip";
+            this.picturePackingSlip.Size = new System.Drawing.Size(175, 175);
+            this.picturePackingSlip.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picturePackingSlip.TabIndex = 67;
+            this.picturePackingSlip.TabStop = false;
             // 
-            // label1
+            // includePackingSlip
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(78, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(396, 13);
-            this.label1.TabIndex = 64;
-            this.label1.Text = "What printer should invoices, reports, and other documents print on?";
+            this.includePackingSlip.AutoSize = true;
+            this.includePackingSlip.Checked = true;
+            this.includePackingSlip.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.includePackingSlip.Location = new System.Drawing.Point(81, 31);
+            this.includePackingSlip.Name = "includePackingSlip";
+            this.includePackingSlip.Size = new System.Drawing.Size(239, 17);
+            this.includePackingSlip.TabIndex = 66;
+            this.includePackingSlip.Text = "Print a packing slip with every shipping label.";
+            this.includePackingSlip.UseVisualStyleBackColor = true;
+            this.includePackingSlip.CheckedChanged += new System.EventHandler(this.OnChangeIncludePackingSlip);
             // 
-            // pictureBox1
+            // labelPackingSlip
             // 
-            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.document1;
-            this.pictureBox1.Location = new System.Drawing.Point(24, 9);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(48, 48);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 63;
-            this.pictureBox1.TabStop = false;
+            this.labelPackingSlip.AutoSize = true;
+            this.labelPackingSlip.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPackingSlip.Location = new System.Drawing.Point(78, 11);
+            this.labelPackingSlip.Name = "labelPackingSlip";
+            this.labelPackingSlip.Size = new System.Drawing.Size(80, 13);
+            this.labelPackingSlip.TabIndex = 64;
+            this.labelPackingSlip.Text = "Packing Slips";
+            // 
+            // labelPicturePackingSlip
+            // 
+            this.labelPicturePackingSlip.Image = global::ShipWorks.Properties.Resources.form_blue1;
+            this.labelPicturePackingSlip.Location = new System.Drawing.Point(23, 9);
+            this.labelPicturePackingSlip.Name = "labelPicturePackingSlip";
+            this.labelPicturePackingSlip.Size = new System.Drawing.Size(48, 48);
+            this.labelPicturePackingSlip.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.labelPicturePackingSlip.TabIndex = 63;
+            this.labelPicturePackingSlip.TabStop = false;
             // 
             // wizardPage2
             // 
@@ -318,7 +335,7 @@
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPagePrinters,
-            this.wizardPageDocumentPrinter,
+            this.wizardPagePackingSlip,
             this.wizardPageOnlineStore,
             this.wizardPage1,
             this.wizardPage2});
@@ -335,9 +352,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureStandardPrinterHelp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureStandardPrinter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLabelPrinter)).EndInit();
-            this.wizardPageDocumentPrinter.ResumeLayout(false);
-            this.wizardPageDocumentPrinter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.wizardPagePackingSlip.ResumeLayout(false);
+            this.wizardPagePackingSlip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picturePackingSlip)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.labelPicturePackingSlip)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -350,18 +368,19 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private UI.Wizard.WizardPage wizardPage1;
         private ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl printerTypeControl;
-        private UI.Wizard.WizardPage wizardPageDocumentPrinter;
+        private UI.Wizard.WizardPage wizardPagePackingSlip;
         private UI.Wizard.WizardPage wizardPage2;
         private Templates.Media.PrinterSelectionControl labelPrinter;
         private System.Windows.Forms.Label labelLabelPrinter;
         private System.Windows.Forms.PictureBox pictureLabelPrinter;
-        private Templates.Media.PrinterSelectionControl printerSelectionControl1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label labelPackingSlip;
+        private System.Windows.Forms.PictureBox labelPicturePackingSlip;
         private Templates.Media.PrinterSelectionControl standardPrinter;
         private System.Windows.Forms.Label labelStandardPrinter;
         private System.Windows.Forms.PictureBox pictureStandardPrinter;
         private System.Windows.Forms.Label labelStandardPrinterHelp;
         private System.Windows.Forms.PictureBox pictureStandardPrinterHelp;
+        private System.Windows.Forms.CheckBox includePackingSlip;
+        private System.Windows.Forms.PictureBox picturePackingSlip;
     }
 }

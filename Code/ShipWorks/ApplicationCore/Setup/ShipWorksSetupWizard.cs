@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Utility;
+using ShipWorks.Properties;
 using ShipWorks.Stores;
 using ShipWorks.Templates.Media;
 using ShipWorks.UI.Wizard;
@@ -157,5 +158,33 @@ namespace ShipWorks.ApplicationCore.Setup
 
         #endregion
 
+        #region Packing Slips
+
+        /// <summary>
+        /// Stepping into the packing slips page
+        /// </summary>
+        private void OnSteppingIntoPackingSlips(object sender, WizardSteppingIntoEventArgs e)
+        {
+            OnChangeIncludePackingSlip(null, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Changing whether to include packing slips with each shipping label
+        /// </summary>
+        private void OnChangeIncludePackingSlip(object sender, EventArgs e)
+        {
+            // Packing slips included
+            if (includePackingSlip.Checked)
+            {
+                picturePackingSlip.Image = (labelPrinterType.Technology == PrinterTechnology.Thermal) ? Resources.thermal_roll_w_packing_slip : Resources.document_plain_packing_slip;
+            }
+            // No packing slip
+            else
+            {
+                picturePackingSlip.Image = (labelPrinterType.Technology == PrinterTechnology.Thermal) ? Resources.thermal_roll_w_shipping_label : Resources.document_plain_shipping_labels;
+            }
+        }
+
+        #endregion
     }
 }
