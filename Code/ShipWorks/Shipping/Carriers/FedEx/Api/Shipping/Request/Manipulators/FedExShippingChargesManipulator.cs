@@ -59,35 +59,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         {
             shippingCharges.PaymentType = GetApiPaymentType((FedExPayorType)fedExShipment.PayorTransportType);
 
-            if (shippingCharges.PaymentType != PaymentType.COLLECT)
+            InitializePayor(shippingCharges);
+
+            switch (shippingCharges.PaymentType)
             {
-                InitializePayor(shippingCharges);
-                if (shippingCharges.PaymentType == PaymentType.SENDER)
-                {
+                case PaymentType.COLLECT:
+                    shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
+                    shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
+
+                    shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
+                    shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
+                    break;
+                case PaymentType.SENDER:
                     shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
                     shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
 
                     shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
                     shippingCharges.Payor.ResponsibleParty.Address.CountryCode = fedExAccount.CountryCode;
-                }
-                else
-                {
+                    break;
+                case PaymentType.RECIPIENT:
+                case PaymentType.ACCOUNT:
+                case PaymentType.THIRD_PARTY:
+
                     shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
                     shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExShipment.PayorTransportName;
-                    
+
                     // For this to work correctly, CountryCode needs to be specified (as opposed to Duties)
                     shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExShipment.PayorTransportAccount;
                     shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
-                }
-            }
-            else
-            {
-                InitializePayor(shippingCharges);
-                shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
-                shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
-
-                shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
-                shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
+                    break;
             }
         }
 
