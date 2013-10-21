@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     
                     // For this to work correctly, CountryCode needs to be specified (as opposed to Duties)
                     shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExShipment.PayorTransportAccount;
-                    shippingCharges.Payor.ResponsibleParty.Address.CountryCode = "US"; 
+                    shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
                 }
             }
             else
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
 
                 shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
-                shippingCharges.Payor.ResponsibleParty.Address.CountryCode = "US";
+                shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
             }
         }
 

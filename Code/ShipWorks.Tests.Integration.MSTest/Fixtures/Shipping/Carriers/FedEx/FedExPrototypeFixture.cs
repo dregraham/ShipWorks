@@ -754,6 +754,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         {
             FedExPayorType payorType = GetPaymentType(ResponsiblePartyPaymentType);
             shipment.FedEx.PayorTransportType = (int) payorType;
+            shipment.FedEx.PayorDutiesCountryCode = ResponsiblePartyCountryCode;
 
             if (payorType == FedExPayorType.Sender)
             {

@@ -291,10 +291,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
-        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdParty_Test()
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdPartyAndPayCountryCodeIsEmpty_Test()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
+            shipmentEntity.FedEx.PayorDutiesCountryCode = string.Empty;
 
             testObject.Manipulate((carrierRequest.Object));
 
@@ -302,6 +303,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual("US", configuredShippingCharges.Payor.ResponsibleParty.Address.CountryCode);
         }
 
+        [TestMethod]
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdPartyAndPayCountryCodeIsNull_Test()
+        {
+            // Setup the fedex shipment payor type for the test
+            shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
+            shipmentEntity.FedEx.PayorDutiesCountryCode = null;
+
+            testObject.Manipulate((carrierRequest.Object));
+
+            Payment configuredShippingCharges = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.ShippingChargesPayment;
+            Assert.AreEqual("US", configuredShippingCharges.Payor.ResponsibleParty.Address.CountryCode);
+        }
+
+        [TestMethod]
+        public void Manipulate_SetsCountryCode_WhenPaymentTypeIsThirdParty_Test()
+        {
+            // Setup the fedex shipment payor type for the test
+            shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
+            shipmentEntity.FedEx.PayorDutiesCountryCode = "CA";
+
+            testObject.Manipulate((carrierRequest.Object));
+
+            Payment configuredShippingCharges = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.ShippingChargesPayment;
+            Assert.AreEqual("CA", configuredShippingCharges.Payor.ResponsibleParty.Address.CountryCode);
+        }
 
         [TestMethod]
         public void Manipulate_SetsPaymentTypeToCollect_Test()
@@ -347,6 +373,45 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 // since we're not using it for the "collect" type so only perform this check if it has a value
                 Assert.IsTrue(!string.IsNullOrEmpty(configuredShippingCharges.Payor.ResponsibleParty.AccountNumber));
             }
+        }
+
+        [TestMethod]
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsCollect_AndPayCountryCodeIsEmpty_Test()
+        {
+            // Setup the fedex shipment payor type for the test
+            shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Collect;
+            shipmentEntity.FedEx.PayorDutiesCountryCode = string.Empty;
+
+            testObject.Manipulate((carrierRequest.Object));
+
+            Payment configuredShippingCharges = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.ShippingChargesPayment;
+            Assert.AreEqual("US", configuredShippingCharges.Payor.ResponsibleParty.Address.CountryCode);
+        }
+
+        [TestMethod]
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsCollect_AndPayCountryCodeIsNull_Test()
+        {
+            // Setup the fedex shipment payor type for the test
+            shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
+            shipmentEntity.FedEx.PayorDutiesCountryCode = null;
+
+            testObject.Manipulate((carrierRequest.Object));
+
+            Payment configuredShippingCharges = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.ShippingChargesPayment;
+            Assert.AreEqual("US", configuredShippingCharges.Payor.ResponsibleParty.Address.CountryCode);
+        }
+
+        [TestMethod]
+        public void Manipulate_SetsCountryCode_WhenPaymentTypeIsCollect_Test()
+        {
+            // Setup the fedex shipment payor type for the test
+            shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
+            shipmentEntity.FedEx.PayorDutiesCountryCode = "GB";
+
+            testObject.Manipulate((carrierRequest.Object));
+
+            Payment configuredShippingCharges = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.ShippingChargesPayment;
+            Assert.AreEqual("GB", configuredShippingCharges.Payor.ResponsibleParty.Address.CountryCode);
         }
 
         [TestMethod]
