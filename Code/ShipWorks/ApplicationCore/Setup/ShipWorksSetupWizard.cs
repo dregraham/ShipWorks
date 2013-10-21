@@ -111,36 +111,40 @@ namespace ShipWorks.ApplicationCore.Setup
 
         #endregion
 
-        #region Label Printer
+        #region Select Printers
 
         /// <summary>
-        /// Stepping into the label printer page
+        /// Stepping into the select printers page
         /// </summary>
-        private void OnSteppingIntoLabelPrinter(object sender, WizardSteppingIntoEventArgs e)
+        private void OnSteppingIntoSelectPrinter(object sender, WizardSteppingIntoEventArgs e)
         {
+            standardPrinter.LoadPrinters(standardPrinter.PrinterName, -1, PrinterSelectionInvalidPrinterBehavior.AlwaysPreserve);
             labelPrinter.LoadPrinters(labelPrinter.PrinterName, -1, PrinterSelectionInvalidPrinterBehavior.AlwaysPreserve);
         }
 
         /// <summary>
-        /// The selected printer has changed
+        /// The selected label printer has changed
         /// </summary>
-        private void OnPrinterChanged(object sender, EventArgs e)
+        private void OnLabelPrinterChanged(object sender, EventArgs e)
         {
             printerTypeControl.Visible = !string.IsNullOrEmpty(labelPrinter.PrinterName);
             printerTypeControl.PrinterName = labelPrinter.PrinterName;
         }
 
         /// <summary>
-        /// Stepping next from the label printer page
+        /// Stepping next from the printers page
         /// </summary>
-        private void OnStepNextLabelPrinter(object sender, WizardStepEventArgs e)
+        private void OnStepNextSelectPrinters(object sender, WizardStepEventArgs e)
         {
             // If there are printers on the system, make sure they've selected one
-            if (string.IsNullOrEmpty(labelPrinter.PrinterName) && PrintUtility.InstalledPrinters.Count > 0)
+            if (PrintUtility.InstalledPrinters.Count > 0)
             {
-                MessageHelper.ShowInformation(this, "Please select a printer before continuing.");
-                e.NextPage = CurrentPage;
-                return;
+                if (string.IsNullOrEmpty(labelPrinter.PrinterName) || string.IsNullOrEmpty(standardPrinter.PrinterName))
+                {
+                    MessageHelper.ShowInformation(this, "Please select your printers before continuing.");
+                    e.NextPage = CurrentPage;
+                    return;
+                }
             }
 
             labelPrinterType = printerTypeControl.GetPrinterType();

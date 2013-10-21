@@ -1243,6 +1243,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap document_plain {
+            get {
+                object obj = ResourceManager.GetObject("document_plain", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap document_pulse {
             get {
                 object obj = ResourceManager.GetObject("document_pulse", resourceCulture);
@@ -1266,6 +1276,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap document_view32 {
             get {
                 object obj = ResourceManager.GetObject("document_view32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap document1 {
+            get {
+                object obj = ResourceManager.GetObject("document1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3956,6 +3976,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap thermal_label_roll {
             get {
                 object obj = ResourceManager.GetObject("thermal_label_roll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap thermal_roll {
+            get {
+                object obj = ResourceManager.GetObject("thermal_roll", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

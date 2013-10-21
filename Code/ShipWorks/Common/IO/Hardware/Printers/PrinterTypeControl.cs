@@ -64,13 +64,13 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         {
             if (!radioPaper.Checked && !radioThermal.Checked)
             {
-                MessageHelper.ShowMessage(this, "Please select what type of paper your printer uses.");
+                MessageHelper.ShowInformation(this, "Please select what type of paper your printer uses.");
                 return null;
             }
 
             if (radioThermal.Checked && thermalLanguage.SelectedIndex < 0)
             {
-                MessageHelper.ShowMessage(this, "Please select the thermal language supported by your printer.");
+                MessageHelper.ShowInformation(this, "Please select the thermal language supported by your printer.");
                 return null;
             }
 

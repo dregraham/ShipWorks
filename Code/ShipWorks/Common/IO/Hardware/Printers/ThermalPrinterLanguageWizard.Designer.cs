@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.wizardPageStep1 = new ShipWorks.UI.Wizard.WizardPage();
+            this.label6 = new System.Windows.Forms.Label();
             this.panelTest1Result = new System.Windows.Forms.Panel();
             this.labelTest1Result = new System.Windows.Forms.Label();
             this.labelQuestionTest1Result = new System.Windows.Forms.Label();
@@ -48,7 +49,6 @@
             this.radioTest2No = new System.Windows.Forms.RadioButton();
             this.radioTest2Yes = new System.Windows.Forms.RadioButton();
             this.printTest2 = new System.Windows.Forms.Button();
-            this.labelTest2 = new System.Windows.Forms.Label();
             this.wizardPageStep3 = new ShipWorks.UI.Wizard.WizardPage();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -60,7 +60,6 @@
             this.radioTest3No = new System.Windows.Forms.RadioButton();
             this.radioTest3Yes = new System.Windows.Forms.RadioButton();
             this.printTest3 = new System.Windows.Forms.Button();
-            this.labelTest3 = new System.Windows.Forms.Label();
             this.wizardPageFinish = new ShipWorks.UI.Wizard.WizardPage();
             this.labelLanguage = new System.Windows.Forms.Label();
             this.labelPrinterType = new System.Windows.Forms.Label();
@@ -113,6 +112,7 @@
             // 
             // wizardPageStep1
             // 
+            this.wizardPageStep1.Controls.Add(this.label6);
             this.wizardPageStep1.Controls.Add(this.panelTest1Result);
             this.wizardPageStep1.Controls.Add(this.printTest1);
             this.wizardPageStep1.Controls.Add(this.labelTest1);
@@ -127,8 +127,18 @@
             this.wizardPageStep1.Name = "wizardPageStep1";
             this.wizardPageStep1.Size = new System.Drawing.Size(445, 246);
             this.wizardPageStep1.TabIndex = 0;
-            this.wizardPageStep1.Title = "Thermal Language";
+            this.wizardPageStep1.Title = "Printer Language";
             this.wizardPageStep1.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextTest);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(35, 32);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(43, 13);
+            this.label6.TabIndex = 57;
+            this.label6.Text = "Printer:";
             // 
             // panelTest1Result
             // 
@@ -185,7 +195,7 @@
             // 
             // printTest1
             // 
-            this.printTest1.Location = new System.Drawing.Point(38, 113);
+            this.printTest1.Location = new System.Drawing.Point(38, 116);
             this.printTest1.Name = "printTest1";
             this.printTest1.Size = new System.Drawing.Size(75, 23);
             this.printTest1.TabIndex = 52;
@@ -197,11 +207,11 @@
             // 
             this.labelTest1.AutoSize = true;
             this.labelTest1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTest1.Location = new System.Drawing.Point(21, 93);
+            this.labelTest1.Location = new System.Drawing.Point(21, 61);
             this.labelTest1.Name = "labelTest1";
-            this.labelTest1.Size = new System.Drawing.Size(42, 13);
+            this.labelTest1.Size = new System.Drawing.Size(68, 13);
             this.labelTest1.TabIndex = 48;
-            this.labelTest1.Text = "Test 1";
+            this.labelTest1.Text = "Let\'s begin";
             // 
             // labelPrinter
             // 
@@ -209,14 +219,14 @@
             this.labelPrinter.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPrinter.Location = new System.Drawing.Point(20, 9);
             this.labelPrinter.Name = "labelPrinter";
-            this.labelPrinter.Size = new System.Drawing.Size(76, 13);
+            this.labelPrinter.Size = new System.Drawing.Size(234, 13);
             this.labelPrinter.TabIndex = 46;
-            this.labelPrinter.Text = "Instructions";
+            this.labelPrinter.Text = "Time to figure out your printer language";
             // 
             // picturePrinter
             // 
             this.picturePrinter.Image = global::ShipWorks.Properties.Resources.printer2;
-            this.picturePrinter.Location = new System.Drawing.Point(37, 29);
+            this.picturePrinter.Location = new System.Drawing.Point(81, 31);
             this.picturePrinter.Name = "picturePrinter";
             this.picturePrinter.Size = new System.Drawing.Size(16, 16);
             this.picturePrinter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -227,7 +237,7 @@
             // 
             this.printerName.AutoSize = true;
             this.printerName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.printerName.Location = new System.Drawing.Point(55, 30);
+            this.printerName.Location = new System.Drawing.Point(99, 32);
             this.printerName.Name = "printerName";
             this.printerName.Size = new System.Drawing.Size(107, 13);
             this.printerName.TabIndex = 44;
@@ -236,7 +246,7 @@
             // labelPrinterTests2
             // 
             this.labelPrinterTests2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPrinterTests2.Location = new System.Drawing.Point(34, 56);
+            this.labelPrinterTests2.Location = new System.Drawing.Point(37, 82);
             this.labelPrinterTests2.Name = "labelPrinterTests2";
             this.labelPrinterTests2.Size = new System.Drawing.Size(337, 29);
             this.labelPrinterTests2.TabIndex = 43;
@@ -248,7 +258,6 @@
             this.wizardPageStep2.Controls.Add(this.label4);
             this.wizardPageStep2.Controls.Add(this.panelTest2Result);
             this.wizardPageStep2.Controls.Add(this.printTest2);
-            this.wizardPageStep2.Controls.Add(this.labelTest2);
             this.wizardPageStep2.Description = "ShipWorks will help you determine the language of your printer.";
             this.wizardPageStep2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageStep2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -256,15 +265,16 @@
             this.wizardPageStep2.Name = "wizardPageStep2";
             this.wizardPageStep2.Size = new System.Drawing.Size(445, 246);
             this.wizardPageStep2.TabIndex = 0;
-            this.wizardPageStep2.Title = "Thermal Language";
+            this.wizardPageStep2.Title = "Printer Language";
             this.wizardPageStep2.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextTest);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(20, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(165, 13);
+            this.label4.Size = new System.Drawing.Size(188, 13);
             this.label4.TabIndex = 60;
             this.label4.Text = "Good job!  Let\'s try another one.";
             // 
@@ -274,7 +284,7 @@
             this.panelTest2Result.Controls.Add(this.labelTest2Question);
             this.panelTest2Result.Controls.Add(this.radioTest2No);
             this.panelTest2Result.Controls.Add(this.radioTest2Yes);
-            this.panelTest2Result.Location = new System.Drawing.Point(17, 84);
+            this.panelTest2Result.Location = new System.Drawing.Point(17, 64);
             this.panelTest2Result.Name = "panelTest2Result";
             this.panelTest2Result.Size = new System.Drawing.Size(380, 76);
             this.panelTest2Result.TabIndex = 59;
@@ -323,23 +333,13 @@
             // 
             // printTest2
             // 
-            this.printTest2.Location = new System.Drawing.Point(37, 52);
+            this.printTest2.Location = new System.Drawing.Point(37, 31);
             this.printTest2.Name = "printTest2";
             this.printTest2.Size = new System.Drawing.Size(75, 23);
             this.printTest2.TabIndex = 58;
             this.printTest2.Text = "Print Test 2";
             this.printTest2.UseVisualStyleBackColor = true;
             this.printTest2.Click += new System.EventHandler(this.OnPrintTest);
-            // 
-            // labelTest2
-            // 
-            this.labelTest2.AutoSize = true;
-            this.labelTest2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTest2.Location = new System.Drawing.Point(20, 32);
-            this.labelTest2.Name = "labelTest2";
-            this.labelTest2.Size = new System.Drawing.Size(42, 13);
-            this.labelTest2.TabIndex = 57;
-            this.labelTest2.Text = "Test 2";
             // 
             // wizardPageStep3
             // 
@@ -349,7 +349,6 @@
             this.wizardPageStep3.Controls.Add(this.pictureBox2);
             this.wizardPageStep3.Controls.Add(this.panelTest3Result);
             this.wizardPageStep3.Controls.Add(this.printTest3);
-            this.wizardPageStep3.Controls.Add(this.labelTest3);
             this.wizardPageStep3.Description = "ShipWorks will help you determine the language of your printer.";
             this.wizardPageStep3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageStep3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -357,22 +356,23 @@
             this.wizardPageStep3.Name = "wizardPageStep3";
             this.wizardPageStep3.Size = new System.Drawing.Size(445, 246);
             this.wizardPageStep3.TabIndex = 0;
-            this.wizardPageStep3.Title = "Thermal Language";
+            this.wizardPageStep3.Title = "Printer Language";
             this.wizardPageStep3.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextTest);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(20, 9);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(278, 13);
+            this.label5.Size = new System.Drawing.Size(314, 13);
             this.label5.TabIndex = 66;
-            this.label5.Text = "We\'ve almost got this figured out.  Just one more test...";
+            this.label5.Text = "We\'ve almost got this figured out.  Just one more test.";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(43, 56);
+            this.label3.Location = new System.Drawing.Point(59, 55);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(344, 13);
             this.label3.TabIndex = 65;
@@ -381,17 +381,16 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(42, 36);
+            this.label2.Location = new System.Drawing.Point(58, 36);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 13);
+            this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 64;
             this.label2.Text = "Important";
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::ShipWorks.Properties.Resources.exclamation16;
-            this.pictureBox2.Location = new System.Drawing.Point(23, 34);
+            this.pictureBox2.Location = new System.Drawing.Point(40, 35);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(16, 16);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -404,7 +403,7 @@
             this.panelTest3Result.Controls.Add(this.labelTest3Question);
             this.panelTest3Result.Controls.Add(this.radioTest3No);
             this.panelTest3Result.Controls.Add(this.radioTest3Yes);
-            this.panelTest3Result.Location = new System.Drawing.Point(17, 128);
+            this.panelTest3Result.Location = new System.Drawing.Point(17, 111);
             this.panelTest3Result.Name = "panelTest3Result";
             this.panelTest3Result.Size = new System.Drawing.Size(384, 76);
             this.panelTest3Result.TabIndex = 62;
@@ -453,23 +452,13 @@
             // 
             // printTest3
             // 
-            this.printTest3.Location = new System.Drawing.Point(37, 99);
+            this.printTest3.Location = new System.Drawing.Point(38, 78);
             this.printTest3.Name = "printTest3";
             this.printTest3.Size = new System.Drawing.Size(75, 23);
             this.printTest3.TabIndex = 61;
             this.printTest3.Text = "Print Test 3";
             this.printTest3.UseVisualStyleBackColor = true;
             this.printTest3.Click += new System.EventHandler(this.OnPrintTest);
-            // 
-            // labelTest3
-            // 
-            this.labelTest3.AutoSize = true;
-            this.labelTest3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTest3.Location = new System.Drawing.Point(20, 79);
-            this.labelTest3.Name = "labelTest3";
-            this.labelTest3.Size = new System.Drawing.Size(42, 13);
-            this.labelTest3.TabIndex = 60;
-            this.labelTest3.Text = "Test 3";
             // 
             // wizardPageFinish
             // 
@@ -483,7 +472,7 @@
             this.wizardPageFinish.Name = "wizardPageFinish";
             this.wizardPageFinish.Size = new System.Drawing.Size(445, 246);
             this.wizardPageFinish.TabIndex = 0;
-            this.wizardPageFinish.Title = "Thermal Language";
+            this.wizardPageFinish.Title = "Printer Language";
             // 
             // labelLanguage
             // 
@@ -514,13 +503,13 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // PrinterThermalLanguageWizard
+            // ThermalPrinterLanguageWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(445, 353);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "PrinterThermalLanguageWizard";
+            this.Name = "ThermalPrinterLanguageWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageStep1,
@@ -528,7 +517,7 @@
             this.wizardPageStep3,
             this.wizardPageFinish});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Printer Thermal Language";
+            this.Text = "ShipWorks";
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -578,14 +567,12 @@
         private System.Windows.Forms.RadioButton radioTest2No;
         private System.Windows.Forms.RadioButton radioTest2Yes;
         private System.Windows.Forms.Button printTest2;
-        private System.Windows.Forms.Label labelTest2;
         private System.Windows.Forms.Panel panelTest3Result;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelTest3Question;
         private System.Windows.Forms.RadioButton radioTest3No;
         private System.Windows.Forms.RadioButton radioTest3Yes;
         private System.Windows.Forms.Button printTest3;
-        private System.Windows.Forms.Label labelTest3;
         private System.Windows.Forms.Label labelPrinterType;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label labelLanguage;
@@ -594,5 +581,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }
