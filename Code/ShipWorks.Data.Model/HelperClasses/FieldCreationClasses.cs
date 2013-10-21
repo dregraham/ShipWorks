@@ -17892,6 +17892,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.ShipmentChargeCountryCode);}
 		}
+		/// <summary>Creates a new UpsProfileEntity.UspsPackageID field instance</summary>
+		public static EntityField2 UspsPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.UspsPackageID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>
@@ -18241,6 +18246,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipmentChargeCountryCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipmentChargeCountryCode);}
+		}
+		/// <summary>Creates a new UpsShipmentEntity.UspsPackageID field instance</summary>
+		public static EntityField2 UspsPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.UspsPackageID);}
 		}
 	}
 

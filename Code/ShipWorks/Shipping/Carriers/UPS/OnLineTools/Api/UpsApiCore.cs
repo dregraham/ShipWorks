@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -330,6 +331,34 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return referenceValue;
+        }
+
+        /// <summary>
+        /// Process for tokens and trim to allowable length
+        /// </summary>
+        public static string ProcessUspsTokenField(string tokenFieldValue, long shipmentID, string defaultValue)
+        {
+            // Set the max length to 35 for MI shipments
+            int maxLength = 30;
+
+            // Process the reference as a token first
+            tokenFieldValue = TemplateTokenProcessor.ProcessTokens(tokenFieldValue.Trim(), shipmentID);
+
+            tokenFieldValue = Regex.Replace(tokenFieldValue, "[^a-zA-Z0-9]", string.Empty);
+
+            // Fix the defaultValue in case we need to use it below.
+            defaultValue = Regex.Replace(defaultValue, "[^a-zA-Z0-9]", string.Empty);
+
+            // Also, ref 1/2 cannot be blank
+            if (string.IsNullOrWhiteSpace(tokenFieldValue))
+            {
+                tokenFieldValue = defaultValue;
+            }
+
+            // Also, the field must be less than max length
+            tokenFieldValue = tokenFieldValue.Substring(0, tokenFieldValue.Length >= maxLength ? maxLength : tokenFieldValue.Length);
+
+            return tokenFieldValue;
         }
 
         /// <summary>

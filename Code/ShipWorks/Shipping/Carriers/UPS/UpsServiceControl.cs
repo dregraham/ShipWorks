@@ -270,6 +270,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     surePostClassification.ApplyMultiValue((UpsPostalSubclassificationType)shipment.Ups.Subclassification);
                     costCenter.ApplyMultiText(shipment.Ups.CostCenter);
+                    packageID.ApplyMultiText(shipment.Ups.UspsPackageID);
                     irregularIndicator.ApplyMultiValue((UpsIrregularIndicatorType)shipment.Ups.IrregularIndicator);
 
                     uspsEndorsement.ApplyMultiValue((UspsEndorsementType)shipment.Ups.Endorsement);
@@ -333,8 +334,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 codAmount.ReadMultiAmount(a => shipment.Ups.CodAmount = a);
                 codPaymentType.ReadMultiValue(v => shipment.Ups.CodPaymentType = (int) v);
 
-                surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int) v);
+                surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int)v);
                 costCenter.ReadMultiText(t => shipment.Ups.CostCenter = t);
+                packageID.ReadMultiText(t => shipment.Ups.UspsPackageID = t);
                 irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int)v);
 
                 uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
@@ -460,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             irregularIndicator.Visible = isOlt;
 
             sectionSurePost.Height = (isOlt ?
-                                          irregularIndicator.Bottom : costCenter.Bottom) 
+                                          irregularIndicator.Bottom : packageID.Bottom) 
                                           + (sectionSurePost.Height - sectionSurePost.ContentPanel.Height) + 8;
         }
 

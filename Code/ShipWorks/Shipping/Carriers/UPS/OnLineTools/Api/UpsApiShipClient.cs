@@ -668,9 +668,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("IrregularIndicator", EnumHelper.GetApiValue((UpsIrregularIndicatorType)ups.IrregularIndicator));
 
                 // Blanks are not allowed
-                xmlWriter.WriteElementString("CostCenter", ups.CostCenter.Replace(" ", string.Empty));
+                string costCenter = UpsApiCore.ProcessUspsTokenField(ups.CostCenter, ups.ShipmentID, string.Empty);
+                xmlWriter.WriteElementString("CostCenter", costCenter.Replace(" ", string.Empty));
 
-                xmlWriter.WriteElementString("PackageID", ups.Packages.First().UpsPackageID.ToString());
+                string packageID = UpsApiCore.ProcessUspsTokenField(ups.UspsPackageID, ups.ShipmentID, string.Empty);
+                xmlWriter.WriteElementString("PackageID", packageID);
 
                 // If an international shipment, write out the MILabelCN22Indicator so that the label will be the combined label with CN22 form
                 if (!ShipmentType.IsDomestic(ups.Shipment))
