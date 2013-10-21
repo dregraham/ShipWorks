@@ -87,7 +87,7 @@
     <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="FedExIntegrationTests\FedExCanadaIntegrationTests.cs" />
-    <Compile Include="FedExIntegrationTests\FedExDomesticIntegrationTests.cs" />
+    <Compile Include="FedExIntegrationTests\FedExUSIntegrationTests.cs" />
     <Compile Include="FedExIntegrationTests\FedExSmartPostIntegrationTest.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCaExpressInternationalMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCanadaExpressDomesticFixture.cs" />

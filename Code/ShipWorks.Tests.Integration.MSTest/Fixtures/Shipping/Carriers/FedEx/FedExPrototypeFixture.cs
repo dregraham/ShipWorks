@@ -1047,7 +1047,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     // (i.e. SpecialServiceType1 vs. SpecialServiceType2)
                     if (shipment.FedEx.Service == (int)FedExServiceType.PriorityOvernight
                         || shipment.FedEx.Service == (int)FedExServiceType.FirstFreight
-                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx1DayFreight)
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx1DayFreight
+                        || shipment.FedEx.Service == (int) FedExServiceType.InternationalPriority)
                     {
                         shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
                     }

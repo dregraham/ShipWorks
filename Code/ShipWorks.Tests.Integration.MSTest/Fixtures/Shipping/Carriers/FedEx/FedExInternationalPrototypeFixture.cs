@@ -125,22 +125,21 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         /// </summary>
         private void SetupCustomsItems(ShipmentEntity shipment)
         {
-            if (!string.IsNullOrEmpty(CommoditiesQuantity))
+            if (!string.IsNullOrEmpty(CommoditiesQuantity) && CommoditiesQuantity != "0")
             {
                 int numberOfItems = int.Parse(CommoditiesQuantity);
                 
                 // Add the customs items to the shipment
-                ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
-                {
-                    Description = CommoditiesDescription,
-                    Weight = double.Parse(CommoditiesWeightValue),
-                    HarmonizedCode = CommoditiesHarmonizedCode ?? string.Empty,
-                    CountryOfOrigin = CommoditiesCountryOfManufacture,
-                    Quantity = int.Parse(CommoditiesQuantity),
-                    UnitValue = decimal.Parse(CommoditiesCustomsValueAmount),
-                    UnitPriceAmount = decimal.Parse(CommoditiesUnitPriceAmount),
-                    NumberOfPieces = int.Parse(CommoditiesNumberOfPieces)
-                };
+                ShipmentCustomsItemEntity customsItem;
+                customsItem = new ShipmentCustomsItemEntity();
+                customsItem.Weight = double.Parse(CommoditiesWeightValue);
+                customsItem.HarmonizedCode = CommoditiesHarmonizedCode ?? string.Empty;
+                customsItem.CountryOfOrigin = CommoditiesCountryOfManufacture;
+                customsItem.Quantity = int.Parse(CommoditiesQuantity);
+                customsItem.UnitValue = decimal.Parse(CommoditiesCustomsValueAmount);
+                customsItem.UnitPriceAmount = decimal.Parse(CommoditiesUnitPriceAmount);
+                customsItem.NumberOfPieces = int.Parse(CommoditiesNumberOfPieces);
+                customsItem.Description = CommoditiesDescription;
 
                 shipment.CustomsItems.Add(customsItem);
             }
