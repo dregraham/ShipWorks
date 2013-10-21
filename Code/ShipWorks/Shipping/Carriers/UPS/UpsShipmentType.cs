@@ -170,6 +170,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.ShipperRelease = false;
             shipment.Ups.CarbonNeutral = false;
 
+            shipment.Ups.UspsPackageID = string.Empty;
             shipment.Ups.CostCenter = string.Empty;
             shipment.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             shipment.Ups.Cn22Number = string.Empty;
@@ -292,6 +293,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.PaperlessAdditionalDocumentation = false;
             profile.Ups.CarbonNeutral = false;
 
+            profile.Ups.UspsPackageID  = string.Empty;
             profile.Ups.CostCenter = string.Empty;
             profile.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             profile.Ups.Cn22Number = string.Empty;
@@ -435,6 +437,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.ShipperRelease, ups, UpsShipmentFields.ShipperRelease);
             ShippingProfileUtility.ApplyProfileValue(source.CarbonNeutral, ups, UpsShipmentFields.CarbonNeutral);
 
+            ShippingProfileUtility.ApplyProfileValue(source.UspsPackageID, ups, UpsShipmentFields.UspsPackageID);
             ShippingProfileUtility.ApplyProfileValue(source.CostCenter, ups, UpsShipmentFields.CostCenter);
             ShippingProfileUtility.ApplyProfileValue(source.IrregularIndicator, ups, UpsShipmentFields.IrregularIndicator);
             ShippingProfileUtility.ApplyProfileValue(source.Cn22Number, ups, UpsShipmentFields.Cn22Number);

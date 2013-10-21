@@ -3801,7 +3801,7 @@
       <DependentUpon>ShipmentVoidConfirmDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\TemplateLabelCategory.cs" />
-    <Compile Include="Shipping\ThermalLabelType.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\ThermalLanguage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -10020,6 +10020,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.1.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

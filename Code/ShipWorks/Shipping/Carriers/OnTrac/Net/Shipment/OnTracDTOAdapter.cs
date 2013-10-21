@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
@@ -133,11 +134,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
                 return 4; // GIF
             }
 
-            switch ((ThermalLabelType) thermalType)
+            switch ((ThermalLanguage) thermalType)
             {
-                case ThermalLabelType.EPL:
+                case ThermalLanguage.EPL:
                     return 6; //4x5 epl label
-                case ThermalLabelType.ZPL:
+                case ThermalLanguage.ZPL:
                     return 7; //4x5 zpl label
                 default:
                     throw new ArgumentOutOfRangeException("thermalType");

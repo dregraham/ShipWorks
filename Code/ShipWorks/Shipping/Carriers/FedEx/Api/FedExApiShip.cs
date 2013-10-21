@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore;
 using log4net;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -1003,7 +1004,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             if (settings.FedExThermal)
             {
                 // Thermal type
-                label.ImageType = GetApiThermalType((ThermalLabelType) settings.FedExThermalType);
+                label.ImageType = GetApiThermalType((ThermalLanguage) settings.FedExThermalType);
 
                 // Has a doc-tab
                 if (settings.FedExThermalDocTab)
@@ -1064,12 +1065,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get the FedEx API value for our internal thermal type
         /// </summary>
-        private static ShippingDocumentImageType GetApiThermalType(ThermalLabelType thermalType)
+        private static ShippingDocumentImageType GetApiThermalType(ThermalLanguage thermalType)
         {
             switch (thermalType)
             {
-                case ThermalLabelType.EPL: return ShippingDocumentImageType.EPL2;
-                case ThermalLabelType.ZPL: return ShippingDocumentImageType.ZPLII;
+                case ThermalLanguage.EPL: return ShippingDocumentImageType.EPL2;
+                case ThermalLanguage.ZPL: return ShippingDocumentImageType.ZPLII;
             }
 
             throw new InvalidOperationException("Invalid FedEx thermal type " + thermalType);

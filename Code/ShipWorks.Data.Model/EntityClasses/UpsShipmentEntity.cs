@@ -650,6 +650,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipmentChargeCountryCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UspsPackageID", fieldHashtable);
 		}
 		#endregion
 
@@ -1308,6 +1311,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, true); }
 			set	{ SetValue((int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, value); }
+		}
+
+		/// <summary> The UspsPackageID property of the Entity UpsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."UspsPackageID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String UspsPackageID
+		{
+			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.UspsPackageID, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.UspsPackageID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageEntity' which are related to this entity via a relation of type '1:n'.

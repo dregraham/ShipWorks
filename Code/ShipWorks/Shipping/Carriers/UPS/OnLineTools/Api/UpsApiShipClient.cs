@@ -23,6 +23,7 @@ using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 shipment.ThermalType = settings.UpsThermalType;
 
                 xmlWriter.WriteStartElement("LabelPrintMethod");
-                xmlWriter.WriteElementString("Code", settings.UpsThermalType == (int) ThermalLabelType.EPL ? "EPL" : "ZPL");
+                xmlWriter.WriteElementString("Code", settings.UpsThermalType == (int) ThermalLanguage.EPL ? "EPL" : "ZPL");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("LabelStockSize");
                 xmlWriter.WriteElementString("Height", "4");
@@ -667,9 +668,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("IrregularIndicator", EnumHelper.GetApiValue((UpsIrregularIndicatorType)ups.IrregularIndicator));
 
                 // Blanks are not allowed
-                xmlWriter.WriteElementString("CostCenter", ups.CostCenter.Replace(" ", string.Empty));
+                string costCenter = UpsApiCore.ProcessUspsTokenField(ups.CostCenter, ups.ShipmentID, string.Empty);
+                xmlWriter.WriteElementString("CostCenter", costCenter.Replace(" ", string.Empty));
 
-                xmlWriter.WriteElementString("PackageID", ups.Packages.First().UpsPackageID.ToString());
+                string packageID = UpsApiCore.ProcessUspsTokenField(ups.UspsPackageID, ups.ShipmentID, string.Empty);
+                xmlWriter.WriteElementString("PackageID", packageID);
 
                 // If an international shipment, write out the MILabelCN22Indicator so that the label will be the combined label with CN22 form
                 if (!ShipmentType.IsDomestic(ups.Shipment))
@@ -735,7 +738,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Valid values are pdf,png,gif,zpl,star,epl2 and spl
             if (shippingSettings.UpsThermal)
             {
-                xmlWriter.WriteElementString("LabelPrintType", shippingSettings.UpsThermalType == (int) ThermalLabelType.EPL ? "EPL2" : "ZPL");
+                xmlWriter.WriteElementString("LabelPrintType", shippingSettings.UpsThermalType == (int) ThermalLanguage.EPL ? "EPL2" : "ZPL");
             }
             else
             {
@@ -1030,7 +1033,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 else
                 {
                     // Create all the images
-                    CreateLabelImages(packageNode, currentPackage, (ThermalLabelType?) shipment.ThermalType);
+                    CreateLabelImages(packageNode, currentPackage, (ThermalLanguage?) shipment.ThermalType);
                 }
 
                 // Next package
@@ -1069,7 +1072,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Create the label images for the given package
         /// </summary>
-        private static void CreateLabelImages(XPathNavigator packageNode, UpsPackageEntity package, ThermalLabelType? labelType)
+        private static void CreateLabelImages(XPathNavigator packageNode, UpsPackageEntity package, ThermalLanguage? labelType)
         {
             string labelBase64 = XPathUtility.Evaluate(packageNode, "LabelImage/GraphicImage", "");
 

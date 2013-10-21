@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulators
 {
@@ -183,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
             shipmentEntity.FedEx.Shipment.ThermalType = shippingSettings.FedExThermalType;
 
             // Thermal type
-            labelSpecification.ImageType = GetFedExApiThermalType((ThermalLabelType)shippingSettings.FedExThermalType);
+            labelSpecification.ImageType = GetFedExApiThermalType((ThermalLanguage)shippingSettings.FedExThermalType);
 
             // Has a doc-tab
             if (shippingSettings.FedExThermalDocTab)
@@ -206,12 +207,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Shipping.Request.Manipulat
         /// <summary>
         /// Get the FedEx API value for our internal thermal type
         /// </summary>
-        private ShippingDocumentImageType GetFedExApiThermalType(ThermalLabelType thermalType)
+        private ShippingDocumentImageType GetFedExApiThermalType(ThermalLanguage thermalType)
         {
             switch (thermalType)
             {
-                case ThermalLabelType.EPL: return ShippingDocumentImageType.EPL2;
-                case ThermalLabelType.ZPL: return ShippingDocumentImageType.ZPLII;
+                case ThermalLanguage.EPL: return ShippingDocumentImageType.EPL2;
+                case ThermalLanguage.ZPL: return ShippingDocumentImageType.ZPLII;
             }
 
             throw new InvalidOperationException("Invalid FedEx thermal type " + thermalType);

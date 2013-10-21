@@ -8456,6 +8456,8 @@ namespace ShipWorks.Data.Model
 		ShipmentChargePostalCode,
 		///<summary>ShipmentChargeCountryCode. </summary>
 		ShipmentChargeCountryCode,
+		///<summary>UspsPackageID. </summary>
+		UspsPackageID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8614,6 +8616,8 @@ namespace ShipWorks.Data.Model
 		ShipmentChargePostalCode,
 		///<summary>ShipmentChargeCountryCode. </summary>
 		ShipmentChargeCountryCode,
+		///<summary>UspsPackageID. </summary>
+		UspsPackageID,
 		/// <summary></summary>
 		AmountOfFields
 	}

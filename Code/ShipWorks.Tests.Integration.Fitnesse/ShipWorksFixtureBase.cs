@@ -32,6 +32,7 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using ShipWorks.Users.Security;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 
 
@@ -390,11 +391,11 @@ namespace ShipWorks.Tests.Integration.Fitnesse
             }
             else if (LabelType.ToUpperInvariant() == "ZPL")
             {
-                shipment.ThermalType = (int) ThermalLabelType.ZPL;
+                shipment.ThermalType = (int) ThermalLanguage.ZPL;
             }
             else if (LabelType.ToUpperInvariant() == "EPL")
             {
-                shipment.ThermalType = (int) ThermalLabelType.EPL;
+                shipment.ThermalType = (int) ThermalLanguage.EPL;
             }
             
             //if (string.IsNullOrWhiteSpace(AccountID))

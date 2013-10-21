@@ -137,46 +137,49 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Update reference numbers to conform to WorldShip needs
         /// </summary>
-        /// <param name="shipment"></param>
         private static void UpdateReferenceNumbers(ShipmentEntity shipment)
         {
-            // Reference
-            shipment.Ups.ReferenceNumber = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber, (UpsServiceType)shipment.Ups.Service, string.Empty, shipment.Order.OrderNumber.ToString(), shipment.ShipmentID);
-            shipment.Ups.ReferenceNumber2 = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber2, (UpsServiceType)shipment.Ups.Service, shipment.Ups.CostCenter, shipment.Ups.ReferenceNumber, shipment.ShipmentID);
+            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
+            if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))
+            {
+                shipment.Ups.UspsPackageID = UpsApiCore.ProcessUspsTokenField(shipment.Ups.UspsPackageID, shipment.ShipmentID, string.Empty);
+                shipment.Ups.CostCenter = UpsApiCore.ProcessUspsTokenField(shipment.Ups.CostCenter, shipment.ShipmentID, string.Empty);
+
+                // Throw the same errors that online tools does if either are missing.
+                if (string.IsNullOrWhiteSpace(shipment.Ups.UspsPackageID))
+                {
+                    throw new UpsException("Missing or Invalid Mail Innovations Package Id.");
+                }
+                if (string.IsNullOrWhiteSpace(shipment.Ups.CostCenter))
+                {
+                    throw new UpsException("Missing or Invalid Mail Innovations Cost Center.");
+                }
+
+                // WorldShip still looks at Reference numbers for package id and cost ceneter, so update those here.
+                shipment.Ups.ReferenceNumber = shipment.Ups.UspsPackageID;
+                shipment.Ups.ReferenceNumber2 = shipment.Ups.CostCenter;
+            }
+            else
+            {
+                // Reference
+                shipment.Ups.ReferenceNumber = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber, shipment.Order.OrderNumber.ToString(), shipment.ShipmentID);
+                shipment.Ups.ReferenceNumber2 = FixReferenceNumberForWorldShip(shipment.Ups.ReferenceNumber2, shipment.Ups.ReferenceNumber, shipment.ShipmentID);
+            }
         }
 
         /// <summary>
         /// Returns the fixed version of the reference number that is valid for WorldShip
         /// </summary>
         /// <param name="referenceNumber">The reference number to fix.</param>
-        /// <param name="serviceType">The UPS service type of this shipment.</param>
-        /// <param name="costCenter">If provided and serviceType is MI, used as the reference number.</param>
         /// <param name="defaultValue">If the reference number ends up being blank, use this value instead.</param>
         /// <param name="shipmentID">ShipmentID used for processing tokens.</param>
-        private static string FixReferenceNumberForWorldShip(string referenceNumber, UpsServiceType serviceType, string costCenter, string defaultValue, long shipmentID)
+        private static string FixReferenceNumberForWorldShip(string referenceNumber, string defaultValue, long shipmentID)
         {
             // Set the max length to 35 for non-MI shipments
             int maxLength = 35;
 
             // Process the reference as a token first
             referenceNumber = TemplateTokenProcessor.ProcessTokens(referenceNumber.Trim(), shipmentID);
-
-            // WorldShip, for MI, doesn't allow non-alphanumerics for reference 1/2, so remove them
-            if (UpsUtility.IsUpsMiOrSurePostService(serviceType))
-            {
-                if (!string.IsNullOrWhiteSpace(costCenter))
-                {
-                    referenceNumber = costCenter;
-                }
-
-                referenceNumber = Regex.Replace(referenceNumber, "[^a-zA-Z0-9]", string.Empty);
-
-                // Fix the defaultValue in case we need to use it below.
-                defaultValue = Regex.Replace(defaultValue, "[^a-zA-Z0-9]", string.Empty);
-
-                // MI allows only 30 characters
-                maxLength = 30;
-            }
 
             // Also, ref 1/2 cannot be blank
             if (string.IsNullOrWhiteSpace(referenceNumber))
