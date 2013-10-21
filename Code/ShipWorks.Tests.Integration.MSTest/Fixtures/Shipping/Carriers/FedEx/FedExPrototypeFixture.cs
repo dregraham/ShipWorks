@@ -1019,18 +1019,50 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         private void SetShipmentSpecialServiceType(ShipmentEntity shipment, string serviceType)
         {
             if (!string.IsNullOrEmpty(serviceType))
-            switch (serviceType.ToLower())
             {
-                case "cod":
-                case "cod each package":
-                    shipment.FedEx.CodEnabled = true;
-                    break;
-                case "inside_delivery":
-                    shipment.FedEx.FreightInsideDelivery = true;
-                    break;
-                case "saturday_delivery":
-                    shipment.FedEx.SaturdayDelivery = true;
-                    break;
+                switch (serviceType.ToLower())
+                {
+                    case "cod":
+                    case "cod each package":
+                        shipment.FedEx.CodEnabled = true;
+                        break;
+                    case "inside_delivery":
+                        shipment.FedEx.FreightInsideDelivery = true;
+                        break;
+                    case "saturday_delivery":
+                        shipment.FedEx.SaturdayDelivery = true;
+                        break;
+                    case "future_day_shipment":
+                        // Just need to set the ship date to a date in the future; choose the next Monday
+                        // so that Saturday pickup/delivery doesn't factor in
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
+                        break;
+                }
+
+                if (shipment.FedEx.SaturdayDelivery)
+                {
+                    // We have a Saturday delivery, so update the ship date accordingly. We don't do this in
+                    // the switch statement above to avoid the case where a future delivery may overwrite the 
+                    // shipment date depending on the order the special service type values get assigned
+                    // (i.e. SpecialServiceType1 vs. SpecialServiceType2)
+                    if (shipment.FedEx.Service == (int)FedExServiceType.PriorityOvernight
+                        || shipment.FedEx.Service == (int)FedExServiceType.FirstFreight
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx1DayFreight)
+                    {
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
+                    }
+                    else  if (shipment.FedEx.Service == (int)FedExServiceType.FedEx2Day 
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayAM 
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayFreight)
+                    {
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Thursday);
+                    }
+                    else
+                    {
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Wednesday);
+                    }
+                
+                }
             }
         }
 
