@@ -173,6 +173,9 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.AppendLine("Title: " + GetIdentifier(ex));
             sb.AppendLine();
 
+            sb.AppendFormat("[[version]{0}[/version]]", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            sb.AppendLine();
+
             // User Comments
             sb.AppendLine("User Comments:");
             if (string.IsNullOrEmpty(comments)) 
@@ -405,7 +408,44 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.AppendFormat("CurrentCulture: {0}\r\n", Thread.CurrentThread.CurrentCulture);
             sb.AppendFormat("CurrentUICulture: {0}\r\n", Thread.CurrentThread.CurrentUICulture);
 
+            sb.AppendFormat("Machine Name: {0}\r\n", Environment.MachineName);
+            sb.AppendFormat("User Name: {0}\r\n", Environment.UserName);
+            sb.AppendFormat("User Domain Name: {0}\r\n", Environment.UserDomainName);
+            sb.AppendFormat("User Interactive: {0}\r\n", Environment.UserInteractive);
+
+            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", Program.ExecutionMode.GetType().Name));
+            AppendLineIgnoreException(() => sb.AppendFormat("Local IP Address: {0}\r\n", new NetworkUtility().GetIPAddress()));
+
+            if (SqlSession.IsConfigured)
+            {
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Instance Name: {0}\r\n", SqlSession.Current.Configuration.ServerInstance));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Database Name: {0}\r\n", SqlSession.Current.Configuration.DatabaseName));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Is LocalDB: {0}\r\n", SqlSession.Current.Configuration.IsLocalDb()));
+
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Machine Name: {0}\r\n", SqlSession.Current.GetServerMachineName()));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Version: {0}\r\n", SqlSession.Current.GetServerVersion()));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Is Local Server: {0}\r\n", SqlSession.Current.IsLocalServer()));
+            }
+            else
+            {
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Session reported that it is not configured."));
+            }
+
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Helper method to run code and ignore any exceptions if thrown.
+        /// </summary>
+        private static void AppendLineIgnoreException(Action method)
+        {
+            try
+            {
+                method();
+            }
+            catch 
+            {
+            }
         }
 
         /// <summary>
