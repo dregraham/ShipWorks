@@ -145,14 +145,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnPurchasePostage(object sender, EventArgs e)
         {
-            using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, accountInfo))
+            try
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, accountInfo))
                 {
-                    Initialize(account);
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        Initialize(account);
 
-                    postagePurchased = true;
+                        postagePurchased = true;
+                    }
                 }
+            }
+            catch (StampsException stampsException)
+            {
+                MessageHelper.ShowError(this, stampsException.Message);
             }
         }
     }

@@ -49,16 +49,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
         private void InitializeAccountInfo(StampsAccountEntity account, AccountInfo accountInfo)
         {
-            this.account = account;
-            this.accountInfo = accountInfo ?? StampsApiSession.GetAccountInfo(account);
+            // Define these here since they could be used in either inside or outside the try statement
+            string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
+            string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
 
-            if (this.accountInfo == null)
+            try
             {
-                string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
-                throw new StampsException(string.Format("ShipWorks could not retrieve your account information from {0}", carrierName));
-            }
+                this.account = account;
+                this.accountInfo = accountInfo ?? StampsApiSession.GetAccountInfo(account);
 
-            current.Text = this.accountInfo.PostageBalance.AvailablePostage.ToString("c");
+                if (this.accountInfo == null)
+                {
+                    throw new StampsException(exceptionMessage);
+                }
+
+                current.Text = this.accountInfo.PostageBalance.AvailablePostage.ToString("c");
+            }
+            catch (StampsApiException apiException)
+            {
+                log.Error(string.Format("ShipWorks could not retrieve account information from {0}. {1}", carrierName, apiException.Message), apiException);
+                throw new StampsException(exceptionMessage, apiException);
+            }
         }
 
         /// <summary>
