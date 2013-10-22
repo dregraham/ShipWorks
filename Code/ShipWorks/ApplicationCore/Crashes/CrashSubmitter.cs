@@ -1,11 +1,15 @@
 using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using System.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared;
 using System.Collections.Generic;
@@ -186,7 +190,7 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             AppendExceptionDetail(ex, sb, "");
 
-            sb.AppendLine();
+            AppendRunningSqlCommands(sb);
 
             // Other info
             sb.AppendLine("Environment:");
@@ -198,6 +202,17 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.Append(GetLoadedAssemblyList());
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Appends any running sql queries, if SqlSession is configured.
+        /// </summary>
+        private static void AppendRunningSqlCommands(StringBuilder sb)
+        {
+            if (SqlSession.IsConfigured)
+            {
+                sb.AppendLine(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
+            }
         }
 
         /// <summary>
@@ -286,6 +301,8 @@ namespace ShipWorks.ApplicationCore.Crashes
             StringBuilder sb = new StringBuilder();
 
             AppendExceptionDetail(ex, sb, "");
+
+            AppendRunningSqlCommands(sb);
 
             return sb.ToString();
         }

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Interapptive.Shared.Data;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
@@ -171,6 +172,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             else
             {
                 log.Fatal("Application Crashed", exception);
+
+                if (SqlSession.IsConfigured)
+                {
+                    log.Fatal(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
+                }
 
                 // If the splash is shown, the crash window will close it.
                 using (CrashWindow dlg = new CrashWindow(exception, guiThread, userEmail))

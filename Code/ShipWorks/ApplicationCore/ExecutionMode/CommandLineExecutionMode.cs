@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Data;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Connection;
@@ -113,6 +114,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             else
             {
                 log.Fatal("Application Crashed", exception);
+
+                if (SqlSession.IsConfigured)
+                {
+                    log.Fatal(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
+                }
             }
         }
     }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
+using Interapptive.Shared.Utility;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.IO;
@@ -300,6 +302,71 @@ namespace Interapptive.Shared.Data
             deleteCmd.ExecuteNonQuery();
 
             truncateWithDelete = true;
+        }
+
+        /// <summary>
+        /// Queries the database for running queries, and returns a pipe delimited CSV of the results.
+        /// </summary>
+        /// <returns>Pipe delimited CSV of running queries.</returns>
+        public static string GetRunningSqlCommands(string connectionString)
+        {
+            StringBuilder runningSqlCommands = new StringBuilder();
+            bool isFirstRow = true;
+
+            try
+            {
+                runningSqlCommands.AppendLine();
+                runningSqlCommands.AppendLine("SQL Commands that were running:");
+
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand sqlCommand = sqlConnection.CreateCommand())
+                    {
+                        sqlCommand.CommandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.RunningSqlQueries.sql");
+                        sqlConnection.Open();
+
+                        using (SqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                if (isFirstRow)
+                                {
+                                    DataTable schemaTable = sqlDataReader.GetSchemaTable();
+
+                                    runningSqlCommands.AppendLine();
+                                    for (int rowNumber = 0; rowNumber < schemaTable.Rows.Count; rowNumber++)
+                                    {
+                                        DataRow schemaRow = schemaTable.Rows[rowNumber];
+                                        runningSqlCommands.AppendFormat("{0}|", schemaRow[0]);
+                                    }
+                                    runningSqlCommands.AppendLine();
+
+                                    isFirstRow = false;
+                                }
+
+                                for (int columnNumber = 0; columnNumber < sqlDataReader.FieldCount; columnNumber++)
+                                {
+                                    string value = sqlDataReader[columnNumber].ToString().Replace(Environment.NewLine, " ");
+                                    runningSqlCommands.AppendFormat("{0}|", value);
+                                }
+
+                                runningSqlCommands.AppendLine();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Since this is method is really only for logging additional troubleshooting info, we don't want an exception here to interfere
+                // with the real exception that occurred, so we'll just log this exception, and carry on.
+                log.Error("An error occurred while attempting to determine sql commands that were running.", ex);
+                runningSqlCommands.AppendLine(ex.Message);
+            }
+
+            runningSqlCommands.AppendLine();
+
+            return runningSqlCommands.ToString();
         }
     }
 }
