@@ -30,13 +30,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
         public void Initialize()
         {
             shipmentEntity = new ShipmentEntity();
+            shipmentEntity.FedEx = new FedExShipmentEntity() { ReferencePO = "testPO" };
+
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
+
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
 
             fedExService = new Mock<IFedExServiceGateway>();
-            fedExService.Setup(s => s.GetRates(It.IsAny<RateRequest>())).Returns(new RateReply());
+            fedExService.Setup(s => s.GetRates(It.IsAny<RateRequest>(), shipmentEntity)).Returns(new RateReply());
 
             carrierResponse = new Mock<ICarrierResponse>();
 
@@ -99,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             ICarrierResponse response = testObject.Submit();
 
             // Verify that the close method was called using the test object's native request
-            fedExService.Verify(s => s.GetRates(testObject.NativeRequest as RateRequest), Times.Once());
+            fedExService.Verify(s => s.GetRates(testObject.NativeRequest as RateRequest, shipmentEntity), Times.Once());
         }
 
         [TestMethod]

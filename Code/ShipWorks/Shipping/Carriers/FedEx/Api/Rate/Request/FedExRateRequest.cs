@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
 
             // The request is ready to be sent to FedEx; we're sure the native request will be a RateRequest 
             // (since we assigned it as such in the constructor) so we can safely cast it here
-            RateReply nativeResponse = serviceGateway.GetRates(NativeRequest as RateRequest);
+            RateReply nativeResponse = serviceGateway.GetRates(NativeRequest as RateRequest, ShipmentEntity);
             return responseFactory.CreateRateResponse(nativeResponse, this);
         }
     }

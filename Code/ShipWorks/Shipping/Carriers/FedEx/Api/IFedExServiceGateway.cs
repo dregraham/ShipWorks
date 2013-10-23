@@ -1,3 +1,4 @@
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
@@ -18,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Intended to interact with the FedEx API to process a shipment.
         /// </summary>
-        /// <param name="processShipmentRequest">The process shipment request.</param>
         /// <returns>The ProcessShipmentReply recevied from FedEx.</returns>
         IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest);
 
@@ -79,8 +79,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for obtaining shipping rates.
         /// </summary>
         /// <param name="rateRequest">The rate request.</param>
+        /// <param name="shipmentEntity"></param>
         /// <returns>The RateReply received from FedEx.</returns>
-        RateReply GetRates(RateRequest rateRequest);
+        RateReply GetRates(RateRequest rateRequest, ShipmentEntity shipmentEntity);
 
         /// <summary>
         /// Intended to interact with the FedEx API for tracking a shipment.

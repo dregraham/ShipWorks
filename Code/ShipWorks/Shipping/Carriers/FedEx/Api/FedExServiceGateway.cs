@@ -3,6 +3,7 @@ using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -371,7 +372,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="rateRequest">The rate request.</param>
         /// <param name="shipmentEntity"></param>
         /// <returns>The RateReply received from FedEx.</returns>
-        public RateReply GetRates(RateRequest rateRequest)
+        public RateReply GetRates(RateRequest rateRequest, ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -391,7 +392,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     // If we are an Interapptive user, save for certification
                     if (InterapptiveOnly.IsInterapptiveUser)
                     {
-                        string uniqueId = Guid.NewGuid().ToString();
+                        string uniqueId = string.IsNullOrEmpty(shipmentEntity.FedEx.ReferencePO) ? Guid.NewGuid().ToString() : shipmentEntity.FedEx.ReferencePO;
                         FedExUtility.SaveCertificationRequestAndResponseFiles(uniqueId, "Rates", service.RawSoap);
                     }
                 }
