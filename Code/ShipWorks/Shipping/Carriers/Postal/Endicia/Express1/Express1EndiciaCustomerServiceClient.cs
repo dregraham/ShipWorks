@@ -251,52 +251,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         private static SecurityInfo GetSecurityInfo()
         {
             SecurityInfo security = new SecurityInfo();
-            security.RemoteIPAddress = GetPublicIP();
+            security.RemoteIPAddress = new NetworkUtility().GetPublicIPAddress();
             security.SessionID = ShipWorksSession.InstanceID.ToString();
             security.UserAgent = "ShipWorks";
 
             return security;
         }
 
-        /// <summary>
-        /// Gets the public ip address of this computer
-        /// </summary>
-        private static string GetPublicIP()
-        {
-            try
-            {
-                WebRequest request = WebRequest.Create("http://checkip.dyndns.org");
-
-                // if we don't get a near-immediate response, don't wait
-                request.Timeout = 1000;
-
-                using (WebResponse response = request.GetResponse())
-                {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        string text = reader.ReadToEnd();
-
-                        Regex addressRegex = new Regex(@"Current IP Address: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
-                        string ip = addressRegex.Match(text).Groups[1].Value;
-
-                        if (!String.IsNullOrEmpty(ip))
-                        {
-                            return ip;
-                        }
-                        else
-                        {
-                            return "Unknown";
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return "Unknown";
-            }
-        }
-
-       
         #region Refunds
 
         /// <summary>

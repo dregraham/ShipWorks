@@ -184,41 +184,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         {
             return new SecurityInfo
                 {
-                    RemoteIPAddress = GetPublicIP(),
+                    RemoteIPAddress = new NetworkUtility().GetPublicIPAddress(),
                     SessionID = ShipWorksSession.InstanceID.ToString(),
                     UserAgent = "ShipWorks"
                 };
-        }
-
-        /// <summary>
-        /// Gets the public ip address of this computer
-        /// </summary>
-        private static string GetPublicIP()
-        {
-            try
-            {
-                WebRequest request = WebRequest.Create("http://checkip.dyndns.org");
-
-                // if we don't get a near-immediate response, don't wait
-                request.Timeout = 1000;
-
-                using (WebResponse response = request.GetResponse())
-                {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        string text = reader.ReadToEnd();
-
-                        Regex addressRegex = new Regex(@"Current IP Address: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
-                        string ip = addressRegex.Match(text).Groups[1].Value;
-
-                        return !String.IsNullOrEmpty(ip) ? ip : "Unknown";
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return "Unknown";
-            }
         }
 
         /// <summary>
