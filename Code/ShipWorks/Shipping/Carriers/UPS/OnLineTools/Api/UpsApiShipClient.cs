@@ -381,6 +381,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             UpsShipmentChargeType upsShipmentChargeType = (UpsShipmentChargeType)ups.ShipmentChargeType;
 
+            if (UpsUtility.IsUpsMiService((UpsServiceType) ups.Service))
+            {
+                // No duties payor designation is allowed for MI
+                return;
+            }
+
             // Now write the tax/duty shipment charge
             xmlWriter.WriteStartElement("ShipmentCharge");
                 xmlWriter.WriteElementString("Type", "02");
