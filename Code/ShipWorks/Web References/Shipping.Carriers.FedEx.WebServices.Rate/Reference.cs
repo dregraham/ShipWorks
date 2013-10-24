@@ -606,6 +606,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         PAYOR_LIST_SHIPMENT,
         
         /// <remarks/>
+        PAYOR_RETAIL_PACKAGE,
+        
+        /// <remarks/>
+        PAYOR_RETAIL_SHIPMENT,
+        
+        /// <remarks/>
         PREFERRED_ACCOUNT_PACKAGE,
         
         /// <remarks/>
@@ -628,6 +634,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         
         /// <remarks/>
         RATED_LIST_SHIPMENT,
+        
+        /// <remarks/>
+        RATED_RETAIL_PACKAGE,
+        
+        /// <remarks/>
+        RATED_RETAIL_SHIPMENT,
     }
     
     /// <remarks/>
