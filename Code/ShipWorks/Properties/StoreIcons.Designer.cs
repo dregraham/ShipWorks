@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ShipWorks.Stores.Platforms {
+namespace ShipWorks.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShipWorks.Stores.Platforms.StoreIcons", typeof(StoreIcons).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShipWorks.Properties.StoreIcons", typeof(StoreIcons).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

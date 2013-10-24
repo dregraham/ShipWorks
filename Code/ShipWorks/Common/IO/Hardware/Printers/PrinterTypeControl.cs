@@ -104,10 +104,6 @@ namespace ShipWorks.Common.IO.Hardware.Printers
                 {
                     thermalLanguage.SelectedValue = dlg.ThermalLanguage;
                 }
-                else
-                {
-                    thermalLanguage.SelectedIndex = -1;
-                }
             }
         }
     }

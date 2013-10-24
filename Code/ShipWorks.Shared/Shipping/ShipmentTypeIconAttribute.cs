@@ -4,21 +4,21 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Stores
+namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Custom ImageResource attribute for icons for store types
+    /// Custom ImageResource attribute for icons for shipment types
     /// </summary>
     [AttributeUsage(AttributeTargets.All)]
-    public sealed class StoreTypeIconAttribute : ImageResourceAttribute
+    public sealed class ShipmentTypeIconAttribute : ImageResourceAttribute
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreTypeIconAttribute(string resourceKey)
+        public ShipmentTypeIconAttribute(string resourceKey)
             : base(resourceKey)
         {
-            ResourceSet = "ShipWorks.Properties.StoreIcons";
+            ResourceSet = "ShipWorks.Properties.ShippingIcons";
         }
     }
 }

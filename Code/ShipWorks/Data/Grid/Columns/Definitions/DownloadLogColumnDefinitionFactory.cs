@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {

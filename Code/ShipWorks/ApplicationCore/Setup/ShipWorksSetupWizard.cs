@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Utility;
 using ShipWorks.Properties;
 using ShipWorks.Stores;
 using ShipWorks.Templates.Media;
+using ShipWorks.UI.Controls;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -33,7 +35,16 @@ namespace ShipWorks.ApplicationCore.Setup
             InitializeComponent();
         }
 
-        #region Opening
+        /// <summary>
+        /// Initialization
+        /// </summary>
+        private void OnLoad(object sender, EventArgs e)
+        {
+            LoadStoreTypes();
+            LoadShippingCarriers();
+        }
+
+        #region Wizard Creation
 
         /// <summary>
         /// Run the setup wizard.  Will return false if the user doesn't have permissions, the user canceled, or if the Wizard was not able to run because
@@ -183,6 +194,47 @@ namespace ShipWorks.ApplicationCore.Setup
             {
                 picturePackingSlip.Image = (labelPrinterType.Technology == PrinterTechnology.Thermal) ? Resources.thermal_roll_w_shipping_label : Resources.document_plain_shipping_labels;
             }
+        }
+
+        #endregion
+
+        #region Online Store
+
+        /// <summary>
+        /// Load the list of store types to choose from
+        /// </summary>
+        private void LoadStoreTypes()
+        {
+            comboStoreType.Items.Clear();
+            comboStoreType.Items.Add("Choose...");
+
+            // Add each store type as a radio
+            foreach (StoreType storeType in StoreTypeManager.StoreTypes)
+            {
+                comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
+            }
+
+            comboStoreType.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        /// Changing the option to connect to an online store now or later
+        /// </summary>
+        private void OnChangeStoreOption(object sender, EventArgs e)
+        {
+            comboStoreType.Enabled = radioStoreConnect.Checked;
+        }
+
+        #endregion
+
+        #region Carriers
+
+        /// <summary>
+        /// Load all of the shipping carriers into the combo box
+        /// </summary>
+        private void LoadShippingCarriers()
+        {
+
         }
 
         #endregion

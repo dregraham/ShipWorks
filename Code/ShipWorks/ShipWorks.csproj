@@ -889,6 +889,16 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Filters\Content\Conditions\ChildQuantityCondition.cs" />
+    <Compile Include="Properties\ShippingIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShippingIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\StoreIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\CreatePendingShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\IFedExNativeShipmentRequest.cs" />
@@ -2145,11 +2155,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.Designer.cs">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\StoreIcons.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreIcons.resx</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\IApiQueryProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\MSAccessQueryProvider.cs" />
@@ -6703,6 +6708,11 @@
       <SubType>Designer</SubType>
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\ShippingIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.resx">
       <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7033,8 +7043,9 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\StoreIcons.resx">
+    <EmbeddedResource Include="Properties\StoreIcons.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>StoreIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\CoreExtensions\Actions\ThreeDCartOrderUpdateTaskEditor.resx">
@@ -10231,6 +10242,16 @@
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
     <None Include="Resources\ship2.png" />
+    <None Include="Resources\Shipping\Icons\endicia.png" />
+    <None Include="Resources\Shipping\Icons\express1.png" />
+    <None Include="Resources\Shipping\Icons\fedex.png" />
+    <None Include="Resources\Shipping\Icons\iparcel.png" />
+    <None Include="Resources\Shipping\Icons\ontrac.png" />
+    <None Include="Resources\Shipping\Icons\other.png" />
+    <None Include="Resources\Shipping\Icons\stamps.png" />
+    <None Include="Resources\Shipping\Icons\ups.png" />
+    <None Include="Resources\Shipping\Icons\usps.png" />
+    <None Include="Resources\Shipping\Icons\dhl.png" />
     <Content Include="Resources\shipworks.ico" />
     <EmbeddedResource Include="Templates\Distribution\History.xml" />
     <None Include="Resources\template_snippet16.png" />
@@ -10314,6 +10335,9 @@
     <None Include="Resources\thermal_roll.png" />
     <None Include="Resources\thermal_roll_w_packing_slip.png" />
     <None Include="Resources\thermal_roll_w_shipping_label.png" />
+    <None Include="Resources\truck_blue.png" />
+    <None Include="Resources\shoppingcart2.png" />
+    <None Include="Resources\truck_blue1.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -12090,7 +12114,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

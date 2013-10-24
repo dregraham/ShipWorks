@@ -3423,6 +3423,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap shoppingcart {
+            get {
+                object obj = ResourceManager.GetObject("shoppingcart", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap shoppingcart_full {
             get {
                 object obj = ResourceManager.GetObject("shoppingcart_full", resourceCulture);
@@ -4056,6 +4066,26 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap thermal_roll_w_shipping_label {
             get {
                 object obj = ResourceManager.GetObject("thermal_roll_w_shipping_label", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap truck_blue {
+            get {
+                object obj = ResourceManager.GetObject("truck_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap truck_blue1 {
+            get {
+                object obj = ResourceManager.GetObject("truck_blue1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

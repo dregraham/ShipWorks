@@ -22,6 +22,7 @@ using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Stores.Platforms;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
