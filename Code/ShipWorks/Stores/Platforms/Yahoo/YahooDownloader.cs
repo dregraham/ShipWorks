@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
@@ -51,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             try
             {
-                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
+                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((YahooStoreEntity)Store).YahooEmailAccountID);
                 if (emailAccount == null)
                 {
                     throw new DownloadException("The email account configured for downloading has been deleted.");
@@ -86,6 +87,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                     // Must be called to finalize delete
                     popClient.Disconnect();
                 }
+            }
+            catch (WebException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
             }
             catch (EmailLogonException ex)
             {
