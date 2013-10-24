@@ -555,6 +555,12 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.Designer.cs">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Setup\ShipWorksSetupManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
@@ -6944,6 +6950,9 @@
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormDlg.resx">
       <DependentUpon>ScanFormDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -10207,6 +10216,8 @@
     <None Include="Resources\document_plain_packing_slip.png" />
     <None Include="Resources\document_plain_packing_slip1.png" />
     <None Include="Resources\document_plain_shipping_labels.png" />
+    <None Include="Resources\hand_thumb_up.png" />
+    <None Include="Resources\hand_thumb_up1.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10227,6 +10238,7 @@
     <None Include="Resources\money_envelope.png" />
     <None Include="Resources\monitor.png" />
     <None Include="Resources\mouse.png" />
+    <None Include="Resources\nav_down_green1.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />

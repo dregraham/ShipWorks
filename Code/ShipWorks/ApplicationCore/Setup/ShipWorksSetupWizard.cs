@@ -169,35 +169,6 @@ namespace ShipWorks.ApplicationCore.Setup
 
         #endregion
 
-        #region Packing Slips
-
-        /// <summary>
-        /// Stepping into the packing slips page
-        /// </summary>
-        private void OnSteppingIntoPackingSlips(object sender, WizardSteppingIntoEventArgs e)
-        {
-            OnChangeIncludePackingSlip(null, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Changing whether to include packing slips with each shipping label
-        /// </summary>
-        private void OnChangeIncludePackingSlip(object sender, EventArgs e)
-        {
-            // Packing slips included
-            if (includePackingSlip.Checked)
-            {
-                picturePackingSlip.Image = (labelPrinterType.Technology == PrinterTechnology.Thermal) ? Resources.thermal_roll_w_packing_slip : Resources.document_plain_packing_slip;
-            }
-            // No packing slip
-            else
-            {
-                picturePackingSlip.Image = (labelPrinterType.Technology == PrinterTechnology.Thermal) ? Resources.thermal_roll_w_shipping_label : Resources.document_plain_shipping_labels;
-            }
-        }
-
-        #endregion
-
         #region Online Store
 
         /// <summary>
@@ -225,14 +196,10 @@ namespace ShipWorks.ApplicationCore.Setup
             comboStoreType.Enabled = radioStoreConnect.Checked;
         }
 
-        #endregion
-
-        #region Carriers
-
         /// <summary>
-        /// Load all of the shipping carriers into the combo box
+        /// Stepping next from the online store page
         /// </summary>
-        private void LoadShippingCarriers()
+        private void OnStepNextOnlineStore(object sender, WizardStepEventArgs e)
         {
 
         }

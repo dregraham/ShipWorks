@@ -1973,6 +1973,26 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap hand_thumb_up {
+            get {
+                object obj = ResourceManager.GetObject("hand_thumb_up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap hand_thumb_up1 {
+            get {
+                object obj = ResourceManager.GetObject("hand_thumb_up1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap headset {
             get {
                 object obj = ResourceManager.GetObject("headset", resourceCulture);
@@ -2686,6 +2706,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap myFilters24 {
             get {
                 object obj = ResourceManager.GetObject("myFilters24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap nav_down_green {
+            get {
+                object obj = ResourceManager.GetObject("nav_down_green", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
