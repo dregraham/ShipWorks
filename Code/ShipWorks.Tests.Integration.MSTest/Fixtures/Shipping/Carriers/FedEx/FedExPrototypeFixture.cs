@@ -243,6 +243,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
         public string SaveLabel { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether save label is "true"
+        /// </summary>
+        public bool IsSaveLabel
+        {
+            get
+            {
+                return (String.IsNullOrWhiteSpace(SaveLabel) || !SaveLabel.Equals("true", StringComparison.InvariantCultureIgnoreCase));
+            }
+        }
 
         /// <summary>
         /// Determines if a special key combination is active.  Can be used
@@ -308,7 +318,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
         private void CleanupLabel()
         {
-            if (String.IsNullOrWhiteSpace(SaveLabel) || !SaveLabel.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            if (IsSaveLabel)
             {
                 string certificationDirectory = LogSession.LogFolder + "\\FedExCertification\\";
 

@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
             try
             {
-                if (PopulateTestObject(testObject, FedExSmartPostFixture.SmartPostMapping))
+                if (PopulateTestObject(testObject, FedExSmartPostFixture.SmartPostMapping) && testObject.IsSaveLabel)
                 {
                     testObject.Ship();
                 }

@@ -9,6 +9,9 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
     {
         private const string fedExTestAccountNumber = "603153529";
 
+        private bool justLabels = true;
+
+
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
@@ -18,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             {
                 FedExCanadaExpressDomesticFixture testObject = new FedExCanadaExpressDomesticFixture();
 
-                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping))
+                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping) && testObject.IsSaveLabel)
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
@@ -50,7 +53,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             FedExCAGroundDomesticInternational testObject = new FedExCAGroundDomesticInternational();
             try
             {
-                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping))
+                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping) && testObject.IsSaveLabel)
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
 
@@ -79,7 +82,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
 
             try
             {
-                if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping))
+                if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping) && testObject.IsSaveLabel)
                 {
                     Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
