@@ -18,6 +18,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
     public class GridEnumDisplayType<T> : GridColumnDisplayType where T: struct
     {
         EnumSortMethod sortMethod;
+        bool showIcon = true;
 
         /// <summary>
         /// Default constructor
@@ -25,6 +26,20 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         public GridEnumDisplayType(EnumSortMethod sortMethod)
         {
             this.sortMethod = sortMethod;
+        }
+
+        /// <summary>
+        /// Create the editor to use
+        /// </summary>
+        public override GridColumnDisplayEditor CreateEditor()
+        {
+            // Only show our specific editor (which allows for image on\off) if there are any images present for this enum
+            if (EnumHelper.GetEnumList<T>().Any(e => e.Image != null))
+            {
+                return new GridEnumDisplayEditor<T>(this);
+            }
+
+            return base.CreateEditor();
         }
 
         /// <summary>
@@ -73,6 +88,15 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         }
 
         /// <summary>
+        /// Indicates if the icon representing the store type should be displayed
+        /// </summary>
+        public bool ShowIcon
+        {
+            get { return showIcon; }
+            set { showIcon = value; }
+        }
+
+        /// <summary>
         /// Get the text to display for the given value
         /// </summary>
         protected override string GetDisplayText(object value)
@@ -90,7 +114,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// </summary>
         protected override Image GetDisplayImage(object value)
         {
-            if (value == null)
+            if (value == null || !showIcon)
             {
                 return null;
             }
