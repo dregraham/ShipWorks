@@ -117,11 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label4.Text" xml:space="preserve">
-    <value>ShipWorks has already started downloading your orders, and will automatically do so every 15 minutes.
-
-Anytime you want to immediately download the latest orders from your online store, just click the "Download" button (shown at left).</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pictureStandardPrinterHelp.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -135,5 +130,10 @@ Anytime you want to immediately download the latest orders from your online stor
         4l6AeLSugtsMv08ExTIhgp3CpRTgkZa15L0AOwzqE4bHglojQdF0NSjYTNWkoG2IVXWe9sEF+MZgc2DS
         a29BW+lKUICXTeTPuXW/uTrFufgNjfHjRfn+0H/hb4lEvgB6cj6uKPuMAwAAAABJRU5ErkJggg==
 </value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>ShipWorks has already started downloading your orders, and will automatically do so every 15 minutes.
+
+Anytime you want to immediately download the latest orders from your online store, just click the "Download" button (shown at left).</value>
   </data>
 </root>

@@ -41,7 +41,6 @@ namespace ShipWorks.ApplicationCore.Setup
         private void OnLoad(object sender, EventArgs e)
         {
             LoadStoreTypes();
-            LoadShippingCarriers();
         }
 
         #region Wizard Creation

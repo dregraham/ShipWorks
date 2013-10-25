@@ -47,6 +47,7 @@
             this.pictureLabelPrinter = new System.Windows.Forms.PictureBox();
             this.printerTypeControl = new ShipWorks.Common.IO.Hardware.Printers.PrinterTypeControl();
             this.wizardPageFinish = new ShipWorks.UI.Wizard.WizardPage();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -66,16 +66,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureStandardPrinter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureLabelPrinter)).BeginInit();
             this.wizardPageFinish.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(380, 343);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -87,7 +85,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinish);
+            this.mainPanel.Controls.Add(this.wizardPageOnlineStore);
             this.mainPanel.Size = new System.Drawing.Size(548, 271);
             // 
             // etchBottom
@@ -130,9 +128,9 @@
             this.labelSampleOrderHelp.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelSampleOrderHelp.Location = new System.Drawing.Point(96, 104);
             this.labelSampleOrderHelp.Name = "labelSampleOrderHelp";
-            this.labelSampleOrderHelp.Size = new System.Drawing.Size(217, 13);
+            this.labelSampleOrderHelp.Size = new System.Drawing.Size(328, 13);
             this.labelSampleOrderHelp.TabIndex = 55;
-            this.labelSampleOrderHelp.Text = "(Play around now, and get connected later)";
+            this.labelSampleOrderHelp.Text = "(We\'ll make up some fake orders, and you can fake ship them too.)";
             // 
             // radioStoreSamples
             // 
@@ -140,9 +138,9 @@
             this.radioStoreSamples.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioStoreSamples.Location = new System.Drawing.Point(78, 82);
             this.radioStoreSamples.Name = "radioStoreSamples";
-            this.radioStoreSamples.Size = new System.Drawing.Size(252, 17);
+            this.radioStoreSamples.Size = new System.Drawing.Size(219, 17);
             this.radioStoreSamples.TabIndex = 53;
-            this.radioStoreSamples.Text = "Just create some sample orders for now";
+            this.radioStoreSamples.Text = "Create a sample store to play with";
             this.radioStoreSamples.UseVisualStyleBackColor = true;
             this.radioStoreSamples.Click += new System.EventHandler(this.OnChangeStoreOption);
             // 
@@ -166,9 +164,9 @@
             this.labelStoreTypeHelp.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelStoreTypeHelp.Location = new System.Drawing.Point(95, 56);
             this.labelStoreTypeHelp.Name = "labelStoreTypeHelp";
-            this.labelStoreTypeHelp.Size = new System.Drawing.Size(344, 13);
+            this.labelStoreTypeHelp.Size = new System.Drawing.Size(281, 13);
             this.labelStoreTypeHelp.TabIndex = 49;
-            this.labelStoreTypeHelp.Text = "(If you have multiple stores just pick one. It\'s easy to add more later.)";
+            this.labelStoreTypeHelp.Text = "(If you need to add more than one, it\'s easy to do later.)";
             // 
             // comboStoreType
             // 
@@ -326,6 +324,16 @@
             this.wizardPageFinish.TabIndex = 0;
             this.wizardPageFinish.Title = "ShipWorks Setup";
             // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::ShipWorks.Properties.Resources.box_closed32;
+            this.pictureBox3.Location = new System.Drawing.Point(65, 165);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox3.TabIndex = 8;
+            this.pictureBox3.TabStop = false;
+            // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::ShipWorks.Properties.Resources.nav_down_green;
@@ -404,22 +412,11 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = global::ShipWorks.Properties.Resources.box_closed32;
-            this.pictureBox3.Location = new System.Drawing.Point(65, 165);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox3.TabIndex = 8;
-            this.pictureBox3.TabStop = false;
-            // 
             // ShipWorksSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 378);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximumSize = new System.Drawing.Size(564, 416);
             this.MinimumSize = new System.Drawing.Size(564, 416);
@@ -446,9 +443,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureLabelPrinter)).EndInit();
             this.wizardPageFinish.ResumeLayout(false);
             this.wizardPageFinish.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
 
         }
