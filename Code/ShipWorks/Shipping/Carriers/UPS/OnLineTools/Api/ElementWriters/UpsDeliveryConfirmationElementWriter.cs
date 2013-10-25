@@ -28,13 +28,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // From UPS Tech Support:  Delivery confirmation can be on the shipment or package level as follows:
             // ShipmentServiceOptions - international shipment (Canada to US) or (US to Canada) => OriginCountryCode != ShipCountryCode
             // PackageServiceOptions - domestic shipment (Canada to Canada) or (US to US)       => OriginCountryCode == ShipCountryCode
+            // /ShipmentConfirmRequest/Shipment/Package/PackageServiceOptions/DeliveryConfirmation/DCISType
+            // Valid values are:
+            // 1 - Delivery Confirmation
+            // 2 - Delivery Confirmation Signature Required 
+            // 3 - Delivery Confirmation Adult Signature Required
+            // 4 - USPS Delivery Confirmation
             if (upsShipment.Shipment.OriginCountryCode == upsShipment.Shipment.ShipCountryCode)
             {
                 // Delivery confirmation
                 if (upsShipment.DeliveryConfirmation != (int)UpsDeliveryConfirmationType.None)
                 {
                     xmlWriter.WriteStartElement("DeliveryConfirmation");
-                    xmlWriter.WriteElementString("DCISType", UpsApiCore.GetDeliveryConfirmationCode((UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation));
+                    xmlWriter.WriteElementString("DCISType", UpsApiCore.GetPackageLevelDeliveryConfirmationCode((UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation));
                     xmlWriter.WriteEndElement();
                 }
             }
@@ -48,13 +54,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // From UPS Tech Support:  Delivery confirmation can be on the shipment or package level as follows:
             // ShipmentServiceOptions - international shipment (Canada to US) or (US to Canada) => OriginCountryCode != ShipCountryCode
             // PackageServiceOptions - domestic shipment (Canada to Canada) or (US to US)       => OriginCountryCode == ShipCountryCode
+            // Valid values are: 
+            // 1 - Delivery Confirmation Signature Required 
+            // 2 - Delivery Confirmation Adult Signature Required
             if (upsShipment.Shipment.OriginCountryCode != upsShipment.Shipment.ShipCountryCode)
             {
                 // Delivery confirmation
-                if (upsShipment.DeliveryConfirmation != (int)UpsDeliveryConfirmationType.None)
+                UpsDeliveryConfirmationType upsDeliveryConfirmationType = (UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation;
+                if (upsDeliveryConfirmationType == UpsDeliveryConfirmationType.AdultSignature || upsDeliveryConfirmationType == UpsDeliveryConfirmationType.Signature)
                 {
                     xmlWriter.WriteStartElement("DeliveryConfirmation");
-                    xmlWriter.WriteElementString("DCISType", UpsApiCore.GetDeliveryConfirmationCode((UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation));
+                    xmlWriter.WriteElementString("DCISType", UpsApiCore.GetShipmentLevelDeliveryConfirmationCode((UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation));
                     xmlWriter.WriteEndElement();
                 }
             }

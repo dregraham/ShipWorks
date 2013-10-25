@@ -389,11 +389,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         void OnChangeService(object sender, EventArgs e)
         {
-            if (!service.MultiValued && service.SelectedValue != null)
-            {
-                UpdateBillingSectionDisplay();
-            }
-
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
             UpdateCodVisibility();
@@ -401,6 +396,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             
             SaveToShipments();
             RaiseShipmentServiceChanged();
+
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                UpdateBillingSectionDisplay();
+            }
         }
 
         /// <summary>
@@ -670,7 +670,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // after LoadShipmentDetails.
             bool hasCustoms = LoadedShipments != null ? LoadedShipments.Any(s => CustomsManager.IsCustomsRequired(s)) : false;
 
-            if (hasCustoms)
+            // We don't want to show duties/payor for MI or SurePost, so see if we have any shipments that AREN'T either of those two.
+            bool hasNonMiOrSurePost = LoadedShipments != null ? LoadedShipments.Any(s => !UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)s.Ups.Service)) : false;
+
+            if (hasCustoms && hasNonMiOrSurePost)
             {
                 panelPayorDuties.Visible = true;
                 if (payorDuties.MultiValued)

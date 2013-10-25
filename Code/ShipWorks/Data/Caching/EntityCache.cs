@@ -253,7 +253,16 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void Remove(long entityID)
         {
-            cache.Remove(GetCacheKey(entityID));
+            try
+            {
+                cache.Remove(GetCacheKey(entityID));
+            }
+            catch (NullReferenceException)
+            {
+                // Just log the NullReferenceException because if cache is null, we wouldn't need
+                // to worry about removing the entity anyway. This is in response to FogBugz #253969
+                log.Warn("An entity was requested to be removed, but the cache was null");
+            }
         }
 
         /// <summary>

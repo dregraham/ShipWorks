@@ -406,14 +406,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// </summary>
         private void OnClickBuyPostage(object sender, EventArgs e)
         {
-            if (registration.AccountId.HasValue)
+            try
             {
-                // Show the Postage Purchasing dialog
-                postageDialog.ShowDialog(this, registration.AccountId.Value);
+                if (registration.AccountId.HasValue)
+                {
+                    // Show the Postage Purchasing dialog
+                    postageDialog.ShowDialog(this, registration.AccountId.Value);
+                }
+                else
+                {
+                    MessageHelper.ShowError(this, "An account needs to be created before trying to buy postage.");
+                }
             }
-            else
+            catch (StampsException stampsException)
             {
-                MessageHelper.ShowError(this, "An account needs to be created before trying to buy postage.");
+                // This could be refactored to catch a more general type of "purchase postage" exception
+                // when Endicia is incorporated into this setup wizard
+                MessageHelper.ShowError(this, stampsException.Message);
             }
         }
 

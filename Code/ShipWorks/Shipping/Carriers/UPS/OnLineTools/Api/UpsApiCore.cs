@@ -364,7 +364,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get the code to use for the given delivery confirmation type
         /// </summary>
-        public static string GetDeliveryConfirmationCode(UpsDeliveryConfirmationType confirmationType)
+        public static string GetShipmentLevelDeliveryConfirmationCode(UpsDeliveryConfirmationType confirmationType)
+        {
+            switch (confirmationType)
+            {
+                case UpsDeliveryConfirmationType.NoSignature: return "";
+                case UpsDeliveryConfirmationType.Signature: return "1";
+                case UpsDeliveryConfirmationType.AdultSignature: return "2";
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation: return "";
+            }
+
+            throw new InvalidOperationException("Invalid UPS DC Type: " + confirmationType);
+        }
+
+        /// <summary>
+        /// Get the code to use for the given delivery confirmation type
+        /// </summary>
+        public static string GetPackageLevelDeliveryConfirmationCode(UpsDeliveryConfirmationType confirmationType)
         {
             switch (confirmationType)
             {

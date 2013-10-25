@@ -283,6 +283,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private void LoadOrderItems(NetworkSolutionsOrderEntity order, OrderType nsOrder)
         {
+            // Don't crash just because there are no items in this order
+            if (nsOrder.Invoice.LineItemList == null)
+            {
+                return;
+            }
+
             // go through and find all line items on the order
             foreach (LineItemType lineItem in nsOrder.Invoice.LineItemList)
             {
