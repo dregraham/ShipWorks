@@ -872,14 +872,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         string errorMessage = response.ErrorMessage;
 
-                        // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
-                        // an authentication error message in the response; do some fuzzy logic in case there are other errors when 
-                        // rates are not found for cubic packages
-                        if (response.Status == 55001 &&
-                            response.ErrorMessage.ToUpperInvariant().Contains("CUBIC") &&
-                            !response.ErrorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
+                        if (response.Status == 55001)
                         {
-                            errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
+                            // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
+                            // an authentication error message in the response; do some fuzzy logic to determine what the error actually is
+                            if (response.ErrorMessage.ToUpperInvariant().Contains("CUBIC") && !response.ErrorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
+                            {
+                                // The error is in reference to cubic packaging; use our own error message, here so we can 
+                                // direct the user to contact Express1 to try to reduce ShipWorks call volume
+                                errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
+                            }
+                            else if (response.ErrorMessage.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
+                            {
+                                // Use an error message that is slightly more informative, to let the user know which of their accounts
+                                // had the problem in the event that they have multiple accounts for Endicia and/or have an Express1 account
+                                errorMessage = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.", 
+                                    account.EndiciaReseller == 0 ? "Endicia" : "Express1",
+                                    account.AccountNumber,
+                                    Environment.NewLine);
+
+                            }
                         }
 
                         throw new EndiciaApiException(response.Status, errorMessage);
