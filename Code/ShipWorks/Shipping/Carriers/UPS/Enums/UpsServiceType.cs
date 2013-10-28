@@ -84,16 +84,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         [Description("UPS Expedited®")]
         UpsExpedited = 24,
 
-        [Description("UPS 3 Day Select®")]
+        [Description("UPS 3 Day Select® (Canada)")]
         Ups3DaySelectFromCanada = 25,
 
-        [Description("UPS Worldwide Express Saver™")]
+        [Description("UPS Worldwide Express Saver™ (Canada)")]
         UpsCaWorldWideExpressSaver=26,
 
-        [Description("UPS Worldwide Express Plus™")]
+        [Description("UPS Worldwide Express Plus™ (Canada)")]
         UpsCaWorldWideExpressPlus=27,
 
-        [Description("UPS Worldwide Express™")]
+        [Description("UPS Worldwide Express™ (Canada)")]
         UpsCaWorldWideExpress=28,
 
         [Description("UPS Second Day Air Intra")]
