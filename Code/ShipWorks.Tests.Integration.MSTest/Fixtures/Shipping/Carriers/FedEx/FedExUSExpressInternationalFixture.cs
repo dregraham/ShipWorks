@@ -270,6 +270,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.ProperShippingName", PropertyName = "HazardProperShippingName", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Amount", PropertyName = "HazardQuantityAmount", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Units", PropertyName = "HazardQuantityUnits", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.NumberOfContainers", PropertyName = "DangerCounts", SpreadsheetColumnIndex = -1 });
+
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.SpecialServiceTypes1", PropertyName = "PackageLineItemSpecialServiceType1", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.SpecialServiceTypes2", PropertyName = "PackageLineItemSpecialServiceType2", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.SpecialServiceTypes3", PropertyName = "PackageLineItemSpecialServiceType3", SpreadsheetColumnIndex = -1 });
+
                     //columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "", PropertyName = "DangerCounts", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.EmergencyContactNumber", PropertyName = "DangerEmergencyContactNumber", SpreadsheetColumnIndex = -1 });
                     //columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "", PropertyName = "DangerOfferor", SpreadsheetColumnIndex = -1 });
@@ -280,7 +286,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.CargoAircraftOnly", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.PackingInstructions", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.SequenceNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
-                    // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.NumberOfContainers", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Options", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.ContactName", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     // columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.Place", PropertyName = "", SpreadsheetColumnIndex = -1 });
@@ -312,6 +317,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             SetupExportDetail(shipment);
 
             ApplyDangerousGoods(shipment);
+
+            SetPriortyAlertData(shipment);
 
             SetupRecipientIdentification(shipment);
 
@@ -493,13 +500,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         private void ApplyDangerousGoods(ShipmentEntity shipment)
         {
-            if (!string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail))
+            if (!string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail) || !string.IsNullOrWhiteSpace(DangerousGoodsAccessibility))
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
                     package.DangerousGoodsType = (int)GetDangerousGoodsMaterialType();
 
-                    if (package.DangerousGoodsType == (int)FedExDangerousGoodsMaterialType.HazardousMaterials)
+                    if (package.DangerousGoodsType == (int)FedExDangerousGoodsMaterialType.HazardousMaterials || !string.IsNullOrEmpty(HazardProperShippingName))
                     {
                         package.HazardousMaterialProperName = HazardProperShippingName;
                         package.HazardousMaterialClass = HazardClass;
@@ -522,6 +529,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
         private FedExDangerousGoodsMaterialType GetDangerousGoodsMaterialType()
         {
+            if (string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail))
+            {
+                return FedExDangerousGoodsMaterialType.NotApplicable;
+            }
+
             switch (PackageDangerousGoodsDetail.ToLower())
             {
                 case ("hazardous_materials"): return FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -549,6 +561,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     unitInt = (int)FedExHazardousMaterialsQuantityUnits.Milliliters;
                     break;
 
+                case "l":
+                    unitInt = (int)FedExHazardousMaterialsQuantityUnits.Liters;
+                    break;
+                    
                 default:
                     throw new ArgumentException(string.Format("Invalid Unit {0}", unit), unit);
             }

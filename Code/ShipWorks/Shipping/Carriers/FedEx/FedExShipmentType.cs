@@ -374,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
-            profile.FedEx.Signature = (int) FedExSignatureType.NoSignature;
+            profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
             profile.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             profile.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
             profile.FedEx.NonStandardContainer = false;

@@ -255,7 +255,7 @@ namespace ShipWorks.Tests.Integration.Fitnesse
                         break;
 
                     case "":
-                        signatureType = 0;
+                        signatureType = (int)FedExSignatureType.ServiceDefault;
                         break;
 
                     default:

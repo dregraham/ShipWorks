@@ -250,7 +250,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         {
             get
             {
-                return (String.IsNullOrWhiteSpace(SaveLabel) || !SaveLabel.Equals("true", StringComparison.InvariantCultureIgnoreCase));
+                return (String.IsNullOrWhiteSpace(SaveLabel) || SaveLabel.Equals("true", StringComparison.InvariantCultureIgnoreCase));
             }
         }
 
@@ -318,7 +318,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
         private void CleanupLabel()
         {
-            if (IsSaveLabel)
+            if (!IsSaveLabel)
             {
                 string certificationDirectory = LogSession.LogFolder + "\\FedExCertification\\";
 
@@ -824,7 +824,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         /// Sets the priorty alert data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        private void SetPriortyAlertData(ShipmentEntity shipment)
+        protected void SetPriortyAlertData(ShipmentEntity shipment)
         {
             if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT")
             {
@@ -977,6 +977,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                         shipment.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
                         break;
                 }
+            }
+            else
+            {
+                shipment.FedEx.Signature = (int)FedExSignatureType.ServiceDefault;
             }
         }
 

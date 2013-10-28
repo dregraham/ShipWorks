@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                         break;
 
                     case "":
-                        signatureType = 0;
+                        signatureType = (int) FedExSignatureType.ServiceDefault;
                         break;
 
                     default:

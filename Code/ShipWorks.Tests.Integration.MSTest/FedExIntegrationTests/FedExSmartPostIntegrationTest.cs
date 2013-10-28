@@ -10,6 +10,8 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
 
         //note: smartpost gets it account number from the spreadsheet.
 
+        private const bool justLabels = false;
+
         [DataSource("DataSource_Ship_FedExSmartPost")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
@@ -18,7 +20,8 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
             try
             {
-                if (PopulateTestObject(testObject, FedExSmartPostFixture.SmartPostMapping) && testObject.IsSaveLabel)
+                if (PopulateTestObject(testObject, FedExSmartPostFixture.SmartPostMapping) &&
+                    (testObject.IsSaveLabel || justLabels))
                 {
                     testObject.Ship();
                 }

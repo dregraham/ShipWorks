@@ -9,8 +9,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
     {
         private const string fedExTestAccountNumber = "603153529";
 
-        private bool justLabels = true;
-
+        private const bool justLabels = true;
 
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
@@ -19,12 +18,13 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         {
             try
             {
-                FedExCanadaExpressDomesticFixture testObject = new FedExCanadaExpressDomesticFixture();
+                var testObject = new FedExCanadaExpressDomesticFixture();
 
-                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping) && testObject.IsSaveLabel)
+                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping) &&
+                    (testObject.IsSaveLabel || justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
                     Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
@@ -50,10 +50,11 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [TestMethod]
         public void Ship_FedExCanadaGroundDomIntl()
         {
-            FedExCAGroundDomesticInternational testObject = new FedExCAGroundDomesticInternational();
+            var testObject = new FedExCAGroundDomesticInternational();
             try
             {
-                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping) && testObject.IsSaveLabel)
+                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping) &&
+                    (testObject.IsSaveLabel || justLabels))
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
 
@@ -78,14 +79,15 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [TestMethod]
         public void Ship_FedExCanadaExpressInternational()
         {
-            FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
+            var testObject = new FedExUSExpressInternationalFixture();
 
             try
             {
-                if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping) && testObject.IsSaveLabel)
+                if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping) &&
+                    (testObject.IsSaveLabel || justLabels))
                 {
                     Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
                     Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
