@@ -3517,3 +3517,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "includer", Scope = "member", Target = "Interapptive.Shared.Utility.EnumHelper.#GetEnumList`1(System.Func`2<!!0,System.Boolean>,System.Boolean)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Scope = "member", Target = "Interapptive.Shared.Utility.EnumHelper.#GetEnumList`1(System.Func`2<!!0,System.Boolean>,System.Boolean)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Interapptive.Shared.Net.NetworkUtility.#GetIPFromUrl(System.String,System.Boolean,System.String)")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Scope = "member", Target = "Interapptive.Shared.Data.SqlUtility.#GetRunningSqlCommands(System.String)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Interapptive.Shared.Data.SqlUtility.#GetRunningSqlCommands(System.String)")]

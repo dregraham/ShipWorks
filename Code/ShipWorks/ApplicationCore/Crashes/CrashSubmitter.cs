@@ -1,11 +1,15 @@
 using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using System.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared;
 using System.Collections.Generic;
@@ -169,6 +173,9 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.AppendLine("Title: " + GetIdentifier(ex));
             sb.AppendLine();
 
+            sb.AppendFormat("[[version]{0}[/version]]", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            sb.AppendLine();
+
             // User Comments
             sb.AppendLine("User Comments:");
             if (string.IsNullOrEmpty(comments)) 
@@ -186,7 +193,7 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             AppendExceptionDetail(ex, sb, "");
 
-            sb.AppendLine();
+            AppendRunningSqlCommands(sb);
 
             // Other info
             sb.AppendLine("Environment:");
@@ -198,6 +205,19 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.Append(GetLoadedAssemblyList());
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Appends any running sql queries, if SqlSession is configured.
+        /// </summary>
+        private static void AppendRunningSqlCommands(StringBuilder sb)
+        {
+            if (SqlSession.IsConfigured)
+            {
+                sb.AppendLine();
+                sb.AppendLine(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
+                sb.AppendLine();
+            }
         }
 
         /// <summary>
@@ -286,6 +306,8 @@ namespace ShipWorks.ApplicationCore.Crashes
             StringBuilder sb = new StringBuilder();
 
             AppendExceptionDetail(ex, sb, "");
+
+            AppendRunningSqlCommands(sb);
 
             return sb.ToString();
         }
@@ -388,7 +410,44 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.AppendFormat("CurrentCulture: {0}\r\n", Thread.CurrentThread.CurrentCulture);
             sb.AppendFormat("CurrentUICulture: {0}\r\n", Thread.CurrentThread.CurrentUICulture);
 
+            sb.AppendFormat("Machine Name: {0}\r\n", Environment.MachineName);
+            sb.AppendFormat("User Name: {0}\r\n", Environment.UserName);
+            sb.AppendFormat("User Domain Name: {0}\r\n", Environment.UserDomainName);
+            sb.AppendFormat("User Interactive: {0}\r\n", Environment.UserInteractive);
+
+            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", Program.ExecutionMode.GetType().Name));
+            AppendLineIgnoreException(() => sb.AppendFormat("Local IP Address: {0}\r\n", new NetworkUtility().GetIPAddress()));
+
+            if (SqlSession.IsConfigured)
+            {
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Instance Name: {0}\r\n", SqlSession.Current.Configuration.ServerInstance));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Database Name: {0}\r\n", SqlSession.Current.Configuration.DatabaseName));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Is LocalDB: {0}\r\n", SqlSession.Current.Configuration.IsLocalDb()));
+
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Machine Name: {0}\r\n", SqlSession.Current.GetServerMachineName()));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Version: {0}\r\n", SqlSession.Current.GetServerVersion()));
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Server Is Local Server: {0}\r\n", SqlSession.Current.IsLocalServer()));
+            }
+            else
+            {
+                AppendLineIgnoreException(() => sb.AppendFormat("Sql Session reported that it is not configured."));
+            }
+
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Helper method to run code and ignore any exceptions if thrown.
+        /// </summary>
+        private static void AppendLineIgnoreException(Action method)
+        {
+            try
+            {
+                method();
+            }
+            catch 
+            {
+            }
         }
 
         /// <summary>
