@@ -533,6 +533,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("LastModifiedDate", () => order.Value.OnlineLastModified);
             outline.AddElement("BuyerID", () => order.Value.EbayBuyerID);
 
+            outline.AddElement("EligibleForGSP", () => order.Value.GspEligible);
+            outline.AddElement("ShippingMethod", () => EnumHelper.GetDescription((EbayShippingMethod)order.Value.SelectedShippingMethod));
+
             // Since typical ebay orders will have just a single item, and to ease template migration from v2, include
             // the auction details here like with v2
             var item = new Lazy<EbayOrderItemEntity>(() =>
@@ -571,7 +574,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Gerereates for a single EbayOrderItemEntity
+        /// Generates for a single EbayOrderItemEntity
         /// </summary>
         private static void GenerateTemplateCommonElements(ElementOutline outline, Lazy<EbayOrderItemEntity> item)
         {
