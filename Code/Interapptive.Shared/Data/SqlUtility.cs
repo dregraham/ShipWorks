@@ -315,7 +315,6 @@ namespace Interapptive.Shared.Data
 
             try
             {
-                runningSqlCommands.AppendLine();
                 runningSqlCommands.AppendLine("SQL Commands that were running:");
 
                 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
@@ -333,7 +332,6 @@ namespace Interapptive.Shared.Data
                                 {
                                     DataTable schemaTable = sqlDataReader.GetSchemaTable();
 
-                                    runningSqlCommands.AppendLine();
                                     for (int rowNumber = 0; rowNumber < schemaTable.Rows.Count; rowNumber++)
                                     {
                                         DataRow schemaRow = schemaTable.Rows[rowNumber];
@@ -363,8 +361,6 @@ namespace Interapptive.Shared.Data
                 log.Error("An error occurred while attempting to determine sql commands that were running.", ex);
                 runningSqlCommands.AppendLine(ex.Message);
             }
-
-            runningSqlCommands.AppendLine();
 
             return runningSqlCommands.ToString();
         }

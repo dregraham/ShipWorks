@@ -373,12 +373,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Resources\RunningSqlQueries.sql" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
       <Link>Properties\AnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
-    <EmbeddedResource Include="Resources\RunningSqlQueries.sql" />
     <Content Include="Resources\flags\afghanistan.png" />
     <Content Include="Resources\flags\albania.png" />
     <Content Include="Resources\flags\algeria.png" />

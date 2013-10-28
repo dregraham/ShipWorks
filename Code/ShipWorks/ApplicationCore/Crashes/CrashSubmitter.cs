@@ -214,7 +214,9 @@ namespace ShipWorks.ApplicationCore.Crashes
         {
             if (SqlSession.IsConfigured)
             {
+                sb.AppendLine();
                 sb.AppendLine(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
+                sb.AppendLine();
             }
         }
 
