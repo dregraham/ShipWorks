@@ -74,11 +74,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             {
                 // SurePost Less than a Pound requires that the weight be in ounces
                 double weightInOunces = WeightUtility.Convert(upsSetting.WeightUnitOfMeasure, WeightUnitOfMeasure.Ounces, weight);
-                xmlWriter.WriteElementString("Weight", weightInOunces.ToString());
+                xmlWriter.WriteElementString("Weight", weightInOunces.ToString("##0.##"));
             }
             else
             {
-                xmlWriter.WriteElementString("Weight", weight.ToString("##0.0"));
+                xmlWriter.WriteElementString("Weight", weight.ToString("##0.##"));
             }
 
             xmlWriter.WriteEndElement();

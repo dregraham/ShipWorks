@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             xmlWriter.WriteElementString("Description", "Pounds");
             xmlWriter.WriteEndElement();
 
-            xmlWriter.WriteElementString("Weight", weight.ToString("##0.0"));
+            xmlWriter.WriteElementString("Weight", weight.ToString("##0.##"));
             xmlWriter.WriteEndElement();
         }
     }

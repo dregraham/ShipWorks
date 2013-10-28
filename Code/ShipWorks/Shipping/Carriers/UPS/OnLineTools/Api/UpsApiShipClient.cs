@@ -792,7 +792,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Close UnitOfMeasurement
                 xmlWriter.WriteEndElement();
 
-                xmlWriter.WriteElementString("Weight", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? weight.ToString("N4") : weight.ToString("N1"));
+                xmlWriter.WriteElementString("Weight", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? weight.ToString("N2") : weight.ToString("N1"));
 
                 // Close CN22ContentWeight
                 xmlWriter.WriteEndElement();
