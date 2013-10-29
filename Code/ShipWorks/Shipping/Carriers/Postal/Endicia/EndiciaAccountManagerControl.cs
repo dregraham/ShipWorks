@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// UserControl for managing\editing endicia accounts
     /// </summary>
-    public partial class EndiciaAccountManagerControl : UserControl
+    public partial class EndiciaAccountManagerControl : PostalAccountManagerControlBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EndiciaAccountManagerControl));
 

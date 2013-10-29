@@ -17,33 +17,57 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// UserControl for editing options specific to the endicia integration
     /// </summary>
-    public partial class EndiciaOptionsControl : UserControl
+    public partial class EndiciaOptionsControl : PostalOptionsControlBase
     {
         // Endicia or a reseller like Express1
         EndiciaReseller endiciaReseller = EndiciaReseller.None;
 
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="EndiciaOptionsControl"/> class resulting
+        /// in the EndiciaReseller value being None.
         /// </summary>
         public EndiciaOptionsControl()
+            : this(EndiciaReseller.None)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EndiciaOptionsControl"/> class.
+        /// </summary>
+        /// <param name="reseller">The reseller.</param>
+        public EndiciaOptionsControl(EndiciaReseller reseller)
         {
             InitializeComponent();
+            Reseller = reseller;
+        }
+
+        /// <summary>
+        /// Gets or sets the reseller.
+        /// </summary>
+        public EndiciaReseller Reseller { get; set; }
+
+        /// <summary>
+        /// Loads the settings.
+        /// </summary>
+        /// <param name="reseller">The reseller.</param>
+        public void LoadSettings(EndiciaReseller reseller)
+        {
+            // This is just a stop gap until everything has been refactored out
+            Reseller = reseller;
+            LoadSettings();
         }
 
         /// <summary>
         /// Load the configured settings into the control
         /// </summary>
-        public void LoadSettings(EndiciaReseller reseller)
+        public override void LoadSettings()
         {
-            // remember the reseller for use when saving
-            endiciaReseller = reseller;
-
             EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
             EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            switch (endiciaReseller)
+            switch (Reseller)
             {
                 case EndiciaReseller.Express1:
                     {
@@ -92,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Save the settings to the database
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public override void SaveSettings(ShippingSettingsEntity settings)
         {
             switch (endiciaReseller)
             {
