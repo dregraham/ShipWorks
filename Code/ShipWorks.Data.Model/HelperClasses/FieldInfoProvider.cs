@@ -2727,6 +2727,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "VoidIndicator", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.VoidIndicator, 50, 0, 0);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "NumberOfPackages", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.NumberOfPackages, 50, 0, 0);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "LeadTrackingNumber", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.LeadTrackingNumber, 50, 0, 0);
+			base.AddElementFieldInfo("WorldShipProcessedEntity", "ShipmentIdCalculated", typeof(Nullable<System.Int64>), false, false, true, true,  (int)WorldShipProcessedFieldIndex.ShipmentIdCalculated, 0, 0, 19);
 		}
 		/// <summary>Inits WorldShipShipmentEntity's FieldInfo objects</summary>
 		private void InitWorldShipShipmentEntityInfos()

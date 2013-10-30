@@ -18977,6 +18977,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipProcessedFieldIndex.LeadTrackingNumber);}
 		}
+		/// <summary>Creates a new WorldShipProcessedEntity.ShipmentIdCalculated field instance</summary>
+		public static EntityField2 ShipmentIdCalculated
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipProcessedFieldIndex.ShipmentIdCalculated);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WorldShipShipmentEntity</summary>

@@ -2863,7 +2863,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits WorldShipProcessedEntity's mappings</summary>
 		private void InitWorldShipProcessedEntityMappings()
 		{
-			base.AddElementMapping( "WorldShipProcessedEntity", "ShipWorksLocal", @"dbo", "WorldShipProcessed", 16 );
+			base.AddElementMapping( "WorldShipProcessedEntity", "ShipWorksLocal", @"dbo", "WorldShipProcessed", 17 );
 			base.AddElementFieldMapping( "WorldShipProcessedEntity", "WorldShipProcessedID", "WorldShipProcessedID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "WorldShipProcessedEntity", "ShipmentID", "ShipmentID", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "WorldShipProcessedEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 2 );
@@ -2880,6 +2880,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "WorldShipProcessedEntity", "VoidIndicator", "VoidIndicator", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
 			base.AddElementFieldMapping( "WorldShipProcessedEntity", "NumberOfPackages", "NumberOfPackages", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
 			base.AddElementFieldMapping( "WorldShipProcessedEntity", "LeadTrackingNumber", "LeadTrackingNumber", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "WorldShipProcessedEntity", "ShipmentIdCalculated", "ShipmentIdCalculated", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 16 );
 		}
 		/// <summary>Inits WorldShipShipmentEntity's mappings</summary>
 		private void InitWorldShipShipmentEntityMappings()

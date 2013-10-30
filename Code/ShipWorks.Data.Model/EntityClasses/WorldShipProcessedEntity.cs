@@ -510,6 +510,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("LeadTrackingNumber", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentIdCalculated", fieldHashtable);
 		}
 		#endregion
 
@@ -792,6 +795,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.LeadTrackingNumber, true); }
 			set	{ SetValue((int)WorldShipProcessedFieldIndex.LeadTrackingNumber, value); }
+		}
+
+		/// <summary> The ShipmentIdCalculated property of the Entity WorldShipProcessed<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipProcessed"."ShipmentIdCalculated"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ShipmentIdCalculated
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)WorldShipProcessedFieldIndex.ShipmentIdCalculated, false); }
+
 		}
 
 

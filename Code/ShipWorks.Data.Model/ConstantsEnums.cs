@@ -8980,6 +8980,8 @@ namespace ShipWorks.Data.Model
 		NumberOfPackages,
 		///<summary>LeadTrackingNumber. </summary>
 		LeadTrackingNumber,
+		///<summary>ShipmentIdCalculated. </summary>
+		ShipmentIdCalculated,
 		/// <summary></summary>
 		AmountOfFields
 	}

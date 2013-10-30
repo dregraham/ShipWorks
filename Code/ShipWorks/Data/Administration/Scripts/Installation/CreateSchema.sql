@@ -4408,7 +4408,8 @@ CREATE TABLE [dbo].[WorldShipProcessed]
 [WorldShipShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [VoidIndicator] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [NumberOfPackages] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[LeadTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[LeadTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ShipmentIdCalculated] AS (case when isnumeric([ShipmentID]+'.e0')=(1) then CONVERT([bigint],[ShipmentID],(0))  end) PERSISTED
 )
 GO
 PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'

@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public class WorldShipProcessedGrouping
     {
-        readonly string shipmentID;
+        readonly long? shipmentID;
         List<WorldShipProcessedEntity> worldShipProcessedEntries;
         bool haveProcessedEntriesBeenSorted = false;
 
@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         /// <param name="shipmentID">The shipment for processing</param>
         /// <param name="worldShipProcessedEntries">The WorldShipProcessed entries to process</param>
-        public WorldShipProcessedGrouping(string shipmentID, List<WorldShipProcessedEntity> worldShipProcessedEntries)
+        public WorldShipProcessedGrouping(long? shipmentID, List<WorldShipProcessedEntity> worldShipProcessedEntries)
         {
             this.shipmentID = shipmentID;
             this.worldShipProcessedEntries = worldShipProcessedEntries;
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// The ShipmentID for processing
         /// </summary>
-        public string ShipmentID
+        public long? ShipmentID
         {
             get 
             {
