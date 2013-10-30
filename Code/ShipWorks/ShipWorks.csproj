@@ -879,6 +879,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
       <SubType>UserControl</SubType>
@@ -1401,42 +1402,6 @@
     <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracZipResponse.cs">
       <DependentUpon>OnTracZipResponse.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.Designer.cs">
-      <DependentUpon>EndiciaAutomaticExpress1Control.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.Designer.cs">
-      <DependentUpon>EndiciaExpress1ActivateDiscountDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.Designer.cs">
-      <DependentUpon>EndiciaExpress1ActualSavingsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RateDiscountedFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RateNotQualifiedFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RatePromotionFootnote.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1507,12 +1472,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceWrapper.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.Designer.cs">
-      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsForm.cs" />
     <Compile Include="Data\Import\Xml\GenericXmlOrderLoader.cs" />
@@ -6751,32 +6710,11 @@
     <EmbeddedResource Include="Shipping\Carriers\OnTrac\OnTracSetupWizard.resx">
       <DependentUpon>OnTracSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.resx">
-      <DependentUpon>EndiciaAutomaticExpress1Control.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.resx">
-      <DependentUpon>EndiciaExpress1ActivateDiscountDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.resx">
-      <DependentUpon>EndiciaExpress1ActualSavingsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.resx">
-      <DependentUpon>EndiciaExpress1RateDiscountedFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.resx">
-      <DependentUpon>EndiciaExpress1RateNotQualifiedFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.resx">
-      <DependentUpon>EndiciaExpress1RatePromotionFootnote.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.resx">
       <DependentUpon>EndiciaPassphraseChangeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.resx">
       <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.resx">
-      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.resx">
       <DependentUpon>AutomaticExpress1ControlBase.cs</DependentUpon>
@@ -11990,7 +11928,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
