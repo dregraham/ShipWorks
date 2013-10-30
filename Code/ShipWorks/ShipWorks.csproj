@@ -876,9 +876,9 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1ConnectionDetails.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1PasswordEncryptionStrategy.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1RegistrationGateway.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1PasswordEncryptionStrategy.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">

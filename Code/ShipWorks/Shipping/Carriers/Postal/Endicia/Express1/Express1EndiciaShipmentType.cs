@@ -3,6 +3,7 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 

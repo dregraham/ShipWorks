@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 {
     /// <summary>
     /// An Express1RegistrationGateway implementation for integrating the Endicia API client into the Express1 registration process.
