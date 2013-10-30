@@ -18,17 +18,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         private Express1RegistrationValidator testObject;
 
         private Express1Registration registration;
+
         private Mock<IExpress1RegistrationGateway> gateway;
         private Mock<IExpress1RegistrationRepository> repository;
         private Mock<IExpress1PaymentValidator> paymentValidator;
+        private Mock<IExpress1PasswordEncryptionStrategy> encryptionStrategy;
 
         [TestInitialize]
         public void Initialize()
         {
             gateway = new Mock<IExpress1RegistrationGateway>();
             repository = new Mock<IExpress1RegistrationRepository>();
+            encryptionStrategy = new Mock<IExpress1PasswordEncryptionStrategy>();
 
-            registration = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object, testObject)
+            registration = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object, encryptionStrategy.Object, testObject)
             {
                 MailingAddress = new PersonAdapter()
                 {

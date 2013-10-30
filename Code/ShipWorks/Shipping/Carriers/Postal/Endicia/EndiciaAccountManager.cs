@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (endiciaReseller == EndiciaReseller.Express1)
             {
-                using (Express1EndiciaSetupWizard dlg = new Express1EndiciaSetupWizard(true))
+                using (Form dlg = new Express1EndiciaShipmentType().CreateSetupWizard())
                 {
                     return (dlg.ShowDialog(owner) == DialogResult.OK);
                 }
