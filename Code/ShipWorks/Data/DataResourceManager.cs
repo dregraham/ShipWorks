@@ -411,10 +411,11 @@ namespace ShipWorks.Data
                 {
                     using (SqlConnection connection = SqlSession.Current.OpenConnection())
                     {
+                        string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
+
                         try
                         {
-                            string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
-
+                            
                             using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
                             {
                                 command.CommandType = CommandType.StoredProcedure;
@@ -426,9 +427,17 @@ namespace ShipWorks.Data
                                 command.ExecuteNonQuery();
                             }
                         }
-                        catch (SqlLockException ex)
+                        catch (SqlException ex)
                         {
-                            log.Warn(ex.Message);
+                            if (ex.Message.Contains("SqlLockException"))
+                            {
+                                log.Warn(ex.Message);                                
+                            }
+                            else
+                            {
+                                log.Error(string.Format("Error likely returned from stored proc {0}", scriptName), ex);
+                                throw;
+                            }
                         }
                     }
                 }
