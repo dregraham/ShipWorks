@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
 
@@ -11,26 +8,27 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
     public class FedExUSIntegrationTests : IntegrationTestBase
     {
         private const string fedExTestAccountNumber = "603103343";
-        private const string ecodAccountNumber = "603157745";
+        private const string ecodAccountNumber = "222326460";
 
-        private bool justLabels = false;
+        private bool justLabels = true;
 
         [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         public void Ship_FedExUSGroundDomestic()
         {
-            FedExUSGroundFixture testObject = new FedExUSGroundFixture();
+            var testObject = new FedExUSGroundFixture();
 
             try
             {
-                if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping) && 
+                if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
                     (testObject.IsSaveLabel || justLabels))
                 {
                     // TransactionID 605733 should use ECOD account.
                     testObject.FedExAccountNumber = testObject.CustomerTransactionId == "605733" ? ecodAccountNumber : fedExTestAccountNumber;
 
                     testObject.Ship();
+
                 }
             }
             catch (Exception ex)
@@ -51,7 +49,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [TestMethod]
         public void Ship_FedExGroundDomesticAlcohol()
         {
-            FedExUSGroundAlcoholFixture testObject = new FedExUSGroundAlcoholFixture();
+            var testObject = new FedExUSGroundAlcoholFixture();
             try
             {
                 if (PopulateTestObject(testObject, FedExUSGroundAlcoholFixture.Mapping) &&
@@ -75,20 +73,18 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             }
         }
 
-
-
         [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         public void Ship_FedExExpressInternationalAlcohol()
         {
-            FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
+            var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(testObject, FedExUsExpressInternationalAlcoholMapping.Mapping) &&
                 (testObject.IsSaveLabel || justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
                 Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
@@ -101,7 +97,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [TestMethod]
         public void Ship_FedExExpressInternational()
         {
-            FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
+            var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping) &&
                 (testObject.IsSaveLabel || justLabels))
@@ -121,13 +117,13 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [TestMethod]
         public void Ship_FedExExpressDomesticAlcohol()
         {
-            FedExPrototypeFixture testObject = new FedExPrototypeFixture();
+            var testObject = new FedExPrototypeFixture();
 
-            if (PopulateTestObject(testObject, FedExUSExpressDomesticAlcoholMapping.Mapping) && 
+            if (PopulateTestObject(testObject, FedExUSExpressDomesticAlcoholMapping.Mapping) &&
                 (testObject.IsSaveLabel || justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
                 Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
@@ -147,7 +143,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
                 (testObject.IsSaveLabel || justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                Console.WriteLine(string.Format("Executing customer transaction ID {0}", this.TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
                 Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
