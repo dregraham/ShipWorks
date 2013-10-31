@@ -98,9 +98,12 @@ namespace ShipWorks.Data.Connection
             // Set the loaded session as current
             Current = session;
 
-            // If there is a crash, we are not allowed to ask the database for these values, so ask now so that they get cached.
-            Current.GetServerMachineName();
-            Current.GetServerVersion();
+            if (IsConfigured)
+            {
+                // If there is a crash, we are not allowed to ask the database for these values, so ask now so that they get cached.
+                Current.GetServerMachineName();
+                Current.GetServerVersion();
+            }
         }
 
         /// <summary>
