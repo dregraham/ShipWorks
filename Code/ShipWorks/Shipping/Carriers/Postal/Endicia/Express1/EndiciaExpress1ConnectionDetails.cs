@@ -78,30 +78,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 return ApiLogSource.UspsExpress1Endicia;
             }
         }
-
-        ///// <summary>
-        ///// Gets the service URL.
-        ///// </summary>
-        ///// <value>
-        ///// The service URL.
-        ///// </value>
-        //public string ServiceUrl
-        //{
-        //    // TODO: Pull this into the gateway
-        //    get
-        //    {
-        //        string urlBase = "https://service.express1.com/Customer/Gateway.aspx";
-        //        if (Express1EndiciaUtility.UseTestServer)
-        //        {
-        //            urlBase = "http://www.express1dev.com/CustomerWeb/Gateway.aspx";
-        //        }
-
-        //        // format the url
-        //        //string url = string.Format("{0}?app={1}&info={2}", urlBase, Express1EndiciaUtility.ApiKey, HttpUtility.UrlEncode(customerInfo));
-
-        //        // that's it
-        //        return urlBase;
-        //    }
-        //}
     }
 }

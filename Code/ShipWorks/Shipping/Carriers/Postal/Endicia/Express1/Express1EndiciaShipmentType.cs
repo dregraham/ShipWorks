@@ -107,7 +107,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public override Form CreateSetupWizard()
         {
-            //return new Express1EndiciaSetupWizard();
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new EndiciaExpress1RegistrationGateway(), new EndiciaExpress1RegistrationRepository(), 
                 new EndiciaExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
@@ -116,7 +115,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             EndiciaBuyPostageDlg postageDlg = new EndiciaBuyPostageDlg();
 
             return new Express1SetupWizard(postageDlg, accountManagerControl, optionsControl, registration, EndiciaAccountManager.Express1Accounts);
-
         }
 
         /// <summary>
