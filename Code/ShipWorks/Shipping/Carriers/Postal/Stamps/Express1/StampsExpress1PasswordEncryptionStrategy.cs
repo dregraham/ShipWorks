@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -17,6 +18,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>The encrypted password.</returns>
         public string EncryptPassword(Express1Registration registration)
         {
+            if (registration == null)
+            {
+                throw new ArgumentNullException("registration");
+            }
+
             return SecureText.Encrypt(registration.PlainTextPassword, registration.UserName);
         }
     }
