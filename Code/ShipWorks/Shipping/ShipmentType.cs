@@ -536,5 +536,13 @@ namespace ShipWorks.Shipping
 
             return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
         }
+
+        /// <summary>
+        /// Gets whether the specified settings tab should be hidden in the UI
+        /// </summary>
+        public virtual bool IsSettingsTabHidden(ShipmentTypeSettingsControl.Page tab)
+        {
+            return false;
+        }
     }
 }

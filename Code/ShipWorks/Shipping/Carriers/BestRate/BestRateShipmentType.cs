@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -35,6 +36,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void ProcessShipment(Data.Model.EntityClasses.ShipmentEntity shipment)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets whether the specified settings tab should be hidden in the UI
+        /// </summary>
+        public override bool IsSettingsTabHidden(ShipmentTypeSettingsControl.Page tab)
+        {
+            return tab == ShipmentTypeSettingsControl.Page.Actions || tab == ShipmentTypeSettingsControl.Page.Printing;
         }
     }
 }

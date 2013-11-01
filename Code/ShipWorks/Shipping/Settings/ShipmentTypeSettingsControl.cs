@@ -4,8 +4,12 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.UI.Utility;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Controls;
@@ -41,6 +45,13 @@ namespace ShipWorks.Shipping.Settings
             InitializeComponent();
 
             this.shipmentType = shipmentType;
+
+            // Hide 
+            Enum.GetValues(typeof(Page))
+                .OfType<Page>()
+                .Where(shipmentType.IsSettingsTabHidden)
+                .ToList()
+                .ForEach(x => tabControl.Controls.Remove(GetTabControlForPage(x)));
         }
 
         /// <summary>
@@ -69,12 +80,13 @@ namespace ShipWorks.Shipping.Settings
             }
             set
             {
-                switch (value)
+                tabControl.SelectedTab = GetTabControlForPage(value);
+
+                // We can't just use the null coalescing operator here because setting the SelectedTab property
+                // to a tab that doesn't exist in the controls collection will cause the property to set itself to null
+                if (tabControl.SelectedTab == null)
                 {
-                    case Page.Settings: tabControl.SelectedTab = tabPageSettings; break;
-                    case Page.Printing: tabControl.SelectedTab = tabPagePrinting; break;
-                    case Page.Profiles: tabControl.SelectedTab = tabPageProfiles; break;
-                    case Page.Actions: tabControl.SelectedTab = tabPageActions; break;
+                    tabControl.SelectedTab = tabPageSettings;
                 }
             }
         }
@@ -179,6 +191,24 @@ namespace ShipWorks.Shipping.Settings
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith
         {
             get { return ((IPrintWithTemplates) printOutputControl).TemplatesToPrintWith; }
+        }
+
+        /// <summary>
+        /// Gets a TabPage for the specified Page enum value
+        /// </summary>
+        /// <param name="page">Page for which to return a TabPage</param>
+        /// <returns></returns>
+        private TabPage GetTabControlForPage(Page page)
+        {
+            switch (page)
+            {
+                case Page.Settings: return tabPageSettings;
+                case Page.Printing: return tabPagePrinting;
+                case Page.Profiles: return tabPageProfiles;
+                case Page.Actions: return tabPageActions;
+            }
+
+            throw new InvalidOperationException(string.Format("Could not find a page for {0}", page));
         }
     }
 }
