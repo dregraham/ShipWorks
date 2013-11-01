@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
@@ -144,6 +145,9 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.iParcel:
                     return new iParcelShipmentType();
+
+                case ShipmentTypeCode.BestRate:
+                    return new BestRateShipmentType();
             }
 
             throw new InvalidOperationException("Invalid shipment type.");
@@ -169,6 +173,7 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.iParcel: return 11;
                 case ShipmentTypeCode.Other: return 12;
                 case ShipmentTypeCode.None: return 13;
+                case ShipmentTypeCode.BestRate: return 14;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");
