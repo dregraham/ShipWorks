@@ -4,6 +4,9 @@ using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
+    /// <summary>
+    /// Best rate implementation of ShipmentType
+    /// </summary>
     public class BestRateShipmentType : ShipmentType
     {
         /// <summary>
@@ -13,10 +16,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get { return ShipmentTypeCode.BestRate; }
         }
-        
+
+        /// <summary>
+        /// Create the UserControl used to handle best rate shipments
+        /// </summary>
         public override Editing.ServiceControlBase CreateServiceControl()
         {
-            throw new NotImplementedException();
+            return new BestRateServiceControl(ShipmentTypeCode);
         }
 
         /// <summary>
