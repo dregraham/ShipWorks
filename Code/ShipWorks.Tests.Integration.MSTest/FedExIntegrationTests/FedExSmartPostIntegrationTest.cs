@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             try
             {
                 if (PopulateTestObject(testObject, FedExSmartPostFixture.SmartPostMapping) &&
-                    (testObject.IsSaveLabel || justLabels))
+                    (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.Ship();
                 }

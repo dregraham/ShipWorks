@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
                 var testObject = new FedExCanadaExpressDomesticFixture();
 
                 if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping) &&
-                    (testObject.IsSaveLabel || justLabels))
+                    (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             try
             {
                 if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping) &&
-                    (testObject.IsSaveLabel || justLabels))
+                    (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             try
             {
                 if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping) &&
-                    (testObject.IsSaveLabel || justLabels))
+                    (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
