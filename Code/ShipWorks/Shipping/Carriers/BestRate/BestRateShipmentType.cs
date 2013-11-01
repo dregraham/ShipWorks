@@ -11,9 +11,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get { return ShipmentTypeCode.BestRate; }
         }
-
-        override 
-
+        
         public override Editing.ServiceControlBase CreateServiceControl()
         {
             throw new NotImplementedException();
