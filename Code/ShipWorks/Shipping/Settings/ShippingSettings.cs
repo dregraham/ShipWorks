@@ -138,8 +138,8 @@ namespace ShipWorks.Shipping.Settings
         {
             ShippingSettingsEntity settings = new ShippingSettingsEntity(true);
 
-            settings.ActivatedTypes = new int[0];
-            settings.ConfiguredTypes = new int[0];
+            settings.ActivatedTypes = new int[1] { (int)ShipmentTypeCode.BestRate };
+            settings.ConfiguredTypes = new int[1] { (int)ShipmentTypeCode.BestRate };
             settings.ExcludedTypes = new int[0];
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
