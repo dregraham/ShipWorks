@@ -182,5 +182,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.AreEqual(rates[0].Selectable, bestRates[0].Selectable);
             Assert.AreEqual(rates[1].Selectable, bestRates[1].Selectable);
         }
+
+        [TestMethod]
+        public void SupportsGetRates_ReturnsTrue()
+        {
+            Assert.IsTrue(testObject.SupportsGetRates);
+        }
     }
 }

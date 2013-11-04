@@ -147,5 +147,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return new NullShippingBroker();
         }
+
+        /// <summary>
+        /// Indicates if the shipment service type supports getting rates
+        /// </summary>
+        public override bool SupportsGetRates
+        {
+            get { return true; }
+        }
     }
 }
