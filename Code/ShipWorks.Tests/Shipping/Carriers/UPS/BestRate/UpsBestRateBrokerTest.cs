@@ -25,13 +25,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private RateResult account2Rate1;
         private RateResult account3Rate1;
         private RateResult account3Rate2;
+        private UpsBestRateBroker testObject;
+        private ShipmentEntity testShipment;
 
+        private List<ShipmentEntity> getRatesShipments; 
 
         private Mock<ICarrierAccountRepository<UpsAccountEntity>> genericRepositoryMock;
         private Mock<UpsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
-            
-            
+       
+
         [TestInitialize]
         public void Initialize()
         {
@@ -61,15 +64,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             genericRepositoryMock.Setup(x => x.Accounts)
                                  .Returns(new List<UpsAccountEntity> { account1, account2, account3 });
 
+            getRatesShipments = new List<ShipmentEntity>();
+
             genericShipmentTypeMock = new Mock<UpsShipmentType>();
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                            .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID]);
+                            .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID])
+                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(e));
+
+            testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+
+            testShipment = new ShipmentEntity {ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1 };
         }
 
         [TestMethod]
         public void GetBestRates_RetrievesAllAccounts()
         {
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             testObject.GetBestRates(new ShipmentEntity());
 
             genericRepositoryMock.Verify(x => x.Accounts);
@@ -78,8 +87,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_CallsConfigureNewShipmentForEachAccount()
         {
-            ShipmentEntity testShipment = new ShipmentEntity();
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             testObject.GetBestRates(testShipment);
 
             genericShipmentTypeMock.Verify(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()), Times.Exactly(3));
@@ -88,18 +95,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_CallsGetRatesForEachAccount()
         {
-            ShipmentEntity testShipment = new ShipmentEntity();
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             testObject.GetBestRates(testShipment);
 
             genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Exactly(3));
+
+            foreach (var shipment in getRatesShipments)
+            {
+                Assert.AreEqual(ShipmentTypeCode.UpsOnLineTools, (ShipmentTypeCode)shipment.ShipmentType);
+                Assert.AreEqual(12.1, shipment.ContentWeight);
+            }
         }
 
         [TestMethod]
         public void GetBestRates_ReturnsTwoRates_SinceSecondAccountHasNoRates()
         {
-            ShipmentEntity testShipment = new ShipmentEntity();
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.AreEqual(2, rates.Count);
@@ -108,8 +117,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsBestRateForEachAccount()
         {
-            ShipmentEntity testShipment = new ShipmentEntity();
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.IsTrue(rates.Contains(account1Rate2));
@@ -120,8 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         public void GetBestRates_OriginalUpsShipmentDetailsAreRestoredAfterCall()
         {
             UpsShipmentEntity upsShipment = new UpsShipmentEntity();
-            ShipmentEntity testShipment = new ShipmentEntity { Ups = upsShipment };
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+            testShipment = new ShipmentEntity { Ups = upsShipment };
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.AreEqual(upsShipment, testShipment.Ups);
@@ -130,7 +136,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_ReturnedRatesAreNotAffected_WhenShippingExceptionIsThrown()
         {
-
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                                    .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID])
                                    .Callback((ShipmentEntity s) =>
@@ -138,8 +143,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                                            if (s.Ups.UpsAccountID == 2) throw new ShippingException();
                                        });
 
-            ShipmentEntity testShipment = new ShipmentEntity();
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.AreEqual(2, rates.Count);
@@ -148,8 +151,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_SetsHoverText()
         {
-            ShipmentEntity testShipment = new ShipmentEntity();
-            var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.AreEqual("Ups - Account 1b", account1Rate2.HoverText);
