@@ -876,6 +876,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\CreatePendingShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\IFedExNativeShipmentRequest.cs" />
