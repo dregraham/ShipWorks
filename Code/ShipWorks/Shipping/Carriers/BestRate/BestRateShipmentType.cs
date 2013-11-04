@@ -1,5 +1,6 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
