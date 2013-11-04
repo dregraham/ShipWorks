@@ -34,6 +34,7 @@ using ShipWorks.Stores;
 using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -924,6 +925,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public virtual bool IsMailInnovationsEnabled()
         {
             return ShippingSettings.Fetch().UpsMailInnovationsEnabled;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the UPS shipment type.
+        /// </summary>
+        /// <returns>An instance of an IBestRateShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
         }
     }
 }

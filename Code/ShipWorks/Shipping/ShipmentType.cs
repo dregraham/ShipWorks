@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping
 {
@@ -544,5 +545,11 @@ namespace ShipWorks.Shipping
         {
             return false;
         }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for a provider.
+        /// </summary>
+        /// <returns>An instance of an IBestRateShippingBroker.</returns>
+        public abstract IBestRateShippingBroker GetShippingBroker();
     }
 }

@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -186,6 +187,15 @@ namespace ShipWorks.Shipping.Carriers.Other
             ElementOutline outline = container.AddElement("Other");
             outline.AddElement("Carrier", () => loaded().Other.Carrier);
             outline.AddElement("Service", () => loaded().Other.Service);
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Other shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
         }
     }
 }

@@ -299,6 +299,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return confirmationTypes;
-        }
+        }        
     }
 }

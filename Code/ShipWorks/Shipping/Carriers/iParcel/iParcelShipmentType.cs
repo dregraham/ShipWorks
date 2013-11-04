@@ -22,6 +22,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -900,6 +901,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             return location.ToString();
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the iParcel shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
         }
     }
 }

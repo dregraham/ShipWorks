@@ -82,5 +82,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return tab == ShipmentTypeSettingsControl.Page.Actions || tab == ShipmentTypeSettingsControl.Page.Printing;
         }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the best rate shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker since this is not applicable to the best rate shipment type.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
+        }
     }
 }
