@@ -141,6 +141,7 @@
     <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\NullShippingBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />

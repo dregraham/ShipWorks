@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
@@ -10,6 +12,27 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateShipmentType : ShipmentType
     {
+        private readonly IBestRateShippingBrokerFactory brokerFactory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
+        /// version of the constructor will use the "live" implementation of the 
+        /// IBestRateShippingBrokerFactory interface.
+        /// </summary>
+        public BestRateShipmentType()
+            : this(new BestRateShippingBrokerFactory())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This version of
+        /// the constructor is primarily for testing purposes.
+        /// </summary>
+        /// <param name="brokerFactory">The broker factory.</param>
+        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory)
+        {
+            this.brokerFactory = brokerFactory;
+        }
+
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType
         /// </summary>
@@ -21,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>
-        public override Editing.ServiceControlBase CreateServiceControl()
+        public override ServiceControlBase CreateServiceControl()
         {
             return new BestRateServiceControl(ShipmentTypeCode);
         }
@@ -57,11 +80,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "BestRate", typeof(BestRateShipmentEntity), refreshIfPresent);
         }
 
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get the insurance data that describes what type of insurance is being used and on what parcels.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">shipment</exception>
         public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
@@ -72,6 +103,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new InsuranceChoice(shipment, shipment, shipment.BestRate, shipment.BestRate);
         }
 
+        /// <summary>
+        /// Called to get the latest rates for the shipment. This implementation will accumulate the 
+        /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
+        /// </summary>
+        public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            List<RateResult> rates = new List<RateResult>();
+
+            foreach (IBestRateShippingBroker broker in brokerFactory.CreateBrokers())
+            {
+                // Use the broker to get the best rates for each shipping provider
+                rates.AddRange(broker.GetBestRates(shipment));
+            }
+
+            return new RateGroup(rates);
+        }
+
+        /// <summary>
+        /// Process the shipment
+        /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
             throw new NotImplementedException();
