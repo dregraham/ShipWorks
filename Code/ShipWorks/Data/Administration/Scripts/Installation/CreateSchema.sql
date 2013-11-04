@@ -4416,6 +4416,23 @@ PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcesse
 GO
 ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
 GO
+PRINT N'Creating [dbo].[BestRateShipment]'
+GO
+CREATE TABLE [dbo].[BestRateShipment]
+(
+[ShipmentID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NOT NULL,
+[DimsLength] [float] NOT NULL,
+[DimsWidth] [float] NOT NULL,
+[DimsHeight] [float] NOT NULL,
+[DimsWeight] [float] NOT NULL,
+[DimsAddWeight] [bit] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [PK_BestRateShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
 PRINT N'Altering [dbo].[DimensionsProfile]'
 GO
 PRINT N'Altering [dbo].[EmailAccount]'
@@ -4616,6 +4633,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID])
 GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
 GO
