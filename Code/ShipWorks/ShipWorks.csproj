@@ -1764,6 +1764,7 @@
       <DependentUpon>InsuranceSelectionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsuranceInitialValueSource.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBroker.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileControl.cs" />
     <Compile Include="Shipping\ScanForms\DefaultScanFormBatchShipmentRepository.cs" />
     <Compile Include="Shipping\ScanForms\IScanFormBatchPrinter.cs" />
