@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.ShipmentCustomsItemEntityUsingShipmentID);
+			toReturn.Add(this.BestRateShipmentEntityUsingShipmentID);
 			toReturn.Add(this.EquaShipShipmentEntityUsingShipmentID);
 			toReturn.Add(this.FedExShipmentEntityUsingShipmentID);
 			toReturn.Add(this.IParcelShipmentEntityUsingShipmentID);
@@ -55,6 +56,25 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, ShipmentCustomsItemFields.ShipmentID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentCustomsItemEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and BestRateShipmentEntity over the 1:1 relation they have, using the relation between the fields:
+		/// Shipment.ShipmentID - BestRateShipment.ShipmentID
+		/// </summary>
+		public virtual IEntityRelation BestRateShipmentEntityUsingShipmentID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "BestRateShipment", true);
+
+				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, BestRateShipmentFields.ShipmentID);
+
+
+
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("BestRateShipmentEntity", false);
 				return relation;
 			}
 		}

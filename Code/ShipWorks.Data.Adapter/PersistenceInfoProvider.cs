@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((159 + 0));
+			base.InitClass((160 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -70,6 +70,7 @@ namespace ShipWorks.Data.Adapter
 			InitAuditEntityMappings();
 			InitAuditChangeEntityMappings();
 			InitAuditChangeDetailEntityMappings();
+			InitBestRateShipmentEntityMappings();
 			InitBigCommerceOrderItemEntityMappings();
 			InitBigCommerceStoreEntityMappings();
 			InitBuyDotComOrderItemEntityMappings();
@@ -410,6 +411,18 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AuditChangeDetailEntity", "TextNew", "TextNew", true, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 7 );
 			base.AddElementFieldMapping( "AuditChangeDetailEntity", "VariantOld", "VariantOld", true, (int)SqlDbType.Variant, 0, 0, 0, false, "", null, typeof(System.Object), 8 );
 			base.AddElementFieldMapping( "AuditChangeDetailEntity", "VariantNew", "VariantNew", true, (int)SqlDbType.Variant, 0, 0, 0, false, "", null, typeof(System.Object), 9 );
+		}
+		/// <summary>Inits BestRateShipmentEntity's mappings</summary>
+		private void InitBestRateShipmentEntityMappings()
+		{
+			base.AddElementMapping( "BestRateShipmentEntity", "ShipWorksLocal", @"dbo", "BestRateShipment", 7 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsProfileID", "DimsProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsLength", "DimsLength", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 2 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsWidth", "DimsWidth", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 3 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsHeight", "DimsHeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 4 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsWeight", "DimsWeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 5 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's mappings</summary>
 		private void InitBigCommerceOrderItemEntityMappings()

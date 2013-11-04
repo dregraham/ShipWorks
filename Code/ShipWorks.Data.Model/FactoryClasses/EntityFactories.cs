@@ -655,6 +655,45 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
+	/// <summary>Factory to create new, empty BestRateShipmentEntity objects.</summary>
+	[Serializable]
+	public partial class BestRateShipmentEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public BestRateShipmentEntityFactory() : base("BestRateShipmentEntity", ShipWorks.Data.Model.EntityType.BestRateShipmentEntity) { }
+
+		/// <summary>Creates a new, empty BestRateShipmentEntity object.</summary>
+		/// <returns>A new, empty BestRateShipmentEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new BestRateShipmentEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateShipment
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new BestRateShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new BestRateShipmentEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateShipmentUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<BestRateShipmentEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
 	/// <summary>Factory to create new, empty BigCommerceOrderItemEntity objects.</summary>
 	[Serializable]
 	public partial class BigCommerceOrderItemEntityFactory : EntityFactoryBase2 {
@@ -6624,6 +6663,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.AuditChangeDetailEntity:
 					factoryToUse = new AuditChangeDetailEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.BestRateShipmentEntity:
+					factoryToUse = new BestRateShipmentEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.BigCommerceOrderItemEntity:
 					factoryToUse = new BigCommerceOrderItemEntityFactory();
