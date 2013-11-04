@@ -1397,6 +1397,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsAddWeight);}
 		}
+		/// <summary>Creates a new BestRateShipmentEntity.TransitTimeType field instance</summary>
+		public static EntityField2 TransitTimeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.TransitTimeType);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.EstimatedTransitDays field instance</summary>
+		public static EntityField2 EstimatedTransitDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.EstimatedTransitDays);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity BigCommerceOrderItemEntity</summary>

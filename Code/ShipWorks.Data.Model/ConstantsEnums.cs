@@ -697,6 +697,10 @@ namespace ShipWorks.Data.Model
 		DimsWeight,
 		///<summary>DimsAddWeight. </summary>
 		DimsAddWeight,
+		///<summary>TransitTimeType. </summary>
+		TransitTimeType,
+		///<summary>EstimatedTransitDays. </summary>
+		EstimatedTransitDays,
 		/// <summary></summary>
 		AmountOfFields
 	}

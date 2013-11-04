@@ -485,6 +485,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("TransitTimeType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("EstimatedTransitDays", fieldHashtable);
 		}
 		#endregion
 
@@ -668,6 +674,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)BestRateShipmentFieldIndex.DimsAddWeight, true); }
 			set	{ SetValue((int)BestRateShipmentFieldIndex.DimsAddWeight, value); }
+		}
+
+		/// <summary> The TransitTimeType property of the Entity BestRateShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "BestRateShipment"."TransitTimeType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 TransitTimeType
+		{
+			get { return (System.Int32)GetValue((int)BestRateShipmentFieldIndex.TransitTimeType, true); }
+			set	{ SetValue((int)BestRateShipmentFieldIndex.TransitTimeType, value); }
+		}
+
+		/// <summary> The EstimatedTransitDays property of the Entity BestRateShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "BestRateShipment"."EstimatedTransitDays"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 EstimatedTransitDays
+		{
+			get { return (System.Int32)GetValue((int)BestRateShipmentFieldIndex.EstimatedTransitDays, true); }
+			set	{ SetValue((int)BestRateShipmentFieldIndex.EstimatedTransitDays, value); }
 		}
 
 
