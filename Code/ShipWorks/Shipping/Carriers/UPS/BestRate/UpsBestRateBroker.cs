@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -51,18 +52,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             List<RateResult> accountRates = new List<RateResult>();
             List<UpsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
 
-            // Save a reference to the current UPS shipment, if there is one, since we'll be overwriting it
-            UpsShipmentEntity originalUpsShipment = shipment.Ups;
+            // Create a clone so we don't have to worry about modifying the original shipment
+            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
+            testRateShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
 
             foreach (UpsAccountEntity account in upsAccounts)
             {
                 // Create the UpsShipment that will be used to get rates
-                shipment.Ups = new UpsShipmentEntity { UpsAccountID = account.UpsAccountID };
-                shipmentType.ConfigureNewShipment(shipment);
+                testRateShipment.Ups = new UpsShipmentEntity { UpsAccountID = account.UpsAccountID };
+                shipmentType.ConfigureNewShipment(testRateShipment);
 
                 try
                 {
-                    RateGroup rates = shipmentType.GetRates(shipment);
+                    RateGroup rates = shipmentType.GetRates(testRateShipment);
                     RateResult lowestRate = rates.Rates.Where(r => r.Amount > 0).OrderBy(r => r.Amount).FirstOrDefault();
 
                     if (lowestRate != null)
@@ -76,9 +78,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     // We will handle exceptions in a future story.  For now, just eat them.
                 }
             }
-
-            // Restore the original ups version of this shipment
-            shipment.Ups = originalUpsShipment;
 
             return accountRates;
         }

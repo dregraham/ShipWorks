@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             testObject.GetBestRates(testShipment);
 
-            genericShipmentTypeMock.Verify(x => x.ConfigureNewShipment(testShipment), Times.Exactly(3));
+            genericShipmentTypeMock.Verify(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()), Times.Exactly(3));
         }
 
         [TestMethod]
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             var testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
             testObject.GetBestRates(testShipment);
 
-            genericShipmentTypeMock.Verify(x => x.GetRates(testShipment), Times.Exactly(3));
+            genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Exactly(3));
         }
 
         [TestMethod]
