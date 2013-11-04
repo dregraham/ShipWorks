@@ -987,6 +987,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsIrregularIndicatorType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsShipmentChargeType.cs" />

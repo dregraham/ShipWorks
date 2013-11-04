@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
-    public class UpsAccountRepository : ICarrierAccountRepository
+    public class UpsAccountRepository : ICarrierAccountRepository<UpsAccountEntity>
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
-        public IEnumerable<IEntity2> Accounts
+        public IEnumerable<UpsAccountEntity> Accounts
         {
             get
             {
@@ -26,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account as IEntity2.</returns>
-        public IEntity2 GetAccount(long accountID)
+        public UpsAccountEntity GetAccount(long accountID)
         {
             return UpsAccountManager.GetAccount(accountID);
         }
