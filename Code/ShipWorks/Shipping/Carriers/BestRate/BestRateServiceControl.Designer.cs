@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             // sectionRecipient
             // 
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 181);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             // 
             // sectionReturns
             // 
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 5);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 92);
             this.sectionShipment.Size = new System.Drawing.Size(385, 171);
             // 
             // sectionFrom
@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.sectionFrom.ContentPanel.Controls.Add(this.originControl);
             this.sectionFrom.ExpandedHeight = 431;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 210);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
             this.sectionRates.ExpandedHeight = 90;
             this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(3, 239);
+            this.sectionRates.Location = new System.Drawing.Point(3, 63);
             this.sectionRates.Name = "sectionRates";
             this.sectionRates.SectionName = "Rates";
             this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
@@ -220,10 +220,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.Name = "BestRateServiceControl";
             this.Size = new System.Drawing.Size(391, 297);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
-            this.Controls.SetChildIndex(this.sectionFrom, 0);
-            this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
+            this.Controls.SetChildIndex(this.sectionRates, 0);
+            this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
