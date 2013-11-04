@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.BestRate
+﻿using ShipWorks.Shipping.Settings.Origin;
+
+namespace ShipWorks.Shipping.Carriers.BestRate
 {
     partial class BestRateServiceControl
     {
@@ -28,8 +30,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.sectionRates = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
+            this.labelShipDate = new System.Windows.Forms.Label();
+            this.shipDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
+            this.weight = new ShipWorks.UI.Controls.WeightControl();
+            this.labelWeight = new System.Windows.Forms.Label();
+            this.labelDimensions = new System.Windows.Forms.Label();
+            this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -37,6 +47,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
+            this.sectionShipment.ContentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
+            this.sectionFrom.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).BeginInit();
             this.sectionRates.ContentPanel.SuspendLayout();
@@ -44,19 +58,69 @@
             // 
             // sectionRecipient
             // 
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 143);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 181);
             // 
             // sectionReturns
             // 
+            this.sectionReturns.Location = new System.Drawing.Point(3, 268);
             // 
             // sectionShipment
             // 
-            this.sectionShipment.Location = new System.Drawing.Point(3, 34);
+            // 
+            // sectionShipment.ContentPanel
+            // 
+            this.sectionShipment.ContentPanel.Controls.Add(this.weight);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelDimensions);
+            this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsControl);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
+            this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 5);
+            this.sectionShipment.Size = new System.Drawing.Size(385, 171);
+            // 
+            // sectionFrom
+            // 
+            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionFrom.Collapsed = true;
+            // 
+            // sectionFrom.ContentPanel
+            // 
+            this.sectionFrom.ContentPanel.Controls.Add(this.originControl);
+            this.sectionFrom.ExpandedHeight = 487;
+            this.sectionFrom.ExtraText = "";
+            this.sectionFrom.Location = new System.Drawing.Point(3, 210);
+            this.sectionFrom.Name = "sectionFrom";
+            this.sectionFrom.SectionName = "From";
+            this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
+            this.sectionFrom.Size = new System.Drawing.Size(385, 24);
+            this.sectionFrom.TabIndex = 0;
+            // 
+            // originControl
+            // 
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
+            | ShipWorks.Data.Controls.PersonFields.Residential) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
+            | ShipWorks.Data.Controls.PersonFields.Phone) 
+            | ShipWorks.Data.Controls.PersonFields.Website)));
+            this.originControl.BackColor = System.Drawing.Color.Transparent;
+            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.originControl.Location = new System.Drawing.Point(3, 54);
+            this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.originControl.Name = "originControl";
+            this.originControl.Size = new System.Drawing.Size(246, 403);
+            this.originControl.TabIndex = 8;
+            this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // sectionRates
             // 
-            this.sectionRates.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionRates.Collapsed = true;
             // 
             // sectionRates.ContentPanel
@@ -64,7 +128,7 @@
             this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
             this.sectionRates.ExpandedHeight = 90;
             this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(3, 5);
+            this.sectionRates.Location = new System.Drawing.Point(3, 239);
             this.sectionRates.Name = "sectionRates";
             this.sectionRates.SectionName = "Rates";
             this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
@@ -77,20 +141,84 @@
             this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rateControl.Location = new System.Drawing.Point(0, 0);
             this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(396, 0);
+            this.rateControl.Size = new System.Drawing.Size(381, 0);
             this.rateControl.TabIndex = 3;
             this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
+            // 
+            // labelShipDate
+            // 
+            this.labelShipDate.AutoSize = true;
+            this.labelShipDate.BackColor = System.Drawing.Color.Transparent;
+            this.labelShipDate.Location = new System.Drawing.Point(23, 12);
+            this.labelShipDate.Name = "labelShipDate";
+            this.labelShipDate.Size = new System.Drawing.Size(56, 13);
+            this.labelShipDate.TabIndex = 66;
+            this.labelShipDate.Text = "Ship date:";
+            // 
+            // shipDate
+            // 
+            this.shipDate.Enabled = false;
+            this.shipDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.shipDate.Location = new System.Drawing.Point(85, 8);
+            this.shipDate.Name = "shipDate";
+            this.shipDate.Size = new System.Drawing.Size(144, 21);
+            this.shipDate.TabIndex = 65;
+            // 
+            // weight
+            // 
+            this.weight.BackColor = System.Drawing.Color.Transparent;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(85, 35);
+            this.weight.Name = "weight";
+            this.weight.RangeMax = 1000D;
+            this.weight.RangeMin = 0D;
+            this.weight.Size = new System.Drawing.Size(218, 21);
+            this.weight.TabIndex = 68;
+            this.weight.Weight = 0D;
+            // 
+            // labelWeight
+            // 
+            this.labelWeight.AutoSize = true;
+            this.labelWeight.BackColor = System.Drawing.Color.Transparent;
+            this.labelWeight.Location = new System.Drawing.Point(34, 38);
+            this.labelWeight.Name = "labelWeight";
+            this.labelWeight.Size = new System.Drawing.Size(45, 13);
+            this.labelWeight.TabIndex = 67;
+            this.labelWeight.Text = "Weight:";
+            // 
+            // labelDimensions
+            // 
+            this.labelDimensions.AutoSize = true;
+            this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
+            this.labelDimensions.Location = new System.Drawing.Point(15, 68);
+            this.labelDimensions.Name = "labelDimensions";
+            this.labelDimensions.Size = new System.Drawing.Size(64, 13);
+            this.labelDimensions.TabIndex = 69;
+            this.labelDimensions.Text = "Dimensions:";
+            // 
+            // dimensionsControl
+            // 
+            this.dimensionsControl.BackColor = System.Drawing.Color.White;
+            this.dimensionsControl.Cleared = false;
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(82, 62);
+            this.dimensionsControl.Name = "dimensionsControl";
+            this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
+            this.dimensionsControl.TabIndex = 70;
             // 
             // BestRateServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.sectionFrom);
             this.Controls.Add(this.sectionRates);
             this.Name = "BestRateServiceControl";
-            this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Size = new System.Drawing.Size(391, 346);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
-            this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRates, 0);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
+            this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Controls.SetChildIndex(this.sectionShipment, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
@@ -98,7 +226,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
+            this.sectionShipment.ContentPanel.ResumeLayout(false);
+            this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
+            this.sectionFrom.ContentPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).EndInit();
             this.sectionRates.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).EndInit();
@@ -108,7 +241,15 @@
 
         #endregion
 
+        private ShipWorks.UI.Controls.CollapsibleGroupControl sectionFrom;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionRates;
+        private ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl originControl;
         private ShipWorks.Shipping.Editing.RateControl rateControl;
+        private System.Windows.Forms.Label labelShipDate;
+        private UI.Controls.MultiValueDateTimePicker shipDate;
+        private UI.Controls.WeightControl weight;
+        private System.Windows.Forms.Label labelWeight;
+        private System.Windows.Forms.Label labelDimensions;
+        private Editing.DimensionsControl dimensionsControl;
     }
 }

@@ -20,5 +20,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             throw new NotImplementedException();
         }
+
+        private void OnOriginChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
