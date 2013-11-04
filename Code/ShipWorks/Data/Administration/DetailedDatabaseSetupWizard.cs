@@ -44,6 +44,7 @@ using ShipWorks.Properties;
 using Divelements.SandGrid;
 using ShipWorks.UI.Controls;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Data.Administration
 {
@@ -2200,10 +2201,10 @@ namespace ShipWorks.Data.Administration
 
             sqlSession.SaveAsCurrent();
 
-            // If we created this database, then seamlessly continue this wizard into the ShipWorks setup wizard
+            // If we created this database, then seamlessly continue this wizard into the add store wizard
             if (ChooseWisely == ChooseWiselyOption.Create)
             {
-                ShipWorksSetupWizard.ContinueAfterCreateDatabase(this, swUsername.Text.Trim(), swPassword.Text);
+                AddStoreWizard.ContinueAfterCreateDatabase(this, swUsername.Text.Trim(), swPassword.Text);
             }
             else
             {

@@ -81,22 +81,37 @@ namespace ShipWorks.Stores.Management
             InitializeComponent();
         }
 
+        #region Wizard Creation
+
         /// <summary>
-        /// Run the wizard.  We do it this way so that we can control access to when the wizard dialog is created.  It's possible
-        /// it may not be able to be created due to the wizard open on another computer.  Only one wizard per-computer can be open
-        /// so that we can be sure that the store that is marked "IsSetupComplete" does not get wiped out from under a wizard.
+        /// Run the setup wizard.  Will return false if the user doesn't have permissions, the user canceled, or if the Wizard was not able to run because
+        /// it was already running on another computer.
         /// </summary>
-        public static StoreEntity RunWizard(IWin32Window owner)
+        public static bool RunWizard(IWin32Window owner)
         {
+            // See if we have permissions
+            if (!(UserSession.Security.HasPermission(PermissionType.ManageStores)))
+            {
+                MessageHelper.ShowInformation(owner, "An administrator must log on to setup to ShipWorks.");
+                return false;
+            }
+
             try
             {
                 using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
                 {
                     using (AddStoreWizard wizard = new AddStoreWizard())
                     {
+                        // If it was succesful, make sure our local list of stores is refreshed
                         if (wizard.ShowDialog(owner) == DialogResult.OK)
                         {
-                            return wizard.Store;
+                            StoreManager.CheckForChanges();
+
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
                         }
                     }
                 }
@@ -104,11 +119,45 @@ namespace ShipWorks.Stores.Management
             catch (SqlAppResourceLockException)
             {
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks.  This can only be done on one computer at a time.");
-                return null;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Designed to be called from the last step of another wizard where a brand new database and user account was just created, this makes it look to the user
+        /// like the ShipWorks Setup wizard is a seamless continuation of the previous wizard.  The DialogResult of the ShipWorks Setup is used as the DialogResult
+        /// that closes the original wizard.
+        /// </summary>
+        public static void ContinueAfterCreateDatabase(WizardForm originalWizard, string username, string password)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Initialize the session
+            UserSession.InitializeForCurrentDatabase();
+
+            // Logon the user
+            UserSession.Logon(username, password, true);
+
+            // Initialize the session
+            UserManager.InitializeForCurrentUser();
+            UserSession.InitializeForCurrentSession();
+
+            originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
+
+            // Run the setup wizard
+            bool complete = RunWizard(originalWizard);
+
+            // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
+            if (!complete)
+            {
+                UserSession.Logoff(false);
             }
 
-            return null;
+            // Counts as a cancel on the original wizard if they didn't complete the setup.
+            originalWizard.DialogResult = complete ? DialogResult.OK : DialogResult.Cancel;
         }
+
+        #endregion
 
         /// <summary>
         /// The store currently being configured by the wizard
@@ -175,19 +224,11 @@ namespace ShipWorks.Stores.Management
         #region StoreType Page
 
         /// <summary>
-        /// Indicates if the Wizard is in trial mode vs. entered an actual license.
+        /// Entering the store type wizard page.
         /// </summary>
-        public bool TrialMode
+        private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
         {
-            get
-            {
-                return tryRadio.Checked;
-            }
-            set
-            {
-                tryRadio.Checked = value;
-                licenseRadio.Checked = !value;
-            }
+            NextEnabled = SelectedStoreType != null;
         }
 
         /// <summary>
@@ -204,36 +245,6 @@ namespace ShipWorks.Stores.Management
             }
 
             comboStoreType.SelectedIndex = 0;
-        }
-
-        /// <summary>
-        /// User is choosing to do the trial
-        /// </summary>
-        private void OnChooseTryShipWorks(object sender, EventArgs e)
-        {
-            if (tryRadio.Checked)
-            {
-                NextEnabled = false;
-                comboStoreType.Enabled = true;
-
-                licenseKey.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// User selected the radio to enter a license key.
-        /// </summary>
-        private void OnChooseEnterLicense(object sender, EventArgs e)
-        {
-            if (licenseRadio.Checked)
-            {
-                comboStoreType.SelectedIndex = 0;
-                comboStoreType.Enabled = false;
-
-                NextEnabled = true;
-
-                licenseKey.Enabled = true;
-            }
         }
 
         /// <summary>
@@ -263,62 +274,23 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
-        /// Entering the store type wizard page.
-        /// </summary>
-        private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
-        {
-            NextEnabled = licenseRadio.Checked || SelectedStoreType != null;
-        }
-
-        /// <summary>
         /// Stepping next from the initial page.
         /// </summary>
         private void OnStepNextStoreType(object sender, WizardStepEventArgs e)
         {
-            StoreType storeType = null;
+            StoreType storeType = SelectedStoreType;
 
-            // Validate the license if they are entering a license
-            if (licenseRadio.Checked)
+            if (storeType == null)
             {
-                ShipWorksLicense license = new ShipWorksLicense(licenseKey.Text.Trim());
+                MessageHelper.ShowInformation(this, "Please select the online platform you use, or enter a license key.");
 
-                // Only go the the next page if the status is now Active
-                // for this license.
-                if (!license.IsValid)
-                {
-                    MessageHelper.ShowInformation(this, "The license entered is not a valid ShipWorks license.");
-
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-
-                storeType = StoreTypeManager.GetType(license.StoreTypeCode);
-            }
-            else
-            {
-                storeType = SelectedStoreType;
-
-                if (storeType == null)
-                {
-                    MessageHelper.ShowInformation(this, "Please select the online platform you use, or enter a license key.");
-
-                    e.NextPage = CurrentPage;
-                    return;
-                }
+                e.NextPage = CurrentPage;
+                return;
             }
 
             // Setup for the selected\licensed storetype
             SetupForStoreType(storeType);
-
-            // Apply the license
-            if (licenseRadio.Checked)
-            {
-                store.License = licenseKey.Text.Trim();
-            }
-            else
-            {
-                store.License = "";
-            }
+            store.License = "";
 
             // Move to the now newly inserted next page
             e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
@@ -364,6 +336,83 @@ namespace ShipWorks.Stores.Management
                 for (int i = storePages.Count - 1; i >= 0; i--)
                 {
                     Pages.Insert(Pages.IndexOf(CurrentPage) + 1, storePages[i]);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Already Active
+
+        /// <summary>
+        /// Activate and step into the appropriate account page
+        /// </summary>
+        private void ActivateAndFinish(WizardStepEventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Default is to move to the finished page
+            e.NextPage = wizardPageFinished;
+
+            try
+            {
+                // Create a license for the given store
+                trialDetail = TangoWebClient.GetTrial(store);
+
+                // Save the license
+                store.License = trialDetail.License.Key;
+                store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
+
+                // Already an active license available
+                if (trialDetail.IsConverted)
+                {
+                    e.NextPage = wizardPageAlreadyActive;
+                }
+
+                // Can't attach to a freemium trial if not freemium mode
+                else if (trialDetail.Edition is FreemiumFreeEdition && !isFreemiumMode)
+                {
+                    MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay version.", StoreTypeManager.GetType(store).LicenseIdentifier));
+
+                    e.NextPage = CurrentPage;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is ShipWorksLicenseException || ex is TangoException)
+                {
+                    MessageHelper.ShowError(this, ex.Message);
+
+                    e.NextPage = CurrentPage;
+                    return;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stepping next from the already active license page
+        /// </summary>
+        private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
+        {
+            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, trialLicense.Text.Trim(), this);
+
+            if (licenseState != LicenseActivationState.Active)
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+            else
+            {
+                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && !isFreemiumMode)
+                {
+                    MessageHelper.ShowError(this, "The license you entered can only be used with the Endicia Free for eBay ShipWorks edition.");
+
+                    e.NextPage = CurrentPage;
+                    return;
                 }
             }
         }
@@ -638,290 +687,7 @@ namespace ShipWorks.Stores.Management
 
         #endregion
 
-        #region Settings Page
-
-        /// <summary>
-        /// Stepping into the settings page
-        /// </summary>
-        private void OnSteppingIntoSettings(object sender, WizardSteppingIntoEventArgs e)
-        {
-            // Load the email settings
-            EmailUtility.LoadEmailAccounts(emailAccountDefault);
-
-            // Load the download settings
-            automaticDownloadControl.LoadStore(store);
-
-            // Don't need to mess with user-rights at all if there are no standard users
-            panelUserRights.Visible = UserManager.GetUsers(false).Any(u => !u.IsAdmin);
-
-            if (permissions == null)
-            {
-                // Use a placeholder StoreID since we don't have a real one yet
-                permissions = UserUtility.CreateDefaultStorePermissionSet(permissionsPlaceholderStoreID);
-            }
-        }
-
-        /// <summary>
-        /// Stepping next out of the settings page
-        /// </summary>
-        private void OnStepNextSettings(object sender, WizardStepEventArgs e)
-        {
-            automaticDownloadControl.SaveToStoreEntity(store);
-
-            store.DefaultEmailAccountID = (emailAccountDefault.Items.Count > 0) ?
-                (long) emailAccountDefault.SelectedValue :
-                -1;
-
-            ActivateAndFinish(e);
-        }
-
-        /// <summary>
-        /// Open the window for managing email accounts for the store
-        /// </summary>
-        private void OnEmailAccounts(object sender, EventArgs e)
-        {
-            using (EmailAccountManagerDlg dlg = new EmailAccountManagerDlg())
-            {
-                dlg.ShowDialog(this);
-
-                EmailUtility.LoadEmailAccounts(emailAccountDefault);
-            }
-        }
-
-        /// <summary>
-        /// Open the window for editing the default user rights
-        /// </summary>
-        private void OnEditUserRights(object sender, EventArgs e)
-        {
-            // Make a copy of the permissions to give to the dialog
-            PermissionSet copy = new PermissionSet(permissions);
-
-            using (AddStorePermissionsDlg dlg = new AddStorePermissionsDlg(copy, permissionsPlaceholderStoreID))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    permissions = copy;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Activate and step into the appropriate account page
-        /// </summary>
-        private void ActivateAndFinish(WizardStepEventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            // Default is to move to the finished page
-            e.NextPage = wizardPageFinished;
-
-            // If the selected to enter a key, use that
-            if (licenseRadio.Checked)
-            {
-                LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, store.License, this);
-
-                if (licenseState != LicenseActivationState.Active)
-                {
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-                else
-                {
-                    if (EditionSerializer.Restore(store) is FreemiumFreeEdition && !isFreemiumMode)
-                    {
-                        MessageHelper.ShowError(this, "The license you entered can only be used with the Endicia Free for eBay ShipWorks edition.");
-
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                try
-                {
-                    // Create a license for the given store
-                    trialDetail = TangoWebClient.GetTrial(store);
-
-                    // Save the license
-                    store.License = trialDetail.License.Key;
-                    store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
-
-                    // Already an active license available
-                    if (trialDetail.IsConverted)
-                    {
-                        e.NextPage = wizardPageTrialConverted;
-                    }
-
-                    // If its expired
-                    else if (trialDetail.IsExpired)
-                    {
-                        e.NextPage = wizardPageTrialExpired;
-                    }
-
-                    // Can't attach to a freemium trial if not freemium mode
-                    else if (trialDetail.Edition is FreemiumFreeEdition && !isFreemiumMode)
-                    {
-                        MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay version.", StoreTypeManager.GetType(store).LicenseIdentifier));
-
-                        e.NextPage = CurrentPage;
-                    }
-
-                    // If it wasnt started today, we consider it in progress. Also special case for freemium - which creates a trial initially, but the user shouldn't know what.
-                    else if (trialDetail.Started != trialDetail.ServerDate && !isFreemiumMode)
-                    {
-                        e.NextPage = wizardPageTrialInProgress;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is ShipWorksLicenseException || ex is TangoException)
-                    {
-                        MessageHelper.ShowError(this, ex.Message);
-
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region Trial In Progress
-
-        /// <summary>
-        /// Stepping into the trial in progress page
-        /// </summary>
-        private void OnSteppingIntoTrialInProgress(object sender, WizardSteppingIntoEventArgs e)
-        {
-            string display = "The trial period for your store has already begun.  There are now {0} days left in your trial.";
-            labelTrialStarted.Text = string.Format(display, trialDetail.DaysRemaining);
-        }
-
-        /// <summary>
-        /// Stepping next out of the trial in progress page
-        /// </summary>
-        private void OnStepNextTrialInProgress(object sender, WizardStepEventArgs e)
-        {
-            e.NextPage = wizardPageFinished;
-        }
-
-        #endregion
-
-        #region Trial Expired
-
-        /// <summary>
-        /// The trial expired page is being displayed.
-        /// </summary>
-        private void OnSteppingIntoTrialExpired(object sender, WizardSteppingIntoEventArgs e)
-        {
-            panelCanExtend.Visible = trialDetail.CanExtend;
-            panelNoExtend.Visible = !trialDetail.CanExtend;
-        }
-
-        /// <summary>
-        /// Stepping next from the "Expired" screen.
-        /// </summary>
-        private void OnStepNextTrialExpired(object sender, WizardStepEventArgs e)
-        {
-            e.NextPage = wizardPageFinished;
-        }
-
-        /// <summary>
-        /// Open the link to signup for trial services.
-        /// </summary>
-        private void OnTrialSignup(object sender, EventArgs e)
-        {
-            WebHelper.OpenUrl("https://www.interapptive.com/store/?store=" + StoreTypeManager.GetType(store).TangoCode, this);
-        }
-
-        /// <summary>
-        /// Open the link to signup
-        /// </summary>
-        private void OnTrialExpiredSignup(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            WebHelper.OpenUrl("https://www.interapptive.com/store/?store=" + StoreTypeManager.GetType(store).TangoCode, this);
-        }
-
-        /// <summary>
-        /// User wants to extend their trial.
-        /// </summary>
-        private void OnTrialExtend(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                Cursor.Current = Cursors.WaitCursor;
-
-                TangoWebClient.ExtendTrial(store);
-
-                MessageHelper.ShowMessage(this, "Your trial has been extended.");
-
-                // Simulate next click
-                MoveNext();
-            }
-            catch (ShipWorksLicenseException ex)
-            {
-                MessageHelper.ShowError(this, ex.Message);
-            }
-            catch (TangoException ex)
-            {
-                MessageHelper.ShowError(this, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region Trial Converted
-
-        /// <summary>
-        /// Stepping next from the trial convertd page
-        /// </summary>
-        private void OnStepNextTrialConverted(object sender, WizardStepEventArgs e)
-        {
-            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, trialLicense.Text.Trim(), this);
-
-            if (licenseState != LicenseActivationState.Active)
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-            else
-            {
-                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && !isFreemiumMode)
-                {
-                    MessageHelper.ShowError(this, "The license you entered can only be used with the Endicia Free for eBay ShipWorks edition.");
-
-                    e.NextPage = CurrentPage;
-                    return;
-                }
-            }
-
-            // Done
-            e.NextPage = wizardPageFinished;
-        }
-
-        #endregion
-
         #region Complete
-
-        /// <summary>
-        /// Create a default status preset for the store
-        /// </summary>
-        private void CreateDefaultStatusPreset(StoreEntity store, StatusPresetTarget presetTarget, SqlAdapter adapter)
-        {
-            StatusPresetEntity preset = new StatusPresetEntity();
-            preset.StoreID = store.StoreID;
-            preset.StatusTarget = (int) presetTarget;
-            preset.StatusText = "";
-            preset.IsDefault = true;
-
-            adapter.SaveEntity(preset);
-        }
 
         /// <summary>
         /// Stepping into the complete page
@@ -940,19 +706,6 @@ namespace ShipWorks.Stores.Management
                     // Create the default presets
                     CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
                     CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
-
-                    // Now that we have a StoreID, we have to update our permission set to use
-                    // it instead of the fake zero one
-                    foreach (PermissionEntity permission in permissions)
-                    {
-                        permission.ObjectID = store.StoreID;
-                    }
-
-                    // Apply permissions to existing users
-                    foreach (UserEntity user in UserManager.GetUsers(false))
-                    {
-                        permissions.CopyTo(user.UserID, false, adapter);
-                    }
 
                     // See if the store has needs to create any store-specific filters
                     List<FilterEntity> storeFilters = StoreTypeManager.GetType(store).CreateInitialFilters();
@@ -1009,6 +762,20 @@ namespace ShipWorks.Stores.Management
             {
                 FilterLayoutContext.PopScope();
             }
+        }
+
+        /// <summary>
+        /// Create a default status preset for the store
+        /// </summary>
+        private void CreateDefaultStatusPreset(StoreEntity store, StatusPresetTarget presetTarget, SqlAdapter adapter)
+        {
+            StatusPresetEntity preset = new StatusPresetEntity();
+            preset.StoreID = store.StoreID;
+            preset.StatusTarget = (int) presetTarget;
+            preset.StatusText = "";
+            preset.IsDefault = true;
+
+            adapter.SaveEntity(preset);
         }
 
         /// <summary>

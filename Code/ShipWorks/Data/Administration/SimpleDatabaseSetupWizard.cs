@@ -18,6 +18,7 @@ using log4net;
 using ShipWorks.Email;
 using ShipWorks.Users;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Data.Administration
 {
@@ -401,8 +402,8 @@ namespace ShipWorks.Data.Administration
             createdDatabase = false;
             sqlSession.SaveAsCurrent();
 
-            // Now we propel them right into our ShipWorks Setup Wizard
-            ShipWorksSetupWizard.ContinueAfterCreateDatabase(this, username, swPassword.Text);
+            // Now we propel them right into our add store wizard
+            AddStoreWizard.ContinueAfterCreateDatabase(this, username, swPassword.Text);
         }
 
         /// <summary>

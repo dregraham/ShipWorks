@@ -78,26 +78,25 @@
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.next.Location = new System.Drawing.Point(380, 343);
-            this.next.Text = "Finish";
+            this.next.Location = new System.Drawing.Point(380, 379);
+            this.next.ShowShield = true;
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(461, 343);
+            this.cancel.Location = new System.Drawing.Point(461, 379);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(299, 343);
+            this.back.Location = new System.Drawing.Point(299, 379);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinishExisting);
-            this.mainPanel.Size = new System.Drawing.Size(548, 271);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Size = new System.Drawing.Size(548, 307);
             // 
             // etchBottom
             // 
-            this.etchBottom.Location = new System.Drawing.Point(0, 333);
+            this.etchBottom.Location = new System.Drawing.Point(0, 369);
             this.etchBottom.Size = new System.Drawing.Size(552, 2);
             // 
             // pictureBox
@@ -126,7 +125,7 @@
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
             this.wizardPageWelcome.NextRequiresElevation = true;
-            this.wizardPageWelcome.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageWelcome.Size = new System.Drawing.Size(548, 307);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Welcome to ShipWorks";
             this.wizardPageWelcome.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
@@ -440,10 +439,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 378);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(548, 414);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MinimumSize = new System.Drawing.Size(564, 416);
+            this.MaximumSize = new System.Drawing.Size(564, 452);
+            this.MinimumSize = new System.Drawing.Size(564, 452);
             this.Name = "SimpleDatabaseSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {

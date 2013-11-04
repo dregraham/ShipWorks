@@ -221,26 +221,24 @@ namespace ShipWorks.Data.Administration
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.next.Location = new System.Drawing.Point(380, 343);
-            this.next.Text = "Finish";
+            this.next.Location = new System.Drawing.Point(380, 379);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(461, 343);
+            this.cancel.Location = new System.Drawing.Point(461, 379);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(299, 343);
+            this.back.Location = new System.Drawing.Point(299, 379);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageComplete);
-            this.mainPanel.Size = new System.Drawing.Size(548, 271);
+            this.mainPanel.Controls.Add(this.wizardPageChooseWisely2012);
+            this.mainPanel.Size = new System.Drawing.Size(548, 307);
             // 
             // etchBottom
             // 
-            this.etchBottom.Location = new System.Drawing.Point(0, 333);
+            this.etchBottom.Location = new System.Drawing.Point(0, 369);
             this.etchBottom.Size = new System.Drawing.Size(552, 2);
             // 
             // pictureBox
@@ -269,7 +267,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageChooseWisely2012.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageChooseWisely2012.Location = new System.Drawing.Point(0, 0);
             this.wizardPageChooseWisely2012.Name = "wizardPageChooseWisely2012";
-            this.wizardPageChooseWisely2012.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageChooseWisely2012.Size = new System.Drawing.Size(548, 307);
             this.wizardPageChooseWisely2012.TabIndex = 0;
             this.wizardPageChooseWisely2012.Title = "Database Configuration";
             this.wizardPageChooseWisely2012.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSetupOrConnect);
@@ -1739,10 +1737,10 @@ namespace ShipWorks.Data.Administration
             // DetailedDatabaseSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(548, 378);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(548, 414);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MinimumSize = new System.Drawing.Size(554, 406);
+            this.MaximumSize = new System.Drawing.Size(564, 452);
+            this.MinimumSize = new System.Drawing.Size(564, 452);
             this.Name = "DetailedDatabaseSetupWizard";
             this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {

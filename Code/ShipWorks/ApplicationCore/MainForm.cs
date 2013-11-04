@@ -592,10 +592,10 @@ namespace ShipWorks
                 return;
             }
             
-            // See if there is any setup that needs to be done
-            if (!ShipWorksSetupManager.IsFullySetup())
+            // If there are no stores, we need to make sure one is added before continuing
+            if (StoreManager.GetDatabaseStoreCount() == 0)
             {
-                if (!ShipWorksSetupWizard.RunWizard(this))
+                if (!AddStoreWizard.RunWizard(this))
                 {
                     UserSession.Logoff(false);
                     UserSession.Reset();

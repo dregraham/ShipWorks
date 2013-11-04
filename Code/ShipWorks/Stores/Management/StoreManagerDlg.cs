@@ -170,12 +170,19 @@ namespace ShipWorks.Stores.Management
             }
             set
             {
-                foreach (GridRow row in sandGrid.Rows)
+                if (value == null)
                 {
-                    if (((StoreEntity)row.Tag).StoreID == value.StoreID)
+                    sandGrid.SelectedElements.Clear();
+                }
+                else
+                {
+                    foreach (GridRow row in sandGrid.Rows)
                     {
-                        row.Selected = true;
-                        return;
+                        if (((StoreEntity) row.Tag).StoreID == value.StoreID)
+                        {
+                            row.Selected = true;
+                            return;
+                        }
                     }
                 }
             }
@@ -388,13 +395,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnAddStore(object sender, EventArgs e)
         {
-            StoreEntity newStore = AddStoreWizard.RunWizard(this);
-
-            if (newStore != null)
+            if (AddStoreWizard.RunWizard(this))
             {
                 LoadStores();
 
-                SelectedStore = newStore;
+                SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();
                 ActiveControl = sandGrid;
             }
         }
