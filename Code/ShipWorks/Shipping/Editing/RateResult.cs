@@ -44,6 +44,11 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Gets or sets the hover text information that is displayed in RateControl.
+        /// </summary>
+        public string HoverText { get; set; }
+
+        /// <summary>
         /// A description of the rate service class, like "USPS Priority"
         /// </summary>
         public string Description
