@@ -41,10 +41,11 @@
             this.panelOutOfDate = new System.Windows.Forms.Panel();
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            ((System.ComponentModel.ISupportInitialize) (this.outOfDateBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).BeginInit();
             this.outOfDateBar.Panel.SuspendLayout();
             this.outOfDateBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.image)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.panelOutOfDate.SuspendLayout();
             this.panelFootnote.SuspendLayout();
             this.SuspendLayout();
@@ -108,6 +109,8 @@
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
             this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
+            this.sandGrid.MouseHover += new System.EventHandler(this.OnSandGridMouseHover);
+            this.sandGrid.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnSandGridMouseMove);
             // 
             // gridColumnService
             // 
@@ -149,12 +152,13 @@
             // 
             // outOfDateBar
             // 
-            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.outOfDateBar.GroupBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderRowList;
             this.outOfDateBar.GroupBorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
             this.outOfDateBar.Location = new System.Drawing.Point(4, 3);
             this.outOfDateBar.Name = "outOfDateBar";
+            this.outOfDateBar.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Global;
             // 
             // outOfDateBar.Panel
             // 
@@ -162,19 +166,27 @@
             this.outOfDateBar.Panel.Controls.Add(this.labelPrimary);
             this.outOfDateBar.Panel.Controls.Add(this.image);
             this.outOfDateBar.Size = new System.Drawing.Size(485, 24);
-            this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (235)))));
+            this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(235)))));
+            this.outOfDateBar.StateCommon.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.outOfDateBar.StateCommon.Border.Color1 = System.Drawing.Color.Silver;
-            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders) ((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom)
-                        | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left)
-                        | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.outOfDateBar.StateCommon.Border.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.outOfDateBar.StateCommon.Border.Rounding = 4;
+            this.outOfDateBar.StateDisabled.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.outOfDateBar.StateDisabled.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Inherit;
+            this.outOfDateBar.StateDisabled.Border.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.outOfDateBar.StateNormal.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.outOfDateBar.StateNormal.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Inherit;
+            this.outOfDateBar.StateNormal.Border.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.outOfDateBar.TabIndex = 6;
             // 
             // labelSecondary
             // 
             this.labelSecondary.AutoSize = true;
             this.labelSecondary.BackColor = System.Drawing.Color.Transparent;
-            this.labelSecondary.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (50)))), ((int) (((byte) (50)))), ((int) (((byte) (50)))));
+            this.labelSecondary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.labelSecondary.Location = new System.Drawing.Point(85, 2);
             this.labelSecondary.Name = "labelSecondary";
             this.labelSecondary.Size = new System.Drawing.Size(231, 13);
@@ -185,7 +197,7 @@
             // 
             this.labelPrimary.AutoSize = true;
             this.labelPrimary.BackColor = System.Drawing.Color.Transparent;
-            this.labelPrimary.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelPrimary.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPrimary.Location = new System.Drawing.Point(16, 2);
             this.labelPrimary.Name = "labelPrimary";
             this.labelPrimary.Size = new System.Drawing.Size(71, 13);
@@ -228,7 +240,11 @@
             this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Top;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 0);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
+            this.kryptonBorderEdge.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Global;
             this.kryptonBorderEdge.Size = new System.Drawing.Size(493, 1);
+            this.kryptonBorderEdge.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.kryptonBorderEdge.StateDisabled.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.kryptonBorderEdge.StateNormal.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.kryptonBorderEdge.TabIndex = 3;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -239,14 +255,15 @@
             this.Controls.Add(this.sandGrid);
             this.Controls.Add(this.panelOutOfDate);
             this.Controls.Add(this.panelFootnote);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RateControl";
             this.Size = new System.Drawing.Size(493, 205);
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).EndInit();
             this.outOfDateBar.Panel.ResumeLayout(false);
             this.outOfDateBar.Panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.outOfDateBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).EndInit();
             this.outOfDateBar.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.image)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.panelOutOfDate.ResumeLayout(false);
             this.panelFootnote.ResumeLayout(false);
             this.ResumeLayout(false);

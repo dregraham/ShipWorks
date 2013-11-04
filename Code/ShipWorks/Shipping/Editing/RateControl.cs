@@ -26,6 +26,9 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public event EventHandler ReloadRatesRequired;
 
+        private ToolTip toolTip;
+        private int hoverRow = -1;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -64,10 +67,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private List<RateFootnoteControl> PreviousFootnotes
         {
-            get
-            {
-                return panelFootnote.Controls.OfType<RateFootnoteControl>().ToList();
-            }
+            get { return panelFootnote.Controls.OfType<RateFootnoteControl>().ToList(); }
         }
 
         /// <summary>
@@ -81,12 +81,12 @@ namespace ShipWorks.Shipping.Editing
             foreach (RateResult rate in rateGroup.Rates)
             {
                 GridRow row = new GridRow(new GridCell[]
-                    {
-                        new GridCell(rate.Description),
-                        new GridCell(rate.Days),
-                        new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
-                        new GridHyperlinkCell(rate.Selectable ? "Select" : "")
-                    });
+                {
+                    new GridCell(rate.Description),
+                    new GridCell(rate.Days),
+                    new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
+                    new GridHyperlinkCell(rate.Selectable ? "Select" : "")
+                });
 
                 row.Tag = rate;
 
@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// The footnote has indicated it has changed something that has changed the rate criteria
         /// </summary>
-        void OnFootnoteRateCriteriaChanged(object sender, EventArgs e)
+        private void OnFootnoteRateCriteriaChanged(object sender, EventArgs e)
         {
             if (ReloadRatesRequired != null)
             {
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// User has clicked to select a rate
         /// </summary>
-        void OnSelectRate(object sender, GridRowColumnEventArgs e)
+        private void OnSelectRate(object sender, GridRowColumnEventArgs e)
         {
             RateResult rate = e.Row.Tag as RateResult;
             if (!rate.Selectable)
@@ -152,10 +152,76 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public int FootnoteHeight
         {
-            get
+            get { return panelFootnote.Visible ? panelFootnote.Height : 0; }
+        }
+
+        /// <summary>
+        /// Called when mouse hovers over SandGrid
+        /// </summary>
+        private void OnSandGridMouseHover(object sender, EventArgs e)
+        {
+            if (toolTip == null)
             {
-                return panelFootnote.Visible ? panelFootnote.Height : 0;
+                toolTip = new ToolTip();
             }
+        }
+
+        /// <summary>
+        /// Called when [sand grid mouse move].
+        /// </summary>
+        private void OnSandGridMouseMove(object sender, MouseEventArgs e)
+        {
+            GridRow rowMouseIsOn = GetRowMouseIsOn();
+
+            if (rowMouseIsOn != null && rowMouseIsOn.Index != hoverRow && toolTip != null)
+            {
+                toolTip.Active = false;
+
+                string hoverText = GetHoverText(rowMouseIsOn);
+                
+                if (!string.IsNullOrEmpty(hoverText))
+                {
+                    toolTip.SetToolTip(sandGrid, hoverText);
+                    toolTip.Active = true;
+
+                    hoverRow = rowMouseIsOn.Index;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the hover text for specific row.
+        /// </summary>
+        private string GetHoverText(GridRow row)
+        {
+            RateResult rate = row.Tag as RateResult;
+
+            string hoverText = string.Empty;
+
+            if (rate != null)
+            {
+                hoverText = rate.HoverText;
+            }
+
+            return hoverText;
+        }
+
+        /// <summary>
+        /// Gets the row the mouse is on.
+        /// </summary>
+        private GridRow GetRowMouseIsOn()
+        {
+            int mouseYLocation = Cursor.Position.Y - sandGrid.PointToScreen(sandGrid.Location).Y;
+
+            foreach (GridRow row in sandGrid.Rows)
+            {
+                if (row.Bounds.Top <= mouseYLocation && row.Bounds.Bottom >= mouseYLocation)
+                {
+                    return row;
+                }
+            }
+
+            return null;
         }
     }
 }
