@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // sectionFrom.ContentPanel
             // 
             this.sectionFrom.ContentPanel.Controls.Add(this.originControl);
-            this.sectionFrom.ExpandedHeight = 487;
+            this.sectionFrom.ExpandedHeight = 431;
             this.sectionFrom.ExtraText = "";
             this.sectionFrom.Location = new System.Drawing.Point(3, 210);
             this.sectionFrom.Name = "sectionFrom";
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             | ShipWorks.Data.Controls.PersonFields.Website)));
             this.originControl.BackColor = System.Drawing.Color.Transparent;
             this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.originControl.Location = new System.Drawing.Point(3, 54);
+            this.originControl.Location = new System.Drawing.Point(3, 5);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
             this.originControl.Size = new System.Drawing.Size(246, 403);
@@ -121,6 +121,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             // sectionRates
             // 
+            this.sectionRates.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionRates.Collapsed = true;
             // 
             // sectionRates.ContentPanel
@@ -157,7 +159,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             // shipDate
             // 
-            this.shipDate.Enabled = false;
             this.shipDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.shipDate.Location = new System.Drawing.Point(85, 8);
             this.shipDate.Name = "shipDate";
@@ -175,6 +176,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weight.Size = new System.Drawing.Size(218, 21);
             this.weight.TabIndex = 68;
             this.weight.Weight = 0D;
+            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelWeight
             // 
@@ -205,15 +207,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 70;
+            this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // BestRateServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.Controls.Add(this.sectionFrom);
             this.Controls.Add(this.sectionRates);
             this.Name = "BestRateServiceControl";
-            this.Size = new System.Drawing.Size(391, 346);
+            this.Size = new System.Drawing.Size(391, 297);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);

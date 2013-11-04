@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             if (shipment.BestRate != null)
             {
                 shipment.BestRate.DimsAddWeight = false;
+                shipment.BestRate.DimsProfileID = 0;
                 shipment.BestRate.DimsHeight = 0;
                 shipment.BestRate.DimsLength = 0;
                 shipment.BestRate.DimsWeight = 0;
@@ -59,9 +60,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             throw new NotImplementedException();
         }
 
-        public override Insurance.InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
         {
-            throw new NotImplementedException();
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return new InsuranceChoice(shipment, shipment, shipment.BestRate, shipment.BestRate);
         }
 
         public override void ProcessShipment(ShipmentEntity shipment)
