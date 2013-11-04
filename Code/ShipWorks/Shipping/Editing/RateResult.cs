@@ -7,12 +7,11 @@ using System.Drawing;
 namespace ShipWorks.Shipping.Editing
 {
     /// <summary>
-    /// Rate object used by the RatesControl, use for univeral rate display system
+    /// Rate object used by the RatesControl, use for universal rate display system
     /// </summary>
     public class RateResult
     {
         bool selectable;
-        string description;
         string days;
         decimal amount;
 
@@ -20,11 +19,11 @@ namespace ShipWorks.Shipping.Editing
         object tag;
 
         /// <summary>
-        /// Constructor, for when an entry is not a selctable rate, but used more as a heading
+        /// Constructor, for when an entry is not a selectable rate, but used more as a heading
         /// </summary>
         public RateResult(string description, string days)
         {
-            this.description = description;
+            this.Description = description;
             this.days = days;
 
             this.selectable = false;
@@ -35,7 +34,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public RateResult(string description, string days, decimal amount, object tag)
         {
-            this.description = description;
+            this.Description = description;
             this.days = days;
             this.amount = amount;
             this.tag = tag;
@@ -51,10 +50,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// A description of the rate service class, like "USPS Priority"
         /// </summary>
-        public string Description
-        {
-            get { return description; }
-        }
+        public string Description { get; set; }
 
         /// <summary>
         /// Transit time description could be "2" or "2 - 3 standard" or whatever

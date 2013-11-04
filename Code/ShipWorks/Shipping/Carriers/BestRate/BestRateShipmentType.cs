@@ -116,6 +116,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Use the broker to get the best rates for each shipping provider
                 rates.AddRange(broker.GetBestRates(shipment));
             }
+            
+            // We don't want to show the actual carrier/service name in the description due to contractual obligations
+            rates.ForEach(r => r.Description = string.Empty);
 
             return new RateGroup(rates);
         }
