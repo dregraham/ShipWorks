@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -933,7 +934,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker()
         {
-            return new NullShippingBroker();
+            return new UpsBestRateBroker();
         }
     }
 }
