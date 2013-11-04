@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<ShipmentCustomsItemEntity> _customsItems;
 
 		private OrderEntity _order;
-		private BestRateShipmentEntity _bestRateShipment;
+		private BestRateShipmentEntity _bestRate;
 		private EquaShipShipmentEntity _equaShip;
 		private FedExShipmentEntity _fedEx;
 		private IParcelShipmentEntity _iParcel;
@@ -65,8 +65,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			/// <summary>Member name CustomsItems</summary>
 			public static readonly string CustomsItems = "CustomsItems";
 
-			/// <summary>Member name BestRateShipment</summary>
-			public static readonly string BestRateShipment = "BestRateShipment";
+			/// <summary>Member name BestRate</summary>
+			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name EquaShip</summary>
 			public static readonly string EquaShip = "EquaShip";
 			/// <summary>Member name FedEx</summary>
@@ -146,10 +146,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_order.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-				_bestRateShipment = (BestRateShipmentEntity)info.GetValue("_bestRateShipment", typeof(BestRateShipmentEntity));
-				if(_bestRateShipment!=null)
+				_bestRate = (BestRateShipmentEntity)info.GetValue("_bestRate", typeof(BestRateShipmentEntity));
+				if(_bestRate!=null)
 				{
-					_bestRateShipment.AfterSave+=new EventHandler(OnEntityAfterSave);
+					_bestRate.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_equaShip = (EquaShipShipmentEntity)info.GetValue("_equaShip", typeof(EquaShipShipmentEntity));
 				if(_equaShip!=null)
@@ -232,8 +232,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)entity);
 					break;
 
-				case "BestRateShipment":
-					this.BestRateShipment = (BestRateShipmentEntity)entity;
+				case "BestRate":
+					this.BestRate = (BestRateShipmentEntity)entity;
 					break;
 				case "EquaShip":
 					this.EquaShip = (EquaShipShipmentEntity)entity;
@@ -284,7 +284,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					toReturn.Add(ShipmentEntity.Relations.ShipmentCustomsItemEntityUsingShipmentID);
 					break;
 
-				case "BestRateShipment":
+				case "BestRate":
 					toReturn.Add(ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID);
 					break;
 				case "EquaShip":
@@ -357,8 +357,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)relatedEntity);
 					break;
-				case "BestRateShipment":
-					SetupSyncBestRateShipment(relatedEntity);
+				case "BestRate":
+					SetupSyncBestRate(relatedEntity);
 					break;
 				case "EquaShip":
 					SetupSyncEquaShip(relatedEntity);
@@ -401,8 +401,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					base.PerformRelatedEntityRemoval(this.CustomsItems, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-				case "BestRateShipment":
-					DesetupSyncBestRateShipment(false, true);
+				case "BestRate":
+					DesetupSyncBestRate(false, true);
 					break;
 				case "EquaShip":
 					DesetupSyncEquaShip(false, true);
@@ -435,9 +435,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_bestRateShipment!=null)
+			if(_bestRate!=null)
 			{
-				toReturn.Add(_bestRateShipment);
+				toReturn.Add(_bestRate);
 			}
 
 			if(_equaShip!=null)
@@ -530,7 +530,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_customsItems", ((_customsItems!=null) && (_customsItems.Count>0) && !this.MarkedForDeletion)?_customsItems:null);
 
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
-				info.AddValue("_bestRateShipment", (!this.MarkedForDeletion?_bestRateShipment:null));
+				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_equaShip", (!this.MarkedForDeletion?_equaShip:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
@@ -606,7 +606,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'BestRateShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoBestRateShipment()
+		public virtual IRelationPredicateBucket GetRelationInfoBestRate()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(BestRateShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
@@ -755,7 +755,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("Order", _order);
 			toReturn.Add("CustomsItems", _customsItems);
 
-			toReturn.Add("BestRateShipment", _bestRateShipment);
+			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("EquaShip", _equaShip);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("IParcel", _iParcel);
@@ -778,9 +778,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_order.ActiveContext = base.ActiveContext;
 			}
-			if(_bestRateShipment!=null)
+			if(_bestRate!=null)
 			{
-				_bestRateShipment.ActiveContext = base.ActiveContext;
+				_bestRate.ActiveContext = base.ActiveContext;
 			}
 			if(_equaShip!=null)
 			{
@@ -819,7 +819,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_customsItems = null;
 
 			_order = null;
-			_bestRateShipment = null;
+			_bestRate = null;
 			_equaShip = null;
 			_fedEx = null;
 			_iParcel = null;
@@ -1040,31 +1040,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
-		/// <summary> Removes the sync logic for member _bestRateShipment</summary>
+		/// <summary> Removes the sync logic for member _bestRate</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncBestRateShipment(bool signalRelatedEntity, bool resetFKFields)
+		private void DesetupSyncBestRate(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _bestRateShipment, new PropertyChangedEventHandler( OnBestRateShipmentPropertyChanged ), "BestRateShipment", ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
-			_bestRateShipment = null;
+			base.PerformDesetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
+			_bestRate = null;
 		}
 		
-		/// <summary> setups the sync logic for member _bestRateShipment</summary>
+		/// <summary> setups the sync logic for member _bestRate</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncBestRateShipment(IEntity2 relatedEntity)
+		private void SetupSyncBestRate(IEntity2 relatedEntity)
 		{
-			if(_bestRateShipment!=relatedEntity)
+			if(_bestRate!=relatedEntity)
 			{
-				DesetupSyncBestRateShipment(true, true);
-				_bestRateShipment = (BestRateShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _bestRateShipment, new PropertyChangedEventHandler( OnBestRateShipmentPropertyChanged ), "BestRateShipment", ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID, false, new string[] {  } );
+				DesetupSyncBestRate(true, true);
+				_bestRate = (BestRateShipmentEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID, false, new string[] {  } );
 			}
 		}
 		
 		/// <summary>Handles property change events of properties in a related entity.</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnBestRateShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnBestRatePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1364,12 +1364,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateShipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathBestRateShipment
+		public static IPrefetchPathElement2 PrefetchPathBestRate
 		{
 			get
 			{
 				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(BestRateShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("BestRateShipment")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.BestRateShipmentEntity, 0, null, null, null, null, "BestRateShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
+					(IEntityRelation)GetRelationsForField("BestRate")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.BestRateShipmentEntity, 0, null, null, null, null, "BestRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
 			}
 		}
 
@@ -2130,17 +2130,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'BestRateShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
 		[Browsable(false)]
-		public virtual BestRateShipmentEntity BestRateShipment
+		public virtual BestRateShipmentEntity BestRate
 		{
 			get
 			{
-				return _bestRateShipment;
+				return _bestRate;
 			}
 			set
 			{
 				if(base.IsDeserializing)
 				{
-					SetupSyncBestRateShipment(value);
+					SetupSyncBestRate(value);
 					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
 					{
 						value.SetRelatedEntity(this, "Shipment");
@@ -2150,20 +2150,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_bestRateShipment !=null);
-						DesetupSyncBestRateShipment(true, true);
+						bool raisePropertyChanged = (_bestRate !=null);
+						DesetupSyncBestRate(true, true);
 						if(raisePropertyChanged)
 						{
-							OnPropertyChanged("BestRateShipment");
+							OnPropertyChanged("BestRate");
 						}
 					}
 					else
 					{
-						if(_bestRateShipment!=value)
+						if(_bestRate!=value)
 						{
 							IEntity2 relatedEntity = (IEntity2)value;
 							relatedEntity.SetRelatedEntity(this, "Shipment");
-							SetupSyncBestRateShipment(relatedEntity);
+							SetupSyncBestRate(relatedEntity);
 						}
 					}
 				}

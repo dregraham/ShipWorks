@@ -26,13 +26,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             base.ConfigureNewShipment(shipment);
 
-            if (shipment.BestRateShipment != null)
+            if (shipment.BestRate != null)
             {
-                shipment.BestRateShipment.DimsAddWeight = false;
-                shipment.BestRateShipment.DimsHeight = 0;
-                shipment.BestRateShipment.DimsLength = 0;
-                shipment.BestRateShipment.DimsWeight = 0;
-                shipment.BestRateShipment.DimsWidth = 0;
+                shipment.BestRate.DimsAddWeight = false;
+                shipment.BestRate.DimsHeight = 0;
+                shipment.BestRate.DimsLength = 0;
+                shipment.BestRate.DimsWeight = 0;
+                shipment.BestRate.DimsWidth = 0;
             }
         }
 
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "BestRate", typeof(UpsShipmentEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "BestRate", typeof(BestRateShipmentEntity), refreshIfPresent);
         }
 
         public override string GetServiceDescription(ShipmentEntity shipment)
