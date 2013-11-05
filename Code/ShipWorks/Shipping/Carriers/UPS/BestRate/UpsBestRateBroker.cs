@@ -61,6 +61,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // Create the UpsShipment that will be used to get rates
                 testRateShipment.Ups = new UpsShipmentEntity { UpsAccountID = account.UpsAccountID };
                 shipmentType.ConfigureNewShipment(testRateShipment);
+                testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
+                testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
+                testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
+                testRateShipment.Ups.Packages[0].DimsWeight = testRateShipment.ContentWeight;
 
                 try
                 {
