@@ -21,15 +21,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-            
-            // Add a broker for every shipment type that has been activated, configured, and hasn't been excluded
-            foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
-            {
-                int shipmentTypeCodeValue = (int)shipmentType.ShipmentTypeCode;
+            List <ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
 
-                if (shippingSettings.ActivatedTypes.Contains(shipmentTypeCodeValue) 
-                    && shippingSettings.ConfiguredTypes.Contains(shipmentTypeCodeValue) 
-                    && !shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue))
+            // If both UPS OnlineTools AND WorldShip are selected, remove WorldShip so we don't get double rates returned
+            if (shipmentTypes.Any(st => st.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools && IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, st.ShipmentTypeCode)) &&
+                shipmentTypes.Any(st => st.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip && IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, st.ShipmentTypeCode)))
+            {
+                shipmentTypes.Remove(shipmentTypes.First(st => st.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip));
+            }
+
+            // Add a broker for every shipment type that has been activated, configured, and hasn't been excluded
+            foreach (ShipmentType shipmentType in shipmentTypes)
+            {
+                if (IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
                 {
                     // This shipment type is activated, configured, and hasn't been excluded, so add it to our list of brokers
                     brokers.Add(shipmentType.GetShippingBroker());
@@ -37,6 +41,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return brokers;
+        }
+
+        /// <summary>
+        /// Determines if a Shipment Type Code is active, configured and not excluded
+        /// </summary>
+        private static bool IsShipmentTypeActiveConfiguredAndNotExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
+        {
+            int shipmentTypeCodeValue = (int) shipmentTypeCode;
+
+            return shippingSettings.ActivatedTypes.Contains(shipmentTypeCodeValue) &&
+                   shippingSettings.ConfiguredTypes.Contains(shipmentTypeCodeValue) && 
+                   !shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue);
         }
     }
 }
