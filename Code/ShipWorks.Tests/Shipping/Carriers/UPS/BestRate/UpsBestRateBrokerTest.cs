@@ -6,6 +6,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
@@ -165,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_SetsDimensionsOnPackage()
+        public void GetBestRates_SetsPackageDetails()
         {
             testShipment.BestRate.DimsHeight = 3;
             testShipment.BestRate.DimsWidth = 5;
@@ -179,6 +180,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                 Assert.AreEqual(5, shipment.Ups.Packages[0].DimsWidth);
                 Assert.AreEqual(2, shipment.Ups.Packages[0].DimsLength);
                 Assert.AreEqual(12.1, shipment.Ups.Packages[0].DimsWeight);
+            }
+        }
+
+        [TestMethod]
+        public void GetBestRates_OverridesProfileServiceAndPackagingType()
+        {
+            genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
+                                   .Callback<ShipmentEntity>(x =>
+                                       {
+                                           x.Ups.Service = (int) UpsServiceType.UpsMailInnovationsExpedited;
+                                           x.Ups.Packages.Add(new UpsPackageEntity { PackagingType = (int)UpsPackagingType.Tube });
+                                       });
+
+            testObject.GetBestRates(testShipment);
+
+            foreach (ShipmentEntity shipment in getRatesShipments)
+            {
+                Assert.AreEqual(UpsServiceType.UpsGround, (UpsServiceType)shipment.Ups.Service);
+                Assert.AreEqual(UpsPackagingType.Custom, (UpsPackagingType)shipment.Ups.Packages[0].PackagingType);
             }
         }
     }

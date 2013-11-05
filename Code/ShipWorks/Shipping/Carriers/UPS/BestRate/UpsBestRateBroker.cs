@@ -4,6 +4,7 @@ using System.Linq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
 
@@ -61,10 +62,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // Create the UpsShipment that will be used to get rates
                 testRateShipment.Ups = new UpsShipmentEntity { UpsAccountID = account.UpsAccountID };
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
-                testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
-                testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
-                testRateShipment.Ups.Packages[0].DimsWeight = testRateShipment.ContentWeight;
+                UpdateUpsShipmentSettings(testRateShipment);
 
                 try
                 {
@@ -84,6 +82,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             }
 
             return accountRates;
+        }
+
+        /// <summary>
+        /// Updates data on the Ups shipment that is required for checking best rate
+        /// </summary>
+        /// <param name="testRateShipment">Shipment that we'll be working with</param>
+        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment)
+        {
+            testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
+            testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
+            testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
+
+            // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
+            testRateShipment.Ups.Packages[0].DimsWeight = testRateShipment.ContentWeight;
+            testRateShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
+            testRateShipment.Ups.Service = (int) UpsServiceType.UpsGround;
         }
     }
 }
