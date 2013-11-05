@@ -74,6 +74,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.AuditChangeDetailEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AuditChangeDetailEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.BestRateProfileEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "BestRateProfileEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.BestRateShipmentEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "BestRateShipmentEntity");
 					break;

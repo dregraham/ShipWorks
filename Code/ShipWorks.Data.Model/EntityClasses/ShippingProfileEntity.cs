@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		private BestRateProfileEntity _bestRate;
 		private EquaShipProfileEntity _equaShip;
 		private FedExProfileEntity _fedEx;
 		private IParcelProfileEntity _iParcel;
@@ -62,6 +63,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			/// <summary>Member name BestRate</summary>
+			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name EquaShip</summary>
 			public static readonly string EquaShip = "EquaShip";
 			/// <summary>Member name FedEx</summary>
@@ -137,6 +140,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				_bestRate = (BestRateProfileEntity)info.GetValue("_bestRate", typeof(BestRateProfileEntity));
+				if(_bestRate!=null)
+				{
+					_bestRate.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				_equaShip = (EquaShipProfileEntity)info.GetValue("_equaShip", typeof(EquaShipProfileEntity));
 				if(_equaShip!=null)
 				{
@@ -211,6 +219,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "BestRate":
+					this.BestRate = (BestRateProfileEntity)entity;
+					break;
 				case "EquaShip":
 					this.EquaShip = (EquaShipProfileEntity)entity;
 					break;
@@ -256,6 +267,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				case "BestRate":
+					toReturn.Add(ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID);
+					break;
 				case "EquaShip":
 					toReturn.Add(ShippingProfileEntity.Relations.EquaShipProfileEntityUsingShippingProfileID);
 					break;
@@ -305,6 +319,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -320,6 +335,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
+				case "BestRate":
+					SetupSyncBestRate(relatedEntity);
+					break;
 				case "EquaShip":
 					SetupSyncEquaShip(relatedEntity);
 					break;
@@ -357,6 +375,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
+				case "BestRate":
+					DesetupSyncBestRate(false, true);
+					break;
 				case "EquaShip":
 					DesetupSyncEquaShip(false, true);
 					break;
@@ -388,6 +409,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_bestRate!=null)
+			{
+				toReturn.Add(_bestRate);
+			}
+
 			if(_equaShip!=null)
 			{
 				toReturn.Add(_equaShip);
@@ -447,6 +473,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
 			return toReturn;
 		}
 		
@@ -473,6 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_equaShip", (!this.MarkedForDeletion?_equaShip:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
@@ -516,6 +545,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'BestRateProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoBestRate()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(BestRateProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
+			return bucket;
+		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'EquaShipProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
@@ -656,6 +695,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("EquaShip", _equaShip);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("IParcel", _iParcel);
@@ -672,6 +712,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			if(_bestRate!=null)
+			{
+				_bestRate.ActiveContext = base.ActiveContext;
+			}
 			if(_equaShip!=null)
 			{
 				_equaShip.ActiveContext = base.ActiveContext;
@@ -709,6 +753,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			_bestRate = null;
 			_equaShip = null;
 			_fedEx = null;
 			_iParcel = null;
@@ -764,6 +809,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
+
+		/// <summary> Removes the sync logic for member _bestRate</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncBestRate(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			_bestRate = null;
+		}
+		
+		/// <summary> setups the sync logic for member _bestRate</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncBestRate(IEntity2 relatedEntity)
+		{
+			if(_bestRate!=relatedEntity)
+			{
+				DesetupSyncBestRate(true, true);
+				_bestRate = (BestRateProfileEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID, false, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnBestRatePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 		/// <summary> Removes the sync logic for member _equaShip</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -1031,6 +1109,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateProfile' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathBestRate
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(BestRateProfileEntityFactory))),
+					(IEntityRelation)GetRelationsForField("BestRate")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.BestRateProfileEntity, 0, null, null, null, null, "BestRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
+			}
+		}
+
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EquaShipProfile' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -1251,6 +1341,49 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+		/// <summary> Gets / sets related entity of type 'BestRateProfileEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual BestRateProfileEntity BestRate
+		{
+			get
+			{
+				return _bestRate;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncBestRate(value);
+					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
+					{
+						value.SetRelatedEntity(this, "ShippingProfile");
+					}
+				}
+				else
+				{
+					if(value==null)
+					{
+						bool raisePropertyChanged = (_bestRate !=null);
+						DesetupSyncBestRate(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("BestRate");
+						}
+					}
+					else
+					{
+						if(_bestRate!=value)
+						{
+							IEntity2 relatedEntity = (IEntity2)value;
+							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncBestRate(relatedEntity);
+						}
+					}
+				}
+			}
+		}
 
 		/// <summary> Gets / sets related entity of type 'EquaShipProfileEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>

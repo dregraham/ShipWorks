@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (160 + 0));
+			base.InitClass( (161 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -71,6 +71,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAuditEntityInfos();
 			InitAuditChangeEntityInfos();
 			InitAuditChangeDetailEntityInfos();
+			InitBestRateProfileEntityInfos();
 			InitBestRateShipmentEntityInfos();
 			InitBigCommerceOrderItemEntityInfos();
 			InitBigCommerceStoreEntityInfos();
@@ -399,6 +400,19 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AuditChangeDetailEntity", "VariantOld", typeof(System.Object), false, false, false, true,  (int)AuditChangeDetailFieldIndex.VariantOld, 0, 0, 0);
 			base.AddElementFieldInfo("AuditChangeDetailEntity", "VariantNew", typeof(System.Object), false, false, false, true,  (int)AuditChangeDetailFieldIndex.VariantNew, 0, 0, 0);
 		}
+		/// <summary>Inits BestRateProfileEntity's FieldInfo objects</summary>
+		private void InitBestRateProfileEntityInfos()
+		{
+			base.AddElementFieldInfo("BestRateProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)BestRateProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("BestRateProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.Weight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "TransitDays", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.TransitDays, 0, 0, 10);
+		}
 		/// <summary>Inits BestRateShipmentEntity's FieldInfo objects</summary>
 		private void InitBestRateShipmentEntityInfos()
 		{
@@ -409,8 +423,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsHeight, 0, 0, 38);
 			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
-			base.AddElementFieldInfo("BestRateShipmentEntity", "TransitTimeType", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.TransitTimeType, 0, 0, 10);
-			base.AddElementFieldInfo("BestRateShipmentEntity", "EstimatedTransitDays", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.EstimatedTransitDays, 0, 0, 10);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "TransitDays", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.TransitDays, 0, 0, 10);
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's FieldInfo objects</summary>
 		private void InitBigCommerceOrderItemEntityInfos()

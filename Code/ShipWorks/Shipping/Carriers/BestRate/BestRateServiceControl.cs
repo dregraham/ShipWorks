@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
 
-                    transitDays.ApplyMultiValue(shipment.BestRate.EstimatedTransitDays);
+                    transitDays.ApplyMultiValue(shipment.BestRate.TransitDays);
 
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
                 }
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
-                transitDays.ReadMultiValue(v => shipment.BestRate.EstimatedTransitDays = (int) v);
+                transitDays.ReadMultiValue(v => shipment.BestRate.TransitDays = (int)v);
             }
 
             ResumeRateCriteriaChangeEvent();

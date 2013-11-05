@@ -64,8 +64,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipment.BestRate.DimsLength = 0;
                 shipment.BestRate.DimsWeight = 0;
                 shipment.BestRate.DimsWidth = 0;
-                shipment.BestRate.EstimatedTransitDays = 1;
-                shipment.BestRate.TransitTimeType = 0;
+                shipment.BestRate.TransitDays = 0;
             }
         }
 
