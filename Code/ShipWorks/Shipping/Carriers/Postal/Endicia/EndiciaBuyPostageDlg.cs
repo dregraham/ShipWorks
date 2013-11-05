@@ -87,31 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 MessageHelper.ShowError(this, ex.Message);
             }
-        }
-
-        ///// <summary>
-        ///// Initializes the account info.
-        ///// </summary>
-        ///// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
-        //private void InitializeAccountInfo(EndiciaAccountEntity account)
-        //{
-        //    // Define these here since they could be used in either inside or outside the try statement
-        //    string carrierName = account.EndiciaReseller == 1 ? "Express1" : "Endicia";
-        //    string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
-
-        //    try
-        //    {
-        //        this.account = account;
-        //        EndiciaAccountStatus status = EndiciaApiClient.GetAccountStatus(account);
-
-        //        current.Text = status.PostageBalance.ToString("c");
-        //    }
-        //    catch (EndiciaApiException apiException)
-        //    {
-        //        log.Error(string.Format("ShipWorks could not retrieve account information from {0}. {1}", carrierName, apiException.Message), apiException);
-        //        throw new EndiciaException(exceptionMessage, apiException);
-        //    }
-        //}
+        }        
 
         /// <summary>
         /// This will show the dialog using the information for the given Stamps account entity provided.
