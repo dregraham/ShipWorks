@@ -28,6 +28,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
 
             dimensionsControl.Initialize();
+
+            transitDays.DisplayMember = "Value";
+            transitDays.ValueMember = "Key";
+            transitDays.DataSource = BestRateUtility.GetTransitDayValues();
         }
 
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
@@ -66,6 +70,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
 
+                    transitDays.ApplyMultiValue(shipment.BestRate.EstimatedTransitDays);
+
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
                 }
             }
@@ -94,6 +100,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
+                transitDays.ReadMultiValue(v => shipment.BestRate.EstimatedTransitDays = (int) v);
             }
 
             ResumeRateCriteriaChangeEvent();

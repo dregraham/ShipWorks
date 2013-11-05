@@ -40,6 +40,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelDimensions = new System.Windows.Forms.Label();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
+            this.labelTransitDays = new System.Windows.Forms.Label();
+            this.transitDays = new ShipWorks.UI.Controls.MultiValueComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -59,16 +61,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // sectionRecipient
             // 
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
+            this.sectionRecipient.Size = new System.Drawing.Size(317, 24);
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 268);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 350);
+            this.sectionReturns.Size = new System.Drawing.Size(317, 24);
             // 
             // sectionShipment
             // 
             // 
             // sectionShipment.ContentPanel
             // 
+            this.sectionShipment.ContentPanel.Controls.Add(this.transitDays);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelTransitDays);
             this.sectionShipment.ContentPanel.Controls.Add(this.weight);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelDimensions);
@@ -76,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.Location = new System.Drawing.Point(3, 92);
-            this.sectionShipment.Size = new System.Drawing.Size(385, 171);
+            this.sectionShipment.Size = new System.Drawing.Size(317, 253);
             // 
             // sectionFrom
             // 
@@ -93,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
-            this.sectionFrom.Size = new System.Drawing.Size(385, 24);
+            this.sectionFrom.Size = new System.Drawing.Size(317, 24);
             this.sectionFrom.TabIndex = 0;
             // 
             // originControl
@@ -115,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.originControl.Location = new System.Drawing.Point(3, 5);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(246, 403);
+            this.originControl.Size = new System.Drawing.Size(178, 403);
             this.originControl.TabIndex = 8;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -134,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.sectionRates.Name = "sectionRates";
             this.sectionRates.SectionName = "Rates";
             this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
-            this.sectionRates.Size = new System.Drawing.Size(385, 24);
+            this.sectionRates.Size = new System.Drawing.Size(317, 24);
             this.sectionRates.TabIndex = 2;
             // 
             // rateControl
@@ -143,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rateControl.Location = new System.Drawing.Point(0, 0);
             this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(381, 0);
+            this.rateControl.Size = new System.Drawing.Size(313, 0);
             this.rateControl.TabIndex = 3;
             this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
             // 
@@ -209,6 +215,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.dimensionsControl.TabIndex = 70;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
+            // labelTransitDays
+            // 
+            this.labelTransitDays.AutoSize = true;
+            this.labelTransitDays.BackColor = System.Drawing.Color.Transparent;
+            this.labelTransitDays.Location = new System.Drawing.Point(8, 141);
+            this.labelTransitDays.Name = "labelTransitDays";
+            this.labelTransitDays.Size = new System.Drawing.Size(71, 13);
+            this.labelTransitDays.TabIndex = 71;
+            this.labelTransitDays.Text = "Transit Days:";
+            // 
+            // transitDays
+            // 
+            this.transitDays.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.transitDays.FormattingEnabled = true;
+            this.transitDays.Location = new System.Drawing.Point(85, 138);
+            this.transitDays.Name = "transitDays";
+            this.transitDays.PromptText = "(Multiple Values)";
+            this.transitDays.Size = new System.Drawing.Size(121, 21);
+            this.transitDays.TabIndex = 72;
+            // 
             // BestRateServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.Controls.Add(this.sectionFrom);
             this.Controls.Add(this.sectionRates);
             this.Name = "BestRateServiceControl";
-            this.Size = new System.Drawing.Size(391, 297);
+            this.Size = new System.Drawing.Size(374, 377);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRates, 0);
@@ -256,5 +282,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private System.Windows.Forms.Label labelWeight;
         private System.Windows.Forms.Label labelDimensions;
         private Editing.DimensionsControl dimensionsControl;
+        private ShipWorks.UI.Controls.MultiValueComboBox transitDays;
+        private System.Windows.Forms.Label labelTransitDays;
     }
 }
