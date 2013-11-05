@@ -60,9 +60,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             foreach (UpsAccountEntity account in upsAccounts)
             {
                 // Create the UpsShipment that will be used to get rates
-                testRateShipment.Ups = new UpsShipmentEntity { UpsAccountID = account.UpsAccountID };
+                testRateShipment.Ups = new UpsShipmentEntity();
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateUpsShipmentSettings(testRateShipment);
+                UpdateUpsShipmentSettings(testRateShipment, account.UpsAccountID);
 
                 try
                 {
@@ -88,7 +88,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Updates data on the Ups shipment that is required for checking best rate
         /// </summary>
         /// <param name="testRateShipment">Shipment that we'll be working with</param>
-        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment)
+        /// <param name="upsAccountID">The UPS Account Entity ID for this shipment.</param>
+        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, long upsAccountID)
         {
             testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
             testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
@@ -98,6 +99,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             testRateShipment.Ups.Packages[0].DimsWeight = testRateShipment.ContentWeight;
             testRateShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
             testRateShipment.Ups.Service = (int) UpsServiceType.UpsGround;
+            testRateShipment.Ups.UpsAccountID = upsAccountID;
         }
     }
 }
