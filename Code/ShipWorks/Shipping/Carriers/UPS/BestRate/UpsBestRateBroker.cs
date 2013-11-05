@@ -96,7 +96,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.Ups.Packages[0].DimsWeight = testRateShipment.ContentWeight;
+            testRateShipment.Ups.Packages[0].Weight = testRateShipment.ContentWeight;
+            testRateShipment.Ups.Packages[0].DimsAddWeight = false;
             testRateShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
             testRateShipment.Ups.Service = (int) UpsServiceType.UpsGround;
             testRateShipment.Ups.UpsAccountID = upsAccountID;

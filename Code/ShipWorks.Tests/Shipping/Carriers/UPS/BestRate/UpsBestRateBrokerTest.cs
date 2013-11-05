@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -70,10 +72,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             getRatesShipments = new List<ShipmentEntity>();
 
+            // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<UpsShipmentType>();
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                             .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID])
-                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(e));
+                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
 
             // Mimic the bare minimum of what the configure method is doing
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -179,7 +182,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                 Assert.AreEqual(3, shipment.Ups.Packages[0].DimsHeight);
                 Assert.AreEqual(5, shipment.Ups.Packages[0].DimsWidth);
                 Assert.AreEqual(2, shipment.Ups.Packages[0].DimsLength);
-                Assert.AreEqual(12.1, shipment.Ups.Packages[0].DimsWeight);
+                Assert.IsFalse(shipment.Ups.Packages[0].DimsAddWeight);
+                Assert.AreEqual(12.1, shipment.Ups.Packages[0].Weight);
             }
         }
 
@@ -200,6 +204,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                 Assert.AreEqual(UpsServiceType.UpsGround, (UpsServiceType)shipment.Ups.Service);
                 Assert.AreEqual(UpsPackagingType.Custom, (UpsPackagingType)shipment.Ups.Packages[0].PackagingType);
             }
+        }
+
+        [TestMethod]
+        public void GetBestRates_OverridesProfileAccount()
+        {
+            genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
+                                   .Callback<ShipmentEntity>(x =>
+                                   {
+                                       x.Ups.UpsAccountID = 999;
+                                       x.Ups.Packages.Add(new UpsPackageEntity());
+                                   });
+
+            testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(getRatesShipments.Any(x => x.Ups.UpsAccountID == 1));
+            Assert.IsTrue(getRatesShipments.Any(x => x.Ups.UpsAccountID == 2));
+            Assert.IsTrue(getRatesShipments.Any(x => x.Ups.UpsAccountID == 3));
+            Assert.IsFalse(getRatesShipments.Any(x => x.Ups.UpsAccountID == 999));
         }
     }
 }
