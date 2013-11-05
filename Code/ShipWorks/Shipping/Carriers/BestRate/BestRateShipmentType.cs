@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -13,6 +15,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShipmentType : ShipmentType
     {
         private readonly IBestRateShippingBrokerFactory brokerFactory;
+
+        static readonly ILog log = LogManager.GetLogger(typeof(BestRateShipmentType));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -66,6 +70,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipment.BestRate.DimsWidth = 0;
                 shipment.BestRate.TransitDays = 0;
             }
+        }
+
+        /// <summary>
+        /// Allows bases classes to apply the default settings to the given profile
+        /// </summary>
+        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            log.Warn("ConfigurePrimaryProfile called for BestRateShipmentType.");
+            Debug.Assert(false, "ConfigurePrimaryProfile maybe shouldn't be called for BestRateShipmentType.");
         }
 
         /// <summary>
