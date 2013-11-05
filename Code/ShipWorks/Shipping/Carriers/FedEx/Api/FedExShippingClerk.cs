@@ -653,6 +653,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // Cost
                 decimal cost = rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetCharge.Amount;
+                if (shipment.OriginCountryCode.ToUpper() == "CA" && rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                {
+                    cost = rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                }
 
                 // Add the shipworks rate object
                 results.Add(new RateResult(
