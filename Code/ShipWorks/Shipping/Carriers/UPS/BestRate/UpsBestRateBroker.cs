@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
                     if (lowestRate != null)
                     {
-                        lowestRate.HoverText = "Ups - " + lowestRate.Description;
+                        lowestRate.HoverText = "UPS - " + lowestRate.Description;
                         accountRates.Add(lowestRate);
                     }
                 }

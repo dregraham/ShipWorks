@@ -153,8 +153,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         {
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.AreEqual("Ups - Account 1b", account1Rate2.HoverText);
-            Assert.AreEqual("Ups - Account 3a", account3Rate1.HoverText);
+            Assert.AreEqual("UPS - Account 1b", account1Rate2.HoverText);
+            Assert.AreEqual("UPS - Account 3a", account3Rate1.HoverText);
         }
     }
 }
