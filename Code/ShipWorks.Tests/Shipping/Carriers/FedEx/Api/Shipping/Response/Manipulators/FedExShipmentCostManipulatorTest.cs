@@ -42,6 +42,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
+
+        [TestMethod]
+        public void Manipulate_UsesTotalNetFedExCharge_OriginIsCA()
+        {
+            fedExShipResponse.Shipment.OriginCountryCode = "CA";
+
+            testObject.Manipulate(fedExShipResponse);
+
+            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
+                fedExShipResponse.Shipment.ShipmentCost);
+        }
+
         [TestMethod]
         public void Manipulate_FirstRateCostAddedToShipment_ActualRateTypeDoesNotMatchIncludedShipRateDetail()
         {
@@ -65,6 +77,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             Assert.AreEqual(0, fedExShipResponse.Shipment.ShipmentCost);
 
             mockLog.Verify(log => log.WarnFormat(It.IsAny<string>(), (long) 77), Times.Once());
+        }
+
+        [TestMethod]
+        public void Manipulate_ShippingCostLoggedAsTotalNetFedExCharge_OriginIsCanada()
+        {
+            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
+
+            fedExShipResponse.Shipment.OriginCountryCode = "CA";
+
+            testObject.Manipulate(fedExShipResponse);
+
+            Assert.AreEqual(
+                nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetFedExCharge.Amount,
+                fedExShipResponse.Shipment.ShipmentCost);
         }
     }
 }

@@ -42,12 +42,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
                             new ShipmentRateDetail()
                             {
                                 RateType = ReturnedRateType.INCENTIVE,
-                                TotalNetCharge = new Money(){ Amount = 100, Currency = "USD"}
+                                TotalNetCharge = new Money(){ Amount = 100, Currency = "USD"},
+                                TotalNetFedExCharge = new Money() {Amount = 90, Currency = "CAD"}
                             },
                             new ShipmentRateDetail()
                             {
                                 RateType = ReturnedRateType.PREFERRED_ACCOUNT_PACKAGE,
-                                TotalNetCharge = new Money(){ Amount = 42, Currency = "USD"}
+                                TotalNetCharge = new Money(){ Amount = 42, Currency = "USD"},
+                                TotalNetFedExCharge = new Money() {Amount = 40, Currency = "CAD"}
+
                             }
                         }
                     }

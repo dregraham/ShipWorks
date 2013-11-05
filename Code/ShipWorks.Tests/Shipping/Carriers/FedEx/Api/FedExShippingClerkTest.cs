@@ -1090,7 +1090,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             nativeRateReply.RateReplyDetails[0].DeliveryTimestampSpecified = false;
             nativeRateReply.RateReplyDetails[0].TransitTime = TransitTimeType.ELEVEN_DAYS;
             nativeRateReply.RateReplyDetails[0].TransitTimeSpecified = true;
-            
+
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
             Assert.AreEqual("11", rates.Rates.First().Days);
