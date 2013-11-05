@@ -163,6 +163,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Ensures that the carrier specific data for the given profile exists and is loaded
+        /// </summary>
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            ShipmentTypeDataService.LoadProfileData(profile, "BestRate", typeof(BestRateProfileEntity), refreshIfPresent);
+        }
+
+        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
