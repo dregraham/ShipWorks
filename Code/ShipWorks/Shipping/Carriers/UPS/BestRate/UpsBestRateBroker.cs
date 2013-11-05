@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // Create the UpsShipment that will be used to get rates
                 testRateShipment.Ups = new UpsShipmentEntity();
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateUpsShipmentSettings(testRateShipment, account.UpsAccountID);
+                UpdateUpsShipmentSettings(testRateShipment, shipment.ContentWeight, account.UpsAccountID);
 
                 try
                 {
@@ -88,15 +88,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Updates data on the Ups shipment that is required for checking best rate
         /// </summary>
         /// <param name="testRateShipment">Shipment that we'll be working with</param>
+        /// <param name="contentWeight">The content weight of the shipement.</param>
         /// <param name="upsAccountID">The UPS Account Entity ID for this shipment.</param>
-        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, long upsAccountID)
+        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, double contentWeight, long upsAccountID)
         {
             testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
             testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
             testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.Ups.Packages[0].Weight = testRateShipment.ContentWeight;
+            testRateShipment.Ups.Packages[0].Weight = contentWeight;
             testRateShipment.Ups.Packages[0].DimsAddWeight = false;
             testRateShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
             testRateShipment.Ups.Service = (int) UpsServiceType.UpsGround;
