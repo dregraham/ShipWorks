@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using ShipWorks.Data.Model.HelperClasses;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -43,6 +45,31 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override ShipmentTypeCode ShipmentTypeCode
         {
             get { return ShipmentTypeCode.BestRate; }
+        }
+
+        /// <summary>
+        /// Apply the specified shipment profile to the given shipment.
+        /// </summary>
+        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        {
+            base.ApplyProfile(shipment, profile);
+
+            BestRateShipmentEntity bestRateShipment = shipment.BestRate;
+            BestRateProfileEntity bestRateProfile = profile.BestRate;
+
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
+
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.TransitDays, bestRateShipment, BestRateShipmentFields.TransitDays);
+
+            if (bestRateProfile.Weight.HasValue && bestRateProfile.Weight.Value != 0)
+            {
+                ShippingProfileUtility.ApplyProfileValue(bestRateProfile.Weight, shipment, ShipmentFields.ContentWeight);
+            }
         }
 
         /// <summary>
