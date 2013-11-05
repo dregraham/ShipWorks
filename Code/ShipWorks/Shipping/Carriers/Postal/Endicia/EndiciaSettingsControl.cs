@@ -22,9 +22,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public partial class EndiciaSettingsControl : SettingsControlBase
     {
         bool loadedAccounts = false;
-
+        
         // the reseller type being worked with
         EndiciaReseller endiciaReseller = EndiciaReseller.None;
+
+        private EndiciaExpress1SettingsFacade express1Settings;
 
         /// <summary>
         /// Constructor
@@ -46,29 +48,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             string reseller = EndiciaAccountManager.GetResellerName(endiciaReseller);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
-            endiciaOptions.Top = express1Options.Top;
-            endiciaOptions.Visible = (endiciaReseller == EndiciaReseller.None);
+            express1PostageDiscountSettingsControl.Visible = (endiciaReseller == EndiciaReseller.None);
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
             
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            
+            LoadExpress1Settings(settings);
+
             if (endiciaReseller == EndiciaReseller.None)
             {
-                endiciaOptions.LoadSettings();
-                panelBottom.Top = endiciaOptions.Bottom + 5;
-
+                // Showing the insurance control is dependent on if its allowed in tango
                 insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.EndiciaInsuranceProvider;
-
-                // Showing the insurance control is dependant on if its allowed in tango
                 panelInsurance.Visible = (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaInsurance).Level == EditionRestrictionLevel.None);
             }
             else
             {
-                express1Options.LoadSettings(settings);
-                panelBottom.Top = express1Options.Bottom + 5;
-
                 // Doesn't make sense to show Endicia insurance choosing to Express1
                 panelInsurance.Visible = false;
+            }
+
+        }
+
+        /// <summary>
+        /// Loads the Express1 settings.
+        /// </summary>
+        private void LoadExpress1Settings(ShippingSettingsEntity settings)
+        {
+            express1Settings = new EndiciaExpress1SettingsFacade(settings);
+
+            if (endiciaReseller == EndiciaReseller.Express1)
+            {
+                express1Options.LoadSettings(settings);
+                panelBottom.Top = express1Options.Bottom + 5;
+            }
+            else
+            {
+                express1PostageDiscountSettingsControl.LoadSettings(express1Settings);
+                express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
+
+                panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
             }
         }
 
@@ -80,9 +97,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             optionsControl.SaveSettings(settings);
 
             if (endiciaReseller == EndiciaReseller.None)
-            {
-                endiciaOptions.SaveSettings(settings);
-
+            {                
+                express1Settings.SaveSettings(settings);
                 settings.EndiciaInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             }
             else
@@ -106,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 loadedAccounts = true;
             }
 
-            endiciaOptions.LoadSettings();
+            LoadExpress1Settings(ShippingSettings.Fetch());
         }
     }
 }

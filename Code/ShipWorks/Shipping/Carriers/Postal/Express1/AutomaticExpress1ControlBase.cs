@@ -23,15 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Gets whether the use wants to use Express1
-        /// </summary>
-        public bool UseExpress1
-        {
-            get { return checkBoxUseExpress1.Checked; }
-        }
-
+        
         /// <summary>
         /// Load the settings
         /// </summary>

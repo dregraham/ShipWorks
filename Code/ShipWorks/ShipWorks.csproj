@@ -875,6 +875,11 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1ConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1PasswordEncryptionStrategy.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
       <SubType>UserControl</SubType>
@@ -924,6 +929,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IScanFormShipmentTypeName.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1PurchasePostageDlg.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1AchPaymentValidator.cs" />
@@ -972,6 +978,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
@@ -1395,42 +1402,6 @@
     <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracZipResponse.cs">
       <DependentUpon>OnTracZipResponse.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.Designer.cs">
-      <DependentUpon>EndiciaAutomaticExpress1Control.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.Designer.cs">
-      <DependentUpon>EndiciaExpress1ActivateDiscountDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.Designer.cs">
-      <DependentUpon>EndiciaExpress1ActualSavingsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RateDiscountedFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RateNotQualifiedFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RatePromotionFootnote.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1501,12 +1472,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceWrapper.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.Designer.cs">
-      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsForm.cs" />
     <Compile Include="Data\Import\Xml\GenericXmlOrderLoader.cs" />
@@ -6745,32 +6710,11 @@
     <EmbeddedResource Include="Shipping\Carriers\OnTrac\OnTracSetupWizard.resx">
       <DependentUpon>OnTracSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.resx">
-      <DependentUpon>EndiciaAutomaticExpress1Control.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.resx">
-      <DependentUpon>EndiciaExpress1ActivateDiscountDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.resx">
-      <DependentUpon>EndiciaExpress1ActualSavingsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.resx">
-      <DependentUpon>EndiciaExpress1RateDiscountedFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.resx">
-      <DependentUpon>EndiciaExpress1RateNotQualifiedFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.resx">
-      <DependentUpon>EndiciaExpress1RatePromotionFootnote.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.resx">
       <DependentUpon>EndiciaPassphraseChangeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.resx">
       <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.resx">
-      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.resx">
       <DependentUpon>AutomaticExpress1ControlBase.cs</DependentUpon>
