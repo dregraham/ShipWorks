@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
-namespace ShipWorks.Shipping.Carriers.BestRate.Enums
+namespace ShipWorks.Shipping.Editing.Enums
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     enum TransitTimeRange

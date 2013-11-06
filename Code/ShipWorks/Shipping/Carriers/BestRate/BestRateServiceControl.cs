@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
