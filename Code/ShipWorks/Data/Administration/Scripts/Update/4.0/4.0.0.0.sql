@@ -12,6 +12,24 @@ update ShippingSettings
 		  END
 GO
 
+PRINT N'Creating [dbo].[BestRateShipment]'
+GO
+CREATE TABLE [dbo].[BestRateShipment]
+(
+[ShipmentID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NOT NULL,
+[DimsLength] [float] NOT NULL,
+[DimsWidth] [float] NOT NULL,
+[DimsHeight] [float] NOT NULL,
+[DimsWeight] [float] NOT NULL,
+[DimsAddWeight] [bit] NOT NULL,
+[ServiceLevel] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [PK_BestRateShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
 
 -- Create default best rate profile
 INSERT INTO [ShipWorksLocal].[dbo].[ShippingProfile] ([Name], [ShipmentType], [ShipmentTypePrimary], [OriginID], [Insurance], [InsuranceInitialValueSource], [InsuranceInitialValueAmount], [ReturnShipment])
