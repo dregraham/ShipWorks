@@ -40,7 +40,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private Mock<UpsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
        
-
         [TestInitialize]
         public void Initialize()
         {
@@ -222,6 +221,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.IsTrue(getRatesShipments.Any(x => x.Ups.UpsAccountID == 2));
             Assert.IsTrue(getRatesShipments.Any(x => x.Ups.UpsAccountID == 3));
             Assert.IsFalse(getRatesShipments.Any(x => x.Ups.UpsAccountID == 999));
+        }
+
+        [TestMethod]
+        public void GetBestRates_OverridesProfileWeight()
+        {
+            genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
+                                   .Callback<ShipmentEntity>(x =>
+                                       {
+                                           x.ContentWeight = 123;
+                                           x.Ups.Packages.Add(new UpsPackageEntity());
+                                       });
+
+            testObject.GetBestRates(testShipment);
+
+            foreach (ShipmentEntity shipment in getRatesShipments)
+            {
+                Assert.AreEqual(12.1, shipment.Ups.Packages[0].Weight);
+            }
         }
     }
 }
