@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 {
@@ -47,12 +48,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             account2 = new UpsAccountEntity { UpsAccountID = 2 };
             account3 = new UpsAccountEntity { UpsAccountID = 3 };
 
-            account1Rate1 = new RateResult("Account 1a", "4", 12, null);
-            account1Rate2 = new RateResult("Account 1b", "3", 4, null);
-            account1Rate3 = new RateResult("Account 1c", "1", 15, null);
+            account1Rate1 = new RateResult("Account 1a", "4", 12, null) { ServiceLevel = ServiceLevelType.TwoDays};
+            account1Rate2 = new RateResult("Account 1b", "3", 4, null) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            account1Rate3 = new RateResult("Account 1c", "1", 15, null) { ServiceLevel = ServiceLevelType.OneDay };
             account2Rate1 = new RateResult("* No rates were returned for the selected Service.", "");
-            account3Rate1 = new RateResult("Account 3a", "4", 3, null);
-            account3Rate2 = new RateResult("Account 3b", "3", 10, null);
+            account3Rate1 = new RateResult("Account 3a", "4", 3, null) { ServiceLevel = ServiceLevelType.Anytime };
+            account3Rate2 = new RateResult("Account 3b", "3", 10, null) { ServiceLevel = ServiceLevelType.TwoDays };
 
             rateGroup1 = new RateGroup(new [] { account1Rate1, account1Rate2, account1Rate3 });
             rateGroup2 = new RateGroup(new [] { account2Rate1 });
@@ -131,6 +132,30 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             Assert.IsTrue(rates.Contains(account1Rate2));
             Assert.IsTrue(rates.Contains(account3Rate1));
+            Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsBestRateForEachAccount_WhenServiceTypeIsFiltered()
+        {
+            testShipment.BestRate.TransitDays = (int) ServiceLevelType.ThreeDays;
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(rates.Contains(account1Rate1));
+            Assert.IsTrue(rates.Contains(account3Rate2));
+            Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsBestRateForSingleAccount_WhenServiceTypeFilterExcludesAllRatesInSecondAccount()
+        {
+            testShipment.BestRate.TransitDays = (int)ServiceLevelType.OneDay;
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(rates.Contains(account1Rate3));
+            Assert.AreEqual(1, rates.Count);
         }
 
         [TestMethod]

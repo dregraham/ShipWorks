@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -67,7 +68,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 try
                 {
                     RateGroup rates = shipmentType.GetRates(testRateShipment);
-                    RateResult lowestRate = rates.Rates.Where(r => r.Amount > 0).OrderBy(r => r.Amount).FirstOrDefault();
+                    RateResult lowestRate = rates.Rates
+                        .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.TransitDays))
+                        .OrderBy(r => r.Amount)
+                        .FirstOrDefault();
 
                     if (lowestRate != null)
                     {
@@ -82,6 +86,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             }
 
             return accountRates;
+        }
+
+        /// <summary>
+        /// Determines whether the rate's service level meets the requested level criteria
+        /// </summary>
+        /// <param name="rateServiceLevel">Service level of the rate that should be tested</param>
+        /// <param name="requestedType">Requested level against which to test</param>
+        /// <returns></returns>
+        private static bool MeetsServiceLevelCriteria(ServiceLevelType rateServiceLevel, ServiceLevelType requestedType)
+        {
+            return ServiceLevelType.Anytime == requestedType ||
+                   (rateServiceLevel != ServiceLevelType.Anytime && rateServiceLevel <= requestedType);
         }
 
         /// <summary>
