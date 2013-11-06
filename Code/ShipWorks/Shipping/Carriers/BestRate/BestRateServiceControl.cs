@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -22,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             rateControl.ReloadRatesRequired += OnReloadRatesRequired;
         }
 
-
         /// <summary>
         /// Initialization
         /// </summary>
@@ -33,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             originControl.Initialize(ShipmentTypeCode.BestRate);
             dimensionsControl.Initialize();
 
-            EnumHelper.BindComboBox<ServiceLevelType>(transitDays);
+            EnumHelper.BindComboBox<ServiceLevelType>(serviceLevel);
         }
 
         /// <summary>
@@ -42,15 +40,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
-
             RecipientDestinationChanged -= OnRecipientDestinationChanged;
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
             RecipientDestinationChanged += OnRecipientDestinationChanged;
-
+            
             LoadShipmentDetails();
-
             UpdateInsuranceDisplay();
 
             ResumeRateCriteriaChangeEvent();
@@ -70,13 +66,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    weight.ApplyMultiWeight(shipment.ContentWeight);
-
                     shipDate.ApplyMultiDate(shipment.ShipDate);
-
-                    transitDays.ApplyMultiValue((ServiceLevelType) shipment.BestRate.TransitDays);
-
+                    weight.ApplyMultiWeight(shipment.ContentWeight);
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
+
+                    serviceLevel.ApplyMultiValue((ServiceLevelType) shipment.BestRate.TransitDays);
                 }
             }
 
@@ -90,7 +84,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
-
             base.SaveToShipments();
 
             // Save the origin
@@ -104,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
-                transitDays.ReadMultiValue(v => shipment.BestRate.TransitDays = (int)v);
+                serviceLevel.ReadMultiValue(v => shipment.BestRate.TransitDays = (int)v);
             }
 
             ResumeRateCriteriaChangeEvent();
@@ -126,12 +119,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 }
             }
 
-            // Start the dimensiosn control listening to weight changes
+            // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
         }
 
         /// <summary>
-        /// Called whent the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
         private void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
