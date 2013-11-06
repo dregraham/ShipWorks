@@ -387,6 +387,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 return;
             }
 
+            // If the user didn't enter an account number for billing the receiver, just return 
+            if (upsShipmentChargeType == UpsShipmentChargeType.BillReceiver && (string.IsNullOrWhiteSpace(ups.ShipmentChargeAccount) || string.IsNullOrWhiteSpace(ups.ShipmentChargePostalCode)))
+            {
+                return;
+            }
+
             // Now write the tax/duty shipment charge
             xmlWriter.WriteStartElement("ShipmentCharge");
                 xmlWriter.WriteElementString("Type", "02");
