@@ -8,12 +8,21 @@ using System.Text;
 namespace ShipWorks.Shipping.Carriers.BestRate.Enums
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum TransitTimeType
+    enum TransitTimeRange
     {
-        [Description("Any")] 
-        Any = 0,
+        [Description("Anytime")]
+        Anytime = 0,
 
-        [Description("Expected")] 
-        Expected = 1
+        [Description("One Day")]
+        OneDay = 1,
+
+        [Description("Two Days")]
+        TwoDays = 2,
+
+        [Description("Three Days")]
+        ThreeDays = 3, 
+
+        [Description("4-7 Days")]
+        FourToSevenDays = 4
     }
 }

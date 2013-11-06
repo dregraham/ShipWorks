@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Controls;
 
@@ -20,23 +22,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             rateControl.ReloadRatesRequired += OnReloadRatesRequired;
         }
 
+
+        /// <summary>
+        /// Initialization
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
 
             originControl.Initialize(ShipmentTypeCode.BestRate);
-            
-
             dimensionsControl.Initialize();
 
-            transitDays.DisplayMember = "Value";
-            transitDays.ValueMember = "Key";
-            transitDays.DataSource = BestRateUtility.GetTransitDayValues();
+            EnumHelper.BindComboBox<TransitTimeRange>(transitDays);
         }
 
+        /// <summary>
+        /// Load the data for the list of shipments into the control
+        /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
-
             SuspendRateCriteriaChangeEvent();
 
             RecipientDestinationChanged -= OnRecipientDestinationChanged;
@@ -70,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
 
-                    transitDays.ApplyMultiValue(shipment.BestRate.TransitDays);
+                    transitDays.ApplyMultiValue((TransitTimeRange) shipment.BestRate.TransitDays);
 
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
                 }
@@ -152,7 +156,5 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             //throw new NotImplementedException();
         }
-
-
     }
 }
