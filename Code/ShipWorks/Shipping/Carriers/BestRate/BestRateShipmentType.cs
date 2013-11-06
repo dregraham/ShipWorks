@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
 
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.TransitDays, bestRateShipment, BestRateShipmentFields.TransitDays);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.TransitDays, bestRateShipment, BestRateShipmentFields.ServiceLevel);
 
             if (bestRateProfile.Weight.HasValue && bestRateProfile.Weight.Value != 0)
             {
@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipment.BestRate.DimsLength = 0;
                 shipment.BestRate.DimsWeight = 0;
                 shipment.BestRate.DimsWidth = 0;
-                shipment.BestRate.TransitDays = 0;
+                shipment.BestRate.ServiceLevel = 0;
             }
         }
 

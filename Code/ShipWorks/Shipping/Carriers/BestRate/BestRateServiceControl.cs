@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     weight.ApplyMultiWeight(shipment.ContentWeight);
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
 
-                    serviceLevel.ApplyMultiValue((ServiceLevelType) shipment.BestRate.TransitDays);
+                    serviceLevel.ApplyMultiValue((ServiceLevelType) shipment.BestRate.ServiceLevel);
                 }
             }
 
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
-                serviceLevel.ReadMultiValue(v => shipment.BestRate.TransitDays = (int)v);
+                serviceLevel.ReadMultiValue(v => shipment.BestRate.ServiceLevel = (int)v);
             }
 
             ResumeRateCriteriaChangeEvent();

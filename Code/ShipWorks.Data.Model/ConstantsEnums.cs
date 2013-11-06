@@ -726,8 +726,8 @@ namespace ShipWorks.Data.Model
 		DimsWeight,
 		///<summary>DimsAddWeight. </summary>
 		DimsAddWeight,
-		///<summary>TransitDays. </summary>
-		TransitDays,
+		///<summary>ServiceLevel. </summary>
+		ServiceLevel,
 		/// <summary></summary>
 		AmountOfFields
 	}

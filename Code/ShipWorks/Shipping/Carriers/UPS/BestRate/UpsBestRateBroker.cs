@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 {
                     RateGroup rates = shipmentType.GetRates(testRateShipment);
                     RateResult lowestRate = rates.Rates
-                        .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.TransitDays))
+                        .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel))
                         .OrderBy(r => r.Amount)
                         .FirstOrDefault();
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Updates data on the Ups shipment that is required for checking best rate
         /// </summary>
         /// <param name="testRateShipment">Shipment that we'll be working with</param>
-        /// <param name="contentWeight">The content weight of the shipement.</param>
+        /// <param name="contentWeight">The content weight of the shipment.</param>
         /// <param name="upsAccountID">The UPS Account Entity ID for this shipment.</param>
         private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, double contentWeight, long upsAccountID)
         {

@@ -1447,10 +1447,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsAddWeight);}
 		}
-		/// <summary>Creates a new BestRateShipmentEntity.TransitDays field instance</summary>
-		public static EntityField2 TransitDays
+		/// <summary>Creates a new BestRateShipmentEntity.ServiceLevel field instance</summary>
+		public static EntityField2 ServiceLevel
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.TransitDays);}
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.ServiceLevel);}
 		}
 	}
 

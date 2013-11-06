@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsBestRateForEachAccount_WhenServiceTypeIsFiltered()
         {
-            testShipment.BestRate.TransitDays = (int) ServiceLevelType.ThreeDays;
+            testShipment.BestRate.ServiceLevel = (int) ServiceLevelType.ThreeDays;
 
             var rates = testObject.GetBestRates(testShipment);
 
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsBestRateForSingleAccount_WhenServiceTypeFilterExcludesAllRatesInSecondAccount()
         {
-            testShipment.BestRate.TransitDays = (int)ServiceLevelType.OneDay;
+            testShipment.BestRate.ServiceLevel = (int)ServiceLevelType.OneDay;
 
             var rates = testObject.GetBestRates(testShipment);
 

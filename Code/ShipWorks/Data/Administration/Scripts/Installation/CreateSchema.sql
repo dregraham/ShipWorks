@@ -4427,8 +4427,7 @@ CREATE TABLE [dbo].[BestRateShipment]
 [DimsHeight] [float] NOT NULL,
 [DimsWeight] [float] NOT NULL,
 [DimsAddWeight] [bit] NOT NULL,
-[TransitTimeType] [int]	NOT NULL,
-[EstimatedTransitDays] [int] NOT NULL
+[ServiceLevel] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
