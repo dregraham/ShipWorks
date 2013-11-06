@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.ShipmentChargeAccount = string.Empty;
             shipment.Ups.ShipmentChargeCountryCode = string.Empty;
             shipment.Ups.ShipmentChargePostalCode = string.Empty;
-            shipment.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillShipper;
+            shipment.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillReceiver;
 
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
             shipment.Ups.Packages.Add(package);
@@ -301,7 +301,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.ShipmentChargeAccount = string.Empty;
             profile.Ups.ShipmentChargeCountryCode = string.Empty;
             profile.Ups.ShipmentChargePostalCode = string.Empty;
-            profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillShipper;
+            profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillReceiver;
         }
 
         /// <summary>
