@@ -48,12 +48,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             account2 = new UpsAccountEntity { UpsAccountID = 2 };
             account3 = new UpsAccountEntity { UpsAccountID = 3 };
 
-            account1Rate1 = new RateResult("Account 1a", "4", 12, null) { ServiceLevel = ServiceLevelType.TwoDays};
-            account1Rate2 = new RateResult("Account 1b", "3", 4, null) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-            account1Rate3 = new RateResult("Account 1c", "1", 15, null) { ServiceLevel = ServiceLevelType.OneDay };
+            account1Rate1 = new RateResult("Account 1a", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays};
+            account1Rate2 = new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            account1Rate3 = new RateResult("Account 1c", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
             account2Rate1 = new RateResult("* No rates were returned for the selected Service.", "");
-            account3Rate1 = new RateResult("Account 3a", "4", 3, null) { ServiceLevel = ServiceLevelType.Anytime };
-            account3Rate2 = new RateResult("Account 3b", "3", 10, null) { ServiceLevel = ServiceLevelType.TwoDays };
+            account3Rate1 = new RateResult("Account 3a", "4", 3, UpsServiceType.UpsExpressSaver) { ServiceLevel = ServiceLevelType.Anytime };
+            account3Rate2 = new RateResult("Account 3b", "3", 10, UpsServiceType.Ups2DayAirAM) { ServiceLevel = ServiceLevelType.TwoDays };
 
             rateGroup1 = new RateGroup(new [] { account1Rate1, account1Rate2, account1Rate3 });
             rateGroup2 = new RateGroup(new [] { account2Rate1 });
@@ -118,21 +118,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsTwoRates_SinceSecondAccountHasNoRates()
+        public void GetBestRates_ReturnsAllRates_WithNoFilter()
         {
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.AreEqual(2, rates.Count);
-        }
-
-        [TestMethod]
-        public void GetBestRates_ReturnsBestRateForEachAccount()
-        {
-            var rates = testObject.GetBestRates(testShipment);
-
+            Assert.AreEqual(5, rates.Count);
+            Assert.IsTrue(rates.Contains(account1Rate1));
             Assert.IsTrue(rates.Contains(account1Rate2));
+            Assert.IsTrue(rates.Contains(account1Rate3));
             Assert.IsTrue(rates.Contains(account3Rate1));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(rates.Contains(account3Rate2));
         }
 
         [TestMethod]
@@ -143,8 +138,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.IsTrue(rates.Contains(account1Rate1));
+            Assert.IsTrue(rates.Contains(account1Rate3));
             Assert.IsTrue(rates.Contains(account3Rate2));
-            Assert.AreEqual(2, rates.Count);
+            Assert.AreEqual(3, rates.Count);
         }
 
         [TestMethod]
@@ -156,6 +152,80 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             Assert.IsTrue(rates.Contains(account1Rate3));
             Assert.AreEqual(1, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsFirstRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(rates.Contains(result1));
+            Assert.AreEqual(1, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsCheapestRate_WhenTwoRatesHaveSameTypeLevel()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result2 = new RateResult("Account 1b", "3", 2, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(rates.Contains(result2));
+            Assert.AreEqual(1, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsBothRates_WhenTwoRatesHaveSameTypeAndPriceButDifferentLevels()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.TwoDays };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(rates.Contains(result1));
+            Assert.IsTrue(rates.Contains(result2));
+            Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsBothRates_WhenTwoRatesHaveSameLevelAndPriceButDifferentType()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(rates.Contains(result1));
+            Assert.IsTrue(rates.Contains(result2));
+            Assert.AreEqual(2, rates.Count);
         }
 
         [TestMethod]
@@ -180,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.AreEqual(2, rates.Count);
+            Assert.AreEqual(5, rates.Count);
         }
 
         [TestMethod]

@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 throw new ArgumentNullException("shipment");
             }
 
-            List<RateResult> accountRates = new List<RateResult>();
+            List<RateResult> allRates = new List<RateResult>();
             List<UpsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
 
             // Create a clone so we don't have to worry about modifying the original shipment
@@ -67,17 +67,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
                 try
                 {
-                    RateGroup rates = shipmentType.GetRates(testRateShipment);
-                    RateResult lowestRate = rates.Rates
-                        .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel))
-                        .OrderBy(r => r.Amount)
-                        .FirstOrDefault();
-
-                    if (lowestRate != null)
-                    {
-                        lowestRate.HoverText = "UPS - " + lowestRate.Description;
-                        accountRates.Add(lowestRate);
-                    }
+                    //RateGroup rates = shipmentType.GetRates(testRateShipment);
+                    allRates.AddRange(shipmentType.GetRates(testRateShipment).Rates);
                 }
                 catch (ShippingException)
                 {
@@ -85,7 +76,38 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 }
             }
 
-            return accountRates;
+            // Update the results to show the correct hover text
+            foreach (RateResult result in allRates)
+            {
+                result.HoverText = "UPS - " + result.Description;
+            }
+
+            // Return all the rates, filtered by service level, then grouped by UpsServiceType and ServiceLevel
+            return allRates
+                .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel))
+                .GroupBy(r => (UpsServiceType)r.Tag)
+                .SelectMany(RateResultsByServiceLevel)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Gets a list of rates by UpsServiceType
+        /// </summary>
+        /// <param name="upsTypeGroup">Group </param>
+        /// <returns></returns>
+        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<UpsServiceType, RateResult> upsTypeGroup)
+        {
+            return upsTypeGroup.GroupBy(r => r.ServiceLevel).Select(CheapestRateInGroup);
+        }
+
+        /// <summary>
+        /// Gets the cheapest rate in group of rates.
+        /// </summary>
+        /// <param name="serviceLevelGroup">Group of rates from which to return the cheapest</param>
+        /// <returns></returns>
+        private static RateResult CheapestRateInGroup(IGrouping<ServiceLevelType, RateResult> serviceLevelGroup)
+        {
+            return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
         }
 
         /// <summary>
