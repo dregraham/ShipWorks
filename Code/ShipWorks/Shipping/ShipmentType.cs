@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual ShippingProfileControlBase CreateProfileControl()
         {
-            return null;
+            return new BestRateProfileControl();
         }
 
         /// <summary>

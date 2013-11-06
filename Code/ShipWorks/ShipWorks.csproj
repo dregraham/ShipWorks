@@ -868,6 +868,12 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Filters\Content\Conditions\ChildQuantityCondition.cs" />
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.Designer.cs">
+      <DependentUpon>BestRateProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6669,6 +6675,9 @@
     <EmbeddedResource Include="ApplicationCore\SplashScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
+      <DependentUpon>BestRateProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateServiceControl.resx">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
