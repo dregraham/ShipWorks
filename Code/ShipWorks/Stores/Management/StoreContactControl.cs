@@ -9,6 +9,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
+using log4net;
 
 namespace ShipWorks.Stores.Management
 {
@@ -17,6 +19,9 @@ namespace ShipWorks.Stores.Management
     /// </summary>
     partial class StoreContactControl : UserControl
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(StoreContactControl));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -43,6 +48,35 @@ namespace ShipWorks.Stores.Management
             store.Email = email.Text;
             store.Phone = phone.Text;
             store.Website = website.Text;
+        }
+
+        /// <summary>
+        /// Select the image to use for the store logo
+        /// </summary>
+        private void OnSelectLogo(object sender, EventArgs e)
+        {
+            openFileDialog.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// User is trying to select a logo image
+        /// </summary>
+        private void OnLogoSelectOK(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                Image image = Image.FromFile(openFileDialog.FileName);
+
+                pictureBoxLogo.Image = image;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error loading selected image file.", ex);
+
+                MessageHelper.ShowMessage(this, "The selected file could not be opened or is not a valid image file.");
+
+                e.Cancel = true;
+            }
         }
     }
 }

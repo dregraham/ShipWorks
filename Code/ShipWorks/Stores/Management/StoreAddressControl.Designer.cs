@@ -171,7 +171,7 @@
             this.fullName.Location = new System.Drawing.Point(74, 23);
             this.fullName.Name = "fullName";
             this.fullName.Size = new System.Drawing.Size(274, 21);
-            this.fullName.TabIndex = 84;
+            this.fullName.TabIndex = 0;
             // 
             // labelFullName
             // 
@@ -189,7 +189,7 @@
             this.company.Location = new System.Drawing.Point(74, 95);
             this.company.Name = "company";
             this.company.Size = new System.Drawing.Size(274, 21);
-            this.company.TabIndex = 88;
+            this.company.TabIndex = 1;
             // 
             // labelCompany
             // 
@@ -212,7 +212,7 @@
             this.street.Multiline = true;
             this.street.Name = "street";
             this.street.Size = new System.Drawing.Size(274, 47);
-            this.street.TabIndex = 73;
+            this.street.TabIndex = 2;
             // 
             // StoreAddressControl
             // 

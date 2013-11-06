@@ -62,10 +62,6 @@ namespace ShipWorks.Stores.Management
         // If doing a trial, this is the current trial data
         TrialDetail trialDetail;
 
-        // The permissions existing users will get for this store
-        PermissionSet permissions;
-        long permissionsPlaceholderStoreID = -5;
-
         // So we know when to update the config of the pages
         long initialDownloadConfiguredStoreID = 0;
         long onlineUpdateConfiguredStoreID = 0;
@@ -224,14 +220,6 @@ namespace ShipWorks.Stores.Management
         #region StoreType Page
 
         /// <summary>
-        /// Entering the store type wizard page.
-        /// </summary>
-        private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
-        {
-            NextEnabled = SelectedStoreType != null;
-        }
-
-        /// <summary>
         /// Load the list of store types to choose from
         /// </summary>
         private void LoadStoreTypes()
@@ -248,11 +236,43 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
+        /// Entering the store type wizard page.
+        /// </summary>
+        private void OnSteppingIntoStoreType(object sender, WizardSteppingIntoEventArgs e)
+        {
+            UpdateStoreConnectionUI();
+        }
+
+        /// <summary>
+        /// Changing the option to use a real store or sample orders
+        /// </summary>
+        private void OnChangeStoreConnection(object sender, EventArgs e)
+        {
+            UpdateStoreConnectionUI();
+        }
+
+        /// <summary>
         /// User has chosen a specific store type to try.
         /// </summary>
         private void OnChooseStoreType(object sender, EventArgs e)
         {
-            NextEnabled = (SelectedStoreType != null);
+            UpdateStoreConnectionUI();
+        }
+
+        /// <summary>
+        /// Update the UI for store connection
+        /// </summary>
+        private void UpdateStoreConnectionUI()
+        {
+            NextEnabled = SelectedStoreType != null || radioStoreSamples.Checked;
+
+            comboStoreType.Enabled = radioStoreConnect.Checked;
+
+            if (radioStoreSamples.Checked)
+            {
+                // Index zero is the choose option
+                comboStoreType.SelectedIndex = 0;
+            }
         }
 
         /// <summary>
@@ -278,22 +298,30 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextStoreType(object sender, WizardStepEventArgs e)
         {
-            StoreType storeType = SelectedStoreType;
-
-            if (storeType == null)
+            if (radioStoreSamples.Checked)
             {
-                MessageHelper.ShowInformation(this, "Please select the online platform you use, or enter a license key.");
-
+                MessageHelper.ShowError(this, "Not done.");
                 e.NextPage = CurrentPage;
-                return;
             }
+            else
+            {
+                StoreType storeType = SelectedStoreType;
 
-            // Setup for the selected\licensed storetype
-            SetupForStoreType(storeType);
-            store.License = "";
+                if (storeType == null)
+                {
+                    MessageHelper.ShowInformation(this, "Please select the online platform that you use.");
 
-            // Move to the now newly inserted next page
-            e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
+                    e.NextPage = CurrentPage;
+                    return;
+                }
+
+                // Setup for the selected\licensed storetype
+                SetupForStoreType(storeType);
+                store.License = "";
+
+                // Move to the now newly inserted next page
+                e.NextPage = Pages[Pages.IndexOf(CurrentPage) + 1];
+            }
         }
 
         /// <summary>
@@ -345,14 +373,11 @@ namespace ShipWorks.Stores.Management
         #region Already Active
 
         /// <summary>
-        /// Activate and step into the appropriate account page
+        /// Stepping into the page that determines if the store is already active
         /// </summary>
-        private void ActivateAndFinish(WizardStepEventArgs e)
+        private void OnSteppingIntoAlreadyActive(object sender, WizardSteppingIntoEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-
-            // Default is to move to the finished page
-            e.NextPage = wizardPageFinished;
 
             try
             {
@@ -363,18 +388,22 @@ namespace ShipWorks.Stores.Management
                 store.License = trialDetail.License.Key;
                 store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
 
-                // Already an active license available
-                if (trialDetail.IsConverted)
+                // If it's not converted, then we can skip this page
+                if (!trialDetail.IsConverted)
                 {
-                    e.NextPage = wizardPageAlreadyActive;
-                }
+                    // Can't attach to a freemium trial if not freemium mode
+                    if (trialDetail.Edition is FreemiumFreeEdition && !isFreemiumMode)
+                    {
+                        MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay version.", StoreTypeManager.GetType(store).LicenseIdentifier));
 
-                // Can't attach to a freemium trial if not freemium mode
-                else if (trialDetail.Edition is FreemiumFreeEdition && !isFreemiumMode)
-                {
-                    MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay version.", StoreTypeManager.GetType(store).LicenseIdentifier));
+                        // Go back to the previous page
+                        e.Skip = true;
+                        e.SkipToPage = Pages[CurrentIndex - 1];
+                    }
 
-                    e.NextPage = CurrentPage;
+                    // No license, just skip
+                    e.Skip = true;
+                    e.RaiseStepEventWhenSkipping = false;
                 }
             }
             catch (Exception ex)
@@ -383,8 +412,9 @@ namespace ShipWorks.Stores.Management
                 {
                     MessageHelper.ShowError(this, ex.Message);
 
-                    e.NextPage = CurrentPage;
-                    return;
+                    // Go back to the previous page
+                    e.Skip = true;
+                    e.SkipToPage = Pages[CurrentIndex - 1];
                 }
                 else
                 {
@@ -398,7 +428,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
         {
-            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, trialLicense.Text.Trim(), this);
+            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, licenseKey.Text.Trim(), this);
 
             if (licenseState != LicenseActivationState.Active)
             {
@@ -415,6 +445,26 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Open the link for a user to get their license key
+        /// </summary>
+        private void OnHelpFindLicenseKey(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("https://www.interapptive.com/account", this);
+        }
+
+        #endregion
+
+        #region Address
+
+        /// <summary>
+        /// Stepping into the address page
+        /// </summary>
+        private void OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
+        {
+            storeAddressControl.LoadStore(store);
         }
 
         #endregion
@@ -447,159 +497,102 @@ namespace ShipWorks.Stores.Management
 
         #endregion
 
-        #region Initial Download Page
+        #region Settings Page
 
         /// <summary>
-        /// Stepping into the InitialDownload page
+        /// Stepping into the settings page
         /// </summary>
-        private void OnSteppingIntoInitialDownloadPage(object sender, WizardSteppingIntoEventArgs e)
+        private void OnSteppingIntoSettings(object sender, WizardSteppingIntoEventArgs e)
+        {
+            bool downloadSettings = PrepareSettingsInitialDownloadUI(e);
+            bool uploadSettings = PrepareSettingsActionUI(e);
+
+            e.Skip = !downloadSettings && !uploadSettings;
+            e.RaiseStepEventWhenSkipping = false;
+        }
+
+        /// <summary>
+        /// Prepare the UI for the initial download settings
+        /// </summary>
+        private bool PrepareSettingsInitialDownloadUI(WizardSteppingIntoEventArgs e)
         {
             StoreType storeType = StoreTypeManager.GetType(Store);
             InitialDownloadPolicy policy = storeType.InitialDownloadPolicy;
-
-            // Don't show initial download policy
-            if (policy.RestrictionType == InitialDownloadRestrictionType.None)
-            {
-                e.Skip = true;
-                e.RaiseStepEventWhenSkipping = true;
-
-                return;
-            }
 
             // Only reset the UI if the store has changed.  The only potential issue here is with generic where you could actually
             // be pointing to a totally different capabilities type without changing store types, but thats unlikely, and not catastrophic.
-            if (initialDownloadConfiguredStoreID != store.StoreID)
+            if (initialDownloadConfiguredStoreID != store.StoreID || e.FirstTime)
             {
-                initialDownloadConfiguredStoreID = store.StoreID;
+                store.InitialDownloadDays = null;
+                store.InitialDownloadOrder = null;
 
-                // Restrict by order number
-                if (policy.RestrictionType == InitialDownloadRestrictionType.OrderNumber)
+                // Don't show initial download policy
+                if (policy.RestrictionType == InitialDownloadRestrictionType.None)
                 {
-                    panelDateRange.Visible = false;
+                    // Hide the download range settings completely
+                    panelDownloadSettings.Visible = false;
 
-                    panelFirstOrder.Visible = true;
-                    panelFirstOrder.Top = panelDateRange.Top;
-
-                    initialDownloadFirstOrder.Text = policy.DefaultStartingOrderNumber.ToString();
-                    radioStartNumberLimit.Checked = true;
+                    return false;
                 }
-                // Restrict by date range
                 else
                 {
-                    panelDateRange.Visible = true;
-                    panelFirstOrder.Visible = false;
+                    initialDownloadConfiguredStoreID = store.StoreID;
 
-                    dateRangeDays.Text = policy.DefaultDaysBack.ToString();
-                    radioDateRangeDays.Checked = true;
+                    /// Show the download range settings
+                    panelDownloadSettings.Visible = true;
 
-                    dateRangeRadioHider.Visible = policy.MaxDaysBack != null;
-                    radioDateRangeAll.Visible = policy.MaxDaysBack == null;
-                }
-            }
-        }
+                    // Initially, the simple view will be shown and the editor wont.
+                    panelViewDownloadRange.Visible = true;
+                    panelEditDownloadRange.Visible = false;
+                    panelDownloadSettings.Height = panelViewDownloadRange.Bottom + 5;
 
-        /// <summary>
-        /// Changing the selected radio option
-        /// </summary>
-        private void OnChangeInitialDownloadOption(object sender, EventArgs e)
-        {
-            dateRangeDays.Enabled = radioDateRangeDays.Checked;
-            initialDownloadFirstOrder.Enabled = radioStartNumberLimit.Checked;
-        }
-
-        /// <summary>
-        /// Stepping next from the eBay initial download page
-        /// </summary>
-        private void OnStepNextInitialDownload(object sender, WizardStepEventArgs e)
-        {
-            StoreType storeType = StoreTypeManager.GetType(Store);
-            InitialDownloadPolicy policy = storeType.InitialDownloadPolicy;
-
-            // Start over, and we'll fill it back in..
-            store.InitialDownloadDays = null;
-            store.InitialDownloadOrder = null;
-
-            // Restrict by order number
-            if (policy.RestrictionType == InitialDownloadRestrictionType.OrderNumber)
-            {
-                if (radioStartNumberLimit.Checked)
-                {
-                    // Make sure the entered something
-                    if (initialDownloadFirstOrder.Text.Trim().Length == 0)
+                    // Restrict by order number
+                    if (policy.RestrictionType == InitialDownloadRestrictionType.OrderNumber)
                     {
-                        MessageHelper.ShowInformation(this, "Enter an order number that ShipWorks should start downloading from.");
-                        e.NextPage = CurrentPage;
-                        return;
+                        downloadRange.Text = (policy.DefaultStartingOrderNumber == 0) ? "Your first order" : string.Format("Order {0}", policy.DefaultStartingOrderNumber);
+
+                        panelDateRange.Visible = false;
+
+                        panelFirstOrder.Visible = true;
+                        panelFirstOrder.Top = panelDateRange.Top;
+
+                        initialDownloadFirstOrder.Text = policy.DefaultStartingOrderNumber.ToString();
+                        radioStartNumberLimit.Checked = true;
+                    }
+                    // Restrict by date range
+                    else
+                    {
+                        downloadRange.Text = string.Format("{0} days ago", policy.DefaultDaysBack);
+
+                        panelDateRange.Visible = true;
+                        panelFirstOrder.Visible = false;
+
+                        dateRangeDays.Text = policy.DefaultDaysBack.ToString();
+                        radioDateRangeDays.Checked = true;
+
+                        dateRangeRadioHider.Visible = policy.MaxDaysBack != null;
+                        radioDateRangeAll.Visible = policy.MaxDaysBack == null;
                     }
 
-                    long firstOrder;
-                    if (!long.TryParse(initialDownloadFirstOrder.Text.Trim(), out firstOrder))
-                    {
-                        MessageHelper.ShowInformation(this, "Enter a valid order number that ShipWorks should start downloading from.");
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-
-                    store.InitialDownloadOrder = firstOrder;
+                    // update link position for edit mode
+                    linkEditDownloadRange.Left = downloadRange.Right + 3;
                 }
             }
 
-            // Restrict by date range
-            if (policy.RestrictionType == InitialDownloadRestrictionType.DaysBack)
-            {
-                if (radioDateRangeDays.Checked)
-                {
-                    // Make sure the entered something
-                    if (dateRangeDays.Text.Trim().Length == 0)
-                    {
-                        MessageHelper.ShowInformation(this, "Enter the number of days ShipWorks should go back.");
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-
-                    int daysBack;
-                    if (!int.TryParse(dateRangeDays.Text.Trim(), out daysBack))
-                    {
-                        MessageHelper.ShowInformation(this, "Enter a valid number of days.");
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-
-                    if (daysBack <= 0 || (policy.MaxDaysBack != null && daysBack > policy.MaxDaysBack))
-                    {
-                        if (policy.MaxDaysBack != null)
-                        {
-                            MessageHelper.ShowInformation(this, string.Format("The number of days back must be between 1 and {0}.", policy.MaxDaysBack));
-                        }
-                        else
-                        {
-                            MessageHelper.ShowInformation(this, "The number of days back must be greater than zero.");
-                        }
-
-                        e.NextPage = CurrentPage;
-                        return;
-                    }
-
-                    store.InitialDownloadDays = daysBack;
-                }
-            }
+            return true;
         }
 
-        #endregion
-
-        #region Online Update Page
-
         /// <summary>
-        /// Stepping into the online update page
+        /// Prepare the UI for the actions stuff
         /// </summary>
-        private void OnSteppingIntoOnlineUpdate(object sender, WizardSteppingIntoEventArgs e)
+        private bool PrepareSettingsActionUI(WizardSteppingIntoEventArgs e)
         {
             // Ensure no actions are left over from this store, b\c we'll be recreating them when we move next
             ActionManager.DeleteStoreActions(store.StoreID);
 
             if (e.StepReason == WizardStepReason.StepBack)
             {
-                return;
+                return true;
             }
 
             StoreType storeType = StoreTypeManager.GetType(store);
@@ -611,8 +604,7 @@ namespace ShipWorks.Stores.Management
                 panelOnlineUpdatePlaceholder.Controls.Clear();
                 onlineUpdateConfiguredStoreID = 0;
 
-                e.Skip = true;
-                return;
+                return false;
             }
 
             // See if the existing one is already for this store
@@ -632,15 +624,129 @@ namespace ShipWorks.Stores.Management
 
             // Let the control initialize itself
             onlineUpdateControl.UpdateForStore(store);
+
+            return true;
         }
 
         /// <summary>
-        /// Stepping next from the online update page
+        /// User wants to edit the initial download range
         /// </summary>
-        private void OnStepNextOnlineUpdate(object sender, WizardStepEventArgs e)
+        private void OnEditInitialDownloadRange(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            panelViewDownloadRange.Visible = false;
+
+            panelEditDownloadRange.Top = panelViewDownloadRange.Top;
+            panelEditDownloadRange.Visible = true;
+
+            panelEditDownloadRange.Height = panelDateRange.Bottom;
+            panelDownloadSettings.Height = panelEditDownloadRange.Bottom;
+        }
+
+        /// <summary>
+        /// Changing the selected radio option
+        /// </summary>
+        private void OnChangeInitialDownloadOption(object sender, EventArgs e)
+        {
+            dateRangeDays.Enabled = radioDateRangeDays.Checked;
+            initialDownloadFirstOrder.Enabled = radioStartNumberLimit.Checked;
+        }
+
+        /// <summary>
+        /// Stepping next from the settings page
+        /// </summary>
+        private void OnStepNextSettings(object sender, WizardStepEventArgs e)
+        {
+            if (!SaveSettingsInitialDownload())
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+
+            SaveSettingsActions();
+        }
+
+        /// <summary>
+        /// Save the settings from the initial download control
+        /// </summary>
+        private bool SaveSettingsInitialDownload()
+        {
+            StoreType storeType = StoreTypeManager.GetType(Store);
+            InitialDownloadPolicy policy = storeType.InitialDownloadPolicy;
+
+            // Start over, and we'll fill it back in..
+            store.InitialDownloadDays = null;
+            store.InitialDownloadOrder = null;
+
+            // Restrict by order number
+            if (policy.RestrictionType == InitialDownloadRestrictionType.OrderNumber)
+            {
+                if (radioStartNumberLimit.Checked)
+                {
+                    // Make sure the entered something
+                    if (initialDownloadFirstOrder.Text.Trim().Length == 0)
+                    {
+                        MessageHelper.ShowInformation(this, "Enter an order number that ShipWorks should start downloading from.");
+                        return false;
+                    }
+
+                    long firstOrder;
+                    if (!long.TryParse(initialDownloadFirstOrder.Text.Trim(), out firstOrder))
+                    {
+                        MessageHelper.ShowInformation(this, "Enter a valid order number that ShipWorks should start downloading from.");
+                        return false;
+                    }
+
+                    store.InitialDownloadOrder = firstOrder;
+                }
+            }
+
+            // Restrict by date range
+            if (policy.RestrictionType == InitialDownloadRestrictionType.DaysBack)
+            {
+                if (radioDateRangeDays.Checked)
+                {
+                    // Make sure the entered something
+                    if (dateRangeDays.Text.Trim().Length == 0)
+                    {
+                        MessageHelper.ShowInformation(this, "Enter the number of days ShipWorks should go back.");
+                        return false;
+                    }
+
+                    int daysBack;
+                    if (!int.TryParse(dateRangeDays.Text.Trim(), out daysBack))
+                    {
+                        MessageHelper.ShowInformation(this, "Enter a valid number of days.");
+                        return false;
+                    }
+
+                    if (daysBack <= 0 || (policy.MaxDaysBack != null && daysBack > policy.MaxDaysBack))
+                    {
+                        if (policy.MaxDaysBack != null)
+                        {
+                            MessageHelper.ShowInformation(this, string.Format("The number of days back must be between 1 and {0}.", policy.MaxDaysBack));
+                        }
+                        else
+                        {
+                            MessageHelper.ShowInformation(this, "The number of days back must be greater than zero.");
+                        }
+
+                        return false;
+                    }
+
+                    store.InitialDownloadDays = daysBack;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Save the settings from the actions ui
+        /// </summary>
+        private void SaveSettingsActions()
         {
             OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
-            
+
             // See what tasks are configured to be created
             List<ActionTask> tasks = control.CreateActionTasks(store);
 

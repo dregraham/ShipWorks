@@ -33,24 +33,25 @@ namespace ShipWorks.Stores.Management
             this.labelWebsite = new System.Windows.Forms.Label();
             this.labelEmail = new System.Windows.Forms.Label();
             this.labelPhone = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.linkControl1 = new ShipWorks.UI.Controls.LinkControl();
-            this.promptTextBox2 = new ShipWorks.UI.Controls.PromptTextBox();
-            this.promptTextBox1 = new ShipWorks.UI.Controls.PromptTextBox();
+            this.labelSocialMedia = new System.Windows.Forms.Label();
+            this.labelTwitter = new System.Windows.Forms.Label();
+            this.labelFacebook = new System.Windows.Forms.Label();
+            this.labelYourLogo = new System.Windows.Forms.Label();
+            this.linkSelectLogo = new ShipWorks.UI.Controls.LinkControl();
+            this.twitter = new ShipWorks.UI.Controls.PromptTextBox();
+            this.facebook = new ShipWorks.UI.Controls.PromptTextBox();
             this.website = new System.Windows.Forms.TextBox();
             this.phone = new System.Windows.Forms.TextBox();
             this.email = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxFacebook = new System.Windows.Forms.PictureBox();
+            this.pictureBoxTwitter = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFacebook)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTwitter)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // labelContactInfo
@@ -90,73 +91,74 @@ namespace ShipWorks.Stores.Management
             this.labelPhone.TabIndex = 68;
             this.labelPhone.Text = "Phone:";
             // 
-            // label1
+            // labelSocialMedia
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(0, 111);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 74;
-            this.label1.Text = "Social Media";
+            this.labelSocialMedia.AutoSize = true;
+            this.labelSocialMedia.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSocialMedia.Location = new System.Drawing.Point(0, 111);
+            this.labelSocialMedia.Name = "labelSocialMedia";
+            this.labelSocialMedia.Size = new System.Drawing.Size(77, 13);
+            this.labelSocialMedia.TabIndex = 74;
+            this.labelSocialMedia.Text = "Social Media";
             // 
-            // label2
+            // labelTwitter
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(27, 164);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 13);
-            this.label2.TabIndex = 80;
-            this.label2.Text = "Twitter:";
+            this.labelTwitter.AutoSize = true;
+            this.labelTwitter.Location = new System.Drawing.Point(27, 164);
+            this.labelTwitter.Name = "labelTwitter";
+            this.labelTwitter.Size = new System.Drawing.Size(45, 13);
+            this.labelTwitter.TabIndex = 80;
+            this.labelTwitter.Text = "Twitter:";
             // 
-            // label4
+            // labelFacebook
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 137);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
-            this.label4.TabIndex = 78;
-            this.label4.Text = "Facebook:";
+            this.labelFacebook.AutoSize = true;
+            this.labelFacebook.Location = new System.Drawing.Point(15, 137);
+            this.labelFacebook.Name = "labelFacebook";
+            this.labelFacebook.Size = new System.Drawing.Size(57, 13);
+            this.labelFacebook.TabIndex = 78;
+            this.labelFacebook.Text = "Facebook:";
             // 
-            // label3
+            // labelYourLogo
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(10, 193);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(63, 13);
-            this.label3.TabIndex = 81;
-            this.label3.Text = "Your Logo";
+            this.labelYourLogo.AutoSize = true;
+            this.labelYourLogo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelYourLogo.Location = new System.Drawing.Point(10, 193);
+            this.labelYourLogo.Name = "labelYourLogo";
+            this.labelYourLogo.Size = new System.Drawing.Size(63, 13);
+            this.labelYourLogo.TabIndex = 81;
+            this.labelYourLogo.Text = "Your Logo";
             // 
-            // linkControl1
+            // linkSelectLogo
             // 
-            this.linkControl1.AutoSize = true;
-            this.linkControl1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.linkControl1.ForeColor = System.Drawing.Color.Blue;
-            this.linkControl1.Location = new System.Drawing.Point(36, 262);
-            this.linkControl1.Name = "linkControl1";
-            this.linkControl1.Size = new System.Drawing.Size(48, 13);
-            this.linkControl1.TabIndex = 85;
-            this.linkControl1.Text = "Select...";
+            this.linkSelectLogo.AutoSize = true;
+            this.linkSelectLogo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkSelectLogo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkSelectLogo.ForeColor = System.Drawing.Color.Blue;
+            this.linkSelectLogo.Location = new System.Drawing.Point(31, 214);
+            this.linkSelectLogo.Name = "linkSelectLogo";
+            this.linkSelectLogo.Size = new System.Drawing.Size(48, 13);
+            this.linkSelectLogo.TabIndex = 85;
+            this.linkSelectLogo.Text = "Select...";
+            this.linkSelectLogo.Click += new System.EventHandler(this.OnSelectLogo);
             // 
-            // promptTextBox2
+            // twitter
             // 
-            this.promptTextBox2.Location = new System.Drawing.Point(100, 161);
-            this.promptTextBox2.Name = "promptTextBox2";
-            this.promptTextBox2.PromptColor = System.Drawing.SystemColors.GrayText;
-            this.promptTextBox2.PromptText = "e.g. @ShipWorks";
-            this.promptTextBox2.Size = new System.Drawing.Size(247, 21);
-            this.promptTextBox2.TabIndex = 84;
+            this.twitter.Location = new System.Drawing.Point(100, 161);
+            this.twitter.Name = "twitter";
+            this.twitter.PromptColor = System.Drawing.Color.DarkGray;
+            this.twitter.PromptText = "@YourAccount";
+            this.twitter.Size = new System.Drawing.Size(247, 21);
+            this.twitter.TabIndex = 5;
             // 
-            // promptTextBox1
+            // facebook
             // 
-            this.promptTextBox1.Location = new System.Drawing.Point(100, 134);
-            this.promptTextBox1.Name = "promptTextBox1";
-            this.promptTextBox1.PromptColor = System.Drawing.SystemColors.GrayText;
-            this.promptTextBox1.PromptText = "e.g. www.facebook.com/ShipWorks";
-            this.promptTextBox1.Size = new System.Drawing.Size(247, 21);
-            this.promptTextBox1.TabIndex = 83;
+            this.facebook.Location = new System.Drawing.Point(100, 134);
+            this.facebook.Name = "facebook";
+            this.facebook.PromptColor = System.Drawing.Color.DarkGray;
+            this.facebook.PromptText = "www.facebook.com/YourPage";
+            this.facebook.Size = new System.Drawing.Size(247, 21);
+            this.facebook.TabIndex = 4;
             // 
             // website
             // 
@@ -164,7 +166,7 @@ namespace ShipWorks.Stores.Management
             this.fieldLengthProvider.SetMaxLengthSource(this.website, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonWebsite);
             this.website.Name = "website";
             this.website.Size = new System.Drawing.Size(271, 21);
-            this.website.TabIndex = 60;
+            this.website.TabIndex = 1;
             // 
             // phone
             // 
@@ -172,7 +174,7 @@ namespace ShipWorks.Stores.Management
             this.fieldLengthProvider.SetMaxLengthSource(this.phone, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonPhone);
             this.phone.Name = "phone";
             this.phone.Size = new System.Drawing.Size(271, 21);
-            this.phone.TabIndex = 59;
+            this.phone.TabIndex = 3;
             // 
             // email
             // 
@@ -180,51 +182,58 @@ namespace ShipWorks.Stores.Management
             this.fieldLengthProvider.SetMaxLengthSource(this.email, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonEmail);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(271, 21);
-            this.email.TabIndex = 57;
+            this.email.TabIndex = 2;
             // 
-            // pictureBox2
+            // pictureBoxFacebook
             // 
-            this.pictureBox2.Image = global::ShipWorks.Properties.Resources.social_twitter;
-            this.pictureBox2.Location = new System.Drawing.Point(78, 164);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 86;
-            this.pictureBox2.TabStop = false;
+            this.pictureBoxFacebook.Image = global::ShipWorks.Properties.Resources.social_facebook;
+            this.pictureBoxFacebook.Location = new System.Drawing.Point(78, 137);
+            this.pictureBoxFacebook.Name = "pictureBoxFacebook";
+            this.pictureBoxFacebook.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxFacebook.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxFacebook.TabIndex = 87;
+            this.pictureBoxFacebook.TabStop = false;
             // 
-            // pictureBox1
+            // pictureBoxTwitter
             // 
-            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.unknown;
-            this.pictureBox1.Location = new System.Drawing.Point(34, 214);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(313, 77);
-            this.pictureBox1.TabIndex = 82;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxTwitter.Image = global::ShipWorks.Properties.Resources.social_twitter;
+            this.pictureBoxTwitter.Location = new System.Drawing.Point(78, 164);
+            this.pictureBoxTwitter.Name = "pictureBoxTwitter";
+            this.pictureBoxTwitter.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxTwitter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxTwitter.TabIndex = 86;
+            this.pictureBoxTwitter.TabStop = false;
             // 
-            // pictureBox3
+            // pictureBoxLogo
             // 
-            this.pictureBox3.Image = global::ShipWorks.Properties.Resources.social_facebook;
-            this.pictureBox3.Location = new System.Drawing.Point(78, 137);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 87;
-            this.pictureBox3.TabStop = false;
+            this.pictureBoxLogo.Image = global::ShipWorks.Properties.Resources.dashed_outline;
+            this.pictureBoxLogo.Location = new System.Drawing.Point(34, 232);
+            this.pictureBoxLogo.Name = "pictureBoxLogo";
+            this.pictureBoxLogo.Size = new System.Drawing.Size(84, 48);
+            this.pictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxLogo.TabIndex = 82;
+            this.pictureBoxLogo.TabStop = false;
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.Filter = "All Pictures Files|*.*";
+            this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.OnLogoSelectOK);
             // 
             // StoreContactControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.linkControl1);
-            this.Controls.Add(this.promptTextBox2);
-            this.Controls.Add(this.promptTextBox1);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.pictureBoxFacebook);
+            this.Controls.Add(this.pictureBoxTwitter);
+            this.Controls.Add(this.linkSelectLogo);
+            this.Controls.Add(this.twitter);
+            this.Controls.Add(this.facebook);
+            this.Controls.Add(this.pictureBoxLogo);
+            this.Controls.Add(this.labelYourLogo);
+            this.Controls.Add(this.labelTwitter);
+            this.Controls.Add(this.labelFacebook);
+            this.Controls.Add(this.labelSocialMedia);
             this.Controls.Add(this.labelContactInfo);
             this.Controls.Add(this.website);
             this.Controls.Add(this.labelWebsite);
@@ -236,9 +245,9 @@ namespace ShipWorks.Stores.Management
             this.Name = "StoreContactControl";
             this.Size = new System.Drawing.Size(360, 300);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFacebook)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTwitter)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,15 +263,16 @@ namespace ShipWorks.Stores.Management
         protected System.Windows.Forms.TextBox email;
         protected System.Windows.Forms.Label labelPhone;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        protected System.Windows.Forms.Label label1;
-        protected System.Windows.Forms.Label label2;
-        protected System.Windows.Forms.Label label4;
-        protected System.Windows.Forms.Label label3;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private UI.Controls.PromptTextBox promptTextBox1;
-        private UI.Controls.PromptTextBox promptTextBox2;
-        private UI.Controls.LinkControl linkControl1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        protected System.Windows.Forms.Label labelSocialMedia;
+        protected System.Windows.Forms.Label labelTwitter;
+        protected System.Windows.Forms.Label labelFacebook;
+        protected System.Windows.Forms.Label labelYourLogo;
+        private System.Windows.Forms.PictureBox pictureBoxLogo;
+        private UI.Controls.PromptTextBox facebook;
+        private UI.Controls.PromptTextBox twitter;
+        private UI.Controls.LinkControl linkSelectLogo;
+        private System.Windows.Forms.PictureBox pictureBoxTwitter;
+        private System.Windows.Forms.PictureBox pictureBoxFacebook;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
