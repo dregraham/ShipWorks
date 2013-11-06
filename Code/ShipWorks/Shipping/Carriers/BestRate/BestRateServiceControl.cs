@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             originControl.Initialize(ShipmentTypeCode.BestRate);
             dimensionsControl.Initialize();
 
-            EnumHelper.BindComboBox<TransitTimeRange>(transitDays);
+            EnumHelper.BindComboBox<ServiceLevelType>(transitDays);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
 
-                    transitDays.ApplyMultiValue((TransitTimeRange) shipment.BestRate.TransitDays);
+                    transitDays.ApplyMultiValue((ServiceLevelType) shipment.BestRate.TransitDays);
 
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
                 }

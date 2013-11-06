@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ShipWorks.Shipping.Editing.Enums
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    enum TransitTimeRange
+    public enum ServiceLevelType
     {
         [Description("Anytime")]
         Anytime = 0,

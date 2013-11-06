@@ -876,7 +876,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
-    <Compile Include="Shipping\Editing\Enums\TransitTimeRange.cs" />
+    <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepository.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -41,6 +42,11 @@ namespace ShipWorks.Shipping.Editing
 
             this.selectable = true;
         }
+
+        /// <summary>
+        /// Gets or sets the service level.
+        /// </summary>
+        public ServiceLevelType ServiceLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the hover text information that is displayed in RateControl.
