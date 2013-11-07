@@ -39,6 +39,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             this.shipmentType = shipmentType;
             this.accountRepository = accountRepository;
         }
+
+        /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasAccounts
+        {
+            get { return accountRepository.Accounts.Any(); }
+        }
+
         /// <summary>
         /// Gets the single best rate for each UPS account based 
         /// on the configuration of the best rate shipment data.

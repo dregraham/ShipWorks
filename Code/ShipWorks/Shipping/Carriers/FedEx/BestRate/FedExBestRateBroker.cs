@@ -34,5 +34,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 new RateResult("Stubbed FedEx", "1", 0.01M, FedExServiceType.FirstOvernight)
             };
         }
+
+        /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public bool HasAccounts
+        {
+            get
+            {
+                // Just stubbed in for now
+                return true;
+            }
+        }
     }
 }

@@ -27,5 +27,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             Assert.IsTrue(!rates.Any());
         }
+
+        [TestMethod]
+        public void HasAccounts_ReturnsFalse_Test()
+        {
+            Assert.IsFalse(testObject.HasAccounts);
+        }
     }
 }

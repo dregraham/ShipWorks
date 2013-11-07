@@ -11,8 +11,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class NullShippingBroker : IBestRateShippingBroker
     {
+
         /// <summary>
-        /// Gets the single best rate for each of the accounts of a specific shipping provider based
+        /// Gets the rates for each of the accounts of a specific shipping provider based
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -20,6 +21,22 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public List<RateResult> GetBestRates(ShipmentEntity shipment)
         {
             return new List<RateResult>();
+        }
+
+
+        /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasAccounts
+        {
+            get
+            {
+                // Always return false since this is a null broker
+                return false;
+            }
         }
     }
 }

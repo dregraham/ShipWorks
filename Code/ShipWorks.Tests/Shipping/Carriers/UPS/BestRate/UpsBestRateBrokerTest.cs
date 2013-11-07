@@ -89,6 +89,34 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [TestMethod]
+        public void HasAccounts_DelegatesToAccountRepository_Test()
+        {
+            bool hasAccounts = testObject.HasAccounts;
+
+            genericRepositoryMock.Verify(r => r.Accounts, Times.Once());
+        }
+
+        [TestMethod]
+        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts_Test()
+        {
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { new UpsAccountEntity() });
+
+            bool hasAccounts = testObject.HasAccounts;
+
+            Assert.IsTrue(hasAccounts);
+        }
+
+        [TestMethod]
+        public void HasAccounts_ReturnsFalse_WhenRepositoryHaSZeroAccounts_Test()
+        {
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity>());
+
+            bool hasAccounts = testObject.HasAccounts;
+
+            Assert.IsFalse(hasAccounts);
+        }
+
+        [TestMethod]
         public void GetBestRates_RetrievesAllAccounts()
         {
             testObject.GetBestRates(testShipment);
@@ -386,7 +414,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             Assert.AreEqual(fedExEntity, testShipment.FedEx);
         }
-
+       
         /// <summary>
         /// Gets a list of original rates from a list of NonCompetitiveRateResults
         /// </summary>

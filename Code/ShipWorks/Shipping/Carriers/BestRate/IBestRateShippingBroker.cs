@@ -24,5 +24,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// two accounts are registered for a single provider, the list of rates would have two entries
         /// if both accounts returned rates).</returns>
         List<RateResult> GetBestRates(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
+        bool HasAccounts { get; }
     }
 }
