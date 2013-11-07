@@ -82,24 +82,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new BestRateServiceControl(ShipmentTypeCode);
         }
 
-        /// <summary>
-        /// Apply the configured defaults and profile rule settings to the given shipment
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
-
-            if (shipment.BestRate != null)
-            {
-                shipment.BestRate.DimsAddWeight = false;
-                shipment.BestRate.DimsProfileID = 0;
-                shipment.BestRate.DimsHeight = 0;
-                shipment.BestRate.DimsLength = 0;
-                shipment.BestRate.DimsWeight = 0;
-                shipment.BestRate.DimsWidth = 0;
-                shipment.BestRate.ServiceLevel = 0;
-            }
-        }
 
         /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
