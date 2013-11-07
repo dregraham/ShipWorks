@@ -1,33 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ComponentFactory.Krypton.Toolkit;
-using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid;
-using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Filters;
-using Divelements.SandGrid.Rendering;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.Users;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Controls;
-using ShipWorks.Data.Grid;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.DetailView;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Data.Model;
@@ -41,14 +24,11 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Processing;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
-using System.Data.SqlClient;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Editions;
 
@@ -801,6 +781,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.RateCriteriaChanged += this.OnRateCriteriaChanged;
                     newServiceControl.ReloadRatesRequired += new EventHandler(OnRateReloadRequired);
                     newServiceControl.ShipmentsAdded += this.OnServiceControlShipmentsAdded;
+                    newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -814,6 +795,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.RateCriteriaChanged -= this.OnRateCriteriaChanged;
                     oldServiceControl.ReloadRatesRequired -= new EventHandler(OnRateReloadRequired);
                     oldServiceControl.ShipmentsAdded -= this.OnServiceControlShipmentsAdded;
+                    oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
 
                     oldServiceControl.Dispose();
                 }
@@ -828,6 +810,17 @@ namespace ShipWorks.Shipping
 
             // Update the displayed rates
             LoadDisplayedRates();
+        }
+
+        /// <summary>
+        /// When BestRate Rate is selected, the BestRateServiceControl raises this event.
+        /// </summary>
+        private void OnShipmentTypeChanged(object sender, EventArgs e)
+        {
+            ShipmentEntity shipment = shipmentControl.SelectedShipments.First();
+            ShipmentTypeCode shipmentTypeCode = ((ShipmentTypeCode)shipment.ShipmentType);
+
+            comboShipmentType.SelectedValue = shipmentTypeCode;
         }
 
         /// <summary>

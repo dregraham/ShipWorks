@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Called when [rate selected].
+        /// Event raised when Rate is selected in rate control.
         /// </summary>
         private void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
