@@ -313,6 +313,7 @@
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypeTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\Editing\RateResultTest.cs" />
+    <Compile Include="Shipping\Editing\NonCompetitiveRateResultTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
