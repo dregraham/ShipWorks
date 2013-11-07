@@ -100,20 +100,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             foreach (RateResult rate in filteredRates)
             {
-                // Save the shipment and rate service type for use in the anonymous method
-                object originalTag = rate.Tag;
-                UpsShipmentEntity rateShipment = rateShipments[rate];
-
                 // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = (Action<ShipmentEntity>)(selectedShipment =>
-                    {
-                        rateShipment.Service = (int)originalTag;
-                        selectedShipment.Ups = rateShipment;
-                        selectedShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
-                    });
+                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
             }
 
             return filteredRates;
+        }
+
+        /// <summary>
+        /// Creates a function that can be used to select a specific rate
+        /// </summary>
+        /// <param name="rateShipment">UpsShipment that was used to get the rate</param>
+        /// <param name="originalTag">UpsServiceType associated with the specific rate</param>
+        /// <returns>A function that, when executed, will convert the passed in shipment to a UPS shipment
+        /// used to create the rate.</returns>
+        private static Action<ShipmentEntity> CreateRateSelectionFunction(UpsShipmentEntity rateShipment, object originalTag)
+        {
+            return selectedShipment =>
+                {
+                    rateShipment.Service = (int)originalTag;
+                    selectedShipment.Ups = rateShipment;
+                    selectedShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+                };
         }
 
         /// <summary>
