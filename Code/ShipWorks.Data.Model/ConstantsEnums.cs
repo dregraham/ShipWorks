@@ -7447,8 +7447,8 @@ namespace ShipWorks.Data.Model
 		UpsMailInnovationsEnabled,
 		///<summary>WorldShipMailInnovationsEnabled. </summary>
 		WorldShipMailInnovationsEnabled,
-		///<summary>BestRateExcludedShipmentTypes. </summary>
-		BestRateExcludedShipmentTypes,
+		///<summary>InternalBestRateExcludedShipmentTypes. </summary>
+		InternalBestRateExcludedShipmentTypes,
 		/// <summary></summary>
 		AmountOfFields
 	}

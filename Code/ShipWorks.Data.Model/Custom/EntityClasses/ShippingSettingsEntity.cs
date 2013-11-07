@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// List of shipment types that the user has elected to have hidden from the ShipWorks UI for selection and configuration.  This list is independant
+        /// List of shipment types that the user has elected to have hidden from the ShipWorks UI for selection and configuration.  This list is independent
         /// of the Activated and Configured lists.
         /// </summary>
         public int[] ExcludedTypes
@@ -55,6 +55,21 @@ namespace ShipWorks.Data.Model.EntityClasses
             set
             {
                 InternalExcluded = ArrayUtility.FormatCommaSeparatedList(value);
+            }
+        }
+
+        /// <summary>
+        /// List of shipment types that the user has elected to exclude when attempting to get the cheapest rate.
+        /// </summary>
+        public int[] BestRateExcludedTypes
+        {
+            get
+            {
+                return ArrayUtility.ParseCommaSeparatedList<int>(InternalBestRateExcludedShipmentTypes);
+            }
+            set
+            {
+                InternalBestRateExcludedShipmentTypes = ArrayUtility.FormatCommaSeparatedList(value);
             }
         }
     }

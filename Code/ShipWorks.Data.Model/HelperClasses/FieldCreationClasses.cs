@@ -15797,10 +15797,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.BestRateExcludedShipmentTypes field instance</summary>
-		public static EntityField2 BestRateExcludedShipmentTypes
+		/// <summary>Creates a new ShippingSettingsEntity.InternalBestRateExcludedShipmentTypes field instance</summary>
+		public static EntityField2 InternalBestRateExcludedShipmentTypes
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.BestRateExcludedShipmentTypes);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes);}
 		}
 	}
 
