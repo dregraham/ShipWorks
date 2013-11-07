@@ -94,5 +94,15 @@ namespace ShipWorks.Shipping.Editing
         {
             get { return selectable; }
         }
+
+        /// <summary>
+        /// Mask the description of the rate, if necessary
+        /// </summary>
+        /// <param name="rates">Collection of all rates, including this one</param>
+        /// <remarks>For the base RateResult class, this method should do nothing</remarks>
+        public virtual void MaskDescription(IEnumerable<RateResult> rates)
+        {
+            
+        }
     }
 }
