@@ -134,7 +134,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             List<RateResult> rates = new List<RateResult>();
 
-            foreach (IBestRateShippingBroker broker in brokerFactory.CreateBrokers())
+            IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
+            
+            if (!bestRateShippingBrokers.Any())
+            {
+                throw new ShippingException("No Carrier with an account has been selected.");
+            }
+
+            foreach (IBestRateShippingBroker broker in bestRateShippingBrokers)
             {
                 // Use the broker to get the best rates for each shipping provider
                 rates.AddRange(broker.GetBestRates(shipment));
