@@ -26,9 +26,6 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public event EventHandler ReloadRatesRequired;
 
-        private ToolTip toolTip;
-        private int hoverRow = -1;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -155,73 +152,8 @@ namespace ShipWorks.Shipping.Editing
             get { return panelFootnote.Visible ? panelFootnote.Height : 0; }
         }
 
-        /// <summary>
-        /// Called when mouse hovers over SandGrid
-        /// </summary>
-        private void OnSandGridMouseHover(object sender, EventArgs e)
-        {
-            if (toolTip == null)
-            {
-                toolTip = new ToolTip();
-            }
-        }
 
-        /// <summary>
-        /// Called when [sand grid mouse move].
-        /// </summary>
-        private void OnSandGridMouseMove(object sender, MouseEventArgs e)
-        {
-            GridRow rowMouseIsOn = GetRowMouseIsOn();
+      
 
-            if (rowMouseIsOn != null && rowMouseIsOn.Index != hoverRow && toolTip != null)
-            {
-                toolTip.Active = false;
-
-                string hoverText = GetHoverText(rowMouseIsOn);
-                
-                if (!string.IsNullOrEmpty(hoverText))
-                {
-                    toolTip.SetToolTip(sandGrid, hoverText);
-                    toolTip.Active = true;
-
-                    hoverRow = rowMouseIsOn.Index;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the hover text for specific row.
-        /// </summary>
-        private string GetHoverText(GridRow row)
-        {
-            RateResult rate = row.Tag as RateResult;
-
-            string hoverText = string.Empty;
-
-            if (rate != null)
-            {
-                hoverText = rate.HoverText;
-            }
-
-            return hoverText;
-        }
-
-        /// <summary>
-        /// Gets the row the mouse is on.
-        /// </summary>
-        private GridRow GetRowMouseIsOn()
-        {
-            int mouseYLocation = Cursor.Position.Y - sandGrid.PointToScreen(sandGrid.Location).Y;
-
-            foreach (GridRow row in sandGrid.Rows)
-            {
-                if (row.Bounds.Top <= mouseYLocation && row.Bounds.Bottom >= mouseYLocation)
-                {
-                    return row;
-                }
-            }
-
-            return null;
-        }
     }
 }

@@ -85,12 +85,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 }
             }
 
-            // Update the results to show the correct hover text
-            foreach (RateResult result in allRates)
-            {
-                result.HoverText = "UPS - " + result.Description;
-            }
-
             // Return all the rates, filtered by service level, then grouped by UpsServiceType and ServiceLevel
             List<RateResult> filteredRates = allRates
                 .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel))

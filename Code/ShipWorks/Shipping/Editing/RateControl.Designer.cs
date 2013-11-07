@@ -109,8 +109,6 @@
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
             this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
-            this.sandGrid.MouseHover += new System.EventHandler(this.OnSandGridMouseHover);
-            this.sandGrid.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnSandGridMouseMove);
             // 
             // gridColumnService
             // 

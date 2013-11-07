@@ -49,11 +49,6 @@ namespace ShipWorks.Shipping.Editing
         public ServiceLevelType ServiceLevel { get; set; }
 
         /// <summary>
-        /// Gets or sets the hover text information that is displayed in RateControl.
-        /// </summary>
-        public string HoverText { get; set; }
-
-        /// <summary>
         /// A description of the rate service class, like "USPS Priority"
         /// </summary>
         public string Description { get; set; }

@@ -255,15 +255,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_SetsHoverText()
-        {
-            var rates = testObject.GetBestRates(testShipment);
-
-            Assert.AreEqual("UPS - Account 1b", account1Rate2.HoverText);
-            Assert.AreEqual("UPS - Account 3a", account3Rate1.HoverText);
-        }
-
-        [TestMethod]
         public void GetBestRates_SetsPackageDetails()
         {
             testShipment.BestRate.DimsHeight = 3;
