@@ -36,7 +36,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 if (IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
                 {
                     // This shipment type is activated, configured, and hasn't been excluded, so add it to our list of brokers
-                    brokers.Add(shipmentType.GetShippingBroker());
+                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker();
+                    if (broker.HasAccounts)
+                    {
+                        // We only want to return brokers that have accounts setup
+                        brokers.Add(shipmentType.GetShippingBroker());
+                    }
                 }
             }
 
@@ -44,7 +49,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Determines if a Shipment Type Code is active, configured and not excluded
+        /// Determines if a Shipment Type Code is active, configured, not a globally excluded shipment type, and not a shipment type
+        /// that has been excluded from being used with the best rate shipment type.
         /// </summary>
         private static bool IsShipmentTypeActiveConfiguredAndNotExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
         {
@@ -52,7 +58,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return shippingSettings.ActivatedTypes.Contains(shipmentTypeCodeValue) &&
                    shippingSettings.ConfiguredTypes.Contains(shipmentTypeCodeValue) && 
-                   !shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue);
+                   !shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue) &&
+                   !shippingSettings.BestRateExcludedTypes.Contains((int)shipmentTypeCode);
         }
     }
 }
