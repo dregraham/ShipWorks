@@ -8,6 +8,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -184,7 +185,53 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void SupportsGetRates_ReturnsTrue()
+        public void GetRates_RatesAreOrderedFromCheapestToMostExpensive_Test()
+        {
+            // Setup the broker to return specific rates
+            rates = new List<RateResult>
+            {
+                new RateResult("Rate abc", "12", 34.30M, null) { ServiceLevel = ServiceLevelType.Anytime },
+                new RateResult("Rate xyz", "12", 4.23M, null) { ServiceLevel = ServiceLevelType.Anytime },
+                new RateResult("Rate 123", "probably 7", 9.87M, null) { ServiceLevel = ServiceLevelType.Anytime }
+            };
+
+            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>())).Returns(rates);
+
+            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            List<RateResult> bestRates = rateGroup.Rates.ToList();
+            
+            Assert.AreEqual(rates[1], bestRates[0]);
+            Assert.AreEqual(rates[2], bestRates[1]);
+            Assert.AreEqual(rates[0], bestRates[2]);
+        }
+
+        [TestMethod]
+        public void GetRates_RatesWithSameCost_AreOrderedByServiceLevel_Test()
+        {
+            // Setup the broker to return specific rates
+            rates = new List<RateResult>
+            {
+                new RateResult("Rate abc", "3", 4.23M, null) { ServiceLevel = ServiceLevelType.ThreeDays },
+                new RateResult("Rate xyz", "It will get there when it gets there", 4.23M, null) { ServiceLevel = ServiceLevelType.Anytime },
+                new RateResult("Rate 123", "1", 4.23M, null) { ServiceLevel = ServiceLevelType.OneDay },
+                new RateResult("Rate 456", "Soon", 4.23M, null) { ServiceLevel = ServiceLevelType.FourToSevenDays },
+                new RateResult("Rate 789", "2", 4.23M, null) { ServiceLevel = ServiceLevelType.TwoDays },                
+            };
+
+            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>())).Returns(rates);
+
+            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            List<RateResult> bestRates = rateGroup.Rates.ToList();
+
+            Assert.AreEqual(rates[2], bestRates[0]);
+            Assert.AreEqual(rates[4], bestRates[1]);
+            Assert.AreEqual(rates[0], bestRates[2]);
+            Assert.AreEqual(rates[3], bestRates[3]);
+            Assert.AreEqual(rates[1], bestRates[4]);
+        }
+
+        [TestMethod]
+        public void SupportsGetRates_ReturnsTrue_Test()
         {
             Assert.IsTrue(testObject.SupportsGetRates);
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Enums;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -159,7 +161,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // We don't want to show the actual carrier/service name in the description due to contractual obligations
             rates.ForEach(r => r.Description = string.Empty);
 
-            return new RateGroup(rates);
+            // We want the cheapest rates to appear first, and any ties to be ordered by service level
+            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, new ServiceLevelSpeedComparer());
+            return new RateGroup(orderedRates);
         }
 
         /// <summary>
