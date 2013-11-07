@@ -310,6 +310,7 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsResponseFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsClerkTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypeTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />

@@ -14,16 +14,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         UpsServiceType service;
         decimal amount;
         bool negotiated;
+        
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsServiceRate(UpsServiceType service, decimal amount, bool negotiated)
+        public UpsServiceRate(UpsServiceType service, decimal amount, bool negotiated, int? guaranteedDaysToDelivery)
         {
             this.service = service;
             this.amount = amount;
             this.negotiated = negotiated;
+            GuaranteedDaysToDelivery = guaranteedDaysToDelivery;
         }
+
+        /// <summary>
+        /// The guaranteed days automatic delivery if provided by Ups
+        /// </summary>
+        public int? GuaranteedDaysToDelivery { get; set; }
 
         /// <summary>
         /// The service the rate is for
