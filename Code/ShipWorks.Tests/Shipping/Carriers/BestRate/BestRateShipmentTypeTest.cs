@@ -92,18 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             
             Assert.AreEqual(0, rateGroup.Rates.Count());
         }
-
-        [TestMethod]
-        public void GetRates_ClearsRateDescription_Test()
-        {
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
-
-            foreach (RateResult rate in rateGroup.Rates)
-            {
-                Assert.AreEqual(string.Empty, rate.Description);
-            }
-        }
-
+        
         [TestMethod]
         public void GetRates_RateAmountFromBrokerIsUnmodified_Test()
         {

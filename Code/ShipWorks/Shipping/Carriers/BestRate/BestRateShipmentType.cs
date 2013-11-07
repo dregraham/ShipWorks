@@ -140,9 +140,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 rates.AddRange(broker.GetBestRates(shipment));
             }
             
-            // We don't want to show the actual carrier/service name in the description due to contractual obligations
-            rates.ForEach(r => r.Description = string.Empty);
-
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
             IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, new ServiceLevelSpeedComparer());
