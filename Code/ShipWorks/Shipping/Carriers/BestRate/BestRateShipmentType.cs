@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
 
-            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.TransitDays, bestRateShipment, BestRateShipmentFields.ServiceLevel);
+            ShippingProfileUtility.ApplyProfileValue(bestRateProfile.ServiceLevel, bestRateShipment, BestRateShipmentFields.ServiceLevel);
 
             if (bestRateProfile.Weight.HasValue && bestRateProfile.Weight.Value != 0)
             {

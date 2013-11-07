@@ -490,7 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Weight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("TransitDays", fieldHashtable);
+			_fieldsCustomProperties.Add("ServiceLevel", fieldHashtable);
 		}
 		#endregion
 
@@ -687,15 +687,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)BestRateProfileFieldIndex.Weight, value); }
 		}
 
-		/// <summary> The TransitDays property of the Entity BestRateProfile<br/><br/>
+		/// <summary> The ServiceLevel property of the Entity BestRateProfile<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "BestRateProfile"."TransitDays"<br/>
+		/// <remarks>Mapped on  table field: "BestRateProfile"."ServiceLevel"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> TransitDays
+		public virtual Nullable<System.Int32> ServiceLevel
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)BestRateProfileFieldIndex.TransitDays, false); }
-			set	{ SetValue((int)BestRateProfileFieldIndex.TransitDays, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)BestRateProfileFieldIndex.ServiceLevel, false); }
+			set	{ SetValue((int)BestRateProfileFieldIndex.ServiceLevel, value); }
 		}
 
 

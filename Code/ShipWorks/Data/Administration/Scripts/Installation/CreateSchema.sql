@@ -1265,6 +1265,25 @@ PRINT N'Creating primary key [PK_EquashipProfile] on [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [PK_EquashipProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
+PRINT N'Creating [dbo].[BestRateProfile]'
+GO
+CREATE TABLE [dbo].[BestRateProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL,
+[Weight] [float] NULL,
+[ServiceLevel] [int] NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
+GO
+ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [PK_BestRateProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
 PRINT N'Creating [dbo].[Shipment]'
 GO
 CREATE TABLE [dbo].[Shipment]
@@ -4634,6 +4653,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BestRateProfile]'
+GO
+ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [FK_BestRateProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
 GO

@@ -411,7 +411,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("BestRateProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("BestRateProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("BestRateProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.Weight, 0, 0, 38);
-			base.AddElementFieldInfo("BestRateProfileEntity", "TransitDays", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.TransitDays, 0, 0, 10);
+			base.AddElementFieldInfo("BestRateProfileEntity", "ServiceLevel", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.ServiceLevel, 0, 0, 10);
 		}
 		/// <summary>Inits BestRateShipmentEntity's FieldInfo objects</summary>
 		private void InitBestRateShipmentEntityInfos()

@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             EnumHelper.BindComboBox<ServiceLevelType>(transitTime);
 
             //Shipment
-            AddValueMapping(bestRateProfile, BestRateProfileFields.TransitDays, transitTimeState, transitTime, labelTransitTime);
+            AddValueMapping(bestRateProfile, BestRateProfileFields.ServiceLevel, transitTimeState, transitTime, labelTransitTime);
             AddValueMapping(bestRateProfile, BestRateProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(bestRateProfile, BestRateProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 

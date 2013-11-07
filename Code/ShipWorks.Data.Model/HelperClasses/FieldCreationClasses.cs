@@ -1402,10 +1402,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.Weight);}
 		}
-		/// <summary>Creates a new BestRateProfileEntity.TransitDays field instance</summary>
-		public static EntityField2 TransitDays
+		/// <summary>Creates a new BestRateProfileEntity.ServiceLevel field instance</summary>
+		public static EntityField2 ServiceLevel
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.TransitDays);}
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.ServiceLevel);}
 		}
 	}
 
