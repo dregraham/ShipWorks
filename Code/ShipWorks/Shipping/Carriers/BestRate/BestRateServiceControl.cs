@@ -140,9 +140,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             RaiseRateCriteriaChanged();
         }
 
+        /// <summary>
+        /// Called when [rate selected].
+        /// </summary>
         private void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            //throw new NotImplementedException();
+            Action<ShipmentEntity> action = ((Action<ShipmentEntity>)e.Rate.Tag);
+
+            action(LoadedShipments[0]);
+
+            RaiseShipmentTypeChanged();
         }
 
         private void OnOriginChanged(object sender, EventArgs e)
