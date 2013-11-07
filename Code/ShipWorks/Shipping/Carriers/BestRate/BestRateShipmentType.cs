@@ -190,6 +190,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new NullShippingBroker();
         }
 
+        public override SettingsControlBase CreateSettingsControl()
+        {
+            return new BestRateSettingsControl();
+        }
+
         /// <summary>
         /// Indicates if the shipment service type supports getting rates
         /// </summary>
