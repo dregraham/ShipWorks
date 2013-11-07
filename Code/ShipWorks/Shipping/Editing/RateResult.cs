@@ -20,6 +20,14 @@ namespace ShipWorks.Shipping.Editing
         object tag;
 
         /// <summary>
+        /// Constructor for tests
+        /// </summary>
+        protected RateResult()
+        {
+            
+        }
+
+        /// <summary>
         /// Constructor, for when an entry is not a selectable rate, but used more as a heading
         /// </summary>
         public RateResult(string description, string days)

@@ -272,6 +272,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.AreEqual(rates.Count, bestRates.Count);
         }
 
+
+        [TestMethod]
+        public void GetRates_CallsMaskDescription_OnReturnedRates()
+        {
+            var testRate = new Mock<RateResult>();
+
+            // Setup the broker to return specific rates
+            rates = new List<RateResult>
+            {
+                testRate.Object
+            };
+
+            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>())).Returns(rates);
+
+            testObject.GetRates(new ShipmentEntity());
+
+            testRate.Verify(x => x.MaskDescription(rates));
+        }
+
         [TestMethod]
         public void SupportsGetRates_ReturnsTrue_Test()
         {
