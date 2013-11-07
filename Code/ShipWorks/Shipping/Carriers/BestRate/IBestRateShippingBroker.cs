@@ -16,13 +16,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public interface IBestRateShippingBroker
     {
         /// <summary>
-        /// Gets the single best rate for each of the accounts of a specific shipping provider based 
+        /// Gets the rates for each of the accounts of a specific shipping provider based 
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns>A list of RateResults composed of the single best rate for each account of a specific 
-        /// shipping provider (i.e. if two accounts are registered for a single provider, the list of
-        /// rates would have two entries if both accounts returned rates).</returns>
+        /// <returns>A list of RateResults for each account of a specific shipping provider (i.e. if 
+        /// two accounts are registered for a single provider, the list of rates would have two entries
+        /// if both accounts returned rates).</returns>
         List<RateResult> GetBestRates(ShipmentEntity shipment);
     }
 }

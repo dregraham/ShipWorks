@@ -883,6 +883,7 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\ServiceLevelSpeedComparer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBroker.cs" />
     <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />
