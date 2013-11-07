@@ -108,6 +108,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             {
                 // Replace the service type with a function that will select the correct shipment type
                 rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
+                rate.Description = rate.Description.Contains("UPS") ? rate.Description : "UPS " + rate.Description;
             }
 
             return filteredRates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();

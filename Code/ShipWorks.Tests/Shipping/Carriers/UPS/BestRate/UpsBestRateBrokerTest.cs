@@ -414,6 +414,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             Assert.AreEqual(fedExEntity, testShipment.FedEx);
         }
+
+        [TestMethod]
+        public void GetBestRates_AddsUPSToDescription_WhenItDoesNotAlreadyExist()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("UPS Ground", "4", 4, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment);
+
+            Assert.IsTrue(OriginalRates(rates).Select(x => x.Description).Contains("UPS Ground"));
+            Assert.IsTrue(OriginalRates(rates).Select(x => x.Description).Contains("UPS Some Service"));
+            Assert.AreEqual(2, rates.Count);
+        }
        
         /// <summary>
         /// Gets a list of original rates from a list of NonCompetitiveRateResults
