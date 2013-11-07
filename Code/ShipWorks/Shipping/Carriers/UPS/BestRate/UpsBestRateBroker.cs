@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
             }
 
-            return filteredRates;
+            return filteredRates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
         }
 
         /// <summary>

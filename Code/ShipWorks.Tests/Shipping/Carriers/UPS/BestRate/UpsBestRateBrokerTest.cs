@@ -124,11 +124,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             var rates = testObject.GetBestRates(testShipment);
 
             Assert.AreEqual(5, rates.Count);
-            Assert.IsTrue(rates.Contains(account1Rate1));
-            Assert.IsTrue(rates.Contains(account1Rate2));
-            Assert.IsTrue(rates.Contains(account1Rate3));
-            Assert.IsTrue(rates.Contains(account3Rate1));
-            Assert.IsTrue(rates.Contains(account3Rate2));
+            Assert.IsTrue(OriginalRates(rates).Contains(account1Rate1));
+            Assert.IsTrue(OriginalRates(rates).Contains(account1Rate2));
+            Assert.IsTrue(OriginalRates(rates).Contains(account1Rate3));
+            Assert.IsTrue(OriginalRates(rates).Contains(account3Rate1));
+            Assert.IsTrue(OriginalRates(rates).Contains(account3Rate2));
         }
 
         [TestMethod]
@@ -138,9 +138,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.IsTrue(rates.Contains(account1Rate1));
-            Assert.IsTrue(rates.Contains(account1Rate3));
-            Assert.IsTrue(rates.Contains(account3Rate2));
+            Assert.IsTrue(OriginalRates(rates).Contains(account1Rate1));
+            Assert.IsTrue(OriginalRates(rates).Contains(account1Rate3));
+            Assert.IsTrue(OriginalRates(rates).Contains(account3Rate2));
             Assert.AreEqual(3, rates.Count);
         }
 
@@ -151,7 +151,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.IsTrue(rates.Contains(account1Rate3));
+            Assert.IsTrue(OriginalRates(rates).Contains(account1Rate3));
             Assert.AreEqual(1, rates.Count);
         }
 
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.IsTrue(rates.Contains(result1));
+            Assert.IsTrue(OriginalRates(rates).Contains(result1));
             Assert.AreEqual(1, rates.Count);
         }
 
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.IsTrue(rates.Contains(result2));
+            Assert.IsTrue(OriginalRates(rates).Contains(result2));
             Assert.AreEqual(1, rates.Count);
         }
 
@@ -205,8 +205,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.IsTrue(rates.Contains(result1));
-            Assert.IsTrue(rates.Contains(result2));
+            Assert.IsTrue(OriginalRates(rates).Contains(result1));
+            Assert.IsTrue(OriginalRates(rates).Contains(result2));
             Assert.AreEqual(2, rates.Count);
         }
 
@@ -224,8 +224,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment);
 
-            Assert.IsTrue(rates.Contains(result1));
-            Assert.IsTrue(rates.Contains(result2));
+            Assert.IsTrue(OriginalRates(rates).Contains(result1));
+            Assert.IsTrue(OriginalRates(rates).Contains(result2));
             Assert.AreEqual(2, rates.Count);
         }
 
@@ -329,6 +329,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [TestMethod]
+        public void GetBestRates_ReturnsRatesAsNonCompetitiveRateResults()
+        {
+            var rates = testObject.GetBestRates(testShipment);
+
+            foreach (var rate in rates)
+            {
+                Assert.IsInstanceOfType(rate, typeof(NoncompetitiveRateResult));
+            }
+        }
+
+        [TestMethod]
         public void GetBestRates_SetsTagToAction()
         {
             var rates = testObject.GetBestRates(testShipment);
@@ -374,6 +385,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             ((Action<ShipmentEntity>)rates[0].Tag)(testShipment);
 
             Assert.AreEqual(fedExEntity, testShipment.FedEx);
+        }
+
+        /// <summary>
+        /// Gets a list of original rates from a list of NonCompetitiveRateResults
+        /// </summary>
+        /// <param name="rates"></param>
+        /// <returns></returns>
+        private static IEnumerable<RateResult> OriginalRates(IEnumerable<RateResult> rates)
+        {
+            return rates.OfType<NoncompetitiveRateResult>().Select(x => x.OriginalRate);
         }
     }
 }
