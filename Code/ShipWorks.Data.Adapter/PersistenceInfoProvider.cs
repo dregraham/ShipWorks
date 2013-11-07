@@ -2279,7 +2279,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShippingSettingsEntity's mappings</summary>
 		private void InitShippingSettingsEntityMappings()
 		{
-			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 59 );
+			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 60 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShippingSettingsID", "ShippingSettingsID", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 0 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalActivated", "Activated", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalConfigured", "Configured", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2339,6 +2339,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsSingleSource", "Express1StampsSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 56 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 57 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "BestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 59 );
 		}
 		/// <summary>Inits ShopifyOrderEntity's mappings</summary>
 		private void InitShopifyOrderEntityMappings()

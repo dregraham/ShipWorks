@@ -15797,6 +15797,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.BestRateExcludedShipmentTypes field instance</summary>
+		public static EntityField2 BestRateExcludedShipmentTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.BestRateExcludedShipmentTypes);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopifyOrderEntity</summary>

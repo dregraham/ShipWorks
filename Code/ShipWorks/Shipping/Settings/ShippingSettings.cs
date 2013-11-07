@@ -211,6 +211,8 @@ namespace ShipWorks.Shipping.Settings
             settings.UpsMailInnovationsEnabled = false;
             settings.WorldShipMailInnovationsEnabled = false;
 
+            settings.BestRateExcludedShipmentTypes = string.Empty;
+
             adapter.SaveAndRefetch(settings);
         }
     }

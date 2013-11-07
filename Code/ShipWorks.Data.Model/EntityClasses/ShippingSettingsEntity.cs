@@ -608,6 +608,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("WorldShipMailInnovationsEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BestRateExcludedShipmentTypes", fieldHashtable);
 		}
 		#endregion
 
@@ -1320,6 +1323,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, value); }
+		}
+
+		/// <summary> The BestRateExcludedShipmentTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."BestRateExcludedShipmentTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String BestRateExcludedShipmentTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.BestRateExcludedShipmentTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.BestRateExcludedShipmentTypes, value); }
 		}
 
 

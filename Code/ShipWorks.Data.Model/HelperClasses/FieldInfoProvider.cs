@@ -2215,6 +2215,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsSingleSource, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "UpsMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "BestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.BestRateExcludedShipmentTypes, 30, 0, 0);
 		}
 		/// <summary>Inits ShopifyOrderEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderEntityInfos()
