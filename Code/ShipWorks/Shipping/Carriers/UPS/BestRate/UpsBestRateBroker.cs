@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -53,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             List<RateResult> allRates = new List<RateResult>();
             List<UpsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
+            Dictionary<RateResult, UpsShipmentEntity> rateShipments = new Dictionary<RateResult, UpsShipmentEntity>();
 
             // Create a clone so we don't have to worry about modifying the original shipment
             ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
@@ -67,8 +69,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
                 try
                 {
-                    //RateGroup rates = shipmentType.GetRates(testRateShipment);
-                    allRates.AddRange(shipmentType.GetRates(testRateShipment).Rates);
+                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates;
+
+                    // Save a mapping between the rate and the UPS shipment used to get the rate
+                    foreach (RateResult result in results)
+                    {
+                        rateShipments.Add(result, testRateShipment.Ups);
+                    }
+
+                    allRates.AddRange(results);
                 }
                 catch (ShippingException)
                 {
@@ -83,11 +92,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             }
 
             // Return all the rates, filtered by service level, then grouped by UpsServiceType and ServiceLevel
-            return allRates
+            List<RateResult> filteredRates = allRates
                 .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel))
                 .GroupBy(r => (UpsServiceType)r.Tag)
                 .SelectMany(RateResultsByServiceLevel)
                 .ToList();
+
+            foreach (RateResult rate in filteredRates)
+            {
+                // Save the shipment and rate service type for use in the anonymous method
+                object originalTag = rate.Tag;
+                UpsShipmentEntity rateShipment = rateShipments[rate];
+
+                // Replace the service type with a function that will select the correct shipment type
+                rate.Tag = (Action<ShipmentEntity>)(selectedShipment =>
+                    {
+                        rateShipment.Service = (int)originalTag;
+                        selectedShipment.Ups = rateShipment;
+                        selectedShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+                    });
+            }
+
+            return filteredRates;
         }
 
         /// <summary>

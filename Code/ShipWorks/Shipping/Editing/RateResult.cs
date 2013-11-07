@@ -89,6 +89,7 @@ namespace ShipWorks.Shipping.Editing
         public object Tag
         {
             get { return tag; }
+            set { tag = value; }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -334,6 +335,54 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             {
                 Assert.AreEqual(12.1, shipment.Ups.Packages[0].Weight);
             }
+        }
+
+        [TestMethod]
+        public void GetBestRates_SetsTagToAction()
+        {
+            var rates = testObject.GetBestRates(testShipment);
+
+            foreach (var rate in rates)
+            {
+                Assert.IsInstanceOfType(rate.Tag, typeof(Action<ShipmentEntity>));
+            }
+        }
+
+        [TestMethod]
+        public void GetBestRates_ConvertsShipmentToUps_WhenRateIsSelected()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+
+            rateGroup1.Rates.Add(result1);
+
+            var rates = testObject.GetBestRates(testShipment);
+            ((Action<ShipmentEntity>) rates[0].Tag)(testShipment);
+
+            Assert.AreEqual((int)ShipmentTypeCode.UpsOnLineTools, testShipment.ShipmentType);
+            Assert.AreEqual((int)UpsServiceType.UpsExpressEarlyAm, testShipment.Ups.Service);
+            Assert.AreEqual(account1.UpsAccountID, testShipment.Ups.UpsAccountID);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotAlterOtherShipmentTypeData_WhenRateIsSelected()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            FedExShipmentEntity fedExEntity = new FedExShipmentEntity();
+            testShipment.FedEx = fedExEntity;
+
+            RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+
+            rateGroup1.Rates.Add(result1);
+
+            var rates = testObject.GetBestRates(testShipment);
+            ((Action<ShipmentEntity>)rates[0].Tag)(testShipment);
+
+            Assert.AreEqual(fedExEntity, testShipment.FedEx);
         }
     }
 }
