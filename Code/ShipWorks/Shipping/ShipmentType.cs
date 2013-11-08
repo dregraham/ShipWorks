@@ -551,5 +551,17 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker();
+
+        /// <summary>
+        /// Preferences the process.
+        /// </summary>
+        /// <returns>
+        /// Most shipment types don't do any pre-processing and will return themselves.  
+        /// This will return a different shipping type for BestRate
+        /// </returns>
+        public virtual ShipmentType PreProcess()
+        {
+            return this;
+        }
     }
 }
