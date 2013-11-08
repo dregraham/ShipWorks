@@ -257,6 +257,8 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnOptionPageSelecting(object sender, OptionControlCancelEventArgs e)
         {
+            SaveSettings();
+
             ShipmentTypeSettingsControl settingsControl = null;
 
             if (e.OptionPage != null && e.OptionPage.Controls.Count == 1)
@@ -281,6 +283,14 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            SaveSettings();
+        }
+
+        /// <summary>
+        /// Saves the shipping settings
+        /// </summary>
+        private void SaveSettings()
+        {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 List<int> excludedTypes = new List<int>();
@@ -296,7 +306,11 @@ namespace ShipWorks.Shipping.Settings
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
                 settings.ExcludedTypes = excludedTypes.ToArray();
 
-                settings.BlankPhoneOption = (int) (radioBlankPhoneUseShipper.Checked ? ShipmentBlankPhoneOption.ShipperPhone : ShipmentBlankPhoneOption.SpecifiedPhone);
+                settings.BlankPhoneOption =
+                    (int)
+                    (radioBlankPhoneUseShipper.Checked
+                         ? ShipmentBlankPhoneOption.ShipperPhone
+                         : ShipmentBlankPhoneOption.SpecifiedPhone);
                 settings.BlankPhoneNumber = blankPhone.Text;
 
                 providerRulesControl.SaveSettings(settings);

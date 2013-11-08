@@ -88,6 +88,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets a list of enabled shipment types
+        /// </summary>
+        public static List<ShipmentType> EnabledShipmentTypes
+        {
+            get { return ShipmentTypes.Where(s => ShippingManager.IsShipmentTypeEnabled(s.ShipmentTypeCode)).ToList(); }
+        }
+
+        /// <summary>
         /// Get the StoreType instance of the specified ShipmentEntity
         /// </summary>
         public static ShipmentType GetType(ShipmentEntity shipment)
