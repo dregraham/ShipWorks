@@ -559,7 +559,7 @@ namespace ShipWorks.Shipping
         /// Most shipment types don't do any pre-processing and will return themselves.  
         /// This will return a different shipping type for BestRate
         /// </returns>
-        public virtual ShipmentType PreProcess()
+        public virtual ShipmentType PreProcess(ShipmentEntity shipment)
         {
             return this;
         }

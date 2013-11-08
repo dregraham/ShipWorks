@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Enums;
 using log4net;
@@ -190,6 +191,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new NullShippingBroker();
         }
 
+        /// <summary>
+        /// Creates the UserControl that is used to edit the defaults\settings for the service
+        /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
             return new BestRateSettingsControl();
@@ -201,6 +205,29 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override bool SupportsGetRates
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets rates and converts shipment to the found best rate type.
+        /// </summary>
+        /// <returns>
+        /// This will return the shiping type of the best rate found.
+        /// </returns>
+        public override ShipmentType PreProcess(ShipmentEntity shipment)
+        {
+            RateGroup rateGroup = GetRates(shipment); //TODO: change to overloaded getrates()
+            RateResult bestRate = rateGroup.Rates.FirstOrDefault();
+
+            Action<ShipmentEntity> action = ((Action<ShipmentEntity>)bestRate.Tag);
+
+            action(shipment);
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveAndRefetch(shipment);
+            }
+
+            return ShipmentTypeManager.GetType(shipment);
         }
     }
 }
