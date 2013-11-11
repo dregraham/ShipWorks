@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            // TODO: Handle errors
+            // TODO: Handle errors so they can be displayed. This should be done during the "Notify users when best rate could not be found" story
             return GetRates(shipment, ex => { } );
         }
 
