@@ -134,6 +134,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            // TODO: Handle errors
+            return GetRates(shipment, ex => { } );
+        }
+
+        /// <summary>
+        /// Called to get the latest rates for the shipment. This implementation will accumulate the 
+        /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
+        /// </summary>
+        public RateGroup GetRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        {
             List<RateResult> rates = new List<RateResult>();
 
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
@@ -146,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             foreach (IBestRateShippingBroker broker in bestRateShippingBrokers)
             {
                 // Use the broker to get the best rates for each shipping provider
-                rates.AddRange(broker.GetBestRates(shipment));
+                rates.AddRange(broker.GetBestRates(shipment, exceptionHandler));
             }
             
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
@@ -214,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>This will return the shipping type of the best rate found.</returns>
         public override ShipmentType PreProcess(ShipmentEntity shipment)
         {
-            RateGroup rateGroup = GetRates(shipment); //TODO: change to overloaded getrates()
+            RateGroup rateGroup = GetRates(shipment, ex => { throw ex; });
             RateResult bestRate = rateGroup.Rates.FirstOrDefault();
 
             if (bestRate == null)

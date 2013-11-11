@@ -20,12 +20,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
+        /// <param name="exceptionHandler"></param>
         /// <returns>
         /// A list of RateResults for each account of a specific shipping provider (i.e. if two accounts 
         /// are registered for a single provider, the list of rates would have two entries if both 
         /// accounts returned rates).
         /// </returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment)
+        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
         {
             // We're just stubbing this out for now, so we have another carrier/broker
             // for testing purposes

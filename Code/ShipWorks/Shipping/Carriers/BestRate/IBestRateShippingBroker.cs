@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 
@@ -20,10 +21,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
+        /// <param name="exceptionHandler"></param>
         /// <returns>A list of RateResults for each account of a specific shipping provider (i.e. if 
         /// two accounts are registered for a single provider, the list of rates would have two entries
         /// if both accounts returned rates).</returns>
-        List<RateResult> GetBestRates(ShipmentEntity shipment);
+        List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler);
 
         /// <summary>
         /// Gets a value indicating whether there any accounts available to a broker.

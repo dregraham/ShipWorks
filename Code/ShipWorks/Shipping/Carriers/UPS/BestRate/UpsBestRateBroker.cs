@@ -56,8 +56,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
+        /// <param name="exceptionHandler"></param>
         /// <returns>A list of RateResults composed of the single best rate for each UPS account.</returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment)
+        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
         {
             if (shipment == null)
             {
@@ -93,9 +94,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
                     allRates.AddRange(results);
                 }
-                catch (ShippingException)
+                catch (ShippingException ex)
                 {
-                    // We will handle exceptions in a future story.  For now, just eat them.
+                    // Offload exception handling to the passed in exception handler
+                    exceptionHandler(ex);
                 }
             }
 
