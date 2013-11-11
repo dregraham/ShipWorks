@@ -19,9 +19,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateShipmentType : ShipmentType
     {
+        private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
-
-        static readonly ILog log = LogManager.GetLogger(typeof(BestRateShipmentType));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -29,17 +28,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// IBestRateShippingBrokerFactory interface.
         /// </summary>
         public BestRateShipmentType()
-            : this(new BestRateShippingBrokerFactory())
+            : this(new BestRateShippingBrokerFactory(), LogManager.GetLogger(typeof(BestRateShipmentType)))
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This version of
+        /// Initializes a new instance of the <see cref="BestRateShipmentType" /> class. This version of
         /// the constructor is primarily for testing purposes.
         /// </summary>
         /// <param name="brokerFactory">The broker factory.</param>
-        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory)
+        /// <param name="log">The log.</param>
+        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, ILog log)
         {
             this.brokerFactory = brokerFactory;
+            this.log = log;
         }
 
         /// <summary>
@@ -210,16 +211,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
-        /// <returns>
-        /// This will return the shiping type of the best rate found.
-        /// </returns>
+        /// <returns>This will return the shipping type of the best rate found.</returns>
         public override ShipmentType PreProcess(ShipmentEntity shipment)
         {
             RateGroup rateGroup = GetRates(shipment); //TODO: change to overloaded getrates()
             RateResult bestRate = rateGroup.Rates.FirstOrDefault();
 
-            Action<ShipmentEntity> action = ((Action<ShipmentEntity>)bestRate.Tag);
+            if (bestRate == null)
+            {
+                throw new ShippingException("ShipWorks could not find any rates.");
+            }
 
+            Action<ShipmentEntity> action = ((Action<ShipmentEntity>)bestRate.Tag);
             action(shipment);
 
             using (SqlAdapter adapter = new SqlAdapter())

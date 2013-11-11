@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,6 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         private Mock<IBestRateShippingBrokerFactory> brokerFactory;
         private Mock<IBestRateShippingBroker> broker;
+        private Mock<ILog> log;
 
         private List<RateResult> rates;
 
@@ -37,7 +39,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             brokerFactory = new Mock<IBestRateShippingBrokerFactory>();
             brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
-            testObject = new BestRateShipmentType(brokerFactory.Object);
+            log = new Mock<ILog>();
+
+
+            testObject = new BestRateShipmentType(brokerFactory.Object, log.Object);
         }
 
         [TestMethod]
