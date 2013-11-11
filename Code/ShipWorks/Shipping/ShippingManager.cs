@@ -908,9 +908,10 @@ namespace ShipWorks.Shipping
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
 
-                    // Get the ShipmentType instance
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                    shipmentType = shipmentType.PreProcess(shipment);
+                    // Get the ShipmentType instance - call PreProcess to give the (best rate) shipment type
+                    // a chance to inspect the shipment and return the actual shipment type that will be
+                    // used to process the shipment
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment).PreProcess(shipment);
 
                     // Make sure the type is setup - its possible it's not in the case of upgrading from V2
                     if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
