@@ -66,8 +66,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             List<RateResult> allRates = new List<RateResult>();
             
-            List<UpsAccountEntity> upsAccounts = new List<UpsAccountEntity>();
-            upsAccounts.Add(accountRepository.Accounts.ToList().First());
+            List<UpsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
 
             Dictionary<RateResult, UpsShipmentEntity> rateShipments = new Dictionary<RateResult, UpsShipmentEntity>();
 
