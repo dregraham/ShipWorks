@@ -313,32 +313,6 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
-    <Compile Include="Stores\eBay\Authorization\EbayTokenFactoryTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\EbayTokenRepositoryTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Readers\SecureXmlFileTokenReaderTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Readers\XmlFileTokenReaderTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Readers\XmlTokenReaderTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\TokenTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Writers\SecureXmlFileTokenWriterTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Writers\SecureXmlTokenWriterTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Writers\XmlFileTokenWriterTest.cs" />
-    <Compile Include="Stores\eBay\Authorization\Writers\XmlTokenWriterTest.cs" />
-    <Compile Include="Stores\eBay\EbayDownloadSummaryTest.cs" />
-    <Compile Include="Stores\eBay\EbayWebClientTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Authorization\EbayUserInfoRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Download\EbayCombinedPaymentRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Download\EbayFeedbackRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Download\EbayItemRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Download\EbaySellingRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Download\EbayTransactionRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\EbayRequestFactoryTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayCombineOrdersRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayCompleteSaleRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayItemTransactionRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayLeaveFeedbackRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Fulfillment\EbaySendMessageToPartnerRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\Fulfillment\EbayUserNotesRequestTest.cs" />
-    <Compile Include="Stores\eBay\Requests\System\EbayTimeRequestTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
@@ -451,24 +425,6 @@
     <EmbeddedResource Include="Stores\Newegg\Artifacts\ZeroOrderDownload.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Stores\eBay\Artifacts\SecureTokenFileWithoutUserId.tkn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Stores\eBay\Artifacts\SecureTokenFileWithUserId.tkn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Stores\eBay\Artifacts\TokenFileWithoutUserId.tkn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Stores\eBay\Artifacts\TokenFileWithUserId.tkn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Stores\eBay\Artifacts\TokenFileWithoutUserId.xml" />
-    <EmbeddedResource Include="Stores\eBay\Artifacts\TokenFileWithUserId.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Stores\BuyDotcom\" />

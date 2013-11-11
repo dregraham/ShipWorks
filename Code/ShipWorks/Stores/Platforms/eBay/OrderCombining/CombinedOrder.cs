@@ -247,8 +247,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 EbayOrderEntity orderTemplate = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
                                
                 // Combine the orders through eBay and pull out the new eBay order ID
-                ebayOrderID = long.Parse(new EbayWebClient().CombineOrders(ebayStore.EBayToken, transactions, GetCombinedPaymentTotal(toCombine), AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
-                                                                ShippingCost, orderTemplate.ShipCountryCode, ShippingService, TaxPercent, TaxState, TaxShipping));
+   //             ebayOrderID = long.Parse(new Old_EbayWebClient().CombineOrders(ebayStore.EBayToken, transactions, GetCombinedPaymentTotal(toCombine), AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
+   //                                                             ShippingCost, orderTemplate.ShipCountryCode, ShippingService, TaxPercent, TaxState, TaxShipping));
             }
 
             // create the local combined order

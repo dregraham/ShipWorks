@@ -45,6 +45,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {

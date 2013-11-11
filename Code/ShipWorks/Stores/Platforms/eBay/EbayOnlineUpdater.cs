@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             try
             {
                 // Fire off the message
-                new EbayWebClient().SendMessageToPartner(store.EBayToken, orderItem.EbayItemID.ToString(), buyerID, ebayMessageType, subject, message, copySender);                
+             //   new Old_EbayWebClient().SendMessageToPartner(store.EBayToken, orderItem.EbayItemID.ToString(), buyerID, ebayMessageType, subject, message, copySender);                
             }
             catch (EbayException ex)
             {
@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 // Make sure we have a handle to the store and send the feedback to eBay
                 EbayStoreEntity ebayStore = (EbayStoreEntity)StoreManager.GetStore(orderItem.Order.StoreID);
-                new EbayWebClient().LeaveFeedback(ebayStore.EBayToken, orderItem.EbayItemID.ToString(), orderItem.EbayTransactionID.ToString(), ((EbayOrderEntity)orderItem.Order).EbayBuyerID, feedbackType, feedback);
+  //              new Old_EbayWebClient().LeaveFeedback(ebayStore.EBayToken, orderItem.EbayItemID.ToString(), orderItem.EbayTransactionID.ToString(), ((EbayOrderEntity)orderItem.Order).EbayBuyerID, feedbackType, feedback);
                 
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
@@ -320,7 +320,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             // Only set the transaction ID if there is a valid eBay transaction ID associated with the eBay item;
                             // setting a transaction ID to 0 will result in an eBay error
                             string transactionId = ebayItem.EbayTransactionID > 0 ? ebayItem.EbayTransactionID.ToString() : null;
-                            new EbayWebClient().SaveNote(store.EBayToken, ebayItem.EbayItemID.ToString(), transactionId, notesText);
+                        //    new Old_EbayWebClient().SaveNote(store.EBayToken, ebayItem.EbayItemID.ToString(), transactionId, notesText);
                         }
                     }
                 }
@@ -347,8 +347,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 // log that we're about to make the request and send the request
                 log.InfoFormat("Preparing to update eBay order status for order id {0}.", orderID);
-                new EbayWebClient().CompleteSale(store.EBayToken, ebayItem.EbayItemID.ToString(), ebayItem.EbayTransactionID.ToString(), paid,
-                                                 shipped, trackingNumber, shippingCarrierUsed);
+  //              new Old_EbayWebClient().CompleteSale(store.EBayToken, ebayItem.EbayItemID.ToString(), ebayItem.EbayTransactionID.ToString(), paid,
+  //                                               shipped, trackingNumber, shippingCarrierUsed);
 
                 // update the shipped flag
                 if (shipped.HasValue)

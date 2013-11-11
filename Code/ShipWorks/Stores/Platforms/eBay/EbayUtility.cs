@@ -21,6 +21,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // Used to extract shipping method name from ebay shipping code
         static Regex shipMethodRegex = new Regex("[A-Z0-9][a-z]+", RegexOptions.Compiled);
 
+        // Salt for descrypting sandbox credentials
+        static string sandboxCredentialSaltValue = "apptive";
+
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -75,6 +78,30 @@ namespace ShipWorks.Stores.Platforms.Ebay
             shippingMethods.Add("USPSGlobalPrioritySmallEnvelope", "USPS Global Priority Small Envelope");
             shippingMethods.Add("USPSPriorityFlatRateBox", "USPS Priority Flat Rate Box");
             shippingMethods.Add("USPSPriorityFlatRateEnvelope", "USPS Priority Flat Rate Envelope");
+        }
+
+        /// <summary>
+        /// Gets the sandbox developer credential.
+        /// </summary>
+        public static string SandboxDeveloperCredential
+        {
+            get { return SecureText.Decrypt("9EjIiY68ZC9AmdbCllBY3u7iAPOS7JnSlecbcc8Jf80=", sandboxCredentialSaltValue); }
+        }
+
+        /// <summary>
+        /// Gets the sandbox application credential.
+        /// </summary>
+        public static string SandboxApplicationCredential
+        {
+            get { return SecureText.Decrypt("d0t5tDPECtuYnbRi9LAXAsLrbVXGyhsVAW3Jo3giRNY=", sandboxCredentialSaltValue); }
+        }
+
+        /// <summary>
+        /// Gets the sandbox certificate credential.
+        /// </summary>
+        public static string SandboxCertificateCredential
+        {
+            get { return SecureText.Decrypt("Z9/F10grv8Vkkz/UU1Zk4I26AJ6ZBA2EdcCSgQMbUvM=", sandboxCredentialSaltValue); }
         }
 
         /// <summary>

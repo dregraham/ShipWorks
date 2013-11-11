@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Platforms.Ebay.Authorization;
 using System.Net;
 using System.Web.Services.Protocols;
 using System.Xml;
 using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Requests
 {
@@ -16,57 +16,50 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
     /// An abstract class that encapsulates the functionality for creating and submitting
     /// requests to eBay.
     /// </summary>
-    public abstract class EbayRequest
+    public abstract class EbayRequest<TResult, TEbayRequest, TEbayResponse> where TEbayRequest : AbstractRequestType, new() where TEbayResponse : AbstractResponseType
     {
-        private EbayRequestConfiguration requestConfiguration;
-        private TokenData tokenData;
+        EbayRequestConfiguration configuration;
+        EbayToken token;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayRequest"/> class.
         /// </summary>
-        /// <param name="requestDescription">The request description.</param>
-        protected EbayRequest(TokenData tokenData, string requestDescription)
+        protected EbayRequest(EbayToken token, string callName)
         {
-            requestConfiguration = new EbayRequestConfiguration(requestDescription);
-            this.tokenData = tokenData;
+            this.configuration = new EbayRequestConfiguration(callName);
+            this.token = token;
         }
 
         /// <summary>
-        /// Gets the request configuration.
+        /// Execute the request and resturn the response
         /// </summary>
-        protected EbayRequestConfiguration RequestConfiguration
+        public abstract TResult Execute();
+        
+        /// <summary>
+        /// Gets the type of the eBay request.
+        /// </summary>
+        protected virtual AbstractRequestType CreateRequest()
         {
-            get { return requestConfiguration; }
+            return new TEbayRequest();
         }
-        
-        /// <summary>
-        /// Gets the name of the call as it is known to eBay. This value gets used
-        /// as a query string parameter sent to eBay.
-        /// </summary>
-        /// <returns></returns>
-        public abstract string GetEbayCallName();
-
-
-        /// <summary>
-        /// Gets the specific eBay request (GetUserRequestType, GetOrdersRequestType, etc.) containing any parameter data necessary to make the request.
-        /// </summary>
-        /// <returns>An AbstractRequestType object.</returns>
-        public abstract AbstractRequestType GetEbayRequest();
-
-        
 
         /// <summary>
         /// Submits the request to eBay.
         /// </summary>
-        /// <returns>An AbstractResponseType object.</returns>
-        protected AbstractResponseType SubmitRequest()
+        protected TEbayResponse SubmitRequest()
         {
             // There are cases where a request could fail unexpectedly; An ebay forum post said this 
             // is "expected behavior" and should be retried when encountered. 
             AbstractResponseType response = SubmitRequest(3);
             ValidateResponse(response);
             
-            return response;
+            TEbayResponse cast = response as TEbayResponse;
+            if (cast == null)
+            {
+                throw new EbayException("eBay responded with a response type that ShipWorks could not understand.");
+            }
+
+            return cast;
         }
 
         /// <summary>
@@ -89,10 +82,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 {
                     // Just make sure the version of the request is set  prior to executing the request
                     // otherwise a SoapException will be generated
-                    AbstractRequestType request = GetEbayRequest();
-                    request.Version = RequestConfiguration.ApiVersion;
+                    AbstractRequestType request = CreateRequest();
+                    request.Version = configuration.ApiVersion;
 
-                    response = service.ExecuteRequest(request, GetEbayCallName());
+                    response = service.ExecuteRequest(request, configuration.RequestName);
                 }
                 catch (WebException ex)
                 {
@@ -204,12 +197,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         private CustomEBaySoapService CreateEbaySoapService()
         {
             // Create the service 
-            CustomEBaySoapService service = new CustomEBaySoapService(new ApiLogEntry(ApiLogSource.eBay, GetEbayCallName()));
-            service.Timeout = requestConfiguration.TimeoutInMilliseconds;
+            CustomEBaySoapService service = new CustomEBaySoapService(new ApiLogEntry(ApiLogSource.eBay, configuration.RequestName));
+            service.Timeout = (int) configuration.Timeout.TotalMilliseconds;
 
             // Set credentials 
             service.RequesterCredentials = new CustomSecurityHeaderType();
-            service.RequesterCredentials.eBayAuthToken = tokenData.Key;
+            service.RequesterCredentials.eBayAuthToken = token.Token;
 
             // Credentials
             if (EbayUrlUtilities.UseLiveServer)
@@ -226,16 +219,16 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
             else
             {
                 service.RequesterCredentials.Credentials = new UserIdPasswordType();
-                service.RequesterCredentials.Credentials.AppId = requestConfiguration.SandboxApplicationCredential;
-                service.RequesterCredentials.Credentials.DevId = requestConfiguration.SandboxDeveloperCredential;
-                service.RequesterCredentials.Credentials.AuthCert = requestConfiguration.SandboxCertificateCredential;
+                service.RequesterCredentials.Credentials.AppId = EbayUtility.SandboxApplicationCredential;
+                service.RequesterCredentials.Credentials.DevId = EbayUtility.SandboxDeveloperCredential;
+                service.RequesterCredentials.Credentials.AuthCert = EbayUtility.SandboxCertificateCredential;
             }
 
             string requestURL = EbayUrlUtilities.SoapUrl
-                + "?callname=" + GetEbayCallName()
+                + "?callname=" + configuration.RequestName
                 + "&siteid=0"
                 + "&appid=" + service.RequesterCredentials.Credentials.AppId
-                + "&version=" + requestConfiguration.ApiVersion
+                + "&version=" + configuration.ApiVersion
                 + "&routing=default";
             
             service.Url = requestURL;
@@ -247,7 +240,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         #region CustomEBaySoapService
 
         /// <summary>
-        /// Class that enabled us to execute an ebay SOAP call by name.
+        /// Class that enables us to execute an ebay SOAP call by name.
         /// </summary>
         class CustomEBaySoapService : eBayAPIInterfaceService
         {
@@ -267,6 +260,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 return ((AbstractResponseType)(results[0]));
             }
         }
+
         #endregion CustomEBaySoapService
     }
 }
