@@ -65,7 +65,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             }
 
             List<RateResult> allRates = new List<RateResult>();
-            List<UpsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
+            
+            List<UpsAccountEntity> upsAccounts = new List<UpsAccountEntity>();
+            upsAccounts.Add(accountRepository.Accounts.ToList().First());
+
             Dictionary<RateResult, UpsShipmentEntity> rateShipments = new Dictionary<RateResult, UpsShipmentEntity>();
 
             // Create a clone so we don't have to worry about modifying the original shipment
@@ -74,14 +77,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             foreach (UpsAccountEntity account in upsAccounts)
             {
-                // Create the UpsShipment that will be used to get rates
                 testRateShipment.Ups = new UpsShipmentEntity();
+
                 shipmentType.ConfigureNewShipment(testRateShipment);
                 UpdateUpsShipmentSettings(testRateShipment, shipment.ContentWeight, account.UpsAccountID);
 
                 try
                 {
-                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates;
+                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates.Where(r => r.Tag != null);
 
                     // Save a mapping between the rate and the UPS shipment used to get the rate
                     foreach (RateResult result in results)
@@ -126,8 +129,31 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             return selectedShipment =>
                 {
                     rateShipment.Service = (int)originalTag;
-                    selectedShipment.Ups = rateShipment;
                     selectedShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+                    ShippingManager.EnsureShipmentLoaded(selectedShipment);
+
+                    if (selectedShipment.Ups == null)
+                    {
+                        selectedShipment.Ups = rateShipment;
+                    }
+                    else
+                    {
+                        // Grab the original ups package so we can get it's UpsPackageID, as we'll need to set it on the
+                        // cloned package.  There's probably a better way, so need to check with Brian.
+                        UpsPackageEntity selectedUpsPackageEntity = selectedShipment.Ups.Packages[0];
+                        long originalUpsPackageID = selectedUpsPackageEntity.UpsPackageID;
+
+                        // Set the rated shipment as the UPS shipment
+                        selectedShipment.Ups = rateShipment;
+
+                        // Update the first package UpsPackgeID to be that of the original persisted package.  If this isn't 
+                        // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
+                        selectedShipment.Ups.Packages[0].UpsPackageID = originalUpsPackageID;
+
+                        // Set the ups shipment and package to be not new so a copy isn't persisted.
+                        selectedShipment.Ups.Packages[0].IsNew = false;
+                        selectedShipment.Ups.IsNew = false;
+                    }
                 };
         }
 
