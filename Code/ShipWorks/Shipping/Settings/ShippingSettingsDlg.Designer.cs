@@ -22,7 +22,7 @@
             this.tabPageProviders = new System.Windows.Forms.TabPage();
             this.panelActiveProviders = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.panelProviders = new System.Windows.Forms.Panel();
+            this.panelProviders = new ShippingTypeCheckBoxesControl();
             this.labelProvidersInfo = new System.Windows.Forms.Label();
             this.panelDefaultProvider = new System.Windows.Forms.Panel();
             this.providerRulesControl = new ShipWorks.Shipping.Settings.ShippingProviderControl();
@@ -133,6 +133,7 @@
             this.panelProviders.Name = "panelProviders";
             this.panelProviders.Size = new System.Drawing.Size(307, 100);
             this.panelProviders.TabIndex = 1;
+            this.panelProviders.ChangeEnabledShipmentTypes += new System.EventHandler(this.OnChangeEnabledShipmentTypes);
             // 
             // labelProvidersInfo
             // 
@@ -314,7 +315,7 @@
         private ShipWorks.UI.Controls.OptionControl optionControl;
         private ShipWorks.UI.Controls.OptionPage optionPageGeneral;
         private System.Windows.Forms.Label labelProvidersInfo;
-        private System.Windows.Forms.Panel panelProviders;
+        private ShippingTypeCheckBoxesControl panelProviders;
         private System.Windows.Forms.Panel panelDefaultProvider;
         private System.Windows.Forms.Label labelBlankPhone;
         private System.Windows.Forms.Label labelBlankPhoneInfo;

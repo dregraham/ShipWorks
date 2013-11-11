@@ -63,36 +63,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void LoadProvidersPanel()
         {
-            int top = 3;
-            int left = 3;
-            
-            // This is called more than once since we may need to add an Express1 entry depending on 
-            // whether we need to show both Express1 for Endicia and Express1 for Stamps, so we need
-            // to clear and reload any existing check boxes
-            foreach (CheckBox checkBox in panelProviders.Controls.OfType<CheckBox>())
-            {
-                checkBox.CheckedChanged -= OnChangeEnabledShipmentTypes;
-            }
-            panelProviders.Controls.Clear();
-
-            // Add a check box for each shipment type
-            foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes.Where(st => st.ShipmentTypeCode != ShipmentTypeCode.None))
-            {
-                CheckBox checkBox = new CheckBox();
-                checkBox.AutoSize = true;
-                checkBox.Location = new Point(left, top);
-
-                checkBox.Tag = shipmentType.ShipmentTypeCode;
-                checkBox.Text = shipmentType.ShipmentTypeName;
-                checkBox.Checked = ShippingManager.IsShipmentTypeEnabled(shipmentType.ShipmentTypeCode);
-                checkBox.CheckedChanged += new EventHandler(OnChangeEnabledShipmentTypes);
-
-                panelProviders.Controls.Add(checkBox);
-
-                top = checkBox.Bottom + 5;
-            }
-
-            panelProviders.Height = top;
+            panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes.Where(st => st.ShipmentTypeCode != ShipmentTypeCode.None), ShippingManager.IsShipmentTypeEnabled);
             panelActiveProviders.Height = panelProviders.Bottom + 2;
         }
 
@@ -209,19 +180,9 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private List<ShipmentType> GetEnabledShipmentTypes()
         {
-            List<ShipmentType> enabled = new List<ShipmentType>();
-
-            foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
-            {
-                if (panelProviders.Controls.OfType<CheckBox>().Any(c => c.Checked && (ShipmentTypeCode) c.Tag == shipmentType.ShipmentTypeCode))
-                {
-                    enabled.Add(shipmentType);
-                }
-            }
-
-            enabled.Add(ShipmentTypeManager.GetType(ShipmentTypeCode.None));
-
-            return enabled;
+            return panelProviders.SelectedShipmentTypes
+                                 .Concat(new[] { ShipmentTypeManager.GetType(ShipmentTypeCode.None) })
+                                 .ToList();
         }
 
         /// <summary>
@@ -293,18 +254,8 @@ namespace ShipWorks.Shipping.Settings
         {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                List<int> excludedTypes = new List<int>();
-
-                foreach (CheckBox checkBox in panelProviders.Controls)
-                {
-                    if (!checkBox.Checked)
-                    {
-                        excludedTypes.Add((int) (ShipmentTypeCode) checkBox.Tag);
-                    }
-                }
-
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                settings.ExcludedTypes = excludedTypes.ToArray();
+                settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int)x.ShipmentTypeCode).ToArray();
 
                 settings.BlankPhoneOption =
                     (int)

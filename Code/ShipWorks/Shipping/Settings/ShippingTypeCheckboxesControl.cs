@@ -85,5 +85,10 @@ namespace ShipWorks.Shipping.Settings
                 return shipmentTypes.Where(st => Controls.OfType<CheckBox>().Any(c => c.Checked && (ShipmentTypeCode) c.Tag == st.ShipmentTypeCode)).ToList();    
             }
         }
+
+        public List<ShipmentType> UnselectedShipmentTypes
+        {
+            get { return shipmentTypes.Except(SelectedShipmentTypes).ToList(); }
+        }
     }
 }
