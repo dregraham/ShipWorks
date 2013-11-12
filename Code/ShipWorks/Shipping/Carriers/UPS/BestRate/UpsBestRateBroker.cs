@@ -169,18 +169,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <returns></returns>
         private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<UpsServiceType, RateResult> upsTypeGroup)
         {
-            return upsTypeGroup.GroupBy(r => r.ServiceLevel).Select(CheapestRateInGroup);
+            return upsTypeGroup
+                .GroupBy(r => r.ServiceLevel)
+                .Select(serviceLevelRate => serviceLevelRate.OrderBy(rateToOrder=> rateToOrder.Amount)
+                    .FirstOrDefault());
         }
 
-        /// <summary>
-        /// Gets the cheapest rate in group of rates.
-        /// </summary>
-        /// <param name="serviceLevelGroup">Group of rates from which to return the cheapest</param>
-        /// <returns></returns>
-        private static RateResult CheapestRateInGroup(IGrouping<ServiceLevelType, RateResult> serviceLevelGroup)
-        {
-            return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
-        }
 
         /// <summary>
         /// Updates data on the Ups shipment that is required for checking best rate
