@@ -744,7 +744,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                             service)
                         {
                             ServiceLevel = GetServiceLevel(serviceRate, transitTime),
-                            ExpectedDeliveryDate = transitTime == null ? CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery) : transitTime.ArrivalDate
+                            ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate
                         };
 
                         rates.Add(rateResult);
@@ -781,38 +781,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-        /// <summary>
-        /// Calculates the expected delivery date
-        /// </summary>
-        public static DateTime? CalculateExpectedDeliveryDate(int? guaranteedDaysToDelivery)
-        {
-            return CalculateExpectedDeliveryDate(guaranteedDaysToDelivery, DateTime.Today);
-        }
 
-        /// <summary>
-        /// Calculates the expected delivery date
-        /// </summary>
-        public static DateTime? CalculateExpectedDeliveryDate(int? guaranteedDaysToDelivery, DateTime shipmentDate)
-        {
-            if (!guaranteedDaysToDelivery.HasValue)
-            {
-                return null;
-            }
-
-            DateTime incrementingDate = shipmentDate;
-
-            while (guaranteedDaysToDelivery > 0)
-            {
-                incrementingDate = incrementingDate.AddDays(1);
-
-                if (incrementingDate.DayOfWeek != DayOfWeek.Saturday && incrementingDate.DayOfWeek != DayOfWeek.Sunday)
-                {
-                    guaranteedDaysToDelivery--;
-                }
-            }
-
-            return incrementingDate;
-        }
 
         /// <summary>
         /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
@@ -998,7 +967,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the service level.
         /// </summary>
-        public ServiceLevelType GetServiceLevel(UpsServiceType upsService, int? guaranteedDaysToDelivery)
+        public static ServiceLevelType GetServiceLevel(UpsServiceType upsService, int? guaranteedDaysToDelivery)
         {
             switch (upsService)
             {
@@ -1060,9 +1029,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     {
                         return ServiceLevelType.FourToSevenDays;
                     }
-                    break;
+                    return ServiceLevelType.Anytime;
             }
-            return ServiceLevelType.Anytime;
         }
     }
 }

@@ -333,7 +333,7 @@ namespace ShipWorks.Shipping
         public static ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment)
         {
             // load all carrier and customs data
-            ShippingManager.EnsureShipmentLoaded(shipment);
+            EnsureShipmentLoaded(shipment);
 
             // clone the entity tree
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
@@ -357,12 +357,12 @@ namespace ShipWorks.Shipping
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
             {
-                clonedShipment.Ups.UspsTrackingNumber = string.Empty;
-                clonedShipment.Ups.Cn22Number = string.Empty;
+                clonedShipment.Ups.UspsTrackingNumber = String.Empty;
+                clonedShipment.Ups.Cn22Number = String.Empty;
                 foreach (UpsPackageEntity package in clonedShipment.Ups.Packages)
                 {
-                    package.TrackingNumber = string.Empty;
-                    package.UspsTrackingNumber = string.Empty;
+                    package.TrackingNumber = String.Empty;
+                    package.UspsTrackingNumber = String.Empty;
                     MarkAsNew(package);
                 }
             }
@@ -702,7 +702,7 @@ namespace ShipWorks.Shipping
             // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
             if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
-                throw new ShippingException(string.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
+                throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
             }
 
             // Ensure data is valid and up-to-date
@@ -726,7 +726,7 @@ namespace ShipWorks.Shipping
                 // We want to retain the buyer's address on the original shipment object, so we're going to use 
                 // a cloned shipment to confirm the shipping address with the store. This way the original 
                 // shipment is not altered and persisted to the database if the store alters the address
-                ShipmentEntity clonedShipment = EntityUtility.CloneEntity<ShipmentEntity>(shipment);
+                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
                 OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
 
                 // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
@@ -763,7 +763,7 @@ namespace ShipWorks.Shipping
             // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
             if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
-                throw new ShippingException(string.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
+                throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
             }
 
             TrackingResult result = shipmentType.TrackShipment(shipment);
@@ -784,7 +784,7 @@ namespace ShipWorks.Shipping
                 // Ensure's we are the only one who processes this shipment, if other ShipWorks are running
                 using (SqlEntityLock processLock = new SqlEntityLock(shipmentID, "Process Shipment"))
                 {
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+                    ShipmentEntity shipment = GetShipment(shipmentID);
 
                     if (shipment == null)
                     {
@@ -809,7 +809,7 @@ namespace ShipWorks.Shipping
                     // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
                     if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                     {
-                        throw new ShippingException(string.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
+                        throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
                     }
 
                     // Ensure the carrier specific data has been loaded in case the shipment type needs it for voiding
@@ -869,7 +869,7 @@ namespace ShipWorks.Shipping
             // Clone the shipment and check with the store in case anything was overridden. We clone
             // the original shipment so that the shipment is not altered and inadvertently saved
             // to the database.
-            ShipmentEntity overriddenShipment = EntityUtility.CloneEntity<ShipmentEntity>(shipment);
+            ShipmentEntity overriddenShipment = EntityUtility.CloneEntity(shipment);
             storeType.OverrideShipmentDetails(overriddenShipment);
 
             return overriddenShipment;
@@ -892,7 +892,7 @@ namespace ShipWorks.Shipping
                 // Ensure's we are the only one who processes this shipment, if other ShipWorks are running
                 using (SqlEntityLock processLock = new SqlEntityLock(shipmentID, "Process Shipment"))
                 {
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+                    ShipmentEntity shipment = GetShipment(shipmentID);
 
                     if (shipment == null)
                     {
@@ -918,7 +918,7 @@ namespace ShipWorks.Shipping
                     // Make sure the type is setup - its possible it's not in the case of upgrading from V2
                     if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                     {
-                        throw new ShippingException(string.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
+                        throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
                     }
 
                     // Validate that the license is valid
@@ -966,7 +966,7 @@ namespace ShipWorks.Shipping
                     var typeRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, shipmentType.ShipmentTypeCode);
                     if (typeRestriction.Level != EditionRestrictionLevel.None)
                     {
-                        throw new ShippingException(string.Format("Your edition of ShipWorks does not support shipping with '{0}'.", shipmentType.ShipmentTypeName));
+                        throw new ShippingException(String.Format("Your edition of ShipWorks does not support shipping with '{0}'.", shipmentType.ShipmentTypeName));
                     }
 
                     // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
@@ -1208,6 +1208,39 @@ namespace ShipWorks.Shipping
         public static bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode)
         {
             return !ShippingSettings.Fetch().ExcludedTypes.Contains((int) shipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Calculates the expected delivery date
+        /// </summary>
+        public static DateTime? CalculateExpectedDeliveryDate(int? guaranteedDaysToDelivery, params DayOfWeek[] excludedDays)
+        {
+            return CalculateExpectedDeliveryDate(guaranteedDaysToDelivery, DateTime.Today, excludedDays);
+        }
+
+        /// <summary>
+        /// Calculates the expected delivery date
+        /// </summary>
+        public static DateTime? CalculateExpectedDeliveryDate(int? guaranteedDaysToDelivery, DateTime shipmentDate, params DayOfWeek[] excludedDays)
+        {
+            if (!guaranteedDaysToDelivery.HasValue)
+            {
+                return null;
+            }
+
+            DateTime incrementingDate = shipmentDate;
+
+            while (guaranteedDaysToDelivery > 0)
+            {
+                incrementingDate = incrementingDate.AddDays(1);
+
+                if (!excludedDays.Contains(incrementingDate.DayOfWeek))
+                {
+                    guaranteedDaysToDelivery--;
+                }
+            }
+
+            return incrementingDate;
         }
     }
 }
