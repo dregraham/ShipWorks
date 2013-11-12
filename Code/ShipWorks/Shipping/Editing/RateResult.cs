@@ -104,6 +104,11 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Gets or sets the expected delivery date.
+        /// </summary>
+        public DateTime? ExpectedDeliveryDate { get; set; }
+
+        /// <summary>
         /// Mask the description of the rate, if necessary
         /// </summary>
         /// <param name="rates">Collection of all rates, including this one</param>

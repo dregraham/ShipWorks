@@ -84,7 +84,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
                 try
                 {
-                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates.Where(r => r.Tag != null);
+                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates
+                                                                  .Where(r => r.Tag != null)
+                                                                  .Where(r => r.Amount > 0)
+                                                                  .Where(r => (UpsServiceType)r.Tag != UpsServiceType.UpsSurePostBoundPrintedMatter && (UpsServiceType)r.Tag != UpsServiceType.UpsSurePostMedia);
 
                     // Save a mapping between the rate and the UPS shipment used to get the rate
                     foreach (RateResult result in results)
@@ -101,9 +104,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 }
             }
 
-            // Return all the rates, filtered by service level, then grouped by UpsServiceType and ServiceLevel
+            // Return all the rates, then group by UpsServiceType and ServiceLevel
             List<RateResult> filteredRates = allRates
-                .Where(r => r.Amount > 0 && MeetsServiceLevelCriteria(r.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel))
                 .GroupBy(r => (UpsServiceType)r.Tag)
                 .SelectMany(RateResultsByServiceLevel)
                 .ToList();
@@ -176,18 +178,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         private static RateResult CheapestRateInGroup(IGrouping<ServiceLevelType, RateResult> serviceLevelGroup)
         {
             return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Determines whether the rate's service level meets the requested level criteria
-        /// </summary>
-        /// <param name="rateServiceLevel">Service level of the rate that should be tested</param>
-        /// <param name="requestedType">Requested level against which to test</param>
-        /// <returns></returns>
-        private static bool MeetsServiceLevelCriteria(ServiceLevelType rateServiceLevel, ServiceLevelType requestedType)
-        {
-            return ServiceLevelType.Anytime == requestedType ||
-                   (rateServiceLevel != ServiceLevelType.Anytime && rateServiceLevel <= requestedType);
         }
 
         /// <summary>

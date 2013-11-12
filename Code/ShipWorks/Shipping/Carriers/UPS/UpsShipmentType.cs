@@ -739,11 +739,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                         RateResult rateResult = new RateResult(
                             (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
-                            GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(service, transitTimes),
+                            GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(transitTime),
                             serviceRate.Amount,
                             service)
                         {
-                            ServiceLevel = GetServiceLevel(serviceRate, transitTime)
+                            ServiceLevel = GetServiceLevel(serviceRate, transitTime),
+                            ExpectedDeliveryDate = transitTime == null ? CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery) : transitTime.ArrivalDate
                         };
 
                         rates.Add(rateResult);
@@ -781,6 +782,39 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Calculates the expected delivery date
+        /// </summary>
+        public static DateTime? CalculateExpectedDeliveryDate(int? guaranteedDaysToDelivery)
+        {
+            return CalculateExpectedDeliveryDate(guaranteedDaysToDelivery, DateTime.Today);
+        }
+
+        /// <summary>
+        /// Calculates the expected delivery date
+        /// </summary>
+        public static DateTime? CalculateExpectedDeliveryDate(int? guaranteedDaysToDelivery, DateTime shipmentDate)
+        {
+            if (!guaranteedDaysToDelivery.HasValue)
+            {
+                return null;
+            }
+
+            DateTime incrementingDate = shipmentDate;
+
+            while (guaranteedDaysToDelivery > 0)
+            {
+                incrementingDate = incrementingDate.AddDays(1);
+
+                if (incrementingDate.DayOfWeek != DayOfWeek.Saturday && incrementingDate.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    guaranteedDaysToDelivery--;
+                }
+            }
+
+            return incrementingDate;
+        }
+
+        /// <summary>
         /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
         /// empty string is returned.
         /// </summary>
@@ -800,11 +834,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Gets the service estimated arrival time for the given service type if it's available.
         /// </summary>
         /// <param name="service">The service.</param>
-        /// <param name="transitTimes">The transit times.</param>
+        /// <param name="transitTime">The transit time.</param>
         /// <returns>A string value of the arrival time in the format of "DayOfWeek h:mm tt" (e.g. Friday 4:00 PM)</returns>
-        private string GetServiceEstimatedArrivalTime(UpsServiceType service, List<UpsTransitTime> transitTimes)
+        private static string GetServiceEstimatedArrivalTime(UpsTransitTime transitTime)
         {
-            UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
             string arrivalInfo = string.Empty;
 
             if (transitTime != null)

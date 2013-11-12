@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Editing
             AmountFootnote = originalRate.AmountFootnote;
             ServiceLevel = originalRate.ServiceLevel;
             OriginalRate = originalRate;
+            ExpectedDeliveryDate = originalRate.ExpectedDeliveryDate;
         }
 
         /// <summary>

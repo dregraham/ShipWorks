@@ -158,10 +158,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Use the broker to get the best rates for each shipping provider
                 rates.AddRange(broker.GetBestRates(shipment, exceptionHandler));
             }
+
+            if (shipment.BestRate.ServiceLevel != (int)ServiceLevelType.Anytime)
+            {
+                DateTime? maxDeliveryDate = rates
+                    .Where(x => x.ServiceLevel != ServiceLevelType.Anytime)
+                    .Where(x => (int)x.ServiceLevel <= shipment.BestRate.ServiceLevel)
+                    .Max(x => x.ExpectedDeliveryDate);
+
+                rates = rates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate).ToList();
+            }
             
+
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
-            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, new ServiceLevelSpeedComparer());
+            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount);
 
             var orderedRatesList = orderedRates.Take(5).ToList();
             orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
