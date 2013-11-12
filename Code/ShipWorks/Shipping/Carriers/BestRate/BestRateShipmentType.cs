@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Settings.Origin;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -74,6 +77,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 ShippingProfileUtility.ApplyProfileValue(bestRateProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
+        }
+
+        /// <summary>
+        /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
+        /// the originID is no longer valid and the address could not be updated, false is returned.
+        /// </summary>
+        public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
+        {
+            if (shipment.Processed)
+            {
+                return true;
+            }
+
+            if (originID == (int)ShipmentOriginSource.Account)
+            {
+                // Copy an empty person since the account address used will depend on each carrier
+                PersonAdapter.Copy(new PersonAdapter(), person);
+            }
+
+            return base.UpdatePersonAddress(shipment, person, originID);
         }
 
         /// <summary>
@@ -227,6 +250,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override bool SupportsGetRates
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Indicates that this shipment type supports shipping from an account address
+        /// </summary>
+        public override bool SupportsAccountAsOrigin
+        {
+            get
+            {
+                return true;
+            }
         }
 
         /// <summary>
