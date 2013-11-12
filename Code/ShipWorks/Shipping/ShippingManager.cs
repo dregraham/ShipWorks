@@ -1061,60 +1061,34 @@ namespace ShipWorks.Shipping
         /// <param name="adapter">SqlAdapter that will be used to delete other shipment data</param>
         private static void ClearNonActiveShipmentData(ShipmentEntity shipment, IDataAccessAdapter adapter)
         {
-            ClearOtherShipmentData(adapter, shipment, x => x.Ups, UpsShipmentFields.ShipmentID, ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip);
-            ClearOtherShipmentData(adapter, shipment, x => x.Postal.Endicia, EndiciaShipmentFields.ShipmentID, ShipmentTypeCode.Endicia);
-            ClearOtherShipmentData(adapter, shipment, x => x.Postal.Stamps, StampsShipmentFields.ShipmentID, ShipmentTypeCode.Stamps);
-            ClearOtherShipmentData(adapter, shipment, x => x.Postal, PostalShipmentFields.ShipmentID, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Endicia, ShipmentTypeCode.Stamps);
-            ClearOtherShipmentData(adapter, shipment, x => x.FedEx, FedExShipmentFields.ShipmentID, ShipmentTypeCode.FedEx);
-            ClearOtherShipmentData(adapter, shipment, x => x.OnTrac, OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
-            ClearOtherShipmentData(adapter, shipment, x => x.IParcel, IParcelShipmentFields.ShipmentID, ShipmentTypeCode.iParcel);
-            ClearOtherShipmentData(adapter, shipment, x => x.Other, OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
-            ClearOtherShipmentData(adapter, shipment, x => x.EquaShip, EquaShipShipmentFields.ShipmentID, ShipmentTypeCode.EquaShip);
-            ClearOtherShipmentData(adapter, shipment, x => x.BestRate, BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
+            ClearOtherShipmentData(adapter, shipment, typeof(UpsShipmentEntity), UpsShipmentFields.ShipmentID, ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip);
+            ClearOtherShipmentData(adapter, shipment, typeof(EndiciaShipmentEntity), EndiciaShipmentFields.ShipmentID, ShipmentTypeCode.Endicia);
+            ClearOtherShipmentData(adapter, shipment, typeof(StampsShipmentEntity), StampsShipmentFields.ShipmentID, ShipmentTypeCode.Stamps);
+            ClearOtherShipmentData(adapter, shipment, typeof(PostalShipmentEntity), PostalShipmentFields.ShipmentID, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Endicia, ShipmentTypeCode.Stamps);
+            ClearOtherShipmentData(adapter, shipment, typeof(FedExShipmentEntity), FedExShipmentFields.ShipmentID, ShipmentTypeCode.FedEx);
+            ClearOtherShipmentData(adapter, shipment, typeof(OnTracShipmentEntity), OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
+            ClearOtherShipmentData(adapter, shipment, typeof(IParcelShipmentEntity), IParcelShipmentFields.ShipmentID, ShipmentTypeCode.iParcel);
+            ClearOtherShipmentData(adapter, shipment, typeof(OtherShipmentEntity), OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
+            ClearOtherShipmentData(adapter, shipment, typeof(EquaShipShipmentEntity), EquaShipShipmentFields.ShipmentID, ShipmentTypeCode.EquaShip);
+            ClearOtherShipmentData(adapter, shipment, typeof(BestRateShipmentEntity), BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
         }
 
         /// <summary>
         /// Clear specified shipment data if not relevant
         /// </summary>
-        /// <typeparam name="T">Type of child shipment entity</typeparam>
         /// <param name="adapter">SqlAdapter that will be used to delete child shipment entities</param>
         /// <param name="shipment">Shipment from which child shipment data will be deleted</param>
-        /// <param name="accessor">Property that should be cleared from the main shipment</param>
+        /// <param name="childShipmentType">Type of child shipment that should be deleted</param>
         /// <param name="shipmentIdField">Field that specifies the ShipmentId for the child</param>
         /// <param name="requiredForTypes">Delete this child shipment unless it is one of the specified types</param>
-        private static void ClearOtherShipmentData<T>(IDataAccessAdapter adapter, ShipmentEntity shipment, Expression<Func<ShipmentEntity, T>> accessor, EntityField2 shipmentIdField, params ShipmentTypeCode[] requiredForTypes)
+        private static void ClearOtherShipmentData(IDataAccessAdapter adapter, ShipmentEntity shipment, Type childShipmentType, EntityField2 shipmentIdField, params ShipmentTypeCode[] requiredForTypes)
         {
-            if (requiredForTypes.Contains((ShipmentTypeCode) shipment.ShipmentType))
+            if (requiredForTypes.Contains((ShipmentTypeCode)shipment.ShipmentType))
             {
                 return;
             }
 
-            // Create a stack of properties between the root shipment and the actual child shipment
-            Stack<PropertyInfo> stack = new Stack<PropertyInfo>();
-            var memberExpression = accessor.Body as MemberExpression;
-            while (memberExpression != null)
-            {
-                stack.Push(memberExpression.Member as PropertyInfo);
-                memberExpression = memberExpression.Expression as MemberExpression;
-            }
-
-            // Walk the stack to get the the object the child property is on
-            object propertyObject = shipment;
-            while (stack.Count > 1)
-            {
-                propertyObject = stack.Pop().GetValue(propertyObject, null);
-
-                // If any property in the chain is null, we can quit the method
-                if (propertyObject == null)
-                {
-                    return;
-                }
-            }
-
-            // Delete the child shipment and unasign it
-            PropertyInfo property = stack.Pop();
-            adapter.DeleteEntitiesDirectly(property.PropertyType, new RelationPredicateBucket(shipmentIdField == shipment.ShipmentID));
-            property.SetValue(propertyObject, null, null);
+            adapter.DeleteEntitiesDirectly(childShipmentType, new RelationPredicateBucket(shipmentIdField == shipment.ShipmentID));
         }
 
         private static void ResetShippingAddressFields(ShipmentEntity shipment, string originalShipFirstName, string originalShipMiddleName, string originalShipLastName, string originalShipCompany, 
