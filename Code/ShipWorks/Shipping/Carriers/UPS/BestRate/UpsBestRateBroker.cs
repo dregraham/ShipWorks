@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -8,6 +9,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
@@ -80,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 testRateShipment.Ups = new UpsShipmentEntity();
 
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateUpsShipmentSettings(testRateShipment, shipment.ContentWeight, account.UpsAccountID);
+                UpdateUpsShipmentSettings(testRateShipment, shipment, account);
 
                 try
                 {
@@ -184,20 +186,32 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Updates data on the Ups shipment that is required for checking best rate
         /// </summary>
         /// <param name="testRateShipment">Shipment that we'll be working with</param>
-        /// <param name="contentWeight">The content weight of the shipment.</param>
-        /// <param name="upsAccountID">The UPS Account Entity ID for this shipment.</param>
-        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, double contentWeight, long upsAccountID)
+        /// <param name="originalShipment">The original shipment from which data can be copied.</param>
+        /// <param name="upsAccount">The UPS Account Entity for this shipment.</param>
+        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, UpsAccountEntity upsAccount)
         {
+            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
+
+            // Set the address of the shipment to either the UPS account, or the address of the original shipment
+            if (testRateShipment.OriginOriginID == (int) ShipmentOriginSource.Account)
+            {
+                PersonAdapter.Copy(upsAccount, "", testRateShipment, "Origin");
+            }
+            else
+            {
+                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
+            }
+
             testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
             testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
             testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.Ups.Packages[0].Weight = contentWeight;
+            testRateShipment.Ups.Packages[0].Weight = originalShipment.ContentWeight;
             testRateShipment.Ups.Packages[0].DimsAddWeight = false;
             testRateShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
             testRateShipment.Ups.Service = (int) UpsServiceType.UpsGround;
-            testRateShipment.Ups.UpsAccountID = upsAccountID;
+            testRateShipment.Ups.UpsAccountID = upsAccount.UpsAccountID;
         }
     }
 }

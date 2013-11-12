@@ -93,7 +93,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             if (originID == (int)ShipmentOriginSource.Account)
             {
                 // Copy an empty person since the account address used will depend on each carrier
-                PersonAdapter.Copy(new PersonAdapter(), person);
+                PersonAdapter.Copy(new PersonAdapter { OriginID = (int)ShipmentOriginSource.Account }, person);
+                return true;
             }
 
             return base.UpdatePersonAddress(shipment, person, originID);
