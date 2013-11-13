@@ -14,8 +14,10 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -677,7 +679,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                                                         .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
                                                         .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
 
-                            RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType));
+                            RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
+                            {
+                                ServiceLevel = ServiceLevelType.Anytime
+                            };
+
                             results.Add(serviceRate);
                         }
 
@@ -909,7 +915,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker()
         {
-            return new NullShippingBroker();
+            return new iParcelBestRateBroker();
         }
     }
 }
