@@ -19,6 +19,7 @@ using ShipWorks.Data.Connection;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
@@ -244,6 +245,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             new PostalRateSelection(serviceType, PostalConfirmationType.None));
                     }
 
+                    SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
+
                     rates.Add(baseRate);
 
                     // Add a rate for each add-on
@@ -273,6 +276,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                                 stampsRate.Amount + addOn.Amount,
                                 new PostalRateSelection(serviceType, confirmationType));
 
+                            SetServiceDetails(addOnRate, serviceType, stampsRate.DeliverDays);
+
                             rates.Add(addOnRate);
                         }
                     }
@@ -296,6 +301,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 // This isn't an authentication exception, so just throw the original exception
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Sets service level details on the specified rate
+        /// </summary>
+        /// <param name="baseRate">Rate on which service level details should be set</param>
+        /// <param name="serviceType">Service type for the specified rate</param>
+        /// <param name="deliverDays">How many days are expected for the package to be in delivery</param>
+        private static void SetServiceDetails(RateResult baseRate, PostalServiceType serviceType, string deliverDays)
+        {
+            baseRate.ServiceLevel = PostalUtility.GetServiceLevel(serviceType);
+
+            int deliveryDays = -1;
+            if (!int.TryParse(deliverDays.Split('-').LastOrDefault(), out deliveryDays))
+            {
+                deliveryDays = PostalUtility.GetWorstCaseDeliveryDaysFromServiceType(baseRate.ServiceLevel);
+            }
+
+            if (deliveryDays > 0)
+            {
+                DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(deliveryDays, DayOfWeek.Sunday);
+
+                if (deliveryDate.HasValue && deliveryDate.Value.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    deliveryDate = deliveryDate.Value.AddDays(2);
+                }
+
+                baseRate.ExpectedDeliveryDate = deliveryDate;
             }
         }
 
@@ -425,7 +459,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             registration.Email,
                             registration.AccountType,
                             registration.PromoCode,
-                            (object) registration.CreditCard ?? registration.AchAccount,
+                            (object)registration.CreditCard ?? registration.AchAccount,
                             out suggestedUserName,
                             out userId,
                             out promoUrl
@@ -600,11 +634,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ThermalLanguage? thermalType;
 
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
-            if(shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
                 thermalType = settings.StampsThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
             }
-            else if(shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
                 thermalType = settings.Express1StampsThermal ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
             }
@@ -1059,8 +1093,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static RateV11 CreateRateForProcessing(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV11 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
@@ -1243,10 +1277,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
         {
-            if(isExpress1)
+            if (isExpress1)
             {
                 // Express1 does not return error codes...
-                switch(ex.Message)
+                switch (ex.Message)
                 {
                     case "Invalid authentication info":
                     case "Unable to authenticate user.":
@@ -1259,7 +1293,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 long code = StampsApiException.GetErrorCode(ex);
 
-                switch(code)
+                switch (code)
                 {
                     case 0x002b0201: // Invalid
                     case 0x002b0202: // Expired

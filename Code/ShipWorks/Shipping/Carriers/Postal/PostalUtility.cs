@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Settings.Origin;
@@ -219,6 +220,53 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return "";
+        }
+
+        /// <summary>
+        /// Gets the BestRate service level associated with the specified postal service type
+        /// </summary>
+        /// <param name="serviceType">Service type for which to get the best rate service level</param>
+        /// <returns></returns>
+        public static ServiceLevelType GetServiceLevel(PostalServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case PostalServiceType.ExpressMail:
+                    return ServiceLevelType.TwoDays;
+
+                case PostalServiceType.PriorityMail:
+                case PostalServiceType.FirstClass:
+                case PostalServiceType.CriticalMail:
+                    return ServiceLevelType.ThreeDays;
+
+                case PostalServiceType.InternationalExpress:
+                    return ServiceLevelType.FourToSevenDays;
+
+                default:
+                    return ServiceLevelType.Anytime;
+            }
+        }
+
+        /// <summary>
+        /// Get the longest amount of delivery days for the specified best rate service level
+        /// </summary>
+        /// <param name="serviceLevel">Service level for which to get the worst case delivery days</param>
+        /// <returns></returns>
+        public static int GetWorstCaseDeliveryDaysFromServiceType(ServiceLevelType serviceLevel)
+        {
+            switch (serviceLevel)
+            {
+                case ServiceLevelType.OneDay:
+                    return 1;
+                case ServiceLevelType.TwoDays:
+                    return 2;
+                case ServiceLevelType.ThreeDays:
+                    return 3;
+                case ServiceLevelType.FourToSevenDays:
+                    return 7;
+                default:
+                    return -1;
+            }
         }
 
         /// <summary>
