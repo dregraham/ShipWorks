@@ -10,19 +10,19 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Settings.Origin;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 {
-    public class StampsBestRateBroker : IBestRateShippingBroker
+    public class EndiciaBestRateBroker : IBestRateShippingBroker
     {
-        private readonly StampsShipmentType shipmentType;
-        private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
+        private readonly EndiciaShipmentType shipmentType;
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
 
-        public StampsBestRateBroker() : this(new StampsShipmentType(), new StampsAccountRepository())
+        public EndiciaBestRateBroker() : this(new EndiciaShipmentType(), new EndiciaAccountRepository())
         {
             
         }
 
-        public StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository)
+        public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository)
         {
             this.shipmentType = shipmentType;
             this.accountRepository = accountRepository;
@@ -55,20 +55,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
 
             List<RateResult> allRates = new List<RateResult>();
 
-            List<StampsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
+            List<EndiciaAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
 
             Dictionary<RateResult, PostalShipmentEntity> rateShipments = new Dictionary<RateResult, PostalShipmentEntity>();
 
             // Create a clone so we don't have to worry about modifying the original shipment
             ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentTypeCode.Stamps;
+            testRateShipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
 
-            foreach (StampsAccountEntity account in upsAccounts)
+            foreach (EndiciaAccountEntity account in upsAccounts)
             {
-                testRateShipment.Postal = new PostalShipmentEntity { Stamps = new StampsShipmentEntity() };
+                testRateShipment.Postal = new PostalShipmentEntity { Endicia = new EndiciaShipmentEntity() };
 
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateStampsShipmentSettings(testRateShipment, shipment, account);
+                UpdateEndiciaShipmentSettings(testRateShipment, shipment, account);
 
                 try
                 {
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
             {
                 // Replace the service type with a function that will select the correct shipment type
                 rate.Tag = CreateRateSelectionFunction(rateShipments[rate], (PostalRateSelection)rate.Tag);
-                rate.Description = rate.Description.Contains("Stamps") ? rate.Description : "Stamps " + rate.Description;
+                rate.Description = rate.Description.Contains("Endicia") ? rate.Description : "Endicia " + rate.Description;
             }
 
             return filteredRates.ToList();
@@ -167,18 +167,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
                     rateShipment.Service = (int) originalTag.ServiceType;
                     rateShipment.Confirmation = (int) originalTag.ConfirmationType;
                 
-                    selectedShipment.ShipmentType = (int)ShipmentTypeCode.Stamps;
+                    selectedShipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
                     ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
-                    // Save a reference to the stamps shipment entity because if we set the shipment id while it's 
-                    // attached to the Postal entity, the Stamps entity will be set to null
-                    StampsShipmentEntity newStampsShipment = rateShipment.Stamps;
-                    newStampsShipment.ShipmentID = selectedShipment.ShipmentID;
+                    // Save a reference to the Endicia shipment entity because if we set the shipment id while it's 
+                    // attached to the Postal entity, the Endicia entity will be set to null
+                    EndiciaShipmentEntity newEndiciaShipment = rateShipment.Endicia;
+                    newEndiciaShipment.ShipmentID = selectedShipment.ShipmentID;
 
                     selectedShipment.Postal = rateShipment;
-                    selectedShipment.Postal.Stamps = newStampsShipment;
+                    selectedShipment.Postal.Endicia = newEndiciaShipment;
                     selectedShipment.Postal.IsNew = false;
-                    selectedShipment.Postal.Stamps.IsNew = false;
+                    selectedShipment.Postal.Endicia.IsNew = false;
                 };
         }
 
@@ -207,15 +207,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// </summary>
         /// <param name="testRateShipment">Shipment that we'll be working with</param>
         /// <param name="originalShipment">The original shipment from which data can be copied.</param>
-        /// <param name="stampsAccount">The UPS Account Entity for this shipment.</param>
-        private static void UpdateStampsShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, StampsAccountEntity stampsAccount)
+        /// <param name="endiciaAccount">The UPS Account Entity for this shipment.</param>
+        private static void UpdateEndiciaShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, EndiciaAccountEntity endiciaAccount)
         {
             testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
 
             // Set the address of the shipment to either the UPS account, or the address of the original shipment
             if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(stampsAccount, "", testRateShipment, "Origin");
+                PersonAdapter.Copy(endiciaAccount, "", testRateShipment, "Origin");
             }
             else
             {
@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
             testRateShipment.Postal.DimsAddWeight = false;
             testRateShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
             testRateShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
-            testRateShipment.Postal.Stamps.StampsAccountID = stampsAccount.StampsAccountID;
+            testRateShipment.Postal.Endicia.EndiciaAccountID = endiciaAccount.EndiciaAccountID;
         }
     }
 }

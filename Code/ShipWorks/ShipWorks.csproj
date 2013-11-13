@@ -893,6 +893,8 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBroker.cs" />
     <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
