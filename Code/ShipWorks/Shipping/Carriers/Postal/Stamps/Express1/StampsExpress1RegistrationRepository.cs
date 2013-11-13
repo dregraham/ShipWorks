@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             stampsAccount.Street3 = registration.MailingAddress.Street3;
             stampsAccount.City = registration.MailingAddress.City;
             stampsAccount.PostalCode = registration.MailingAddress.PostalCode;
-            stampsAccount.CountryCode = Geography.GetStateProvCode(registration.MailingAddress.CountryCode);
+            stampsAccount.CountryCode = Geography.GetCountryCode(registration.MailingAddress.CountryCode);
             stampsAccount.StateProvCode = Geography.GetStateProvCode(registration.MailingAddress.StateProvCode);
             stampsAccount.MailingPostalCode = registration.MailingAddress.PostalCode;
 

@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
             endiciaAccount.Street3 = registration.MailingAddress.Street3;
             endiciaAccount.City = registration.MailingAddress.City;
             endiciaAccount.PostalCode = registration.MailingAddress.PostalCode;
-            endiciaAccount.CountryCode = Geography.GetStateProvCode(registration.MailingAddress.CountryCode);
+            endiciaAccount.CountryCode = Geography.GetCountryCode(registration.MailingAddress.CountryCode);
             endiciaAccount.StateProvCode = Geography.GetStateProvCode(registration.MailingAddress.StateProvCode);
             endiciaAccount.MailingPostalCode = registration.MailingAddress.PostalCode;
 
