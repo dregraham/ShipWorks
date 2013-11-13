@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data;
@@ -41,6 +43,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         private Mock<ICarrierAccountRepository<StampsAccountEntity>> genericRepositoryMock;
         private Mock<StampsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
+
+        public TestContext TestContext { get; set; }
 
         [TestInitialize]
         public void Initialize()
@@ -231,6 +235,98 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             Assert.IsTrue(rates.Contains(result1));
             Assert.IsTrue(rates.Contains(result2));
             Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotReturnNonSelectableRates()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1a", "4") { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup1.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment, ex => { });
+
+            Assert.IsFalse(rates.Contains(result1));
+            Assert.IsTrue(rates.Contains(result2));
+            Assert.AreEqual(1, rates.Count);
+        }
+
+        //[TestMethod]
+        //public void GetBestRates_DoesNotIncludeMediaMail()
+        //{
+        //    TestServiceTypeIsExcluded(PostalServiceType.MediaMail);
+        //}
+
+        //[TestMethod]
+        //public void GetBestRates_DoesNotIncludeLibrayMail()
+        //{
+        //    TestServiceTypeIsExcluded(PostalServiceType.LibraryMail);
+        //}
+
+        //[TestMethod]
+        //public void GetBestRates_DoesNotIncludeBPM()
+        //{
+        //    TestServiceTypeIsExcluded(PostalServiceType.BoundPrintedMatter);
+        //}
+
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\GetBestRates_DoesNotIncludeTypes.csv", "GetBestRates_DoesNotIncludeTypes#csv", DataAccessMethod.Sequential)]
+        [DeploymentItem(@"Shipping\Carriers\Postal\Stamps\BestRate\GetBestRates_DoesNotIncludeTypes.csv")]
+        [TestMethod]
+        public void GetBestRates_ExcludesVariousTypes()
+        {
+            PostalServiceType excludedServiceType = (PostalServiceType)Enum.Parse(typeof (PostalServiceType), TestContext.DataRow[0].ToString());
+
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(excludedServiceType, PostalConfirmationType.None))
+                {
+                    ServiceLevel = ServiceLevelType.OneDay
+                };
+
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None))
+                {
+                    ServiceLevel = ServiceLevelType.OneDay
+                };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup1.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment, ex => { });
+
+            Assert.IsFalse(rates.Contains(result1), "Returned rates should not include {0}", EnumHelper.GetDescription(excludedServiceType));
+            Assert.IsTrue(rates.Contains(result2));
+            Assert.AreEqual(1, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_UpdatesDescriptionWhenPartOfRateGroup()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Foo", "4") { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("       Bar", string.Empty, 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            RateResult result3 = new RateResult("Baz", "3") { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result4 = new RateResult("   Other", string.Empty, 4, new PostalRateSelection(PostalServiceType.ExpressMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup1.Rates.Add(result2);
+            rateGroup3.Rates.Add(result3);
+            rateGroup3.Rates.Add(result4);
+
+            testObject.GetBestRates(testShipment, ex => { });
+
+            Assert.AreEqual("Stamps Foo Bar", result2.Description);
+            Assert.AreEqual("Stamps Baz Other", result4.Description);
+            Assert.AreEqual("4", result2.Days);
+            Assert.AreEqual("3", result4.Days);
         }
 
         [TestMethod]

@@ -463,6 +463,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Shipping\Carriers\Postal\Stamps\BestRate\GetBestRates_DoesNotIncludeTypes.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Stores\eBay\Artifacts\SecureTokenFileWithoutUserId.tkn">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

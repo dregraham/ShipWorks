@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Business;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -71,18 +72,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
 
                 try
                 {
-                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates
-                                                                  .Where(r => r.Tag != null)
-                                                                  .Where(r => r.Amount > 0)
-                                                                  .Where(r => ((PostalRateSelection)r.Tag).ServiceType != PostalServiceType.MediaMail && ((PostalRateSelection)r.Tag).ServiceType != PostalServiceType.LibraryMail);
+                    var rates = shipmentType.GetRates(testRateShipment).Rates;
+                    MergeDescriptionsWithNonSelectableRates(rates);
+
+                    IEnumerable<RateResult> results = rates.Where(r => r.Tag != null)
+                                                           .Where(r => r.Selectable)
+                                                           .Where(r => r.Amount > 0)
+                                                           .Where(r => !IsExcludedServiceType(((PostalRateSelection)r.Tag).ServiceType));
 
                     // Save a mapping between the rate and the UPS shipment used to get the rate
                     foreach (RateResult result in results)
                     {
                         rateShipments.Add(result, testRateShipment.Postal);
+                        allRates.Add(result);
                     }
-
-                    allRates.AddRange(results);
                 }
                 catch (ShippingException ex)
                 {
@@ -105,6 +108,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
             }
 
             return filteredRates.ToList();
+        }
+
+        /// <summary>
+        /// Merge rate descriptions meant as headers with actual rate descriptions
+        /// </summary>
+        /// <param name="rates">Collection of rates to update</param>
+        /// <remarks>It is important that these rates are in the same order that they are returned from
+        /// the shipment type's GetRates method or the merging could be incorrect</remarks>
+        private static void MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
+        {
+            Regex beginsWithSpaces = new Regex("^[ ]+");
+            
+            RateResult lastNonSelectable = null;
+
+            foreach (var rate in rates)
+            {
+                if (rate.Selectable)
+                {
+                    if (beginsWithSpaces.IsMatch(rate.Description) && lastNonSelectable != null)
+                    {
+                        rate.Description = lastNonSelectable.Description + beginsWithSpaces.Replace(rate.Description, " ");
+                        rate.Days = lastNonSelectable.Days;
+                    }
+                }
+                else
+                {
+                    lastNonSelectable = rate;
+                }
+            }
+        }
+
+        private static bool IsExcludedServiceType(PostalServiceType serviceType)
+        {
+            return serviceType == PostalServiceType.MediaMail ||
+                   serviceType == PostalServiceType.LibraryMail ||
+                   serviceType == PostalServiceType.BoundPrintedMatter ||
+                   serviceType == PostalServiceType.DhlBpmExpedited ||
+                   serviceType == PostalServiceType.DhlBpmStandard;
         }
 
         /// <summary>

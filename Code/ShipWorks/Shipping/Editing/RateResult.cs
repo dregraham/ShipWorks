@@ -67,6 +67,7 @@ namespace ShipWorks.Shipping.Editing
         public string Days
         {
             get { return days; }
+            set { days = value; }
         }
 
         /// <summary>
