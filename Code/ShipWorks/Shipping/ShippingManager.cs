@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Users;
 using ShipWorks.Data.Grid;
 using System.Diagnostics;
@@ -1241,6 +1242,34 @@ namespace ShipWorks.Shipping
             }
 
             return incrementingDate;
+        }
+
+        /// <summary>
+        /// Gets the service level based on number of days in transit.
+        /// </summary>
+        public static ServiceLevelType GetServiceLevel(int transitDays)
+        {
+            if (transitDays < 0)
+            {
+                return ServiceLevelType.Anytime;
+            }
+            if (transitDays <= 1)
+            {
+                return ServiceLevelType.OneDay;
+            }
+            if (transitDays == 2)
+            {
+                return ServiceLevelType.TwoDays;
+            }
+            if (transitDays == 3)
+            {
+                return ServiceLevelType.ThreeDays;
+            }
+            if (transitDays <= 7)
+            {
+                return ServiceLevelType.FourToSevenDays;
+            }
+            return ServiceLevelType.Anytime;
         }
     }
 }

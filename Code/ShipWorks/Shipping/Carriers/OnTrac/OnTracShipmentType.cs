@@ -10,6 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
@@ -485,10 +486,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets an instance to the best rate shipping broker for the OnTrac shipment type.
         /// </summary>
-        /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker()
         {
-            return new NullShippingBroker();
+            return new OnTracBestRateBroker();
         }
     }
 }

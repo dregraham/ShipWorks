@@ -4,25 +4,21 @@ using System.Linq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
+namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
-    /// <summary>
-    /// An implementation of the IBestRateShippingBroker that Rate broker that 
-    /// finds the best rates for FedEx accounts.
-    /// </summary>
-    public class FedExBestRateBroker : IBestRateShippingBroker
+    class OnTracBestRateBroker : IBestRateShippingBroker
     {
 
-        private readonly FedExShipmentType shipmentType;
-        private readonly ICarrierAccountRepository<FedExAccountEntity> accountRepository;
+        private readonly OnTracShipmentType shipmentType;
+        private readonly ICarrierAccountRepository<OnTracAccountEntity> accountRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExBestRateBroker"/> class.
+        /// Initializes a new instance of the <see cref="OnTracBestRateBroker"/> class.
         /// </summary>
-        public FedExBestRateBroker() : this(new FedExShipmentType(), new FedExAccountRepository())
+        public OnTracBestRateBroker() : this(new OnTracShipmentType(), new OnTracAccountRepository())
         {}
 
         /// <summary>
@@ -30,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        private FedExBestRateBroker(FedExShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity> accountRepository)
+        private OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository)
         {
             this.shipmentType = shipmentType;
             this.accountRepository = accountRepository;
@@ -47,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             get { return accountRepository.Accounts.Any(); }
         }
+
 
         /// <summary>
         /// Gets the rates for each of the accounts of a specific shipping provider based
@@ -68,20 +65,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 
             List<RateResult> allRates = new List<RateResult>();
 
-            List<FedExAccountEntity> accounts = accountRepository.Accounts.ToList();
+            List<OnTracAccountEntity> accounts = accountRepository.Accounts.ToList();
 
-            Dictionary<RateResult, FedExShipmentEntity> rateShipments = new Dictionary<RateResult, FedExShipmentEntity>();
+            Dictionary<RateResult, OnTracShipmentEntity> rateShipments = new Dictionary<RateResult, OnTracShipmentEntity>();
 
             // Create a clone so we don't have to worry about modifying the original shipment
             ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            testRateShipment.ShipmentType = (int)ShipmentTypeCode.OnTrac;
 
-            foreach (FedExAccountEntity account in accounts)
+            foreach (OnTracAccountEntity account in accounts)
             {
-                testRateShipment.FedEx = new FedExShipmentEntity();
+                testRateShipment.OnTrac = new OnTracShipmentEntity();
 
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateShipmentSettings(testRateShipment, shipment.ContentWeight, account.FedExAccountID);
+                UpdateShipmentSettings(testRateShipment, shipment.ContentWeight, account.OnTracAccountID);
 
                 try
                 {
@@ -92,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                     // Save a mapping between the rate and the shipment used to get the rate
                     foreach (RateResult result in results)
                     {
-                        rateShipments.Add(result, testRateShipment.FedEx);
+                        rateShipments.Add(result, testRateShipment.OnTrac);
                     }
 
                     allRates.AddRange(results);
@@ -104,9 +101,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 }
             }
 
-            // Return all the rates, then group by FedExServiceType and ServiceLevel
+            // Return all the rates, then group by OnTracServiceType and ServiceLevel
             List<RateResult> filteredRates = allRates
-                .GroupBy(r => ((FedExRateSelection)r.Tag).ServiceType)
+                .GroupBy(r => (OnTracServiceType)r.Tag)
                 .SelectMany(RateResultsByServiceLevel)
                 .ToList();
 
@@ -114,67 +111,53 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             {
                 // Replace the service type with a function that will select the correct shipment type
                 rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
-                rate.Description = rate.Description.Contains("FedEx") ? rate.Description : "FedEx " + rate.Description;
+                rate.Description = rate.Description.Contains("OnTrac") ? rate.Description : "OnTrac " + rate.Description;
             }
 
             return filteredRates.ToList();
         }
 
-
         /// <summary>
         /// Creates a function that can be used to select a specific rate
         /// </summary>
-        /// <param name="rateShipment">FedExShipment that was used to get the rate</param>
-        /// <param name="originalTag">FedExServiceType associated with the specific rate</param>
-        /// <returns>A function that, when executed, will convert the passed in shipment to a FedEx shipment
+        /// <param name="rateShipment">OnTracShipment that was used to get the rate</param>
+        /// <param name="originalTag">OnTracServiceType associated with the specific rate</param>
+        /// <returns>A function that, when executed, will convert the passed in shipment to a OnTrac shipment
         /// used to create the rate.</returns>
-        private static Action<ShipmentEntity> CreateRateSelectionFunction(FedExShipmentEntity rateShipment, object originalTag)
+        private static Action<ShipmentEntity> CreateRateSelectionFunction(OnTracShipmentEntity rateShipment, object originalTag)
         {
             return selectedShipment =>
             {
-                rateShipment.Service = (int)((FedExRateSelection)originalTag).ServiceType;
-                selectedShipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+                rateShipment.Service = (int)((OnTracServiceType)originalTag);
+                selectedShipment.ShipmentType = (int)ShipmentTypeCode.OnTrac;
                 ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
-                if (selectedShipment.FedEx == null)
+                if (selectedShipment.OnTrac == null)
                 {
-                    selectedShipment.FedEx = rateShipment;
+                    selectedShipment.OnTrac = rateShipment;
                 }
                 else
                 {
-                    // Grab the original FedEx package so we can get it's FedExPackageID, as we'll need to set it on the
-                    // cloned package.  There's probably a better way, so need to check with Brian.
-                    FedExPackageEntity selectedPackageEntity = selectedShipment.FedEx.Packages[0];
-                    long originalPackageID = selectedPackageEntity.FedExPackageID;
+                    // Set the rated shipment as the OnTrac shipment
+                    selectedShipment.OnTrac = rateShipment;
 
-                    // Set the rated shipment as the FedEx shipment
-                    selectedShipment.FedEx = rateShipment;
-
-                    // Update the first package FedExPackgeID to be that of the original persisted package.  If this isn't 
-                    // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
-                    selectedShipment.FedEx.Packages[0].FedExPackageID = originalPackageID;
-
-                    // Set the shipment and package to be not new so a copy isn't persisted.
-                    selectedShipment.FedEx.Packages[0].IsNew = false;
-                    selectedShipment.FedEx.IsNew = false;
-
+                    selectedShipment.OnTrac.IsNew = false;
                 }
             };
         }
 
         /// <summary>
-        /// Gets a list of rates by FedExServiceType
+        /// Gets a list of rates by OnTracServiceType
         /// </summary>
         /// <param name="typeGroup">Group </param>
         /// <returns></returns>
-        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<FedExServiceType, RateResult> typeGroup)
+        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<OnTracServiceType, RateResult> typeGroup)
         {
             return typeGroup
                 .GroupBy(r => r.ServiceLevel)
                 .Select(serviceLevelRate => serviceLevelRate.OrderBy(rateToOrder => rateToOrder.Amount)
                     .FirstOrDefault());
         }
-
 
         /// <summary>
         /// Updates the shipment settings.
@@ -184,16 +167,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <param name="accountID">The account unique identifier.</param>
         private static void UpdateShipmentSettings(ShipmentEntity testRateShipment, double contentWeight, long accountID)
         {
-            testRateShipment.FedEx.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
-            testRateShipment.FedEx.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
-            testRateShipment.FedEx.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
+            testRateShipment.OnTrac.DimsHeight = testRateShipment.BestRate.DimsHeight;
+            testRateShipment.OnTrac.DimsWidth = testRateShipment.BestRate.DimsWidth;
+            testRateShipment.OnTrac.DimsLength = testRateShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.FedEx.Packages[0].Weight = contentWeight;
-            testRateShipment.FedEx.Packages[0].DimsAddWeight = false;
-            testRateShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
-            testRateShipment.FedEx.FedExAccountID = accountID;
+            testRateShipment.OnTrac.DimsWeight = contentWeight;
+            testRateShipment.OnTrac.DimsAddWeight = false;
+            testRateShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
+            testRateShipment.OnTrac.OnTracAccountID = accountID;
         }
-
     }
 }

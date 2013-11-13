@@ -718,27 +718,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
                 case FedExServiceType.InternationalPriorityFreight:
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.SmartPost:
-                    if (transitDays < 0)
-                    {
-                        return ServiceLevelType.Anytime;
-                    }
-                    if (transitDays <= 1)
-                    {
-                        return ServiceLevelType.OneDay;
-                    }
-                    if (transitDays == 2)
-                    {
-                        return ServiceLevelType.TwoDays;
-                    }
-                    if (transitDays == 3)
-                    {
-                        return ServiceLevelType.ThreeDays;
-                    }
-                    if (transitDays <= 7)
-                    {
-                        return ServiceLevelType.FourToSevenDays;
-                    }
-                    return ServiceLevelType.Anytime;
+                    return ShippingManager.GetServiceLevel(transitDays);
             }
         }
 
