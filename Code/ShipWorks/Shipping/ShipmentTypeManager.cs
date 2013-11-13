@@ -209,6 +209,15 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Determines whether shipment is BestRate Shipment
+        /// </summary>
+        public static bool IsBestRate(ShipmentTypeCode shipmentTypeCode)
+        {
+            return shipmentTypeCode == ShipmentTypeCode.BestRate;
+
+        }
+
+        /// <summary>
         /// Indicates if the shipment type is UPS
         /// </summary>
         public static bool IsUps(ShipmentTypeCode shipmentTypeCode)
@@ -279,5 +288,6 @@ namespace ShipWorks.Shipping
 
             return false;
         }
-    }
+
+   }
 }

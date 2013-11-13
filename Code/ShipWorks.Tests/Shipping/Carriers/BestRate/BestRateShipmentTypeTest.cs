@@ -23,6 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private Mock<ILog> log;
 
         private List<RateResult> rates;
+        private ShipmentEntity shipment;
 
         [TestInitialize]
         public void Initialize()
@@ -31,6 +32,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             {
                 new RateResult("Rate xyz", "5", 4.23M, null),
                 new RateResult("Rate 123", "4", 6.23M, null)
+            };
+
+            shipment = new ShipmentEntity()
+            {
+                BestRate = new BestRateShipmentEntity()
             };
 
             broker = new Mock<IBestRateShippingBroker>();
@@ -48,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void GetRates_DelegatesToBrokerFactory_Test()
         {
-            testObject.GetRates(new ShipmentEntity());
+            testObject.GetRates(shipment);
 
             brokerFactory.Verify(f => f.CreateBrokers(), Times.Once());
         }
@@ -62,7 +68,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
             brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
-            ShipmentEntity shipment = new ShipmentEntity();
 
             testObject.GetRates(shipment);
 
@@ -79,7 +84,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
             brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
-            ShipmentEntity shipment = new ShipmentEntity();
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
@@ -93,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             // Setup the broker to return an empty list of rate results
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(new List<RateResult>());
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             
             Assert.AreEqual(0, rateGroup.Rates.Count());
         }
@@ -110,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(4.23M, bestRates[0].Amount);
@@ -129,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual("12", bestRates[0].Days);
@@ -150,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(cookie, bestRates[0].Tag);
@@ -171,7 +175,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(rates[0].Selectable, bestRates[0].Selectable);
@@ -191,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
             
             Assert.AreEqual(rates[1], bestRates[0]);
@@ -214,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(rates[2], bestRates[0]);
@@ -246,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(rates[6], bestRates[0]);
@@ -271,7 +275,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            RateGroup rateGroup = testObject.GetRates(new ShipmentEntity());
+            RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(rates.Count, bestRates.Count);
@@ -291,7 +295,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<ShippingException>>())).Returns(rates);
 
-            testObject.GetRates(new ShipmentEntity());
+            testObject.GetRates(shipment);
 
             testRate.Verify(x => x.MaskDescription(rates));
         }
@@ -301,7 +305,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             Action<ShippingException> handler = exception => { };
 
-            testObject.GetRates(new ShipmentEntity(), handler);
+            testObject.GetRates(shipment, handler);
 
             broker.Verify(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), handler));
         }

@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
-            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount);
+            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r=>r.ServiceLevel, new ServiceLevelSpeedComparer());
 
             var orderedRatesList = orderedRates.Take(5).ToList();
             orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
@@ -270,6 +270,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>This will return the shipping type of the best rate found.</returns>
         public override ShipmentType PreProcess(ShipmentEntity shipment)
         {
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             RateGroup rateGroup = GetRates(shipment, ex => { throw ex; });
             RateResult bestRate = rateGroup.Rates.FirstOrDefault();
 
@@ -288,5 +290,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return ShipmentTypeManager.GetType(shipment);
         }
+
     }
 }

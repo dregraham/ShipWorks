@@ -653,7 +653,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.v2013
                 else if (rateDetail.TransitTimeSpecified)
                 {
                     transitDays = GetTransitDays(rateDetail.TransitTime);
-                    deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                    
+                    if (serviceType == FedExServiceType.GroundHomeDelivery)
+                    {
+                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday);
+                    }
+                    else
+                    {
+                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);    
+                    }
                 }
 
                 // Cost

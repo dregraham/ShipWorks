@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             return selectedShipment =>
             {
-                rateShipment.Service = (int)originalTag;
+                rateShipment.Service = (int)((FedExRateSelection)originalTag).ServiceType;
                 selectedShipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
                 ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
