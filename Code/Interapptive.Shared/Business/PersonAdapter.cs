@@ -227,7 +227,7 @@ namespace Interapptive.Shared.Business
             {
                 IEntityField2 field = entity.Fields[fieldPrefix + fieldName];
 
-                if (field == null)
+                if (field == null || field.CurrentValue == null)
                 {
                     return GetDefault<T>();
                 }

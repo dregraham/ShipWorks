@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
@@ -539,7 +540,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker()
         {
-            return new NullShippingBroker();
+            return new StampsBestRateBroker();
         }
     }
 }
