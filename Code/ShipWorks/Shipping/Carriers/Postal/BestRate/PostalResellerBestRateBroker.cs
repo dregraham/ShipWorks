@@ -14,11 +14,18 @@ using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
+    /// <summary>
+    /// Base class for postal reseller brokers, like Stamps and Endicia
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class PostalResellerBestRateBroker<T> : IBestRateShippingBroker where T : EntityBase2
     {
         private readonly ICarrierAccountRepository<T> accountRepository;
         private readonly string carrierDescription;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected PostalResellerBestRateBroker(ICarrierAccountRepository<T> accountRepository, string carrierDescription)
         {
             this.accountRepository = accountRepository;
@@ -165,6 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                     rateShipment.Confirmation = (int) originalTag.ConfirmationType;
 
                     selectedShipment.ShipmentType = (int)ShipmentCode;
+                    selectedShipment.Postal = null;
                     ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
                     selectedShipment.Postal = rateShipment;

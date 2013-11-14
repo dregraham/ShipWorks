@@ -898,8 +898,12 @@
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalResellerBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsBestRateBroker.cs" />
     <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />

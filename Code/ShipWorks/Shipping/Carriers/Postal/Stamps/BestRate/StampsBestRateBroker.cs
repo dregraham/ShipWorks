@@ -5,19 +5,37 @@ using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
 {
+    /// <summary>
+    /// Best rate broker for Stamps accounts
+    /// </summary>
     public class StampsBestRateBroker : PostalResellerBestRateBroker<StampsAccountEntity>
     {
         private readonly StampsShipmentType shipmentType;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public StampsBestRateBroker() : this(new StampsShipmentType(), new StampsAccountRepository())
         {
             
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
-            base(accountRepository, "Stamps")
+            this(shipmentType, accountRepository, "Stamps")
         {
-            this.shipmentType = shipmentType; 
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository, string carrierDescription) :
+            base(accountRepository, carrierDescription)
+        {
+            this.shipmentType = shipmentType;
         }
 
         /// <summary>

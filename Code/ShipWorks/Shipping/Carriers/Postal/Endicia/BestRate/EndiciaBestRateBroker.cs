@@ -5,19 +5,37 @@ using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 {
+    /// <summary>
+    /// Best rate broker for Endicia accounts
+    /// </summary>
     public class EndiciaBestRateBroker : PostalResellerBestRateBroker<EndiciaAccountEntity>
     {
         private readonly EndiciaShipmentType shipmentType;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public EndiciaBestRateBroker() : this(new EndiciaShipmentType(), new EndiciaAccountRepository())
         {
             
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository) :
-            base(accountRepository, "Endicia")
+            this(shipmentType, accountRepository, "Endicia")
         {
-            this.shipmentType = shipmentType; 
+
+        }
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, string carrierDescription) :
+            base(accountRepository, carrierDescription)
+        {
+            this.shipmentType = shipmentType;
         }
 
         /// <summary>
