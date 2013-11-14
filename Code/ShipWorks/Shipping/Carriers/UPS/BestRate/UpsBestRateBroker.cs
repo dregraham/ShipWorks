@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 testRateShipment.Ups = new UpsShipmentEntity();
 
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateUpsShipmentSettings(testRateShipment, shipment, account);
+                UpdateShipmentSettings(testRateShipment, shipment, account);
 
                 try
                 {
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="testRateShipment">Shipment that we'll be working with</param>
         /// <param name="originalShipment">The original shipment from which data can be copied.</param>
         /// <param name="upsAccount">The UPS Account Entity for this shipment.</param>
-        private static void UpdateUpsShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, UpsAccountEntity upsAccount)
+        private static void UpdateShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, UpsAccountEntity upsAccount)
         {
             testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
 

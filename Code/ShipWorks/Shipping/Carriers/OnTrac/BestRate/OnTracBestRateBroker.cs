@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
@@ -78,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
                 testRateShipment.OnTrac = new OnTracShipmentEntity();
 
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateShipmentSettings(testRateShipment, shipment.ContentWeight, account.OnTracAccountID);
+                UpdateShipmentSettings(testRateShipment, shipment, account);
 
                 try
                 {
@@ -163,19 +165,31 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// Updates the shipment settings.
         /// </summary>
         /// <param name="testRateShipment">The test rate shipment.</param>
-        /// <param name="contentWeight">The content weight.</param>
-        /// <param name="accountID">The account unique identifier.</param>
-        private static void UpdateShipmentSettings(ShipmentEntity testRateShipment, double contentWeight, long accountID)
+        /// <param name="originalShipment">The original shipment.</param>
+        /// <param name="account">The account.</param>
+        private void UpdateShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, OnTracAccountEntity account)
         {
+            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
+
+            // Set the address of the shipment to either the UPS account, or the address of the original shipment
+            if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            {
+                PersonAdapter.Copy(account, "", testRateShipment, "Origin");
+            }
+            else
+            {
+                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
+            }
+
             testRateShipment.OnTrac.DimsHeight = testRateShipment.BestRate.DimsHeight;
             testRateShipment.OnTrac.DimsWidth = testRateShipment.BestRate.DimsWidth;
             testRateShipment.OnTrac.DimsLength = testRateShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.OnTrac.DimsWeight = contentWeight;
+            testRateShipment.OnTrac.DimsWeight = originalShipment.ContentWeight;
             testRateShipment.OnTrac.DimsAddWeight = false;
             testRateShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
-            testRateShipment.OnTrac.OnTracAccountID = accountID;
+            testRateShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
         }
     }
 }

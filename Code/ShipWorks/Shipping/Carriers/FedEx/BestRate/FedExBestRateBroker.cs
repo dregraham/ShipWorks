@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -81,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 testRateShipment.FedEx = new FedExShipmentEntity();
 
                 shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateShipmentSettings(testRateShipment, shipment.ContentWeight, account.FedExAccountID);
+                UpdateShipmentSettings(testRateShipment, shipment, account);
 
                 try
                 {
@@ -119,7 +121,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 
             return filteredRates.ToList();
         }
-
 
         /// <summary>
         /// Creates a function that can be used to select a specific rate
@@ -179,20 +180,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <summary>
         /// Updates the shipment settings.
         /// </summary>
-        /// <param name="testRateShipment">The test rate shipment.</param>
-        /// <param name="contentWeight">The content weight.</param>
-        /// <param name="accountID">The account unique identifier.</param>
-        private static void UpdateShipmentSettings(ShipmentEntity testRateShipment, double contentWeight, long accountID)
+        private void UpdateShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, FedExAccountEntity account)
         {
+            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
+
+            // Set the address of the shipment to either the UPS account, or the address of the original shipment
+            if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            {
+                PersonAdapter.Copy(account, "", testRateShipment, "Origin");
+            }
+            else
+            {
+                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
+            }
+
             testRateShipment.FedEx.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
             testRateShipment.FedEx.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
             testRateShipment.FedEx.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.FedEx.Packages[0].Weight = contentWeight;
+            testRateShipment.FedEx.Packages[0].Weight = originalShipment.ContentWeight;
             testRateShipment.FedEx.Packages[0].DimsAddWeight = false;
             testRateShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
-            testRateShipment.FedEx.FedExAccountID = accountID;
+            testRateShipment.FedEx.FedExAccountID = account.FedExAccountID;
         }
 
     }
