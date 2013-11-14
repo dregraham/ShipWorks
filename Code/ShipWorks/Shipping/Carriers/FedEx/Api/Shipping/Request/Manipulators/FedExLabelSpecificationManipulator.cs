@@ -1,5 +1,6 @@
 using System;
 using Interapptive.Shared.Business;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;

@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         
         /// <remarks/>
         public RegistrationService() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService;
+            this.Url = "https://wsbeta.fedex.com:443/web-services";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

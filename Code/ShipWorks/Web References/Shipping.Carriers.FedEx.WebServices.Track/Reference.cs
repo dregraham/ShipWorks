@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         /// <remarks/>
         public TrackService() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService;
+            this.Url = "https://wsbeta.fedex.com:443/web-services/track";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

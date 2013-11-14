@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         
         /// <remarks/>
         public RateService() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService;
+            this.Url = "https://wsbeta.fedex.com:443/web-services/rate";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

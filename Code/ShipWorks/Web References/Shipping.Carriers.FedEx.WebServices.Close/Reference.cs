@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         
         /// <remarks/>
         public CloseService() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService;
+            this.Url = "https://gatewaybeta.fedex.com:443/web-services/close";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
