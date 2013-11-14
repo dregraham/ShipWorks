@@ -8,8 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 

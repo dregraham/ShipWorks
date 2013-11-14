@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx

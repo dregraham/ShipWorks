@@ -209,6 +209,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         case FedExServiceType.FedExExpressSaver:
                             return "EXPSAVER";
 
+                        case FedExServiceType.FirstFreight:
                         case FedExServiceType.FedEx1DayFreight:
                             return "OVERNIGHTFREIGHT";
 

@@ -25,6 +25,7 @@
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement", "PackageMovementInformationService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation", "AddressValidationService",
 		"ShipWorks.Shipping.Carriers.FedEx.WebServices.Close", "CloseService",
+		"ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress", "GlobalShipAddressService",
 		"ShipWorks.Stores.Platforms.Infopia.WebServices", "InfopiaWebService",
 		"ShipWorks.Stores.Platforms.PayPal.WebServices", "PayPalAPISoapBinding",
 		"ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral", "merchantinterfacedime",
@@ -36,14 +37,7 @@
 		"ShipWorks.Shipping.Carriers.EquaShip.WebServices", "EquashipAPI",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship", "ShipService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement", "PackageMovementInformationService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Registration", "RegistrationService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress", "GlobalShipAddressService",
 		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Close", "CloseService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate", "RateService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Track", "TrackService",
 		"ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount", "OpenAccountService",
         "ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps", "SDCV24Service"
 	};

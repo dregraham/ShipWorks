@@ -13,13 +13,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedExServiceType
     {
-        [Description("Priority Overnight")]
+        [Description("FedEx Priority Overnight")]
         PriorityOvernight = 0,
 
-        [Description("Standard Overnight")]
+        [Description("FedEx Standard Overnight")]
         StandardOvernight = 1,
 
-        [Description("First Overnight")]
+        [Description("FedEx First Overnight")]
         FirstOvernight = 2,
 
         [Description("FedEx 2Day")]
@@ -28,13 +28,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx Express Saver")]
         FedExExpressSaver = 4,
 
-        [Description("International Priority")]
+        [Description("FedEx International Priority")]
         InternationalPriority = 5,
 
-        [Description("International Economy")]
+        [Description("FedEx International Economy")]
         InternationalEconomy = 6,
 
-        [Description("International First")]
+        [Description("FedEx International First")]
         InternationalFirst = 7,
 
         [Description("FedEx 1Day Freight")]
@@ -52,10 +52,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx Home Delivery")]
         GroundHomeDelivery = 12,
 
-        [Description("International Priority Freight")]
+        [Description("FedEx International Priority Freight")]
         InternationalPriorityFreight = 13,
 
-        [Description("International Economy Freight")]
+        [Description("FedEx International Economy Freight")]
         InternationalEconomyFreight = 14,
         
         [Description("FedEx SmartPost")]
@@ -65,7 +65,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         FedExEuropeFirstInternationalPriority = 17,
 
         [Description("FedEx 2Day A.M.")]
-        FedEx2DayAM = 18
+        FedEx2DayAM = 18,
+
+        [Description("FedEx First Overnight Freight")]
+        FirstFreight = 19
 
     }
 }

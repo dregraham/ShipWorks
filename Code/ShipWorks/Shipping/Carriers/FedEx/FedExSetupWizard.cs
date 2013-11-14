@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;

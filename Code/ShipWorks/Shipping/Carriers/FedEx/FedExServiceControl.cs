@@ -6,7 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
@@ -1025,6 +1025,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx International Economy®\n" +
                 "FedEx International Priority® Freight\n" +
                 "FedEx International Economy® Freight\n" +
+                "FedEx First Overnight® Freight\n" +
                 "FedEx 1Day® Freight\n" +
                 "FedEx 2Day® Freight\n" +
                 "FedEx 3Day® Freight\n" +
@@ -1038,8 +1039,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx SmartPost® Standard A\n" + 
                 "FedEx SmartPost® Standard B\n" + 
                 "FedEx SmartPost® Bound Printed Matter\n" + 
-                "FedEx SmartPost® Media Mail\n" +
-                "FedEx SmartPost® Parcel Post\n" + 
+                "FedEx SmartPost® Media\n" +
+                "FedEx SmartPost® Parcel Select\n" + 
                 "FedEx ShipAlert® (Email ID)\n" +
                 "FedEx Priority Alert Plus™\n\n" +
 
