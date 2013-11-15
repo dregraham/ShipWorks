@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -15,6 +17,44 @@ namespace ShipWorks.Stores.Platforms.Ebay
         long ebayOrderId = 0;
         long ebayItemId = 0;
         long transactionId = 0;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EbayOrderIdentifier(long ebayOrderId, long ebayItemId, long transactionId)
+        {
+            this.ebayOrderId = ebayOrderId;
+            this.ebayItemId = ebayItemId;
+            this.transactionId = transactionId;
+        }
+
+        /// <summary>
+        /// Create the identifier from the given eBay API object
+        /// </summary>
+        public EbayOrderIdentifier(OrderType orderType)
+        {
+            Match match = Regex.Match(orderType.OrderID, @"^(\d+)-(\d+)$");
+
+            // "Combined" orders have an Int64 ID, whereas single-line auctions are represented by an ItemID-TransactionID hyphenation
+            if (match.Success)
+            {
+                ebayItemId = Int64.Parse(match.Groups[1].Value);
+                transactionId = Int64.Parse(match.Groups[2].Value);
+            }
+            else
+            {
+                ebayOrderId = Int64.Parse(orderType.OrderID);
+            }
+        }
+
+        /// <summary>
+        /// Create the identifier based on itemID and transactionID which are provided as strings from eBay
+        /// </summary>
+        public EbayOrderIdentifier(string itemID, string transactionID)
+        {
+            this.ebayItemId = long.Parse(itemID);
+            this.transactionId = long.Parse(transactionID);
+        }
 
         /// <summary>
         /// The Order ID if it's a combined payment in ebay's system
@@ -41,16 +81,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public EbayOrderIdentifier(long ebayOrderId, long ebayItemId, long transactionId)
-        {
-            this.ebayOrderId = ebayOrderId;
-            this.ebayItemId = ebayItemId;
-            this.transactionId = transactionId;
-        }
-
-        /// <summary>
         /// Apply the identifier properties to the provided order
         /// </summary>
         public override void ApplyTo(OrderEntity order)
@@ -58,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             EbayOrderEntity ebayOrder = order as EbayOrderEntity;
             if (ebayOrder == null)
             {
-                throw new InvalidOperationException("A non eBay Order was passd to the EbayOrderIdentifier.");
+                throw new InvalidOperationException("A non eBay Order was passed to the EbayOrderIdentifier.");
             }
 
             ebayOrder.EbayOrderID = ebayOrderId;

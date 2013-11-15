@@ -1979,7 +1979,7 @@
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetUserRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetOrdersRequest.cs" />
     <None Include="Stores\Platforms\Ebay\Requests\EbayFeedbackRequest.cs" />
-    <None Include="Stores\Platforms\Ebay\Requests\EbayItemRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetItemRequest.cs" />
     <None Include="Stores\Platforms\Ebay\Requests\EbaySellingRequest.cs" />
     <None Include="Stores\Platforms\Ebay\Requests\EbayTransactionRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayRequest.cs" />

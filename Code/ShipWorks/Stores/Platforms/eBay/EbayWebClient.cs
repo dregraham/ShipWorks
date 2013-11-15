@@ -62,5 +62,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             return request.Execute();
         }
+
+        /// <summary>
+        /// Get full item details for the given item listing ID
+        /// </summary>
+        public ItemType GetItem(string itemID)
+        {
+            EbayGetItemRequest request = new EbayGetItemRequest(token, itemID);
+
+            return request.Execute();
+        }
     }
 }
