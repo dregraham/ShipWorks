@@ -282,8 +282,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 throw new ShippingException("ShipWorks could not find any rates.");
             }
 
-            Action<ShipmentEntity> action = ((Action<ShipmentEntity>)bestRate.Tag);
-            action(shipment);
+            ApplySelectedShipmentRate(shipment, bestRate);
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -293,5 +292,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return ShipmentTypeManager.GetType(shipment);
         }
 
+        /// <summary>
+        /// Applies the selected rate to the specified shipment
+        /// </summary>
+        /// <param name="shipment">Shipment that will have the rate applied</param>
+        /// <param name="bestRate">Rate that should be applied to the shipment</param>
+        public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
+        {
+            Action<ShipmentEntity> action = ((Action<ShipmentEntity>) bestRate.Tag);
+            action(shipment);
+        }
     }
 }

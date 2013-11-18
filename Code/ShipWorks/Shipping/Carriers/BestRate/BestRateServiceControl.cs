@@ -145,9 +145,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            Action<ShipmentEntity> action = ((Action<ShipmentEntity>)e.Rate.Tag);
-
-            action(LoadedShipments[0]);
+            BestRateShipmentType.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
 
             RaiseShipmentTypeChanged();
         }
