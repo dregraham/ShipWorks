@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             // Create a clone so we don't have to worry about modifying the original shipment
             ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+            testRateShipment.ShipmentType = (int) shipmentType.ShipmentTypeCode;
 
             foreach (UpsAccountEntity account in upsAccounts)
             {
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             foreach (RateResult rate in filteredRates)
             {
                 // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
+                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag, shipmentType.ShipmentTypeCode);
                 rate.Description = rate.Description.Contains("UPS") ? rate.Description : "UPS " + rate.Description;
             }
 
@@ -129,12 +129,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="originalTag">UpsServiceType associated with the specific rate</param>
         /// <returns>A function that, when executed, will convert the passed in shipment to a UPS shipment
         /// used to create the rate.</returns>
-        private static Action<ShipmentEntity> CreateRateSelectionFunction(UpsShipmentEntity rateShipment, object originalTag)
+        private static Action<ShipmentEntity> CreateRateSelectionFunction(UpsShipmentEntity rateShipment, object originalTag, ShipmentTypeCode shipmentTypeCode)
         {
             return selectedShipment =>
                 {
                     rateShipment.Service = (int)originalTag;
-                    selectedShipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+                    selectedShipment.ShipmentType = (int) shipmentTypeCode;
                     ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
                     if (selectedShipment.Ups == null)
