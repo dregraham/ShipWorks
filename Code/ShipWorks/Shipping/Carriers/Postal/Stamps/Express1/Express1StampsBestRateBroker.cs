@@ -24,13 +24,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
 
         }
-
-        /// <summary>
-        /// Gets the shipment type code for the postal reseller shipment type
-        /// </summary>
-        protected override ShipmentTypeCode ShipmentCode
-        {
-            get { return ShipmentTypeCode.Express1Stamps; }
-        }
     }
 }

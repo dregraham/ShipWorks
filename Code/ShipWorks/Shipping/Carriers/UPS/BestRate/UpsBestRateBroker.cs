@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
     /// <summary>
     /// Rate broker that finds the best rates for UPS accounts
     /// </summary>
-    public class UpsBestRateBroker : IBestRateShippingBroker
+    public class UpsBestRateBroker : PackageBasedBestRateBroker<UpsAccountEntity, UpsPackageEntity>
     {
-        private readonly UpsShipmentType shipmentType;
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
-
         /// <summary>
         /// Creates a broker with the default shipment type and account repository
         /// </summary>
@@ -39,188 +30,106 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="shipmentType">Instance of a UPS shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get UPS accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public UpsBestRateBroker(UpsShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository)
+        public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository) :
+            base(shipmentType, accountRepository, "UPS")
         {
-            this.shipmentType = shipmentType;
-            this.accountRepository = accountRepository;
+
         }
 
         /// <summary>
-        /// Gets a value indicating whether there any accounts available to a broker.
+        /// Gets a list of Ups rates
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasAccounts
+        /// <param name="shipment">Shipment for which rates should be retrieved</param>
+        /// <param name="exceptionHandler">Action that performs exception handling</param>
+        /// <returns>List of NoncompetitiveRateResults</returns>
+        /// <remarks>This is overridden because Ups has a requirement that we have to hide their branding if
+        /// other carriers rates are present</remarks>
+        public override List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
         {
-            get { return accountRepository.Accounts.Any(); }
+            return base.GetBestRates(shipment, exceptionHandler).Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
         }
 
         /// <summary>
-        /// Gets the single best rate for each UPS account based 
-        /// on the configuration of the best rate shipment data.
+        /// Applies Ups specific data to the specified shipment
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
-        /// <returns>A list of RateResults composed of the single best rate for each UPS account.</returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        /// <param name="currentShipment">Shipment that will be modified</param>
+        /// <param name="originalShipment">Shipment that contains original data for copying</param>
+        /// <param name="account">Account that will be attached to the shipment</param>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, UpsAccountEntity account)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
 
-            List<RateResult> allRates = new List<RateResult>();
-
-            List<UpsAccountEntity> upsAccounts = accountRepository.Accounts.ToList();
-
-            Dictionary<RateResult, UpsAccountEntity> rateShipments = new Dictionary<RateResult, UpsAccountEntity>();
-
-            // Create a clone so we don't have to worry about modifying the original shipment
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int) shipmentType.ShipmentTypeCode;
-
-            foreach (UpsAccountEntity account in upsAccounts)
-            {
-                testRateShipment.Ups = new UpsShipmentEntity();
-
-                shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateShipmentSettings(testRateShipment, shipment, account);
-
-                try
-                {
-                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates
-                                                                  .Where(r => r.Tag != null)
-                                                                  .Where(r => r.Amount > 0)
-                                                                  .Where(r => (UpsServiceType)r.Tag != UpsServiceType.UpsSurePostBoundPrintedMatter && (UpsServiceType)r.Tag != UpsServiceType.UpsSurePostMedia);
-
-                    // Save a mapping between the rate and the UPS shipment used to get the rate
-                    foreach (RateResult result in results)
-                    {
-                        rateShipments.Add(result, account);
-                    }
-
-                    allRates.AddRange(results);
-                }
-                catch (ShippingException ex)
-                {
-                    // Offload exception handling to the passed in exception handler
-                    exceptionHandler(ex);
-                }
-            }
-
-            // Return all the rates, then group by UpsServiceType and ServiceLevel
-            List<RateResult> filteredRates = allRates
-                .GroupBy(r => (UpsServiceType)r.Tag)
-                .SelectMany(RateResultsByServiceLevel)
-                .ToList();
-
-            foreach (RateResult rate in filteredRates)
-            {
-                // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag, shipmentType.ShipmentTypeCode);
-                rate.Description = rate.Description.Contains("UPS") ? rate.Description : "UPS " + rate.Description;
-            }
-
-            return filteredRates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
-        }
-
-        /// <summary>
-        /// Creates a function that can be used to select a specific rate
-        /// </summary>
-        /// <param name="account">Account that was used to get the rate</param>
-        /// <param name="originalTag">UpsServiceType associated with the specific rate</param>
-        /// <param name="shipmentTypeCode">Whether we should use online tools or Worldship</param>
-        /// <returns>A function that, when executed, will convert the passed in shipment to a UPS shipment
-        /// used to create the rate.</returns>
-        private Action<ShipmentEntity> CreateRateSelectionFunction(UpsAccountEntity account, object originalTag, ShipmentTypeCode shipmentTypeCode)
-        {
-            return selectedShipment =>
-                {
-                    // Create a clone so we don't have to worry about modifying the original shipment
-                    ShipmentEntity originalShipment = EntityUtility.CloneEntity(selectedShipment);
-                    selectedShipment.ShipmentType = (int) shipmentTypeCode;
-
-                    ShippingManager.EnsureShipmentLoaded(selectedShipment);
-
-                    if (selectedShipment.Ups.Fields.State != EntityState.New)
-                    {
-                        // Grab the original ups package so we can get it's UpsPackageID, as we'll need to set it on the
-                        // cloned package.  There's probably a better way, so need to check with Brian.
-                        UpsPackageEntity selectedUpsPackageEntity = selectedShipment.Ups.Packages[0];
-                        long originalUpsPackageID = selectedUpsPackageEntity.UpsPackageID;
-
-                        selectedShipment.Ups.Packages.ToList().ForEach(x =>
-                        {
-                            // Remove it from the list
-                            selectedShipment.Ups.Packages.Remove(x);
-
-                            // If its saved in the database, we have to delete it
-                            if (!x.IsNew)
-                            {
-                                using (SqlAdapter adapter = new SqlAdapter())
-                                {
-                                    adapter.DeleteEntity(x);
-                                }
-                            }
-                        });
-
-                        shipmentType.ConfigureNewShipment(selectedShipment);
-
-                        // Update the first package UpsPackgeID to be that of the original persisted package.  If this isn't 
-                        // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
-                        selectedShipment.Ups.Packages[0].UpsPackageID = originalUpsPackageID;
-                    }
-
-                    UpdateShipmentSettings(selectedShipment, originalShipment, account);
-                    selectedShipment.Ups.Service = (int)originalTag;
-                };
-        }
-
-        /// <summary>
-        /// Gets a list of rates by UpsServiceType
-        /// </summary>
-        /// <param name="upsTypeGroup">Group </param>
-        /// <returns></returns>
-        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<UpsServiceType, RateResult> upsTypeGroup)
-        {
-            return upsTypeGroup
-                .GroupBy(r => r.ServiceLevel)
-                .Select(serviceLevelRate => serviceLevelRate.OrderBy(rateToOrder => rateToOrder.Amount)
-                    .FirstOrDefault());
-        }
-
-
-        /// <summary>
-        /// Updates data on the Ups shipment that is required for checking best rate
-        /// </summary>
-        /// <param name="testRateShipment">Shipment that we'll be working with</param>
-        /// <param name="originalShipment">The original shipment from which data can be copied.</param>
-        /// <param name="upsAccount">The UPS Account Entity for this shipment.</param>
-        private static void UpdateShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, UpsAccountEntity upsAccount)
-        {
-            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
-
-            // Set the address of the shipment to either the UPS account, or the address of the original shipment
-            if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
-            {
-                PersonAdapter.Copy(upsAccount, "", testRateShipment, "Origin");
-            }
-            else
-            {
-                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
-            }
-
-            testRateShipment.Ups.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
-            testRateShipment.Ups.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
-            testRateShipment.Ups.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
+            currentShipment.Ups.Packages[0].DimsHeight = currentShipment.BestRate.DimsHeight;
+            currentShipment.Ups.Packages[0].DimsWidth = currentShipment.BestRate.DimsWidth;
+            currentShipment.Ups.Packages[0].DimsLength = currentShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.Ups.Packages[0].Weight = originalShipment.ContentWeight;
-            testRateShipment.Ups.Packages[0].DimsAddWeight = false;
-            testRateShipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Custom;
-            testRateShipment.Ups.Service = (int)UpsServiceType.UpsGround;
-            testRateShipment.Ups.UpsAccountID = upsAccount.UpsAccountID;
+            currentShipment.Ups.Packages[0].Weight = originalShipment.ContentWeight;
+            currentShipment.Ups.Packages[0].DimsAddWeight = false;
+            currentShipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Custom;
+            currentShipment.Ups.Service = (int)UpsServiceType.UpsGround;
+            currentShipment.Ups.UpsAccountID = account.UpsAccountID;
+        }
+
+        /// <summary>
+        /// Checks whether the service type specified in the rate should be excluded from best rate consideration
+        /// </summary>
+        /// <param name="tag">Ups service type from the rate tag</param>
+        /// <returns></returns>
+        protected override bool IsExcludedServiceType(object tag)
+        {
+            UpsServiceType serviceType = (UpsServiceType)tag;
+            return serviceType == UpsServiceType.UpsSurePostBoundPrintedMatter || serviceType == UpsServiceType.UpsSurePostMedia;
+        }
+
+        /// <summary>
+        /// Creates and attaches a new instance of a UpsShipment to the specified shipment
+        /// </summary>
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            shipment.Ups = new UpsShipmentEntity();
+        }
+
+        /// <summary>
+        /// Sets the service type on the Ups shipment from the value in the rate tag
+        /// </summary>
+        /// <param name="shipment">Shipment that will be updated</param>
+        /// <param name="tag">Rate tag that represents the service type</param>
+        protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
+        {
+            shipment.Ups.Service = (int) tag;
+        }
+
+        /// <summary>
+        /// Gets the current entity state for the specified shipment's child
+        /// </summary>
+        protected override EntityState ChildShipmentEntityState(ShipmentEntity shipment)
+        {
+            return shipment.Ups.Fields.State;
+        }
+
+        /// <summary>
+        /// Gets a collection of packages from the specified shipment
+        /// </summary>
+        protected override IList<UpsPackageEntity> Packages(ShipmentEntity shipment)
+        {
+            return shipment.Ups.Packages;
+        }
+
+        /// <summary>
+        /// Gets the id for the specified package
+        /// </summary>
+        protected override long PackageId(UpsPackageEntity package)
+        {
+            return package.UpsPackageID;
+        }
+
+        /// <summary>
+        /// Sets the id on the specified package
+        /// </summary>
+        protected override void SetPackageId(UpsPackageEntity package, long packageId)
+        {
+            package.UpsPackageID = packageId;
         }
     }
 }

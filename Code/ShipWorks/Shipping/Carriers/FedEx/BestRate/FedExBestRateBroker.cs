@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Business;
-using ShipWorks.Data;
+﻿using System.Collections.Generic;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -15,195 +10,110 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
     /// An implementation of the IBestRateShippingBroker that Rate broker that 
     /// finds the best rates for FedEx accounts.
     /// </summary>
-    public class FedExBestRateBroker : IBestRateShippingBroker
+    public class FedExBestRateBroker : PackageBasedBestRateBroker<FedExAccountEntity, FedExPackageEntity>
     {
-
-        private readonly FedExShipmentType shipmentType;
-        private readonly ICarrierAccountRepository<FedExAccountEntity> accountRepository;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExBestRateBroker"/> class.
+        /// Creates a broker with the default shipment type and account repository
         /// </summary>
-        public FedExBestRateBroker() : this(new FedExShipmentType(), new FedExAccountRepository())
-        {}
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="shipmentType">Type of the shipment.</param>
-        /// <param name="accountRepository">The account repository.</param>
-        private FedExBestRateBroker(FedExShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity> accountRepository)
+        /// <remarks>This is designed to be used within ShipWorks</remarks>
+        public FedExBestRateBroker()
+            : this(new FedExShipmentType(), new FedExAccountRepository())
         {
-            this.shipmentType = shipmentType;
-            this.accountRepository = accountRepository;
+
         }
 
         /// <summary>
-        /// Gets a value indicating whether there any accounts available to a broker.
+        /// Creates a broker with the specified shipment type and account repository
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
-        /// </value>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public bool HasAccounts
+        /// <param name="shipmentType">Instance of a FedEx shipment type that will be used to get rates</param>
+        /// <param name="accountRepository">Instance of an account repository that will get FedEx accounts</param>
+        /// <remarks>This is designed to be used by tests</remarks>
+        public FedExBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity> accountRepository) :
+            base(shipmentType, accountRepository, "FedEx")
         {
-            get { return accountRepository.Accounts.Any(); }
+
         }
 
         /// <summary>
-        /// Gets the rates for each of the accounts of a specific shipping provider based
-        /// on the configuration of the best rate shipment data.
+        /// Applies FedEx specific data to the specified shipment
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
-        /// <returns>
-        /// A list of RateResults for each account of a specific shipping provider (i.e. if two accounts 
-        /// are registered for a single provider, the list of rates would have two entries if both 
-        /// accounts returned rates).
-        /// </returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        /// <param name="currentShipment">Shipment that will be modified</param>
+        /// <param name="originalShipment">Shipment that contains original data for copying</param>
+        /// <param name="account">Account that will be attached to the shipment</param>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, FedExAccountEntity account)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
 
-            List<RateResult> allRates = new List<RateResult>();
-
-            List<FedExAccountEntity> accounts = accountRepository.Accounts.ToList();
-
-            Dictionary<RateResult, FedExShipmentEntity> rateShipments = new Dictionary<RateResult, FedExShipmentEntity>();
-
-            // Create a clone so we don't have to worry about modifying the original shipment
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
-
-            foreach (FedExAccountEntity account in accounts)
-            {
-                testRateShipment.FedEx = new FedExShipmentEntity();
-
-                shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateShipmentSettings(testRateShipment, shipment, account);
-
-                try
-                {
-                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates
-                                                                  .Where(r => r.Tag != null)
-                                                                  .Where(r => r.Amount > 0);
-
-                    // Save a mapping between the rate and the shipment used to get the rate
-                    foreach (RateResult result in results)
-                    {
-                        rateShipments.Add(result, testRateShipment.FedEx);
-                    }
-
-                    allRates.AddRange(results);
-                }
-                catch (ShippingException ex)
-                {
-                    // Offload exception handling to the passed in exception handler
-                    exceptionHandler(ex);
-                }
-            }
-
-            // Return all the rates, then group by FedExServiceType and ServiceLevel
-            List<RateResult> filteredRates = allRates
-                .GroupBy(r => ((FedExRateSelection)r.Tag).ServiceType)
-                .SelectMany(RateResultsByServiceLevel)
-                .ToList();
-
-            foreach (RateResult rate in filteredRates)
-            {
-                // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
-                rate.Description = rate.Description.Contains("FedEx") ? rate.Description : "FedEx " + rate.Description;
-            }
-
-            return filteredRates.ToList();
-        }
-
-        /// <summary>
-        /// Creates a function that can be used to select a specific rate
-        /// </summary>
-        /// <param name="rateShipment">FedExShipment that was used to get the rate</param>
-        /// <param name="originalTag">FedExServiceType associated with the specific rate</param>
-        /// <returns>A function that, when executed, will convert the passed in shipment to a FedEx shipment
-        /// used to create the rate.</returns>
-        private static Action<ShipmentEntity> CreateRateSelectionFunction(FedExShipmentEntity rateShipment, object originalTag)
-        {
-            return selectedShipment =>
-            {
-                rateShipment.Service = (int)((FedExRateSelection)originalTag).ServiceType;
-                selectedShipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
-                ShippingManager.EnsureShipmentLoaded(selectedShipment);
-
-                if (selectedShipment.FedEx == null)
-                {
-                    selectedShipment.FedEx = rateShipment;
-                }
-                else
-                {
-                    // Grab the original FedEx package so we can get it's FedExPackageID, as we'll need to set it on the
-                    // cloned package.  There's probably a better way, so need to check with Brian.
-                    FedExPackageEntity selectedPackageEntity = selectedShipment.FedEx.Packages[0];
-                    long originalPackageID = selectedPackageEntity.FedExPackageID;
-
-                    // Set the rated shipment as the FedEx shipment
-                    selectedShipment.FedEx = rateShipment;
-
-                    // Update the first package FedExPackgeID to be that of the original persisted package.  If this isn't 
-                    // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
-                    selectedShipment.FedEx.Packages[0].FedExPackageID = originalPackageID;
-
-                    // Set the shipment and package to be not new so a copy isn't persisted.
-                    selectedShipment.FedEx.Packages[0].IsNew = false;
-                    selectedShipment.FedEx.IsNew = false;
-
-                }
-            };
-        }
-
-        /// <summary>
-        /// Gets a list of rates by FedExServiceType
-        /// </summary>
-        /// <param name="typeGroup">Group </param>
-        /// <returns></returns>
-        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<FedExServiceType, RateResult> typeGroup)
-        {
-            return typeGroup
-                .GroupBy(r => r.ServiceLevel)
-                .Select(serviceLevelRate => serviceLevelRate.OrderBy(rateToOrder => rateToOrder.Amount)
-                    .FirstOrDefault());
-        }
-
-
-        /// <summary>
-        /// Updates the shipment settings.
-        /// </summary>
-        private void UpdateShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, FedExAccountEntity account)
-        {
-            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
-
-            // Set the address of the shipment to either the UPS account, or the address of the original shipment
-            if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
-            {
-                PersonAdapter.Copy(account, "", testRateShipment, "Origin");
-            }
-            else
-            {
-                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
-            }
-
-            testRateShipment.FedEx.Packages[0].DimsHeight = testRateShipment.BestRate.DimsHeight;
-            testRateShipment.FedEx.Packages[0].DimsWidth = testRateShipment.BestRate.DimsWidth;
-            testRateShipment.FedEx.Packages[0].DimsLength = testRateShipment.BestRate.DimsLength;
+            currentShipment.FedEx.Packages[0].DimsHeight = currentShipment.BestRate.DimsHeight;
+            currentShipment.FedEx.Packages[0].DimsWidth = currentShipment.BestRate.DimsWidth;
+            currentShipment.FedEx.Packages[0].DimsLength = currentShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.FedEx.Packages[0].Weight = originalShipment.ContentWeight;
-            testRateShipment.FedEx.Packages[0].DimsAddWeight = false;
-            testRateShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
-            testRateShipment.FedEx.FedExAccountID = account.FedExAccountID;
+            currentShipment.FedEx.Packages[0].Weight = originalShipment.ContentWeight;
+            currentShipment.FedEx.Packages[0].DimsAddWeight = false;
+            currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
+            currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
+            currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
         }
 
+        /// <summary>
+        /// Checks whether the service type specified in the rate should be excluded from best rate consideration
+        /// </summary>
+        /// <param name="tag">FedEx service type from the rate tag</param>
+        /// <returns></returns>
+        protected override bool IsExcludedServiceType(object tag)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Creates and attaches a new instance of a FedExShipment to the specified shipment
+        /// </summary>
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            shipment.FedEx = new FedExShipmentEntity();
+        }
+
+        /// <summary>
+        /// Sets the service type on the FedEx shipment from the value in the rate tag
+        /// </summary>
+        /// <param name="shipment">Shipment that will be updated</param>
+        /// <param name="tag">Rate tag that represents the service type</param>
+        protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
+        {
+            shipment.FedEx.Service = (int) tag;
+        }
+
+        /// <summary>
+        /// Gets the current entity state for the specified shipment's child
+        /// </summary>
+        protected override EntityState ChildShipmentEntityState(ShipmentEntity shipment)
+        {
+            return shipment.FedEx.Fields.State;
+        }
+
+        /// <summary>
+        /// Gets a collection of packages from the specified shipment
+        /// </summary>
+        protected override IList<FedExPackageEntity> Packages(ShipmentEntity shipment)
+        {
+            return shipment.FedEx.Packages;
+        }
+
+        /// <summary>
+        /// Gets the id for the specified package
+        /// </summary>
+        protected override long PackageId(FedExPackageEntity package)
+        {
+            return package.FedExPackageID;
+        }
+
+        /// <summary>
+        /// Sets the id on the specified package
+        /// </summary>
+        protected override void SetPackageId(FedExPackageEntity package, long packageId)
+        {
+            package.FedExPackageID = packageId;
+        }
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -18,100 +12,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
     /// Base class for postal reseller brokers, like Stamps and Endicia
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class PostalResellerBestRateBroker<T> : IBestRateShippingBroker where T : EntityBase2
+    public abstract class PostalResellerBestRateBroker<T> : BestRateBroker<T> where T : EntityBase2
     {
-        private readonly ICarrierAccountRepository<T> accountRepository;
-        private readonly string carrierDescription;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        protected PostalResellerBestRateBroker(ICarrierAccountRepository<T> accountRepository, string carrierDescription)
+        protected PostalResellerBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<T> accountRepository, string carrierDescription) :
+            base(shipmentType, accountRepository, carrierDescription)
         {
-            this.accountRepository = accountRepository;
-            this.carrierDescription = carrierDescription;
+
         }
 
         /// <summary>
-        /// Gets a value indicating whether there any accounts available to a broker.
+        /// Gets a list of Postal rates
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasAccounts
+        /// <param name="shipment">Shipment for which rates should be retrieved</param>
+        /// <returns>List of RateResults</returns>
+        /// <remarks>This is overridden because Postal rates are returned in a pseudo-nested way and they need </remarks>
+        protected override IEnumerable<RateResult> GetRates(ShipmentEntity shipment)
         {
-            get { return accountRepository.Accounts.Any(); }
-        }
-
-        /// <summary>
-        /// Gets the single best rate for each account based 
-        /// on the configuration of the best rate shipment data.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
-        /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            List<RateResult> allRates = new List<RateResult>();
-
-            List<T> accounts = accountRepository.Accounts.ToList();
-
-            Dictionary<RateResult, PostalShipmentEntity> rateShipments = new Dictionary<RateResult, PostalShipmentEntity>();
-
-            // Create a clone so we don't have to worry about modifying the original shipment
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentCode;
-
-            foreach (T account in accounts)
-            {
-                testRateShipment.Postal = new PostalShipmentEntity();
-
-                ConfigureNewShipment(testRateShipment);
-                UpdateChildShipmentSettings(testRateShipment, shipment, account);
-
-                try
-                {
-                    var rates = GetRates(testRateShipment);
-                    MergeDescriptionsWithNonSelectableRates(rates);
-
-                    IEnumerable<RateResult> results = rates.Where(r => r.Tag != null)
-                                                            .Where(r => r.Selectable)
-                                                            .Where(r => r.Amount > 0)
-                                                            .Where(r => !IsExcludedServiceType(((PostalRateSelection)r.Tag).ServiceType));
-
-                    // Save a mapping between the rate and the shipment used to get the rate
-                    foreach (RateResult result in results)
-                    {
-                        rateShipments.Add(result, testRateShipment.Postal);
-                        allRates.Add(result);
-                    }
-                }
-                catch (ShippingException ex)
-                {
-                    // Offload exception handling to the passed in exception handler
-                    exceptionHandler(ex);
-                }
-            }
-
-            // Return all the rates, then group by PostalServiceType and ServiceLevel
-            List<RateResult> filteredRates = allRates
-                .GroupBy(r => ((PostalRateSelection)r.Tag).ServiceType)
-                .SelectMany(RateResultsByServiceLevel)
-                .ToList();
-
-            foreach (RateResult rate in filteredRates)
-            {
-                // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], (PostalRateSelection)rate.Tag);
-                rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
-            }
-
-            return filteredRates.ToList();
+            var rates = base.GetRates(shipment).ToList();
+            MergeDescriptionsWithNonSelectableRates(rates);
+            return rates;
         }
 
         /// <summary>
@@ -126,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             
             RateResult lastNonSelectable = null;
 
+            //TODO: There is a bug here where if the next "top-level" rate is selectable, it will have its description
+            // Added to the previous non-selectable rate
             foreach (var rate in rates)
             {
                 if (rate.Selectable)
@@ -146,10 +70,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <summary>
         /// Returns whether the specified service type should be excluded from consideration
         /// </summary>
-        /// <param name="serviceType">Service type to check</param>
+        /// <param name="tag">Service type to check</param>
         /// <returns></returns>
-        private static bool IsExcludedServiceType(PostalServiceType serviceType)
+        protected override bool IsExcludedServiceType(object tag)
         {
+            PostalServiceType serviceType = ((PostalRateSelection) tag).ServiceType;
+
             return serviceType == PostalServiceType.MediaMail ||
                    serviceType == PostalServiceType.LibraryMail ||
                    serviceType == PostalServiceType.BoundPrintedMatter ||
@@ -158,87 +84,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         }
 
         /// <summary>
-        /// Creates a function that can be used to select a specific rate
-        /// </summary>
-        /// <param name="rateShipment">ChildShipment that was used to get the rate</param>
-        /// <param name="originalTag">PostalServiceType associated with the specific rate</param>
-        /// <returns>A function that, when executed, will convert the passed in shipment to a Postal reseller shipment
-        /// used to create the rate.</returns>
-        private Action<ShipmentEntity> CreateRateSelectionFunction(PostalShipmentEntity rateShipment, PostalRateSelection originalTag)
-        {
-            return selectedShipment =>
-                {
-                    rateShipment.Service = (int) originalTag.ServiceType;
-                    rateShipment.Confirmation = (int) originalTag.ConfirmationType;
-
-                    selectedShipment.ShipmentType = (int)ShipmentCode;
-                    selectedShipment.Postal = null;
-                    ShippingManager.EnsureShipmentLoaded(selectedShipment);
-
-                    selectedShipment.Postal = rateShipment;
-                    selectedShipment.Postal.IsNew = false;
-
-                    SelectChildShipment(rateShipment, selectedShipment);
-                };
-        }
-
-        /// <summary>
-        /// Gets a list of rates by PostalServiceType
-        /// </summary>
-        /// <param name="typeGroup">Group </param>
-        /// <returns></returns>
-        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<PostalServiceType, RateResult> typeGroup)
-        {
-            return typeGroup.GroupBy(r => r.ServiceLevel).Select(CheapestRateInGroup);
-        }
-
-        /// <summary>
-        /// Gets the cheapest rate in group of rates.
-        /// </summary>
-        /// <param name="serviceLevelGroup">Group of rates from which to return the cheapest</param>
-        /// <returns></returns>
-        private static RateResult CheapestRateInGroup(IGrouping<ServiceLevelType, RateResult> serviceLevelGroup)
-        {
-            return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
-        }
-
-        /// <summary>
         /// Updates data on the postal child shipment that is required for checking best rate
         /// </summary>
-        /// <param name="testRateShipment">Shipment that we'll be working with</param>
+        /// <param name="currentShipment">Shipment that we'll be working with</param>
         /// <param name="originalShipment">The original shipment from which data can be copied.</param>
         /// <param name="account">The Account Entity for this shipment.</param>
-        private void UpdateChildShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, T account)
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, T account)
         {
-            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
-
-            // Set the address of the shipment to either the account, or the address of the original shipment
-            if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
-            {
-                PersonAdapter.Copy(account, "", testRateShipment, "Origin");
-            }
-            else
-            {
-                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
-            }
-
-            testRateShipment.Postal.DimsHeight = testRateShipment.BestRate.DimsHeight;
-            testRateShipment.Postal.DimsWidth = testRateShipment.BestRate.DimsWidth;
-            testRateShipment.Postal.DimsLength = testRateShipment.BestRate.DimsLength;
+            currentShipment.Postal.DimsHeight = currentShipment.BestRate.DimsHeight;
+            currentShipment.Postal.DimsWidth = currentShipment.BestRate.DimsWidth;
+            currentShipment.Postal.DimsLength = currentShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.Postal.DimsWeight = originalShipment.ContentWeight;
-            testRateShipment.Postal.DimsAddWeight = false;
-            testRateShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
-            testRateShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
+            currentShipment.Postal.DimsWeight = originalShipment.ContentWeight;
+            currentShipment.Postal.DimsAddWeight = false;
+            currentShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
+            currentShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
 
-            UpdateChildAccountId(testRateShipment.Postal, account);
+            UpdateChildAccountId(currentShipment.Postal, account);
         }
-
-        /// <summary>
-        /// Gets the shipment type code for the postal reseller shipment type
-        /// </summary>
-        protected abstract ShipmentTypeCode ShipmentCode { get; }
 
         /// <summary>
         /// Convert the best rate shipment into the specified postal reseller shipment
@@ -251,14 +115,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// Configures a postal reseller shipment for use in the get rates method
         /// </summary>
         /// <param name="shipment">Test shipment that will be used to get rates</param>
-        protected abstract void ConfigureNewShipment(ShipmentEntity shipment);
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            shipment.Postal = new PostalShipmentEntity();
+        }
 
         /// <summary>
-        /// Gets rates for the specified shipment
+        /// Gets the service type from the rate tag
         /// </summary>
-        /// <param name="shipment">Shipment for which to get rates</param>
-        /// <returns>List of rates</returns>
-        protected abstract IEnumerable<RateResult> GetRates(ShipmentEntity shipment);
+        /// <param name="tag">Service type specified in the rate tag</param>
+        protected override int GetServiceTypeFromTag(object tag)
+        {
+            return (int)((PostalRateSelection) tag).ServiceType;
+        }
+
+        /// <summary>
+        /// Sets the service type on the Postal shipment from the value in the rate tag
+        /// </summary>
+        /// <param name="shipment">Shipment that will be updated</param>
+        /// <param name="tag">Rate tag that represents the service type</param>
+        protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
+        {
+            shipment.Postal.Service = GetServiceTypeFromTag(tag);
+        }
 
         /// <summary>
         /// Updates the account id on the postal reseller shipment

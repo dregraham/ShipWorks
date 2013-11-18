@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
-using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 {
@@ -10,8 +8,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
     /// </summary>
     public class EndiciaBestRateBroker : PostalResellerBestRateBroker<EndiciaAccountEntity>
     {
-        private readonly EndiciaShipmentType shipmentType;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -33,17 +29,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// Constructor
         /// </summary>
         protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, string carrierDescription) :
-            base(accountRepository, carrierDescription)
+            base(shipmentType, accountRepository, carrierDescription)
         {
-            this.shipmentType = shipmentType;
-        }
 
-        /// <summary>
-        /// Gets the shipment type code for the postal reseller shipment type
-        /// </summary>
-        protected override ShipmentTypeCode ShipmentCode
-        {
-            get { return ShipmentTypeCode.Endicia; }
         }
 
         /// <summary>
@@ -66,20 +54,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// Configures a postal reseller shipment for use in the get rates method
         /// </summary>
         /// <param name="shipment">Test shipment that will be used to get rates</param>
-        protected override void ConfigureNewShipment(ShipmentEntity shipment)
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
         {
+            base.CreateShipmentChild(shipment);
             shipment.Postal.Endicia = new EndiciaShipmentEntity();
-            shipmentType.ConfigureNewShipment(shipment);
-        }
-
-        /// <summary>
-        /// Gets rates for the specified shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to get rates</param>
-        /// <returns>List of rates</returns>
-        protected override IEnumerable<RateResult> GetRates(ShipmentEntity shipment)
-        {
-            return shipmentType.GetRates(shipment).Rates;
         }
 
         /// <summary>

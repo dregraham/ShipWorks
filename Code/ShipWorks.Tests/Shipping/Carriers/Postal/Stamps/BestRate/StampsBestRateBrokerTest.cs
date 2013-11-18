@@ -79,6 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<StampsShipmentType>();
+            genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Stamps);
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                             .Returns((ShipmentEntity s) => rateResults[s.Postal.Stamps.StampsAccountID])
                             .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
