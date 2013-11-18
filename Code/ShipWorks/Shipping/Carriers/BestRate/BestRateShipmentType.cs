@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
             // TODO: Handle errors so they can be displayed. This should be done during the "Notify users when best rate could not be found" story
-            return GetRates(shipment, ex => { } );
+            return GetRates(shipment, ex => log.WarnFormat("Received an while obtaining rates from a carrier. {0}", ex.Message));
         }
 
         /// <summary>
@@ -196,11 +196,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
-            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r=>r.ServiceLevel, new ServiceLevelSpeedComparer());
+            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, new ServiceLevelSpeedComparer());
+            List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
 
-            var orderedRatesList = orderedRates.Take(5).ToList();
+            // Allow each rate result the chance to mask its description if needed based on the 
+            // other rate results in the list. This is for UPS that does not want its named-rates
+            // intermingled with rates from other carriers
             orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
-
             return new RateGroup(orderedRatesList);
         }
 

@@ -281,7 +281,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.AreEqual(rates.Count, bestRates.Count);
         }
 
-
         [TestMethod]
         public void GetRates_CallsMaskDescription_OnReturnedRates()
         {
