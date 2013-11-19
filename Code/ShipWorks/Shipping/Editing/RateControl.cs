@@ -85,6 +85,13 @@ namespace ShipWorks.Shipping.Editing
                     new GridHyperlinkCell(rate.Selectable ? "Select" : "")
                 });
 
+                // Adjust the height of the row for wrapping (exception) text
+                using (Graphics g = CreateGraphics())
+                {
+                    SizeF size = g.MeasureString(rate.Description, row.Font, sandGrid.Columns[0].Width);
+                    row.Height = (int)Math.Ceiling(size.Height) > row.Height ? (int)Math.Ceiling(size.Height) : row.Height;
+                }
+
                 row.Tag = rate;
 
                 sandGrid.Rows.Add(row);
