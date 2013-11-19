@@ -1842,10 +1842,6 @@ namespace ShipWorks.Data.Model
 		EbayOrderID,
 		///<summary>EbayBuyerID. </summary>
 		EbayBuyerID,
-		///<summary>BuyerFeedbackScore. </summary>
-		BuyerFeedbackScore,
-		///<summary>BuyerFeedbackPrivate. </summary>
-		BuyerFeedbackPrivate,
 		///<summary>CombinedLocally. </summary>
 		CombinedLocally,
 		///<summary>SelectedShippingMethod. </summary>
@@ -1943,10 +1939,6 @@ namespace ShipWorks.Data.Model
 		EbayItemID,
 		///<summary>EbayTransactionID. </summary>
 		EbayTransactionID,
-		///<summary>SellingManagerProductName. </summary>
-		SellingManagerProductName,
-		///<summary>SellingManagerProductPart. </summary>
-		SellingManagerProductPart,
 		///<summary>SellingManagerRecord. </summary>
 		SellingManagerRecord,
 		///<summary>EffectiveCheckoutStatus. </summary>
@@ -1957,12 +1949,8 @@ namespace ShipWorks.Data.Model
 		PaymentStatus,
 		///<summary>PaymentMethod. </summary>
 		PaymentMethod,
-		///<summary>CheckoutStatus. </summary>
-		CheckoutStatus,
 		///<summary>CompleteStatus. </summary>
 		CompleteStatus,
-		///<summary>SellerPaidStatus. </summary>
-		SellerPaidStatus,
 		///<summary>FeedbackLeftType. </summary>
 		FeedbackLeftType,
 		///<summary>FeedbackLeftComments. </summary>
@@ -2076,6 +2064,8 @@ namespace ShipWorks.Data.Model
 		DomesticShippingService,
 		///<summary>InternationalShippingService. </summary>
 		InternationalShippingService,
+		///<summary>FeedbackUpdatedThrough. </summary>
+		FeedbackUpdatedThrough,
 		/// <summary></summary>
 		AmountOfFields
 	}

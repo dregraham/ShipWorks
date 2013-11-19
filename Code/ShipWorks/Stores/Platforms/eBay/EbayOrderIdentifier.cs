@@ -31,9 +31,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the identifier from the given eBay API object
         /// </summary>
-        public EbayOrderIdentifier(OrderType orderType)
+        public EbayOrderIdentifier(string orderID)
         {
-            Match match = Regex.Match(orderType.OrderID, @"^(\d+)-(\d+)$");
+            Match match = Regex.Match(orderID, @"^(\d+)-(\d+)$");
 
             // "Combined" orders have an Int64 ID, whereas single-line auctions are represented by an ItemID-TransactionID hyphenation
             if (match.Success)
@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             else
             {
-                ebayOrderId = Int64.Parse(orderType.OrderID);
+                ebayOrderId = Int64.Parse(orderID);
             }
         }
 

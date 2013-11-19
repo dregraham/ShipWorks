@@ -72,5 +72,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             return request.Execute();
         }
+
+        /// <summary>
+        /// Get feedback that has been left by or for this user
+        /// </summary>
+        public GetFeedbackResponseType GetFeedback(int page)
+        {
+            EbayGetFeedbackRequest request = new EbayGetFeedbackRequest(token, page);
+
+            return request.Execute();
+        }
     }
 }

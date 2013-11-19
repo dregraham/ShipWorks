@@ -512,6 +512,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("InternationalShippingService", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("FeedbackUpdatedThrough", fieldHashtable);
 		}
 		#endregion
 
@@ -726,6 +729,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)EbayStoreFieldIndex.InternationalShippingService, true); }
 			set	{ SetValue((int)EbayStoreFieldIndex.InternationalShippingService, value); }
+		}
+
+		/// <summary> The FeedbackUpdatedThrough property of the Entity EbayStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "EbayStore"."FeedbackUpdatedThrough"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> FeedbackUpdatedThrough
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)EbayStoreFieldIndex.FeedbackUpdatedThrough, false); }
+			set	{ SetValue((int)EbayStoreFieldIndex.FeedbackUpdatedThrough, value); }
 		}
 
 

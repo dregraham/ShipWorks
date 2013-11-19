@@ -73,6 +73,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     return;
                 }
 
+                if (!DownloadFeedback())
+                {
+                    return;
+                }
+
                 // Done
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
@@ -90,6 +95,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new DownloadException(ex.Message, ex);
             }
         }
+
+        #region Orders
 
         /// <summary>
         /// Download all orders from eBay
@@ -141,12 +148,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation
-            EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType));
+            EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
 
-            // Special processing for cancelled orders
-            if (orderType.OrderStatus == OrderStatusCodeType.Cancelled)
+            // Special processing for cancelled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
+            if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
             {
-                ProcessCancelledOrder(order, orderType);
+                log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's cancelled.", orderType.OrderID);
                 return;
             }
 
@@ -162,6 +169,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Update last modified
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
 
+            // Online status
+            order.OnlineStatusCode = (int) orderType.OrderStatus;
+            order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
+
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
             order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
@@ -171,6 +182,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
             {
                 order.RequestedShipping = EbayUtility.GetShipmentMethodName(orderType.ShippingServiceSelected.ShippingService);
+            }
+            else
+            {
+                order.RequestedShipping = "";
             }
 
             // Load all the transactions (line items) for the order
@@ -199,27 +214,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             BalanceOrderTotal(order, amount);
 
             SaveDownloadedOrder(order);
-        }
-
-        /// <summary>
-        /// Special processing for an order that has been cancelled on eBay
-        /// </summary>
-        private void ProcessCancelledOrder(EbayOrderEntity order, OrderType orderType)
-        {
-            // If we'd never seen it before, there's no reason to do anything - just ignore it.
-            if (order.IsNew)
-            {
-                log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's cancelled.", orderType.OrderID);
-            }
-
-            // If we do have this order, then we need to remove it from our system.
-            else
-            {
-                // I think here what we can do is if there are no processed shipments, we can safely delete the existing order.  If there are processed shipments,
-                // then we can't delete it.  It should (maybe?) get deleted once the new order that the transactions moved to gets seen, and those transactions
-                // get moved to the new one.
-                throw new NotImplementedException("Cancelled non-new orders");
-            }
         }
 
         /// <summary>
@@ -256,6 +250,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (orderItem == null)
                 {
                     orderItem = (EbayOrderItemEntity) InstantiateOrderItem(order);
+
+                    orderItem.LocalEbayOrderID = orderItem.OrderID;
+                    orderItem.EbayItemID = long.Parse(transaction.Item.ItemID);
+                    orderItem.EbayTransactionID = long.Parse(transaction.TransactionID);
                 }
 
                 UpdateTransaction(orderItem, transaction, orderType.CheckoutStatus);
@@ -962,5 +960,160 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
             }
         }
+
+        #endregion
+
+        #region Feedback
+
+        /// <summary>
+        /// Download all feedback
+        /// </summary>
+        private bool DownloadFeedback()
+        {
+            Progress.Detail = "Checking for feedback...";
+            Progress.PercentComplete = 0;
+
+            int page = 1;
+            int count = 1;
+
+            DateTime? downloadThrough = ((EbayStoreEntity) Store).FeedbackUpdatedThrough;
+
+            // The date to stop looking at feedback, even if more exists
+            if (downloadThrough == null)
+            {
+                downloadThrough = GetOldestOrderDate();
+                if (downloadThrough == null)
+                {
+                    return true;
+                }
+            }
+
+            // Go back a max of 30 days
+            if (downloadThrough < DateTime.UtcNow.AddDays(-30))
+            {
+                downloadThrough = DateTime.UtcNow.AddDays(-30);
+            }
+
+            // Tracks the newest feedback we've seen - which is where we will start next time.  But only if we complete this time.
+            DateTime newestFeedback = downloadThrough.Value;
+
+            // Keep going until the user cancels or there aren't any more.
+            while (true)
+            {
+                GetFeedbackResponseType response = webClient.GetFeedback(page);
+
+                // Quit if eBay says there aren't any more
+                if (response.FeedbackDetailItemTotal == 0)
+                {
+                    if (page > 1)
+                    {
+                        SaveFeedbackCheckpoint(newestFeedback);
+                    }
+
+                    return true;
+                }
+
+                // Process all of the downloaded feedback
+                foreach (FeedbackDetailType feedback in response.FeedbackDetailArray)
+                {
+                    DateTime feedbackDate = feedback.CommentTime.ToUniversalTime();
+
+                    // Record this as the newest we've seen if necessary
+                    if (feedbackDate > newestFeedback)
+                    {
+                        newestFeedback = feedbackDate;
+                    }
+
+                    // If this goes back prior to when we want to look for feedback, we are done
+                    if (feedbackDate < downloadThrough)
+                    {
+                        SaveFeedbackCheckpoint(newestFeedback);
+
+                        return true;
+                    }
+
+                    ProcessFeedback(feedback);
+
+                    Progress.Detail = string.Format("Processing feedback {0}...", count++);
+
+                    // Check for user cancel
+                    if (Progress.IsCancelRequested)
+                    {
+                        return false;
+                    }
+                }
+
+                // Next page
+                page++;
+            }
+        }
+
+        /// <summary>
+        /// Save the checkpoint for how far back to go looking for feedback
+        /// </summary>
+        private void SaveFeedbackCheckpoint(DateTime newestFeedback)
+        {
+            EbayStoreEntity eBayStore = (EbayStoreEntity) Store;
+
+            eBayStore.FeedbackUpdatedThrough = newestFeedback;
+            SqlAdapter.Default.SaveAndRefetch(eBayStore);
+        }
+
+        /// <summary>
+        /// Process the given feedback
+        /// </summary>
+        private void ProcessFeedback(FeedbackDetailType feedback)
+        {
+            EbayOrderEntity order = FindOrder(new EbayOrderIdentifier(feedback.OrderLineItemID), true);
+            if (order == null)
+            {
+                return;
+            }
+
+            log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
+
+            EbayOrderItemEntity item = order.OrderItems.OfType<EbayOrderItemEntity>().First(i => i.OrderLineItemID == feedback.OrderLineItemID);
+
+            // Feedback we've recieved
+            if (feedback.Role == TradingRoleCodeType.Seller)
+            {
+                item.FeedbackReceivedType = (int) feedback.CommentType;
+                item.FeedbackReceivedComments = feedback.CommentText;
+            }
+            else
+            {
+                item.FeedbackLeftType = (int) feedback.CommentType;
+                item.FeedbackLeftComments = feedback.CommentText;
+            }
+
+            // save the order item
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveEntity(item);
+            }
+        }
+
+        /// <summary>
+        /// Gets the smallest order date, combined or not, for this store in the database
+        /// </summary>
+        private DateTime? GetOldestOrderDate()
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                object result = adapter.GetScalar(
+                    OrderFields.OrderDate,
+                    null, AggregateFunction.Min,
+                    OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
+
+                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
+
+                log.InfoFormat("MIN(OrderDate) = {0:u}", dateTime);
+
+                return dateTime;
+            }
+        }
+
+        #endregion
+
     }
 }

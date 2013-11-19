@@ -268,10 +268,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayOrderID = 0,
                 EbayBuyerID = "",
 
-                BuyerFeedbackScore = 0,
-                BuyerFeedbackPrivate = false,
-
-                SelectedShippingMethod = 0,
+                SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
                 
                 GspEligible = false,
                 GspFirstName = "",
@@ -313,7 +310,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 FeedbackReceivedType = (int) EbayFeedbackType.None,
                 FeedbackReceivedComments = "",
 
-                CheckoutStatus = (int) CheckoutStatusCodeType.CheckoutIncomplete,
                 MyEbayPaid = false,
                 MyEbayShipped = false,
 
@@ -323,7 +319,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 PayPalAddressStatus = (int) AddressStatusCodeType.None,
                 PayPalTransactionID = "",
 
-                SellerPaidStatus = (int) PaidStatusCodeType.NotPaid,
                 SellingManagerRecord = 0,
             };
         }
@@ -453,11 +448,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// ChannelAdvisor does not have an Online Status
+        /// eBay has online status and online last modified
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            if (column == OnlineGridColumnSupport.LastModified)
+            if (column == OnlineGridColumnSupport.LastModified || column == OnlineGridColumnSupport.OnlineStatus)
             {
                 return true;
             }
@@ -591,8 +586,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Selling Manager record
             ElementOutline sellingElement = outline.AddElement("SellingManager");
             sellingElement.AddElement("RecordNumber", () => item.Value.SellingManagerRecord.ToString());
-            sellingElement.AddElement("ProductName", () => item.Value.SellingManagerProductName);
-            sellingElement.AddElement("PartNumber", () => item.Value.SellingManagerProductPart);
 
             // only write out paypal stuff if we know the paypal transaction id
             ElementOutline paypalElement = outline.AddElement("PayPal", ElementOutline.If(() => item.Value.PayPalTransactionID.Length > 0));

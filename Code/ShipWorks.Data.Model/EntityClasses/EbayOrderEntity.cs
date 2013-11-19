@@ -489,12 +489,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EbayBuyerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("BuyerFeedbackScore", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("BuyerFeedbackPrivate", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CombinedLocally", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -649,28 +643,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.EbayBuyerID, true); }
 			set	{ SetValue((int)EbayOrderFieldIndex.EbayBuyerID, value); }
-		}
-
-		/// <summary> The BuyerFeedbackScore property of the Entity EbayOrder<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrder"."BuyerFeedbackScore"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 BuyerFeedbackScore
-		{
-			get { return (System.Int32)GetValue((int)EbayOrderFieldIndex.BuyerFeedbackScore, true); }
-			set	{ SetValue((int)EbayOrderFieldIndex.BuyerFeedbackScore, value); }
-		}
-
-		/// <summary> The BuyerFeedbackPrivate property of the Entity EbayOrder<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrder"."BuyerFeedbackPrivate"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean BuyerFeedbackPrivate
-		{
-			get { return (System.Boolean)GetValue((int)EbayOrderFieldIndex.BuyerFeedbackPrivate, true); }
-			set	{ SetValue((int)EbayOrderFieldIndex.BuyerFeedbackPrivate, value); }
 		}
 
 		/// <summary> The CombinedLocally property of the Entity EbayOrder<br/><br/>
