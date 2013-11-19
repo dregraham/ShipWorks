@@ -11,7 +11,6 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

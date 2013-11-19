@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     previousAddress = currentAddress;
                 }
 
-                topLabel.Text = "Select a Hold At Location:";
+                topLabel.Text = "Select a Hold At FedEx Location:";
                 ResizeDialog();
             }
             catch (CarrierException ex)

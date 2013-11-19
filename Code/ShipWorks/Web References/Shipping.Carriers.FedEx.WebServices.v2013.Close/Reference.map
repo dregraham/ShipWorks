@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///E:/Interapptive/Applications/ShipWorks3x/Branches/3.2.x - FedExRecertification/Code/ShipWorks/Shipping/Carriers/FedEx/Api/v2013/Wsdl/CloseService_v2.wsdl" filename="CloseServiceDefinitions.wsdl" />
-  </Results>
-</DiscoveryClientResultsFile>

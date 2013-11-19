@@ -404,18 +404,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.FootnoteCreator = () => new EndiciaExpress1RateDiscountedFootnote(endiciaRates, express1Rates);
+                            finalGroup.FootnoteCreator = () => new Express1RateDiscountedFootnote(endiciaRates, express1Rates);
                         }
                         else
                         {
-                            finalGroup.FootnoteCreator = () => new EndiciaExpress1RateNotQualifiedFootnote();
+                            finalGroup.FootnoteCreator = () => new Express1RateNotQualifiedFootnote();
                         }
                     }
                     else
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
                         {
-                            finalGroup.FootnoteCreator = () => new EndiciaExpress1RatePromotionFootnote();
+                            IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
+                            finalGroup.FootnoteCreator = () => new Express1RatePromotionFootnote(express1Settings);
                         }
                     }
 

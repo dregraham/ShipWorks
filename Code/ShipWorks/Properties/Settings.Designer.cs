@@ -22,5 +22,6 @@ namespace ShipWorks.Properties {
                 return defaultInstance;
             }
         }
+      
     }
 }

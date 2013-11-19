@@ -15,8 +15,8 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
@@ -376,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
-            profile.FedEx.Signature = (int) FedExSignatureType.NoSignature;
+            profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
             profile.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             profile.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
             profile.FedEx.NonStandardContainer = false;

@@ -18,6 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         private Mock<IExpress1RegistrationGateway> gateway;
         private Mock<IExpress1RegistrationRepository> repository;
         private Mock<IExpress1RegistrationValidator> validator;
+        private Mock<IExpress1PasswordEncryptionStrategy> encryptionStrategy;
 
         private Express1RegistrationResult registrationResult;
 
@@ -44,7 +45,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             validator.Setup(v => v.ValidatePaymentInfo(It.IsAny<Express1Registration>()))
                      .Returns(new List<Express1ValidationError>());
 
-            testObject = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object, validator.Object);
+            encryptionStrategy = new Mock<IExpress1PasswordEncryptionStrategy>();
+            encryptionStrategy.Setup(s => s.EncryptPassword(It.IsAny<Express1Registration>())).Returns("ThePasswordHasBeenEncrypted");
+
+            testObject = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object,encryptionStrategy.Object, validator.Object);
         }
 
         [TestMethod]
@@ -161,6 +165,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject.DeleteAccount();
 
             repository.Verify(r => r.Delete(testObject), Times.Never());
+        }
+
+        [TestMethod]
+        public void EncryptedPassword_DelegatesToEncryptionStrategy_Test()
+        {
+            string encryptedPassword = testObject.EncryptedPassword;
+
+            encryptionStrategy.Verify(s => s.EncryptPassword(testObject), Times.Once());
+        }
+
+        [TestMethod]
+        public void EncryptedPassword_DoesNotModifyValue_FromEncryptionStrategy_Test()
+        {
+            encryptionStrategy.Setup(s => s.EncryptPassword(It.IsAny<Express1Registration>())).Returns("ThePasswordHasBeenEncrypted");
+            string encryptedPassword = testObject.EncryptedPassword;
+
+            Assert.AreEqual("ThePasswordHasBeenEncrypted", encryptedPassword);
         }
     }
 }

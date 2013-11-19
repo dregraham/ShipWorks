@@ -22,6 +22,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
 using System.Data.SqlClient;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data.Caching
 {
@@ -47,6 +48,8 @@ namespace ShipWorks.Data.Caching
         // Notifiers of changes
         Dictionary<EntityType, EntityTypeChangeNotifier> changeNotifiers;
 
+        private readonly ExecutionMode executionMode;
+        
         // What we actually store in the cache
         class CacheEntry
         {
@@ -62,10 +65,11 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Constructor
         /// </summary>
-        public EntityRelationCache(EntityCache entityCache)
+        public EntityRelationCache(EntityCache entityCache, ExecutionMode executionMode)
         {
             this.entityCache = entityCache;
             this.entityTypes = entityCache.EntityTypes.ToArray();
+            this.executionMode = executionMode;
 
             changeNotifiers = entityTypes.ToDictionary(e => e, e => new EntityTypeChangeNotifier(e));
         }
@@ -130,7 +134,7 @@ namespace ShipWorks.Data.Caching
             if (needsFetched.Count > 0)
             {
                 // If we are on the UI thread, don't wait if we can't get the lock. On the background thread, always wait.
-                bool tookLock = semaphore.Wait((Program.ExecutionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
+                bool tookLock = semaphore.Wait((executionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
 
                 try
                 {

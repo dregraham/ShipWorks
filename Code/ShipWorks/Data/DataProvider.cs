@@ -22,6 +22,7 @@ using System.Runtime.Caching;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Caching;
 using ShipWorks.Data.Utility;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data
 {
@@ -41,6 +42,8 @@ namespace ShipWorks.Data
 
         // The wrapper that monitors the cache for cahnges
         static EntityCacheChangeMonitor cacheChangeMonitor;
+
+        private static ExecutionMode executionMode;
 
         // The entity types we support caching of and monitor for changes
         static EntityType[] changeMonitoredEntityTypes = new EntityType[]
@@ -68,15 +71,26 @@ namespace ShipWorks.Data
         /// </summary>
         public static event EventHandler EntityChangeDetected;
 
+
         /// <summary>
         /// Do one-time application level initialization
         /// </summary>
         public static void InitializeForApplication()
         {
+            InitializeForApplication(Program.ExecutionMode);
+        }
+
+        /// <summary>
+        /// Do one-time application level initialization
+        /// </summary>
+        public static void InitializeForApplication(ExecutionMode mode)
+        {
+            executionMode = mode;
+
             entityTypeChangeVersions = changeMonitoredEntityTypes.ToDictionary(e => e, e => new EntityTypeChangeVersion(e));
 
-            entityCache = new EntityCache(changeMonitoredEntityTypes);
-            relationCache = new EntityRelationCache(entityCache);
+            entityCache = new EntityCache(changeMonitoredEntityTypes, executionMode);
+            relationCache = new EntityRelationCache(entityCache, executionMode);
 
             orderHeaderProvider = new OrderHeaderProvider(entityCache);
 
@@ -89,7 +103,19 @@ namespace ShipWorks.Data
         /// </summary>
         public static void InitializeForCurrentDatabase()
         {
+            InitializeForCurrentDatabase(Program.ExecutionMode);
+        }
+
+        /// <summary>
+        /// Clears any existing cache entries in preperation for a newly connected database. This
+        /// overloaded version of InitializeForCurrentDatabase is intended to be used for 
+        /// integration testing purposes.
+        /// </summary>
+        public static void InitializeForCurrentDatabase(ExecutionMode mode)
+        {
             Reset();
+
+            executionMode = mode;
 
             // Properly dispose the old one if there is one
             if (cacheChangeMonitor != null)
@@ -99,7 +125,7 @@ namespace ShipWorks.Data
                 cacheChangeMonitor = null;
             }
 
-            cacheChangeMonitor = new EntityCacheChangeMonitor(entityCache, relationCache);
+            cacheChangeMonitor = new EntityCacheChangeMonitor(entityCache, relationCache, executionMode);
             cacheChangeMonitor.CacheChanged += new EntityCacheChangeMonitoredChangedEventHandler(OnChangeMonitorChangedCache);
         }
 
@@ -303,7 +329,7 @@ namespace ShipWorks.Data
                 orderHeaderProvider.InitiateHeaderLoading();
             }
 
-            if (Program.ExecutionMode.IsUIDisplayed)
+            if (executionMode.IsUIDisplayed)
             {
                 Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
                     {

@@ -43,16 +43,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelPriorityAlert.AutoSize = true;
             this.labelPriorityAlert.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPriorityAlert.Location = new System.Drawing.Point(7, 6);
+            this.labelPriorityAlert.Location = new System.Drawing.Point(6, 6);
             this.labelPriorityAlert.Name = "labelPriorityAlert";
-            this.labelPriorityAlert.Size = new System.Drawing.Size(71, 13);
+            this.labelPriorityAlert.Size = new System.Drawing.Size(104, 13);
             this.labelPriorityAlert.TabIndex = 0;
-            this.labelPriorityAlert.Text = "Priority Alert:";
+            this.labelPriorityAlert.Text = "FedEx Priority Alert:";
             this.labelPriorityAlert.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lalbelPriorityAlertContentDetail
             // 
-            this.lalbelPriorityAlertContentDetail.Location = new System.Drawing.Point(10, 30);
+            this.lalbelPriorityAlertContentDetail.Location = new System.Drawing.Point(40, 30);
             this.lalbelPriorityAlertContentDetail.Name = "lalbelPriorityAlertContentDetail";
             this.lalbelPriorityAlertContentDetail.Size = new System.Drawing.Size(68, 37);
             this.lalbelPriorityAlertContentDetail.TabIndex = 2;
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.priorityAlertContentDetail.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.priorityAlertContentDetail.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.priorityAlertContentDetail.Location = new System.Drawing.Point(84, 30);
+            this.priorityAlertContentDetail.Location = new System.Drawing.Point(114, 30);
             this.fieldLengthProvider.SetMaxLengthSource(this.priorityAlertContentDetail, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExPackagePriorityAlertContentDetail);
             this.priorityAlertContentDetail.Multiline = true;
             this.priorityAlertContentDetail.Name = "priorityAlertContentDetail";
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.priorityAlertEnhancementType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.priorityAlertEnhancementType.FormattingEnabled = true;
-            this.priorityAlertEnhancementType.Location = new System.Drawing.Point(84, 3);
+            this.priorityAlertEnhancementType.Location = new System.Drawing.Point(114, 3);
             this.priorityAlertEnhancementType.Name = "priorityAlertEnhancementType";
             this.priorityAlertEnhancementType.PromptText = "(Multiple Values)";
             this.priorityAlertEnhancementType.Size = new System.Drawing.Size(211, 21);
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.priorityAlertEnhancementType);
             this.Controls.Add(this.labelPriorityAlert);
             this.Name = "FedExPackagePriorityAlertsControl";
-            this.Size = new System.Drawing.Size(309, 138);
+            this.Size = new System.Drawing.Size(334, 138);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

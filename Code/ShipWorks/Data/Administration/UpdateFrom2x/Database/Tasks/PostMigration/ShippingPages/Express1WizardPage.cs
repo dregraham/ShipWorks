@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages
 {
@@ -69,7 +70,10 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         {
             // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
             // if they canceled before getting there endicia account# emailed to them.
-            using (Express1EndiciaSetupWizard wizard = new Express1EndiciaSetupWizard())
+
+            // There wasn't an Express1 for Stamps.com in ShipWorks 2x, so we can explicitly call out the Express1 for Endicia 
+            // shipment type here
+            using (Form wizard = new Express1EndiciaShipmentType().CreateSetupWizard())
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {

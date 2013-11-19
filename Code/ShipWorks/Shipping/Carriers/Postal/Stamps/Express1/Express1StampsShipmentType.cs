@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override Form CreateSetupWizard()
         {
-            Express1Registration registration = new Express1Registration(ShipmentTypeCode);
+            Express1Registration registration = new Express1Registration(ShipmentTypeCode, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new StampsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
             StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { IsExpress1 = true };
             StampsOptionsControl optionsControl = new StampsOptionsControl { IsExpress1 = true };
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
         }
-
+        
         /// <summary>
         /// Creates the Express1/Stamps settings control.
         /// </summary>
@@ -89,6 +89,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             try
             {
+                // Express1 for Stamps.com requires that postage be hidden per their negotiated
+                // service agreement
+                shipment.Postal.Stamps.HidePostage = true;
                 StampsApiSession.ProcessShipment(shipment);
             }
             catch(StampsException ex)
