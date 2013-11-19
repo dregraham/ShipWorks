@@ -314,5 +314,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             Assert.IsTrue(testObject.SupportsGetRates);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ProcessShipment_ThrowsInvalidOperationException_Test()
+        {
+            testObject.ProcessShipment(new ShipmentEntity());
+        }
     }
 }

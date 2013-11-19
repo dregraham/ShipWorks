@@ -185,7 +185,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                "your shipping accounts have been setup for the shipping providers being used with best rate.", Environment.NewLine);
 
                 throw new ShippingException(message);
-
             }
 
             foreach (IBestRateShippingBroker broker in bestRateShippingBrokers)
@@ -230,7 +229,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            // This is by design. The best rate shipment type should never actually 
+            // process a shipment due to the pre-process functionality
+            throw new InvalidOperationException();
         }
 
         /// <summary>
