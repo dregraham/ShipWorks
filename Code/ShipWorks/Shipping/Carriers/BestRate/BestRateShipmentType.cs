@@ -55,6 +55,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Indicates if the shipment service type supports getting rates
+        /// </summary>
+        public override bool SupportsGetRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// Indicates that this shipment type supports shipping from an account address
+        /// </summary>
+        public override bool SupportsAccountAsOrigin
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
@@ -257,25 +276,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override SettingsControlBase CreateSettingsControl()
         {
             return new BestRateSettingsControl();
-        }
-
-        /// <summary>
-        /// Indicates if the shipment service type supports getting rates
-        /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Indicates that this shipment type supports shipping from an account address
-        /// </summary>
-        public override bool SupportsAccountAsOrigin
-        {
-            get
-            {
-                return true;
-            }
         }
 
         /// <summary>
