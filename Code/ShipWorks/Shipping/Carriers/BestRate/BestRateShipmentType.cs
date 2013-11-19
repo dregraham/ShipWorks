@@ -108,6 +108,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new BestRateServiceControl(ShipmentTypeCode);
         }
 
+        /// <summary>
+        /// Create the UserControl that is used to edit a profile for the service
+        /// </summary>
+        public override ShippingProfileControlBase CreateProfileControl()
+        {
+            return new BestRateProfileControl();
+        }
 
         /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
