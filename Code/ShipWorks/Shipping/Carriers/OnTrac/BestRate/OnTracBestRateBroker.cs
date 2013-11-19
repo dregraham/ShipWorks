@@ -1,195 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Business;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
-    class OnTracBestRateBroker : IBestRateShippingBroker
+    class OnTracBestRateBroker : BestRateBroker<OnTracAccountEntity>
     {
-
-        private readonly OnTracShipmentType shipmentType;
-        private readonly ICarrierAccountRepository<OnTracAccountEntity> accountRepository;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTracBestRateBroker"/> class.
         /// </summary>
-        public OnTracBestRateBroker() : this(new OnTracShipmentType(), new OnTracAccountRepository())
-        {}
+        public OnTracBestRateBroker()
+            : this(new OnTracShipmentType(), new OnTracAccountRepository())
+        {
+
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        private OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository)
+        private OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository) :
+            base(shipmentType, accountRepository, "OnTrac")
         {
-            this.shipmentType = shipmentType;
-            this.accountRepository = accountRepository;
+
         }
 
         /// <summary>
-        /// Gets a value indicating whether there any accounts available to a broker.
+        /// Applies OnTrac specific data to the specified shipment
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
-        /// </value>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public bool HasAccounts
+        /// <param name="currentShipment">Shipment that will be modified</param>
+        /// <param name="originalShipment">Shipment that contains original data for copying</param>
+        /// <param name="account">Account that will be attached to the shipment</param>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, OnTracAccountEntity account)
         {
-            get { return accountRepository.Accounts.Any(); }
-        }
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
 
-
-        /// <summary>
-        /// Gets the rates for each of the accounts of a specific shipping provider based
-        /// on the configuration of the best rate shipment data.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
-        /// <returns>
-        /// A list of RateResults for each account of a specific shipping provider (i.e. if two accounts 
-        /// are registered for a single provider, the list of rates would have two entries if both 
-        /// accounts returned rates).
-        /// </returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            List<RateResult> allRates = new List<RateResult>();
-
-            List<OnTracAccountEntity> accounts = accountRepository.Accounts.ToList();
-
-            Dictionary<RateResult, OnTracShipmentEntity> rateShipments = new Dictionary<RateResult, OnTracShipmentEntity>();
-
-            // Create a clone so we don't have to worry about modifying the original shipment
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentTypeCode.OnTrac;
-
-            foreach (OnTracAccountEntity account in accounts)
-            {
-                testRateShipment.OnTrac = new OnTracShipmentEntity();
-
-                shipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateShipmentSettings(testRateShipment, shipment, account);
-
-                try
-                {
-                    IEnumerable<RateResult> results = shipmentType.GetRates(testRateShipment).Rates
-                                                                  .Where(r => r.Tag != null)
-                                                                  .Where(r => r.Amount > 0);
-
-                    // Save a mapping between the rate and the shipment used to get the rate
-                    foreach (RateResult result in results)
-                    {
-                        rateShipments.Add(result, testRateShipment.OnTrac);
-                    }
-
-                    allRates.AddRange(results);
-                }
-                catch (ShippingException ex)
-                {
-                    // Offload exception handling to the passed in exception handler
-                    exceptionHandler(ex);
-                }
-            }
-
-            // Return all the rates, then group by OnTracServiceType and ServiceLevel
-            List<RateResult> filteredRates = allRates
-                .GroupBy(r => (OnTracServiceType)r.Tag)
-                .SelectMany(RateResultsByServiceLevel)
-                .ToList();
-
-            foreach (RateResult rate in filteredRates)
-            {
-                // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
-                rate.Description = rate.Description.Contains("OnTrac") ? rate.Description : "OnTrac " + rate.Description;
-            }
-
-            return filteredRates.ToList();
-        }
-
-        /// <summary>
-        /// Creates a function that can be used to select a specific rate
-        /// </summary>
-        /// <param name="rateShipment">OnTracShipment that was used to get the rate</param>
-        /// <param name="originalTag">OnTracServiceType associated with the specific rate</param>
-        /// <returns>A function that, when executed, will convert the passed in shipment to a OnTrac shipment
-        /// used to create the rate.</returns>
-        private static Action<ShipmentEntity> CreateRateSelectionFunction(OnTracShipmentEntity rateShipment, object originalTag)
-        {
-            return selectedShipment =>
-            {
-                rateShipment.Service = (int)((OnTracServiceType)originalTag);
-                selectedShipment.ShipmentType = (int)ShipmentTypeCode.OnTrac;
-                ShippingManager.EnsureShipmentLoaded(selectedShipment);
-
-                if (selectedShipment.OnTrac == null)
-                {
-                    selectedShipment.OnTrac = rateShipment;
-                }
-                else
-                {
-                    // Set the rated shipment as the OnTrac shipment
-                    selectedShipment.OnTrac = rateShipment;
-
-                    selectedShipment.OnTrac.IsNew = false;
-                }
-            };
-        }
-
-        /// <summary>
-        /// Gets a list of rates by OnTracServiceType
-        /// </summary>
-        /// <param name="typeGroup">Group </param>
-        /// <returns></returns>
-        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<OnTracServiceType, RateResult> typeGroup)
-        {
-            return typeGroup
-                .GroupBy(r => r.ServiceLevel)
-                .Select(serviceLevelRate => serviceLevelRate.OrderBy(rateToOrder => rateToOrder.Amount)
-                    .FirstOrDefault());
-        }
-
-        /// <summary>
-        /// Updates the shipment settings.
-        /// </summary>
-        /// <param name="testRateShipment">The test rate shipment.</param>
-        /// <param name="originalShipment">The original shipment.</param>
-        /// <param name="account">The account.</param>
-        private void UpdateShipmentSettings(ShipmentEntity testRateShipment, ShipmentEntity originalShipment, OnTracAccountEntity account)
-        {
-            testRateShipment.OriginOriginID = originalShipment.OriginOriginID;
-
-            // Set the address of the shipment to either the UPS account, or the address of the original shipment
-            if (testRateShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
-            {
-                PersonAdapter.Copy(account, "", testRateShipment, "Origin");
-            }
-            else
-            {
-                PersonAdapter.Copy(originalShipment, testRateShipment, "Origin");
-            }
-
-            testRateShipment.OnTrac.DimsHeight = testRateShipment.BestRate.DimsHeight;
-            testRateShipment.OnTrac.DimsWidth = testRateShipment.BestRate.DimsWidth;
-            testRateShipment.OnTrac.DimsLength = testRateShipment.BestRate.DimsLength;
+            currentShipment.OnTrac.DimsHeight = originalShipment.BestRate.DimsHeight;
+            currentShipment.OnTrac.DimsWidth = originalShipment.BestRate.DimsWidth;
+            currentShipment.OnTrac.DimsLength = originalShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            testRateShipment.OnTrac.DimsWeight = originalShipment.ContentWeight;
-            testRateShipment.OnTrac.DimsAddWeight = false;
-            testRateShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
-            testRateShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
+            currentShipment.OnTrac.DimsWeight = originalShipment.ContentWeight;
+            currentShipment.OnTrac.DimsAddWeight = false;
+            currentShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
+            currentShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
+        }
+
+        /// <summary>
+        /// Checks whether the service type specified in the rate should be excluded from best rate consideration
+        /// </summary>
+        /// <param name="tag">OnTrac service type from the rate tag</param>
+        /// <returns></returns>
+        protected override bool IsExcludedServiceType(object tag)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Creates and attaches a new instance of a OnTracShipment to the specified shipment
+        /// </summary>
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            shipment.OnTrac = new OnTracShipmentEntity();
+        }
+
+        /// <summary>
+        /// Sets the service type on the OnTrac shipment from the value in the rate tag
+        /// </summary>
+        /// <param name="shipment">Shipment that will be updated</param>
+        /// <param name="tag">Rate tag that represents the service type</param>
+        protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
+        {
+            shipment.OnTrac.Service = (int)tag;
         }
     }
 }
