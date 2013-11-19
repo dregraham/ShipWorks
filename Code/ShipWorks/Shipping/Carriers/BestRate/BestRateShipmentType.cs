@@ -194,6 +194,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
         {
+            var serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
             List<RateResult> rates = new List<RateResult>();
 
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
@@ -219,13 +220,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     .Where(x => (int)x.ServiceLevel <= shipment.BestRate.ServiceLevel)
                     .Max(x => x.ExpectedDeliveryDate);
 
-                rates = rates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate).ToList();
+                rates = rates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate || serviceLevelSpeedComparer.Compare(x.ServiceLevel, (ServiceLevelType) shipment.BestRate.ServiceLevel) <= 0).ToList();
             }
             
 
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
-            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, new ServiceLevelSpeedComparer());
+            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
             List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
 
             // Allow each rate result the chance to mask its description if needed based on the 
