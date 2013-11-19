@@ -181,7 +181,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             if (!bestRateShippingBrokers.Any())
             {
-                throw new ShippingException("No Carrier with an account has been selected.");
+                string message = string.Format("There are not any accounts configured to use with best rate.{0}Check the shipping settings to ensure " +
+                                               "your shipping accounts have been setup for the shipping providers being used with best rate.", Environment.NewLine);
+
+                throw new ShippingException(message);
+
             }
 
             foreach (IBestRateShippingBroker broker in bestRateShippingBrokers)
