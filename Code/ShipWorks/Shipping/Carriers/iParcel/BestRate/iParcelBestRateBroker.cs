@@ -69,6 +69,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             shipment.IParcel = new IParcelShipmentEntity();
         }
 
+        protected override int GetServiceTypeFromTag(object tag)
+        {
+            return (int) ((iParcelRateSelection) tag).ServiceType;
+        }
+
         /// <summary>
         /// Sets the service type on the IParcel shipment from the value in the rate tag
         /// </summary>
@@ -76,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// <param name="tag">Rate tag that represents the service type</param>
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
-            shipment.IParcel.Service = (int) tag;
+            shipment.IParcel.Service = GetServiceTypeFromTag(tag);
         }
 
         /// <summary>
