@@ -586,7 +586,6 @@
             this.service.PromptText = "(Multiple Values)";
             this.service.Size = new System.Drawing.Size(250, 21);
             this.service.TabIndex = 49;
-            this.service.SelectedIndexChanged += new System.EventHandler(this.OnChangeService);
             // 
             // confirmationState
             // 
