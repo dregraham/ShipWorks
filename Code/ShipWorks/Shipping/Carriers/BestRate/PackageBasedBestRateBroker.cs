@@ -40,10 +40,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             IList<TPackage> packages = Packages(shipment);
 
-            // Grab the original ups package so we can get it's UpsPackageID, as we'll need to set it on the
+            // Grab the original package so we can get it's PackageID, as we'll need to set it on the
             // cloned package.  There's probably a better way, so need to check with Brian.
-            TPackage selectedUpsPackageEntity = packages[0];
-            long originalPackageId = PackageId(selectedUpsPackageEntity);
+            TPackage selectedPackageEntity = packages[0];
+            long originalPackageId = PackageId(selectedPackageEntity);
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             packages = Packages(shipment);
 
-            // Update the first package UpsPackgeID to be that of the original persisted package.  If this isn't 
+            // Update the first package PackgeID to be that of the original persisted package.  If this isn't 
             // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
             SetPackageId(packages[0], originalPackageId);
         }

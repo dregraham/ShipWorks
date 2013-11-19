@@ -81,7 +81,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <param name="tag">Rate tag that represents the service type</param>
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
-            shipment.FedEx.Service = (int) tag;
+            shipment.FedEx.Service = GetServiceTypeFromTag(tag);
+        }
+
+        /// <summary>
+        /// Gets the service type from tag.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns></returns>
+        protected override int GetServiceTypeFromTag(object tag)
+        {
+            return (int) ((FedExRateSelection)tag).ServiceType;
         }
 
         /// <summary>
