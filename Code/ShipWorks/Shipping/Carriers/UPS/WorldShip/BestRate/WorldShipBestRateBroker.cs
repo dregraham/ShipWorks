@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Business;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
 {
@@ -36,28 +24,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
         /// <remarks>This is designed to be used by tests</remarks>
         public WorldShipBestRateBroker(WorldShipShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository) : base(shipmentType, accountRepository)
         {
-        }
-
-        /// <summary>
-        /// Gets the single best rate for each UPS account based 
-        /// on the configuration of the best rate shipment data.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
-        /// <returns>A list of RateResults composed of the single best rate for each UPS account.</returns>
-        public new List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            // Create a clone so we don't have to worry about modifying the original shipment
-            // Switch out the shipment type to be World Ship
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentTypeCode.UpsWorldShip;
-
-            return base.GetBestRates(testRateShipment, exceptionHandler);
         }
     }
 }
