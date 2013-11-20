@@ -512,7 +512,7 @@ namespace ShipWorks.Stores.Communication
             bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
 
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditBehaviorDisabledState.Default : AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -607,6 +607,16 @@ namespace ShipWorks.Stores.Communication
             }
 
             log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Create the proper AuditBehaviorScope to used based on the configuration of auditing new orders.
+        /// </summary>
+        public static AuditBehaviorScope CreateOrderAuditScope(OrderEntity order)
+        {
+            ConfigurationEntity config = ConfigurationData.Fetch();
+
+            return new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditBehaviorDisabledState.Default : AuditBehaviorDisabledState.Disabled);
         }
 
         /// <summary>

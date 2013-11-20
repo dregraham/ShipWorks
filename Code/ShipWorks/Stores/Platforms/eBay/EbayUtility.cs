@@ -184,10 +184,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return EbayEffectiveCheckoutStatus.PaymentPendingPayPal;
             }
 
-            // If it's marked as paid in My eBay, or it's marked as no payment failure, or complete status is Complete
-            if (orderItem.MyEbayPaid || 
-                paymentStatus == PaymentStatusCodeType.NoPaymentFailure ||
-                completeStatus == CompleteStatusCodeType.Complete)
+            // If it's marked as paid in My eBay, or complete status is Complete
+            if (orderItem.MyEbayPaid || completeStatus == CompleteStatusCodeType.Complete)
             {
                 return EbayEffectiveCheckoutStatus.Paid;
             }

@@ -12,6 +12,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -19,6 +20,7 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -189,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // Load all the transactions (line items) for the order
-            LoadTransactions(order, orderType);
+            List<OrderItemEntity> abandonedItems = LoadTransactions(order, orderType);
 
             // Update PayPal information
             UpdatePayPal(order, orderType);
@@ -213,14 +215,71 @@ namespace ShipWorks.Stores.Platforms.Ebay
             double amount = orderType.AmountPaid != null ? orderType.AmountPaid.Value : orderType.Total.Value;
             BalanceOrderTotal(order, amount);
 
-            SaveDownloadedOrder(order);
+            SaveOrder(order, abandonedItems);
         }
 
         /// <summary>
-        /// Load all the transactions (line items) for the given order
+        /// Save the given order, handling all the given abandoned items that have now moved to the new order
         /// </summary>
-        private void LoadTransactions(EbayOrderEntity order, OrderType orderType)
+        private void SaveOrder(EbayOrderEntity order, List<OrderItemEntity> abandonedItems)
         {
+            List<OrderEntity> affectedOrders = new List<OrderEntity>();
+
+            // Build a distinct list of all the orders affected by the abandoned items
+            foreach (long orderID in abandonedItems.Select(i => i.OrderID).Distinct())
+            {
+                // Load the order and all of it's items (which, will duplicate any abandoned item entities)
+                OrderEntity affectedOrder = (OrderEntity) DataProvider.GetEntity(orderID);
+                affectedOrder.OrderItems.AddRange(DataProvider.GetRelatedEntities(orderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
+
+                affectedOrders.Add(affectedOrder);
+            }
+
+            // We have to use the exact scope that SaveDownloadedOrder will, or a MSDTC exception will be thrown since the connection would be slightly different
+            using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
+            {
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    // Save the new order
+                    SaveDownloadedOrder(order);
+
+                    // Go through each abandoned item and delete it
+                    foreach (OrderItemEntity item in abandonedItems)
+                    {
+                        // Detatch it from the order
+                        affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+
+                        // And delete it
+                        adapter.DeleteEntity(item);
+                    }
+
+                    // Find all the orders that have no items.  We're going to have to delete them, since they are now empty and pointless.  But before
+                    // we delete them, we need to migrate their shipments and notes so they don't just get lost.
+                    foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
+                    {
+                        // Copy the notes from the old order
+                        CopyNotes(fromOrder.OrderID, order, adapter);
+
+                        // Copy the shipments from the old order
+                        CopyShipments(fromOrder.OrderID, order, adapter);
+
+                        // Delete the old order
+                        DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
+                    }
+
+                    adapter.Commit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Load all the transactions (line items) for the given order. Returns a list of items for transactions that are being loaded that used to be apart
+        /// of another order.  Those items must be deleted when the new order is saved, as they've now moved to the new order.
+        /// </summary>
+        private List<OrderItemEntity> LoadTransactions(EbayOrderEntity order, OrderType orderType)
+        {
+            List<OrderItemEntity> abandonedItems = new List<OrderItemEntity>();
+
             // Go through each transaction in the order
             foreach (TransactionType transaction in orderType.TransactionArray)
             {
@@ -230,23 +289,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     continue;
                 }
 
-                // See if this transaction is already attached to the order and just needs updated
-                EbayOrderItemEntity orderItem = order.OrderItems.OfType<EbayOrderItemEntity>().FirstOrDefault(i => transaction.OrderLineItemID == i.OrderLineItemID);
+                // See if this item exists somewhere already in our database
+                EbayOrderItemEntity orderItem = FindItem(new EbayOrderIdentifier(transaction.Item.ItemID, transaction.TransactionID));
 
-                // If it doesn't exist already in the order, we need to see if it exists on a different order
-                if (orderItem == null)
+                // If it does already exist, let's see if it's actually on a different order, we need to see if it exists on a different order
+                if (orderItem != null)
                 {
-                    EbayOrderEntity otherOrder = FindOrder(new EbayOrderIdentifier(transaction.Item.ItemID, transaction.TransactionID), false);
-
-                    // If another order owns this item right now, we have to delete it from that order.  Also if that other order has shipments, we're going to move
-                    // them over to this order.  And then, if that other order has no more shipments, and no more items, we'll delete it.
-                    if (otherOrder != null)
+                    // If this order is new, or if the ID's don't match, then it was on a different order and we have to move it
+                    if (order.IsNew || order.OrderID != orderItem.OrderID)
                     {
-                        throw new NotImplementedException("Moving existing items to new combined orders.");
+                        abandonedItems.Add(orderItem);
+
+                        // This will force creating a brand new order item that will recreate this one fresh on this order.  The previous item will just be deleted, effectivly moving
+                        // the item from the old order to the new order
+                        orderItem = null;
                     }
                 }
 
-                // If we still don't have an orderItem, we need to create it
+                // See if we need to create a band new order item, we need to create it
                 if (orderItem == null)
                 {
                     orderItem = (EbayOrderItemEntity) InstantiateOrderItem(order);
@@ -257,6 +317,56 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
 
                 UpdateTransaction(orderItem, transaction, orderType.CheckoutStatus);
+            }
+
+            return abandonedItems;
+        }
+
+        /// <summary>
+        /// Copies any note entities from one order to another.
+        /// </summary>
+        private static void CopyNotes(long fromOrderID, OrderEntity toOrder, SqlAdapter adapter)
+        {
+            // Make the copies
+            List<NoteEntity> newNotes = EntityUtility.CloneEntityCollection(DataProvider.GetRelatedEntities(fromOrderID, EntityType.NoteEntity).Select(n => (NoteEntity) n));
+
+            foreach (NoteEntity note in newNotes)
+            {
+                EntityUtility.MarkAsNew(note);
+                note.Order = toOrder;
+
+                NoteManager.SaveNote(note);
+            }
+        }
+
+        /// <summary>
+        /// Copies any shipment entities from one order to another
+        /// </summary>
+        private static void CopyShipments(long fromOrderID, OrderEntity toOrder, SqlAdapter adapter)
+        {
+            // Copy any existing shipments
+            foreach (ShipmentEntity shipment in ShippingManager.GetShipments(fromOrderID, false))
+            {
+                // load all carrier and customs data
+                ShippingManager.EnsureShipmentLoaded(shipment);
+
+                // clone the entity tree
+                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
+
+                // this is now a new shipment to be inserted
+                EntityUtility.MarkAsNew(clonedShipment);
+                clonedShipment.Order = toOrder;
+
+                // Mark all the carrier-specific stuff as new
+                clonedShipment.GetDependingRelatedEntities().ForEach(e => EntityUtility.MarkAsNew(e));
+
+                // And all the customers stuff as new
+                foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)
+                {
+                   EntityUtility.MarkAsNew(customsItem);
+                }
+
+                ShippingManager.SaveShipment(clonedShipment);
             }
         }
 
@@ -784,28 +894,26 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         protected override OrderEntity FindOrder(OrderIdentifier orderIdentifier)
         {
-            return FindOrder(orderIdentifier, true);
-        }
-
-        /// <summary>
-        /// Find and load an order of the given identifier, optionall including all child records
-        /// </summary>
-        private EbayOrderEntity FindOrder(OrderIdentifier orderIdentifier, bool includeChildren)
-        {
             EbayOrderIdentifier identifier = orderIdentifier as EbayOrderIdentifier;
             if (identifier == null)
             {
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
+            return FindOrder(identifier, true);
+        }
+
+        /// <summary>
+        /// Find and load an order of the given identifier, optionally including child charges
+        /// </summary>
+        private EbayOrderEntity FindOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        {
             PrefetchPath2 prefetch = null;
 
-            // When we do load the order, we'll need to grab order items, charges, shipments since they'll be needed during processing
-            if (includeChildren)
+            // When we do load the order, see if we should include charges
+            if (includeCharges)
             {
                 prefetch = new PrefetchPath2(EntityType.OrderEntity);
-                prefetch.Add(OrderEntity.PrefetchPathOrderItems).SubPath.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
-                prefetch.Add(OrderEntity.PrefetchPathOrderPaymentDetails);
                 prefetch.Add(OrderEntity.PrefetchPathOrderCharges);
             }
 
@@ -832,7 +940,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
                 else
                 {
-                    // return the order entity, with associated items, charges, etc
+                    // return the order entity
                     long orderID = (long) objOrderID;
 
                     EbayOrderEntity ebayOrder = new EbayOrderEntity(orderID);
@@ -850,6 +958,45 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
 
                 return collection.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Locate an item with the given identifier.  Can be optionally restricted to only loading the ItemID
+        /// </summary>
+        private EbayOrderItemEntity FindItem(EbayOrderIdentifier identifier, bool idOnly = false)
+        {
+            if (identifier.EbayOrderID != 0)
+            {
+                throw new InvalidOperationException("FindItem not valid for identifiers representing combined orders.");
+            }
+
+            object objItemID = SqlAdapter.Default.GetScalar(EbayOrderItemFields.OrderItemID,
+                null, AggregateFunction.None,
+                EbayOrderItemFields.EbayItemID == identifier.EbayItemID & EbayOrderItemFields.EbayTransactionID == identifier.TransactionID,
+                null);
+
+            if (objItemID == null)
+            {
+                // item does not exist
+                return null;
+            }
+            else
+            {
+                // return the item entity
+                long itemID = (long) objItemID;
+
+                EbayOrderItemEntity item = new EbayOrderItemEntity(itemID);
+
+                if (!idOnly)
+                {
+                    PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
+                    prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+
+                    SqlAdapter.Default.FetchEntity(item, prefetch);
+                }
+
+                return item;
             }
         }
 
@@ -1064,15 +1211,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void ProcessFeedback(FeedbackDetailType feedback)
         {
-            EbayOrderEntity order = FindOrder(new EbayOrderIdentifier(feedback.OrderLineItemID), true);
-            if (order == null)
+            EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
+            if (item == null)
             {
                 return;
             }
 
             log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
-
-            EbayOrderItemEntity item = order.OrderItems.OfType<EbayOrderItemEntity>().First(i => i.OrderLineItemID == feedback.OrderLineItemID);
 
             // Feedback we've recieved
             if (feedback.Role == TradingRoleCodeType.Seller)
@@ -1111,6 +1256,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 return dateTime;
             }
+        }
+
+        /// <summary>
+        /// Verify order totals are correct.
+        /// </summary>
+        protected override void VerifyOrderTotal(OrderEntity order)
+        {
+            // do nothing because during normal ebay operations, there are 
+            // times when the orders don't always balance correctly temporarily.
         }
 
         #endregion

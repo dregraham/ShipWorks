@@ -200,7 +200,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             },
 
                         new GridColumnDefinition("{85CFDCF5-4243-4dc0-90CC-777CEC004768}",
-                            new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description), "Checkout Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
+                            new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description), "Payment Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
                             EbayOrderItemFields.EffectiveCheckoutStatus)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay
