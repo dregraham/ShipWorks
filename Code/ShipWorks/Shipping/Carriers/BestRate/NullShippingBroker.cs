@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>An empty list of RateResult objects.</returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             return new List<RateResult>();
         }

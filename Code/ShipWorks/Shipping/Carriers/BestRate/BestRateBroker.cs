@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
-        public virtual List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        public virtual List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             List<RateResult> allRates = new List<RateResult>();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 catch (ShippingException ex)
                 {
                     // Offload exception handling to the passed in exception handler
-                    exceptionHandler(ex);
+                    exceptionHandler(new BrokerException(ex, BrokerExceptionSeverityLevel.High, carrierDescription));
                 }
             }
 

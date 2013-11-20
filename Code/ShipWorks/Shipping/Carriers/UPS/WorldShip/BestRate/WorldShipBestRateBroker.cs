@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>A list of RateResults composed of the single best rate for each UPS account.</returns>
-        public new List<RateResult> GetBestRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        public new List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             if (shipment == null)
             {

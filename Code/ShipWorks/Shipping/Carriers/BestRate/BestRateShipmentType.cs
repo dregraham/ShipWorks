@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, Action<ShippingException> exceptionHandler)
+        public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             var serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
             List<RateResult> rates = new List<RateResult>();

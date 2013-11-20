@@ -262,8 +262,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
                                    });
 
             testObject.GetBestRates(testShipment, ex => calledException = ex);
-
-            Assert.AreEqual(exception, calledException);
+            
+            Assert.AreEqual(exception, calledException.InnerException);
         }
 
         [TestMethod]

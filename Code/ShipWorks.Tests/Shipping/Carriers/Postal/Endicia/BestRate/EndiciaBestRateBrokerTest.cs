@@ -370,7 +370,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject.GetBestRates(testShipment, ex => calledException = ex);
 
-            Assert.AreEqual(exception, calledException);
+            Assert.AreEqual(exception, calledException.InnerException);
         }
 
         [TestMethod]
