@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, FedExAccountEntity account)
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
-
+            
             currentShipment.FedEx.Packages[0].DimsHeight = currentShipment.BestRate.DimsHeight;
             currentShipment.FedEx.Packages[0].DimsWidth = currentShipment.BestRate.DimsWidth;
             currentShipment.FedEx.Packages[0].DimsLength = currentShipment.BestRate.DimsLength;

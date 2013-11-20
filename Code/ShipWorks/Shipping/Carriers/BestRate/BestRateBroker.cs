@@ -28,12 +28,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.accountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
             ShipmentType = shipmentType;
+            GetRatesAction = shipment => ShippingManager.GetRates(shipment).Rates;
         }
 
         /// <summary>
         /// Shipment type for the broker
         /// </summary>
         protected ShipmentType ShipmentType { get; private set; }
+
+        /// <summary>
+        /// The action to GetRates.
+        /// </summary>
+        public Func<ShipmentEntity, IEnumerable<RateResult>> GetRatesAction { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether there any accounts available to a broker.
@@ -179,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         protected virtual IEnumerable<RateResult> GetRates(ShipmentEntity shipment)
         {
-            return ShipmentType.GetRates(shipment).Rates;
+            return GetRatesAction(shipment);
         }
 
         /// <summary>

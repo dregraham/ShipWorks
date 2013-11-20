@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 
@@ -41,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private Mock<ICarrierAccountRepository<UpsAccountEntity>> genericRepositoryMock;
         private Mock<UpsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
-       
+
         [TestInitialize]
         public void Initialize()
         {
@@ -83,7 +84,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x => x.Ups.Packages.Add(new UpsPackageEntity()));
 
-            testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+            testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
+            {
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+            };
 
             testShipment = new ShipmentEntity {ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity()};
         }
