@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // None is only an option if an invalid country is selected.
                 if (((OnTracServiceType)shipment.OnTrac.Service) == OnTracServiceType.None)
                 {
-                    throw new OnTracException("OnTrac does not provide service outside of the United States.");
+                    throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();

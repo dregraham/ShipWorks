@@ -287,7 +287,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             ShippingManager.EnsureShipmentLoaded(shipment);
 
-            RateGroup rateGroup = GetRates(shipment, ex => { throw ex; });
+            RateGroup rateGroup = GetRates(shipment, PreProcessExceptionHandler);
             RateResult bestRate = rateGroup.Rates.FirstOrDefault();
 
             if (bestRate == null)
@@ -303,6 +303,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return ShipmentTypeManager.GetType(shipment);
+        }
+
+        /// <summary>
+        /// Handles exceptions generated during the preprocess phase
+        /// </summary>
+        /// <param name="exception">Exception that was generated</param>
+        private static void PreProcessExceptionHandler(BrokerException exception)
+        {
+            if (exception.SeverityLevel != BrokerExceptionSeverityLevel.Low)
+            {
+                // Throw the inner exception since 
+                throw exception.InnerException;    
+            }
         }
 
         /// <summary>

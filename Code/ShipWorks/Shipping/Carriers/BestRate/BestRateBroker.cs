@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 catch (ShippingException ex)
                 {
                     // Offload exception handling to the passed in exception handler
-                    exceptionHandler(new BrokerException(ex, BrokerExceptionSeverityLevel.High, carrierDescription));
+                    exceptionHandler(WrapShippingException(ex));
                 }
             }
 
@@ -108,6 +108,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return filteredRates.ToList();
+        }
+
+        /// <summary>
+        /// Wrap a BrokerException around a ShippingException so it can be handled by BestRateShipmentType
+        /// </summary>
+        /// <param name="ex">ShippingException to wrap</param>
+        /// <returns></returns>
+        protected virtual BrokerException WrapShippingException(ShippingException ex)
+        {
+            return new BrokerException(ex, BrokerExceptionSeverityLevel.High, carrierDescription);
         }
 
         /// <summary>

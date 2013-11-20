@@ -6,6 +6,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
     class OnTracBestRateBroker : BestRateBroker<OnTracAccountEntity>
     {
+        private const string OnTracCarrierDescription = "OnTrac";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTracBestRateBroker"/> class.
         /// </summary>
@@ -21,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
         private OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "OnTrac")
+            base(shipmentType, accountRepository, OnTracCarrierDescription)
         {
 
         }
@@ -73,6 +75,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
             shipment.OnTrac.Service = (int)tag;
+        }
+
+        /// <summary>
+        /// When OnTrac doesn't service an address, mark the exception as low priority so it does not halt processing
+        /// </summary>
+        protected override BrokerException WrapShippingException(ShippingException ex)
+        {
+            OnTracException onTracException = ex.InnerException as OnTracException;
+
+            if (onTracException != null && onTracException.DoesNotServiceLocation)
+            {
+                return new BrokerException(ex, BrokerExceptionSeverityLevel.Low, OnTracCarrierDescription);
+            }
+
+            return base.WrapShippingException(ex);
         }
     }
 }
