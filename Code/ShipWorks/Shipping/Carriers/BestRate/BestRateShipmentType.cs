@@ -184,8 +184,27 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            // TODO: Handle errors so they can be displayed. This should be done during the "Notify users when best rate could not be found" story
-            return GetRates(shipment, ex => log.WarnFormat("Received an while obtaining rates from a carrier. {0}", ex.Message));
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+
+            RateGroup rateGroup = GetRates(shipment, ex =>
+            {
+                // Accumulate all of the broker exceptions for later use
+                log.WarnFormat("Received an while obtaining rates from a carrier. {0}", ex.Message);
+                brokerExceptions.Add(ex);
+            });
+
+            // Get a list of distinct exceptions based on the message text ordered by the severity level
+            IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderByDescending(e => e.SeverityLevel)
+                                                                                .GroupBy(e => e.Message)
+                                                                                .Select(m => m.First()).ToList();
+            foreach (BrokerException brokerException in distinctExceptions)
+            {
+                // Add a rate result for each of the broker exceptions, so they appear to 
+                // the user in the rates grid
+                rateGroup.Rates.Add(new RateResult("* " + brokerException.Message, string.Empty));
+            }
+
+            return rateGroup;
         }
 
         /// <summary>

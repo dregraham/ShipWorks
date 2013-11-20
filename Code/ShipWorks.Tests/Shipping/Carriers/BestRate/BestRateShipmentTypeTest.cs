@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using ShipWorks.Shipping;
+using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -10,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -372,7 +374,83 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.AreEqual(rates[0], bestRates[2]);
             Assert.AreEqual(rates[1], bestRates[3]);
             Assert.AreEqual(rates[2], bestRates[4]);
-            
+        }
+
+        [TestMethod]
+        public void GetRates_AddsBrokerExceptionsToRateGroup_WhenOneBrokerExceptionIsEncountered_Test()
+        {
+            // Use the fake broker for simulating the exception handler being called; a fake broker is used
+            // because we couldn't get this functionality with Moq
+            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(brokerException);
+
+            // We want the factory to return our fake broker for this test
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.IsTrue(rateGroup.Rates.First().Description.Contains("a shipping exception"));
+        }
+
+        [TestMethod]
+        public void GetRates_AddsBrokerExceptionsToRateGroup_WhenMultipleBrokerExceptionsAreEncountered_Test()
+        {
+            // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
+            // because we couldn't get this functionality with Moq
+            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException anotherBrokerException = new BrokerException(new ShippingException("another shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+
+            FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { brokerException, anotherBrokerException });
+
+            // We want the factory to return our fake broker for this test
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.AreEqual(2, rateGroup.Rates.Count(r => r.Description.Contains("shipping exception")));
+        }
+
+        [TestMethod]
+        public void GetRates_OrdersBrokerExceptionsFromHighestToLowestSeverity_WhenMultipleBrokerExceptionsAreEncountered_Test()
+        {
+            // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
+            // because we couldn't get this functionality with Moq
+            BrokerException lowSeverityBrokerException = new BrokerException(new ShippingException("a low severity shipping exception"), BrokerExceptionSeverityLevel.Low, "Stamps.com");
+            BrokerException highSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException anotherhighSeverityBrokerException = new BrokerException(new ShippingException("another high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+
+            FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { lowSeverityBrokerException, highSeverityBrokerException, anotherhighSeverityBrokerException });
+
+            // We want the factory to return our fake broker for this test
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            // Can't actually test the severity level, so inspect the description
+            Assert.IsTrue(rateGroup.Rates.ToList()[0].Description.Contains("high severity"));
+            Assert.IsTrue(rateGroup.Rates.ToList()[1].Description.Contains("high severity"));
+            Assert.IsTrue(rateGroup.Rates.ToList()[2].Description.Contains("low severity"));
+        }
+
+        [TestMethod]
+        public void GetRates_RemovesDuplicateMessages_WhenBrokerExceptionsAreEncountered_Test()
+        {
+            // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
+            // because we couldn't get this functionality with Moq          
+            BrokerException lowSeverityBrokerException = new BrokerException(new ShippingException("a low severity shipping exception"), BrokerExceptionSeverityLevel.Low, "Stamps.com");
+            BrokerException highSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException anotherhighSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+
+            FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { lowSeverityBrokerException, highSeverityBrokerException, anotherhighSeverityBrokerException });
+
+            // We want the factory to return our fake broker for this test
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            // Make sure there are two exceptions, but only one with high severity message
+            Assert.AreEqual(2, rateGroup.Rates.Count());
+            Assert.AreEqual(1, rateGroup.Rates.Count(r => r.Description.Contains("high severity shipping exception")));
         }
 
         [TestMethod]
