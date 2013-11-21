@@ -1457,16 +1457,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.InsuranceValue);}
 		}
-		/// <summary>Creates a new BestRateShipmentEntity.InsurancePennyOne field instance</summary>
-		public static EntityField2 InsurancePennyOne
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.InsurancePennyOne);}
-		}
-		/// <summary>Creates a new BestRateShipmentEntity.DeclaredValue field instance</summary>
-		public static EntityField2 DeclaredValue
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DeclaredValue);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity BigCommerceOrderItemEntity</summary>

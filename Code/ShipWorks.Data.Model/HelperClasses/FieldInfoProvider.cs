@@ -425,8 +425,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("BestRateShipmentEntity", "ServiceLevel", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.ServiceLevel, 0, 0, 10);
 			base.AddElementFieldInfo("BestRateShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)BestRateShipmentFieldIndex.InsuranceValue, 0, 4, 19);
-			base.AddElementFieldInfo("BestRateShipmentEntity", "InsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.InsurancePennyOne, 0, 0, 0);
-			base.AddElementFieldInfo("BestRateShipmentEntity", "DeclaredValue", typeof(System.Decimal), false, false, false, false,  (int)BestRateShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's FieldInfo objects</summary>
 		private void InitBigCommerceOrderItemEntityInfos()

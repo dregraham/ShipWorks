@@ -730,10 +730,6 @@ namespace ShipWorks.Data.Model
 		ServiceLevel,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
-		///<summary>InsurancePennyOne. </summary>
-		InsurancePennyOne,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
 		/// <summary></summary>
 		AmountOfFields
 	}
