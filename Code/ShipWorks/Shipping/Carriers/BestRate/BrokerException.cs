@@ -26,10 +26,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override string Message
         {
-            get
-            {
-                return string.Format("An {0} error occurred. {1}", carrierName, InnerException.Message);
-            }
+            get { return InnerException.Message; }
         }
 
         /// <summary>
