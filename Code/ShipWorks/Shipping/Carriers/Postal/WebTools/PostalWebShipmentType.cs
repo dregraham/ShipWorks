@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing.TemplateXml;
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     /// <summary>
     /// Shipment type for USPS WebTools shipments
     /// </summary>
-    class PostalWebShipmentType : PostalShipmentType
+    public class PostalWebShipmentType : PostalShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value
@@ -171,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker()
         {
-            return new NullShippingBroker();
+            return new WebToolsBestRateBroker();
         }
     }
 }

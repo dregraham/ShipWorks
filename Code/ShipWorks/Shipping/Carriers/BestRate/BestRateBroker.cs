@@ -73,12 +73,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             foreach (TAccount account in accounts)
             {
-                CreateShipmentChild(testRateShipment);
-                ShipmentType.ConfigureNewShipment(testRateShipment);
-                UpdateChildShipmentSettings(testRateShipment, shipment, account);
-
                 try
                 {
+                    CreateShipmentChild(testRateShipment);
+                    ShipmentType.ConfigureNewShipment(testRateShipment);
+                    UpdateChildShipmentSettings(testRateShipment, shipment, account);
+
                     var rates = GetRates(testRateShipment);
 
                     IEnumerable<RateResult> results = rates.Where(r => r.Tag != null)
