@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
-            var previousFootnotes = PreviousFootnotes;
+            List<RateFootnoteControl> previousFootnotes = PreviousFootnotes;
             sandGrid.Rows.Clear();
 
             foreach (RateResult rate in rateGroup.Rates)
@@ -85,20 +85,17 @@ namespace ShipWorks.Shipping.Editing
                     new GridHyperlinkCell(rate.Selectable ? "Select" : "")
                 });
 
-                // Adjust the height of the row for wrapping (exception) text
-                using (Graphics g = CreateGraphics())
-                {
-                    SizeF size = g.MeasureString(rate.Description, row.Font, sandGrid.Columns[0].Width);
-                    row.Height = (int)Math.Ceiling(size.Height) > row.Height ? (int)Math.Ceiling(size.Height) : row.Height;
-                }
+                // Set the height of the row to zero, so it is dynamically adjusted to fit 
+                // when the wrapping (exception) text
+                row.Height = 0;
 
                 row.Tag = rate;
 
                 sandGrid.Rows.Add(row);
             }
-
+            
             panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
-
+            
             RateFootnoteControl footnote = (rateGroup.FootnoteCreator != null) ? rateGroup.FootnoteCreator() : null;
 
             if (footnote != null)
