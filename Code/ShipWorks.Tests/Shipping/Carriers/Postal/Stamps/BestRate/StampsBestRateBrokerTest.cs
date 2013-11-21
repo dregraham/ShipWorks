@@ -88,7 +88,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                             .Callback<ShipmentEntity>(x => x.Postal = new PostalShipmentEntity { Stamps = new StampsShipmentEntity() });
 
-            testObject = new StampsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+            testObject = new StampsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
+            {
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+            };
 
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity() };
         }

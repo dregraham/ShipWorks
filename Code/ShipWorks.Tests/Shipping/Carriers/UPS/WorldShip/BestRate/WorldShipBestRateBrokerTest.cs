@@ -86,7 +86,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x => x.Ups.Packages.Add(new UpsPackageEntity()));
 
-            testObject = new WorldShipBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+            testObject = new WorldShipBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
+            {
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+            };
+
 
             testShipment = new ShipmentEntity {ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity()};
         }
