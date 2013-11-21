@@ -356,26 +356,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             base.ConfigureNewShipment(shipment);
 
             shipment.BestRate.InsuranceValue = 0;
-            shipment.BestRate.InsurancePennyOne = false;
-            shipment.BestRate.DeclaredValue = 0;
         }
 
-        /// <summary>
-        /// Update any data that could have changed dynamically or externally
-        /// </summary>
-        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
-        {
-            base.UpdateDynamicShipmentData(shipment);
-
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            foreach
-            ;
-
-            if (shipment.Insurance)
-            {
-                shipment.BestRate.DeclaredValue = shipment.BestRate.DeclaredValue;
-            }
-        }
     }
 }
