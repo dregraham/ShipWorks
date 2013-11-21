@@ -347,5 +347,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             Action<ShipmentEntity> action = ((Action<ShipmentEntity>) bestRate.Tag);
             action(shipment);
         }
+
+        /// <summary>
+        /// Apply the configured defaults and profile rule settings to the given shipment
+        /// </summary>
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        {
+            base.ConfigureNewShipment(shipment);
+
+            shipment.BestRate.InsuranceValue = 0;
+            shipment.BestRate.InsurancePennyOne = false;
+            shipment.BestRate.DeclaredValue = 0;
+        }
     }
 }

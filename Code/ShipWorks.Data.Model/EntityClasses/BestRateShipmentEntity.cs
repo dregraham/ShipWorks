@@ -488,6 +488,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ServiceLevel", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InsurancePennyOne", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("DeclaredValue", fieldHashtable);
 		}
 		#endregion
 
@@ -682,6 +691,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)BestRateShipmentFieldIndex.ServiceLevel, true); }
 			set	{ SetValue((int)BestRateShipmentFieldIndex.ServiceLevel, value); }
+		}
+
+		/// <summary> The InsuranceValue property of the Entity BestRateShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "BestRateShipment"."InsuranceValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal InsuranceValue
+		{
+			get { return (System.Decimal)GetValue((int)BestRateShipmentFieldIndex.InsuranceValue, true); }
+			set	{ SetValue((int)BestRateShipmentFieldIndex.InsuranceValue, value); }
+		}
+
+		/// <summary> The InsurancePennyOne property of the Entity BestRateShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "BestRateShipment"."InsurancePennyOne"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean InsurancePennyOne
+		{
+			get { return (System.Boolean)GetValue((int)BestRateShipmentFieldIndex.InsurancePennyOne, true); }
+			set	{ SetValue((int)BestRateShipmentFieldIndex.InsurancePennyOne, value); }
+		}
+
+		/// <summary> The DeclaredValue property of the Entity BestRateShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "BestRateShipment"."DeclaredValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal DeclaredValue
+		{
+			get { return (System.Decimal)GetValue((int)BestRateShipmentFieldIndex.DeclaredValue, true); }
+			set	{ SetValue((int)BestRateShipmentFieldIndex.DeclaredValue, value); }
 		}
 
 

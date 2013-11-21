@@ -728,6 +728,12 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>ServiceLevel. </summary>
 		ServiceLevel,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>InsurancePennyOne. </summary>
+		InsurancePennyOne,
+		///<summary>DeclaredValue. </summary>
+		DeclaredValue,
 		/// <summary></summary>
 		AmountOfFields
 	}
