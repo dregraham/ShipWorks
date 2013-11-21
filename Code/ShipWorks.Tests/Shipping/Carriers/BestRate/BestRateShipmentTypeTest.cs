@@ -381,7 +381,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             // Use the fake broker for simulating the exception handler being called; a fake broker is used
             // because we couldn't get this functionality with Moq
-            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.High);
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(brokerException);
 
             // We want the factory to return our fake broker for this test
@@ -397,8 +397,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
             // because we couldn't get this functionality with Moq
-            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
-            BrokerException anotherBrokerException = new BrokerException(new ShippingException("another shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.High);
+            BrokerException anotherBrokerException = new BrokerException(new ShippingException("another shipping exception"), BrokerExceptionSeverityLevel.High);
 
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { brokerException, anotherBrokerException });
 
@@ -415,9 +415,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
             // because we couldn't get this functionality with Moq
-            BrokerException lowSeverityBrokerException = new BrokerException(new ShippingException("a low severity shipping exception"), BrokerExceptionSeverityLevel.Low, "Stamps.com");
-            BrokerException highSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
-            BrokerException anotherhighSeverityBrokerException = new BrokerException(new ShippingException("another high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException lowSeverityBrokerException = new BrokerException(new ShippingException("a low severity shipping exception"), BrokerExceptionSeverityLevel.Low);
+            BrokerException highSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High);
+            BrokerException anotherhighSeverityBrokerException = new BrokerException(new ShippingException("another high severity shipping exception"), BrokerExceptionSeverityLevel.High);
 
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { lowSeverityBrokerException, highSeverityBrokerException, anotherhighSeverityBrokerException });
 
@@ -437,9 +437,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
             // because we couldn't get this functionality with Moq          
-            BrokerException lowSeverityBrokerException = new BrokerException(new ShippingException("a low severity shipping exception"), BrokerExceptionSeverityLevel.Low, "Stamps.com");
-            BrokerException highSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
-            BrokerException anotherhighSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High, "Stamps.com");
+            BrokerException lowSeverityBrokerException = new BrokerException(new ShippingException("a low severity shipping exception"), BrokerExceptionSeverityLevel.Low);
+            BrokerException highSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High);
+            BrokerException anotherhighSeverityBrokerException = new BrokerException(new ShippingException("high severity shipping exception"), BrokerExceptionSeverityLevel.High);
 
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { lowSeverityBrokerException, highSeverityBrokerException, anotherhighSeverityBrokerException });
 

@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns></returns>
         protected virtual BrokerException WrapShippingException(ShippingException ex)
         {
-            return new BrokerException(ex, BrokerExceptionSeverityLevel.High, carrierDescription);
+            return new BrokerException(ex, BrokerExceptionSeverityLevel.High);
         }
 
         /// <summary>

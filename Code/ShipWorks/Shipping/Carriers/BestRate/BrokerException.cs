@@ -6,19 +6,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BrokerException : ShippingException
     {
-        private readonly string carrierName;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BrokerException" /> class.
         /// </summary>
         /// <param name="innerException">The inner exception.</param>
         /// <param name="severityLevel">The severity level.</param>
-        /// <param name="carrierName">Name of the carrier.</param>
-        public BrokerException(ShippingException innerException, BrokerExceptionSeverityLevel severityLevel, string carrierName)
+        public BrokerException(ShippingException innerException, BrokerExceptionSeverityLevel severityLevel)
             : base(string.Empty, innerException)
         {
             SeverityLevel = severityLevel;
-            this.carrierName = carrierName;
         }
 
         /// <summary>
@@ -32,8 +28,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the severity level of the exception.
         /// </summary>
-        public BrokerExceptionSeverityLevel SeverityLevel
-        {
-            get; private set; }
+        public BrokerExceptionSeverityLevel SeverityLevel { get; private set; }
     }
 }
