@@ -12,15 +12,15 @@ namespace ShipWorks.Shipping.Editing.Enums
     public enum BestRateEventType
     {
         [Description("None")]
-        None = 0,
+        None = 0x00,
 
         [Description("Rates Compared")]
-        RatesCompared = 1,
+        RatesCompared = 0x01,
 
         [Description("Rate Selected")]
-        RateSelected = 2,
+        RateSelected = 0x02,
 
         [Description("Rate Auto Selected and Processed")]
-        RateAutoSelectedAndProcessed  = 4
+        RateAutoSelectedAndProcessed  = 0x04
     }
 }
