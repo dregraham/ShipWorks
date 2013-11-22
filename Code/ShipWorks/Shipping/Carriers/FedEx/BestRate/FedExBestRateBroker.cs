@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -53,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
             
-            currentShipment.FedEx.Packages[0].DimsHeight = currentShipment.BestRate.DimsHeight;
-            currentShipment.FedEx.Packages[0].DimsWidth = currentShipment.BestRate.DimsWidth;
-            currentShipment.FedEx.Packages[0].DimsLength = currentShipment.BestRate.DimsLength;
+            currentShipment.FedEx.Packages[0].DimsHeight = originalShipment.BestRate.DimsHeight;
+            currentShipment.FedEx.Packages[0].DimsWidth = originalShipment.BestRate.DimsWidth;
+            currentShipment.FedEx.Packages[0].DimsLength = originalShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.FedEx.Packages[0].Weight = originalShipment.ContentWeight;
@@ -63,6 +64,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
             currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
             currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
+
+            currentShipment.FedEx.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
+            currentShipment.FedEx.Packages[0].Insurance = currentShipment.Insurance;
         }
 
         /// <summary>
