@@ -455,6 +455,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
+        public void GetRates_AddsRatesComparedEventToShipment_Test()
+        {
+            shipment.BestRateEvents = 0;
+            testObject.GetRates(shipment);
+
+            Assert.AreEqual((int)BestRateEventType.RatesCompared, shipment.BestRateEvents);
+        }
+
+        [TestMethod]
+        public void GetRates_DoesNotRemoveOtherBestRateEvents_Test()
+        {
+            shipment.BestRateEvents = (int)BestRateEventType.RateSelected;
+            testObject.GetRates(shipment);
+
+            Assert.AreEqual(BestRateEventType.RateSelected, (BestRateEventType)shipment.BestRateEvents & BestRateEventType.RateSelected);
+        }
+
+        [TestMethod]
         public void SupportsGetRates_ReturnsTrue_Test()
         {
             Assert.IsTrue(testObject.SupportsGetRates);
@@ -515,6 +533,36 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider());
+        }
+		
+        [TestMethod]
+        public void ApplySelectedShipmentRate_AddsRateSelectedEventToShipment_Test()
+        {
+            shipment.BestRateEvents = 0;
+            RateResult rate = new RateResult("foo", "3") {Tag = new Action<ShipmentEntity>(entity => { })};
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+
+            Assert.AreEqual((int)BestRateEventType.RateSelected, shipment.BestRateEvents); 
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_DoesNotRemoveOtherBestRateEvents_Test()
+        {
+            shipment.BestRateEvents = (int)BestRateEventType.RatesCompared;
+            RateResult rate = new RateResult("foo", "3") { Tag = new Action<ShipmentEntity>(entity => { }) };
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+
+            Assert.AreEqual(BestRateEventType.RatesCompared, (BestRateEventType)shipment.BestRateEvents & BestRateEventType.RatesCompared);
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_CallsActionSetOnTag_Test()
+        {
+            ShipmentEntity calledShipment = null;
+            RateResult rate = new RateResult("foo", "3") { Tag = new Action<ShipmentEntity>(entity => { calledShipment = entity; }) };
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+
+            Assert.AreEqual(shipment, calledShipment);
         }
     }
 }

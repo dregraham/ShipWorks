@@ -39,8 +39,14 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public int BestRateEvents
         {
-            get { return BitConverter.ToInt32(InternalBestRateEvents, 0); }
-            set { InternalBestRateEvents = BitConverter.GetBytes(value); }
+            get
+            {
+                return (InternalBestRateEvents != null) ? BitConverter.ToInt32(InternalBestRateEvents, 0) : 0;
+            }
+            set
+            {
+                InternalBestRateEvents = BitConverter.GetBytes(value);
+            }
         }
 
         /// <summary>

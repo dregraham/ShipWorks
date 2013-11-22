@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping
             else
             {
                 // Get the order 
-                OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
+                OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
 
                 if (order == null)
                 {
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping
         private static ShipmentEntity InternalCreateFirstShipment(long orderID)
         {
             // Get the order 
-            OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
+            OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
 
             if (order == null)
             {
@@ -166,16 +166,17 @@ namespace ShipWorks.Shipping
 
             // Set some defaults
             shipment.ShipDate = DateTime.Now.Date.AddHours(12);
-            shipment.ShipmentType = (int) ShipmentTypeCode.None;
+            shipment.ShipmentType = (int)ShipmentTypeCode.None;
             shipment.Processed = false;
             shipment.Voided = false;
             shipment.ShipmentCost = 0;
             shipment.TrackingNumber = "";
-            shipment.ResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
+            shipment.ResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
             shipment.ResidentialResult = true;
             shipment.ReturnShipment = false;
             shipment.Insurance = false;
-            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
+            shipment.BestRateEvents = (int)BestRateEventType.None;
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
@@ -191,7 +192,7 @@ namespace ShipWorks.Shipping
             // Initialize the to address
             PersonAdapter.Copy(order, shipment, "Ship");
 
-            shipment.OriginOriginID = (int) ShipmentOriginSource.Store;
+            shipment.OriginOriginID = (int)ShipmentOriginSource.Store;
 
             // The from address will be dependant on the specific service type, but we'll default it to that of the store
             StoreEntity store = StoreManager.GetStore(order.StoreID);
@@ -204,7 +205,7 @@ namespace ShipWorks.Shipping
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Apply the determined shipment type
-                shipment.ShipmentType = (int) shipmentTypeCode;
+                shipment.ShipmentType = (int)shipmentTypeCode;
 
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
@@ -227,13 +228,13 @@ namespace ShipWorks.Shipping
 
                 // Go ahead and create customs if needed
                 CustomsManager.LoadCustomsItems(shipment, false);
-                
+
                 adapter.Commit();
             }
 
             lock (siblingData)
             {
-                List<long> shipmentList = siblingData[(long) shipment.Fields[(int) ShipmentFieldIndex.OrderID].CurrentValue];
+                List<long> shipmentList = siblingData[(long)shipment.Fields[(int)ShipmentFieldIndex.OrderID].CurrentValue];
                 if (shipmentList != null)
                 {
                     shipmentList.Add(shipment.ShipmentID);
@@ -256,12 +257,12 @@ namespace ShipWorks.Shipping
                 {
                     if (FilterHelper.IsObjectInFilterContent(order.OrderID, filterContentID.Value))
                     {
-                        return (ShipmentTypeCode) rule.ShipmentType;
+                        return (ShipmentTypeCode)rule.ShipmentType;
                     }
                 }
             }
 
-            return (ShipmentTypeCode) ShippingSettings.Fetch().DefaultType;
+            return (ShipmentTypeCode)ShippingSettings.Fetch().DefaultType;
         }
 
         /// <summary>
@@ -269,14 +270,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentEntity GetShipment(long shipmentID)
         {
-            ShipmentEntity shipment = (ShipmentEntity) DataProvider.GetEntity(shipmentID);
+            ShipmentEntity shipment = (ShipmentEntity)DataProvider.GetEntity(shipmentID);
             if (shipment == null)
             {
                 log.InfoFormat("Shipment {0} seems to be now deleted.", shipmentID);
                 return null;
             }
 
-            OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+            OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
             if (order == null)
             {
                 log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
@@ -449,7 +450,7 @@ namespace ShipWorks.Shipping
                 if (!rootDirty && anyDirty)
                 {
                     // Use a column we don't filter on so we don't falsely trigger filter recalculations.
-                    shipment.Fields[(int) ShipmentFieldIndex.CustomsGenerated].IsChanged = true;
+                    shipment.Fields[(int)ShipmentFieldIndex.CustomsGenerated].IsChanged = true;
                     shipment.Fields.IsDirty = true;
                 }
 
@@ -625,11 +626,11 @@ namespace ShipWorks.Shipping
             else if (shipmentTypeCode == ShipmentTypeCode.EquaShip)
             {
                 return "EquaShip";
-            } 
+            }
             else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
             {
                 return "OnTrac";
-            } 
+            }
             else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
             {
                 return "i-parcel";
@@ -713,39 +714,33 @@ namespace ShipWorks.Shipping
             // Ensure data is valid and up-to-date
             shipmentType.UpdateDynamicShipmentData(shipment);
 
-            // Capture the original value - if it's someting like "CommercialIfCompany" we are about to overwrite it with the actual result of that.  It needs to be restored
-            shipment.SaveFields("Rates");
+            // We're going to confirm the shipping address with the store as some stores may change 
+            // the shipping address depending on the shipping program being used (such as eBay's 
+            // Global Shipping Program), so we want to get rates for the location the package will be shipped                
+
+            // We want to retain the buyer's address on the original shipment object, so we're going to use 
+            // a cloned shipment to confirm the shipping address with the store. This way the original 
+            // shipment is not altered and persisted to the database if the store alters the address
+            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
+            OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
 
             // Determine residential status
-            if (shipmentType.IsResidentialStatusRequired(shipment))
+            if (shipmentType.IsResidentialStatusRequired(clonedShipment))
             {
-                shipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(shipment);
+                clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
             }
 
-            try
-            {
-                // We're going to confirm the shipping address with the store as some stores may change 
-                // the shipping address depending on the shipping program being used (such as eBay's 
-                // Global Shipping Program), so we want to get rates for the location the package will be shipped                
-                
-                // We want to retain the buyer's address on the original shipment object, so we're going to use 
-                // a cloned shipment to confirm the shipping address with the store. This way the original 
-                // shipment is not altered and persisted to the database if the store alters the address
-                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
-                OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
+            // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
+            StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+            storeType.OverrideShipmentDetails(clonedShipment);
 
-                // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
-                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
-                storeType.OverrideShipmentDetails(clonedShipment);
+            // Use the cloned shipment with the potentially adjusted shipping address to get the rates
+            RateGroup rateResults = shipmentType.GetRates(clonedShipment);
 
-                // Use the cloned shipment with the potentially adjusted shipping address to get the rates
-                RateGroup rateResults = shipmentType.GetRates(clonedShipment);
-                return rateResults;
-            }
-            finally
-            {
-                shipment.RollbackFields("Rates");
-            }
+            // Copy back any best rate events that were set on the clone
+            shipment.BestRateEvents |= clonedShipment.BestRateEvents;
+
+            return rateResults;
         }
 
         /// <summary>
@@ -762,7 +757,7 @@ namespace ShipWorks.Shipping
             {
                 throw new ShippingException("The shipment has been voided.");
             }
-            
+
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
             // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
@@ -941,7 +936,7 @@ namespace ShipWorks.Shipping
                     // after processing, so it doesn't look like that's the phone the customer entered for the shipment.
                     if (shipment.ShipPhone.Trim().Length == 0)
                     {
-                        if (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.SpecifiedPhone)
+                        if (settings.BlankPhoneOption == (int)ShipmentBlankPhoneOption.SpecifiedPhone)
                         {
                             shipment.ShipPhone = settings.BlankPhoneNumber;
                         }
@@ -1008,7 +1003,7 @@ namespace ShipWorks.Shipping
                             shipment.SetNewFieldValue((int)fieldIndex, clone.GetCurrentFieldValue((int)fieldIndex));
                             shipment.Fields[(int)fieldIndex].IsChanged = false;
                         }
-                        
+
                         shipment.Processed = true;
                         shipment.ProcessedDate = DateTime.UtcNow;
 
@@ -1069,7 +1064,7 @@ namespace ShipWorks.Shipping
             ClearOtherShipmentData(adapter, shipment, typeof(UpsShipmentEntity), UpsShipmentFields.ShipmentID, ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip);
             ClearOtherShipmentData(adapter, shipment, typeof(EndiciaShipmentEntity), EndiciaShipmentFields.ShipmentID, ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia);
             ClearOtherShipmentData(adapter, shipment, typeof(StampsShipmentEntity), StampsShipmentFields.ShipmentID, ShipmentTypeCode.Stamps, ShipmentTypeCode.Express1Stamps);
-            ClearOtherShipmentData(adapter, shipment, typeof(PostalShipmentEntity), PostalShipmentFields.ShipmentID, 
+            ClearOtherShipmentData(adapter, shipment, typeof(PostalShipmentEntity), PostalShipmentFields.ShipmentID,
                 ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Endicia, ShipmentTypeCode.Stamps, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Stamps);
             ClearOtherShipmentData(adapter, shipment, typeof(FedExShipmentEntity), FedExShipmentFields.ShipmentID, ShipmentTypeCode.FedEx);
             ClearOtherShipmentData(adapter, shipment, typeof(OnTracShipmentEntity), OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
@@ -1097,8 +1092,8 @@ namespace ShipWorks.Shipping
             adapter.DeleteEntitiesDirectly(childShipmentType, new RelationPredicateBucket(shipmentIdField == shipment.ShipmentID));
         }
 
-        private static void ResetShippingAddressFields(ShipmentEntity shipment, string originalShipFirstName, string originalShipMiddleName, string originalShipLastName, string originalShipCompany, 
-            string originalShipStreet1, string originalShipStreet2, string originalShipStreet3, string originalShipCity, string originalShipStateProvince, 
+        private static void ResetShippingAddressFields(ShipmentEntity shipment, string originalShipFirstName, string originalShipMiddleName, string originalShipLastName, string originalShipCompany,
+            string originalShipStreet1, string originalShipStreet2, string originalShipStreet3, string originalShipCity, string originalShipStateProvince,
             string originalShipPostalCode, string originalShipCountry, string originalShipEmail, string originalShipPhone)
         {
 
@@ -1126,10 +1121,10 @@ namespace ShipWorks.Shipping
             shipment.ShipCity = originalShipCity;
             shipment.Fields[(int)ShipmentFieldIndex.ShipCity].IsChanged = false;
 
-            shipment.ShipStateProvCode= originalShipStateProvince;
+            shipment.ShipStateProvCode = originalShipStateProvince;
             shipment.Fields[(int)ShipmentFieldIndex.ShipStateProvCode].IsChanged = false;
 
-            shipment.ShipPostalCode= originalShipPostalCode;
+            shipment.ShipPostalCode = originalShipPostalCode;
             shipment.Fields[(int)ShipmentFieldIndex.ShipPostalCode].IsChanged = false;
 
             shipment.ShipCountryCode = originalShipCountry;
@@ -1191,7 +1186,7 @@ namespace ShipWorks.Shipping
                 return true;
             }
 
-            return ShippingSettings.Fetch().ConfiguredTypes.Contains((int) shipmentTypeCode);
+            return ShippingSettings.Fetch().ConfiguredTypes.Contains((int)shipmentTypeCode);
         }
 
         /// <summary>
@@ -1205,7 +1200,7 @@ namespace ShipWorks.Shipping
                 return true;
             }
 
-            return ShippingSettings.Fetch().ActivatedTypes.Contains((int) shipmentTypeCode);
+            return ShippingSettings.Fetch().ActivatedTypes.Contains((int)shipmentTypeCode);
         }
 
         /// <summary>
@@ -1213,7 +1208,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode)
         {
-            return !ShippingSettings.Fetch().ExcludedTypes.Contains((int) shipmentTypeCode);
+            return !ShippingSettings.Fetch().ExcludedTypes.Contains((int)shipmentTypeCode);
         }
 
         /// <summary>
