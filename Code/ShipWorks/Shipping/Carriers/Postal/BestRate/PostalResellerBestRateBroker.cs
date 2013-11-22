@@ -102,6 +102,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
 
             UpdateChildAccountId(currentShipment.Postal, account);
+
+            currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;
         }
 
         /// <summary>

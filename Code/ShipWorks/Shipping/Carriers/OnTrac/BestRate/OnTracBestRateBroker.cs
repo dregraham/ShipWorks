@@ -48,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
             currentShipment.OnTrac.DimsAddWeight = false;
             currentShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
             currentShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
+
+            currentShipment.OnTrac.InsuranceValue = originalShipment.BestRate.InsuranceValue;
         }
 
         /// <summary>
