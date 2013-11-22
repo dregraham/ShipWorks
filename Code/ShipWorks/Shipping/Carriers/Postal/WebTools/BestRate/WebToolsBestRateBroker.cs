@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
@@ -45,6 +46,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
         {
 
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return InsuranceProvider.ShipWorks;
         }
 
         /// <summary>

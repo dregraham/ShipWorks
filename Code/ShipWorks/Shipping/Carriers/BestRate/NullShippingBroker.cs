@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -24,6 +25,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return new List<RateResult>();
         }
 
+        /// <summary>
+        /// Gets the insurance provider for the carrier.
+        /// </summary>
+        public InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return InsuranceProvider.Invalid;
+        }
 
         /// <summary>
         /// Gets a value indicating whether there any accounts available to a broker.

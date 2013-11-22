@@ -7,6 +7,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -40,6 +41,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// The action to GetRates.
         /// </summary>
         public Func<ShipmentEntity, IEnumerable<RateResult>> GetRatesAction { get; set; }
+
+        public abstract InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
 
         /// <summary>
         /// Gets a value indicating whether there any accounts available to a broker.

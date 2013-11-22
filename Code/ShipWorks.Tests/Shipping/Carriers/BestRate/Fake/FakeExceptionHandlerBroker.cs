@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
 {
@@ -32,6 +33,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
             this.brokerExceptionsToThrow = new List<BrokerException>(brokerExceptionsToThrow);
         }
 
+        /// <summary>
+        /// Gets the rates for each of the accounts of a specific shipping provider based
+        /// on the configuration of the best rate shipment data.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns>
+        /// A list of RateResults for each account of a specific shipping provider (i.e. if
+        /// two accounts are registered for a single provider, the list of rates would have two entries
+        /// if both accounts returned rates).
+        /// </returns>
         public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             foreach (BrokerException brokerException in brokerExceptionsToThrow)
@@ -43,6 +55,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
             return new List<RateResult>();
         }
 
+        /// <summary>
+        /// Gets the insurance provider for the carrier.
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        public InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return InsuranceProvider.Invalid;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
         public bool HasAccounts
         {
             get { return true; }

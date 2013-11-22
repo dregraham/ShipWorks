@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 {
@@ -524,6 +525,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             Assert.IsTrue(rates.Select(x => x.Description).Contains("Stamps Ground"));
             Assert.IsTrue(rates.Select(x => x.Description).Contains("Stamps Some Service"));
             Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsShipWorks_Test()
+        {
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity()));
         }
     }
 }

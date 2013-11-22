@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 {
@@ -525,6 +526,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             Assert.IsTrue(rates.Select(x => x.Description).Contains("Endicia Ground"));
             Assert.IsTrue(rates.Select(x => x.Description).Contains("Endicia Some Service"));
             Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsShipWorks_Test()
+        {
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() {EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks}));
+        }
+
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsCarrier_Test()
+        {
+            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { EndiciaInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }
     }
 }

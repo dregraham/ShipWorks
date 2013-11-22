@@ -1,10 +1,11 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
-    class OnTracBestRateBroker : BestRateBroker<OnTracAccountEntity>
+    public class OnTracBestRateBroker : BestRateBroker<OnTracAccountEntity>
     {
         private const string OnTracCarrierDescription = "OnTrac";
 
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        private OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository) :
+        public OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, OnTracCarrierDescription)
         {
 
@@ -75,6 +76,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
             shipment.OnTrac.Service = (int)tag;
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return (InsuranceProvider)settings.OnTracInsuranceProvider;
         }
 
         /// <summary>

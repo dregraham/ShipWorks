@@ -3,6 +3,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -32,6 +33,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             base(shipmentType, accountRepository, "FedEx")
         {
 
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return (InsuranceProvider) settings.FedExInsuranceProvider;
         }
 
         /// <summary>

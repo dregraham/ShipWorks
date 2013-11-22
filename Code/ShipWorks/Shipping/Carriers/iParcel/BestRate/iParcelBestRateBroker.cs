@@ -3,6 +3,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
 {
@@ -28,6 +29,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             base(shipmentType, accountRepository, "iParcel")
         {
 
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return (InsuranceProvider)settings.IParcelInsuranceProvider;
         }
 
         /// <summary>

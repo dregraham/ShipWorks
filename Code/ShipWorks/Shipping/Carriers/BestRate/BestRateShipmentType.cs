@@ -5,7 +5,9 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Settings.Origin;
 using log4net;
@@ -358,5 +360,41 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.BestRate.InsuranceValue = 0;
         }
 
+        /// <summary>
+        /// Update any data that could have changed dynamically or externally
+        /// </summary>
+        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
+        {
+            base.UpdateDynamicShipmentData(shipment);
+
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers().Where(b => b.HasAccounts).ToList();
+            
+            // Default shipmentInsuranceProvider is shipworks
+            InsuranceProvider shipmentInsuranceProvider = InsuranceProvider.ShipWorks;
+            
+            if (brokersWithAccounts.Count() == 1)
+            {
+                // If 1 carrier, use that carrier's insurance provider
+                shipmentInsuranceProvider = brokersWithAccounts.First().GetInsuranceProvider(settings);
+            }
+            else if(brokersWithAccounts.Any())
+            {
+                // If more than 1 carrier, if any of the carrier's are not shipworks insurance, set to invalid.
+                if (brokersWithAccounts.Any(b => b.GetInsuranceProvider(settings) != InsuranceProvider.ShipWorks))
+                {
+                    shipmentInsuranceProvider = InsuranceProvider.Invalid;
+                }
+            }
+            else
+            {
+                // No brokersWithAccounts
+                shipmentInsuranceProvider = InsuranceProvider.Invalid;
+            }
+
+            shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+        }
+
+       
     }
 }

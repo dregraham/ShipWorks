@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
 {
@@ -48,6 +49,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
 
             selectedShipment.Postal.Stamps = newStampsShipment;
             selectedShipment.Postal.Stamps.IsNew = false;
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return InsuranceProvider.ShipWorks;
         }
 
         /// <summary>

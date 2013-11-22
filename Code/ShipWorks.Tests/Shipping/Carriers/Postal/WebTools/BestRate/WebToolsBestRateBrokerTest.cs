@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
@@ -98,6 +99,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
             Assert.IsNull(calledException);
         }
 
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsShipWorks_Test()
+        {
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity()));
+        }
         [TestMethod]
         public void GetBestRates_AddsPostalToDescription_WhenItDoesNotAlreadyExist()
         {

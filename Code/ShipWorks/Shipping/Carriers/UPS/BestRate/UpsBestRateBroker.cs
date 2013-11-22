@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -47,6 +48,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             return base.GetBestRates(shipment, exceptionHandler).Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return (InsuranceProvider)settings.UpsInsuranceProvider;
         }
 
         /// <summary>
