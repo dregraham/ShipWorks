@@ -39,8 +39,7 @@ namespace ShipWorks.Shipping.Insurance
             bool allOnTrac = true;
             bool allEndicia = true;
             bool alliParcel = true;
-            bool allBestRate = true;
-
+            
             InsuranceProvider? insuranceProvider = null;
 
             // Update the insurance status and amount used
@@ -71,11 +70,6 @@ namespace ShipWorks.Shipping.Insurance
                     if (choice.Shipment.ShipmentType != (int) ShipmentTypeCode.Endicia)
                     {
                         allEndicia = false;
-                    }
-
-                    if (choice.Shipment.ShipmentType != (int) ShipmentTypeCode.BestRate)
-                    {
-                        allBestRate = false;
                     }
 
                     if (insuranceProvider == null)
@@ -111,7 +105,7 @@ namespace ShipWorks.Shipping.Insurance
 
                 if (insuranceProvider == InsuranceProvider.Carrier)
                 {
-                    if ((allUps || allFedEx || allOnTrac || alliParcel || allBestRate))
+                    if ((allUps || allFedEx || allOnTrac || alliParcel))
                     {
                         //if insurance provider is not null, loadedInsurance will always have at least one value.
 						string carrierName = ShippingManager.GetCarrierName((ShipmentTypeCode) loadedInsurance.First().Shipment.ShipmentType);

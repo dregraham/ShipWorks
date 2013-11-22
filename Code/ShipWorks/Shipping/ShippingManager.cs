@@ -633,6 +633,10 @@ namespace ShipWorks.Shipping
             else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
             {
                 return "i-parcel";
+            } 
+            else if (shipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                return "Best Rate";
             }
 
             Debug.Fail("Unhandled shipping type in GetCarrierName");

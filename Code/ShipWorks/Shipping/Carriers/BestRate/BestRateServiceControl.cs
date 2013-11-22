@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -92,6 +93,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             //Save dimensions
             dimensionsControl.SaveToEntities();
 
+            //Save insurance info
+            insuranceControl.SaveToInsuranceChoices();
+
             // Save the other fields
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
@@ -153,6 +157,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private void OnOriginChanged(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Update the insurance rate display
+        /// </summary>
+        public override void UpdateInsuranceDisplay()
+        {
+            insuranceControl.LoadInsuranceChoices(
+                LoadedShipments.Select(
+                    shipment => ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, 0)));
         }
     }
 }
