@@ -79,6 +79,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     ShipmentType.ConfigureNewShipment(testRateShipment);
                     UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
+                    //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
+                    testRateShipment.BestRate.InsuranceValue = 0;
+
                     var rates = GetRates(testRateShipment);
 
                     IEnumerable<RateResult> results = rates.Where(r => r.Tag != null)
