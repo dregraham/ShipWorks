@@ -35,6 +35,15 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// Tracks how best rates was used during the processing of the shipment
+        /// </summary>
+        public int BestRateEvents
+        {
+            get { return BitConverter.ToInt32(InternalBestRateEvents, 0); }
+            set { InternalBestRateEvents = BitConverter.GetBytes(value); }
+        }
+
+        /// <summary>
         /// Has to be overridden to serialize our extra data
         /// </summary>
         protected override void OnGetObjectData(SerializationInfo info, StreamingContext context)
