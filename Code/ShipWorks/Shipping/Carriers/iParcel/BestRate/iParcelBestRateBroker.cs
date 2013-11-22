@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
 {
-    class iParcelBestRateBroker : PackageBasedBestRateBroker<IParcelAccountEntity, IParcelPackageEntity>
+    public class iParcelBestRateBroker : PackageBasedBestRateBroker<IParcelAccountEntity, IParcelPackageEntity>
     {
         /// <summary>
         /// Creates a broker with the default shipment type and account repository

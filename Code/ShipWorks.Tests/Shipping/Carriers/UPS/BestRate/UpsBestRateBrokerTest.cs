@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 {
@@ -464,6 +465,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private static IEnumerable<RateResult> OriginalRates(IEnumerable<RateResult> rates)
         {
             return rates.OfType<NoncompetitiveRateResult>().Select(x => x.OriginalRate);
+        }
+
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsShipWorks_UpsSettingSpecfiesShipWorks_Test()
+        {
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
+        }
+
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsCarrier_UpsSettingSpecfiesCarrier_Test()
+        {
+            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }
     }
 }

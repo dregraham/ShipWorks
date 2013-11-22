@@ -7,6 +7,9 @@ using System.Text;
 
 namespace ShipWorks.Shipping.Editing.Enums
 {
+    /// <summary>
+    /// Describes BestRate features used by user when creating and processing a shipment.
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     [Flags]
     public enum BestRateEventType

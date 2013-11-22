@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -464,6 +465,56 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         public void ProcessShipment_ThrowsInvalidOperationException_Test()
         {
             testObject.ProcessShipment(new ShipmentEntity());
+        }
+
+        [TestMethod]
+        public void GetShipmentInsuranceProvider_ReturnsInvalid_OneBrokersWithNoAccounts_Test()
+        {
+            broker.Setup(b => b.HasAccounts)
+                  .Returns(false);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
+                  .Returns(InsuranceProvider.ShipWorks);
+
+            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider());
+        }
+
+        [TestMethod]
+        public void GetShipmentInsuranceProvider_ReturnsShipWorks_TwoBrokersWithAccountsAndShipWorksInsurance_Test()
+        {
+            broker.Setup(b => b.HasAccounts)
+                  .Returns(true);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
+                .Returns(InsuranceProvider.ShipWorks);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
+            
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetShipmentInsuranceProvider());
+        }
+
+        [TestMethod]
+        public void GetShipmentInsuranceProvider_ReturnsInvalid_TwoBrokersWithAccountsAndCarrierInsurance_Test()
+        {
+            broker.Setup(b => b.HasAccounts)
+                  .Returns(true);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
+                .Returns(InsuranceProvider.Carrier);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
+
+            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider());
+        }
+
+        [TestMethod]
+        public void GetShipmentInsuranceProvider_ReturnsCarrier_TwoBrokersWithAccountsAndCarrierInsurance_Test()
+        {
+            broker.Setup(b => b.HasAccounts)
+                  .Returns(true);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
+                .Returns(InsuranceProvider.Carrier);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+
+            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider());
         }
     }
 }

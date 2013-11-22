@@ -143,6 +143,7 @@
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Fake\FakeExceptionHandlerBroker.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExSmartPostCloseRequestTest.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidVersionManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Response\FedExVoidResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentTypeTest.cs" />

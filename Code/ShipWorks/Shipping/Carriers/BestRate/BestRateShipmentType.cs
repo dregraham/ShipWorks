@@ -367,23 +367,38 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             base.UpdateDynamicShipmentData(shipment);
 
+            InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider();
+
+            shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+        }
+
+        /// <summary>
+        /// Gets the shipment insurance provider based on carriers selected.
+        /// </summary>
+        /// <returns></returns>
+        public InsuranceProvider GetShipmentInsuranceProvider()
+        {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers().Where(b => b.HasAccounts).ToList();
-            
+
             // Default shipmentInsuranceProvider is shipworks
-            InsuranceProvider shipmentInsuranceProvider = InsuranceProvider.ShipWorks;
-            
+            InsuranceProvider shipmentInsuranceProvider;
+
             if (brokersWithAccounts.Count() == 1)
             {
                 // If 1 carrier, use that carrier's insurance provider
                 shipmentInsuranceProvider = brokersWithAccounts.First().GetInsuranceProvider(settings);
             }
-            else if(brokersWithAccounts.Any())
+            else if (brokersWithAccounts.Any())
             {
                 // If more than 1 carrier, if any of the carrier's are not shipworks insurance, set to invalid.
                 if (brokersWithAccounts.Any(b => b.GetInsuranceProvider(settings) != InsuranceProvider.ShipWorks))
                 {
                     shipmentInsuranceProvider = InsuranceProvider.Invalid;
+                }
+                else
+                {
+                    shipmentInsuranceProvider = InsuranceProvider.ShipWorks;
                 }
             }
             else
@@ -391,10 +406,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // No brokersWithAccounts
                 shipmentInsuranceProvider = InsuranceProvider.Invalid;
             }
-
-            shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+            return shipmentInsuranceProvider;
         }
-
-       
     }
 }

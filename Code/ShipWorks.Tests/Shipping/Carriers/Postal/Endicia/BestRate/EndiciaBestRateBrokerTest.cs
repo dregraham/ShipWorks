@@ -472,43 +472,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             }
         }
 
-        //[TestMethod]
-        //public void GetBestRates_ConvertsShipmentToEndicia_WhenRateIsSelected()
-        //{
-        //    rateGroup1.Rates.Clear();
-        //    rateGroup3.Rates.Clear();
-
-        //    RateResult result1 = new RateResult("Account 1a", "4", 4, PostalServiceType.EndiciaExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-
-        //    rateGroup1.Rates.Add(result1);
-
-        //    var rates = testObject.GetBestRates(testShipment);
-        //    ((Action<ShipmentEntity>) rates[0].Tag)(testShipment);
-
-        //    Assert.AreEqual((int)ShipmentTypeCode.Endicia, testShipment.ShipmentType);
-        //    Assert.AreEqual((int)PostalServiceType.EndiciaExpressEarlyAm, testShipment.Endicia.Service);
-        //    Assert.AreEqual(account1.EndiciaAccountID, testShipment.Endicia.EndiciaAccountID);
-        //}
-
-        //[TestMethod]
-        //public void GetBestRates_DoesNotAlterOtherShipmentTypeData_WhenRateIsSelected()
-        //{
-        //    rateGroup1.Rates.Clear();
-        //    rateGroup3.Rates.Clear();
-
-        //    FedExShipmentEntity fedExEntity = new FedExShipmentEntity();
-        //    testShipment.FedEx = fedExEntity;
-
-        //    RateResult result1 = new RateResult("Account 1a", "4", 4, PostalServiceType.EndiciaExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-
-        //    rateGroup1.Rates.Add(result1);
-
-        //    var rates = testObject.GetBestRates(testShipment);
-        //    ((Action<ShipmentEntity>)rates[0].Tag)(testShipment);
-
-        //    Assert.AreEqual(fedExEntity, testShipment.FedEx);
-        //}
-
         [TestMethod]
         public void GetBestRates_AddsEndiciaToDescription_WhenItDoesNotAlreadyExist()
         {
