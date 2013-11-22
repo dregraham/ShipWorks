@@ -876,6 +876,12 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.Designer.cs">
       <DependentUpon>BestRateProfileControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.Designer.cs">
+      <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6676,6 +6682,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
       <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.resx">
+      <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.resx">
       <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>

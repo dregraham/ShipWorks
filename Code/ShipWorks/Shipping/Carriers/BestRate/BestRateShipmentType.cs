@@ -201,12 +201,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderByDescending(e => e.SeverityLevel)
                                                                                 .GroupBy(e => e.Message)
                                                                                 .Select(m => m.First()).ToList();
-            foreach (BrokerException brokerException in distinctExceptions)
-            {
-                // Add a rate result for each of the broker exceptions, so they appear to 
-                // the user in the rates grid
-                rateGroup.Rates.Add(new RateResult("* " + brokerException.Message, string.Empty));
-            }
+
+            rateGroup.FootnoteCreator = () => new List<RateFootnoteControl> { new BrokerExceptionsRateFootnoteControl(distinctExceptions) };
 
             return rateGroup;
         }

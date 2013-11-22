@@ -114,7 +114,7 @@
             // 
             this.gridColumnService.AllowEditing = false;
             this.gridColumnService.AllowReorder = false;
-            this.gridColumnService.AllowWrap = true;
+            this.gridColumnService.AllowWrap = false;
             this.gridColumnService.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnService.Clickable = false;
             this.gridColumnService.HeaderText = "Service";

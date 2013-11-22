@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Raised when its necessary for the rates to be reloaded
         /// </summary>
-        public event EventHandler ReloadRatesRequired;
+        public event EventHandler ReloadRatesRequired;       
 
         /// <summary>
         /// Constructor
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Editing
 
             sandGrid.Rows.Clear();
 
-            gridColumnSelect.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnSelectRate);
+            gridColumnSelect.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnSelectRate);            
         }
 
         /// <summary>
@@ -83,11 +83,7 @@ namespace ShipWorks.Shipping.Editing
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
                     new GridHyperlinkCell(rate.Selectable ? "Select" : "")
                 });
-
-                // Set the height of the row to zero, so it is dynamically adjusted to fit 
-                // when the wrapping (exception) text
-                row.Height = 0;
-
+                
                 row.Tag = rate;
 
                 sandGrid.Rows.Add(row);
