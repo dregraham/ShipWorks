@@ -355,6 +355,7 @@ namespace ShipWorks.Shipping
             clonedShipment.Voided = false;
             clonedShipment.ThermalType = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
+            clonedShipment.BestRateEvents = 0;
 
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
