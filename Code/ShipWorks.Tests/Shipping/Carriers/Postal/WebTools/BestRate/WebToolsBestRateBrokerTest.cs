@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data;
@@ -9,7 +7,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
 using ShipWorks.Shipping.Editing;
@@ -99,6 +96,45 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
             testObject.GetBestRates(testShipment, (ex) => calledException = ex);
 
             Assert.IsNull(calledException);
+        }
+
+        [TestMethod]
+        public void GetBestRates_AddsPostalToDescription_WhenItDoesNotAlreadyExist()
+        {
+            rateGroup1.Rates.Clear();
+
+            RateResult result1 = new RateResult("USPS (w/o Postage) Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup1.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment, ex => { });
+
+            Assert.IsTrue(rates.Select(x => x.Description).Contains("USPS (w/o Postage) Ground"));
+            Assert.IsTrue(rates.Select(x => x.Description).Contains("USPS (w/o Postage) Some Service"));
+            Assert.AreEqual(2, rates.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotReturnMediaMail()
+        {
+            rateGroup1.Rates.Clear();
+
+            RateResult result1 = new RateResult("Ground", "4", 4, new PostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Ground", "4", 4, new PostalRateSelection(PostalServiceType.BoundPrintedMatter, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result3 = new RateResult("Ground", "4", 4, new PostalRateSelection(PostalServiceType.LibraryMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result4 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup1.Rates.Add(result2);
+            rateGroup1.Rates.Add(result3);
+            rateGroup1.Rates.Add(result4);
+
+            var rates = testObject.GetBestRates(testShipment, ex => { });
+
+            Assert.IsTrue(rates.Contains(result4));
+            Assert.AreEqual(1, rates.Count);
         }
     }
 }

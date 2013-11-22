@@ -1013,7 +1013,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                     }
 
-                    rates.ForEach(SetServiceDetails);
+                    rates.ForEach(PostalUtility.SetServiceDetails);
 
                     return rates;
                 }
@@ -1022,31 +1022,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 throw WebHelper.TranslateWebException(ex, typeof(EndiciaException));
             }
-        }
-
-        /// <summary>
-        /// Sets service level details on the specified rate
-        /// </summary>
-        /// <param name="baseRate">Rate on which service level details should be set</param>
-        private static void SetServiceDetails(RateResult baseRate)
-        {
-            if (baseRate.Tag == null)
-            {
-                return;
-            }
-
-            PostalServiceType serviceType = ((PostalRateSelection) baseRate.Tag).ServiceType;
-            baseRate.ServiceLevel = PostalUtility.GetServiceLevel(serviceType);
-
-            int deliveryDays = PostalUtility.GetWorstCaseDeliveryDaysFromServiceType(baseRate.ServiceLevel);
-            DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(deliveryDays, DayOfWeek.Sunday);
-
-            if (deliveryDate.HasValue && deliveryDate.Value.DayOfWeek == DayOfWeek.Saturday)
-            {
-                deliveryDate = deliveryDate.Value.AddDays(2);
-            }
-
-            baseRate.ExpectedDeliveryDate = deliveryDate;
         }
 
         /// <summary>
@@ -1187,7 +1162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException(string.Join("\r\n", errors.Select(e => e.Message).Distinct()));
             }
 
-            results.ForEach(SetServiceDetails);
+            results.ForEach(PostalUtility.SetServiceDetails);
 
             return results;
         }

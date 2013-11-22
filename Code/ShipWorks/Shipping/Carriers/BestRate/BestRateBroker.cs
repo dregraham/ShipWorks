@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="serviceLevelGroup">Group of rates from which to return the cheapest</param>
         /// <returns></returns>
-        private static RateResult CheapestRateInGroup(IGrouping<ServiceLevelType, RateResult> serviceLevelGroup)
+        private static RateResult CheapestRateInGroup(IEnumerable<RateResult> serviceLevelGroup)
         {
             return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
         }

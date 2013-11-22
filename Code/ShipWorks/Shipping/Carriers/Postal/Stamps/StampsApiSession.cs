@@ -245,7 +245,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             new PostalRateSelection(serviceType, PostalConfirmationType.None));
                     }
 
-                    SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
+                    PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
 
                     rates.Add(baseRate);
 
@@ -276,7 +276,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                                 stampsRate.Amount + addOn.Amount,
                                 new PostalRateSelection(serviceType, confirmationType));
 
-                            SetServiceDetails(addOnRate, serviceType, stampsRate.DeliverDays);
+                            PostalUtility.SetServiceDetails(addOnRate, serviceType, stampsRate.DeliverDays);
 
                             rates.Add(addOnRate);
                         }
@@ -301,35 +301,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 // This isn't an authentication exception, so just throw the original exception
                 throw;
-            }
-        }
-
-        /// <summary>
-        /// Sets service level details on the specified rate
-        /// </summary>
-        /// <param name="baseRate">Rate on which service level details should be set</param>
-        /// <param name="serviceType">Service type for the specified rate</param>
-        /// <param name="deliverDays">How many days are expected for the package to be in delivery</param>
-        private static void SetServiceDetails(RateResult baseRate, PostalServiceType serviceType, string deliverDays)
-        {
-            baseRate.ServiceLevel = PostalUtility.GetServiceLevel(serviceType);
-
-            int deliveryDays = -1;
-            if (!int.TryParse(deliverDays.Split('-').LastOrDefault(), out deliveryDays))
-            {
-                deliveryDays = PostalUtility.GetWorstCaseDeliveryDaysFromServiceType(baseRate.ServiceLevel);
-            }
-
-            if (deliveryDays > 0)
-            {
-                DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(deliveryDays, DayOfWeek.Sunday);
-
-                if (deliveryDate.HasValue && deliveryDate.Value.DayOfWeek == DayOfWeek.Saturday)
-                {
-                    deliveryDate = deliveryDate.Value.AddDays(2);
-                }
-
-                baseRate.ExpectedDeliveryDate = deliveryDate;
             }
         }
 
