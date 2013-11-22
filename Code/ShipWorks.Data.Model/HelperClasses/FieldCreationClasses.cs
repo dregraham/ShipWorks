@@ -15182,6 +15182,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.OriginUnparsedName);}
 		}
+		/// <summary>Creates a new ShipmentEntity.InternalBestRateEvents field instance</summary>
+		public static EntityField2 InternalBestRateEvents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.InternalBestRateEvents);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

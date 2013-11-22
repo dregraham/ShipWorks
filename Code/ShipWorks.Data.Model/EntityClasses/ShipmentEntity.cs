@@ -1004,6 +1004,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OriginUnparsedName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InternalBestRateEvents", fieldHashtable);
 		}
 		#endregion
 
@@ -2073,6 +2076,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShipmentFieldIndex.OriginUnparsedName, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.OriginUnparsedName, value); }
+		}
+
+		/// <summary> The InternalBestRateEvents property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."BestRateEvents"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 75<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte[] InternalBestRateEvents
+		{
+			get { return (System.Byte[])GetValue((int)ShipmentFieldIndex.InternalBestRateEvents, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.InternalBestRateEvents, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.
