@@ -213,6 +213,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>

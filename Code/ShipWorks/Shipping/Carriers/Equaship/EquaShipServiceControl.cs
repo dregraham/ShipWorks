@@ -426,6 +426,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
     }
 }

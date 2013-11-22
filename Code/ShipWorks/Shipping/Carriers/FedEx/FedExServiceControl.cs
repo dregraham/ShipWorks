@@ -802,6 +802,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
             OnRateCriteriaChanged(sender, e);
         }
 

@@ -217,6 +217,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
     }
 }

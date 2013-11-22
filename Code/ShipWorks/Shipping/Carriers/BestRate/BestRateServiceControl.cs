@@ -154,9 +154,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             RaiseShipmentTypeChanged();
         }
 
+        /// <summary>
+        /// Event raised when the origin address has changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnOriginChanged(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            sectionFrom.ExtraText = originControl.OriginDescription;
+
+            OnRateCriteriaChanged(sender, e);
         }
 
         /// <summary>
