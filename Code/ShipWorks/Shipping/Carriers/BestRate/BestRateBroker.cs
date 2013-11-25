@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.accountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
             ShipmentType = shipmentType;
-            GetRatesAction = shipment => ShippingManager.GetRates(shipment).Rates;
+            GetRatesAction = ShippingManager.GetRates;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// The action to GetRates.
         /// </summary>
-        public Func<ShipmentEntity, IEnumerable<RateResult>> GetRatesAction { get; set; }
+        public Func<ShipmentEntity, RateGroup>GetRatesAction { get; set; }
 
         public abstract InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
 
@@ -85,9 +85,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     ShipmentType.ConfigureNewShipment(testRateShipment);
                     UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
-                    var rates = GetRates(testRateShipment);
+                    RateGroup rateGroup = GetRates(testRateShipment);
 
-                    IEnumerable<RateResult> results = rates.Where(r => r.Tag != null)
+                    IEnumerable<RateResult> results = rateGroup.Rates.Where(r => r.Tag != null)
                                                            .Where(r => r.Selectable)
                                                            .Where(r => r.Amount > 0)
                                                            .Where(r => !IsExcludedServiceType(r.Tag));
@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets a list of rates for the specified shipment
         /// </summary>
-        protected virtual IEnumerable<RateResult> GetRates(ShipmentEntity shipment)
+        protected virtual RateGroup GetRates(ShipmentEntity shipment)
         {
             return GetRatesAction(shipment);
         }

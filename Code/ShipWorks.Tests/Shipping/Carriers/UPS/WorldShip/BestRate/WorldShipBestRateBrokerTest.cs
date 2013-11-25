@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             testObject = new WorldShipBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment)
             };
 
 

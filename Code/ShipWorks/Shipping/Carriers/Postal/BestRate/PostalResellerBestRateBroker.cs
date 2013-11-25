@@ -29,10 +29,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
         /// <returns>List of RateResults</returns>
         /// <remarks>This is overridden because Postal rates are returned in a pseudo-nested way and they need </remarks>
-        protected override IEnumerable<RateResult> GetRates(ShipmentEntity shipment)
+        protected override RateGroup GetRates(ShipmentEntity shipment)
         {
-            var rates = base.GetRates(shipment).ToList();
-            MergeDescriptionsWithNonSelectableRates(rates);
+            RateGroup rates = base.GetRates(shipment);
+            MergeDescriptionsWithNonSelectableRates(rates.Rates);
             return rates;
         }
 

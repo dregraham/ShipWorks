@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
 
             testObject = new iParcelBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment)
             };
         }
 

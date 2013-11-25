@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
             testObject.GetRatesAction = entity =>
                 {
                     getRatesShipments.Add(EntityUtility.CloneEntity(entity));
-                    return rateGroup1.Rates;
+                    return rateGroup1;
                 };
 
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity() };

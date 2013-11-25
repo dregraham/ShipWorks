@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject = new EndiciaBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment)
             };
 
 

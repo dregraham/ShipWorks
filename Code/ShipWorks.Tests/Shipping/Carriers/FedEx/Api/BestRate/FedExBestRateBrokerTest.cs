@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.BestRate
 
             testObject = new FedExBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment).Rates
+                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment)
             };
         }
 
