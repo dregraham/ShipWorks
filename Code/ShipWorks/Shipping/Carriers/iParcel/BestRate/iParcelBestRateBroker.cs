@@ -59,8 +59,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             currentShipment.IParcel.Service = (int)iParcelServiceType.Saver;
             currentShipment.IParcel.IParcelAccountID = account.IParcelAccountID;
 
-            currentShipment.IParcel.Packages[0].Insurance = originalShipment.Insurance;
-            currentShipment.IParcel.Packages[0].InsuranceValue = originalShipment.BestRate.InsuranceValue;
+            currentShipment.IParcel.Packages[0].Insurance = currentShipment.Insurance;
+            currentShipment.IParcel.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
         }
 
         /// <summary>

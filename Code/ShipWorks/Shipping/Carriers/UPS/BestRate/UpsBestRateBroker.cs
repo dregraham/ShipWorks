@@ -79,8 +79,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             currentShipment.Ups.Service = (int)UpsServiceType.UpsGround;
             currentShipment.Ups.UpsAccountID = account.UpsAccountID;
 
-            currentShipment.Ups.Packages[0].Insurance = originalShipment.Insurance;
-            currentShipment.Ups.Packages[0].InsuranceValue = originalShipment.BestRate.InsuranceValue;
+            currentShipment.Ups.Packages[0].Insurance = currentShipment.Insurance;
+            currentShipment.Ups.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
         }
 
         /// <summary>
