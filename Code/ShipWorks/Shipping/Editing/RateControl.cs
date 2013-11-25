@@ -72,7 +72,6 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
-            List<RateFootnoteControl> previousFootnotes = PreviousFootnotes;
             sandGrid.Rows.Clear();
 
             foreach (RateResult rate in rateGroup.Rates)
@@ -95,27 +94,61 @@ namespace ShipWorks.Shipping.Editing
             }
             
             panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
-            
-            RateFootnoteControl footnote = (rateGroup.FootnoteCreator != null) ? rateGroup.FootnoteCreator() : null;
 
-            if (footnote != null)
-            {
-                footnote.Dock = DockStyle.Fill;
-                panelFootnote.Controls.Add(footnote);
-                panelFootnote.Visible = true;
+            UpdateFootnotes(rateGroup);
 
-                footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
-            }
-            else
+        }
+
+        /// <summary>
+        /// Updates the footnotes.
+        /// </summary>
+        /// <param name="rateGroup">The rate group.</param>
+        private void UpdateFootnotes(RateGroup rateGroup)
+        {
+            try
             {
-                panelFootnote.Visible = false;
+                List<RateFootnoteControl> creator = new List<RateFootnoteControl>();
+
+                if (rateGroup.FootnoteCreator != null)
+                {
+                    creator = rateGroup.FootnoteCreator();
+                }
+
+                panelFootnote.Height = 0;
+                int y = 0;
+                foreach (RateFootnoteControl footnote in creator)
+                {
+                    if (footnote != null)
+                    {
+                        panelFootnote.Controls.Add(footnote);
+                        footnote.Location = new Point(0, y);
+                        panelFootnote.Visible = true;
+
+                        footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
+                        panelFootnote.Height += footnote.Height;
+                        y += footnote.Height;
+                    }
+                    else
+                    {
+                        panelFootnote.Visible = false;
+                    }
+                }
+
+                //List<RateFootnoteControl> previousFootnotes = PreviousFootnotes;
+                foreach (RateFootnoteControl previousFootnote in PreviousFootnotes)
+                {
+                    if (!creator.Any(f => f == previousFootnote))
+                    {
+                        previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
+                        previousFootnote.Dispose();
+                    }
+                }
+            }
+            catch
+            {
+                // TODO: maybe do something with this later
             }
 
-            foreach (RateFootnoteControl previousFootnote in previousFootnotes)
-            {
-                previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
-                previousFootnote.Dispose();
-            }
         }
 
         /// <summary>

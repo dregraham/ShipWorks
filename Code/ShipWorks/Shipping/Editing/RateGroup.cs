@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Editing
     {
         List<RateResult> rates;
         bool outOfDate = false;
-        Func<RateFootnoteControl> footnoteCreator;
+        Func<List<RateFootnoteControl>> footnoteCreator;
 
         /// <summary>
         /// Constructor
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Callback to create a footnote control, if any
         /// </summary>
-        public Func<RateFootnoteControl> FootnoteCreator
+        public Func<List<RateFootnoteControl>> FootnoteCreator
         {
             get { return footnoteCreator; }
             set { footnoteCreator = value; }
