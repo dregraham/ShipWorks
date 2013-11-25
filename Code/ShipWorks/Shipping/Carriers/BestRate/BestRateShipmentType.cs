@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            AddBestRateEvent(shipment, BestRateEventType.RatesCompared);
+            AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
 
@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>This will return the shipping type of the best rate found.</returns>
         public override ShipmentType PreProcess(ShipmentEntity shipment)
         {
-            AddBestRateEvent(shipment, BestRateEventType.RateAutoSelectedAndProcessed);
+            AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
             ShippingManager.EnsureShipmentLoaded(shipment);
 
@@ -350,7 +350,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="bestRate">Rate that should be applied to the shipment</param>
         public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
         {
-            AddBestRateEvent(shipment, BestRateEventType.RateSelected);
+            AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
 
             Action<ShipmentEntity> action = ((Action<ShipmentEntity>) bestRate.Tag);
             action(shipment);
@@ -417,7 +417,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 		
         /// Add a best rate event to a shipment
         /// </summary>
-        private static void AddBestRateEvent(ShipmentEntity shipment, BestRateEventType eventType)
+        private static void AddBestRateEvent(ShipmentEntity shipment, BestRateEventTypes eventType)
         {
             shipment.BestRateEvents |= (int)eventType;
         }

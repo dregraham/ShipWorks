@@ -460,16 +460,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             shipment.BestRateEvents = 0;
             testObject.GetRates(shipment);
 
-            Assert.AreEqual((int)BestRateEventType.RatesCompared, shipment.BestRateEvents);
+            Assert.AreEqual((int)BestRateEventTypes.RatesCompared, shipment.BestRateEvents);
         }
 
         [TestMethod]
         public void GetRates_DoesNotRemoveOtherBestRateEvents_Test()
         {
-            shipment.BestRateEvents = (int)BestRateEventType.RateSelected;
+            shipment.BestRateEvents = (int)BestRateEventTypes.RateSelected;
             testObject.GetRates(shipment);
 
-            Assert.AreEqual(BestRateEventType.RateSelected, (BestRateEventType)shipment.BestRateEvents & BestRateEventType.RateSelected);
+            Assert.AreEqual(BestRateEventTypes.RateSelected, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RateSelected);
         }
 
         [TestMethod]
@@ -542,17 +542,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateResult rate = new RateResult("foo", "3") {Tag = new Action<ShipmentEntity>(entity => { })};
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.AreEqual((int)BestRateEventType.RateSelected, shipment.BestRateEvents); 
+            Assert.AreEqual((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents); 
         }
 
         [TestMethod]
         public void ApplySelectedShipmentRate_DoesNotRemoveOtherBestRateEvents_Test()
         {
-            shipment.BestRateEvents = (int)BestRateEventType.RatesCompared;
+            shipment.BestRateEvents = (int)BestRateEventTypes.RatesCompared;
             RateResult rate = new RateResult("foo", "3") { Tag = new Action<ShipmentEntity>(entity => { }) };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.AreEqual(BestRateEventType.RatesCompared, (BestRateEventType)shipment.BestRateEvents & BestRateEventType.RatesCompared);
+            Assert.AreEqual(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
         }
 
         [TestMethod]

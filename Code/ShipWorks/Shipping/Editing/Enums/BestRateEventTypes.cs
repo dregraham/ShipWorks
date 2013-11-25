@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Editing.Enums
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     [Flags]
-    public enum BestRateEventType
+    public enum BestRateEventTypes
     {
         [Description("None")]
         None = 0x00,

@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping
             shipment.ReturnShipment = false;
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
-            shipment.BestRateEvents = (int)BestRateEventType.None;
+            shipment.BestRateEvents = (int)BestRateEventTypes.None;
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
