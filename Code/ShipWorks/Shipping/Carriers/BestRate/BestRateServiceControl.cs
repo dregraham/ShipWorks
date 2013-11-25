@@ -175,5 +175,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 LoadedShipments.Select(
                     shipment => ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, 0)));
         }
+
+        /// <summary>
+        /// Service Level Changed
+        /// </summary>
+        private void OnServiceLevelChanged(object sender, EventArgs e)
+        {
+            OnRateCriteriaChanged(sender, e);
+        }
     }
 }

@@ -240,6 +240,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.serviceLevel.PromptText = "(Multiple Values)";
             this.serviceLevel.Size = new System.Drawing.Size(121, 21);
             this.serviceLevel.TabIndex = 72;
+            this.serviceLevel.SelectedIndexChanged += new System.EventHandler(this.OnServiceLevelChanged);
             // 
             // insuranceControl
             // 
@@ -249,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(23, 167);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(535, 50);
+            this.insuranceControl.Size = new System.Drawing.Size(591, 50);
             this.insuranceControl.TabIndex = 75;
             // 
             // BestRateServiceControl
