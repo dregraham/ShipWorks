@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Users;
 using ShipWorks.Data.Grid;

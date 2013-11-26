@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace ShipWorks.Shipping.Editing.Enums
+namespace ShipWorks.Shipping.Carriers.BestRate
 {
     /// <summary>
     /// Describes BestRate features used by user when creating and processing a shipment.

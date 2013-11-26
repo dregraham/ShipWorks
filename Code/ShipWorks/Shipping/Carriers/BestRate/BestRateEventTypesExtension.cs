@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {

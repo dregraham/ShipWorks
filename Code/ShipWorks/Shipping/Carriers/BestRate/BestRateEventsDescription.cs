@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {

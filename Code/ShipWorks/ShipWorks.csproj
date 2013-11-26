@@ -920,7 +920,7 @@
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
-    <Compile Include="Shipping\Editing\Enums\BestRateEventTypes.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
     <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />
