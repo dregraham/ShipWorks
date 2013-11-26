@@ -100,19 +100,17 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             return "None";
         }
 
-        private string GetLatestBestRateEventDescription(ShipmentEntity shipment)
+        /// <summary>
+        /// Get text describing the latest best rate event that occurred on the shipment.
+        /// </summary>
+        private static string GetLatestBestRateEventDescription(ShipmentEntity shipment)
         {
+            // Obtain the latest event that occurred
             BestRateEventTypes eventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes latestEvent = eventTypes.GetLatestBestRateEvent();
 
-            // Perform some bit masking on the event types of the shipment with all values of the 
-            // enumeration to see which bits are set, then grab the max value to determine what
-            // the latest event (latest event meaning the event that was closest to the shipment being
-            // processed) that occurred).
-            BestRateEventTypes latestEvent = Enum.GetValues(typeof(BestRateEventTypes)).Cast<BestRateEventTypes>()
-                .Where(v => (v & eventTypes) == v)
-                .Max();
-
-            return new BestRateEventsDescription(latestEvent).ToString();
+            // Now that we have the latest event, we can just return the description for it
+            return new BestRateEventsDescription(latestEvent).ToString().Trim();
         }
 
         /// <summary>
