@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -214,7 +215,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             var serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
-            List<RateResult> rates = new List<RateResult>();
 
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
             
@@ -226,11 +226,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 throw new ShippingException(message);
             }
 
-            foreach (IBestRateShippingBroker broker in bestRateShippingBrokers)
-            {
-                // Use the broker to get the best rates for each shipping provider
-                rates.AddRange(broker.GetBestRates(shipment, exceptionHandler));
-            }
+            // Start getting rates from each enabled carrier
+            Task<List<RateResult>>[] tasks = bestRateShippingBrokers
+                .Select(broker => StartGetRatesTask(broker, shipment, exceptionHandler))
+                .ToArray();
+
+            Task.WaitAll(tasks);
+            List<RateResult> rates = tasks.SelectMany(x => x.Result).ToList();
 
             if (shipment.BestRate.ServiceLevel != (int)ServiceLevelType.Anytime)
             {
@@ -242,7 +244,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 rates = rates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate || serviceLevelSpeedComparer.Compare(x.ServiceLevel, (ServiceLevelType) shipment.BestRate.ServiceLevel) <= 0).ToList();
             }
             
-
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
             IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
@@ -253,6 +254,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // intermingled with rates from other carriers
             orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
             return new RateGroup(orderedRatesList);
+        }
+
+        /// <summary>
+        /// Starts getting rates for a broker
+        /// </summary>
+        /// <param name="broker">Broker for which to start getting rates</param>
+        /// <param name="shipment">Shipment for which to get rates</param>
+        /// <param name="exceptionHandler">Handler for exceptions generated while getting rates</param>
+        /// <returns>A task that will contain the results</returns>
+        private static Task<List<RateResult>> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        {
+            return Task<List<RateResult>>.Factory.StartNew(() => broker.GetBestRates(shipment, exceptionHandler));
         }
 
         /// <summary>
@@ -307,8 +320,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
             ShippingManager.EnsureShipmentLoaded(shipment);
+            RateGroup rateGroup;
 
-            RateGroup rateGroup = GetRates(shipment, PreProcessExceptionHandler);
+            try
+            {
+                rateGroup = GetRates(shipment, PreProcessExceptionHandler);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException;
+            }
+            
             RateResult bestRate = rateGroup.Rates.FirstOrDefault();
 
             if (bestRate == null)
