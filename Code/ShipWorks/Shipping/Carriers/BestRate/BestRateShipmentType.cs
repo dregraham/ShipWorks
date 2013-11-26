@@ -202,8 +202,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderByDescending(e => e.SeverityLevel)
                                                                                 .GroupBy(e => e.Message)
                                                                                 .Select(m => m.First()).ToList();
-
-            rateGroup.FootnoteCreator = () => new List<RateFootnoteControl> { new BrokerExceptionsRateFootnoteControl(distinctExceptions) };
+            if (distinctExceptions.Any())
+            {
+            rateGroup.FootnoteCreators.Add(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
+            }
 
             return rateGroup;
         }
@@ -214,7 +216,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            var serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
 
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
             
@@ -227,33 +228,62 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             // Start getting rates from each enabled carrier
-            Task<List<RateResult>>[] tasks = bestRateShippingBrokers
+            Task<RateGroup>[] tasks = bestRateShippingBrokers
                 .Select(broker => StartGetRatesTask(broker, shipment, exceptionHandler))
                 .ToArray();
 
             Task.WaitAll(tasks);
-            List<RateResult> rates = tasks.SelectMany(x => x.Result).ToList();
 
-            if (shipment.BestRate.ServiceLevel != (int)ServiceLevelType.Anytime)
-            {
-                DateTime? maxDeliveryDate = rates
-                    .Where(x => x.ServiceLevel != ServiceLevelType.Anytime)
-                    .Where(x => (int)x.ServiceLevel <= shipment.BestRate.ServiceLevel)
-                    .Max(x => x.ExpectedDeliveryDate);
+            List<RateGroup> rateGroups = tasks.Select(x => x.Result).ToList();
 
-                rates = rates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate || serviceLevelSpeedComparer.Compare(x.ServiceLevel, (ServiceLevelType) shipment.BestRate.ServiceLevel) <= 0).ToList();
-            }
-            
-            // We want the cheapest rates to appear first, and any ties to be ordered by service level
-            // and return the top 5
-            IEnumerable<RateResult> orderedRates = rates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
-            List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
+            var orderedRatesList = GetBestOrderedRatesList(shipment, rateGroups);
 
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
             // intermingled with rates from other carriers
             orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
-            return new RateGroup(orderedRatesList);
+            
+            RateGroup compiledRateGroup = new RateGroup(orderedRatesList);
+
+            SetFootnote(rateGroups, compiledRateGroup);
+
+            return compiledRateGroup;
+        }
+
+        /// <summary>
+        /// Gets the top best rates ordered by cost then service level.
+        /// </summary>
+        private static List<RateResult> GetBestOrderedRatesList(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
+        {
+            IEnumerable<RateResult> allRates = rateGroups.SelectMany(x => x.Rates);
+
+            var serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
+
+            if (shipment.BestRate.ServiceLevel != (int)ServiceLevelType.Anytime)
+            {
+                DateTime? maxDeliveryDate = allRates
+                    .Where(x => x.ServiceLevel != ServiceLevelType.Anytime)
+                    .Where(x => (int)x.ServiceLevel <= shipment.BestRate.ServiceLevel)
+                    .Max(x => x.ExpectedDeliveryDate);
+
+                allRates = allRates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate || serviceLevelSpeedComparer.Compare(x.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel) <= 0).ToList();
+            }
+
+            // We want the cheapest rates to appear first, and any ties to be ordered by service level
+            // and return the top 5
+            IEnumerable<RateResult> orderedRates = allRates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
+            List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
+            return orderedRatesList;
+        }
+
+        /// <summary>
+        /// Sets the footnote.
+        /// </summary>
+        /// <param name="allRateGroups">The rate groups.</param>
+        /// <param name="compiledRateGroup">The compiled rate group.</param>
+        private static void SetFootnote(List<RateGroup> allRateGroups, RateGroup compiledRateGroup)
+        {
+            allRateGroups.Where(x => x.FootnoteCreators.Count > 0).ToList().ForEach(r => compiledRateGroup.FootnoteCreators.AddRange(r.FootnoteCreators));
         }
 
         /// <summary>
@@ -263,9 +293,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">Shipment for which to get rates</param>
         /// <param name="exceptionHandler">Handler for exceptions generated while getting rates</param>
         /// <returns>A task that will contain the results</returns>
-        private static Task<List<RateResult>> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            return Task<List<RateResult>>.Factory.StartNew(() => broker.GetBestRates(shipment, exceptionHandler));
+            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, exceptionHandler));
         }
 
         /// <summary>

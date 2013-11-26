@@ -45,9 +45,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <returns>List of NoncompetitiveRateResults</returns>
         /// <remarks>This is overridden because Ups has a requirement that we have to hide their branding if
         /// other carriers rates are present</remarks>
-        public override List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            return base.GetBestRates(shipment, exceptionHandler).Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+            RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
+            bestRates.Rates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+
+            return bestRates;
         }
 
         /// <summary>

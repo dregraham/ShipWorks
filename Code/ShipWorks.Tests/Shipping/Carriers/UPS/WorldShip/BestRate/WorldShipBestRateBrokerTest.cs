@@ -167,8 +167,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(OriginalRates(rates).Contains(result1));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result1));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -185,8 +185,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(OriginalRates(rates).Contains(result2));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result2));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -203,9 +203,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(OriginalRates(rates).Contains(result1));
-            Assert.IsTrue(OriginalRates(rates).Contains(result2));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result1));
+            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result2));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -222,9 +222,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(OriginalRates(rates).Contains(result1));
-            Assert.IsTrue(OriginalRates(rates).Contains(result2));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result1));
+            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result2));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -249,7 +249,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.AreEqual(5, rates.Count);
+            Assert.AreEqual(5, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -349,7 +349,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         {
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            foreach (var rate in rates)
+            foreach (var rate in rates.Rates)
             {
                 Assert.IsInstanceOfType(rate, typeof(NoncompetitiveRateResult));
             }
@@ -360,7 +360,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         {
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            foreach (var rate in rates)
+            foreach (var rate in rates.Rates)
             {
                 Assert.IsInstanceOfType(rate.Tag, typeof(Action<ShipmentEntity>));
             }
@@ -380,9 +380,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(OriginalRates(rates).Select(x => x.Description).Contains("UPS Ground"));
-            Assert.IsTrue(OriginalRates(rates).Select(x => x.Description).Contains("UPS Some Service"));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(OriginalRates(rates.Rates).Select(x => x.Description).Contains("UPS Ground"));
+            Assert.IsTrue(OriginalRates(rates.Rates).Select(x => x.Description).Contains("UPS Some Service"));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
        
         /// <summary>

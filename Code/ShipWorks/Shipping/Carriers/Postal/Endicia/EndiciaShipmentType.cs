@@ -399,16 +399,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
 
                     RateGroup finalGroup = new RateGroup(finalRates);
-                    List<RateFootnoteControl> footnotes = new List<RateFootnoteControl>();
+                    
                     if (settings.EndiciaAutomaticExpress1)
                     {
                         if (hasExpress1Savings)
                         {
-                            footnotes.Add(new Express1RateDiscountedFootnote(endiciaRates, express1Rates));
+                            finalGroup.FootnoteCreators.Add(() => new Express1RateDiscountedFootnote(endiciaRates, express1Rates));
                         }
                         else
                         {
-                            footnotes.Add(new Express1RateNotQualifiedFootnote());
+                            finalGroup.FootnoteCreators.Add(() => new Express1RateNotQualifiedFootnote());
                         }
                     }
                     else
@@ -416,10 +416,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
                         {
                             IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
-                            footnotes.Add(new Express1RatePromotionFootnote(express1Settings));
+                            finalGroup.FootnoteCreators.Add(() => new Express1RatePromotionFootnote(express1Settings));
                         }
                     }
-                    finalGroup.FootnoteCreator = () => footnotes;
+                    
                     return finalGroup;
                 }
                 else

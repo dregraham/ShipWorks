@@ -117,9 +117,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Select(x => x.Description).Contains("USPS (w/o Postage) Ground"));
-            Assert.IsTrue(rates.Select(x => x.Description).Contains("USPS (w/o Postage) Some Service"));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS (w/o Postage) Ground"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS (w/o Postage) Some Service"));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -139,8 +139,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Contains(result4));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsTrue(rates.Rates.Contains(result4));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
     }
 }

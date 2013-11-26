@@ -12,25 +12,21 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public class RateGroup
     {
-        List<RateResult> rates;
         bool outOfDate = false;
-        Func<List<RateFootnoteControl>> footnoteCreator;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public RateGroup(IEnumerable<RateResult> rates)
         {
-            this.rates = rates.ToList();
+            this.Rates = rates.ToList();
+            FootnoteCreators = new List<Func<RateFootnoteControl>>();
         }
 
         /// <summary>
         /// Get the rates
         /// </summary>
-        public ICollection<RateResult> Rates
-        {
-            get { return rates; }
-        }
+        public List<RateResult> Rates { get; set; }
 
         /// <summary>
         /// Indicates if the rates are out of date due to a change in shipment values
@@ -44,10 +40,6 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Callback to create a footnote control, if any
         /// </summary>
-        public Func<List<RateFootnoteControl>> FootnoteCreator
-        {
-            get { return footnoteCreator; }
-            set { footnoteCreator = value; }
-        }
+        public List<Func<RateFootnoteControl>> FootnoteCreators { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
         /// two accounts are registered for a single provider, the list of rates would have two entries
         /// if both accounts returned rates).
         /// </returns>
-        public List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             foreach (BrokerException brokerException in brokerExceptionsToThrow)
             {
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
                 exceptionHandler(brokerException);
             }
 
-            return new List<RateResult>();
+            return new RateGroup(new List<RateResult>());
         }
 
         /// <summary>

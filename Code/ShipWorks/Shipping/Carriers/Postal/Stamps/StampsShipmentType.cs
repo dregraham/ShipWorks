@@ -220,26 +220,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
 
                     RateGroup finalGroup = new RateGroup(finalRates);
-                    List<RateFootnoteControl> footnotes = new List<RateFootnoteControl>();
                     if (settings.StampsAutomaticExpress1)
                     {
                         if (hasExpress1Savings)
                         {
-                            footnotes.Add(new Express1RateDiscountedFootnote(stampsRates, express1Rates));
+                            finalGroup.FootnoteCreators.Add(() => new Express1RateDiscountedFootnote(stampsRates, express1Rates));
                         }
                         else
                         {
-                            footnotes.Add(new Express1RateNotQualifiedFootnote());
+                            finalGroup.FootnoteCreators.Add(() => new Express1RateNotQualifiedFootnote());
                         }
                     }
                     else
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
-                            footnotes.Add(new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
+                            finalGroup.FootnoteCreators.Add(() => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
                         }
                     }
-                    finalGroup.FootnoteCreator = () => footnotes;
+                    
                     return finalGroup;
                 }
                 else

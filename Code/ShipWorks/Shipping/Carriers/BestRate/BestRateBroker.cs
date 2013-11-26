@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
-        public virtual List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public virtual RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             List<RateResult> allRates = new List<RateResult>();
 
@@ -73,6 +73,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Create a clone so we don't have to worry about modifying the original shipment
             ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
             testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+
+            Func<RateFootnoteControl> footNoteControl = null;
 
             foreach (TAccount account in accounts)
             {
@@ -91,6 +93,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                            .Where(r => r.Selectable)
                                                            .Where(r => r.Amount > 0)
                                                            .Where(r => !IsExcludedServiceType(r.Tag));
+
+                    if (rateGroup.FootnoteCreators != null)
+                    {
+                        footNoteControl = rateGroup.FootnoteCreators.FirstOrDefault();
+                    }
 
                     // Save a mapping between the rate and the shipment used to get the rate
                     foreach (RateResult result in results)
@@ -119,7 +126,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
             }
 
-            return filteredRates.ToList();
+            var bestRateGroup = new RateGroup(filteredRates.ToList());
+            
+            if (footNoteControl != null)
+            {
+                bestRateGroup.FootnoteCreators.Add(footNoteControl);
+            }
+
+            return bestRateGroup;
         }
 
         /// <summary>

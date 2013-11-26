@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A list of RateResults for each account of a specific shipping provider (i.e. if 
         /// two accounts are registered for a single provider, the list of rates would have two entries
         /// if both accounts returned rates).</returns>
-        List<RateResult> GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler);
+        RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler);
 
         /// <summary>
         /// Gets the insurance provider for the carrier.

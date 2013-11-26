@@ -159,14 +159,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsAllRates_WithNoFilter()
         {
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            RateGroup rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.AreEqual(5, rates.Count);
-            Assert.IsTrue(rates.Contains(account1Rate1));
-            Assert.IsTrue(rates.Contains(account1Rate2));
-            Assert.IsTrue(rates.Contains(account1Rate3));
-            Assert.IsTrue(rates.Contains(account3Rate1));
-            Assert.IsTrue(rates.Contains(account3Rate2));
+            Assert.AreEqual(5, rates.Rates.Count);
+            Assert.IsTrue(rates.Rates.Contains(account1Rate1));
+            Assert.IsTrue(rates.Rates.Contains(account1Rate2));
+            Assert.IsTrue(rates.Rates.Contains(account1Rate3));
+            Assert.IsTrue(rates.Rates.Contains(account3Rate1));
+            Assert.IsTrue(rates.Rates.Contains(account3Rate2));
         }
 
         [TestMethod]
@@ -181,10 +181,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            RateGroup rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Contains(result1));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsTrue(rates.Rates.Contains(result1));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -201,8 +201,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Contains(result2));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -219,9 +219,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Contains(result1));
-            Assert.IsTrue(rates.Contains(result2));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(rates.Rates.Contains(result1));
+            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -238,9 +238,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Contains(result1));
-            Assert.IsTrue(rates.Contains(result2));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(rates.Rates.Contains(result1));
+            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -257,9 +257,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsFalse(rates.Contains(result1));
-            Assert.IsTrue(rates.Contains(result2));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsFalse(rates.Rates.Contains(result1));
+            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
 
         //[TestMethod]
@@ -305,9 +305,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsFalse(rates.Contains(result1), "Returned rates should not include {0}", EnumHelper.GetDescription(excludedServiceType));
-            Assert.IsTrue(rates.Contains(result2));
-            Assert.AreEqual(1, rates.Count);
+            Assert.IsFalse(rates.Rates.Contains(result1), "Returned rates should not include {0}", EnumHelper.GetDescription(excludedServiceType));
+            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.AreEqual(1, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -357,7 +357,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.AreEqual(5, rates.Count);
+            Assert.AreEqual(5, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -455,7 +455,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         {
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            foreach (var rate in rates)
+            foreach (var rate in rates.Rates)
             {
                 Assert.IsNotInstanceOfType(rate, typeof(NoncompetitiveRateResult));
             }
@@ -466,7 +466,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         {
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            foreach (var rate in rates)
+            foreach (var rate in rates.Rates)
             {
                 Assert.IsInstanceOfType(rate.Tag, typeof(Action<ShipmentEntity>));
             }
@@ -486,9 +486,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Select(x => x.Description).Contains("Endicia Ground"));
-            Assert.IsTrue(rates.Select(x => x.Description).Contains("Endicia Some Service"));
-            Assert.AreEqual(2, rates.Count);
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Endicia Ground"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Endicia Some Service"));
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
