@@ -57,8 +57,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
             AddElement("CustomsItem", new CustomsItemOutline(context), () => { if (CustomsManager.IsCustomsRequired(Shipment)) { CustomsManager.LoadCustomsItems(Shipment, false); return Shipment.CustomsItems; } else return null; });
             
-            // Add an outline entry for each best rate event that occurred on the shipment
-            AddElement("BestRateEvents", new BestRateEventsOutline(context), () => new BestRateEventsDescription((BestRateEventTypes)Shipment.BestRateEvents).ToString().Split(new char[] { ',' }));
+            // Add an outline entry for the last/terminating best rate event that occurred on the shipment
+            AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
 
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
@@ -98,6 +98,21 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             }
 
             return "None";
+        }
+
+        private string GetLatestBestRateEventDescription(ShipmentEntity shipment)
+        {
+            BestRateEventTypes eventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+
+            // Perform some bit masking on the event types of the shipment with all values of the 
+            // enumeration to see which bits are set, then grab the max value to determine what
+            // the latest event (latest event meaning the event that was closest to the shipment being
+            // processed) that occurred).
+            BestRateEventTypes latestEvent = Enum.GetValues(typeof(BestRateEventTypes)).Cast<BestRateEventTypes>()
+                .Where(v => (v & eventTypes) == v)
+                .Max();
+
+            return new BestRateEventsDescription(latestEvent).ToString();
         }
 
         /// <summary>
