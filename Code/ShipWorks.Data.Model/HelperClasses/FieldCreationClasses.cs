@@ -15182,10 +15182,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.OriginUnparsedName);}
 		}
-		/// <summary>Creates a new ShipmentEntity.InternalBestRateEvents field instance</summary>
-		public static EntityField2 InternalBestRateEvents
+		/// <summary>Creates a new ShipmentEntity.BestRateEvents field instance</summary>
+		public static EntityField2 BestRateEvents
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.InternalBestRateEvents);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.BestRateEvents);}
 		}
 	}
 

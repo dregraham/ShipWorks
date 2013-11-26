@@ -410,12 +410,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             return shipmentInsuranceProvider;
         }
-		
-        /// Add a best rate event to a shipment
+
+        /// <summary>
+        /// Adds the best rate event.
         /// </summary>
         private static void AddBestRateEvent(ShipmentEntity shipment, BestRateEventTypes eventType)
         {
-            shipment.BestRateEvents |= (int)eventType;
+            if ((shipment.BestRateEvents & (byte) BestRateEventTypes.RateAutoSelectedAndProcessed) != (byte) BestRateEventTypes.RateAutoSelectedAndProcessed)
+            {
+                // User already processed it, don't give credit for getting rates which happens during process...
+                shipment.BestRateEvents |= (byte)eventType;
+            }
         }
     }
 }

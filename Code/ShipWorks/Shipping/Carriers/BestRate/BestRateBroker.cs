@@ -168,6 +168,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             currentShipment.Insurance = originalShipment.Insurance;
 
+            currentShipment.BestRateEvents = originalShipment.BestRateEvents;
 
             // Set the address of the shipment to either the account, or the address of the original shipment
             if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Runtime.Serialization;
 
@@ -32,21 +33,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return deletedFromDatabase; }
             set { deletedFromDatabase = value; }
-        }
-
-        /// <summary>
-        /// Tracks how best rates was used during the processing of the shipment
-        /// </summary>
-        public int BestRateEvents
-        {
-            get
-            {
-                return (InternalBestRateEvents != null) ? BitConverter.ToInt32(InternalBestRateEvents, 0) : 0;
-            }
-            set
-            {
-                InternalBestRateEvents = BitConverter.GetBytes(value);
-            }
         }
 
         /// <summary>
