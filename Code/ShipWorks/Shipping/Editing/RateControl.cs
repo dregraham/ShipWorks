@@ -101,51 +101,44 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="rateGroup">The rate group.</param>
         private void UpdateFootnotes(RateGroup rateGroup)
         {
-            try
+            List<RateFootnoteControl> creator = new List<RateFootnoteControl>();
+
+            if (rateGroup.FootnoteCreator != null)
             {
-                List<RateFootnoteControl> creator = new List<RateFootnoteControl>();
-
-                if (rateGroup.FootnoteCreator != null)
-                {
-                    creator = rateGroup.FootnoteCreator();
-                }
-
-                panelFootnote.Height = 0;
-                int y = 0;
-                foreach (RateFootnoteControl footnote in creator)
-                {
-                    if (footnote != null)
-                    {
-                        panelFootnote.Controls.Add(footnote);
-                        footnote.Location = new Point(0, y);
-                        panelFootnote.Visible = true;
-
-                        footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
-                        panelFootnote.Height += footnote.Height;
-                        y += footnote.Height;
-                    }
-                    else
-                    {
-                        panelFootnote.Visible = false;
-                    }
-                }
-
-                //List<RateFootnoteControl> previousFootnotes = PreviousFootnotes;
-                foreach (RateFootnoteControl previousFootnote in PreviousFootnotes)
-                {
-                    if (!creator.Any(f => f == previousFootnote))
-                    {
-                        previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
-                        previousFootnote.Dispose();
-                    }
-                }
-            }
-            catch
-            {
-                // TODO: maybe do something with this later
+                creator = rateGroup.FootnoteCreator();
             }
 
+            panelFootnote.Height = 0;
+            int y = 0;
+            foreach (RateFootnoteControl footnote in creator)
+            {
+                if (footnote != null)
+                {
+                    panelFootnote.Controls.Add(footnote);
+                    footnote.Location = new Point(0, y);
+                    panelFootnote.Visible = true;
+
+                    footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
+                    panelFootnote.Height += footnote.Height;
+                    y += footnote.Height;
+                }
+                else
+                {
+                    panelFootnote.Visible = false;
+                }
+            }
+
+            //List<RateFootnoteControl> previousFootnotes = PreviousFootnotes;
+            foreach (RateFootnoteControl previousFootnote in PreviousFootnotes)
+            {
+                if (!creator.Any(f => f == previousFootnote))
+                {
+                    previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
+                    previousFootnote.Dispose();
+                }
+            }
         }
+
 
         /// <summary>
         /// The footnote has indicated it has changed something that has changed the rate criteria
