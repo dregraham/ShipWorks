@@ -72,7 +72,6 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
-            var previousFootNotes = CurrentFootnotes;
 
             sandGrid.Rows.Clear();
 
@@ -92,10 +91,10 @@ namespace ShipWorks.Shipping.Editing
             }
             
             panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
-            
-            RemoveFootnotes(previousFootNotes);
 
-            AddFootnotes(rateGroup);
+            RemoveFootnotes(CurrentFootnotes.Except(rateGroup.Footnotes));
+
+            AddFootnotes(rateGroup.Footnotes.Except(CurrentFootnotes));
         }
 
         /// <summary>
@@ -106,35 +105,45 @@ namespace ShipWorks.Shipping.Editing
             foreach (RateFootnoteControl previousFootnote in previousFootnotes)
             {
                 previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
-                //previousFootnote.Dispose();
+                panelFootnote.Controls.Remove(previousFootnote);
+                previousFootnote.Dispose();
             }
         }
 
         /// <summary>
         /// Adds the footnotes.
         /// </summary>
-        /// <param name="rateGroup">The rate group.</param>
-        private void AddFootnotes(RateGroup rateGroup)
+        /// <param name="footNotes">The rate group.</param>
+        private void AddFootnotes(IEnumerable<RateFootnoteControl> footNotes)
         {
             panelFootnote.Height = 0;
             int y = 0;
-            foreach (RateFootnoteControl footnote in rateGroup.Footnotes)
-            {
-                if (footnote != null)
-                {
-                    panelFootnote.Controls.Add(footnote);
-                    footnote.Location = new Point(0, y);
-                    panelFootnote.Visible = true;
 
-                    footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
-                    panelFootnote.Height += footnote.Height;
-                    y += footnote.Height;
-                }
-                else
-                {
-                    panelFootnote.Visible = false;
-                }
+            CurrentFootnotes.ForEach(f => y = PositionFootnote(f, y));
+
+            foreach (RateFootnoteControl footnote in footNotes)
+            {
+                panelFootnote.Controls.Add(footnote);
+                footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
+
+                y = PositionFootnote(footnote, y);
             }
+        }
+
+        /// <summary>
+        /// Set the position of a footnote control within the panel
+        /// </summary>
+        /// <param name="footnote">Footnote to position</param>
+        /// <param name="y">Vertical position at which the control should be set</param>
+        /// <returns></returns>
+        private int PositionFootnote(Control footnote, int y)
+        {
+            footnote.Location = new Point(0, y);
+            panelFootnote.Visible = true;
+
+            panelFootnote.Height += footnote.Height;
+            y += footnote.Height;
+            return y;
         }
 
         /// <summary>
