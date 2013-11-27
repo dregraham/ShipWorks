@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the rates
         /// </summary>
-        public List<RateResult> Rates { get; set; }
+        public List<RateResult> Rates { get; private set; }
 
         /// <summary>
         /// Indicates if the rates are out of date due to a change in shipment values
@@ -40,6 +40,6 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Callback to create a footnote control, if any
         /// </summary>
-        public List<Func<RateFootnoteControl>> FootnoteCreators { get; set; }
+        public List<Func<RateFootnoteControl>> FootnoteCreators { get; private set; }
     }
 }

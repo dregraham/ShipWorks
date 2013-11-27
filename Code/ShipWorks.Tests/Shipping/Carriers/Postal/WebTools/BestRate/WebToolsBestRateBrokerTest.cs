@@ -104,6 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
         {
             Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity()));
         }
+
         [TestMethod]
         public void GetBestRates_AddsPostalToDescription_WhenItDoesNotAlreadyExist()
         {

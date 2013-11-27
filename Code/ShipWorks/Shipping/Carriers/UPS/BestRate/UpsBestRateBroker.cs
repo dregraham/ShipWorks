@@ -48,7 +48,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
-            bestRates.Rates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+            var modifiedRates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+            bestRates.Rates.Clear();
+            bestRates.Rates.AddRange(modifiedRates);
 
             return bestRates;
         }

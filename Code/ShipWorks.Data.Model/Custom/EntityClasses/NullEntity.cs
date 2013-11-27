@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.Custom.EntityClasses
@@ -10,6 +11,17 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
     /// but specific behavior may not be.  It is an implementation of the null object pattern</remarks>
     public class NullEntity : EntityBase2
     {
+        private readonly int hashCode;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public NullEntity()
+        {
+            // Make up a hash code so this will work in dictionaries
+            hashCode = new Random().Next(Int32.MaxValue);
+        }
+
         /// <summary>
         /// Custom Properties of type
         /// </summary>
@@ -96,6 +108,14 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         public override List<IEntityCollection2> GetMemberEntityCollections()
         {
             return new List<IEntityCollection2>();
+        }
+
+        /// <summary>
+        /// Get the made up hash code
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return hashCode;
         }
     }
 }

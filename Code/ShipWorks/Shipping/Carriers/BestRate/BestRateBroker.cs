@@ -7,7 +7,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
 
@@ -65,45 +64,29 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
         public virtual RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            List<RateResult> allRates = new List<RateResult>();
-
             List<TAccount> accounts = accountRepository.Accounts.ToList();
 
-            Dictionary<RateResult, TAccount> rateShipments = new Dictionary<RateResult, TAccount>();
+            // Get rates for each account asynchronously
+            IDictionary<TAccount, Task<RateGroup>> accountRates = accounts.ToDictionary(a => a,
+                a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, exceptionHandler)));
 
-            Func<RateFootnoteControl> footNoteControl = null;
+            Task.WaitAll(accountRates.Values.ToArray<Task>());
+            accountRates = accountRates.Where(x => x.Value.Result != null).ToDictionary(x => x.Key, x => x.Value);
 
-            Task<Tuple<RateGroup, TAccount>>[] tasks = accounts.Select(a => Task<Tuple<RateGroup, TAccount>>.Factory.StartNew(() => GetRatesForAccount(shipment, a, exceptionHandler))).ToArray();
-            Task.WaitAll(tasks);
+            // Filter the returned rates
+            List<RateResult> filteredRates = accountRates.SelectMany(x => x.Value.Result.Rates)
+                                                         .Where(IsValidRate)
+                                                         .Where(r => !IsExcludedServiceType(r.Tag))
+                                                         .GroupBy(r => GetServiceTypeFromTag(r.Tag))
+                                                         .SelectMany(RateResultsByServiceLevel)
+                                                         .ToList();
 
-            foreach (Task<Tuple<RateGroup, TAccount>> task in tasks.Where(t => t.Result.Item1 != null))
-            {
-                RateGroup rateGroup = task.Result.Item1;
-                TAccount account = task.Result.Item2;
-
-                if (rateGroup.FootnoteCreators != null)
-                {
-                    footNoteControl = rateGroup.FootnoteCreators.FirstOrDefault();
-                }
-
-                IEnumerable<RateResult> results = rateGroup.Rates.Where(r => r.Tag != null)
-                                       .Where(r => r.Selectable)
-                                       .Where(r => r.Amount > 0)
-                                       .Where(r => !IsExcludedServiceType(r.Tag));
-
-                // Save a mapping between the rate and the shipment used to get the rate
-                foreach (RateResult result in results)
-                {
-                    rateShipments.Add(result, account);
-                    allRates.Add(result);
-                }
-            }
-
-            // Return all the rates, then group by PostalServiceType and ServiceLevel
-            List<RateResult> filteredRates = allRates
-                .GroupBy(r => GetServiceTypeFromTag(r.Tag))
-                .SelectMany(RateResultsByServiceLevel)
-                .ToList();
+            // Create a dictionary of rates with their associated accounts for lookup later
+            IDictionary<RateResult, TAccount> rateShipments = accountRates
+                .Select(ar => ar.Value.Result.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
+                .SelectMany(x => x)
+                .Where(x => x.Key != null)
+                .ToDictionary(x => x.Key, x => x.Value);
 
             foreach (RateResult rate in filteredRates)
             {
@@ -114,6 +97,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             var bestRateGroup = new RateGroup(filteredRates.ToList());
 
+            var footNoteControl = accountRates.SelectMany(x => x.Value.Result.FootnoteCreators)
+                                              .FirstOrDefault();
             if (footNoteControl != null)
             {
                 bestRateGroup.FootnoteCreators.Add(footNoteControl);
@@ -129,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="account">Account for which rates will be retrieved</param>
         /// <param name="exceptionHandler">Exceptions will be given to this action for handling</param>
         /// <returns></returns>
-        private Tuple<RateGroup, TAccount> GetRatesForAccount(ShipmentEntity shipment, TAccount account, Action<BrokerException> exceptionHandler)
+        private RateGroup GetRatesForAccount(ShipmentEntity shipment, TAccount account, Action<BrokerException> exceptionHandler)
         {
             try
             {
@@ -144,13 +129,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ShipmentType.ConfigureNewShipment(testRateShipment);
                 UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
-                return new Tuple<RateGroup, TAccount>(GetRates(testRateShipment), account);
+                return GetRates(testRateShipment);
             }
             catch (ShippingException ex)
             {
                 // Offload exception handling to the passed in exception handler
                 exceptionHandler(WrapShippingException(ex));
-                return new Tuple<RateGroup, TAccount>(null, null);
+                return null;
             }
         }
 
@@ -248,6 +233,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private static RateResult CheapestRateInGroup(IEnumerable<RateResult> serviceLevelGroup)
         {
             return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Should the rate be included in the results
+        /// </summary>
+        private static bool IsValidRate(RateResult rate)
+        {
+            return rate != null && rate.Tag != null && rate.Selectable && rate.Amount > 0;
         }
 
         /// <summary>
