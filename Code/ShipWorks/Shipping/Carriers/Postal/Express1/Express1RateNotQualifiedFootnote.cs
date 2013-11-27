@@ -13,7 +13,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public Express1RateNotQualifiedFootnote()
         {
             InitializeComponent();
-
         }
     }
 }

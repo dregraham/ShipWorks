@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
@@ -22,8 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             InitializeComponent();
 
             express1Settings = settings;
-            
-            AddCarrierNameText(label, linkControl);
+        }
+
+        /// <summary>
+        /// Adds the carrier name text to the text of the control
+        /// </summary>
+        public override void SetCarrierName(string carrierName)
+        {
+            AddCarrierNameText(carrierName, label, linkControl);
         }
 
         /// <summary>

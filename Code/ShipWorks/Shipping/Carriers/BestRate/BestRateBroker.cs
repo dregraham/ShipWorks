@@ -101,6 +101,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                               .FirstOrDefault();
             if (footNoteControl != null)
             {
+                footNoteControl.SetCarrierName(carrierDescription);
                 bestRateGroup.Footnotes.Add(footNoteControl);
             }
 

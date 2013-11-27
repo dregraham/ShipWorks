@@ -21,10 +21,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             this.originalRates = originalRates;
             this.discountedRates = discountedRates;
-
-            AddCarrierNameText(label, linkControl);
         }
 
+        /// <summary>
+        /// Adds the carrier name text to the text of the control
+        /// </summary>
+        public override void SetCarrierName(string carrierName)
+        {
+            AddCarrierNameText(carrierName, label, linkControl);
+        }
 
         /// <summary>
         /// View the detailed Endicia vs. Express1 savings

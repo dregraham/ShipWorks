@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Controls;
 
@@ -16,23 +11,12 @@ namespace ShipWorks.Shipping.Editing
     public partial class RateFootnoteControl : UserControl
     {
         public event EventHandler RateCriteriaChanged;
-        public string CarrierName = "";
 
         /// <summary>
         /// Constructor
         /// </summary>
         public RateFootnoteControl()
         {
-            InitializeComponent();
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public RateFootnoteControl(string carrierName)
-        {
-            this.CarrierName = carrierName;
-
             InitializeComponent();
         }
 
@@ -48,15 +32,24 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Adds the carrier name text to the text of the control
+        /// </summary>
+        public virtual void SetCarrierName(string value)
+        {
+            
+        }
+
+        /// <summary>
         /// Adds the carrier name text.
         /// </summary>
+        /// <param name="carrierName"></param>
         /// <param name="label">The main message text.</param>
         /// <param name="linkLabel">The link label.</param>
-        protected void AddCarrierNameText(Label label, LinkControl linkLabel)
+        protected void AddCarrierNameText(string carrierName, Label label, LinkControl linkLabel)
         {
-            if (!String.IsNullOrEmpty(CarrierName))
+            if (!String.IsNullOrEmpty(carrierName))
             {
-                label.Text = "(" + CarrierName + ") " + label.Text;
+                label.Text = "(" + carrierName + ") " + label.Text;
                 // Resize the label to fit the text
                 label.AutoSize = true;
 
