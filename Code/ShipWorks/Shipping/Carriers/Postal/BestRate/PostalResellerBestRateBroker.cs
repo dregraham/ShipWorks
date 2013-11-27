@@ -49,11 +49,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         private static void MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
         {
             Regex beginsWithSpaces = new Regex("^[ ]+");
-            
+            Regex removeDeliveryConfirmation = new Regex(@" Delivery Confirmation \(\$\d*\.\d\d\)");
+
             RateResult lastNonSelectable = null;
 
-            //TODO: There is a bug here where if the next "top-level" rate is selectable, it will have its description
-            // Added to the previous non-selectable rate
             foreach (var rate in rates)
             {
                 if (rate.Selectable)
@@ -68,6 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                 {
                     lastNonSelectable = rate;
                 }
+
+                rate.Description = removeDeliveryConfirmation.Replace(rate.Description, string.Empty);
             }
         }
 
