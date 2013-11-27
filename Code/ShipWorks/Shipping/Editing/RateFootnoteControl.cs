@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Adds the carrier name text to the text of the control
         /// </summary>
-        public virtual void SetCarrierName(string value)
+        public virtual void SetCarrierName(string carrierName)
         {
             
         }
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="carrierName"></param>
         /// <param name="label">The main message text.</param>
         /// <param name="linkLabel">The link label.</param>
-        protected void AddCarrierNameText(string carrierName, Label label, LinkControl linkLabel)
+        protected static void AddCarrierNameText(string carrierName, Label label, LinkControl linkLabel)
         {
             if (!String.IsNullOrEmpty(carrierName))
             {
