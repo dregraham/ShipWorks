@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Editing
             foreach (RateFootnoteControl previousFootnote in previousFootnotes)
             {
                 previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
-                previousFootnote.Dispose();
+                //previousFootnote.Dispose();
             }
         }
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Editing
         {
             panelFootnote.Height = 0;
             int y = 0;
-            foreach (RateFootnoteControl footnote in rateGroup.FootnoteCreators.Select(footnoteCreator => footnoteCreator()))
+            foreach (RateFootnoteControl footnote in rateGroup.Footnotes)
             {
                 if (footnote != null)
                 {

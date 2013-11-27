@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Editing
         public RateGroup(IEnumerable<RateResult> rates)
         {
             this.Rates = rates.ToList();
-            FootnoteCreators = new List<Func<RateFootnoteControl>>();
+            Footnotes = new List<RateFootnoteControl>();
         }
 
         /// <summary>
@@ -40,6 +40,6 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Callback to create a footnote control, if any
         /// </summary>
-        public List<Func<RateFootnoteControl>> FootnoteCreators { get; private set; }
+        public List<RateFootnoteControl> Footnotes { get; private set; }
     }
 }

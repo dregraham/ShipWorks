@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                                                 .Select(m => m.First()).ToList();
             if (distinctExceptions.Any())
             {
-                rateGroup.FootnoteCreators.Add(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
+                rateGroup.Footnotes.Add(new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
             }
 
             return rateGroup;
@@ -215,9 +215,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
-            
+
             if (!bestRateShippingBrokers.Any())
             {
                 string message = string.Format("There are not any accounts configured to use with best rate.{0}Check the shipping settings to ensure " +
@@ -282,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="compiledRateGroup">The compiled rate group.</param>
         private static void SetFootnote(List<RateGroup> allRateGroups, RateGroup compiledRateGroup)
         {
-            allRateGroups.Where(x => x.FootnoteCreators.Count > 0).ToList().ForEach(r => compiledRateGroup.FootnoteCreators.AddRange(r.FootnoteCreators));
+            allRateGroups.Where(x => x.Footnotes.Count > 0).ToList().ForEach(r => compiledRateGroup.Footnotes.AddRange(r.Footnotes));
         }
 
         /// <summary>

@@ -393,7 +393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
 
             // Probably a better way to inspect that the footnote creator has a BrokerExceptionsRateFootnoteControl
-            Assert.IsNotNull(rateGroup.FootnoteCreators);
+            Assert.IsNotNull(rateGroup.Footnotes);
         }
         
         [TestMethod]

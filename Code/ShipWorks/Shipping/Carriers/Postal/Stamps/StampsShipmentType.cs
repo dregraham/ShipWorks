@@ -117,6 +117,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            ValidateShipment(shipment);
+
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
@@ -222,18 +224,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.FootnoteCreators.Add(() => new Express1RateDiscountedFootnote(stampsRates, express1Rates));
+                            finalGroup.Footnotes.Add(new Express1RateDiscountedFootnote(stampsRates, express1Rates));
                         }
                         else
                         {
-                            finalGroup.FootnoteCreators.Add(() => new Express1RateNotQualifiedFootnote());
+                            finalGroup.Footnotes.Add(new Express1RateNotQualifiedFootnote());
                         }
                     }
                     else
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
-                            finalGroup.FootnoteCreators.Add(() => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
+                            finalGroup.Footnotes.Add(new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
                         }
                     }
                     
