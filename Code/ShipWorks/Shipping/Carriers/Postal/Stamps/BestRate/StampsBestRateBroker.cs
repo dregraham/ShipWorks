@@ -79,5 +79,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         {
             postalShipmentEntity.Stamps.StampsAccountID = account.StampsAccountID;
         }
+
+        protected override void AddCarrierNameToFootnoteText(RateGroup rates)
+        {
+            //throw new System.NotImplementedException();
+        }
     }
 }

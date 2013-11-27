@@ -78,5 +78,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         {
             postalShipmentEntity.Endicia.EndiciaAccountID = account.EndiciaAccountID;
         }
+
+        protected override void AddCarrierNameToFootnoteText(Editing.RateGroup rates)
+        {
+           // throw new System.NotImplementedException();
+        }
     }
 }

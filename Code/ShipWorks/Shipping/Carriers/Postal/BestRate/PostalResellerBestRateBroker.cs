@@ -5,6 +5,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -33,8 +34,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             RateGroup rates = base.GetRates(shipment);
             MergeDescriptionsWithNonSelectableRates(rates.Rates);
+            AddCarrierNameToFootnoteText(rates);
             return rates;
         }
+
+        protected abstract void AddCarrierNameToFootnoteText(RateGroup rates);
 
         /// <summary>
         /// Merge rate descriptions meant as headers with actual rate descriptions

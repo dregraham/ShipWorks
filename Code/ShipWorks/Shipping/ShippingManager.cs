@@ -707,7 +707,7 @@ namespace ShipWorks.Shipping
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-            // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
+            // Marke sure the type is setup - it's possible it's not in the case of upgrading from V2
             if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
                 throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));

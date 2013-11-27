@@ -117,8 +117,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            ValidateShipment(shipment);
-
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 

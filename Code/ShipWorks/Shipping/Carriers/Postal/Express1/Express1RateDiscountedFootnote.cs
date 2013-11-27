@@ -21,7 +21,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             this.originalRates = originalRates;
             this.discountedRates = discountedRates;
+
+            AddCarrierNameText(label, linkControl);
         }
+
 
         /// <summary>
         /// View the detailed Endicia vs. Express1 savings

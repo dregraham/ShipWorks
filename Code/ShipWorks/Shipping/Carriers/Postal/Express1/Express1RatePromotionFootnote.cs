@@ -22,6 +22,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             InitializeComponent();
 
             express1Settings = settings;
+            
+            AddCarrierNameText(label, linkControl);
         }
 
         /// <summary>

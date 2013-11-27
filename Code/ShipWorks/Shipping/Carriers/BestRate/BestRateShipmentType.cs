@@ -190,11 +190,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-
             RateGroup rateGroup = GetRates(shipment, ex =>
             {
                 // Accumulate all of the broker exceptions for later use
-                log.WarnFormat("Received an while obtaining rates from a carrier. {0}", ex.Message);
+                log.WarnFormat("Received an error while obtaining rates from a carrier. {0}", ex.Message);
                 brokerExceptions.Add(ex);
             });
 
@@ -204,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                                                 .Select(m => m.First()).ToList();
             if (distinctExceptions.Any())
             {
-            rateGroup.FootnoteCreators.Add(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
+                rateGroup.FootnoteCreators.Add(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
             }
 
             return rateGroup;

@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 try
                 {
-                    //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
+                    // Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
                     testRateShipment.BestRate.InsuranceValue = 0;
 
                     CreateShipmentChild(testRateShipment);
