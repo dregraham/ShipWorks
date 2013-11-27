@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -70,46 +71,31 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             Dictionary<RateResult, TAccount> rateShipments = new Dictionary<RateResult, TAccount>();
 
-            // Create a clone so we don't have to worry about modifying the original shipment
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-            testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
-
             Func<RateFootnoteControl> footNoteControl = null;
 
-            foreach (TAccount account in accounts)
+            Task<Tuple<RateGroup, TAccount>>[] tasks = accounts.Select(a => Task<Tuple<RateGroup, TAccount>>.Factory.StartNew(() => GetRatesForAccount(shipment, a, exceptionHandler))).ToArray();
+            Task.WaitAll(tasks);
+
+            foreach (Task<Tuple<RateGroup, TAccount>> task in tasks.Where(t => t.Result.Item1 != null))
             {
-                try
+                RateGroup rateGroup = task.Result.Item1;
+                TAccount account = task.Result.Item2;
+
+                if (rateGroup.FootnoteCreators != null)
                 {
-                    // Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
-                    testRateShipment.BestRate.InsuranceValue = 0;
-
-                    CreateShipmentChild(testRateShipment);
-                    ShipmentType.ConfigureNewShipment(testRateShipment);
-                    UpdateChildShipmentSettings(testRateShipment, shipment, account);
-
-                    RateGroup rateGroup = GetRates(testRateShipment);
-
-                    IEnumerable<RateResult> results = rateGroup.Rates.Where(r => r.Tag != null)
-                                                           .Where(r => r.Selectable)
-                                                           .Where(r => r.Amount > 0)
-                                                           .Where(r => !IsExcludedServiceType(r.Tag));
-
-                    if (rateGroup.FootnoteCreators != null)
-                    {
-                        footNoteControl = rateGroup.FootnoteCreators.FirstOrDefault();
-                    }
-
-                    // Save a mapping between the rate and the shipment used to get the rate
-                    foreach (RateResult result in results)
-                    {
-                        rateShipments.Add(result, account);
-                        allRates.Add(result);
-                    }
+                    footNoteControl = rateGroup.FootnoteCreators.FirstOrDefault();
                 }
-                catch (ShippingException ex)
+
+                IEnumerable<RateResult> results = rateGroup.Rates.Where(r => r.Tag != null)
+                                       .Where(r => r.Selectable)
+                                       .Where(r => r.Amount > 0)
+                                       .Where(r => !IsExcludedServiceType(r.Tag));
+
+                // Save a mapping between the rate and the shipment used to get the rate
+                foreach (RateResult result in results)
                 {
-                    // Offload exception handling to the passed in exception handler
-                    exceptionHandler(WrapShippingException(ex));
+                    rateShipments.Add(result, account);
+                    allRates.Add(result);
                 }
             }
 
@@ -127,13 +113,45 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             var bestRateGroup = new RateGroup(filteredRates.ToList());
-            
+
             if (footNoteControl != null)
             {
                 bestRateGroup.FootnoteCreators.Add(footNoteControl);
             }
 
             return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Gets rates for the specified account
+        /// </summary>
+        /// <param name="shipment">Shipment that will be used as the basis for getting rates</param>
+        /// <param name="account">Account for which rates will be retrieved</param>
+        /// <param name="exceptionHandler">Exceptions will be given to this action for handling</param>
+        /// <returns></returns>
+        private Tuple<RateGroup, TAccount> GetRatesForAccount(ShipmentEntity shipment, TAccount account, Action<BrokerException> exceptionHandler)
+        {
+            try
+            {
+                // Create a clone so we don't have to worry about modifying the original shipment
+                ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
+                testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+
+                //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
+                testRateShipment.BestRate.InsuranceValue = 0;
+
+                CreateShipmentChild(testRateShipment);
+                ShipmentType.ConfigureNewShipment(testRateShipment);
+                UpdateChildShipmentSettings(testRateShipment, shipment, account);
+
+                return new Tuple<RateGroup, TAccount>(GetRates(testRateShipment), account);
+            }
+            catch (ShippingException ex)
+            {
+                // Offload exception handling to the passed in exception handler
+                exceptionHandler(WrapShippingException(ex));
+                return new Tuple<RateGroup, TAccount>(null, null);
+            }
         }
 
         /// <summary>

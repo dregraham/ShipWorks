@@ -292,7 +292,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             RateResult result1 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(excludedServiceType, PostalConfirmationType.None))
                 {
-                    ServiceLevel = ServiceLevelType.OneDay
+                    ServiceLevel = ServiceLevelType.TwoDays
                 };
 
             RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None))
