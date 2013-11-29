@@ -13,14 +13,15 @@ namespace ShipWorks.Shipping.Editing
     public class RateGroup
     {
         bool outOfDate = false;
-        
+        private readonly List<Func<RateFootnoteControl>> footnoteCreators;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public RateGroup(IEnumerable<RateResult> rates)
         {
             this.Rates = rates.ToList();
-            Footnotes = new List<RateFootnoteControl>();
+            footnoteCreators = new List<Func<RateFootnoteControl>>();
         }
 
         /// <summary>
@@ -40,6 +41,20 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Callback to create a footnote control, if any
         /// </summary>
-        public List<RateFootnoteControl> Footnotes { get; private set; }
+        public IEnumerable<Func<RateFootnoteControl>> FootnoteCreators
+        {
+            get
+            {
+                return footnoteCreators;
+            }
+        }
+
+        /// <summary>
+        /// Adds a footnote control creator to the footnote control creator collection
+        /// </summary>
+        public void AddFootNoteCreator<T>(Func<T> creator) where T : RateFootnoteControl
+        {
+            footnoteCreators.Add(creator);
+        }
     }
 }

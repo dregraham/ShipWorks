@@ -97,12 +97,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             var bestRateGroup = new RateGroup(filteredRates.ToList());
 
-            var footNoteControl = accountRates.SelectMany(x => x.Value.Result.Footnotes)
+            var footNoteControl = accountRates.SelectMany(x => x.Value.Result.FootnoteCreators)
                                               .FirstOrDefault();
             if (footNoteControl != null)
             {
-                footNoteControl.SetCarrierName(carrierDescription);
-                bestRateGroup.Footnotes.Add(footNoteControl);
+                //footNoteControl.SetCarrierName(carrierDescription);
+                bestRateGroup.AddFootNoteCreator(() =>
+                    {
+                        RateFootnoteControl control = footNoteControl();
+                        control.SetCarrierName(carrierDescription);
+                        return control;
+                    });
             }
 
             return bestRateGroup;
@@ -123,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
                 testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
 
-                // Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
+                //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
                 testRateShipment.BestRate.InsuranceValue = 0;
 
                 CreateShipmentChild(testRateShipment);
