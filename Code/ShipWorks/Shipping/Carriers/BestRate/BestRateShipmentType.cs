@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                                                 .Select(m => m.First()).ToList();
             if (distinctExceptions.Any())
             {
-                rateGroup.AddFootNoteCreator(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
+                rateGroup.AddFootnoteCreator(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
             }
 
             return rateGroup;
@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             foreach (var creator in allRateGroups.SelectMany(outerGroup => outerGroup.FootnoteCreators))
             {
-                compiledRateGroup.AddFootNoteCreator(creator);
+                compiledRateGroup.AddFootnoteCreator(creator);
             }
         }
 

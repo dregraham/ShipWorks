@@ -222,18 +222,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.AddFootNoteCreator(() => new Express1RateDiscountedFootnote(stampsRates, express1Rates));
+                            finalGroup.AddFootnoteCreator(() => new Express1RateDiscountedFootnote(stampsRates, express1Rates));
                         }
                         else
                         {
-                            finalGroup.AddFootNoteCreator(() => new Express1RateNotQualifiedFootnote());
+                            finalGroup.AddFootnoteCreator(() => new Express1RateNotQualifiedFootnote());
                         }
                     }
                     else
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
-                            finalGroup.AddFootNoteCreator(() => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
+                            finalGroup.AddFootnoteCreator(() => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
                         }
                     }
                     

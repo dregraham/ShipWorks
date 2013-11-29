@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Adds a footnote control creator to the footnote control creator collection
         /// </summary>
-        public void AddFootNoteCreator<T>(Func<T> creator) where T : RateFootnoteControl
+        public void AddFootnoteCreator<T>(Func<T> creator) where T : RateFootnoteControl
         {
             footnoteCreators.Add(creator);
         }
