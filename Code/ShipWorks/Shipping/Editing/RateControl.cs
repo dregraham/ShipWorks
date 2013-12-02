@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -75,11 +76,24 @@ namespace ShipWorks.Shipping.Editing
 
             sandGrid.Rows.Clear();
 
+            bool isBestRate = rateGroup.Carrier == ShipmentTypeCode.BestRate;
+            if (!isBestRate)
+            {
+                gridColumnCarrier.Visible = false;
+            }
+
             foreach (RateResult rate in rateGroup.Rates)
             {
+                string serviceDescription = rate.Description;
+                if (isBestRate && rate.CarrierDescription != null)
+                {
+                    int indexOfCarrierNameInServiceDescription = rate.Description.IndexOf(rate.CarrierDescription);
+                    serviceDescription = (indexOfCarrierNameInServiceDescription < 0) ? rate.Description : rate.Description.Remove(indexOfCarrierNameInServiceDescription, rate.CarrierDescription.Length + 1);
+                }
                 GridRow row = new GridRow(new GridCell[]
                 {
-                    new GridCell(rate.Description),
+                    new GridCell(rate.CarrierDescription),
+                    new GridCell(serviceDescription),
                     new GridCell(rate.Days),
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
                     new GridHyperlinkCell(rate.Selectable ? "Select" : "")

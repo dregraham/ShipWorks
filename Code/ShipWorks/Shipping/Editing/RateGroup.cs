@@ -56,5 +56,11 @@ namespace ShipWorks.Shipping.Editing
         {
             footnoteCreators.Add(creator);
         }
+
+        /// <summary>
+        /// Gets or sets the carrier.
+        /// </summary>
+        public ShipmentTypeCode Carrier { get; set; }
+
     }
 }

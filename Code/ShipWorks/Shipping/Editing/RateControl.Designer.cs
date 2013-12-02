@@ -41,6 +41,7 @@
             this.panelOutOfDate = new System.Windows.Forms.Panel();
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.gridColumnCarrier = new Divelements.SandGrid.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).BeginInit();
             this.outOfDateBar.Panel.SuspendLayout();
@@ -55,6 +56,7 @@
             this.sandGrid.AllowMultipleSelection = false;
             this.sandGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
+            this.gridColumnCarrier,
             this.gridColumnService,
             this.gridColumnDays,
             this.gridColumnRate,
@@ -65,11 +67,13 @@
             this.sandGrid.Location = new System.Drawing.Point(0, 30);
             this.sandGrid.Name = "sandGrid";
             this.sandGrid.NullRepresentation = "";
+            this.sandGrid.PrimaryColumn = this.gridColumnService;
             this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
             this.sandGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("First Class"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -79,6 +83,7 @@
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))}),
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("     Delivery Confirmation (+$.045)"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -88,6 +93,7 @@
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))}),
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("     Signature Confirmation (+$0.85)"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -97,6 +103,7 @@
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))}),
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("Priority"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -114,7 +121,6 @@
             // 
             this.gridColumnService.AllowEditing = false;
             this.gridColumnService.AllowReorder = false;
-            this.gridColumnService.AllowWrap = false;
             this.gridColumnService.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnService.Clickable = false;
             this.gridColumnService.HeaderText = "Service";
@@ -234,6 +240,11 @@
             this.kryptonBorderEdge.TabIndex = 3;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
+            // gridColumnCarrier
+            // 
+            this.gridColumnCarrier.HeaderText = "Carrier";
+            this.gridColumnCarrier.Width = 50;
+            // 
             // RateControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -270,5 +281,6 @@
         private System.Windows.Forms.Panel panelOutOfDate;
         private System.Windows.Forms.Panel panelFootnote;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
+        private Divelements.SandGrid.GridColumn gridColumnCarrier;
     }
 }

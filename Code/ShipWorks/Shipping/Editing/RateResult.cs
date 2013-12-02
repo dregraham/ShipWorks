@@ -19,6 +19,8 @@ namespace ShipWorks.Shipping.Editing
         Image amountFootnote;
         object tag;
 
+        string carrierDescription;
+
         /// <summary>
         /// Constructor for tests
         /// </summary>
@@ -118,5 +120,22 @@ namespace ShipWorks.Shipping.Editing
         {
             
         }
+
+
+
+        /// <summary>
+        /// Gets or sets the carrier description.
+        /// </summary>
+        /// <value>
+        /// The carrier description.
+        /// </value>
+        public string CarrierDescription
+        {
+            get { return carrierDescription; }
+            set { carrierDescription = value; }
+        }
+
+
+
     }
 }

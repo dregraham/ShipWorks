@@ -246,6 +246,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             SetFootnote(rateGroups, compiledRateGroup);
 
+            compiledRateGroup.Carrier = Shipping.ShipmentTypeCode.BestRate;
             return compiledRateGroup;
         }
 

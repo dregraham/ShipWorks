@@ -93,6 +93,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Replace the service type with a function that will select the correct shipment type
                 rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
+                rate.CarrierDescription = carrierDescription;
             }
 
             var bestRateGroup = new RateGroup(filteredRates.ToList());
