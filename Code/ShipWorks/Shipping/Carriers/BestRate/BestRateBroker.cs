@@ -67,14 +67,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<TAccount> accounts = accountRepository.Accounts.ToList();
 
             // Get rates for each account asynchronously
-            IDictionary<TAccount, Task<RateGroup>> accountRates = accounts.ToDictionary(a => a,
+            IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,
                 a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, exceptionHandler)));
 
-            Task.WaitAll(accountRates.Values.ToArray<Task>());
-            accountRates = accountRates.Where(x => x.Value.Result != null).ToDictionary(x => x.Key, x => x.Value);
+            Task.WaitAll(accountRateTasks.Values.ToArray<Task>());
+            IDictionary<TAccount, RateGroup> accountRates = accountRateTasks.Where(x => x.Value.Result != null)
+                                                                            .ToDictionary(x => x.Key, x => x.Value.Result);
 
             // Filter the returned rates
-            List<RateResult> filteredRates = accountRates.SelectMany(x => x.Value.Result.Rates)
+            List<RateResult> filteredRates = accountRates.SelectMany(x => x.Value.Rates)
                                                          .Where(IsValidRate)
                                                          .Where(r => !IsExcludedServiceType(r.Tag))
                                                          .GroupBy(r => GetServiceTypeFromTag(r.Tag))
@@ -83,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // Create a dictionary of rates with their associated accounts for lookup later
             IDictionary<RateResult, TAccount> rateShipments = accountRates
-                .Select(ar => ar.Value.Result.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
+                .Select(ar => ar.Value.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
                 .SelectMany(x => x)
                 .Where(x => x.Key != null)
                 .ToDictionary(x => x.Key, x => x.Value);
@@ -96,18 +97,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 rate.CarrierDescription = carrierDescription;
             }
 
-            var bestRateGroup = new RateGroup(filteredRates.ToList());
+            RateGroup bestRateGroup = new RateGroup(filteredRates.ToList());
 
-            var footNoteControl = accountRates.SelectMany(x => x.Value.Result.FootnoteCreators)
-                                              .FirstOrDefault();
-            if (footNoteControl != null)
+            // Get distinct types of footnotes
+            IEnumerable<Func<RateFootnoteControl>> footnoteCreators = accountRates.SelectMany(x => x.Value.FootnoteCreators)
+                                                                                  .GroupBy(x => x.Method.ReturnType)
+                                                                                  .Select(x => x.FirstOrDefault());
+
+            // Add each distinct footnote to the rate group that we're going to return
+            foreach (Func<RateFootnoteControl> footnoteCreator in footnoteCreators)
             {
+                Func<RateFootnoteControl> creator = footnoteCreator;
+
                 bestRateGroup.AddFootnoteCreator(() =>
-                    {
-                        RateFootnoteControl control = footNoteControl();
-                        control.SetCarrierName(carrierDescription);
-                        return control;
-                    });
+                {
+                    RateFootnoteControl control = creator();
+                    control.SetCarrierName(carrierDescription);
+                    return control;
+                });
             }
 
             return bestRateGroup;

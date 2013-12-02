@@ -280,7 +280,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="compiledRateGroup">The compiled rate group.</param>
         private static void SetFootnote(IEnumerable<RateGroup> allRateGroups, RateGroup compiledRateGroup)
         {
-            foreach (Func<RateFootnoteControl> creator in allRateGroups.SelectMany(outerGroup => outerGroup.FootnoteCreators))
+            // Only add footnotes from rategroups from which rates will actually be displayed
+            IEnumerable<Func<RateFootnoteControl>> includedRateGroups = allRateGroups.Where(x => x.Rates.Intersect(compiledRateGroup.Rates).Any())
+                                                                                     .SelectMany(outerGroup => outerGroup.FootnoteCreators);
+
+            foreach (Func<RateFootnoteControl> creator in includedRateGroups)
             {
                 compiledRateGroup.AddFootnoteCreator(creator);
             }
