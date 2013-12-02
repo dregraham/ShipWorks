@@ -30,6 +30,7 @@
         {
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sandGrid = new Divelements.SandGrid.SandGrid();
+            this.gridColumnCarrier = new Divelements.SandGrid.GridColumn();
             this.gridColumnService = new Divelements.SandGrid.GridColumn();
             this.gridColumnDays = new Divelements.SandGrid.GridColumn();
             this.gridColumnRate = new Divelements.SandGrid.GridColumn();
@@ -41,7 +42,6 @@
             this.panelOutOfDate = new System.Windows.Forms.Panel();
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.gridColumnCarrier = new Divelements.SandGrid.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).BeginInit();
             this.outOfDateBar.Panel.SuspendLayout();
@@ -114,8 +114,15 @@
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))})});
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
+            this.sandGrid.SortColumn = this.gridColumnCarrier;
             this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
+            // 
+            // gridColumnCarrier
+            // 
+            this.gridColumnCarrier.HeaderText = "Carrier";
+            this.gridColumnCarrier.Visible = false;
+            this.gridColumnCarrier.Width = 50;
             // 
             // gridColumnService
             // 
@@ -239,11 +246,6 @@
             this.kryptonBorderEdge.Size = new System.Drawing.Size(493, 1);
             this.kryptonBorderEdge.TabIndex = 3;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
-            // 
-            // gridColumnCarrier
-            // 
-            this.gridColumnCarrier.HeaderText = "Carrier";
-            this.gridColumnCarrier.Width = 50;
             // 
             // RateControl
             // 

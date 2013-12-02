@@ -77,9 +77,9 @@ namespace ShipWorks.Shipping.Editing
             sandGrid.Rows.Clear();
 
             bool isBestRate = rateGroup.Carrier == ShipmentTypeCode.BestRate;
-            if (!isBestRate)
+            if (isBestRate)
             {
-                gridColumnCarrier.Visible = false;
+                gridColumnCarrier.Visible = true;
             }
 
             foreach (RateResult rate in rateGroup.Rates)
