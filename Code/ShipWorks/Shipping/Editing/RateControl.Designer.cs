@@ -114,12 +114,15 @@
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))})});
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
-            this.sandGrid.SortColumn = this.gridColumnCarrier;
             this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
             // 
             // gridColumnCarrier
             // 
+            this.gridColumnCarrier.AllowEditing = false;
+            this.gridColumnCarrier.AllowReorder = false;
+            this.gridColumnCarrier.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnCarrier.AutoSortType = Divelements.SandGrid.ColumnAutoSortType.None;
             this.gridColumnCarrier.HeaderText = "Carrier";
             this.gridColumnCarrier.Visible = false;
             this.gridColumnCarrier.Width = 50;
