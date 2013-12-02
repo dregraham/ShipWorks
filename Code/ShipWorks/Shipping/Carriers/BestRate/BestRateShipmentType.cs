@@ -416,9 +416,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
+            BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
 
             Action<ShipmentEntity> action = ((Action<ShipmentEntity>) bestRate.Tag);
             action(shipment);
+
+            // Reset the event types after the the selected shipment has been applied to 
+            // avoid losing them during the transition to the targeted shipment type
+            shipment.BestRateEvents = (byte)originalEventTypes;
         }
 
         /// <summary>
