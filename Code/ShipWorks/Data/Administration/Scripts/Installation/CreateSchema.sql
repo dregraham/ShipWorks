@@ -1342,7 +1342,7 @@ CREATE TABLE [dbo].[Shipment]
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginNameParseStatus] [int] NOT NULL,
 [OriginUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[BestRateEvents] [varbinary] (75) NOT NULL
+[BestRateEvents] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'

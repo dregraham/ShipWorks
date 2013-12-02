@@ -155,10 +155,10 @@ ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMAR
 GO
 
 -- We're adding a column rather than recreating the table and copying the data because the shipment table could be very large for some customers
-ALTER TABLE [dbo].[Shipment] ADD [BestRateEvents] [varbinary](75) NULL
+ALTER TABLE [dbo].[Shipment] ADD [BestRateEvents] [tinyint] NULL
 GO
 UPDATE Shipment SET BestRateEvents = 0
 GO
-ALTER TABLE [dbo].[Shipment] ALTER COLUMN [BestRateEvents] [varbinary](75) NOT NULL
+ALTER TABLE [dbo].[Shipment] ALTER COLUMN [BestRateEvents] [tinyint] NOT NULL
 GO
 
