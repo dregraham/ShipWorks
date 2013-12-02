@@ -361,7 +361,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             catch (AggregateException ex)
             {
-                throw ex.InnerException;
+                // Inspect the aggregate exception for the details of the first underlying exception
+                if (ex.InnerException is AggregateException)
+                {
+                    // The inner exception is also an aggregate exception (in the case that a multi-threaded 
+                    // broker also threw an aggregate exception), so dive into the details of it to grab the 
+                    // first meaningful exception
+                    AggregateException innerAggregate = ex.InnerException as AggregateException;
+                    throw innerAggregate.InnerExceptions.First();
+                }
+
+                // The inner exception is not an aggregate exception, so we can just throw the
+                // first inner exception
+                throw ex.InnerExceptions.First();
             }
             
             RateResult bestRate = rateGroup.Rates.FirstOrDefault();
