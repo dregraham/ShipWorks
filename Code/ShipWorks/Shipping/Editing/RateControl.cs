@@ -73,7 +73,6 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
-
             sandGrid.Rows.Clear();
 
             bool showCarrierColumn = (rateGroup.Carrier == ShipmentTypeCode.BestRate) && (!rateGroup.Rates.All(a => String.IsNullOrEmpty(a.CarrierDescription)));
@@ -87,9 +86,10 @@ namespace ShipWorks.Shipping.Editing
                 string serviceDescription = rate.Description;
                 if (showCarrierColumn && rate.CarrierDescription != null)
                 {
-                    int indexOfCarrierNameInServiceDescription = rate.Description.IndexOf(rate.CarrierDescription);
+                    int indexOfCarrierNameInServiceDescription = rate.Description.IndexOf(rate.CarrierDescription, StringComparison.Ordinal);
                     serviceDescription = (indexOfCarrierNameInServiceDescription < 0) ? rate.Description : rate.Description.Remove(indexOfCarrierNameInServiceDescription, rate.CarrierDescription.Length + 1);
                 }
+
                 GridRow row = new GridRow(new GridCell[]
                 {
                     new GridCell(rate.CarrierDescription),

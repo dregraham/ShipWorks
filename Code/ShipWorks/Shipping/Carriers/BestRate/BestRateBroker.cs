@@ -71,11 +71,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, exceptionHandler)));
 
             Task.WaitAll(accountRateTasks.Values.ToArray<Task>());
-            IDictionary<TAccount, RateGroup> accountRates = accountRateTasks.Where(x => x.Value.Result != null)
+            IDictionary<TAccount, RateGroup> accountRateGroups = accountRateTasks.Where(x => x.Value.Result != null)
                                                                             .ToDictionary(x => x.Key, x => x.Value.Result);
 
             // Filter the returned rates
-            List<RateResult> filteredRates = accountRates.SelectMany(x => x.Value.Rates)
+            List<RateResult> filteredRates = accountRateGroups.SelectMany(x => x.Value.Rates)
                                                          .Where(IsValidRate)
                                                          .Where(r => !IsExcludedServiceType(r.Tag))
                                                          .GroupBy(r => GetServiceTypeFromTag(r.Tag))
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                          .ToList();
 
             // Create a dictionary of rates with their associated accounts for lookup later
-            IDictionary<RateResult, TAccount> rateShipments = accountRates
+            IDictionary<RateResult, TAccount> accountLookup = accountRateGroups
                 .Select(ar => ar.Value.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
                 .SelectMany(x => x)
                 .Where(x => x.Key != null)
@@ -92,13 +92,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             foreach (RateResult rate in filteredRates)
             {
                 // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(rateShipments[rate], rate.Tag);
+                rate.Tag = CreateRateSelectionFunction(accountLookup[rate], rate.Tag);
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
                 rate.CarrierDescription = carrierDescription;
             }
 
             RateGroup bestRateGroup = new RateGroup(filteredRates.ToList());
+            AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
+            return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Adds footnote creation functions from the accountRates collection into the bestRateGroup
+        /// </summary>
+        /// <param name="accountRates">RateGroups from which to get existing footnote functions</param>
+        /// <param name="bestRateGroup">RateGroup into which the footnote creation functions will be added</param>
+        private void AddFootnoteCreators(IEnumerable<KeyValuePair<TAccount, RateGroup>> accountRates, RateGroup bestRateGroup)
+        {
             // Get distinct types of footnotes
             IEnumerable<Func<RateFootnoteControl>> footnoteCreators = accountRates.SelectMany(x => x.Value.FootnoteCreators)
                                                                                   .GroupBy(x => x.Method.ReturnType)
@@ -110,14 +121,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 Func<RateFootnoteControl> creator = footnoteCreator;
 
                 bestRateGroup.AddFootnoteCreator(() =>
-                {
-                    RateFootnoteControl control = creator();
-                    control.SetCarrierName(carrierDescription);
-                    return control;
-                });
+                    {
+                        RateFootnoteControl control = creator();
+                        control.SetCarrierName(carrierDescription);
+                        return control;
+                    });
             }
-
-            return bestRateGroup;
         }
 
         /// <summary>
