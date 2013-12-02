@@ -76,10 +76,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         {
 
         }
-
-        protected override void AddCarrierNameToFootnoteText(Editing.RateGroup rates)
-        {
-            //throw new System.NotImplementedException();
-        }
     }
 }

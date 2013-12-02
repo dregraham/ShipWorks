@@ -34,11 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             RateGroup rates = base.GetRates(shipment);
             MergeDescriptionsWithNonSelectableRates(rates.Rates);
-            AddCarrierNameToFootnoteText(rates);
             return rates;
         }
-
-        protected abstract void AddCarrierNameToFootnoteText(RateGroup rates);
 
         /// <summary>
         /// Merge rate descriptions meant as headers with actual rate descriptions
@@ -53,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 
             RateResult lastNonSelectable = null;
 
-            foreach (var rate in rates)
+            foreach (RateResult rate in rates)
             {
                 if (rate.Selectable)
                 {
