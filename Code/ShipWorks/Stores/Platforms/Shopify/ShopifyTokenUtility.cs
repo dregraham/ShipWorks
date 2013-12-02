@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     store.ShopifyShopUrlName = shopUrlName;
 
                     // Now get the store info
-                    ShopifyWebClient webClient = new ShopifyWebClient(store);
+                    ShopifyWebClient webClient = new ShopifyWebClient(store, null);
                     webClient.RetrieveShopInformation();
                 }
                 catch
