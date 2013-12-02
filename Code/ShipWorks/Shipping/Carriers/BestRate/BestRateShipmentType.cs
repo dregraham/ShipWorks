@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.FedEx.BestRate;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Settings.Origin;
 using log4net;
@@ -243,10 +240,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
             
             RateGroup compiledRateGroup = new RateGroup(orderedRatesList);
-
             SetFootnote(rateGroups, compiledRateGroup);
 
-            compiledRateGroup.Carrier = Shipping.ShipmentTypeCode.BestRate;
+            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
             return compiledRateGroup;
         }
 
@@ -273,6 +269,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // and return the top 5
             IEnumerable<RateResult> orderedRates = allRates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
             List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
+
             return orderedRatesList;
         }
 
@@ -281,9 +278,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="allRateGroups">The rate groups.</param>
         /// <param name="compiledRateGroup">The compiled rate group.</param>
-        private static void SetFootnote(List<RateGroup> allRateGroups, RateGroup compiledRateGroup)
+        private static void SetFootnote(IEnumerable<RateGroup> allRateGroups, RateGroup compiledRateGroup)
         {
-            foreach (var creator in allRateGroups.SelectMany(outerGroup => outerGroup.FootnoteCreators))
+            foreach (Func<RateFootnoteControl> creator in allRateGroups.SelectMany(outerGroup => outerGroup.FootnoteCreators))
             {
                 compiledRateGroup.AddFootnoteCreator(creator);
             }
@@ -394,14 +391,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Handles exceptions generated during the preprocess phase
+        /// Handles exceptions generated during the pre-process phase
         /// </summary>
         /// <param name="exception">Exception that was generated</param>
         private static void PreProcessExceptionHandler(BrokerException exception)
         {
             if (exception.SeverityLevel != BrokerExceptionSeverityLevel.Low)
             {
-                // Throw the inner exception since 
+                // Throw the inner exception since the actual shipping exception we're interested 
+                // in (and the application is expecting to handle) is here
                 throw exception.InnerException;    
             }
         }
@@ -450,7 +448,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers().Where(b => b.HasAccounts).ToList();
 
-            // Default shipmentInsuranceProvider is shipworks
+            // Default shipmentInsuranceProvider is ShipWorks
             InsuranceProvider shipmentInsuranceProvider;
 
             if (brokersWithAccounts.Count() == 1)
@@ -460,7 +458,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             else if (brokersWithAccounts.Any())
             {
-                // If more than 1 carrier, if any of the carrier's are not shipworks insurance, set to invalid.
+                // If more than 1 carrier, if any of the carrier's are not ShipWorks insurance, set to invalid.
                 if (brokersWithAccounts.Any(b => b.GetInsuranceProvider(settings) != InsuranceProvider.ShipWorks))
                 {
                     shipmentInsuranceProvider = InsuranceProvider.Invalid;
@@ -475,6 +473,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // No brokersWithAccounts
                 shipmentInsuranceProvider = InsuranceProvider.Invalid;
             }
+
             return shipmentInsuranceProvider;
         }
 
