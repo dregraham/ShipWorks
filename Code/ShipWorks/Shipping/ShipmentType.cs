@@ -161,7 +161,6 @@ namespace ShipWorks.Shipping
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
         {
             shipment.ThermalType = null;
-            shipment.BestRateEvents = 0;
 
             // First apply the base profile
             ApplyProfile(shipment, GetPrimaryProfile());
