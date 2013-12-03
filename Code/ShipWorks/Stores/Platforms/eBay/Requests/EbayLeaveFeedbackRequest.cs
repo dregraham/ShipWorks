@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.Stores.Platforms.Ebay.Authorization;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Requests
 {
@@ -11,66 +11,40 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
     /// An implementation of the ILeaveFeedbackRequest interface that is responsible for
     /// making requests to eBay to leave feedback regarding an item/transaction.
     /// </summary>
-    public class EbayLeaveFeedbackRequest : EbayRequest, ILeaveFeedbackRequest
+    public class EbayLeaveFeedbackRequest : EbayRequest<LeaveFeedbackResponseType, LeaveFeedbackRequestType, LeaveFeedbackResponseType>
     {
-        private LeaveFeedbackRequestType request; 
+        LeaveFeedbackRequestType request; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayLeaveFeedbackRequest"/> class.
         /// </summary>
-        /// <param name="tokenData">The token data.</param>
-        public EbayLeaveFeedbackRequest(TokenData tokenData)
-            : base(tokenData, "LeaveFeedback")
+        public EbayLeaveFeedbackRequest(EbayToken token, long itemID, long transactionID, string targetUserID, CommentTypeCodeType commentType, string comment)
+            : base(token, "LeaveFeedback")
         {
-            request = new LeaveFeedbackRequestType()
-            {
-                CommentTypeSpecified = true
-            };
-        }
+            request = new LeaveFeedbackRequestType();
+
+            request.ItemID = itemID.ToString();
+            request.TransactionID = transactionID.ToString();
+
+            request.CommentType = commentType;
+            request.CommentTypeSpecified = true;
+
+            request.TargetUser = targetUserID;
+            request.CommentText = comment;
+       }
 
         /// <summary>
         /// Leaves feedback for the given transaction/item.
         /// </summary>
-        /// <param name="itemId">The item ID.</param>
-        /// <param name="transactionId">The transaction ID.</param>
-        /// <param name="targetUserId">The target user ID.</param>
-        /// <param name="commentType">Type of the comment.</param>
-        /// <param name="comment">The comment.</param>
-        /// <returns>A LeaveFeedbackResponseType object.</returns>
-        public LeaveFeedbackResponseType LeaveFeedback(string itemId, string transactionId, string targetUserId, CommentTypeCodeType commentType, string comment)
+        public override LeaveFeedbackResponseType Execute()
         {
-            request.ItemID = itemId;
-            request.TransactionID = transactionId;
-            request.CommentType = commentType;
-            request.TargetUser = targetUserId;
-            request.CommentText = comment;
-
-            LeaveFeedbackResponseType response = SubmitRequest() as LeaveFeedbackResponseType;
-            if (response == null)
-            {
-                throw new EbayException("An error occurred communicating with eBay when leaving feedback.");
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Gets the name of the call as it is known to eBay. This value gets used
-        /// as a query string parameter sent to eBay.
-        /// </summary>
-        /// <returns></returns>
-        public override string GetEbayCallName()
-        {
-            return "LeaveFeedback";
+            return SubmitRequest();
         }
 
         /// <summary>
         /// Gets the specific eBay request (GetUserRequestType, GetOrdersRequestType, etc.) containing any parameter data necessary to make the request.
         /// </summary>
-        /// <returns>
-        /// An AbstractRequestType object.
-        /// </returns>
-        public override AbstractRequestType GetEbayRequest()
+        protected override AbstractRequestType CreateRequest()
         {
             return request;
         }

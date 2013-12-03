@@ -19,6 +19,7 @@ using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -65,8 +66,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
+                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
+
                 // Fire off the message
-             //   new Old_EbayWebClient().SendMessageToPartner(store.EBayToken, orderItem.EbayItemID.ToString(), buyerID, ebayMessageType, subject, message, copySender);                
+                webClient.SendMessage(orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender);                
             }
             catch (EbayException ex)
             {
@@ -103,9 +106,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 log.InfoFormat("Preparing to leave eBay feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
 
-                // Make sure we have a handle to the store and send the feedback to eBay
-                EbayStoreEntity ebayStore = (EbayStoreEntity)StoreManager.GetStore(orderItem.Order.StoreID);
-  //              new Old_EbayWebClient().LeaveFeedback(ebayStore.EBayToken, orderItem.EbayItemID.ToString(), orderItem.EbayTransactionID.ToString(), ((EbayOrderEntity)orderItem.Order).EbayBuyerID, feedbackType, feedback);
+                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
+                webClient.LeaveFeedback(orderItem.EbayItemID, orderItem.EbayTransactionID, ((EbayOrderEntity) orderItem.Order).EbayBuyerID, feedbackType, feedback);
                 
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);

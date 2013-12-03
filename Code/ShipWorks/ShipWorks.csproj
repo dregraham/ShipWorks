@@ -1986,8 +1986,8 @@
     <None Include="Stores\Platforms\Ebay\Requests\EbayCombineOrdersRequest.cs" />
     <None Include="Stores\Platforms\Ebay\Requests\EbayCompleteSaleRequest.cs" />
     <None Include="Stores\Platforms\Ebay\Requests\EbayItemTransactionRequest.cs" />
-    <None Include="Stores\Platforms\Ebay\Requests\EbayLeaveFeedbackRequest.cs" />
-    <None Include="Stores\Platforms\Ebay\Requests\EbaySendMessageToPartnerRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayLeaveFeedbackRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbaySendMessageRequest.cs" />
     <None Include="Stores\Platforms\Ebay\Requests\EbayUserNotesRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayOfficialTimeRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Policy.cs" />

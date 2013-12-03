@@ -24,35 +24,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public partial class LeaveFeedbackDlg : Form
     {
-        /// <summary>
-        /// Type of feedback being left
-        /// </summary>
-        CommentTypeCodeType feedbackType = CommentTypeCodeType.Positive;
-        public CommentTypeCodeType FeedbackType
-        {
-            get { return feedbackType; }
-        }
-
-        /// <summary>
-        /// Feedback contents
-        /// </summary>
-        string comments = "";
-        public string Comments
-        {
-            get { return comments; }
-        }
-
         // collection of order keys passed in, representing those to have feedback left
         List<long> orderIds;
 
-        /// <summary>
-        /// If the user selected a single item to leave feedback for, this is the key
-        /// </summary>
         long selectedItemId;
-        public long SelectedItemID
-        {
-            get { return selectedItemId; }
-        }
+
+        string comments = "";
+
+        CommentTypeCodeType feedbackType = CommentTypeCodeType.Positive;
 
         /// <summary>
         /// Constructor
@@ -62,6 +41,30 @@ namespace ShipWorks.Stores.Platforms.Ebay
             InitializeComponent();
 
             this.orderIds = orderIds;
+        }
+
+        /// <summary>
+        /// Type of feedback being left
+        /// </summary>
+        public CommentTypeCodeType FeedbackType
+        {
+            get { return feedbackType; }
+        }
+
+        /// <summary>
+        /// Feedback contents
+        /// </summary>
+        public string Comments
+        {
+            get { return comments; }
+        }
+
+        /// <summary>
+        /// If the user selected a single item to leave feedback for, this is the key
+        /// </summary>
+        public long SelectedItemID
+        {
+            get { return selectedItemId; }
         }
 
         /// <summary>

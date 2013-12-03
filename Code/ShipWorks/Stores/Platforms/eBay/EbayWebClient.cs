@@ -82,5 +82,25 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             return request.Execute();
         }
+
+        /// <summary>
+        /// Leave feedback for the given item and transaction
+        /// </summary>
+        public void LeaveFeedback(long itemID, long transactionID, string buyerID, CommentTypeCodeType feedbackType, string feedback)
+        {
+            EbayLeaveFeedbackRequest request = new EbayLeaveFeedbackRequest(token, itemID, transactionID, buyerID, feedbackType, feedback);
+
+            request.Execute();
+        }
+
+        /// <summary>
+        /// Send a message for the given item to the buyer
+        /// </summary>
+        public void SendMessage(long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
+        {
+            EbaySendMessageRequest request = new EbaySendMessageRequest(token, itemID, buyerID, messageType, subject, message, copySender);
+
+            request.Execute();
+        }
     }
 }
