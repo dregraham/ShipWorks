@@ -392,7 +392,7 @@ namespace ShipWorks.Shipping.Editing
                         }
                         else if (rateGroup.Rates.Count == 0)
                         {
-                            rateControl.ClearRates("No rates are available for the shipment.");
+                            rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
                         }
                         else
                         {

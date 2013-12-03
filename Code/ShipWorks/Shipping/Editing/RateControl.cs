@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Raised when its necessary for the rates to be reloaded
         /// </summary>
-        public event EventHandler ReloadRatesRequired;       
+        public event EventHandler ReloadRatesRequired;
 
         /// <summary>
         /// Constructor
@@ -36,13 +36,22 @@ namespace ShipWorks.Shipping.Editing
 
             sandGrid.Rows.Clear();
 
-            gridColumnSelect.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnSelectRate);            
+            gridColumnSelect.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnSelectRate);
         }
 
         /// <summary>
         /// Clear the rates in the grid and display the given reason for having no rates displayed.
         /// </summary>
         public void ClearRates(string emptyReason)
+        {
+            ClearRates(emptyReason, null);
+        }
+
+        /// <summary>
+        /// Clear the rates in the grid and display the given reason for having no rates displayed.
+        /// </summary>
+        /// <remarks>This version will display any footnotes associated with the rate group</remarks>
+        public void ClearRates(string emptyReason, RateGroup rateGroup)
         {
             if (sandGrid.EmptyText != emptyReason)
             {
@@ -55,9 +64,7 @@ namespace ShipWorks.Shipping.Editing
             }
 
             panelOutOfDate.Visible = false;
-
-            CurrentFootnotes.ForEach(f => f.Dispose());
-            panelFootnote.Visible = false;
+            UpdateFootnotes(rateGroup);
         }
 
         /// <summary>
@@ -106,10 +113,24 @@ namespace ShipWorks.Shipping.Editing
             
             panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
 
+            UpdateFootnotes(rateGroup);
+        }
+
+        /// <summary>
+        /// Resets the footnotes with what are contained in the specified rate group
+        /// </summary>
+        private void UpdateFootnotes(RateGroup rateGroup)
+        {
             RemoveFootnotes(CurrentFootnotes);
 
-            AddFootnotes(rateGroup.FootnoteCreators);
-
+            if (rateGroup == null)
+            {
+                panelFootnote.Visible = false;
+            }
+            else
+            {
+                AddFootnotes(rateGroup.FootnoteCreators);
+            }
         }
 
         /// <summary>
@@ -123,6 +144,8 @@ namespace ShipWorks.Shipping.Editing
                 panelFootnote.Controls.Remove(previousFootnote);
                 previousFootnote.Dispose();
             }
+
+            panelFootnote.Visible = false;
         }
 
         /// <summary>
@@ -135,20 +158,13 @@ namespace ShipWorks.Shipping.Editing
             int y = 0;
             foreach (RateFootnoteControl footnote in footNotes.Select(footnoteCreator => footnoteCreator()))
             {
-                if (footnote != null)
-                {
-                    panelFootnote.Controls.Add(footnote);
-                    footnote.Location = new Point(0, y);
-                    panelFootnote.Visible = true;
+                panelFootnote.Controls.Add(footnote);
+                footnote.Location = new Point(0, y);
+                panelFootnote.Visible = true;
 
-                    footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
-                    panelFootnote.Height += footnote.Height;
-                    y += footnote.Height;
-                }
-                else
-                {
-                    panelFootnote.Visible = false;
-                }
+                footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
+                panelFootnote.Height += footnote.Height;
+                y += footnote.Height;
             }
         }
 
