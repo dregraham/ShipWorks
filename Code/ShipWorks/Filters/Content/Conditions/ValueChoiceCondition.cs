@@ -63,7 +63,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Get the SQL version of the configured operator
         /// </summary>
-        protected string GetSqlOperator()
+        protected virtual string GetSqlOperator()
         {
             switch (op)
             {
