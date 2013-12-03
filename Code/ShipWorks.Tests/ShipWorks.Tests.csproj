@@ -145,6 +145,9 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Fake\FakeExceptionHandlerBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Fake\FakeRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\FedEx\Api\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequestTest.cs" />

@@ -41,5 +41,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 dlg.ShowDialog(this);
             }
         }
+
+        /// <summary>
+        /// Associated with check mark.
+        /// </summary>
+        public override bool AssociatedWithAmountFooter
+        {
+            get { return true; }
+        }
     }
 }

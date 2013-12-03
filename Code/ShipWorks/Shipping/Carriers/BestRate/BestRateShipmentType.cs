@@ -278,11 +278,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="allRateGroups">The rate groups.</param>
         /// <param name="compiledRateGroup">The compiled rate group.</param>
-        private static void SetFootnote(IEnumerable<RateGroup> allRateGroups, RateGroup compiledRateGroup)
+        public static void SetFootnote(IEnumerable<RateGroup> allRateGroups, RateGroup compiledRateGroup)
         {
             // Only add footnotes from rategroups from which rates will actually be displayed
-            IEnumerable<Func<RateFootnoteControl>> includedRateGroups = allRateGroups.Where(x => x.Rates.Intersect(compiledRateGroup.Rates).Any())
-                                                                                     .SelectMany(outerGroup => outerGroup.FootnoteCreators);
+            IEnumerable<Func<RateFootnoteControl>> includedRateGroups = allRateGroups
+                                                                            .Where(rg => rg.FootnoteCreators.Any())
+                                                                            .Where(rg => rg.Rates
+                                                                                                                // where the rate doesn't have an image or the associated rate footer doesn't need an image
+                                                                                .Intersect(compiledRateGroup.Rates.Where(r => r.AmountFootnote != null || !rg.FootnoteCreators.First().Invoke().AssociatedWithAmountFooter))
+                                                                                .Any())
+                                                                            .SelectMany(outerGroup => outerGroup.FootnoteCreators);
 
             foreach (Func<RateFootnoteControl> creator in includedRateGroups)
             {

@@ -43,5 +43,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 }
             }
         }
+
+        /// <summary>
+        /// Associated with star.
+        /// </summary>
+        public override bool AssociatedWithAmountFooter
+        {
+            get { return true; }
+        }
     }
 }

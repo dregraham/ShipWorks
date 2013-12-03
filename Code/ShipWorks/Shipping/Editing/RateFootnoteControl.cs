@@ -21,6 +21,14 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Gets a value indicating whether [associated with amount footer].
+        /// </summary>
+        public virtual bool AssociatedWithAmountFooter
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Raise the RateCriteriaChanged event
         /// </summary>
         protected void RaiseRateCriteriaChanged()

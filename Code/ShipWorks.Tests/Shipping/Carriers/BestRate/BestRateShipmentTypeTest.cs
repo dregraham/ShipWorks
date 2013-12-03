@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net;
+using ShipWorks.Properties;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,6 +31,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private List<RateResult> rates;
         private ShipmentEntity shipment;
 
+        private RateGroup rateGroupWithNoFootnote;
+        private RateGroup rateGroupWithFooterWithAssociatedAmount;
+        private RateGroup rateGroupWithFooterNotAssociatedWithAmount;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -50,8 +57,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             log = new Mock<ILog>();
 
-
             testObject = new BestRateShipmentType(brokerFactory.Object, log.Object);
+
+
+            InitializeFootnoteTests();
         }
 
         [TestMethod]
@@ -395,7 +404,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             // Probably a better way to inspect that the footnote creator has a BrokerExceptionsRateFootnoteControl
             Assert.IsNotNull(rateGroup.FootnoteCreators);
         }
-        
+
         [TestMethod]
         public void GetRates_AddsRatesComparedEventToShipment_Test()
         {
@@ -506,5 +515,48 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             Assert.AreEqual(shipment, calledShipment);
         }
+
+        private void InitializeFootnoteTests()
+        {
+            rateGroupWithNoFootnote = new RateGroup(new List<RateResult>() { new RateResult("result1", "2"), new RateResult("result2", "2") });
+
+            rateGroupWithFooterWithAssociatedAmount = new RateGroup(new List<RateResult>()
+            {
+                new RateResult("result1", "2") { AmountFootnote = new Bitmap(1, 1) },
+                new RateResult("result2", "2")
+            });
+            rateGroupWithFooterWithAssociatedAmount.AddFootnoteCreator(() => new FakeRateFootnoteControl(true));
+
+            rateGroupWithFooterNotAssociatedWithAmount = new RateGroup(new List<RateResult>() { new RateResult("result1", "2"), new RateResult("result2", "2") });
+            rateGroupWithFooterNotAssociatedWithAmount.AddFootnoteCreator(() => new FakeRateFootnoteControl(false));
+        }
+
+        [TestMethod]
+        public void SetFootnote_ReturnsTwoFooters_BothFootersApplicableToRates_Test()
+        {
+            RateGroup testRateGroup = new RateGroup(new List<RateResult>() { rateGroupWithFooterWithAssociatedAmount.Rates.First(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
+            BestRateShipmentType.SetFootnote(new List<RateGroup>() { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
+
+            Assert.AreEqual(2, testRateGroup.FootnoteCreators.Count());
+        }
+
+        [TestMethod]
+        public void SetFootnote_ReturnsOneFooter_FooterWithAssociatedRateHasNoCorrespondingRate_Test()
+        {
+            RateGroup testRateGroup = new RateGroup(new List<RateResult>() { rateGroupWithFooterNotAssociatedWithAmount.Rates.Last(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
+            BestRateShipmentType.SetFootnote(new List<RateGroup>() { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
+
+            Assert.AreEqual(1, testRateGroup.FootnoteCreators.Count());
+        }
+
+        [TestMethod]
+        public void SetFootnote_ReturnsNoFooter_NoAssociatedFooter_Test()
+        {
+            RateGroup testRateGroup = new RateGroup(new List<RateResult>() { rateGroupWithFooterWithAssociatedAmount.Rates.Last(), rateGroupWithNoFootnote.Rates.First() });
+            BestRateShipmentType.SetFootnote(new List<RateGroup>() { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
+
+            Assert.AreEqual(0, testRateGroup.FootnoteCreators.Count());
+        }
+
     }
 }
