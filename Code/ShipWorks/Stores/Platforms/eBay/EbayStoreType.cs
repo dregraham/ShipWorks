@@ -147,8 +147,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 pages.Add(new FreemiumStoreWizardValidateAccountPage());
             }
 
-            pages.Add(new EBayPayPalPage());
-            pages.Add(new EBayOptionsPage());
+            // People end up thinking they have to download paypal details and images, when really it just takes forever.  Don't show these options by default
+            // pages.Add(new EBayPayPalPage());
+            // pages.Add(new EBayOptionsPage());
            
             return pages;
         }

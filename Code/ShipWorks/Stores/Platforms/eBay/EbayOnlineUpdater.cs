@@ -251,6 +251,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             bool useUpsMailInnovationsCarrierType = false;
 
+            EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
+
             // update each item
             foreach (EbayOrderItemEntity ebayItem in order.OrderItems)
             {
@@ -318,11 +320,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             // note with the tracking number instead
                             string notesText = string.Format("Shipped {0} on {1}. Tracking number: {2}",
                                 ShippingManager.GetServiceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
-                            
-                            // Only set the transaction ID if there is a valid eBay transaction ID associated with the eBay item;
-                            // setting a transaction ID to 0 will result in an eBay error
-                            string transactionId = ebayItem.EbayTransactionID > 0 ? ebayItem.EbayTransactionID.ToString() : null;
-                        //    new Old_EbayWebClient().SaveNote(store.EBayToken, ebayItem.EbayItemID.ToString(), transactionId, notesText);
+
+                            webClient.AddUserNote(ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
                         }
                     }
                 }
@@ -349,8 +348,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 // log that we're about to make the request and send the request
                 log.InfoFormat("Preparing to update eBay order status for order id {0}.", orderID);
-  //              new Old_EbayWebClient().CompleteSale(store.EBayToken, ebayItem.EbayItemID.ToString(), ebayItem.EbayTransactionID.ToString(), paid,
-  //                                               shipped, trackingNumber, shippingCarrierUsed);
+
+                webClient.CompleteSale(ebayItem.EbayItemID, ebayItem.EbayTransactionID, paid, shipped, trackingNumber, shippingCarrierUsed);
 
                 // update the shipped flag
                 if (shipped.HasValue)
@@ -362,12 +361,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (paid.HasValue)
                 {
                     ebayItem.MyEbayPaid = paid.Value;
-                }
-
-                // if it has shipped, update the local status
-                if (shipped.HasValue)
-                {
-                    order.LocalStatus = shipped.Value ? "Shipped" : "";
                 }
 
                 // Save the order on each iteration of the child item as this also recurses to save the child item, 

@@ -102,5 +102,25 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             request.Execute();
         }
+
+        /// <summary>
+        /// Add a note into the buyer's my ebay for the given item
+        /// </summary>
+        public void AddUserNote(long itemID, long transactionID, string notesText)
+        {
+            EbaySetUserNotesRequest request = new EbaySetUserNotesRequest(token, itemID, transactionID, notesText);
+
+            request.Execute();
+        }
+
+        /// <summary>
+        /// Marks a transation as paid (or not) and shipped (or not) on my ebay
+        /// </summary>
+        public void CompleteSale(long itemID, long transactionID, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier)
+        {
+            EbayCompleteSaleRequest request = new EbayCompleteSaleRequest(token, itemID, transactionID, paid, shipped, trackingNumber, shippingCarrier);
+
+            request.Execute();
+        }
     }
 }
