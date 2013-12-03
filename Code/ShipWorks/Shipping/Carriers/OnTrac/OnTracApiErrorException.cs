@@ -12,9 +12,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         static private readonly List<DetailsReplacement> ErrorReplacements = new List<DetailsReplacement>
             {
                 new DetailsReplacement("Invalid Username", "The specified account number and password are not correct.", false),
-                new DetailsReplacement("Delivery Zip Not Serviced", "OnTrac does not service the delivery address.", true),
-                new DetailsReplacement("Invalid Shipper State", "OnTrac does not service the delivery address.", true),
-                new DetailsReplacement("Pickup Zip Not Serviced", "OnTrac does not service the pickup address.", true)
+                new DetailsReplacement("Delivery Zip Not Serviced", "OnTrac does not service delivery addresses outside of AZ, CA,CO, ID, NV, OR, UT, WA.  Please verify that the \"Ship To\" zip code is correct and try again.", true),
+                new DetailsReplacement("Invalid Shipper State", "OnTrac does not service delivery addresses outside of AZ, CA,CO, ID, NV, OR, UT, WA.  Please verify that the \"Ship To\" state is correct and try again.", true),
+                new DetailsReplacement("Pickup Zip Not Serviced", "OnTrac does not service pickup addresses outside of AZ, CA,CO, ID, NV, OR, UT, WA.", true)
             };
 
         /// <summary>
