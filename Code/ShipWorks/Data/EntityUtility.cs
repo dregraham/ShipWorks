@@ -735,6 +735,11 @@ namespace ShipWorks.Data
         /// </summary>
         public static void MarkAsNew(IEntity2 entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
             entity.IsNew = true;
 
             foreach (IEntityField2 field in entity.Fields)

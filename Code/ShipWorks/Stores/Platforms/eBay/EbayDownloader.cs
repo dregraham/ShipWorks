@@ -258,10 +258,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
                     {
                         // Copy the notes from the old order
-                        CopyNotes(fromOrder.OrderID, order, adapter);
+                        CopyNotes(fromOrder.OrderID, order);
 
                         // Copy the shipments from the old order
-                        CopyShipments(fromOrder.OrderID, order, adapter);
+                        CopyShipments(fromOrder.OrderID, order);
 
                         // Delete the old order
                         DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
@@ -325,7 +325,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Copies any note entities from one order to another.
         /// </summary>
-        private static void CopyNotes(long fromOrderID, OrderEntity toOrder, SqlAdapter adapter)
+        private static void CopyNotes(long fromOrderID, OrderEntity toOrder)
         {
             // Make the copies
             List<NoteEntity> newNotes = EntityUtility.CloneEntityCollection(DataProvider.GetRelatedEntities(fromOrderID, EntityType.NoteEntity).Select(n => (NoteEntity) n));
@@ -342,7 +342,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Copies any shipment entities from one order to another
         /// </summary>
-        private static void CopyShipments(long fromOrderID, OrderEntity toOrder, SqlAdapter adapter)
+        private static void CopyShipments(long fromOrderID, OrderEntity toOrder)
         {
             // Copy any existing shipments
             foreach (ShipmentEntity shipment in ShippingManager.GetShipments(fromOrderID, false))
@@ -438,21 +438,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
             #region Shipping
 
             // Shipping
-            OrderChargeEntity shipping = GetCharge(order, "Shipping");
+            OrderChargeEntity shipping = GetCharge(order, "SHIPPING", "Shipping");
             shipping.Amount = orderType.ShippingServiceSelected.ShippingServiceCost != null ? (decimal) orderType.ShippingServiceSelected.ShippingServiceCost.Value : 0;
 
             #endregion
 
             #region Adjustment
 
-            // Adjustment
-            decimal adjustment = (decimal) orderType.AdjustmentAmount.Value;
+            // Only use the adjustment value if the order is considered complete.  Otherwise ebay seems to put an adjustment on non-complete orders that sets the total to zero.
+            decimal adjustment = (order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed) ?
+                (decimal) orderType.AdjustmentAmount.Value :
+                0m;
+
+            OrderChargeEntity adjust = GetCharge(order, "ADJUST", "Adjustment", adjustment != 0);
 
             // Apply the adjustment
-            if (adjustment != 0)
+            if (adjust != null)
             {
-                OrderChargeEntity adjust = GetCharge(order, "ADJUST", true);
-                adjust.Description = "Adjustment";
                 adjust.Amount = adjustment;
             }
 
@@ -479,10 +481,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
             }
 
-            if (insuranceTotal != 0)
+            OrderChargeEntity insurance = GetCharge(order, "INSURANCE", "Insurance", insuranceTotal != 0);
+
+            if (insurance != null)
             {
-                OrderChargeEntity insurance = GetCharge(order, "INSURANCE", true);
-                insurance.Description = "Insurance";
                 insurance.Amount = insuranceTotal;
             }
 
@@ -498,8 +500,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // Tax
-            OrderChargeEntity tax = GetCharge(order, "TAX", true);
-            tax.Description = "Sales Tax";
+            OrderChargeEntity tax = GetCharge(order, "TAX", "Sales Tax", true);
             tax.Amount = salesTax;
 
             #endregion
@@ -589,7 +590,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // My eBay
             orderItem.MyEbayPaid = transaction.PaidTimeSpecified;
-            orderItem.MyEbayShipped = transaction.ShippedTimeSpecified;
+            orderItem.MyEbayShipped = transaction.ShippedTimeSpecified || HasTrackingNumber(transaction);
 
             // Load variation information
             UpdateTransactionVariationDetail(orderItem, transaction);
@@ -727,6 +728,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
+        /// Indicates if the transaction has a shipment tracking number attached
+        /// </summary>
+        private bool HasTrackingNumber(TransactionType transaction)
+        {
+            return
+                transaction.ShippingDetails.ShipmentTrackingDetails != null &&
+                transaction.ShippingDetails.ShipmentTrackingDetails.Any() &&
+                !string.IsNullOrWhiteSpace(transaction.ShippingDetails.ShipmentTrackingDetails.First().ShipmentTrackingNumber);
+        }
+
+        /// <summary>
         /// Reconciles the ShipWorks order total with what eBay has on record.
         /// Any adjustment are done via an OTHER charge
         /// </summary>
@@ -736,10 +748,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             if (order.OrderTotal != Convert.ToDecimal(amountPaid))
             {
-                // only make adjustments if all items are Complete
-                if (order.OrderItems.OfType<EbayOrderItemEntity>().All(item => item.CompleteStatus == (int) CompleteStatusCodeType.Complete))
+                // only make adjustments if it's considered complete
+                if (order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed)
                 {
-                    OrderChargeEntity otherCharge = GetCharge(order, "OTHER", true);
+                    OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other", true);
                     otherCharge.Description = "Other";
                     otherCharge.Amount += Convert.ToDecimal(amountPaid) - order.OrderTotal;
                 }
@@ -871,9 +883,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Get the specified charge for the order
         /// </summary>
-        private OrderChargeEntity GetCharge(OrderEntity order, string description, bool autoCreate = true)
+        private OrderChargeEntity GetCharge(OrderEntity order, string type, string description, bool autoCreate = true)
         {
-            OrderChargeEntity orderCharge = order.OrderCharges.FirstOrDefault(c => c.Description == description);
+            OrderChargeEntity orderCharge = order.OrderCharges.FirstOrDefault(c => c.Type == type);
 
             if (orderCharge == null)
             {
@@ -881,8 +893,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     // create a new one
                     orderCharge = InstantiateOrderCharge(order);
+                    orderCharge.Type = type;
                     orderCharge.Description = description;
-                    orderCharge.Type = description.ToUpper();
                 }
             }
 
@@ -1120,9 +1132,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             Progress.Detail = "Checking for feedback...";
             Progress.PercentComplete = 0;
 
-            int page = 1;
-            int count = 1;
-
             DateTime? downloadThrough = ((EbayStoreEntity) Store).FeedbackUpdatedThrough;
 
             // The date to stop looking at feedback, even if more exists
@@ -1141,23 +1150,50 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 downloadThrough = DateTime.UtcNow.AddDays(-30);
             }
 
-            // Tracks the newest feedback we've seen - which is where we will start next time.  But only if we complete this time.
-            DateTime newestFeedback = downloadThrough.Value;
+            int feedbackCount = 0;
+
+            // First download all feedback recieved
+            DateTime newestRecieved = DownloadFeedback(FeedbackTypeCodeType.FeedbackReceivedAsSeller, downloadThrough.Value, ref feedbackCount);
+
+            // Check for user cancel
+            if (Progress.IsCancelRequested)
+            {
+                return false;
+            }
+
+            // Then download all feedback left
+            DateTime newestLeft = DownloadFeedback(FeedbackTypeCodeType.FeedbackLeft, downloadThrough.Value, ref feedbackCount);
+
+            // Check for user cancel
+            if (Progress.IsCancelRequested)
+            {
+                return false;
+            }
+
+            // Use the latest feedback recieived date as our ending point for next time. Since we queried it first, this is safe.
+            SaveFeedbackCheckpoint(newestRecieved);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Download feedback of the given time, through the specified date
+        /// </summary>
+        private DateTime DownloadFeedback(FeedbackTypeCodeType feedbackType, DateTime downloadThrough, ref int count)
+        {
+            int page = 1;
+
+            DateTime newestFeedback = downloadThrough;
 
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetFeedbackResponseType response = webClient.GetFeedback(page);
+                GetFeedbackResponseType response = webClient.GetFeedback(feedbackType, page);
 
                 // Quit if eBay says there aren't any more
                 if (response.FeedbackDetailItemTotal == 0)
                 {
-                    if (page > 1)
-                    {
-                        SaveFeedbackCheckpoint(newestFeedback);
-                    }
-
-                    return true;
+                    return newestFeedback;
                 }
 
                 // Process all of the downloaded feedback
@@ -1171,23 +1207,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         newestFeedback = feedbackDate;
                     }
 
-                    // If this goes back prior to when we want to look for feedback, we are done
-                    if (feedbackDate < downloadThrough)
+                    // If this goes back prior to when we want to look for feedback, or the user has cancelled, we are doing
+                    if (feedbackDate < downloadThrough || Progress.IsCancelRequested)
                     {
-                        SaveFeedbackCheckpoint(newestFeedback);
-
-                        return true;
+                        return newestFeedback;
                     }
 
                     ProcessFeedback(feedback);
 
                     Progress.Detail = string.Format("Processing feedback {0}...", count++);
-
-                    // Check for user cancel
-                    if (Progress.IsCancelRequested)
-                    {
-                        return false;
-                    }
                 }
 
                 // Next page
