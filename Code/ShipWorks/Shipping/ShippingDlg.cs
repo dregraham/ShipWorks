@@ -1,36 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data;
-using ShipWorks.Common.Threading;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers;
-using ShipWorks.Data.Model;
-using System.Diagnostics;
 using log4net;
-using ShipWorks.Users.Security;
-using ShipWorks.Stores;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Filters;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
 using ShipWorks.Templates;
-using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Media;
+using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Editions;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping
 {
@@ -1665,7 +1665,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get the cached rates for teh shipment, or null if there are none
+        /// Get the cached rates for the shipment, or null if there are none
         /// </summary>
         private RateGroup GetCachedRates(ShipmentEntity shipment)
         {

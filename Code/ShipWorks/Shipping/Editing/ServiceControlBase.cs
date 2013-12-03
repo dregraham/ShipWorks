@@ -415,6 +415,11 @@ namespace ShipWorks.Shipping.Editing
                 height += rateControl.FootnoteHeight;
 
                 ratesSection.Height = height;
+
+                if (ratesSection.Collapsed)
+                {
+                    ratesSection.Collapsed = false;
+                }
             }
         }
 
