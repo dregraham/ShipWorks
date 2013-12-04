@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.Editing
             ServiceLevel = originalRate.ServiceLevel;
             OriginalRate = originalRate;
             ExpectedDeliveryDate = originalRate.ExpectedDeliveryDate;
+            CarrierDescription = originalRate.CarrierDescription;
         }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace ShipWorks.Shipping.Editing
             if (!rates.All(x => x is NoncompetitiveRateResult))
             {
                 Description = "Undisclosed " + EnumHelper.GetDescription(ServiceLevel);
+                CarrierDescription = "Undisclosed";
             }
         }
     }

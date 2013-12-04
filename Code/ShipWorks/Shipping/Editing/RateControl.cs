@@ -82,25 +82,17 @@ namespace ShipWorks.Shipping.Editing
         {
             sandGrid.Rows.Clear();
 
-            bool showCarrierColumn = (rateGroup.Carrier == ShipmentTypeCode.BestRate) && (!rateGroup.Rates.All(a => String.IsNullOrEmpty(a.CarrierDescription)));
-            if (showCarrierColumn)
+            if (rateGroup.Carrier == ShipmentTypeCode.BestRate)
             {
                 gridColumnCarrier.Visible = true;
             }
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                string serviceDescription = rate.Description;
-                if (showCarrierColumn && rate.CarrierDescription != null)
-                {
-                    int indexOfCarrierNameInServiceDescription = rate.Description.IndexOf(rate.CarrierDescription, StringComparison.Ordinal);
-                    serviceDescription = (indexOfCarrierNameInServiceDescription < 0) ? rate.Description : rate.Description.Remove(indexOfCarrierNameInServiceDescription, rate.CarrierDescription.Length + 1);
-                }
-
-                GridRow row = new GridRow(new GridCell[]
+                GridRow row = new GridRow(new[]
                 {
                     new GridCell(rate.CarrierDescription),
-                    new GridCell(serviceDescription),
+                    new GridCell(rate.Description),
                     new GridCell(rate.Days),
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
                     new GridHyperlinkCell(rate.Selectable ? "Select" : "")
