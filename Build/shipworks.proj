@@ -269,7 +269,7 @@
   <Target Name="SqlSnapshot" Condition=" $(CreateInstaller) == 'True' ">
 
     <Message Text="Taking SQL Snapshot" />
-    <Exec Command='".\SqlSnapper\RedGate.SQLSnapper.exe" /server:INTSQL01\Development /database:ShipWorksSchema /makesnapshot:"$(LogDirectory)\DatabaseSchema$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).snp"' />
+    <Exec Command='".\SqlSnapper\RedGate.SQLSnapper.exe" /server:INTSQL01\Development /database:ShipWorksSchema_eBayRedo /makesnapshot:"$(LogDirectory)\DatabaseSchema$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).snp"' />
 
   </Target>
 

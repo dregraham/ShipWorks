@@ -1096,10 +1096,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
             }
 
-            // Go back a max of 30 days
-            if (downloadThrough < DateTime.UtcNow.AddDays(-30))
+            // Go back a max
+            if (downloadThrough < DateTime.UtcNow.AddDays(-14))
             {
-                downloadThrough = DateTime.UtcNow.AddDays(-30);
+                downloadThrough = DateTime.UtcNow.AddDays(-14);
             }
 
             int feedbackCount = 0;
