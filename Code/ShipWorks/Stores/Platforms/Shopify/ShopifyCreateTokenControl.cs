@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                     try
                     {
-                        ShopifyWebClient webClient = new ShopifyWebClient(store);
+                        ShopifyWebClient webClient = new ShopifyWebClient(store, null);
                         webClient.RetrieveShopInformation();
 
                         OnTokenCreate();
