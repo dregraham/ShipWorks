@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {

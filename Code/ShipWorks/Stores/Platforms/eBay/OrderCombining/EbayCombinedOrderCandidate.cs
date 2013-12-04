@@ -203,9 +203,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 {
                     if (!components.Any(c => c.Order.OrderID == foundOrder.OrderID))
                     {
-                        bool add = (CombinedOrderType == EbayCombinedOrderType.Local) ? 
-                            EbayUtility.GetEffectiveCheckoutStatus((EbayOrderItemEntity)foundOrder.OrderItems.First()) == EbayEffectiveCheckoutStatus.Paid :
-                            EbayUtility.GetEffectiveCheckoutStatus((EbayOrderItemEntity)foundOrder.OrderItems.First()) == EbayEffectiveCheckoutStatus.Incomplete;
+                        // Get the list of eBay items from all of the items
+                        List<EbayOrderItemEntity> eBayItems = foundOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
+
+                        bool add = (eBayItems.Count == 1) && (CombinedOrderType == EbayCombinedOrderType.Local) ?
+                            EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Paid :
+                            EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Incomplete;
 
                         if (add)
                         {
@@ -226,29 +229,35 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
             long? ebayOrderID = null;
 
-            // make sure we have all order details in memory
-            toCombine.ForEach(c => EnsureRelatedEntities(c.Order));
-
+            // If combining on eBay, do that first
             if (CombinedOrderType == EbayCombinedOrderType.Ebay)
             {
                 EbayStoreEntity ebayStore = StoreManager.GetStore(StoreID) as EbayStoreEntity;
 
                 // build the collection of transactions to be combined
                 List<TransactionType> transactions = new List<TransactionType>();
-                foreach (EbayCombinedOrderComponent component in toCombine)
-                {
-                    foreach (EbayOrderItemEntity orderItem in component.Order.OrderItems)
-                    {
-                        // build a TransactionType to identify the transaction with eBay
-                        TransactionType transaction = new TransactionType()
-                            {
-                                TransactionID = orderItem.EbayTransactionID.ToString(),
-                                Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
-                            };
 
-                        // add it to the list of transactions to be sent to eBay
-                        transactions.Add(transaction);
+                // Go throughy each order that is going to be combined, and build a list of all eBay transactions from it
+                foreach (EbayOrderEntity order in toCombine.Select(c => c.Order))
+                {
+                    // Ensure the items are loaded for this order
+                    if (order.OrderItems.Count == 0)
+                    {
+                        order.OrderItems.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
                     }
+
+                    // There should be exactly one eBay item entity once we get here - we enfource this in Finding and Discovery
+                    EbayOrderItemEntity orderItem = order.OrderItems.OfType<EbayOrderItemEntity>().Single();
+
+                    // build a TransactionType to identify the transaction with eBay
+                    TransactionType transaction = new TransactionType()
+                        {
+                            TransactionID = orderItem.EbayTransactionID.ToString(),
+                            Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
+                        };
+
+                    // add it to the list of transactions to be sent to eBay
+                    transactions.Add(transaction);
                 }
 
                 // use the most recent order being combined as the template
@@ -274,63 +283,37 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// Calculates the order total to send to eBay when creating the Combined Payment
-        /// </summary>
-        private double GetCombinedPaymentTotal(List<EbayCombinedOrderComponent> toCombine)
-        {
-            decimal total = 0;
-
-            toCombine.ForEach(c =>
-            {
-                total += c.Order.OrderTotal;
-            });
-
-            // Find the current shipping costs
-            decimal currentShippingCost = toCombine.Sum(c => c.Order.OrderCharges.Sum(charge => charge.Type == "SHIPPING" ? charge.Amount : 0));
-
-            // subtract out the current shipping cost
-            total -= currentShippingCost;
-
-            // add in the overridden shipping cost
-            total += ShippingCost;
-
-            // return the double value for eBay
-            return Convert.ToDouble(total);
-        }
-
-        /// <summary>
         /// Creates a new order with the order items of the provided orders.  If this new order
         /// is an actual combined order on eBay (not just local) ebayOrderID will be non-null
         /// </summary>
         private bool CombineLocalOrders(List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
         {
+            // Do nothing
             if (toCombine.Count == 0)
             {
-                // do nothing
                 return true;
             }
 
-            // create a new master order baesd on the most recent Order to be combined.  Choosing the most recent to copy
-            // will prevent orders from being re-downloaded since a more recent order may be turned into an orderitem
-            EbayOrderEntity orderTemplate = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
+            // Create a new master order based on the most recent order to be combined
+            EbayOrderEntity primaryOrder = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
 
-            EbayStoreEntity storeEntity = StoreManager.GetStore(orderTemplate.StoreID) as EbayStoreEntity;
-            if (storeEntity == null)
+            EbayStoreEntity store = StoreManager.GetStore(primaryOrder.StoreID) as EbayStoreEntity;
+            if (store == null)
             {
                 log.WarnFormat("Unable to combine orders for buyer {0}, store has been deleted.", BuyerID);
                 return false;
             }
 
-            EbayOrderEntity newOrder = StoreTypeManager.GetType(storeEntity).CreateOrderInstance() as EbayOrderEntity;
-            CopyOrderFields(orderTemplate, newOrder);
+            EbayOrderEntity newOrder = StoreTypeManager.GetType(store).CreateOrderInstance() as EbayOrderEntity;
+            CopyOrderFields(primaryOrder, newOrder);
 
             // reset the rollup count
             newOrder.RollupItemCount = 0;
             newOrder.RollupEbayItemCount = 0;
             newOrder.RollupNoteCount = 0;
 
-            // generate a new ID
-            AssignOrderNumber(newOrder);
+            // Generate a new order number
+            newOrder.OrderNumber = OrderUtility.GetNextOrderNumber(store.StoreID);
 
             if (ebayOrderID.HasValue)
             {
@@ -344,18 +327,21 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 newOrder.EbayOrderID = 0;
             }
 
-            // keep track of any moved notes and shipments
-            List<ShipmentEntity> movedShipments = new List<ShipmentEntity>();
-            List<NoteEntity> movedNotes = new List<NoteEntity>();
-
+            // For every order that is to be combined, we need to merge in items, charges, and payment details
             foreach (EbayCombinedOrderComponent component in toCombine)
             {
                 EbayOrderEntity sourceOrder = component.Order;
 
-                MergeOrder(sourceOrder, newOrder, movedShipments, movedNotes);
+                MoveOrderItems(sourceOrder, newOrder);
+                MovePaymentDetails(sourceOrder, newOrder);
+                MoveCharges(sourceOrder, newOrder);
             }
 
-            CleanupOrder(newOrder);
+            // For order we crate on eBay, some charges are applied based on what the user entered or what we calculate
+            if (newOrder.EbayOrderID > 0)
+            {
+                ApplyCalculatedCharges(newOrder);
+            }
 
             // the order total needs to be redone
             newOrder.OrderTotal = OrderUtility.CalculateTotal(newOrder);
@@ -365,17 +351,18 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 // save the new order
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
-                    // save the order and all moved items, payments, charges, etc.
+                    // Save the order, which will include all moved items, payments, and charges
                     adapter.SaveAndRefetch(newOrder);
 
-                    // save shipments
-                    movedShipments.ForEach(s => ShippingManager.SaveShipment(s));
+                    // Now we need to go through each old order, copy over the notes and shipments, and delete toe original order
+                    foreach (OrderEntity order in toCombine.Select(c => c.Order))
+                    {
+                        OrderUtility.CopyNotes(order.OrderID, newOrder);
 
-                    // save notes
-                    movedNotes.ForEach(n => NoteManager.SaveNote(n));
+                        OrderUtility.CopyShipments(order.OrderID, newOrder);
 
-                    // delete the old orders
-                    toCombine.ForEach(c => DeletionService.DeleteOrder(c.Order.OrderID));
+                        DeletionService.DeleteOrder(order.OrderID);
+                    }
 
                     // commit the transaction
                     adapter.Commit();
@@ -415,62 +402,93 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// Cleanup unnecessary data as a result of the merge
+        /// Move the items from the source order to the target order
         /// </summary>
-        private void CleanupOrder(EbayOrderEntity newOrder)
+        private void MoveOrderItems(EbayOrderEntity source, EbayOrderEntity target)
         {
-            // detach all order charges and remove them from the collection
-            List<OrderChargeEntity> orderCharges = newOrder.OrderCharges.ToList();
-            orderCharges.ForEach(c => c.Order = null);
-
-            // add back in the charges, combined based on type
-            foreach (string chargeType in orderCharges.Select(c => c.Type).Distinct())
+            // Ensure the items are loaded on the source
+            if (source.OrderItems.Count == 0)
             {
-                // for eBay Combined Payments, don't carry over the standard charges to the new order
-                if (newOrder.EbayOrderID > 0 &&
-                    (chargeType == "TAX" || chargeType == "SHIPPING" || chargeType == "ADJUST"))
+                source.OrderItems.AddRange(DataProvider.GetRelatedEntities(source.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
+            }
+
+            // Re-associate the items with the new order.  The old order is just going to get deleted anyway
+            foreach (OrderItemEntity orderItem in source.OrderItems.ToList())
+            {
+                orderItem.Order = target;
+            }
+        }
+
+        /// <summary>
+        /// Move the payment details from the source order to the target order
+        /// </summary>
+        private void MovePaymentDetails(EbayOrderEntity source, EbayOrderEntity target)
+        {
+            // Ensure payment details are loaded on the source
+            if (source.OrderPaymentDetails.Count == 0)
+            {
+                source.OrderPaymentDetails.AddRange(DataProvider.GetRelatedEntities(source.OrderID, EntityType.OrderPaymentDetailEntity).Cast<OrderPaymentDetailEntity>());
+            }
+
+            // Re-associate with the new order.  The old order is just going to get deleted anyway
+            foreach (OrderPaymentDetailEntity detail in source.OrderPaymentDetails.ToList())
+            {
+                detail.Order = target;
+            }
+        }
+
+        /// <summary>
+        /// Move the charges from the source order to the target order
+        /// </summary>
+        private void MoveCharges(EbayOrderEntity source, EbayOrderEntity target)
+        {
+            // Ensure charges are loaded on the source
+            if (source.OrderCharges.Count == 0)
+            {
+                source.OrderCharges.AddRange(DataProvider.GetRelatedEntities(source.OrderID, EntityType.OrderChargeEntity).Cast<OrderChargeEntity>());
+            }
+
+            // Go through each charge, creating or updating that charge on the target order
+            foreach (OrderChargeEntity sourceCharge in source.OrderCharges.ToList())
+            {
+                // If we combined it on eBay, then the standard charges are going to get applied based on what the user specified when they created they order, not
+                // the existing charges
+                if (target.EbayOrderID > 0 && new List<string> { "TAX", "SHIPPING", "ADJUST", "OTHER" }.Contains(sourceCharge.Type))
                 {
                     continue;
                 }
 
-                // get the total for this type
-                decimal sum = orderCharges.Sum(c => c.Type == chargeType ? c.Amount : 0);
-                string description = orderCharges.First(c => c.Type == chargeType).Description;
+                OrderChargeEntity targetCharge = GetCharge(target, sourceCharge.Type);
+                targetCharge.Description = sourceCharge.Description;
+                targetCharge.Amount += sourceCharge.Amount;
+            }
+        }
 
-                OrderChargeEntity orderCharge = new OrderChargeEntity()
-                {
-                    Type = chargeType,
-                    Description = description,
-                    Amount = sum
-                };
+        /// <summary>
+        /// Apply charges calculated from creating a combined payment on eBay
+        /// </summary>
+        private void ApplyCalculatedCharges(EbayOrderEntity targetOrder)
+        {
+            // get/fix the shipping amount
+            OrderChargeEntity shippingCharge = GetCharge(targetOrder, "SHIPPING");
+            shippingCharge.Description = "Shipping";
+            shippingCharge.Amount = ShippingCost;
 
-                newOrder.OrderCharges.Add(orderCharge);
+            // add in the adjustment, if any
+            if (Adjustment > 0)
+            {
+                OrderChargeEntity adjustmentCharge = GetCharge(targetOrder, "ADJUST");
+                adjustmentCharge.Description = "Adjustment";
+                adjustmentCharge.Amount = Adjustment;
             }
 
-            // for eBay combined payments, add in the standard charges
-            if (newOrder.EbayOrderID > 0)
+            // calculate the tax amount. Calculating this last so that previously added/included charges get counted
+            decimal tax = CalculateTaxAmount(targetOrder);
+            if (tax > 0)
             {
-                // get/fix the shipping amount
-                OrderChargeEntity shippingCharge = GetCharge(newOrder, "SHIPPING", true);
-                shippingCharge.Description = "Shipping";
-                shippingCharge.Amount = ShippingCost;
-
-                // add in the adjustment
-                if (Adjustment > 0)
-                {
-                    OrderChargeEntity adjustmentCharge = GetCharge(newOrder, "ADJUST", true);
-                    adjustmentCharge.Description = "Adjustment";
-                    adjustmentCharge.Amount = Adjustment;
-                }
-
-                // calculate the tax amount. Calculating this last so that previously added/included charges get counted
-                decimal tax = CalculateTaxAmount(newOrder);
-                if (tax > 0)
-                {
-                    OrderChargeEntity taxCharge = GetCharge(newOrder, "TAX", true);
-                    taxCharge.Description = "Sales Tax";
-                    taxCharge.Amount = tax;
-                }
+                OrderChargeEntity taxCharge = GetCharge(targetOrder, "TAX");
+                taxCharge.Description = "Sales Tax";
+                taxCharge.Amount = tax;
             }
         }
 
@@ -499,133 +517,45 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
-        /// such orders exist, zero is returned.
+        /// Get the specified charge for the order, and creates one if necessary
         /// </summary>
-        protected long GetMaxOrderNumber(long storeID)
-        {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderNumber,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == storeID & OrderFields.IsManual == false);
-
-                long orderNumber = result is DBNull ? 0 : (long)result;
-
-                log.InfoFormat("MAX(OrderNumber) = {0}", orderNumber);
-
-                return orderNumber;
-            }
-        }
-
-        /// <summary>
-        /// Get the specified charge for the order
-        /// </summary>
-        private OrderChargeEntity GetCharge(OrderEntity order, string type, bool autoCreate)
+        private OrderChargeEntity GetCharge(OrderEntity order, string type)
         {
             OrderChargeEntity orderCharge = order.OrderCharges.FirstOrDefault(c => c.Type == type);
 
             if (orderCharge == null)
             {
-                if (autoCreate)
-                {
-                    // create a new one
-                    orderCharge = new OrderChargeEntity();
-                    orderCharge.Order = order;
-                    orderCharge.Type = type;
-                }
+                orderCharge = new OrderChargeEntity();
+                orderCharge.Order = order;
+                orderCharge.Type = type;
             }
 
             return orderCharge;
         }
 
         /// <summary>
-        /// Assigns the next order number to the order
+        /// Calculates the order total to send to eBay when creating the Combined Payment
         /// </summary>
-        private void AssignOrderNumber(EbayOrderEntity order)
+        private double GetCombinedPaymentTotal(List<EbayCombinedOrderComponent> toCombine)
         {
-            order.OrderNumber = GetMaxOrderNumber(order.StoreID) + 1;
-        }
+            decimal total = 0;
 
-        /// <summary>
-        /// Moves child rows from one order to another
-        /// </summary>
-        private void MergeOrder(EbayOrderEntity sourceOrder, EbayOrderEntity newOrder, List<ShipmentEntity> movedShipments, List<NoteEntity> movedNotes)
-        {
-            EnsureRelatedEntities(sourceOrder);
-
-            // move the order items.  ToList intentional since changing an item's Order changes that collection
-            foreach (OrderItemEntity orderItem in sourceOrder.OrderItems.ToList())
+            toCombine.ForEach(c =>
             {
-                orderItem.Order = newOrder;
-            }
-
-            // combine order charges
-            foreach (OrderChargeEntity orderCharge in sourceOrder.OrderCharges.ToList())
-            {
-                orderCharge.Order = newOrder;
-            }
-
-            // move the payment details
-            foreach (OrderPaymentDetailEntity detail in sourceOrder.OrderPaymentDetails.ToList())
-            {
-                detail.Order = newOrder;
-            }
-
-            // move any shipments
-            List<ShipmentEntity> oldShipments = ShippingManager.GetShipments(sourceOrder.OrderID, false);
-            oldShipments.ForEach(s =>
-            {
-                // assign it to the new order 
-                s.Order = newOrder;
-
-                // track the moved shipment
-                movedShipments.Add(s);
+                total += c.Order.OrderTotal;
             });
 
-            // move any notes
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                EntityCollection<NoteEntity> oldOrderNotes = new EntityCollection<NoteEntity>();
-                adapter.FetchEntityCollection(oldOrderNotes, NoteManager.GetNotesQuery(sourceOrder.OrderID));
+            // Find the current shipping costs
+            decimal currentShippingCost = toCombine.Sum(c => c.Order.OrderCharges.Sum(charge => charge.Type == "SHIPPING" ? charge.Amount : 0));
 
-                foreach (NoteEntity note in oldOrderNotes)
-                {
-                    // change the order the note is associated with
-                    note.Order = newOrder;
+            // subtract out the current shipping cost
+            total -= currentShippingCost;
 
-                    // update the note text
-                    note.Text = String.Format("From merged order {0}: \r\n{1}", sourceOrder.OrderNumberComplete, note.Text);
+            // add in the overridden shipping cost
+            total += ShippingCost;
 
-                    // keep track of the moved note so it can be saved later
-                    movedNotes.Add(note);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Ensures all related entity collections are loaded on the provided order.
-        /// </summary>
-        private void EnsureRelatedEntities(EbayOrderEntity order)
-        {
-            if (order.OrderItems.Count == 0)
-            {
-                // load order items
-                order.OrderItems.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.EbayOrderItemEntity).Cast<OrderItemEntity>());
-            }
-
-            if (order.OrderCharges.Count == 0)
-            {
-                // load charges
-                order.OrderCharges.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderChargeEntity).Cast<OrderChargeEntity>());
-            }
-
-            if (order.OrderPaymentDetails.Count == 0)
-            {
-                // load payment details
-                order.OrderPaymentDetails.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderPaymentDetailEntity).Cast<OrderPaymentDetailEntity>());
-            }
+            // return the double value for eBay
+            return Convert.ToDouble(total);
         }
 
         /// <summary>

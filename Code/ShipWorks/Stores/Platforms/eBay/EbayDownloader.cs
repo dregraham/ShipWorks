@@ -258,10 +258,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
                     {
                         // Copy the notes from the old order
-                        CopyNotes(fromOrder.OrderID, order);
+                        OrderUtility.CopyNotes(fromOrder.OrderID, order);
 
                         // Copy the shipments from the old order
-                        CopyShipments(fromOrder.OrderID, order);
+                        OrderUtility.CopyShipments(fromOrder.OrderID, order);
 
                         // Delete the old order
                         DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
@@ -320,54 +320,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             return abandonedItems;
-        }
-
-        /// <summary>
-        /// Copies any note entities from one order to another.
-        /// </summary>
-        private static void CopyNotes(long fromOrderID, OrderEntity toOrder)
-        {
-            // Make the copies
-            List<NoteEntity> newNotes = EntityUtility.CloneEntityCollection(DataProvider.GetRelatedEntities(fromOrderID, EntityType.NoteEntity).Select(n => (NoteEntity) n));
-
-            foreach (NoteEntity note in newNotes)
-            {
-                EntityUtility.MarkAsNew(note);
-                note.Order = toOrder;
-
-                NoteManager.SaveNote(note);
-            }
-        }
-
-        /// <summary>
-        /// Copies any shipment entities from one order to another
-        /// </summary>
-        private static void CopyShipments(long fromOrderID, OrderEntity toOrder)
-        {
-            // Copy any existing shipments
-            foreach (ShipmentEntity shipment in ShippingManager.GetShipments(fromOrderID, false))
-            {
-                // load all carrier and customs data
-                ShippingManager.EnsureShipmentLoaded(shipment);
-
-                // clone the entity tree
-                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
-
-                // this is now a new shipment to be inserted
-                EntityUtility.MarkAsNew(clonedShipment);
-                clonedShipment.Order = toOrder;
-
-                // Mark all the carrier-specific stuff as new
-                clonedShipment.GetDependingRelatedEntities().ForEach(e => EntityUtility.MarkAsNew(e));
-
-                // And all the customers stuff as new
-                foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)
-                {
-                   EntityUtility.MarkAsNew(customsItem);
-                }
-
-                ShippingManager.SaveShipment(clonedShipment);
-            }
         }
 
         /// <summary>

@@ -121,14 +121,21 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             // load the order items for this order entity if needed
                             if (ebayOrder.OrderItems.Count == 0)
                             {
-                                ebayOrder.OrderItems.AddRange(DataProvider.GetRelatedEntities(ebayOrder.OrderID, EntityType.EbayOrderItemEntity).Cast<OrderItemEntity>());
+                                ebayOrder.OrderItems.AddRange(DataProvider.GetRelatedEntities(ebayOrder.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
                             }
 
-                            // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
-                            if ((combineType == EbayCombinedOrderType.Local && EbayUtility.GetEffectiveCheckoutStatus((EbayOrderItemEntity)ebayOrder.OrderItems.First()) == EbayEffectiveCheckoutStatus.Paid) ||
-                                (combineType == EbayCombinedOrderType.Ebay && EbayUtility.GetEffectiveCheckoutStatus((EbayOrderItemEntity)ebayOrder.OrderItems.First()) == EbayEffectiveCheckoutStatus.Incomplete))
+                            // Get the list of eBay items from all of the items
+                            List<EbayOrderItemEntity> eBayItems = ebayOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
+
+                            // We only allow combining orders that are still a single eBay item
+                            if (eBayItems.Count == 1)
                             {
-                                orders.Add(ebayOrder);
+                                // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
+                                if ((combineType == EbayCombinedOrderType.Local && EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Paid) ||
+                                    (combineType == EbayCombinedOrderType.Ebay  && EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Incomplete))
+                                {
+                                    orders.Add(ebayOrder);
+                                }
                             }
                         }
 

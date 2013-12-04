@@ -255,26 +255,11 @@ namespace ShipWorks.Stores.Communication
 
         /// <summary>
         /// Gets the next OrderNumber that an order should use.  This is useful for storetypes that don't supply their own
-        /// order numbers for ShipoWorks, such as Amazon and eBay.
+        /// order numbers for ShipWorks, such as Amazon and eBay.
         /// </summary>
         protected long GetNextOrderNumber()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderNumber,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
-
-                long orderNumber = result is DBNull ? 0 : (long)result;
-
-                // Get the next one
-                orderNumber++;
-
-                log.InfoFormat("GetNextOrderNumber = {0}", orderNumber);
-
-                return orderNumber;
-            }
+            return OrderUtility.GetNextOrderNumber(store.StoreID);
         }
 
         /// <summary>

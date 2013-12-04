@@ -769,7 +769,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             else if (e.Candidates.Count == 0)
             {
-                context.Complete(MenuCommandResult.Warning, "There are no orders eligible to combine with those selected.");
+                context.Complete(MenuCommandResult.Warning, string.Format("None of the selected orders are able to be combined {0}.", e.CombinedOrderType == EbayCombinedOrderType.Local ? "locally" : "on eBay"));
                 return;
             }
 
