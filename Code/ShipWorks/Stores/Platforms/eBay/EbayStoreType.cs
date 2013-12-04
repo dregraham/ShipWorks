@@ -606,12 +606,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 new MenuCommand("Send Message...", OnSendMessage),
                 new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true },
+
                 new MenuCommand("Mark as Paid", OnUpdateShipment){ Tag = EbayOnlineAction.Paid },
                 new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped },
+
                 new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true },
                 new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped },
-                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = CombineType.Local },
-                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = CombineType.EbayCombinedPayment },
+
+                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = EbayCombinedOrderType.Local },
+                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = EbayCombinedOrderType.Ebay },
+
                 new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
                 new MenuCommand("Ship to Buyer", OnShipToBuyer)
             };  
@@ -737,20 +741,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void OnCombineOrders(MenuCommandExecutionContext context)
         {
-            CombineType combineType = (CombineType)context.MenuCommand.Tag;
-
-            CombinedOrderFinder loader = new CombinedOrderFinder(context.Owner);
-
-            loader.LoadComplete += new CombinedOrdersLoadedEventHandler(OnCombinedPaymentsLoaded);
+            EbayPotentialCombinedOrderFinder finder = new EbayPotentialCombinedOrderFinder(context.Owner);
+            finder.SearchComplete += new EbayPotentialCombinedOrdersFoundEventHandler(OnPotentialCombinedOrdersFound);
 
             List<long> orderIDs = context.SelectedKeys.ToList();
-            loader.LoadAsync(orderIDs, context, combineType);
+            finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
         }
 
         /// <summary>
         /// Loading of possible combined payments is complete
         /// </summary>
-        void OnCombinedPaymentsLoaded(object sender, CombinedOrdersLoadedEventArgs e)
+        void OnPotentialCombinedOrdersFound(object sender, EbayPotentialCombinedOrdersFoundEventArgs e)
         {
             // unpack the user state
             MenuCommandExecutionContext context = (MenuCommandExecutionContext)e.UserState;
@@ -766,14 +767,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 context.Complete();
                 return;
             }
-            else if (e.CombinedPayments.Count == 0)
+            else if (e.Candidates.Count == 0)
             {
                 context.Complete(MenuCommandResult.Warning, "There are no orders eligible to combine with those selected.");
                 return;
             }
 
             // continue to allow selection of which order(s) to combine
-            using (EbayCombineOrdersDlg dlg = new EbayCombineOrdersDlg(e.CombineType, e.CombinedPayments))
+            using (EbayCombineOrdersDlg dlg = new EbayCombineOrdersDlg(e.CombinedOrderType, e.Candidates))
             {
                 if (dlg.ShowDialog(e.Owner) != DialogResult.OK)
                 {
@@ -781,10 +782,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     return;
                 }
 
-                List<OrderCombining.CombinedOrder> selectedOrders = dlg.SelectedOrders;
+                List<OrderCombining.EbayCombinedOrderCandidate> selectedOrders = dlg.SelectedOrders;
 
                 // create another background worker for combining
-                BackgroundExecutor<OrderCombining.CombinedOrder> executor = new BackgroundExecutor<OrderCombining.CombinedOrder>(e.Owner,
+                BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate> executor = new BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate>(e.Owner,
                     "Combining eBay Orders",
                     "ShipWorks is combining eBay Orders.",
                     "Combining Order {0} of {1}...");
@@ -802,7 +803,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Worker method for combining eBay orders
         /// </summary>
-        private void CombineOrdersCallback(OrderCombining.CombinedOrder toCombine, object userState, BackgroundIssueAdder<OrderCombining.CombinedOrder> issueAdder)
+        private void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
         {
             try
             {

@@ -1981,7 +1981,7 @@
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetItemRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayRequestConfiguration.cs" />
-    <None Include="Stores\Platforms\Ebay\Requests\EbayCombineOrdersRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayAddOrderRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayCompleteSaleRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayLeaveFeedbackRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbaySendMessageRequest.cs" />
@@ -4307,11 +4307,11 @@
     <Compile Include="Stores\Platforms\Ebay\OrderCombining\AcceptedPaymentsControl.Designer.cs">
       <DependentUpon>AcceptedPaymentsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrdersLoadedEventHandler.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrder.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrderFinder.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrderComponent.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombineType.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayPotentialCombinedOrdersFoundEventHandler.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombinedOrderCandidate.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayPotentialCombinedOrderFinder.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombinedOrderComponent.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombinedOrderType.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4353,7 +4353,6 @@
       <DependentUpon>EbayStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Ebay\EbayStoreType.cs" />
-    <None Include="Stores\Platforms\Ebay\Old_EbayWebClient.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbaySendMessageType.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayEffectiveCheckoutStatus.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayEffectivePaymentMethod.cs" />

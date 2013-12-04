@@ -67,9 +67,9 @@
             // 
             // contentPanel
             // 
-            this.contentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.contentPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.contentPanel.AutoScroll = true;
             this.contentPanel.BackColor = System.Drawing.Color.White;
             this.contentPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -81,8 +81,8 @@
             // 
             // localPanel
             // 
-            this.localPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.localPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.localPanel.Controls.Add(this.pictureBox1);
             this.localPanel.Controls.Add(this.label1);
             this.localPanel.Location = new System.Drawing.Point(13, 13);
@@ -101,20 +101,20 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Location = new System.Drawing.Point(42, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(627, 29);
             this.label1.TabIndex = 7;
             this.label1.Text = "ShipWorks has determined the following buyers have orders that can be combined.  " +
-                "Combining will merge the orders in ShipWorks only.";
+    "Combining will merge the orders in ShipWorks only.";
             // 
             // remotePanel
             // 
-            this.remotePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.remotePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.remotePanel.Controls.Add(this.pictureBox2);
             this.remotePanel.Controls.Add(this.label2);
             this.remotePanel.Location = new System.Drawing.Point(13, 12);
@@ -133,16 +133,15 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Location = new System.Drawing.Point(42, 7);
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(42, 8);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(628, 29);
+            this.label2.Size = new System.Drawing.Size(628, 28);
             this.label2.TabIndex = 7;
             this.label2.Text = "ShipWorks has determined the following buyers have outstanding orders that can be" +
-                " Invoiced.   Invoicing will merge the orders in ShipWorks and create an Invoice " +
-                "for the items in My eBay.";
+    " combined.";
             // 
             // EbayCombineOrdersDlg
             // 

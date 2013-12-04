@@ -18,36 +18,20 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
     /// </summary>
     public partial class EbayCombineOrderControl : UserControl
     {
-        // type of combining being configured
-        CombineType combineType;
-        public CombineType CombineType
-        {
-            get { return combineType; }
-        }
-
-        // the combined order being configured
-        CombinedOrder combinedOrder;
-        public CombinedOrder CombinedOrder
-        {
-            get { return combinedOrder; }
-        }
-
-        public bool IsSelected
-        {
-            get { return enableCheckBox.Checked; }
-        }
+        EbayCombinedOrderType combineType;
+        EbayCombinedOrderCandidate candidate;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayCombineOrderControl(CombineType combineType, CombinedOrder combinedOrder)
+        public EbayCombineOrderControl(EbayCombinedOrderType combineType, EbayCombinedOrderCandidate combinedOrder)
         {
             InitializeComponent();
 
-            this.combinedOrder = combinedOrder;
+            this.candidate = combinedOrder;
             this.combineType = combineType;
 
-            if (combineType == CombineType.Local)
+            if (combineType == EbayCombinedOrderType.Local)
             {
                 // hide the ebay details panel
                 eBayDetailsPanel.Visible = false;
@@ -58,16 +42,40 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
+        /// Indicates if the orders are being combined locally or on ebay
+        /// </summary>
+        public EbayCombinedOrderType CombinedOrderType
+        {
+            get { return combineType; }
+        }
+
+        /// <summary>
+        /// The candidate combined order object
+        /// </summary>
+        public EbayCombinedOrderCandidate Candidate
+        {
+            get { return candidate; }
+        }
+
+        /// <summary>
+        /// Indicates if the user has checked this candidate for combining
+        /// </summary>
+        public bool IsSelected
+        {
+            get { return enableCheckBox.Checked; }
+        }
+
+        /// <summary>
         /// Loading
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            buyerLabel.Text = combinedOrder.EbayBuyerID;
+            buyerLabel.Text = candidate.BuyerID;
 
             sandGrid.Rows.Clear();
 
             // populate the grid
-            foreach (CombinedOrderComponent component in combinedOrder.Components)
+            foreach (EbayCombinedOrderComponent component in candidate.Components)
             {
                 GridRow row = new GridRow(new GridCell[]
                     {
@@ -87,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             enableCheckBox.Checked = true;
 
             // populate the shipping and adjustments
-            shippingTextBox.Amount = combinedOrder.ShippingCost;
+            shippingTextBox.Amount = candidate.ShippingCost;
             taxTextBox.Text = "0.000";
 
             // load the state combo
@@ -100,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             shippingServiceComboBox.DisplayMember = "Value";
             shippingServiceComboBox.DataSource = EbayUtility.ShippingMethods;
 
-            EbayStoreEntity store = (EbayStoreEntity)StoreManager.GetStore(combinedOrder.StoreID);
+            EbayStoreEntity store = (EbayStoreEntity)StoreManager.GetStore(candidate.StoreID);
             if (IsDomestic())
             {
                 shippingServiceComboBox.SelectedValue = store.DomesticShippingService;
@@ -117,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         private bool IsDomestic()
         {
             // get the most recent, included order
-            EbayOrderEntity orderTemplate = combinedOrder.Components.Where(c => c.Included).OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
+            EbayOrderEntity orderTemplate = candidate.Components.Where(c => c.Included).OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
 
             return orderTemplate.ShipCountryCode == "US";
         }
@@ -163,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         {
             bool rowChecked = e.Row.Checked;
 
-            CombinedOrderComponent component = e.Row.Tag as CombinedOrderComponent;
+            EbayCombinedOrderComponent component = e.Row.Tag as EbayCombinedOrderComponent;
             component.Included = rowChecked;
         }
 
@@ -172,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// </summary>
         private void OnShippingChanged(object sender, EventArgs e)
         {
-            combinedOrder.ShippingCost = shippingTextBox.Amount;
+            candidate.ShippingCost = shippingTextBox.Amount;
         }
 
         /// <summary>
@@ -182,11 +190,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         {
             try
             {
-                combinedOrder.TaxPercent = Convert.ToDecimal(taxTextBox.Text);
+                candidate.TaxPercent = Convert.ToDecimal(taxTextBox.Text);
             }
             catch (FormatException)
             {
-                combinedOrder.TaxPercent = 0;
+                candidate.TaxPercent = 0;
             }
         }
 
@@ -200,13 +208,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             {
                 taxTextBox.Enabled = false;
                 taxShippingCheckBox.Enabled = false;
-                combinedOrder.TaxState = "";
+                candidate.TaxState = "";
             }
             else
             {
                 taxTextBox.Enabled = true;
                 taxShippingCheckBox.Enabled = true;
-                combinedOrder.TaxState = taxStateComboBox.Text;
+                candidate.TaxState = taxStateComboBox.Text;
             }
         }
 
@@ -215,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// </summary>
         private void OnTaxShippingChanged(object sender, EventArgs e)
         {
-            combinedOrder.TaxShipping = taxShippingCheckBox.Checked;
+            candidate.TaxShipping = taxShippingCheckBox.Checked;
         }
 
         /// <summary>
@@ -224,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         private void OnShippingMethodChanged(object sender, EventArgs e)
         {
             object selectedValue = shippingServiceComboBox.SelectedValue;
-            combinedOrder.ShippingService = selectedValue == null ? "" : (string)selectedValue;
+            candidate.ShippingService = selectedValue == null ? "" : (string)selectedValue;
         }
     }
 }

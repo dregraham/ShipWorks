@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Get feedback that has been left by or for this user
         /// </summary>
-        public GetFeedbackResponseType GetFeedback(FeedbackTypeCodeType feedbackType, int page)
+        public GetFeedbackResponseType GetFeedback(FeedbackTypeCodeType? feedbackType, int page)
         {
             EbayGetFeedbackRequest request = new EbayGetFeedbackRequest(token, feedbackType, page);
 
@@ -121,6 +121,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
             EbayCompleteSaleRequest request = new EbayCompleteSaleRequest(token, itemID, transactionID, paid, shipped, trackingNumber, shippingCarrier);
 
             request.Execute();
+        }
+
+        /// <summary>
+        /// Combine the given transactions, specifying the additional costs for the combined order
+        /// </summary>
+        public long CombineOrders(IEnumerable<TransactionType> transactionsToCombine, double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost, string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed)
+        {
+            EbayAddOrderRequest request = new EbayAddOrderRequest(token, transactionsToCombine, orderTotal, paymentMethods, shippingCost, shippingCountryCode, shippingService, salesTaxPercent, taxState, isShippingTaxed);
+
+            return request.Execute();
         }
     }
 }

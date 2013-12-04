@@ -1153,7 +1153,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             int feedbackCount = 0;
 
             // First download all feedback recieved
-            DateTime newestRecieved = DownloadFeedback(FeedbackTypeCodeType.FeedbackReceivedAsSeller, downloadThrough.Value, ref feedbackCount);
+            DateTime newestRecieved = DownloadFeedback(null, downloadThrough.Value, ref feedbackCount);
 
             // Check for user cancel
             if (Progress.IsCancelRequested)
@@ -1179,7 +1179,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Download feedback of the given time, through the specified date
         /// </summary>
-        private DateTime DownloadFeedback(FeedbackTypeCodeType feedbackType, DateTime downloadThrough, ref int count)
+        private DateTime DownloadFeedback(FeedbackTypeCodeType? feedbackType, DateTime downloadThrough, ref int count)
         {
             int page = 1;
 

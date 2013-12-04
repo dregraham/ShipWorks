@@ -21,13 +21,17 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayFeedbackRequest"/> class.
         /// </summary>
-        public EbayGetFeedbackRequest(EbayToken token, FeedbackTypeCodeType feedbackType, int page)
+        public EbayGetFeedbackRequest(EbayToken token, FeedbackTypeCodeType? feedbackType, int page)
             : base(token, "GetFeedback")
         {
             request = new GetFeedbackRequestType();
             request.DetailLevel = new DetailLevelCodeType[] { DetailLevelCodeType.ReturnAll };
-            request.FeedbackType = feedbackType;
-            request.FeedbackTypeSpecified = true;
+
+            if (feedbackType != null)
+            {
+                request.FeedbackType = feedbackType.Value;
+                request.FeedbackTypeSpecified = true;
+            }
 
             request.Pagination = new PaginationType
             {
