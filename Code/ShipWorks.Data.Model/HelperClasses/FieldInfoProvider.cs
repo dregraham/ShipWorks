@@ -589,8 +589,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)EbayOrderFieldIndex.OrderID, 0, 0, 19);
 			base.AddElementFieldInfo("EbayOrderEntity", "EbayOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderFieldIndex.EbayOrderID, 0, 0, 19);
 			base.AddElementFieldInfo("EbayOrderEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderFieldIndex.EbayBuyerID, 50, 0, 0);
-			base.AddElementFieldInfo("EbayOrderEntity", "BuyerFeedbackScore", typeof(System.Int32), false, false, false, false,  (int)EbayOrderFieldIndex.BuyerFeedbackScore, 0, 0, 10);
-			base.AddElementFieldInfo("EbayOrderEntity", "BuyerFeedbackPrivate", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.BuyerFeedbackPrivate, 0, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "CombinedLocally", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.CombinedLocally, 0, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "SelectedShippingMethod", typeof(System.Int32), false, false, false, false,  (int)EbayOrderFieldIndex.SelectedShippingMethod, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderEntity", "GspEligible", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.GspEligible, 0, 0, 0);
@@ -620,16 +618,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayOrderItemEntity", "LocalEbayOrderID", typeof(System.Int64), false, true, false, false,  (int)EbayOrderItemFieldIndex.LocalEbayOrderID, 0, 0, 19);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "EbayItemID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderItemFieldIndex.EbayItemID, 0, 0, 19);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "EbayTransactionID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderItemFieldIndex.EbayTransactionID, 0, 0, 19);
-			base.AddElementFieldInfo("EbayOrderItemEntity", "SellingManagerProductName", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.SellingManagerProductName, 80, 0, 0);
-			base.AddElementFieldInfo("EbayOrderItemEntity", "SellingManagerProductPart", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.SellingManagerProductPart, 80, 0, 0);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "SellingManagerRecord", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.SellingManagerRecord, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "EffectiveCheckoutStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.EffectiveCheckoutStatus, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "EffectivePaymentMethod", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.EffectivePaymentMethod, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "PaymentStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.PaymentStatus, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "PaymentMethod", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.PaymentMethod, 0, 0, 10);
-			base.AddElementFieldInfo("EbayOrderItemEntity", "CheckoutStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.CheckoutStatus, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "CompleteStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.CompleteStatus, 0, 0, 10);
-			base.AddElementFieldInfo("EbayOrderItemEntity", "SellerPaidStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.SellerPaidStatus, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "FeedbackLeftType", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.FeedbackLeftType, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "FeedbackLeftComments", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.FeedbackLeftComments, 80, 0, 0);
 			base.AddElementFieldInfo("EbayOrderItemEntity", "FeedbackReceivedType", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.FeedbackReceivedType, 0, 0, 10);
@@ -656,6 +650,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiCertificate", typeof(System.Byte[]), false, false, false, true,  (int)EbayStoreFieldIndex.PayPalApiCertificate, 2048, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "DomesticShippingService", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.DomesticShippingService, 50, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "InternationalShippingService", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.InternationalShippingService, 50, 0, 0);
+			base.AddElementFieldInfo("EbayStoreEntity", "FeedbackUpdatedThrough", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)EbayStoreFieldIndex.FeedbackUpdatedThrough, 0, 0, 0);
 		}
 		/// <summary>Inits EmailAccountEntity's FieldInfo objects</summary>
 		private void InitEmailAccountEntityInfos()

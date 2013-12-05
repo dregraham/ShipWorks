@@ -466,7 +466,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{067841B1-C098-4d4e-A0FB-ACABA420B135}", true,
-                        new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description).Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Checkout Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
+                        new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description).Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Payment Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
                         EbayOrderFields.RollupEffectiveCheckoutStatus)
                         {
                             StoreTypeCode = StoreTypeCode.Ebay

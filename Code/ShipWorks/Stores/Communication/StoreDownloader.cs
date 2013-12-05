@@ -255,26 +255,11 @@ namespace ShipWorks.Stores.Communication
 
         /// <summary>
         /// Gets the next OrderNumber that an order should use.  This is useful for storetypes that don't supply their own
-        /// order numbers for ShipoWorks, such as Amazon and eBay.
+        /// order numbers for ShipWorks, such as Amazon and eBay.
         /// </summary>
         protected long GetNextOrderNumber()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderNumber,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
-
-                long orderNumber = result is DBNull ? 0 : (long)result;
-
-                // Get the next one
-                orderNumber++;
-
-                log.InfoFormat("GetNextOrderNumber = {0}", orderNumber);
-
-                return orderNumber;
-            }
+            return OrderUtility.GetNextOrderNumber(store.StoreID);
         }
 
         /// <summary>
@@ -512,7 +497,7 @@ namespace ShipWorks.Stores.Communication
             bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
 
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditBehaviorDisabledState.Default : AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -607,6 +592,16 @@ namespace ShipWorks.Stores.Communication
             }
 
             log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Create the proper AuditBehaviorScope to used based on the configuration of auditing new orders.
+        /// </summary>
+        public static AuditBehaviorScope CreateOrderAuditScope(OrderEntity order)
+        {
+            ConfigurationEntity config = ConfigurationData.Fetch();
+
+            return new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditBehaviorDisabledState.Default : AuditBehaviorDisabledState.Disabled);
         }
 
         /// <summary>

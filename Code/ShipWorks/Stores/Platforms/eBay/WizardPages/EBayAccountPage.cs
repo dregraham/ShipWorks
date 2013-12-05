@@ -21,8 +21,8 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Data.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.Ebay.Requests;
-using ShipWorks.Stores.Platforms.Ebay.Authorization;
 using Interapptive.Shared.Business;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
 {
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
         {
             EbayStoreEntity store = GetStore<EbayStoreEntity>();
 
-            using (TokenImportDialog importDialog = new TokenImportDialog())
+            using (TokenImportDialogController importDialog = new TokenImportDialogController())
             {
                 try
                 {
@@ -90,9 +90,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
                     {
                         // A token file has been selected, so we'll import the token from file 
                         // and use the imported token to configure the eBay store
-                        Token token = importDialog.GetToken();
+                        EbayToken token = importDialog.GetToken();
                         
-                        store.EBayToken = token.Key;
+                        store.EBayToken = token.Token;
                         store.EBayTokenExpire = token.ExpirationDate;
                         store.EBayUserID = token.UserId;
                         
@@ -130,8 +130,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
             // retrieve information from ebay to populate the store description
             try
             {
-                GetUserResponseType getUserResponse = new EbayWebClient().GetUserInfo(ebayStore.EBayToken);
-                UserType eBayUser = getUserResponse.User;
+                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(ebayStore));
+
+                UserType eBayUser = webClient.GetUser();
 
                 ebayStore.StoreName = eBayUser.UserID;
                 ebayStore.Email = eBayUser.Email;

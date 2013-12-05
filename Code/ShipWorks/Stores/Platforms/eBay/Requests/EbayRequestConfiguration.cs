@@ -14,16 +14,15 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
     /// </summary>
     public class EbayRequestConfiguration
     {
-        private string description;
-        private string sandboxCredentialSaltValue = "apptive";
+        private string requestName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayRequestConfiguration"/> class.
         /// </summary>
-        public EbayRequestConfiguration(string description)
+        public EbayRequestConfiguration(string requestName)
         {
-            this.description = description;
-            this.TimeoutInMilliseconds = 180 * 1000;
+            this.requestName = requestName;
+            this.Timeout = TimeSpan.FromMilliseconds(180 * 1000);
         }
 
         /// <summary>
@@ -31,60 +30,33 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// </summary>
         public string ApiVersion
         {
-            get
-            {
-                // Note: the GetUser call returns a warning with version 787 when a <DetailLevel> node 
-                // is provided in the request. Be sure to check that this warning does not turn into 
-                // an error when upgrading to future versions of the API.
-                return "787";
-            }
+            get { return "847"; }
         }
         
         /// <summary>
-        /// Gets the description.
+        /// Gets the exact name of the eBay web service request to be executed.
         /// </summary>
-        public string Description
+        public string RequestName
         {
-            get { return description; }
+            get { return requestName; }
         }
 
         /// <summary>
-        /// Gets or sets the timeout in milliseconds.
+        /// Gets or sets the timeout for the call
         /// </summary>
-        /// <value>
-        /// The timeout in milliseconds.
-        /// </value>
-        public int TimeoutInMilliseconds { get; set; }
+        public TimeSpan Timeout
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets or sets the URL.
         /// </summary>
-        /// <value>The URL.</value>
-        public string Url { get; set; }
-               
-
-        /// <summary>
-        /// Gets the sandbox developer credential.
-        /// </summary>
-        public string SandboxDeveloperCredential
-        {
-            get { return SecureText.Decrypt("9EjIiY68ZC9AmdbCllBY3u7iAPOS7JnSlecbcc8Jf80=", sandboxCredentialSaltValue); }
-        }
-
-        /// <summary>
-        /// Gets the sandbox application credential.
-        /// </summary>
-        public string SandboxApplicationCredential
-        {
-            get { return SecureText.Decrypt("d0t5tDPECtuYnbRi9LAXAsLrbVXGyhsVAW3Jo3giRNY=", sandboxCredentialSaltValue); }
-        }
-
-        /// <summary>
-        /// Gets the sandbox certificate credential.
-        /// </summary>
-        public string SandboxCertificateCredential
-        {
-            get { return SecureText.Decrypt("Z9/F10grv8Vkkz/UU1Zk4I26AJ6ZBA2EdcCSgQMbUvM=", sandboxCredentialSaltValue); }
+        public string Url 
+        { 
+            get; 
+            set; 
         }
     }
 }

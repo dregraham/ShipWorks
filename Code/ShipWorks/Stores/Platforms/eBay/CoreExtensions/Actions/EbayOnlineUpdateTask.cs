@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        public override void /**/Run(List<long> inputKeys, ActionStepContext context)
+        public override void Run(List<long> inputKeys, ActionStepContext context)
         {
             foreach (long orderId in inputKeys)
             {

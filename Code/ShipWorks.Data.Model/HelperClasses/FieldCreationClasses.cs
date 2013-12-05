@@ -3922,16 +3922,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.EbayBuyerID);}
 		}
-		/// <summary>Creates a new EbayOrderEntity.BuyerFeedbackScore field instance</summary>
-		public static EntityField2 BuyerFeedbackScore
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BuyerFeedbackScore);}
-		}
-		/// <summary>Creates a new EbayOrderEntity.BuyerFeedbackPrivate field instance</summary>
-		public static EntityField2 BuyerFeedbackPrivate
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BuyerFeedbackPrivate);}
-		}
 		/// <summary>Creates a new EbayOrderEntity.CombinedLocally field instance</summary>
 		public static EntityField2 CombinedLocally
 		{
@@ -4152,16 +4142,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.EbayTransactionID);}
 		}
-		/// <summary>Creates a new EbayOrderItemEntity.SellingManagerProductName field instance</summary>
-		public static EntityField2 SellingManagerProductName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.SellingManagerProductName);}
-		}
-		/// <summary>Creates a new EbayOrderItemEntity.SellingManagerProductPart field instance</summary>
-		public static EntityField2 SellingManagerProductPart
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.SellingManagerProductPart);}
-		}
 		/// <summary>Creates a new EbayOrderItemEntity.SellingManagerRecord field instance</summary>
 		public static EntityField2 SellingManagerRecord
 		{
@@ -4187,20 +4167,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.PaymentMethod);}
 		}
-		/// <summary>Creates a new EbayOrderItemEntity.CheckoutStatus field instance</summary>
-		public static EntityField2 CheckoutStatus
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.CheckoutStatus);}
-		}
 		/// <summary>Creates a new EbayOrderItemEntity.CompleteStatus field instance</summary>
 		public static EntityField2 CompleteStatus
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.CompleteStatus);}
-		}
-		/// <summary>Creates a new EbayOrderItemEntity.SellerPaidStatus field instance</summary>
-		public static EntityField2 SellerPaidStatus
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.SellerPaidStatus);}
 		}
 		/// <summary>Creates a new EbayOrderItemEntity.FeedbackLeftType field instance</summary>
 		public static EntityField2 FeedbackLeftType
@@ -4461,6 +4431,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InternationalShippingService
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.InternationalShippingService);}
+		}
+		/// <summary>Creates a new EbayStoreEntity.FeedbackUpdatedThrough field instance</summary>
+		public static EntityField2 FeedbackUpdatedThrough
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.FeedbackUpdatedThrough);}
 		}
 	}
 

@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -20,6 +23,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
         // Used to extract shipping method name from ebay shipping code
         static Regex shipMethodRegex = new Regex("[A-Z0-9][a-z]+", RegexOptions.Compiled);
+
+        // Salt for descrypting sandbox credentials
+        static string sandboxCredentialSaltValue = "apptive";
 
         /// <summary>
         /// Static constructor
@@ -75,6 +81,30 @@ namespace ShipWorks.Stores.Platforms.Ebay
             shippingMethods.Add("USPSGlobalPrioritySmallEnvelope", "USPS Global Priority Small Envelope");
             shippingMethods.Add("USPSPriorityFlatRateBox", "USPS Priority Flat Rate Box");
             shippingMethods.Add("USPSPriorityFlatRateEnvelope", "USPS Priority Flat Rate Envelope");
+        }
+
+        /// <summary>
+        /// Gets the sandbox developer credential.
+        /// </summary>
+        public static string SandboxDeveloperCredential
+        {
+            get { return SecureText.Decrypt("9EjIiY68ZC9AmdbCllBY3u7iAPOS7JnSlecbcc8Jf80=", sandboxCredentialSaltValue); }
+        }
+
+        /// <summary>
+        /// Gets the sandbox application credential.
+        /// </summary>
+        public static string SandboxApplicationCredential
+        {
+            get { return SecureText.Decrypt("d0t5tDPECtuYnbRi9LAXAsLrbVXGyhsVAW3Jo3giRNY=", sandboxCredentialSaltValue); }
+        }
+
+        /// <summary>
+        /// Gets the sandbox certificate credential.
+        /// </summary>
+        public static string SandboxCertificateCredential
+        {
+            get { return SecureText.Decrypt("Z9/F10grv8Vkkz/UU1Zk4I26AJ6ZBA2EdcCSgQMbUvM=", sandboxCredentialSaltValue); }
         }
 
         /// <summary>
@@ -140,48 +170,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public static EbayEffectiveCheckoutStatus GetEffectiveCheckoutStatus(EbayOrderItemEntity orderItem)
         {
-            CheckoutStatusCodeType checkoutStatus = (CheckoutStatusCodeType) orderItem.CheckoutStatus;
             CompleteStatusCodeType completeStatus = (CompleteStatusCodeType) orderItem.CompleteStatus;
-            BuyerPaymentMethodCodeType paymentMethod = (BuyerPaymentMethodCodeType) orderItem.PaymentMethod;
             PaymentStatusCodeType paymentStatus = (PaymentStatusCodeType) orderItem.PaymentStatus;
-            PaidStatusCodeType paidStatus = (PaidStatusCodeType) orderItem.SellerPaidStatus;
-
-            // One of the sample databases before upgrading had -1's in here
-            if ((int) checkoutStatus == -1)
-            {
-                checkoutStatus = (completeStatus == CompleteStatusCodeType.Complete) ?
-                    CheckoutStatusCodeType.CheckoutComplete : 
-                    CheckoutStatusCodeType.CheckoutIncomplete;
-            }
-
-            // If SellerPaidStatus is available, see if we can use one of its values.
-            if ((int) paidStatus > 0)
-            {
-                switch (paidStatus)
-                {
-                    case PaidStatusCodeType.BuyerHasNotCompletedCheckout:
-                        {
-                            // Make sure the other status' agree.  Not sure why this one is wrong sometimes
-                            if (completeStatus == CompleteStatusCodeType.Incomplete ||
-                                checkoutStatus == CheckoutStatusCodeType.CheckoutIncomplete)
-                            {
-                                return EbayEffectiveCheckoutStatus.Incomplete;
-                            }
-
-                            break;
-                        }
-
-                    case PaidStatusCodeType.MarkedAsPaid: return EbayEffectiveCheckoutStatus.Paid;
-                    case PaidStatusCodeType.PaidWithEscrow: return EbayEffectiveCheckoutStatus.Paid;
-                    case PaidStatusCodeType.PaidWithPayPal: return EbayEffectiveCheckoutStatus.Paid;
-
-                    case PaidStatusCodeType.PaymentPending: return EbayEffectiveCheckoutStatus.PaymentPending;
-                    case PaidStatusCodeType.PaymentPendingWithEscrow: return EbayEffectiveCheckoutStatus.PaymentPendingEscrow;
-                    case PaidStatusCodeType.PaymentPendingWithPayPal: return EbayEffectiveCheckoutStatus.PaymentPendingPayPal;
-
-                    case PaidStatusCodeType.EscrowPaymentCancelled: return EbayEffectiveCheckoutStatus.EscrowCanceled;
-                }
-            }
 
             // If there was any type of failure, just return the generic failure type
             if (paymentStatus == PaymentStatusCodeType.BuyerECheckBounced ||
@@ -197,61 +187,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return EbayEffectiveCheckoutStatus.PaymentPendingPayPal;
             }
 
-            // See if my ebay has it marked as paid, then show it as paid
-            if (orderItem.MyEbayPaid)
+            // If it's marked as paid in My eBay, or complete status is Complete
+            if (orderItem.MyEbayPaid || completeStatus == CompleteStatusCodeType.Complete)
             {
                 return EbayEffectiveCheckoutStatus.Paid;
             }
 
-            switch (checkoutStatus)
+            // Payment is in process
+            if (paymentStatus == PaymentStatusCodeType.PaymentInProcess || completeStatus == CompleteStatusCodeType.Pending)
             {
-                case CheckoutStatusCodeType.BuyerRequestsTotal:
-                    {
-                        return EbayEffectiveCheckoutStatus.BuyerRequestsTotal;
-                    }
-
-                case CheckoutStatusCodeType.SellerResponded:
-                    {
-                        return EbayEffectiveCheckoutStatus.SellerResponded;
-                    }
-
-                case CheckoutStatusCodeType.CheckoutIncomplete:
-                    {
-                        // If its a paypal payment, then it must awaiting payment
-                        if (paymentMethod == BuyerPaymentMethodCodeType.PayPal)
-                        {
-                            return EbayEffectiveCheckoutStatus.AwaitingPayment;
-                        }
-
-                        else
-                        {
-                            // Otherwise we are not yet complete
-                            return EbayEffectiveCheckoutStatus.Incomplete;
-                        }
-                    }
-
-                case CheckoutStatusCodeType.CheckoutComplete:
-                    {
-                        // If its a paypal payment, then it must be paid
-                        if (paymentMethod == BuyerPaymentMethodCodeType.PayPal)
-                        {
-                            return EbayEffectiveCheckoutStatus.Paid;
-                        }
-
-                        // Otherwise, we would be waiting for payment
-                        else
-                        {
-                            return EbayEffectiveCheckoutStatus.AwaitingPayment;
-                        }
-                    }
+                return EbayEffectiveCheckoutStatus.PaymentPending;
             }
 
             return EbayEffectiveCheckoutStatus.Incomplete;
         }
 
-
         /// <summary>
-        /// Determines if the value of the enum represents a completed checkout status state
+        /// Determines if the item represents a completed checkout status state
         /// </summary>
         public static bool IsCheckoutStatusComplete(EbayOrderItemEntity orderItem)
         {
@@ -260,15 +212,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return true;
             }
 
-            if (orderItem.EffectiveCheckoutStatus == (int) EbayEffectiveCheckoutStatus.Paid)
-            {
-                return true;
-            }
-
-            CompleteStatusCodeType completeStatus = (CompleteStatusCodeType)orderItem.CompleteStatus;
-            BuyerPaymentMethodCodeType paymentMethod = (BuyerPaymentMethodCodeType)orderItem.PaymentMethod;
-
-            return completeStatus == CompleteStatusCodeType.Complete || paymentMethod == BuyerPaymentMethodCodeType.PayPal;
+            return orderItem.EffectiveCheckoutStatus == (int) EbayEffectiveCheckoutStatus.Paid;
         }
 
         /// <summary>
@@ -282,6 +226,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 case PaidStatusCodeType.PaidWithEscrow:
                 case PaidStatusCodeType.PaidWithPaisaPay:
                 case PaidStatusCodeType.PaidWithPayPal:
+                case PaidStatusCodeType.PaidCOD:
+                case PaidStatusCodeType.PaidWithPaisaPayEscrow:
                     return true;
             }
 
@@ -375,6 +321,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             throw new InvalidOperationException("Unhandled ebay comment type: " + commentType);
+        }
+
+        /// <summary>
+        /// Get the display name for the given order status code
+        /// </summary>
+        public static string GetOrderStatusName(OrderStatusCodeType orderStatus)
+        {
+            switch (orderStatus)
+            {
+                case OrderStatusCodeType.Active: return "Active";
+                case OrderStatusCodeType.Cancelled: return "Cancelled";
+                case OrderStatusCodeType.Completed: return "Completed";
+                case OrderStatusCodeType.Inactive: return "Inactive";
+                case OrderStatusCodeType.Shipped: return "Shipped";
+            }
+
+            return "Invalid";
         }
     }
 }

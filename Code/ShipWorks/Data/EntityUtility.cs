@@ -729,5 +729,33 @@ namespace ShipWorks.Data
 
             return clone;
         }
+
+        /// <summary>
+        /// Mark the given entity, which may be in any state, as completely new
+        /// </summary>
+        public static void MarkAsNew(IEntity2 entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            entity.IsNew = true;
+
+            foreach (IEntityField2 field in entity.Fields)
+            {
+                field.IsChanged = true;
+            }
+
+            entity.GetDependingRelatedEntities().ForEach(e => MarkAsNew(e));
+
+            entity.GetMemberEntityCollections().ForEach(c =>
+                {
+                    foreach (IEntity2 e2 in c)
+                    {
+                        MarkAsNew(e2);
+                    }
+                });
+        }
     }
 }

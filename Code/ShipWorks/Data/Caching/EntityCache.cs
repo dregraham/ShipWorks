@@ -41,9 +41,6 @@ namespace ShipWorks.Data.Caching
 
         Dictionary<EntityType, PrefetchPath2> prefetchPaths = new Dictionary<EntityType, PrefetchPath2>();
 
-        // System wide lock
-        static SemaphoreSlim semaphore = new SemaphoreSlim(1);
-
         private readonly ExecutionMode executionMode;
 
         /// <summary>
@@ -102,43 +99,25 @@ namespace ShipWorks.Data.Caching
 
             if (entity == null && fetchIfMissing)
             {
-                bool tookLock = semaphore.Wait((executionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
+                EntityType entityType = EntityUtility.GetEntityType(entityID);
+                IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
 
-                try
+                Stopwatch sw = Stopwatch.StartNew();
+
+                entity = (EntityBase2) SqlAdapter.Default.FetchNewEntity(
+                    GeneralEntityFactory.Create(entityType).GetEntityFactory(),
+                    new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, entityID)),
+                    GetPrefetch(entityType));
+
+                log.DebugFormat("*** EntityCache.GetEntity (Fetch), {0}", sw.Elapsed.TotalSeconds);
+
+                if (entity.Fields.State == EntityState.Fetched)
                 {
-                    // See if the entity got cached while we were waiting
-                    entity = EntityUtility.CloneEntity((EntityBase2) cache[GetCacheKey(entityID)]);
-
-                    if (entity == null)
-                    {
-                        EntityType entityType = EntityUtility.GetEntityType(entityID);
-                        IEntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
-
-                        Stopwatch sw = Stopwatch.StartNew();
-
-                        entity = (EntityBase2) SqlAdapter.Default.FetchNewEntity(
-                            GeneralEntityFactory.Create(entityType).GetEntityFactory(),
-                            new RelationPredicateBucket(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, entityID)),
-                            GetPrefetch(entityType));
-
-                        log.DebugFormat("*** EntityCache.GetEntity (Fetch), {0}", sw.Elapsed.TotalSeconds);
-
-                        if (entity.Fields.State == EntityState.Fetched)
-                        {
-                            SetCache(entityID, entity);
-                        }
-                        else
-                        {
-                            entity = null;
-                        }
-                    }
+                    SetCache(entityID, entity);
                 }
-                finally
+                else
                 {
-                    if (tookLock)
-                    {
-                        semaphore.Release();
-                    }
+                    entity = null;
                 }
             }
 
@@ -166,35 +145,17 @@ namespace ShipWorks.Data.Caching
 
             if (needsFetched.Count > 0)
             {
-                bool tookLock = semaphore.Wait((executionMode.IsUIDisplayed && Program.MainForm.InvokeRequired) ? -1 : 0);
+                EntityType entityType = EntityUtility.GetEntityType(keyList[0]);
+                EntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
 
-                try
+                // Fetch each one that was missing or old
+                EntityCollection collection = new EntityCollection(GeneralEntityFactory.Create(entityType).GetEntityFactory());
+                SqlAdapter.Default.FetchEntityCollection(collection, new RelationPredicateBucket(pkField == needsFetched), GetPrefetch(entityType));
+
+                foreach (EntityBase2 entity in collection)
                 {
-                    // Now that we have the lock, see what may have come in to cache in the meantime
-                    needsFetched = DetermineMissingEntities(needsFetched, entities);
-
-                    if (needsFetched.Count > 0)
-                    {
-                        EntityType entityType = EntityUtility.GetEntityType(keyList[0]);
-                        EntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
-
-                        // Fetch each one that was missing or old
-                        EntityCollection collection = new EntityCollection(GeneralEntityFactory.Create(entityType).GetEntityFactory());
-                        SqlAdapter.Default.FetchEntityCollection(collection, new RelationPredicateBucket(pkField == needsFetched), GetPrefetch(entityType));
-
-                        foreach (EntityBase2 entity in collection)
-                        {
-                            SetCache((long) entity.Fields.PrimaryKeyFields[0].CurrentValue, entity);
-                            entities.Add(entity);
-                        }
-                    }
-                }
-                finally
-                {
-                    if (tookLock)
-                    {
-                        semaphore.Release();
-                    }
+                    SetCache((long) entity.Fields.PrimaryKeyFields[0].CurrentValue, entity);
+                    entities.Add(entity);
                 }
             }
 
