@@ -97,9 +97,16 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Indicates if a download is currently in progress
         /// </summary>
-        public static bool IsDownloading
+        public static bool IsDownloading(long? storeID = null)
         {
-            get { return isDownloading; }
+            if (storeID == null)
+            {
+                return isDownloading;
+            }
+            else
+            {
+                return downloadQueue.Any(d => d.StoreID == storeID);
+            }
         }
 
         /// <summary>

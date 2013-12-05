@@ -645,6 +645,15 @@ namespace ShipWorks
 
             // Start the heartbeat
             heartBeat.Start();
+
+            // Start auto downloading immediately
+            DownloadManager.StartAutoDownloadIfNeeded(true);
+
+            // Then, if we are downloading any stores for the very very first time, auto-show the progress
+            if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
+            {
+                ShowDownloadProgress();
+            }
         }
 
         /// <summary>
@@ -2196,7 +2205,7 @@ namespace ShipWorks
             // If we are not downloading, and the window is closed, then clear out the status
             // label.  The label may still have been visible from an auto-download, or from
             // an error.
-            if (!DownloadManager.IsDownloading)
+            if (!DownloadManager.IsDownloading())
             {
                 downloadingStatusLabel.Visible = false;
             }

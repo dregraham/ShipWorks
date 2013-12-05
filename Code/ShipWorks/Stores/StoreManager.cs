@@ -320,6 +320,15 @@ namespace ShipWorks.Stores
                 }
             }
 
+            // Make sure all stores are represented
+            foreach (StoreEntity store in GetAllStores())
+            {
+                if (!lastDownloadTimes.ContainsKey(store.StoreID))
+                {
+                    lastDownloadTimes[store.StoreID] = null;
+                }
+            }
+
             return lastDownloadTimes;
         }
 
