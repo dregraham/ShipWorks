@@ -11,8 +11,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid
         /// <summary>
         /// Get the display text to use for the given value and entity
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         protected override string GetDisplayText(object value)
         {
             string displayText = string.Empty;
@@ -23,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid
             }
 
             return displayText;
-
         }
     }
 }

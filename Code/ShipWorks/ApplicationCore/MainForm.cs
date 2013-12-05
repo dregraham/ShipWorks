@@ -109,6 +109,7 @@ using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore.Setup;
 
 namespace ShipWorks
 {
@@ -259,7 +260,12 @@ namespace ShipWorks
             {
                 log.InfoFormat("SqlSession not configured; showing welcome.");
 
-                OpenDatabaseConfiguration();
+                // If they don't complete the database configuration, we get out.  It's possible that at this point SqlSession is actually configured,
+                // but they just didn't completely make it through the other stuff like store, carrier, etc. setup.
+                if (!OpenDatabaseConfiguration())
+                {
+                    return;
+                }
             }
 
             // If its still not setup, dont go on
@@ -586,29 +592,18 @@ namespace ShipWorks
                 return;
             }
             
-            // If no stores, automatically show the Add Store Wizard
+            // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
-                if (UserSession.Security.HasPermission(PermissionType.ManageStores))
+                if (!AddStoreWizard.RunWizard(this))
                 {
-                    AddStoreWizard.RunWizard(this);
-                    StoreManager.CheckForChanges();
+                    UserSession.Logoff(false);
+                    UserSession.Reset();
+
+                    ShowBlankUI();
+
+                    return;
                 }
-                else
-                {
-                    MessageHelper.ShowInformation(this, "An administrator must log on to add a store to ShipWorks.");
-                }
-            }
-
-            // Only do the rest if we have a store
-            if (StoreManager.GetDatabaseStoreCount() == 0)
-            {
-                UserSession.Logoff(false);
-                UserSession.Reset();
-
-                ShowBlankUI();
-
-                return;
             }
 
             ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(LogonToShipWorksAsyncGetLicenseStatus, "checking license status"));
@@ -650,6 +645,15 @@ namespace ShipWorks
 
             // Start the heartbeat
             heartBeat.Start();
+
+            // Start auto downloading immediately
+            DownloadManager.StartAutoDownloadIfNeeded(true);
+
+            // Then, if we are downloading any stores for the very very first time, auto-show the progress
+            if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
+            {
+                ShowDownloadProgress();
+            }
         }
 
         /// <summary>
@@ -1493,7 +1497,11 @@ namespace ShipWorks
         /// </summary>
         private void OnDatabaseConfiguration(object sender, EventArgs e)
         {
-            bool needLogon = false;
+            // Indicates the user made it 100% succesfully through the database and setup wizards
+            bool configurationComplete = false;
+
+            // Indicates if the database changed in any way (which database, restored database, whatever)
+            bool databaseChanged = false;
 
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("change database settings", this))
             {
@@ -1508,30 +1516,43 @@ namespace ShipWorks
                     SaveCurrentUserSettings();
                 }
 
-                if (OpenDatabaseConfiguration() || scope.DatabaseRestoreInitiated)
-                {
-                    needLogon = true;
+                // Open the database configuration window
+                configurationComplete = OpenDatabaseConfiguration();
 
+                // Now regardless of if that was succesful, see if it altered the database.  Some things can't be rolled back even if the user canceled.
+                databaseChanged = scope.DatabaseChanged;
+
+                // If the configuration is complete, or the database changed in any way...
+                if (configurationComplete || databaseChanged)
+                {
                     // If they were in the middle of upgrading MSDE to 08... and had to reboot, or whatever.  But then chose Setup Database and finished successfully
                     // then we need to forget about that MSDE upgrade that was in the middle of happening, the user has moved on.
                     SqlServerInstaller.CancelMsdeMigrationInProgress();
-                }
 
-                // If we need to logon, force the logout now.  This makes sure that when we exit the context scope, we don't still briefly look logged in to constantly 
-                // running background threads.  Being logged in asserts that the schema is correct - and at this point, we just connected to a random database, so we don't know what
-                // which is in fact why we are saying "needLogon" is true in the first place.
-                if (needLogon)
-                {
+                    // This makes sure that when we exit the context scope, we don't still briefly look logged in to constantly 
+                    // running background threads.  Being logged in asserts that the schema is correct - and at this point, we just connected to a random database, so we don't know that.
                     // We can't use LogOff here, because that tries to audit the logoff.  We are now connected to a different database, so it wouldn't make any sense to do that audit.
                     UserSession.Reset();
                 }
             }
 
-            // This is down here so its outside of the scope.  The Database setup can sometimes exit due to needing the machine
-            // to reboot before SW can continue.  If this is the case, the SQL Session won't be setup yet, and we can't initiate logon.
-            if (needLogon && SqlSession.IsConfigured)
+            // If the user completed the configuration, kick-off the Logon procedure to get the UI up-and-running for the new user and data
+            if (configurationComplete)
             {
-                InitiateLogon();
+                // The Database setup can sometimes exit due to needing the machine to reboot before SW can continue.  
+                // If this is the case configurationComplete would report true, but the SQL Session won't be setup yet, and we can't initiate logon.
+                if (SqlSession.IsConfigured)
+                {
+                    InitiateLogon();
+                }
+            }
+            // If the configuration did not complete, but the database changed in someway, that means the user got as far as selecting a new, or restoring a database - but then canceled
+            // after the point that could have been rolled back.  So at this point, the user just clicked cancel, but is connected to a different database.  We don't want to initiate
+            // logon, as that would prompt them to complete setup, which they just cancel.  But we can't do nothing, because the UI is showing them their old data.  So we have to just blank
+            // out the UI, and they can try to logon to start over.
+            else if (databaseChanged)
+            {
+                ShowBlankUI();
             }
         }
 
@@ -1588,7 +1609,7 @@ namespace ShipWorks
 
                 using (DatabaseRestoreDlg dlg = new DatabaseRestoreDlg(UserSession.User))
                 {
-                    if (dlg.ShowDialog(this) == DialogResult.OK || scope.DatabaseRestoreInitiated)
+                    if (dlg.ShowDialog(this) == DialogResult.OK || scope.DatabaseChanged)
                     {
                         needLogon = true;
                     }
@@ -2063,6 +2084,7 @@ namespace ShipWorks
                 {
                     Divelements.SandRibbon.MenuItem menuItem = new Divelements.SandRibbon.MenuItem(store.StoreName);
                     menuItem.Tag = store;
+                    menuItem.Image = EnumHelper.GetImage((StoreTypeCode) store.TypeCode);
                     menuItem.Activate += new EventHandler(OnDownloadOrdersSingleStore);
                     menu.Items.Add(menuItem);
                 }
@@ -2183,7 +2205,7 @@ namespace ShipWorks
             // If we are not downloading, and the window is closed, then clear out the status
             // label.  The label may still have been visible from an auto-download, or from
             // an error.
-            if (!DownloadManager.IsDownloading)
+            if (!DownloadManager.IsDownloading())
             {
                 downloadingStatusLabel.Visible = false;
             }

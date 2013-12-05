@@ -425,5 +425,73 @@ namespace ShipWorks.Data.Connection
 
             log.Info(text);
         }
+
+        /// <summary>
+        /// Equals
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            SqlSessionConfiguration other = obj as SqlSessionConfiguration;
+            if ((object) other == null)
+            {
+                return false;
+            }
+
+            // Same server and database...
+            if (this.ServerInstance == other.ServerInstance && this.DatabaseName == other.DatabaseName)
+            {
+                // If they are both windows auth, then it's equal (doesn't matter what user\pass may be stored)
+                if (this.WindowsAuth && other.WindowsAuth)
+                {
+                    return true;
+                }
+
+                // Same auth (password) so we can get out
+                if (!this.WindowsAuth && !other.WindowsAuth &&
+                    this.Username == other.Username &&
+                    this.Password == other.Password)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Operator==
+        /// </summary>
+        public static bool operator ==(SqlSessionConfiguration left, SqlSessionConfiguration right)
+        {
+            // If both are null, or both are same instance, return true.
+            if (Object.ReferenceEquals(left, right))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object) left == null) || ((object) right == null))
+            {
+                return false;
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Operator!=
+        /// </summary>
+        public static bool operator !=(SqlSessionConfiguration left, SqlSessionConfiguration right)
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        /// Hash code
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return serverInstance.GetHashCode() + databaseName.GetHashCode() + username.GetHashCode() + windowsAuth.GetHashCode();
+        }
     }
 }

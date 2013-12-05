@@ -6,9 +6,9 @@ using System.Drawing;
 using System.IO;
 using ShipWorks.ApplicationCore;
 using System.Drawing.Imaging;
-using ShipWorks.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {

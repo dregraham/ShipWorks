@@ -20,6 +20,7 @@ using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Stores.Management;
+using ShipWorks.ApplicationCore.Setup;
 
 namespace ShipWorks.Stores
 {
@@ -319,6 +320,15 @@ namespace ShipWorks.Stores
                 }
             }
 
+            // Make sure all stores are represented
+            foreach (StoreEntity store in GetAllStores())
+            {
+                if (!lastDownloadTimes.ContainsKey(store.StoreID))
+                {
+                    lastDownloadTimes[store.StoreID] = null;
+                }
+            }
+
             return lastDownloadTimes;
         }
 
@@ -410,13 +420,13 @@ namespace ShipWorks.Stores
         {
             // If the add store wizard is not open and there is a non complete store, that basically
             // means sw crashed during the add store wizard and we need to clean it up.
-            if (!AddStoreWizardLock.IsLocked())
+            if (!ShipWorksSetupLock.IsLocked())
             {
                 try
                 {
                     // Have to take the lock while we are doing this. Otherwise there could be a race condition that after we checked the lock,
                     // a temp store was created.
-                    using (AddStoreWizardLock wizardLock = new AddStoreWizardLock())
+                    using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
                     {
                         foreach (StoreEntity store in StoreCollection.Fetch(SqlAdapter.Default, StoreFields.SetupComplete == false))
                         {
