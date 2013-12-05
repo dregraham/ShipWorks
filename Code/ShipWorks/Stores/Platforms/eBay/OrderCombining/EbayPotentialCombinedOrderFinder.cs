@@ -127,12 +127,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             // Get the list of eBay items from all of the items
                             List<EbayOrderItemEntity> eBayItems = ebayOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
 
-                            // We only allow combining orders that are still a single eBay item
-                            if (eBayItems.Count == 1)
+                            // If this order actually has eBay items...
+                            if (eBayItems.Count >= 1)
                             {
                                 // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
-                                if ((combineType == EbayCombinedOrderType.Local && EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Paid) ||
-                                    (combineType == EbayCombinedOrderType.Ebay  && EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Incomplete))
+                                if ((combineType == EbayCombinedOrderType.Local && eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Paid)) ||
+                                    (combineType == EbayCombinedOrderType.Ebay  && eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Incomplete)))
                                 {
                                     orders.Add(ebayOrder);
                                 }

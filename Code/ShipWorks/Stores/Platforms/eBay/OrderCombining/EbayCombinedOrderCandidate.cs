@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                 // we're only allowing combining on orders that aren't already a part of an eBay Order
                 RelationPredicateBucket bucket = new RelationPredicateBucket(EbayOrderFields.StoreID == order.StoreID
-                    & EbayOrderFields.EbayBuyerID == BuyerID & EbayOrderFields.EbayOrderID == 0 & OrderFields.OnlineLastModified >= DateTime.UtcNow.Subtract(TimeSpan.FromDays(14)));
+                    & EbayOrderFields.EbayBuyerID == BuyerID & OrderFields.OnlineLastModified >= DateTime.UtcNow.Subtract(TimeSpan.FromDays(14)));
 
                 // Get order items and charges
                 PrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.EbayOrderEntity);
@@ -206,9 +206,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                         // Get the list of eBay items from all of the items
                         List<EbayOrderItemEntity> eBayItems = foundOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
 
-                        bool add = (eBayItems.Count == 1) && (CombinedOrderType == EbayCombinedOrderType.Local) ?
-                            EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Paid :
-                            EbayUtility.GetEffectiveCheckoutStatus(eBayItems[0]) == EbayEffectiveCheckoutStatus.Incomplete;
+                        bool add = (eBayItems.Count >= 1) && (CombinedOrderType == EbayCombinedOrderType.Local) ?
+                            eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Paid) :
+                            eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Incomplete);
 
                         if (add)
                         {
@@ -246,18 +246,19 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                         order.OrderItems.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
                     }
 
-                    // There should be exactly one eBay item entity once we get here - we enfource this in Finding and Discovery
-                    EbayOrderItemEntity orderItem = order.OrderItems.OfType<EbayOrderItemEntity>().Single();
+                    // Create transactions based on each eBay item
+                    foreach (EbayOrderItemEntity orderItem in order.OrderItems.OfType<EbayOrderItemEntity>())
+                    {
+                        // build a TransactionType to identify the transaction with eBay
+                        TransactionType transaction = new TransactionType()
+                            {
+                                TransactionID = orderItem.EbayTransactionID.ToString(),
+                                Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
+                            };
 
-                    // build a TransactionType to identify the transaction with eBay
-                    TransactionType transaction = new TransactionType()
-                        {
-                            TransactionID = orderItem.EbayTransactionID.ToString(),
-                            Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
-                        };
-
-                    // add it to the list of transactions to be sent to eBay
-                    transactions.Add(transaction);
+                        // add it to the list of transactions to be sent to eBay
+                        transactions.Add(transaction);
+                    }
                 }
 
                 // use the most recent order being combined as the template
