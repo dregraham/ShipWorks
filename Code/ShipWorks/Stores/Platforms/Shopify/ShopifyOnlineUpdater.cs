@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             ShopifyOrderEntity order = (ShopifyOrderEntity) shipment.Order;
 
-            ShopifyWebClient webClient = new ShopifyWebClient(shopifyStore);
+            ShopifyWebClient webClient = new ShopifyWebClient(shopifyStore, null);
             webClient.UploadOrderShipmentDetails(shipment);
 
             order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Fulfilled;

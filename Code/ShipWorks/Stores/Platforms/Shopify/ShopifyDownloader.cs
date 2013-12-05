@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 if (webClient == null)
                 {
                     //Create the web client used for downloading
-                    webClient = new ShopifyWebClient((ShopifyStoreEntity) Store);
+                    webClient = new ShopifyWebClient((ShopifyStoreEntity) Store, Progress);
                 }
 
                 return webClient;
@@ -108,6 +108,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
                             return;
                         }
                     }
+                }
+                catch (ShopifyWebClientThrottleWaitCancelException)
+                {
+                    // Just a cancel - nothing to do
                 }
                 catch (ShopifyException ex)
                 {

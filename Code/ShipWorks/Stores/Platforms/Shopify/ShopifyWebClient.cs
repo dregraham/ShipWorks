@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Communication.Throttling;
 using log4net;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -30,6 +31,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
         static readonly LruCache<string, JToken> productCache = new LruCache<string, JToken>(1000);
+        readonly static ShopifyWebClientRequestThrottle throttler = new ShopifyWebClientRequestThrottle();
+
+        // Progress reporting
+        IProgressReporter progress;
 
         ShopifyStoreEntity store;
         ShopifyEndpoints endpoints;
@@ -37,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
-        public ShopifyWebClient(ShopifyStoreEntity store)
+        public ShopifyWebClient(ShopifyStoreEntity store, IProgressReporter progress)
         {
             if (store == null)
             {
@@ -53,6 +58,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             // Create the Endpoints object for getting api urls
             endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
+
+            this.progress = progress;
         }
 
         /// <summary>
@@ -90,7 +97,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             try
             {
-                using (IHttpResponseReader respReader = requestSubmitter.GetResponse())
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ShopifyWebClientApiCall.IsRealShopifyShopUrlName, requestSubmitter, null);
+
+                using (IHttpResponseReader respReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest<HttpRequestSubmitter, IHttpResponseReader>))
                 {
                     string pageText = respReader.ReadResult();
                     logEntry.LogResponse(pageText, "html");
@@ -113,6 +122,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Make the call to Shopify to get an AccessToken for accessing the API
         /// </summary>
+        /// <param name="shopUrlName">The shop url name.</param>
         /// <param name="requestTokenUrl">The url returned from the Shopify Callback</param>
         /// <returns>The access token needed to access the api</returns>
         public static string GetAccessToken(string shopUrlName, Uri requestTokenUrl)
@@ -134,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 // Get the response from the call.  
                 // This is the JSON response that contains the access token
-                using (var reader = ProcessRequestReader(request, "GetAccessToken"))
+                using (var reader = ProcessRequestReader(request, ShopifyWebClientApiCall.GetAccessToken, null))
                 {
                     string response = reader.ReadResult();
 
@@ -167,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 request.Uri = new Uri(Endpoints.ShopUrl);
 
                 // Make the call and get the response
-                string shopAsString = ProcessAuthenticatedRequest(request, "GetShop");
+                string shopAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetShop, progress);
 
                 JToken shop = JObject.Parse(shopAsString);
 
@@ -211,7 +221,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // We don't really care about the order count, we just need a call to the server, so use Now
             request.Variables.Add("updated_at_min", DateTime.UtcNow.ToString("o"));
 
-            using (IHttpResponseReader respReader = ProcessAuthenticatedRequestReader(request, "GetServerCurrentDateTime"))
+            using (IHttpResponseReader respReader = ProcessAuthenticatedRequestReader(request, ShopifyWebClientApiCall.GetServerCurrentDateTime, progress))
             {            
                 DateTime serverDateTime;
 
@@ -229,6 +239,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Make a call to Shopify requesting a count of orders matching criteria.
         /// </summary>
         /// <param name="startDate">Filter by shopify order modified date after this date</param>
+        /// <param name="endDate">Filter by shopify order modified date before this date</param>
         /// <returns>Number of orders matching criteria</returns>
         public int GetOrderCount(DateTime startDate, DateTime endDate)
         {
@@ -249,7 +260,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 request.Variables.Add("updated_at_max", endDate.ToString("o"));
 
                 // Make the call and get the response
-                string count = ProcessAuthenticatedRequest(request, "GetOrderCount");
+                string count = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrderCount, progress);
                 JObject jsonCount = JObject.Parse(count);
 
                 int orderCount;
@@ -273,7 +284,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Make the call to Shopify to get a list of orders in the date range
         /// </summary>
-        /// <param name="dateRange">Filter by shopify order modified date after this date</param>
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
         public List<JToken> GetOrders(DateTime startDate, DateTime endDate, int page = 1)
         {
@@ -298,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             request.Variables.Add("updated_at_min", startDate.ToString("o"));
             request.Variables.Add("updated_at_max", endDate.ToString("o"));
 
-            string ordersAsString = ProcessAuthenticatedRequest(request, "GetOrders");
+            string ordersAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrders, progress);
 
             JObject orderList = JObject.Parse(ordersAsString);
             List<JToken> ordersToReturn = new List<JToken>();
@@ -344,7 +354,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                     try
                     {
-                        string productAsString = ProcessAuthenticatedRequest(request, "GetProduct");
+                        string productAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetProduct, progress);
                         product = JObject.Parse(productAsString);
                     }
                     catch (ShopifyException ex)
@@ -437,7 +447,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 request.AllowHttpStatusCodes(allowedStatuses.ToArray());
 
                 // Make the call.  If unsuccessful, an error is thrown, so we don't care about the response value
-                ProcessAuthenticatedRequest(request, "AddFulfillment");
+                ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.AddFulfillment, progress);
             }
             catch (Exception ex)
             {
@@ -448,9 +458,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Process a request that requires authentication headers to be sent to Shopify
         /// </summary>
-        private string ProcessAuthenticatedRequest(HttpRequestSubmitter request, string action)
+        private string ProcessAuthenticatedRequest(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
-            using (var reader = ProcessAuthenticatedRequestReader(request, action))
+            using (var reader = ProcessAuthenticatedRequestReader(request, action, progressReporter))
             {
                 return reader.ReadResult();
             }
@@ -459,12 +469,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Process a request that requires authentication headers to be sent to Shopify
         /// </summary>
-        private IHttpResponseReader ProcessAuthenticatedRequestReader(HttpRequestSubmitter request, string action)
+        private IHttpResponseReader ProcessAuthenticatedRequestReader(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
             // Add our authentication header
             request.Headers.Add("X-Shopify-Access-Token", store.ShopifyAccessToken);
 
-            return ProcessRequestReader(request, action);
+            return ProcessRequestReader(request, action, progressReporter);
         }
 
         /// <summary>
@@ -472,8 +482,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         /// <param name="request">An HttpRequestSubmitter derived class on which to make the http call and log</param>
         /// <param name="action">The action to be passed to the logger</param>
+        /// <param name="progressReporter">An IProgressReporter, if available</param>
         /// <returns>The response from the http call</returns>
-        private static IHttpResponseReader ProcessRequestReader(HttpRequestSubmitter request, string action)
+        private static IHttpResponseReader ProcessRequestReader(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
             if (request == null)
             {
@@ -486,11 +497,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 using (new LoggedStopwatch(log, "ProcessRequest " + action))
                 {
                     // Log the request
-                    ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Shopify, action);
+                    ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Shopify, EnumHelper.GetDescription(action));
                     logger.LogRequest(request);
 
+
+                    RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(action, request, progressReporter);
+
                     // Ask for the response
-                    using (IHttpResponseReader responseReader = request.GetResponse())
+                    using (IHttpResponseReader responseReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest<HttpRequestSubmitter, IHttpResponseReader>))
                     {
                         // Read the result
                         string response = responseReader.ReadResult();
@@ -506,6 +520,41 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 log.Error(string.Format("Error in ProcessRequest for action: '{0}'.", action), ex);
                 throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
+            }
+        }
+
+        /// <summary>
+        /// Submit a Shopify request, throttled so we don't over-call
+        /// </summary>
+        /// <typeparam name="THttpRequestSubmitter">Needed by the throttler.  The type of the request to send to the api via throttler.</typeparam>
+        /// <typeparam name="THttpResponseReader">Needed by the throttler.  The type of the response that will be received by the api via throttler.</typeparam>
+        /// <param name="request">The actual request to make.</param>
+        /// <returns>HttpResponseReader received from the call</returns>
+        private static IHttpResponseReader MakeRequest<THttpRequestSubmitter, THttpResponseReader>(THttpRequestSubmitter request)
+            where THttpRequestSubmitter : HttpRequestSubmitter
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            try
+            {
+                IHttpResponseReader responseReader = request.GetResponse();
+
+                return responseReader;
+            }
+            catch (WebException ex)
+            {
+                HttpWebResponse webResponse = ex.Response as HttpWebResponse;
+                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode)ShopifyConstants.OverApiLimitStatusCode)
+                {
+                    throw new RequestThrottledException(ex.Message);
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 

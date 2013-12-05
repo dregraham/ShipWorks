@@ -3,7 +3,6 @@
 // "In Project Suppression File".
 // Error List, point to "Suppress Message(s)", and click 
 // Project-level suppressions either have no target or are given 
-// This file is used by Code Analysis to maintain SuppressMessage 
 // To add a suppression to this file, right-click the message in the 
 // You do not need to add suppressions to this file manually.
 // a specific target and scoped to a namespace, type, member, etc.
@@ -10425,6 +10424,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ShopifyShopName", Scope = "member", Target = "ShipWorks.Stores.Platforms.Shopify.ShopifyEndpoints.#ApiBaseUrl()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ShopifyShopName", Scope = "member", Target = "ShipWorks.Stores.Platforms.Shopify.ShopifyWebClient.#.ctor(ShipWorks.Data.Model.EntityClasses.ShopifyStoreEntity)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ShopifyShopUrlName", Scope = "member", Target = "ShipWorks.Stores.Platforms.Shopify.ShopifyWebClient.#.ctor(ShipWorks.Data.Model.EntityClasses.ShopifyStoreEntity)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ShopifyShopUrlName", Scope = "member", Target = "ShipWorks.Stores.Platforms.Shopify.ShopifyWebClient.#.ctor(ShipWorks.Data.Model.EntityClasses.ShopifyStoreEntity,ShipWorks.Common.Threading.IProgressReporter)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "Shouldnt", Scope = "member", Target = "ShipWorks.Data.Grid.Columns.DisplayTypes.GridEmailRelationDisplayType.#GetDisplayText(System.Object)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ShowAfter", Scope = "member", Target = "ShipWorks.Common.Threading.ProgressDisplayDelayer.#ShowAfter(System.Windows.Forms.Control,System.TimeSpan,System.Boolean)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "Sider", Scope = "member", Target = "ShipWorks.Users.UserManagerDlg.#InitializeComponent()")]
@@ -10860,6 +10860,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Stores.Platforms.Ebay.EbayStoreType.#.cctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Stores.Platforms.Ebay.EbayUtility.#.cctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Stores.Platforms.Etsy.EtsyStoreType.#.cctor()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Stores.Platforms.Shopify.ShopifyWebClientRequestThrottle.#.cctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Templates.Management.Skeletons.TemplateSkeletons.#.cctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Templates.Media.LabelSheetManager.#.cctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "ShipWorks.Templates.Printing.PrinterConfigurationContext.#.cctor()")]
