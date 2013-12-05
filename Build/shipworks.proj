@@ -375,7 +375,7 @@
 
     <!-- Copy the report for non-internal builds (VersionMajor > 0) to a location that the support team 
          can access to streamline their work (i.e. not wait on someone from development to manually copy the file) -->
-    <Copy Condition="$(VersionMajor) &gt; 0)" SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(SupportObfuscationLogDirectory)\ShipWorks$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)\ObfuscationReport.xml" />
+    <Copy Condition="$(VersionMajor) &gt; 0" SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(SupportObfuscationLogDirectory)\ShipWorks$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)\ObfuscationReport.xml" />
     
     <!-- Copy the assemblies that were obfuscated from our original folder so we have an archive of them-->
     <Copy SourceFiles="$(AppDirectory)\%(ObfuscatedAssemblies.Filename)%(ObfuscatedAssemblies.Extension)"
