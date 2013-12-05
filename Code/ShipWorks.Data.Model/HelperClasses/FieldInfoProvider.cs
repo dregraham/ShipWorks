@@ -2707,7 +2707,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitWorldShipProcessedEntityInfos()
 		{
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "WorldShipProcessedID", typeof(System.Int64), true, false, true, false,  (int)WorldShipProcessedFieldIndex.WorldShipProcessedID, 0, 0, 19);
-			base.AddElementFieldInfo("WorldShipProcessedEntity", "ShipmentID", typeof(System.String), false, true, false, true,  (int)WorldShipProcessedFieldIndex.ShipmentID, 50, 0, 0);
+			base.AddElementFieldInfo("WorldShipProcessedEntity", "ShipmentID", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.ShipmentID, 50, 0, 0);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)WorldShipProcessedFieldIndex.RowVersion, 0, 0, 0);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "PublishedCharges", typeof(System.Double), false, false, false, false,  (int)WorldShipProcessedFieldIndex.PublishedCharges, 0, 0, 38);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "NegotiatedCharges", typeof(System.Double), false, false, false, false,  (int)WorldShipProcessedFieldIndex.NegotiatedCharges, 0, 0, 38);
@@ -2722,7 +2722,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "VoidIndicator", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.VoidIndicator, 50, 0, 0);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "NumberOfPackages", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.NumberOfPackages, 50, 0, 0);
 			base.AddElementFieldInfo("WorldShipProcessedEntity", "LeadTrackingNumber", typeof(System.String), false, false, false, true,  (int)WorldShipProcessedFieldIndex.LeadTrackingNumber, 50, 0, 0);
-			base.AddElementFieldInfo("WorldShipProcessedEntity", "ShipmentIdCalculated", typeof(Nullable<System.Int64>), false, false, true, true,  (int)WorldShipProcessedFieldIndex.ShipmentIdCalculated, 0, 0, 19);
+			base.AddElementFieldInfo("WorldShipProcessedEntity", "ShipmentIdCalculated", typeof(Nullable<System.Int64>), false, true, true, true,  (int)WorldShipProcessedFieldIndex.ShipmentIdCalculated, 0, 0, 19);
 		}
 		/// <summary>Inits WorldShipShipmentEntity's FieldInfo objects</summary>
 		private void InitWorldShipShipmentEntityInfos()

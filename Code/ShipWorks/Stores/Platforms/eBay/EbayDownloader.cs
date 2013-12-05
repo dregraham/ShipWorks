@@ -1114,7 +1114,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // Then download all feedback left
-            DateTime newestLeft = DownloadFeedback(FeedbackTypeCodeType.FeedbackLeft, downloadThrough.Value, ref feedbackCount);
+            DownloadFeedback(FeedbackTypeCodeType.FeedbackLeft, downloadThrough.Value, ref feedbackCount);
 
             // Check for user cancel
             if (Progress.IsCancelRequested)

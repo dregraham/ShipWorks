@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Grid.Paging
             }
 
             this.entityType = entityType;
-            this.entityCache = new EntityCache(new EntityType[] { entityType }, prefetchList, Program.ExecutionMode);
+            this.entityCache = new EntityCache(new EntityType[] { entityType }, prefetchList);
 
             if (monitorForChanges)
             {

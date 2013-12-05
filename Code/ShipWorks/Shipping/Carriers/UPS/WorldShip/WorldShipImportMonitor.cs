@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Fetch the records to import
             IRelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.Relations.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentID, "", "", JoinHint.Inner);
+            bucket.Relations.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated, "", "", JoinHint.Inner);
             bucket.PredicateExpression.AddWithAnd(WorldShipShipmentFields.ShipmentProcessedOnComputerID == thisComputerID | WorldShipShipmentFields.ShipmentProcessedOnComputerID == System.DBNull.Value);
             adapter.FetchEntityCollection(importList, bucket, 0);
 

@@ -41,13 +41,11 @@ namespace ShipWorks.Data.Caching
 
         Dictionary<EntityType, PrefetchPath2> prefetchPaths = new Dictionary<EntityType, PrefetchPath2>();
 
-        private readonly ExecutionMode executionMode;
-
         /// <summary>
         /// Creates a cache that can hold the given entity types
         /// </summary>
-        public EntityCache(IEnumerable<EntityType> entityTypes, ExecutionMode executionMode)
-            : this(entityTypes, null, executionMode)
+        public EntityCache(IEnumerable<EntityType> entityTypes)
+            : this(entityTypes, null)
         {
 
         }
@@ -57,10 +55,9 @@ namespace ShipWorks.Data.Caching
         /// each time the associated entity type is checked. Prefetch should really only be used for child data that is not change monitored, otherwise
         /// the standard cache approach should be used.
         /// </summary>
-        public EntityCache(IEnumerable<EntityType> entityTypes, IEnumerable<PrefetchPath2> prefetchPaths, ExecutionMode executionMode)
+        public EntityCache(IEnumerable<EntityType> entityTypes, IEnumerable<PrefetchPath2> prefetchPaths)
         {
             this.entityTypes = entityTypes.ToArray();
-            this.executionMode = executionMode;
 
             changeNotifiers = entityTypes.ToDictionary(e => e, e => new EntityTypeChangeNotifier(e));
 

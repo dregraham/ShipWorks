@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 
 
-			toReturn.Add(this.WorldShipShipmentEntityUsingShipmentID);
+			toReturn.Add(this.WorldShipShipmentEntityUsingShipmentIdCalculated);
 			return toReturn;
 		}
 
@@ -41,9 +41,9 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 		/// <summary>Returns a new IEntityRelation object, between WorldShipProcessedEntity and WorldShipShipmentEntity over the m:1 relation they have, using the relation between the fields:
-		/// WorldShipProcessed.ShipmentID - WorldShipShipment.ShipmentID
+		/// WorldShipProcessed.ShipmentIdCalculated - WorldShipShipment.ShipmentID
 		/// </summary>
-		public virtual IEntityRelation WorldShipShipmentEntityUsingShipmentID
+		public virtual IEntityRelation WorldShipShipmentEntityUsingShipmentIdCalculated
 		{
 			get
 			{
