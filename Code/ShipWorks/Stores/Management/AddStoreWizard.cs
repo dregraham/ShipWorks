@@ -42,6 +42,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Editions.Brown;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.UI.Controls;
+using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Stores.Management
 {
@@ -467,6 +468,21 @@ namespace ShipWorks.Stores.Management
             storeAddressControl.LoadStore(store);
         }
 
+        /// <summary>
+        /// Stepping next from the address page
+        /// </summary>
+        private void OnStepNextAddress(object sender, WizardStepEventArgs e)
+        {
+            storeAddressControl.SaveToEntity(store);
+
+            // Do an initial check on the name
+            if (!StoreManager.CheckStoreName(store.StoreName, this))
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+        }
+
         #endregion
 
         #region ContactInfo Page
@@ -486,13 +502,6 @@ namespace ShipWorks.Stores.Management
         {
             // Save the contact info
             storeContactControl.SaveToEntity(store);
-
-            // Do an initial check on the name
-            if (!StoreManager.CheckStoreName(store.StoreName, this))
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
         }
 
         #endregion
@@ -847,6 +856,11 @@ namespace ShipWorks.Stores.Management
                             ShippingSettings.Save(shippingSettings);
                         }
                     }
+
+                    // By default we auto-download every 15 minutes
+                    store.AutoDownload = true;
+                    store.AutoDownloadMinutes = 15;
+                    store.AutoDownloadOnlyAway = false;
 
                     // Mark that this store is now ready
                     store.SetupComplete = true;

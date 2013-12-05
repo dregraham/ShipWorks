@@ -341,7 +341,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         OrderFields.ShipPostalCode),
 
                     new GridColumnDefinition("{8E9F3D01-98CF-4574-9CF0-9A6A7FE5C86E}", true,
-                        new GridCountryDisplayType(), "S: Country", "US",
+                        new GridCountryDisplayType() { ShowFlag = true }, "S: Country", "US",
                         OrderFields.ShipCountryCode),
 
                     new GridColumnDefinition("{6113F98C-D82D-44ba-900D-3EA50F2078CC}",
@@ -402,7 +402,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         OrderFields.BillPostalCode),
 
                     new GridColumnDefinition("{75F848C5-294B-40b7-B59C-C64D4924B1FD}",
-                        new GridCountryDisplayType(), "B: Country", "US",
+                        new GridCountryDisplayType() { ShowFlag = true }, "B: Country", "US",
                         OrderFields.BillCountryCode),
 
                     new GridColumnDefinition("{9939A9F3-E2D5-4f76-92CE-B591E546BA3A}",

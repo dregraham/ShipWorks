@@ -100,6 +100,7 @@ namespace ShipWorks.Stores.Management
             this.labelSocialMedia.Size = new System.Drawing.Size(77, 13);
             this.labelSocialMedia.TabIndex = 74;
             this.labelSocialMedia.Text = "Social Media";
+            this.labelSocialMedia.Visible = false;
             // 
             // labelTwitter
             // 
@@ -109,6 +110,7 @@ namespace ShipWorks.Stores.Management
             this.labelTwitter.Size = new System.Drawing.Size(45, 13);
             this.labelTwitter.TabIndex = 80;
             this.labelTwitter.Text = "Twitter:";
+            this.labelTwitter.Visible = false;
             // 
             // labelFacebook
             // 
@@ -118,6 +120,7 @@ namespace ShipWorks.Stores.Management
             this.labelFacebook.Size = new System.Drawing.Size(57, 13);
             this.labelFacebook.TabIndex = 78;
             this.labelFacebook.Text = "Facebook:";
+            this.labelFacebook.Visible = false;
             // 
             // labelYourLogo
             // 
@@ -128,6 +131,7 @@ namespace ShipWorks.Stores.Management
             this.labelYourLogo.Size = new System.Drawing.Size(63, 13);
             this.labelYourLogo.TabIndex = 81;
             this.labelYourLogo.Text = "Your Logo";
+            this.labelYourLogo.Visible = false;
             // 
             // linkSelectLogo
             // 
@@ -140,6 +144,7 @@ namespace ShipWorks.Stores.Management
             this.linkSelectLogo.Size = new System.Drawing.Size(48, 13);
             this.linkSelectLogo.TabIndex = 85;
             this.linkSelectLogo.Text = "Select...";
+            this.linkSelectLogo.Visible = false;
             this.linkSelectLogo.Click += new System.EventHandler(this.OnSelectLogo);
             // 
             // twitter
@@ -150,6 +155,7 @@ namespace ShipWorks.Stores.Management
             this.twitter.PromptText = "@YourAccount";
             this.twitter.Size = new System.Drawing.Size(247, 21);
             this.twitter.TabIndex = 5;
+            this.twitter.Visible = false;
             // 
             // facebook
             // 
@@ -159,6 +165,7 @@ namespace ShipWorks.Stores.Management
             this.facebook.PromptText = "www.facebook.com/YourPage";
             this.facebook.Size = new System.Drawing.Size(247, 21);
             this.facebook.TabIndex = 4;
+            this.facebook.Visible = false;
             // 
             // website
             // 
@@ -193,6 +200,7 @@ namespace ShipWorks.Stores.Management
             this.pictureBoxFacebook.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxFacebook.TabIndex = 87;
             this.pictureBoxFacebook.TabStop = false;
+            this.pictureBoxFacebook.Visible = false;
             // 
             // pictureBoxTwitter
             // 
@@ -203,6 +211,7 @@ namespace ShipWorks.Stores.Management
             this.pictureBoxTwitter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxTwitter.TabIndex = 86;
             this.pictureBoxTwitter.TabStop = false;
+            this.pictureBoxTwitter.Visible = false;
             // 
             // pictureBoxLogo
             // 
@@ -213,6 +222,7 @@ namespace ShipWorks.Stores.Management
             this.pictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxLogo.TabIndex = 82;
             this.pictureBoxLogo.TabStop = false;
+            this.pictureBoxLogo.Visible = false;
             // 
             // openFileDialog
             // 
