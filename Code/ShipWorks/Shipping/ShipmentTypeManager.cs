@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
@@ -87,6 +88,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets a list of enabled shipment types
+        /// </summary>
+        public static List<ShipmentType> EnabledShipmentTypes
+        {
+            get { return ShipmentTypes.Where(s => ShippingManager.IsShipmentTypeEnabled(s.ShipmentTypeCode)).ToList(); }
+        }
+
+        /// <summary>
         /// Get the StoreType instance of the specified ShipmentEntity
         /// </summary>
         public static ShipmentType GetType(ShipmentEntity shipment)
@@ -144,6 +153,9 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.iParcel:
                     return new iParcelShipmentType();
+
+                case ShipmentTypeCode.BestRate:
+                    return new BestRateShipmentType();
             }
 
             throw new InvalidOperationException("Invalid shipment type.");
@@ -169,6 +181,7 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.iParcel: return 11;
                 case ShipmentTypeCode.Other: return 12;
                 case ShipmentTypeCode.None: return 13;
+                case ShipmentTypeCode.BestRate: return 14;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");
@@ -193,6 +206,15 @@ namespace ShipWorks.Shipping
         public static bool IsiParcel(ShipmentTypeCode shipmentTypeCode)
         {
             return shipmentTypeCode == ShipmentTypeCode.iParcel;
+        }
+
+        /// <summary>
+        /// Determines whether shipment is BestRate Shipment
+        /// </summary>
+        public static bool IsBestRate(ShipmentTypeCode shipmentTypeCode)
+        {
+            return shipmentTypeCode == ShipmentTypeCode.BestRate;
+
         }
 
         /// <summary>
@@ -266,5 +288,6 @@ namespace ShipWorks.Shipping
 
             return false;
         }
-    }
+
+   }
 }

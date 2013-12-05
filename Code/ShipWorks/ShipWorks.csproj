@@ -868,6 +868,64 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Filters\Content\Conditions\ChildQuantityCondition.cs" />
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescription.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtension.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.Designer.cs">
+      <DependentUpon>BestRateProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.Designer.cs">
+      <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.Designer.cs">
+      <DependentUpon>BestRateServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.Designer.cs">
+      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BrokerException.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\CoreExtensions\Filters\BestRateProcessedCondition.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\PackageBasedBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\ServiceLevelSpeedComparer.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevel.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalResellerBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
+    <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExSmartPostCloseRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\Manipulators\FedExCloseClientDetailManipulator.cs" />
@@ -1110,6 +1168,8 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsIrregularIndicatorType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsShipmentChargeType.cs" />
@@ -1680,6 +1740,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipOdbcManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProcessedGrouping.cs" />
     <Compile Include="Shipping\CoreExtensions\ShippingFilterConditionUtility.cs" />
+    <Compile Include="Shipping\Editing\NonCompetitiveRateResult.cs" />
     <Compile Include="Shipping\Editing\RateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1725,6 +1786,7 @@
       <DependentUpon>InsuranceSelectionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsuranceInitialValueSource.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBroker.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileControl.cs" />
     <Compile Include="Shipping\ScanForms\DefaultScanFormBatchShipmentRepository.cs" />
     <Compile Include="Shipping\ScanForms\IScanFormBatchPrinter.cs" />
@@ -1750,6 +1812,9 @@
     <Compile Include="Shipping\ScanForms\ScanForm.cs" />
     <Compile Include="Shipping\ScanForms\IScanFormAccountRepository.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtility.cs" />
+    <Compile Include="Shipping\Settings\ShippingTypeCheckboxesControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottle.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottleParameters.cs" />
@@ -2168,6 +2233,7 @@
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Yahoo\YahooOnlineUpdater.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\BestRateEventsOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceChoiceOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceOutline.cs" />
     <Compile Include="Templates\Tokens\ITokenSuggestionFactory.cs" />
@@ -6589,6 +6655,18 @@
       <SubType>Designer</SubType>
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
+      <DependentUpon>BestRateProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateServiceControl.resx">
+      <DependentUpon>BestRateServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
+      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.resx">
+      <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.resx">
       <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -9905,6 +9983,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -11244,7 +11323,7 @@
   </ItemGroup>
   <ItemGroup>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
+      <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
       <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
       <ServiceLocationURL>
@@ -11255,7 +11334,7 @@
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
+      <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
       <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl</UpdateFromURL>
       <ServiceLocationURL>
@@ -11266,7 +11345,7 @@
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
+      <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
       <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl</UpdateFromURL>
       <ServiceLocationURL>
@@ -11277,7 +11356,7 @@
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
+      <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
       <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl</UpdateFromURL>
       <ServiceLocationURL>
@@ -11299,7 +11378,7 @@
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_PackageMovement_PackageMovementInformationService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.3.8.x-UPSRecertification\Code\ShipWorks\Shipping\Carriers\UPS\Api\Wsdl\OpenAccount.wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
+      <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\</RelPath>
       <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Branches\3.3.8.x-UPSRecertification\Code\ShipWorks\Shipping\Carriers\UPS\Api\Wsdl\OpenAccount.wsdl</UpdateFromURL>
       <ServiceLocationURL>

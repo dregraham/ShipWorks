@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping
 {
@@ -535,6 +536,32 @@ namespace ShipWorks.Shipping
             }
 
             return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
+        }
+
+        /// <summary>
+        /// Gets whether the specified settings tab should be hidden in the UI
+        /// </summary>
+        public virtual bool IsSettingsTabHidden(ShipmentTypeSettingsControl.Page tab)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for a provider.
+        /// </summary>
+        /// <returns>An instance of an IBestRateShippingBroker.</returns>
+        public abstract IBestRateShippingBroker GetShippingBroker();
+
+        /// <summary>
+        /// Preferences the process.
+        /// </summary>
+        /// <returns>
+        /// Most shipment types don't do any pre-processing and will return themselves.  
+        /// This will return a different shipping type for BestRate
+        /// </returns>
+        public virtual ShipmentType PreProcess(ShipmentEntity shipment)
+        {
+            return this;
         }
     }
 }

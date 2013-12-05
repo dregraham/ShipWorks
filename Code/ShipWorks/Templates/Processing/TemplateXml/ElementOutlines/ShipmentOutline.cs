@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Templates.Processing.TemplateXml.NodeFactories;
 using log4net;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -53,6 +56,9 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Insurance", new ShipmentInsuranceOutline(context), () => LoadedShipment);
 
             AddElement("CustomsItem", new CustomsItemOutline(context), () => { if (CustomsManager.IsCustomsRequired(Shipment)) { CustomsManager.LoadCustomsItems(Shipment, false); return Shipment.CustomsItems; } else return null; });
+            
+            // Add an outline entry for the last/terminating best rate event that occurred on the shipment
+            AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
 
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
@@ -68,7 +74,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                 AddElements(container, If(() => Shipment.ShipmentType == (int) typeCode));
             }
         }
-
+        
         /// <summary>
         /// Create the outline for the ShipmentType element
         /// </summary>
@@ -92,6 +98,19 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             }
 
             return "None";
+        }
+
+        /// <summary>
+        /// Get text describing the latest best rate event that occurred on the shipment.
+        /// </summary>
+        private static string GetLatestBestRateEventDescription(ShipmentEntity shipment)
+        {
+            // Obtain the latest event that occurred
+            BestRateEventTypes eventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes latestEvent = eventTypes.GetLatestBestRateEvent();
+
+            // Now that we have the latest event, we can just return the description for it
+            return new BestRateEventsDescription(latestEvent).ToString().Trim();
         }
 
         /// <summary>

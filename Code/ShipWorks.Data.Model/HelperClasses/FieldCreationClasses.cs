@@ -1359,6 +1359,106 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity BestRateProfileEntity</summary>
+	public partial class BestRateProfileFields
+	{
+		/// <summary>Creates a new BestRateProfileEntity.ShippingProfileID field instance</summary>
+		public static EntityField2 ShippingProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new BestRateProfileEntity.ServiceLevel field instance</summary>
+		public static EntityField2 ServiceLevel
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateProfileFieldIndex.ServiceLevel);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity BestRateShipmentEntity</summary>
+	public partial class BestRateShipmentFields
+	{
+		/// <summary>Creates a new BestRateShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.ServiceLevel field instance</summary>
+		public static EntityField2 ServiceLevel
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.ServiceLevel);}
+		}
+		/// <summary>Creates a new BestRateShipmentEntity.InsuranceValue field instance</summary>
+		public static EntityField2 InsuranceValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateShipmentFieldIndex.InsuranceValue);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity BigCommerceOrderItemEntity</summary>
 	public partial class BigCommerceOrderItemFields
 	{
@@ -15057,6 +15157,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.OriginUnparsedName);}
 		}
+		/// <summary>Creates a new ShipmentEntity.BestRateEvents field instance</summary>
+		public static EntityField2 BestRateEvents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.BestRateEvents);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>
@@ -15676,6 +15781,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WorldShipMailInnovationsEnabled
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.InternalBestRateExcludedShipmentTypes field instance</summary>
+		public static EntityField2 InternalBestRateExcludedShipmentTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes);}
 		}
 	}
 

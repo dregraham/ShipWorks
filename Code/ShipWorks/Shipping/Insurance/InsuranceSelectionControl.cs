@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Insurance
             bool allOnTrac = true;
             bool allEndicia = true;
             bool alliParcel = true;
-
+            
             InsuranceProvider? insuranceProvider = null;
 
             // Update the insurance status and amount used

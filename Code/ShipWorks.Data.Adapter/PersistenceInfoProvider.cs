@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((159 + 0));
+			base.InitClass((161 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -70,6 +70,8 @@ namespace ShipWorks.Data.Adapter
 			InitAuditEntityMappings();
 			InitAuditChangeEntityMappings();
 			InitAuditChangeDetailEntityMappings();
+			InitBestRateProfileEntityMappings();
+			InitBestRateShipmentEntityMappings();
 			InitBigCommerceOrderItemEntityMappings();
 			InitBigCommerceStoreEntityMappings();
 			InitBuyDotComOrderItemEntityMappings();
@@ -410,6 +412,34 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AuditChangeDetailEntity", "TextNew", "TextNew", true, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 7 );
 			base.AddElementFieldMapping( "AuditChangeDetailEntity", "VariantOld", "VariantOld", true, (int)SqlDbType.Variant, 0, 0, 0, false, "", null, typeof(System.Object), 8 );
 			base.AddElementFieldMapping( "AuditChangeDetailEntity", "VariantNew", "VariantNew", true, (int)SqlDbType.Variant, 0, 0, 0, false, "", null, typeof(System.Object), 9 );
+		}
+		/// <summary>Inits BestRateProfileEntity's mappings</summary>
+		private void InitBestRateProfileEntityMappings()
+		{
+			base.AddElementMapping( "BestRateProfileEntity", "ShipWorksLocal", @"dbo", "BestRateProfile", 9 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "DimsProfileID", "DimsProfileID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "DimsLength", "DimsLength", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 2 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "DimsWidth", "DimsWidth", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 3 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "DimsHeight", "DimsHeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 4 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "DimsWeight", "DimsWeight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 5 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "DimsAddWeight", "DimsAddWeight", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "Weight", "Weight", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 7 );
+			base.AddElementFieldMapping( "BestRateProfileEntity", "ServiceLevel", "ServiceLevel", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 8 );
+		}
+		/// <summary>Inits BestRateShipmentEntity's mappings</summary>
+		private void InitBestRateShipmentEntityMappings()
+		{
+			base.AddElementMapping( "BestRateShipmentEntity", "ShipWorksLocal", @"dbo", "BestRateShipment", 9 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsProfileID", "DimsProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsLength", "DimsLength", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 2 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsWidth", "DimsWidth", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 3 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsHeight", "DimsHeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 4 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsWeight", "DimsWeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 5 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "ServiceLevel", "ServiceLevel", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 7 );
+			base.AddElementFieldMapping( "BestRateShipmentEntity", "InsuranceValue", "InsuranceValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 8 );
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's mappings</summary>
 		private void InitBigCommerceOrderItemEntityMappings()
@@ -2094,7 +2124,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 54 );
+			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 55 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShipmentEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -2149,6 +2179,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipUnparsedName", "ShipUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 51 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OriginNameParseStatus", "OriginNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 52 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OriginUnparsedName", "OriginUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 53 );
+			base.AddElementFieldMapping( "ShipmentEntity", "BestRateEvents", "BestRateEvents", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 54 );
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
 		private void InitShipmentCustomsItemEntityMappings()
@@ -2245,7 +2276,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShippingSettingsEntity's mappings</summary>
 		private void InitShippingSettingsEntityMappings()
 		{
-			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 59 );
+			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 60 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShippingSettingsID", "ShippingSettingsID", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 0 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalActivated", "Activated", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalConfigured", "Configured", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2305,6 +2336,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsSingleSource", "Express1StampsSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 56 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 57 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 59 );
 		}
 		/// <summary>Inits ShopifyOrderEntity's mappings</summary>
 		private void InitShopifyOrderEntityMappings()

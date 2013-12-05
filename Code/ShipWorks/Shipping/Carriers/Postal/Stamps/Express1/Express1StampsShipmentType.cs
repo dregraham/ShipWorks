@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Settings;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -97,6 +98,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Express1 for Stamps.com shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new Express1StampsBestRateBroker();
         }
     }
 }

@@ -1013,6 +1013,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                     }
 
+                    rates.ForEach(PostalUtility.SetServiceDetails);
+
                     return rates;
                 }
             }
@@ -1159,6 +1161,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 throw new EndiciaException(string.Join("\r\n", errors.Select(e => e.Message).Distinct()));
             }
+
+            results.ForEach(PostalUtility.SetServiceDetails);
 
             return results;
         }

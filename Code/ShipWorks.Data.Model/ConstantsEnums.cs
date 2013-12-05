@@ -678,6 +678,64 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateProfile.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum BestRateProfileFieldIndex:int
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>ServiceLevel. </summary>
+		ServiceLevel,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateShipment.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum BestRateShipmentFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>ServiceLevel. </summary>
+		ServiceLevel,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BigCommerceOrderItem.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -7061,6 +7119,8 @@ namespace ShipWorks.Data.Model
 		OriginNameParseStatus,
 		///<summary>OriginUnparsedName. </summary>
 		OriginUnparsedName,
+		///<summary>BestRateEvents. </summary>
+		BestRateEvents,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7381,6 +7441,8 @@ namespace ShipWorks.Data.Model
 		UpsMailInnovationsEnabled,
 		///<summary>WorldShipMailInnovationsEnabled. </summary>
 		WorldShipMailInnovationsEnabled,
+		///<summary>InternalBestRateExcludedShipmentTypes. </summary>
+		InternalBestRateExcludedShipmentTypes,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9429,6 +9491,10 @@ namespace ShipWorks.Data.Model
 		AuditChangeEntity,
 		///<summary>AuditChangeDetail</summary>
 		AuditChangeDetailEntity,
+		///<summary>BestRateProfile</summary>
+		BestRateProfileEntity,
+		///<summary>BestRateShipment</summary>
+		BestRateShipmentEntity,
 		///<summary>BigCommerceOrderItem</summary>
 		BigCommerceOrderItemEntity,
 		///<summary>BigCommerceStore</summary>

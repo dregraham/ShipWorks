@@ -265,6 +265,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 }
             }
 
+            rates.ForEach(PostalUtility.SetServiceDetails);
+
             return rates;
         }
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -43,6 +44,15 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void ClearRates(string emptyReason)
         {
+            ClearRates(emptyReason, null);
+        }
+
+        /// <summary>
+        /// Clear the rates in the grid and display the given reason for having no rates displayed.
+        /// </summary>
+        /// <remarks>This version will display any footnotes associated with the rate group</remarks>
+        public void ClearRates(string emptyReason, RateGroup rateGroup)
+        {
             if (sandGrid.EmptyText != emptyReason)
             {
                 sandGrid.EmptyText = emptyReason;
@@ -54,20 +64,15 @@ namespace ShipWorks.Shipping.Editing
             }
 
             panelOutOfDate.Visible = false;
-
-            PreviousFootnotes.ForEach(f => f.Dispose());
-            panelFootnote.Visible = false;
+            UpdateFootnotes(rateGroup);
         }
 
         /// <summary>
         /// Clear the previous content of the footnote control
         /// </summary>
-        private List<RateFootnoteControl> PreviousFootnotes
+        private List<RateFootnoteControl> CurrentFootnotes
         {
-            get
-            {
-                return panelFootnote.Controls.OfType<RateFootnoteControl>().ToList();
-            }
+            get { return panelFootnote.Controls.OfType<RateFootnoteControl>().ToList(); }
         }
 
         /// <summary>
@@ -75,52 +80,90 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
-            var previousFootnotes = PreviousFootnotes;
             sandGrid.Rows.Clear();
+
+            if (rateGroup.Carrier == ShipmentTypeCode.BestRate)
+            {
+                gridColumnCarrier.Visible = true;
+            }
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                GridRow row = new GridRow(new GridCell[]
-                    {
-                        new GridCell(rate.Description),
-                        new GridCell(rate.Days),
-                        new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
-                        new GridHyperlinkCell(rate.Selectable ? "Select" : "")
-                    });
-
+                GridRow row = new GridRow(new[]
+                {
+                    new GridCell(rate.CarrierDescription),
+                    new GridCell(rate.Description),
+                    new GridCell(rate.Days),
+                    new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
+                    new GridHyperlinkCell(rate.Selectable ? "Select" : "")
+                });
+                
                 row.Tag = rate;
 
                 sandGrid.Rows.Add(row);
             }
-
+            
             panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
 
-            RateFootnoteControl footnote = (rateGroup.FootnoteCreator != null) ? rateGroup.FootnoteCreator() : null;
+            UpdateFootnotes(rateGroup);
+        }
 
-            if (footnote != null)
-            {
-                footnote.Dock = DockStyle.Fill;
-                panelFootnote.Controls.Add(footnote);
-                panelFootnote.Visible = true;
+        /// <summary>
+        /// Resets the footnotes with what are contained in the specified rate group
+        /// </summary>
+        private void UpdateFootnotes(RateGroup rateGroup)
+        {
+            RemoveFootnotes(CurrentFootnotes);
 
-                footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
-            }
-            else
+            if (rateGroup == null)
             {
                 panelFootnote.Visible = false;
             }
+            else
+            {
+                AddFootnotes(rateGroup.FootnoteCreators);
+            }
+        }
 
+        /// <summary>
+        /// Removes the footnotes.
+        /// </summary>
+        private void RemoveFootnotes(IEnumerable<RateFootnoteControl> previousFootnotes)
+        {
             foreach (RateFootnoteControl previousFootnote in previousFootnotes)
             {
                 previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
+                panelFootnote.Controls.Remove(previousFootnote);
                 previousFootnote.Dispose();
+            }
+
+            panelFootnote.Visible = false;
+        }
+
+        /// <summary>
+        /// Adds the footnotes.
+        /// </summary>
+        /// <param name="footNotes">The rate group.</param>
+        private void AddFootnotes(IEnumerable<Func<RateFootnoteControl>> footNotes)
+        {
+            panelFootnote.Height = 0;
+            int y = 0;
+            foreach (RateFootnoteControl footnote in footNotes.Select(footnoteCreator => footnoteCreator()))
+            {
+                panelFootnote.Controls.Add(footnote);
+                footnote.Location = new Point(0, y);
+                panelFootnote.Visible = true;
+
+                footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
+                panelFootnote.Height += footnote.Height;
+                y += footnote.Height;
             }
         }
 
         /// <summary>
         /// The footnote has indicated it has changed something that has changed the rate criteria
         /// </summary>
-        void OnFootnoteRateCriteriaChanged(object sender, EventArgs e)
+        private void OnFootnoteRateCriteriaChanged(object sender, EventArgs e)
         {
             if (ReloadRatesRequired != null)
             {
@@ -133,7 +176,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// User has clicked to select a rate
         /// </summary>
-        void OnSelectRate(object sender, GridRowColumnEventArgs e)
+        private void OnSelectRate(object sender, GridRowColumnEventArgs e)
         {
             RateResult rate = e.Row.Tag as RateResult;
             if (!rate.Selectable)
@@ -152,10 +195,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public int FootnoteHeight
         {
-            get
-            {
-                return panelFootnote.Visible ? panelFootnote.Height : 0;
-            }
+            get { return panelFootnote.Visible ? panelFootnote.Height : 0; }
         }
     }
 }

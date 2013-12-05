@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (159 + 0));
+			base.InitClass( (161 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -71,6 +71,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAuditEntityInfos();
 			InitAuditChangeEntityInfos();
 			InitAuditChangeDetailEntityInfos();
+			InitBestRateProfileEntityInfos();
+			InitBestRateShipmentEntityInfos();
 			InitBigCommerceOrderItemEntityInfos();
 			InitBigCommerceStoreEntityInfos();
 			InitBuyDotComOrderItemEntityInfos();
@@ -397,6 +399,32 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AuditChangeDetailEntity", "TextNew", typeof(System.String), false, false, false, true,  (int)AuditChangeDetailFieldIndex.TextNew, 2147483647, 0, 0);
 			base.AddElementFieldInfo("AuditChangeDetailEntity", "VariantOld", typeof(System.Object), false, false, false, true,  (int)AuditChangeDetailFieldIndex.VariantOld, 0, 0, 0);
 			base.AddElementFieldInfo("AuditChangeDetailEntity", "VariantNew", typeof(System.Object), false, false, false, true,  (int)AuditChangeDetailFieldIndex.VariantNew, 0, 0, 0);
+		}
+		/// <summary>Inits BestRateProfileEntity's FieldInfo objects</summary>
+		private void InitBestRateProfileEntityInfos()
+		{
+			base.AddElementFieldInfo("BestRateProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)BestRateProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)BestRateProfileFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("BestRateProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)BestRateProfileFieldIndex.Weight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateProfileEntity", "ServiceLevel", typeof(Nullable<System.Int32>), false, false, false, true,  (int)BestRateProfileFieldIndex.ServiceLevel, 0, 0, 10);
+		}
+		/// <summary>Inits BestRateShipmentEntity's FieldInfo objects</summary>
+		private void InitBestRateShipmentEntityInfos()
+		{
+			base.AddElementFieldInfo("BestRateShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)BestRateShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "ServiceLevel", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.ServiceLevel, 0, 0, 10);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)BestRateShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's FieldInfo objects</summary>
 		private void InitBigCommerceOrderItemEntityInfos()
@@ -2035,6 +2063,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ShipUnparsedName", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipUnparsedName, 100, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "OriginNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.OriginNameParseStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "OriginUnparsedName", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.OriginUnparsedName, 100, 0, 0);
+			base.AddElementFieldInfo("ShipmentEntity", "BestRateEvents", typeof(System.Byte), false, false, false, false,  (int)ShipmentFieldIndex.BestRateEvents, 0, 0, 3);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
@@ -2183,6 +2212,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsSingleSource, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "UpsMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, 30, 0, 0);
 		}
 		/// <summary>Inits ShopifyOrderEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderEntityInfos()

@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Editing;
@@ -19,6 +20,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -397,16 +399,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
 
                     RateGroup finalGroup = new RateGroup(finalRates);
-
+                    
                     if (settings.EndiciaAutomaticExpress1)
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.FootnoteCreator = () => new Express1RateDiscountedFootnote(endiciaRates, express1Rates);
+                            finalGroup.AddFootnoteCreator(() => new Express1RateDiscountedFootnote(endiciaRates, express1Rates));
                         }
                         else
                         {
-                            finalGroup.FootnoteCreator = () => new Express1RateNotQualifiedFootnote();
+                            finalGroup.AddFootnoteCreator(() => new Express1RateNotQualifiedFootnote());
                         }
                     }
                     else
@@ -414,10 +416,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
                         {
                             IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
-                            finalGroup.FootnoteCreator = () => new Express1RatePromotionFootnote(express1Settings);
+                            finalGroup.AddFootnoteCreator(() => new Express1RatePromotionFootnote(express1Settings));
                         }
                     }
-
+                    
                     return finalGroup;
                 }
                 else
@@ -657,6 +659,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             throw new EndiciaException(string.Format("{0} is not supported when shipping with Endicia.", PostalUtility.GetPostalServiceTypeDescription(serviceType)));
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Endicia shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new EndiciaBestRateBroker();
         }
     }
 }

@@ -627,6 +627,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>

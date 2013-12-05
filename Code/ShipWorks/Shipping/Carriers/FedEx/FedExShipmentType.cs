@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -27,6 +28,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -987,6 +989,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the FedEx shipment type.
+        /// </summary>
+        /// <returns>An instance of a FedExBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new FedExBestRateBroker();
         }
 
         /// <summary>

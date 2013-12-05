@@ -48,7 +48,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "WorldShipShipment", false);
-				relation.AddEntityFieldPair(WorldShipShipmentFields.ShipmentID, WorldShipProcessedFields.ShipmentIdCalculated);
+				relation.AddEntityFieldPair(WorldShipShipmentFields.ShipmentID, WorldShipProcessedFields.ShipmentID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WorldShipShipmentEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WorldShipProcessedEntity", true);
 				return relation;

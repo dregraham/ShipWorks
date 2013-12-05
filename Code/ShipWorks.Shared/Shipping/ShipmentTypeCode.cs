@@ -50,6 +50,9 @@ namespace ShipWorks.Shipping
         [Description("EquaShip")]
         EquaShip = 10,
 
+        [Description("Best Rate")]
+        BestRate = 14,
+
         [Description("None")]
         None = 99
     }

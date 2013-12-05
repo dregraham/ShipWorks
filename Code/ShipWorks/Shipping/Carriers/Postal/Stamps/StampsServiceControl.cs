@@ -143,6 +143,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>

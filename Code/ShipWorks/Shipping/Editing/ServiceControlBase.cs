@@ -64,6 +64,12 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler ReloadRatesRequired;
 
         /// <summary>
+        /// Raised when something occurs that causes the service control to change the shipment type. For example, this was created to support 
+        /// the best rate shipment type and allowing the selection of a rate to change the shipment type.
+        /// </summary>
+        public event EventHandler ShipmentTypeChanged;
+
+        /// <summary>
         /// The shipment type this instance is servicing
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode
@@ -386,7 +392,7 @@ namespace ShipWorks.Shipping.Editing
                         }
                         else if (rateGroup.Rates.Count == 0)
                         {
-                            rateControl.ClearRates("No rates are available for the shipment.");
+                            rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
                         }
                         else
                         {
@@ -409,6 +415,11 @@ namespace ShipWorks.Shipping.Editing
                 height += rateControl.FootnoteHeight;
 
                 ratesSection.Height = height;
+
+                if (ratesSection.Collapsed)
+                {
+                    ratesSection.Collapsed = false;
+                }
             }
         }
 
@@ -562,5 +573,17 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentServiceChanged(this, EventArgs.Empty);
             }
         }
+
+        /// <summary>
+        /// Raises the shipment type changed event.
+        /// </summary>
+        protected void RaiseShipmentTypeChanged()
+        {
+            if (ShipmentTypeChanged != null)
+            {
+                ShipmentTypeChanged(this, EventArgs.Empty);
+            }
+        }
+
     }
 }

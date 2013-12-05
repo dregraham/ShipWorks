@@ -1296,6 +1296,25 @@ PRINT N'Creating primary key [PK_EquashipProfile] on [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [PK_EquashipProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
+PRINT N'Creating [dbo].[BestRateProfile]'
+GO
+CREATE TABLE [dbo].[BestRateProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL,
+[Weight] [float] NULL,
+[ServiceLevel] [int] NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
+GO
+ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [PK_BestRateProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
 PRINT N'Creating [dbo].[Shipment]'
 GO
 CREATE TABLE [dbo].[Shipment]
@@ -1353,7 +1372,8 @@ CREATE TABLE [dbo].[Shipment]
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginNameParseStatus] [int] NOT NULL,
-[OriginUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[OriginUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BestRateEvents] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -4320,7 +4340,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [Express1StampsThermalType] [int] NOT NULL,
 [Express1StampsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
-[WorldShipMailInnovationsEnabled] [bit] NOT NULL
+[WorldShipMailInnovationsEnabled] [bit] NOT NULL,
+[BestRateExcludedShipmentTypes] [nvarchar](30) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -4438,6 +4459,25 @@ GO
 PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
 GO
 ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
+GO
+PRINT N'Creating [dbo].[BestRateShipment]'
+GO
+CREATE TABLE [dbo].[BestRateShipment]
+(
+[ShipmentID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NOT NULL,
+[DimsLength] [float] NOT NULL,
+[DimsWidth] [float] NOT NULL,
+[DimsHeight] [float] NOT NULL,
+[DimsWeight] [float] NOT NULL,
+[DimsAddWeight] [bit] NOT NULL,
+[ServiceLevel] [int] NOT NULL,
+[InsuranceValue] [money] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [PK_BestRateShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
 PRINT N'Adding constraints to [dbo].[Computer]'
 GO
@@ -4611,6 +4651,14 @@ GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BestRateProfile]'
+GO
+ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [FK_BestRateProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
 GO

@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -115,8 +117,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            ValidateShipment(shipment);
-
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
@@ -218,26 +218,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
 
                     RateGroup finalGroup = new RateGroup(finalRates);
-
                     if (settings.StampsAutomaticExpress1)
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.FootnoteCreator = () => new Express1RateDiscountedFootnote(stampsRates, express1Rates);
+                            finalGroup.AddFootnoteCreator(() => new Express1RateDiscountedFootnote(stampsRates, express1Rates));
                         }
                         else
                         {
-                            finalGroup.FootnoteCreator = () => new Express1RateNotQualifiedFootnote();
+                            finalGroup.AddFootnoteCreator(() => new Express1RateNotQualifiedFootnote());
                         }
                     }
                     else
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
-                            finalGroup.FootnoteCreator = () => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings));
+                            finalGroup.AddFootnoteCreator(() => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
                         }
                     }
-
+                    
                     return finalGroup;
                 }
                 else
@@ -530,6 +529,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Stamps.com shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new StampsBestRateBroker();
         }
     }
 }

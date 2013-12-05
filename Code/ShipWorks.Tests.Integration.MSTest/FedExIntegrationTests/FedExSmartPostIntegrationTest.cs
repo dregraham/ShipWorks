@@ -15,6 +15,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExSmartPost")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [Ignore]
         public void Ship_FedExSmartPost()
         {
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();

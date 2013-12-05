@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing.TemplateXml;
@@ -17,13 +18,14 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Data;
 using System.Drawing.Imaging;
 using System.Drawing;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
     /// <summary>
     /// Shipment type for USPS WebTools shipments
     /// </summary>
-    class PostalWebShipmentType : PostalShipmentType
+    public class PostalWebShipmentType : PostalShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value
@@ -162,6 +164,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the USPS web tools shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new WebToolsBestRateBroker();
         }
     }
 }

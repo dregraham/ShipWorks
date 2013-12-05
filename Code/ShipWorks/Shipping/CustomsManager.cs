@@ -53,6 +53,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
+            if (ShipmentTypeManager.IsBestRate((ShipmentTypeCode) shipment.ShipmentType))
+            {
+                return false;
+            }
+
             bool requiresCustoms = !ShipmentType.IsDomestic(shipment);
 
             if (shipment.ShipCountryCode == "US")

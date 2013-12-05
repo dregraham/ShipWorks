@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -168,6 +170,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override bool IsMailInnovationsEnabled()
         {
             return ShippingSettings.Fetch().WorldShipMailInnovationsEnabled;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the UPS WorldShip shipment type.
+        /// </summary>
+        /// <returns>An instance of an IBestRateShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new WorldShipBestRateBroker();
         }
     }
 }

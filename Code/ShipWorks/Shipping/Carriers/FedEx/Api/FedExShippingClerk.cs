@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Tracking;
 using log4net;
 
@@ -639,16 +640,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 serviceType = GetFedExServiceType(rateDetail.ServiceType);
 
                 int transitDays = 0;
+                DateTime? deliveryDate = null;
 
                 if (rateDetail.DeliveryTimestampSpecified)
                 {
                     // Transite time
-                    DateTime deliveryDate = rateDetail.DeliveryTimestamp;
-                    transitDays = (deliveryDate.Date - shipment.ShipDate.Date).Days;
+                    deliveryDate = rateDetail.DeliveryTimestamp;
+                    transitDays = (deliveryDate.Value.Date - shipment.ShipDate.Date).Days;
                 }
                 else if (rateDetail.TransitTimeSpecified)
                 {
                     transitDays = GetTransitDays(rateDetail.TransitTime);
+                    
+                    if (serviceType == FedExServiceType.GroundHomeDelivery)
+                    {
+                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday);
+                    }
+                    else
+                    {
+                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);    
+                    }
                 }
 
                 // Cost
@@ -660,13 +671,57 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // Add the shipworks rate object
                 results.Add(new RateResult(
-                    EnumHelper.GetDescription(serviceType),
-                    transitDays == 0 ? string.Empty : transitDays.ToString(),
-                    cost,
-                    new FedExRateSelection(serviceType)));
+                                EnumHelper.GetDescription(serviceType),
+                                transitDays == 0 ? string.Empty : transitDays.ToString(),
+                                cost,
+                                new FedExRateSelection(serviceType))
+                {
+                    ExpectedDeliveryDate = deliveryDate,
+                    ServiceLevel = GetServiceLevel(serviceType, transitDays)
+                });
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Gets the service level.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="transitDays">The transit days.</param>
+        private static ServiceLevelType GetServiceLevel(FedExServiceType serviceType, int transitDays)
+        {
+            switch (serviceType)
+            {
+                case FedExServiceType.PriorityOvernight:
+                case FedExServiceType.StandardOvernight:
+                case FedExServiceType.InternationalFirst:
+                case FedExServiceType.FirstOvernight:
+                case FedExServiceType.FedExEuropeFirstInternationalPriority:
+                case FedExServiceType.FedEx1DayFreight:
+                    return ServiceLevelType.OneDay;
+
+                case FedExServiceType.FedEx2Day:
+                case FedExServiceType.FedEx2DayFreight:
+                case FedExServiceType.FedEx2DayAM:
+                    return ServiceLevelType.TwoDays;
+
+                case FedExServiceType.FedEx3DayFreight:
+                case FedExServiceType.FedExExpressSaver:
+                    return ServiceLevelType.ThreeDays;
+
+                case FedExServiceType.InternationalEconomy:
+                    return ServiceLevelType.FourToSevenDays;
+
+                default:
+                case FedExServiceType.InternationalPriority:
+                case FedExServiceType.FedExGround:
+                case FedExServiceType.GroundHomeDelivery:
+                case FedExServiceType.InternationalPriorityFreight:
+                case FedExServiceType.InternationalEconomyFreight:
+                case FedExServiceType.SmartPost:
+                    return ShippingManager.GetServiceLevel(transitDays);
+            }
         }
 
         /// <summary>

@@ -428,15 +428,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Turn the given notification type on or off depending on the enabled state given
         /// </summary>
-        private int ApplyEmailNotificationType(bool enabled, int previous, FedExEmailNotificationType notificationType)
+        private int ApplyEmailNotificationType(bool enabled, int previous, FedExEmailNotificationType notificationTypes)
         {
             if (enabled)
             {
-                previous |= (int) notificationType;
+                previous |= (int) notificationTypes;
             }
             else
             {
-                previous &= ~(int) notificationType;
+                previous &= ~(int) notificationTypes;
             }
 
             return previous;
@@ -802,6 +802,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
             OnRateCriteriaChanged(sender, e);
         }
 

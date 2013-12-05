@@ -7,6 +7,7 @@ using System.Xml;
 using System.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Logging;
@@ -21,6 +22,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using System.Reflection;
 using ShipWorks.Stores.Content;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -236,6 +238,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("firstname", shipment.ShipFirstName);
                 postRequest.Variables.Add("lastname", shipment.ShipLastName);
                 postRequest.Variables.Add("email", shipment.ShipEmail);
+
+                // Send best rate usage data to Tango
+                BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes)shipment.BestRateEvents);
+                postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
 
                 ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
 
