@@ -531,6 +531,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ConfigurationEntity", "CustomerUpdateBilling", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerUpdateBilling, 0, 0, 0);
 			base.AddElementFieldInfo("ConfigurationEntity", "CustomerUpdateShipping", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerUpdateShipping, 0, 0, 0);
 			base.AddElementFieldInfo("ConfigurationEntity", "AuditNewOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditNewOrders, 0, 0, 0);
+			base.AddElementFieldInfo("ConfigurationEntity", "AuditDeletedOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditDeletedOrders, 0, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()

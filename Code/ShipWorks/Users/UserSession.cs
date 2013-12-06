@@ -41,6 +41,7 @@ using ShipWorks.Templates.Media;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using log4net;
+using ShipWorks.SqlServer.Data.Auditing;
 
 namespace ShipWorks.Users
 {
@@ -261,15 +262,23 @@ namespace ShipWorks.Users
                 string workStationID = basics;
 
                 // If we auditing is disabled, or reason is specified, then we need to add that on
-                if (AuditBehaviorScope.IsDisabled || AuditReason.ReasonType != AuditReasonType.Default)
+                if (AuditBehaviorScope.ActiveState != AuditState.Enabled || AuditReason.ReasonType != AuditReasonType.Default || DeletionService.IsDeletingStore)
                 {
                     // Default to enabled
                     char auditEnabledFlag = 'E';
 
-                    if (AuditBehaviorScope.IsDisabled)
+                    // 'S' means disabled due to store delete, 'D' means just disabled
+                    if (DeletionService.IsDeletingStore)
                     {
-                        // 'S' means disabled due to store delete, 'D' means just disabled
-                        auditEnabledFlag = DeletionService.IsDeletingStore ? 'S' : 'D';
+                        auditEnabledFlag = 'S';
+                    }
+                    else
+                    {
+                        switch (AuditBehaviorScope.ActiveState)
+                        {
+                            case AuditState.Disabled: auditEnabledFlag = 'D'; break;
+                            case AuditState.NoDetails: auditEnabledFlag = 'P'; break;
+                        }
                     }
 
                     string additional = string.Format("{0}{1:X1}{2}",

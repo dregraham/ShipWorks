@@ -107,7 +107,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
             int current = 0;
 
             // dont' audit any of this, we are tryign to save space
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {
                 foreach (PrintResultEntity printResult in jobsToDelete)
                 {

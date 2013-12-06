@@ -355,7 +355,7 @@ namespace ShipWorks.Stores.Management
             BackgroundDeleteState state = (BackgroundDeleteState) userData;
 
             // We don't audit anything for deleting a store
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
             {
                 DeletionService.DeleteStore(state.Store);
             }

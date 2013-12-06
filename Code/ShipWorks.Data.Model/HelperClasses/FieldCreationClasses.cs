@@ -3382,6 +3382,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditNewOrders);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.AuditDeletedOrders field instance</summary>
+		public static EntityField2 AuditDeletedOrders
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditDeletedOrders);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

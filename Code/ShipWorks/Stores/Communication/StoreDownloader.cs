@@ -601,7 +601,7 @@ namespace ShipWorks.Stores.Communication
         {
             ConfigurationEntity config = ConfigurationData.Fetch();
 
-            return new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditBehaviorDisabledState.Default : AuditBehaviorDisabledState.Disabled);
+            return new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditState.Default : AuditState.NoDetails);
         }
 
         /// <summary>

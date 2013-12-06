@@ -1599,6 +1599,8 @@ namespace ShipWorks.Data.Model
 		CustomerUpdateShipping,
 		///<summary>AuditNewOrders. </summary>
 		AuditNewOrders,
+		///<summary>AuditDeletedOrders. </summary>
+		AuditDeletedOrders,
 		/// <summary></summary>
 		AmountOfFields
 	}

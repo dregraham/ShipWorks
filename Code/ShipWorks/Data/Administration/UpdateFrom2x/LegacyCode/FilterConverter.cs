@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
             TemplateTree currentTemplates = TemplateManager.Tree;
 
             // To use FilterLayout there needs to be a user in scope.  Since there is really no active user right now, we just use the SuperUser
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, SqlCommandProvider.DefaultTimeout))
                 {

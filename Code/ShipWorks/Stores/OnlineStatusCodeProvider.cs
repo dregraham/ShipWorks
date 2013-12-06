@@ -127,9 +127,10 @@ namespace ShipWorks.Stores
                 if (!store.IsNew)
                 {
 
-                    using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser,
-                                                                               new AuditReason(AuditReasonType.Default),
-                                                                               AuditBehaviorDisabledState.Disabled))
+                    using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
+                        AuditBehaviorUser.SuperUser,
+                        new AuditReason(AuditReasonType.Default),
+                        AuditState.Disabled))
                     {
                         using (SqlAdapter adapter = new SqlAdapter(true))
                         {

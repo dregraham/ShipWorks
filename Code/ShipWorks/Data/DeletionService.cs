@@ -26,6 +26,8 @@ using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
 using ShipWorks.Stores;
 using ShipWorks.Actions;
+using ShipWorks.Users.Audit;
+using ShipWorks.SqlServer.Data.Auditing;
 
 namespace ShipWorks.Data
 {
@@ -53,18 +55,21 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteEntity(long entityID)
         {
-            switch (EntityUtility.GetEntityType(entityID))
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                case EntityType.OrderEntity:
-                    DeleteOrder(entityID);
-                    break;
+                switch (EntityUtility.GetEntityType(entityID))
+                {
+                    case EntityType.OrderEntity:
+                        DeleteOrder(entityID);
+                        break;
 
-                case EntityType.CustomerEntity:
-                    DeleteCustomer(entityID);
-                    break;
+                    case EntityType.CustomerEntity:
+                        DeleteCustomer(entityID);
+                        break;
 
-                default:
-                    throw new InvalidOperationException("Invalid entity type " + entityID);
+                    default:
+                        throw new InvalidOperationException("Invalid entity type " + entityID);
+                }
             }
         }
 

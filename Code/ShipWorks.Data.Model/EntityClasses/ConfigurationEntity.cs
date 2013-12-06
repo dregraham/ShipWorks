@@ -458,6 +458,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AuditNewOrders", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AuditDeletedOrders", fieldHashtable);
 		}
 		#endregion
 
@@ -620,6 +623,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditNewOrders, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AuditNewOrders, value); }
+		}
+
+		/// <summary> The AuditDeletedOrders property of the Entity Configuration<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Configuration"."AuditDeletedOrders"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AuditDeletedOrders
+		{
+			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditDeletedOrders, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.AuditDeletedOrders, value); }
 		}
 
 

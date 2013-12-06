@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Data;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.SqlServer.Data.Auditing
 {
@@ -54,7 +55,7 @@ namespace ShipWorks.SqlServer.Data.Auditing
                 UserContext userContext = UtilityFunctions.GetUserContext(con);
 
                 // Quit if auditing is not enable
-                if (!userContext.AuditingEnabled)
+                if (userContext.AuditState == AuditState.Disabled)
                 {
                     return;
                 }
@@ -62,7 +63,7 @@ namespace ShipWorks.SqlServer.Data.Auditing
                 long auditID = CreateOrGetAuditID(con, userContext);
 
                 // Create the audit-changes - one for each row that is changing
-                CreateAuditChanges(con, tableInfo, auditID, auditColumns);
+                CreateAuditChanges(con, userContext, tableInfo, auditID, auditColumns);
             }
         }
 
@@ -124,7 +125,7 @@ namespace ShipWorks.SqlServer.Data.Auditing
         /// <summary>
         /// Create the parent audit-change
         /// </summary>
-        private static void CreateAuditChanges(SqlConnection con, AuditTableInfo tableInfo, long auditID, List<string> auditColumns)
+        private static void CreateAuditChanges(SqlConnection con, UserContext userContext, AuditTableInfo tableInfo, long auditID, List<string> auditColumns)
         {
             // We need the PK's of the object that's changing
             foreach (long key in UtilityFunctions.GetTriggerPrimaryKeys(con, tableInfo.PrimaryKey))
@@ -152,16 +153,20 @@ namespace ShipWorks.SqlServer.Data.Auditing
 
                 long auditChangeID = (long) insertCmd.ExecuteScalar();
 
-                // Log the details of the event - all the column before\after's
-                bool anyDetails = CreateAuditChangeDetails(con, key, auditID, auditChangeID, auditColumns, tableInfo);
-
-                // If there are not any details, delete this change
-                if (!anyDetails)
+                // Only log full details if auditing is fully enabled
+                if (userContext.AuditState == AuditState.Enabled)
                 {
-                    SqlCommand deleteCmd = con.CreateCommand();
-                    deleteCmd.CommandText = "DELETE AuditChange WHERE AuditChangeID = @auditChangeID";
-                    deleteCmd.Parameters.AddWithValue("@auditChangeID", auditChangeID);
-                    deleteCmd.ExecuteNonQuery();
+                    // Log the details of the event - all the column before\after's
+                    bool anyDetails = CreateAuditChangeDetails(con, key, auditID, auditChangeID, auditColumns, tableInfo);
+
+                    // If there are not any details, delete this change
+                    if (!anyDetails)
+                    {
+                        SqlCommand deleteCmd = con.CreateCommand();
+                        deleteCmd.CommandText = "DELETE AuditChange WHERE AuditChangeID = @auditChangeID";
+                        deleteCmd.Parameters.AddWithValue("@auditChangeID", auditChangeID);
+                        deleteCmd.ExecuteNonQuery();
+                    }
                 }
             }
         }

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.SqlServer.General
 {
@@ -140,15 +141,25 @@ namespace ShipWorks.SqlServer.General
 
             int auditReasonType = 0;
             string auditReasonDetail = null;
-            bool auditingEnabled = true;
             bool deletingStore = false;
 
+            AuditState auditState = AuditState.Enabled;
+
             // See if the auditing byte is set
-            if (contextInfo.Length >= 11 && (contextInfo[10] == 'E' || contextInfo[10] == 'D' || contextInfo[10] == 'S'))
+            if (contextInfo.Length >= 11 && (contextInfo[10] == 'E' || contextInfo[10] == 'D' || contextInfo[10] == 'S' || contextInfo[10] == 'P'))
             {
-                // (E)nabled
-                auditingEnabled = contextInfo[10] == 'E';
+                // See if a store is being deleted
                 deletingStore = contextInfo[10] == 'S';
+
+                // Auditing is deleted for store deletions as well as wheen it's marked to be disabled
+                if (deletingStore || contextInfo[10] == 'D')
+                {
+                    auditState = AuditState.Disabled;
+                }
+                else if (contextInfo[10] == 'P')
+                {
+                    auditState = AuditState.NoDetails;
+                }
 
                 // If auditing enabled is set, then audit reason may be set...
                 if (contextInfo.Length >= 12)
@@ -170,7 +181,7 @@ namespace ShipWorks.SqlServer.General
                 }
             }
 
-            return new UserContext(userID, computerID, auditReasonType, auditReasonDetail, auditingEnabled, deletingStore);
+            return new UserContext(userID, computerID, auditReasonType, auditReasonDetail, auditState, deletingStore);
         }
 
         /// <summary>
