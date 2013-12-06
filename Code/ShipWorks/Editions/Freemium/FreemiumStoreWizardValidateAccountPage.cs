@@ -93,10 +93,6 @@ namespace ShipWorks.Editions.Freemium
                             store.License = accountDetail.License.Key;
                             store.Edition = EditionSerializer.Serialize(accountDetail.Edition);
 
-                            // Set the wizard to not be in trial mode - its a valid store and we set the key
-                            var wizard = (AddStoreWizard) Wizard;
-                            wizard.TrialMode = false;
-
                             return true;
                         }
                     }
@@ -104,9 +100,7 @@ namespace ShipWorks.Editions.Freemium
                 // No valid license means this is brand new (or just in a trial)
                 else
                 {
-                    // Set the wizard to be in trial mode.  Either the trial exists or a new one will be created
-                    var wizard = (AddStoreWizard) Wizard;
-                    wizard.TrialMode = true;
+                    // Either the trial exists or a new one will be created
 
                     return true;
                 }

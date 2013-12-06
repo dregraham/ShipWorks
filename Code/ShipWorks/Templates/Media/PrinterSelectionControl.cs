@@ -18,7 +18,9 @@ namespace ShipWorks.Templates.Media
     /// </summary>
     public partial class PrinterSelectionControl : UserControl
     {
+        bool showPaperSource = true;
         bool showPrinterCalibration = false;
+        bool showLabels = true;
 
         class PrinterInfo
         {
@@ -30,6 +32,11 @@ namespace ShipWorks.Templates.Media
 
             public bool IsValid { get; set; }
         }
+
+        /// <summary>
+        /// Raised when the selected printer changes
+        /// </summary>
+        public event EventHandler PrinterChanged;
 
         /// <summary>
         /// Constructor
@@ -49,7 +56,16 @@ namespace ShipWorks.Templates.Media
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            UpdatePrinterCalibrationDisplay();
+            UpdateLabelDisplay();
+            UpdatSectionDisplay();
+        }
+
+        /// <summary>
+        /// Load the list of printers from Windows
+        /// </summary>
+        public void LoadPrinters()
+        {
+            LoadPrinters(null, -1, PrinterSelectionInvalidPrinterBehavior.NeverPreserve);
         }
 
         /// <summary>
@@ -91,7 +107,7 @@ namespace ShipWorks.Templates.Media
             // If no printer was selected and preservation is required then add it to the list so the non-selection can be preserved
             if (string.IsNullOrWhiteSpace(selectedPrinter) && ((preserveBehavior & PrinterSelectionInvalidPrinterBehavior.OnNotChosenPreserve) != 0))
             {
-                printerList.Insert(0, new PrinterInfo { Name = selectedPrinter, DisplayText = "(None Selected)", IsValid = false });
+                printerList.Insert(0, new PrinterInfo { Name = selectedPrinter ?? "", DisplayText = "(None Selected)", IsValid = false });
             }
 
             printer.Enabled = (printerList.Count > 0);
@@ -156,6 +172,48 @@ namespace ShipWorks.Templates.Media
         }
 
         /// <summary>
+        /// Controls if the labels to the left of the ComboBoxes are shown
+        /// </summary>
+        [DefaultValue(true)]
+        public bool ShowLabels
+        {
+            get
+            {
+                return showLabels;
+            }
+            set
+            {
+                if (showLabels != value)
+                {
+                    showLabels = value;
+
+                    UpdateLabelDisplay();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Controls if the paper source selection is shown
+        /// </summary>
+        [DefaultValue(true)]
+        public bool ShowPaperSource
+        {
+            get
+            {
+                return showPaperSource;
+            }
+            set
+            {
+                if (showPaperSource != value)
+                {
+                    showPaperSource = value;
+
+                    UpdatSectionDisplay();
+                }
+            }
+        }
+
+        /// <summary>
         /// Controls if the printer calibration button is shown.
         /// </summary>
         [DefaultValue(false)]
@@ -171,13 +229,13 @@ namespace ShipWorks.Templates.Media
                 {
                     showPrinterCalibration = value;
 
-                    UpdatePrinterCalibrationDisplay();
+                    UpdatSectionDisplay();
                 }
             }
         }
 
         /// <summary>
-        /// The selected printer
+        /// The selected printer.  Returns an empty string if the selection is not a valid printer name.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -185,7 +243,9 @@ namespace ShipWorks.Templates.Media
         {
             get
             {
-                return ((PrinterInfo) printer.SelectedItem).Name;
+                PrinterInfo printerInfo = (PrinterInfo) printer.SelectedItem;
+
+                return printerInfo != null ? printerInfo.Name : string.Empty;
             }
         }
 
@@ -215,6 +275,11 @@ namespace ShipWorks.Templates.Media
             LoadPrinterPaperSources();
 
             calibratePrinter.Enabled = ((PrinterInfo) printer.SelectedItem).IsValid;
+
+            if (PrinterChanged != null)
+            {
+                PrinterChanged(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -262,21 +327,48 @@ namespace ShipWorks.Templates.Media
         }
 
         /// <summary>
-        /// Updates the visibility of the printer calibration section
+        /// Update the display of the labels next to the printer
         /// </summary>
-        private void UpdatePrinterCalibrationDisplay()
+        private void UpdateLabelDisplay()
         {
-            labelCalibrate.Visible = showPrinterCalibration;
-            calibratePrinter.Visible = showPrinterCalibration;
+            labelPrinterName.Visible = showLabels;
+            labelPaperSource.Visible = showLabels;
+            labelCalibrate.Visible = showLabels;
 
-            if (showPrinterCalibration)
+            if (showLabels)
             {
-                Height = calibratePrinter.Bottom + 8;
+                printer.Left = labelPrinterName.Right + 4;
+                printer.Width = Width - printer.Left - 2;
+
+                paperSource.Left = printer.Left;
+                paperSource.Width = Width - printer.Left - 2;
+
+                calibratePrinter.Left = printer.Left;
             }
             else
             {
-                Height = paperSource.Bottom + 8;
+                int printerRight = printer.Right;
+                int paperRight = paperSource.Right;
+
+                printer.Left = 2;
+                printer.Width = Width - printer.Left - 2;
+
+                paperSource.Left = 2;
+                paperSource.Width = Width - paperSource.Left - 2;
+
+                calibratePrinter.Left = 2;
             }
+        }
+
+        /// <summary>
+        /// Updates the visibility of the various sections
+        /// </summary>
+        private void UpdatSectionDisplay()
+        {
+            panelSource.Visible = showPaperSource;
+            panelCalibrate.Visible = showPrinterCalibration;
+
+            Height = Controls.OfType<Panel>().Where(p => p.Visible).Select(p => p.Bottom).DefaultIfEmpty().Max();
         }
 
         /// <summary>
