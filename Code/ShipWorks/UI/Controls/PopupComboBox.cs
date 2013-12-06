@@ -89,7 +89,8 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected virtual Size GetIdealPopupSize()
         {
-            return new Size(DropDownWidth, DropDownHeight);
+            // 18 is the standard .net text line height
+            return new Size(DropDownWidth, Math.Max(DropDownHeight, Math.Min(Items.Count, MaxDropDownItems) * 18));
         }
 
         /// <summary>
@@ -123,6 +124,9 @@ namespace ShipWorks.UI.Controls
 
         }
 
+        /// <summary>
+        /// Show the Popup
+        /// </summary>
         public void ShowPopup()
         {
             if (GetStyle(ControlStyles.Selectable))

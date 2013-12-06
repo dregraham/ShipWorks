@@ -38,7 +38,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Bind the ComboBox to the specified Enum type.
         /// </summary>
-        public static void BindComboBox<T>(ComboBox comboBox, Func<T, bool> includer) where T : struct
+        public static void BindComboBox<T>(ComboBox comboBox, Func<T, bool> includer) where T: struct
         {
             BindComboBox<T>(comboBox, includer, false);
         }

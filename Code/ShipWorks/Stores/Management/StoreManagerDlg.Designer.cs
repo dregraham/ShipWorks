@@ -47,13 +47,15 @@ namespace ShipWorks.Stores.Management
             this.delete = new System.Windows.Forms.Button();
             this.edit = new System.Windows.Forms.Button();
             this.editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);
+            this.showDisabledStores = new System.Windows.Forms.CheckBox();
+            this.labelDisabledCount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(451, 10);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 13);
@@ -62,9 +64,9 @@ namespace ShipWorks.Stores.Management
             // 
             // labelAdd
             // 
-            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelAdd.AutoSize = true;
-            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAdd.Location = new System.Drawing.Point(451, 120);
             this.labelAdd.Name = "labelAdd";
             this.labelAdd.Size = new System.Drawing.Size(29, 13);
@@ -75,20 +77,21 @@ namespace ShipWorks.Stores.Management
             // 
             this.sandGrid.AllowGroupCollapse = true;
             this.sandGrid.AllowMultipleSelection = false;
-            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnName,
             this.gridColumnStoreType,
             this.gridColumnLastDownload});
             this.sandGrid.CommitOnLoseFocus = true;
+            this.sandGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
             this.sandGrid.ImageTextSeparation = 1;
             this.sandGrid.Location = new System.Drawing.Point(7, 12);
             this.sandGrid.Name = "sandGrid";
             this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
-            this.sandGrid.Size = new System.Drawing.Size(438, 190);
+            this.sandGrid.Size = new System.Drawing.Size(438, 184);
             this.sandGrid.TabIndex = 0;
             this.sandGrid.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
             this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnChangeGridSelection);
@@ -100,7 +103,7 @@ namespace ShipWorks.Stores.Management
             this.gridColumnName.AllowReorder = false;
             this.gridColumnName.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnName.AutoSizeIncludeHeader = true;
-            this.gridColumnName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnName.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnName.HeaderText = "Store Name";
             this.gridColumnName.MinimumWidth = 100;
@@ -108,7 +111,7 @@ namespace ShipWorks.Stores.Management
             // gridColumnStoreType
             // 
             this.gridColumnStoreType.AllowReorder = false;
-            this.gridColumnStoreType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnStoreType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnStoreType.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnStoreType.HeaderText = "Store Type";
             this.gridColumnStoreType.MinimumWidth = 50;
@@ -118,14 +121,14 @@ namespace ShipWorks.Stores.Management
             // 
             this.gridColumnLastDownload.AllowReorder = false;
             this.gridColumnLastDownload.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
-            this.gridColumnLastDownload.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnLastDownload.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnLastDownload.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnLastDownload.HeaderText = "Last Download";
             this.gridColumnLastDownload.Width = 221;
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(529, 198);
             this.cancel.Name = "cancel";
@@ -136,7 +139,7 @@ namespace ShipWorks.Stores.Management
             // 
             // addStore
             // 
-            this.addStore.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addStore.Image = global::ShipWorks.Properties.Resources.store_add_16;
             this.addStore.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.addStore.Location = new System.Drawing.Point(454, 136);
@@ -149,7 +152,7 @@ namespace ShipWorks.Stores.Management
             // 
             // rename
             // 
-            this.rename.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rename.Image = global::ShipWorks.Properties.Resources.rename;
             this.rename.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rename.Location = new System.Drawing.Point(454, 56);
@@ -162,7 +165,7 @@ namespace ShipWorks.Stores.Management
             // 
             // delete
             // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Image = global::ShipWorks.Properties.Resources.delete16;
             this.delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.delete.Location = new System.Drawing.Point(454, 85);
@@ -175,7 +178,7 @@ namespace ShipWorks.Stores.Management
             // 
             // edit
             // 
-            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.edit.Image = global::ShipWorks.Properties.Resources.edit16;
             this.edit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.edit.Location = new System.Drawing.Point(454, 26);
@@ -186,11 +189,36 @@ namespace ShipWorks.Stores.Management
             this.edit.UseVisualStyleBackColor = true;
             this.edit.Click += new System.EventHandler(this.OnEditStore);
             // 
+            // showDisabledStores
+            // 
+            this.showDisabledStores.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.showDisabledStores.AutoSize = true;
+            this.showDisabledStores.Location = new System.Drawing.Point(7, 204);
+            this.showDisabledStores.Name = "showDisabledStores";
+            this.showDisabledStores.Size = new System.Drawing.Size(127, 17);
+            this.showDisabledStores.TabIndex = 21;
+            this.showDisabledStores.Text = "Show disabled stores";
+            this.showDisabledStores.UseVisualStyleBackColor = true;
+            this.showDisabledStores.CheckedChanged += new System.EventHandler(this.OnChangeShowDisabledStores);
+            // 
+            // labelDisabledCount
+            // 
+            this.labelDisabledCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelDisabledCount.AutoSize = true;
+            this.labelDisabledCount.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelDisabledCount.Location = new System.Drawing.Point(130, 205);
+            this.labelDisabledCount.Name = "labelDisabledCount";
+            this.labelDisabledCount.Size = new System.Drawing.Size(102, 13);
+            this.labelDisabledCount.TabIndex = 22;
+            this.labelDisabledCount.Text = "(12 disabled stores)";
+            // 
             // StoreManagerDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(616, 233);
+            this.Controls.Add(this.labelDisabledCount);
+            this.Controls.Add(this.showDisabledStores);
             this.Controls.Add(this.sandGrid);
             this.Controls.Add(this.labelAdd);
             this.Controls.Add(this.addStore);
@@ -199,7 +227,7 @@ namespace ShipWorks.Stores.Management
             this.Controls.Add(this.delete);
             this.Controls.Add(this.edit);
             this.Controls.Add(this.cancel);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 262);
@@ -229,5 +257,7 @@ namespace ShipWorks.Stores.Management
         private Divelements.SandGrid.GridColumn gridColumnStoreType;
         private Divelements.SandGrid.GridColumn gridColumnLastDownload;
         private Editions.EditionGuiHelper editionGuiHelper;
+        private System.Windows.Forms.CheckBox showDisabledStores;
+        private System.Windows.Forms.Label labelDisabledCount;
     }
 }

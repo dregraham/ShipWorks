@@ -12,9 +12,10 @@ namespace Interapptive.Shared.Utility
     /// Attribute that can be applied to supply the name of an image resource to something
     /// </summary>
     [AttributeUsage(AttributeTargets.All)]
-    public sealed class ImageResourceAttribute : Attribute
+    public class ImageResourceAttribute : Attribute
     {
         string resourceKey;
+        string resourceSet;
 
         /// <summary>
         /// Constructor
@@ -33,6 +34,21 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// The resource set to use to lookup the Resource key.  If null, defaults to AssemblyName.Properties.Resources.
+        /// </summary>
+        public string ResourceSet
+        {
+            get
+            {
+                return resourceSet;
+            }
+            set
+            {
+                resourceSet = value;
+            }
+        }
+
+        /// <summary>
         /// The resource image referenced by the key.  Throws a NotFoundException if not present.
         /// </summary>
         public Image ResourceImage
@@ -40,7 +56,7 @@ namespace Interapptive.Shared.Utility
             get
             {
                 Assembly primaryAssembly = Assembly.GetEntryAssembly();
-                string primaryResources = string.Format("{0}.Properties.Resources", primaryAssembly.GetName().Name);
+                string primaryResources = string.IsNullOrEmpty(resourceSet) ? string.Format("{0}.Properties.Resources", primaryAssembly.GetName().Name) : resourceSet;
 
                 ResourceManager resman = new ResourceManager(primaryResources, primaryAssembly);
 

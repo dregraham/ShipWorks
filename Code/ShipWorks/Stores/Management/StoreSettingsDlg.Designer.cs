@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Management
             this.imageStore = new System.Windows.Forms.PictureBox();
             this.optionControl = new ShipWorks.UI.Controls.OptionControl();
             this.optionPageStoreDetails = new ShipWorks.UI.Controls.OptionPage();
-            this.storeContactControl = new ShipWorks.Data.Controls.StoreContactControl();
+            this.storeContactControl = new StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
             this.labelAllowDownload = new System.Windows.Forms.Label();
             this.comboAllowDownload = new ShipWorks.Stores.Management.ComputerDownloadAllowedComboBox();
@@ -568,7 +568,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label titleStoreType;
         private System.Windows.Forms.Label titleStoreName;
         private System.Windows.Forms.PictureBox imageStore;
-        private ShipWorks.Data.Controls.StoreContactControl storeContactControl;
+        private StoreContactControl storeContactControl;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;

@@ -555,6 +555,13 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.Designer.cs">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -587,6 +594,8 @@
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterDetail.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTechnology.cs" />
     <Compile Include="Data\Administration\DatabaseDetailsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -594,6 +603,12 @@
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Administration\DatabaseFileInfo.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupWizard.Designer.cs">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Administration\SqlDatabaseDetail.cs" />
     <Compile Include="Data\Administration\SimpleDatabaseSetupWizard.cs">
       <SubType>Form</SubType>
@@ -660,6 +675,25 @@
     <Compile Include="Data\Controls\PersonException.cs" />
     <Compile Include="Data\Connection\SqlSessionPermissionSet.cs" />
     <Compile Include="Data\Grid\Columns\Definitions\ServiceStatusColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.Designer.cs">
+      <DependentUpon>GridEnumDisplayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.Designer.cs">
+      <DependentUpon>GridOrderNumberDisplayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridOrderNumberDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.Designer.cs">
+      <DependentUpon>GridStoreDisplayEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridComputerLimitedListDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\Decorators\GridServiceStopTimeDecorator.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridBooleanDisplayType.cs" />
@@ -867,6 +901,16 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Filters\Content\Conditions\ChildQuantityCondition.cs" />
+    <Compile Include="Properties\ShippingIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShippingIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\StoreIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescription.cs" />
@@ -1830,6 +1874,12 @@
     <Compile Include="Stores\Management\ComputerDownloadPolicyDlg.Designer.cs">
       <DependentUpon>ComputerDownloadPolicyDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Management\StoreAddressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
+      <DependentUpon>StoreAddressControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -2233,7 +2283,19 @@
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Yahoo\YahooOnlineUpdater.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\BestRateEventsOutline.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.Designer.cs">
+      <DependentUpon>PrinterTypeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.Designer.cs">
+      <DependentUpon>ThermalPrinterLanguageWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceChoiceOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceOutline.cs" />
     <Compile Include="Templates\Tokens\ITokenSuggestionFactory.cs" />
@@ -2815,7 +2877,7 @@
     <Compile Include="Stores\Management\OnlineUpdateActionControlBase.Designer.cs">
       <DependentUpon>OnlineUpdateActionControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Management\AddStoreWizardLock.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupLock.cs" />
     <Compile Include="Stores\Management\AddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5664,6 +5726,9 @@
     <EmbeddedResource Include="Data\Administration\DatabaseDetailsDlg.resx">
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Setup\ShipWorksSetupWizard.resx">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\SimpleDatabaseSetupWizard.resx">
       <DependentUpon>SimpleDatabaseSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
@@ -6577,6 +6642,15 @@
     <EmbeddedResource Include="Data\Connection\SingleUserModeDlg.resx">
       <DependentUpon>SingleUserModeDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.resx">
+      <DependentUpon>GridEnumDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.resx">
+      <DependentUpon>GridOrderNumberDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.resx">
+      <DependentUpon>GridStoreDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Import\Spreadsheet\Types\Csv\Editing\GenericCsvChangeSourceSchemaDlg.resx">
       <DependentUpon>GenericCsvChangeSourceSchemaDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -6654,6 +6728,11 @@
     <EmbeddedResource Include="ApplicationCore\SplashScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\ShippingIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
       <DependentUpon>BestRateProfileControl.cs</DependentUpon>
@@ -6868,6 +6947,9 @@
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormDlg.resx">
       <DependentUpon>ScanFormDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -6888,6 +6970,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ComputerDownloadPolicyDlg.resx">
       <DependentUpon>ComputerDownloadPolicyDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\StoreAddressControl.resx">
+      <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
@@ -6976,6 +7061,11 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\StoreIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>StoreIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\CoreExtensions\Actions\ThreeDCartOrderUpdateTaskEditor.resx">
       <DependentUpon>ThreeDCartOrderUpdateTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -7015,6 +7105,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooAccountSettingsControl.resx">
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\IO\Hardware\Printers\PrinterTypeControl.resx">
+      <DependentUpon>PrinterTypeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.resx">
+      <DependentUpon>ThermalPrinterLanguageWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\DecimalTextBox.resx">
       <DependentUpon>DecimalTextBox.cs</DependentUpon>
@@ -7297,10 +7393,10 @@
     <Compile Include="Data\Controls\PersonControl.Designer.cs">
       <DependentUpon>PersonControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\Controls\StoreContactControl.cs">
+    <Compile Include="Stores\Management\StoreContactControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Data\Controls\StoreContactControl.Designer.cs">
+    <Compile Include="Stores\Management\StoreContactControl.Designer.cs">
       <DependentUpon>StoreContactControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\PopupComboBox.cs">
@@ -9571,7 +9667,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>PersonControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Controls\StoreContactControl.resx">
+    <EmbeddedResource Include="Stores\Management\StoreContactControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StoreContactControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10014,6 +10110,11 @@
     <None Include="Resources\brush4.png" />
     <None Include="Resources\camera.png" />
     <None Include="Resources\barcode - Copy.png" />
+    <None Include="Resources\blank_paper.png" />
+    <None Include="Resources\box_closed_with_label.png" />
+    <None Include="Resources\calendar_7.png" />
+    <None Include="Resources\box_closed4.png" />
+    <None Include="Resources\box_closed5.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10083,6 +10184,19 @@
     <None Include="Resources\disk_blue - Copy.png" />
     <None Include="Resources\lightbulb - Copy.png" />
     <None Include="Resources\media_stop_red.png" />
+    <None Include="Resources\document1.png" />
+    <None Include="Resources\document_plain.png" />
+    <None Include="Resources\documents.png" />
+    <None Include="Resources\form_blue3.png" />
+    <None Include="Resources\form_blue4.png" />
+    <None Include="Resources\document_plain_packing_slip.png" />
+    <None Include="Resources\document_plain_packing_slip1.png" />
+    <None Include="Resources\document_plain_shipping_labels.png" />
+    <None Include="Resources\hand_thumb_up.png" />
+    <None Include="Resources\hand_thumb_up1.png" />
+    <None Include="Resources\key11.png" />
+    <None Include="Resources\check3.png" />
+    <None Include="Resources\dashed_outline.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10103,6 +10217,9 @@
     <None Include="Resources\money_envelope.png" />
     <None Include="Resources\monitor.png" />
     <None Include="Resources\mouse.png" />
+    <None Include="Resources\nav_down_green1.png" />
+    <None Include="Resources\nav_down_green2.png" />
+    <None Include="Resources\nav_up_blue.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />
@@ -10122,10 +10239,22 @@
     <None Include="Resources\paperclip - Copy.png" />
     <None Include="Resources\pin_blue - Copy.png" />
     <None Include="Resources\refresh - Copy.png" />
+    <None Include="Resources\printer21.png" />
+    <None Include="Resources\server_from_client1.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
     <None Include="Resources\ship2.png" />
+    <None Include="Resources\Shipping\Icons\endicia.png" />
+    <None Include="Resources\Shipping\Icons\express1.png" />
+    <None Include="Resources\Shipping\Icons\fedex.png" />
+    <None Include="Resources\Shipping\Icons\iparcel.png" />
+    <None Include="Resources\Shipping\Icons\ontrac.png" />
+    <None Include="Resources\Shipping\Icons\other.png" />
+    <None Include="Resources\Shipping\Icons\stamps.png" />
+    <None Include="Resources\Shipping\Icons\ups.png" />
+    <None Include="Resources\Shipping\Icons\usps.png" />
+    <None Include="Resources\Shipping\Icons\dhl.png" />
     <Content Include="Resources\shipworks.ico" />
     <EmbeddedResource Include="Templates\Distribution\History.xml" />
     <None Include="Resources\template_snippet16.png" />
@@ -10170,6 +10299,52 @@
     <None Include="Resources\wrench.png" />
     <None Include="Resources\yinyang.png" />
     <None Include="Resources\shoppingcart - Copy.png" />
+    <None Include="Resources\Stores\Icons\3dcart.png" />
+    <None Include="Resources\Stores\Icons\amazon.png" />
+    <None Include="Resources\Stores\Icons\americommerce.png" />
+    <None Include="Resources\Stores\Icons\bigcommerce.png" />
+    <None Include="Resources\Stores\Icons\channeladvisor.png" />
+    <None Include="Resources\Stores\Icons\clickcartpro.png" />
+    <None Include="Resources\Stores\Icons\commerceinterface.png" />
+    <None Include="Resources\Stores\Icons\creloaded.png" />
+    <None Include="Resources\Stores\Icons\ebay.png" />
+    <None Include="Resources\Stores\Icons\etsy.png" />
+    <None Include="Resources\Stores\Icons\genericfile.png" />
+    <None Include="Resources\Stores\Icons\genericmodule.png" />
+    <None Include="Resources\Stores\Icons\infopia.png" />
+    <None Include="Resources\Stores\Icons\magento.png" />
+    <None Include="Resources\Stores\Icons\manual.png" />
+    <None Include="Resources\Stores\Icons\miva.png" />
+    <None Include="Resources\Stores\Icons\networksolutions.png" />
+    <None Include="Resources\Stores\Icons\newegg.png" />
+    <None Include="Resources\Stores\Icons\orderdynamics.png" />
+    <None Include="Resources\Stores\Icons\ordermotion.png" />
+    <None Include="Resources\Stores\Icons\oscommerce.png" />
+    <None Include="Resources\Stores\Icons\paypal.png" />
+    <None Include="Resources\Stores\Icons\prostores.png" />
+    <None Include="Resources\Stores\Icons\rakuten.png" />
+    <None Include="Resources\Stores\Icons\searchfit.png" />
+    <None Include="Resources\Stores\Icons\sears.png" />
+    <None Include="Resources\Stores\Icons\sellervantage.png" />
+    <None Include="Resources\Stores\Icons\shopify.png" />
+    <None Include="Resources\Stores\Icons\shopsite.png" />
+    <None Include="Resources\Stores\Icons\virtuemart.png" />
+    <None Include="Resources\Stores\Icons\volusion.png" />
+    <None Include="Resources\Stores\Icons\webshopmanager.png" />
+    <None Include="Resources\Stores\Icons\xcart.png" />
+    <None Include="Resources\Stores\Icons\yahoo.png" />
+    <None Include="Resources\Stores\Icons\zencart.png" />
+    <None Include="Resources\thermal_label_roll.png" />
+    <None Include="Resources\thermal_roll.png" />
+    <None Include="Resources\thermal_roll_w_packing_slip.png" />
+    <None Include="Resources\thermal_roll_w_shipping_label.png" />
+    <None Include="Resources\truck_blue.png" />
+    <None Include="Resources\shoppingcart2.png" />
+    <None Include="Resources\truck_blue1.png" />
+    <None Include="Resources\unknown1.png" />
+    <None Include="Resources\social-facebook.png" />
+    <None Include="Resources\social-twitter.png" />
+    <None Include="Resources\smiley.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
