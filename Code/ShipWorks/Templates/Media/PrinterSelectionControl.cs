@@ -347,9 +347,6 @@ namespace ShipWorks.Templates.Media
             }
             else
             {
-                int printerRight = printer.Right;
-                int paperRight = paperSource.Right;
-
                 printer.Left = 2;
                 printer.Width = Width - printer.Left - 2;
 
