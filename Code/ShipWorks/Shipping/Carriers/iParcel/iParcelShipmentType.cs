@@ -553,9 +553,22 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Get the insurance data that describes what type of insurance is being used and on what parcels.
+        /// Get the total packages contained by the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override int GetParcelCount(ShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return shipment.IParcel.Packages.Count;
+        }
+
+        /// <summary>
+        /// Get the parcel data that describes details about a particular parcel
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
@@ -565,7 +578,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (parcelIndex >= 0 && parcelIndex < shipment.IParcel.Packages.Count)
             {
                 IParcelPackageEntity package = shipment.IParcel.Packages[parcelIndex];
-                return new InsuranceChoice(shipment, package, package, package);
+
+                return new ShipmentParcel(shipment, package.IParcelPackageID,
+                    new InsuranceChoice(shipment, package, package, package),
+                    new DimensionsAdapter(package));
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");

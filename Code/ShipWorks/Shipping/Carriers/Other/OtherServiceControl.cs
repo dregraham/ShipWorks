@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override void UpdateInsuranceDisplay()
         {
-            insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, 0)));
+            insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
         }
 
         /// <summary>

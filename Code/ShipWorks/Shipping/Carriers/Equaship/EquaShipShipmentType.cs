@@ -140,14 +140,19 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             shipment.EquaShip.InsuranceValue = 0;
         }
 
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        /// <summary>
+        /// Get the details of the equaship parcel
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            return new InsuranceChoice(shipment, shipment, shipment.EquaShip, null);
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.EquaShip, null),
+                new DimensionsAdapter(shipment.EquaShip));
         }
 
         /// <summary>

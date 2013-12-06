@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Insurance
                         }
                     }
 
-                    useInsurance.ApplyMultiCheck(choice.Insurance);
+                    useInsurance.ApplyMultiCheck(choice.Insured);
                     insuredValue.ApplyMultiAmount(choice.InsuranceValue);
                 }
             }
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Insurance
         {
             foreach (InsuranceChoice choice in loadedInsurance)
             {
-                useInsurance.ReadMultiCheck(c => choice.Insurance = c);
+                useInsurance.ReadMultiCheck(c => choice.Insured = c);
                 insuredValue.ReadMultiAmount(v => choice.InsuranceValue = v);
             }
         }
@@ -362,7 +362,7 @@ namespace ShipWorks.Shipping.Insurance
                         // The penny one setting would apply to every package in the shipment
                         for (int index = 0; index < shipmentType.GetParcelCount(shipment); index++)
                         {
-                            shipmentType.GetParcelInsuranceChoice(shipment, index).InsurancePennyOne = true;
+                            shipmentType.GetParcelDetail(shipment, index).Insurance.InsurancePennyOne = true;
                         }
 
                         LoadInsuranceChoices(loadedInsurance);

@@ -403,9 +403,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get the insurance data that describes what type of insurance is being used and on what parcels.
+        /// Get detailed information about the parcel in a generic way that can be used accross shipment types
         /// </summary>
-        public abstract InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex);
+        public abstract ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex);
 
         /// <summary>
         /// Get the tracking numbers for the shipment.  This can incluce extra text, such as "Package 1: (track#)"
@@ -446,11 +446,11 @@ namespace ShipWorks.Shipping
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
             {
-                InsuranceChoice insuranceChoice = GetParcelInsuranceChoice(shipment, i);
+                InsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
 
                 if (profile.Insurance != null)
                 {
-                    insuranceChoice.Insurance = profile.Insurance.Value;
+                    insuranceChoice.Insured = profile.Insurance.Value;
                 }
 
                 if (profile.InsuranceInitialValueSource != null)

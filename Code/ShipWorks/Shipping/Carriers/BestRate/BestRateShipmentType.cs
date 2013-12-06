@@ -168,14 +168,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Get the insurance data that describes what type of insurance is being used and on what parcels.
         /// </summary>
         /// <exception cref="System.ArgumentNullException">shipment</exception>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            return new InsuranceChoice(shipment, shipment, shipment.BestRate, shipment.BestRate);
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.BestRate, shipment.BestRate),
+                new DimensionsAdapter(shipment.BestRate));
         }
 
         /// <summary>

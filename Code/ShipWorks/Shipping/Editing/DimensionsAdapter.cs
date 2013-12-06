@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.Editing
@@ -9,23 +10,24 @@ namespace ShipWorks.Shipping.Editing
     /// <summary>
     /// Used to have a common way of accessing dimensions from any entity
     /// </summary>
-    public class DimensionsAdapter
+    public class DimensionsAdapter : EntityAdapter
     {
-        EntityBase2 entity;
-        string fieldPrefix;
+        /// <summary>
+        /// Creates a new instance of the adapter that maintains its own values, and has no backing entity.
+        /// </summary>
+        public DimensionsAdapter()
+            : base()
+        {
+
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DimensionsAdapter(EntityBase2 entity)
+            : base(entity, "Dims")
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
 
-            this.entity = entity;
-            this.fieldPrefix = "Dims";
         }
 
         /// <summary>
@@ -33,8 +35,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public long ProfileID
         {
-            get { return (long) entity.Fields[fieldPrefix + "ProfileID"].CurrentValue; }
-            set { entity.SetNewFieldValue(fieldPrefix + "ProfileID", value); }
+            get { return GetField<long>("ProfileID"); }
+            set { SetField("ProfileID", value); }
         }
 
         /// <summary>
@@ -42,8 +44,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public double Length
         {
-            get { return (double) entity.Fields[fieldPrefix + "Length"].CurrentValue; }
-            set { entity.SetNewFieldValue(fieldPrefix + "Length", value); }
+            get { return GetField<double>("Length"); }
+            set { SetField("Length", value); }
         }
 
         /// <summary>
@@ -51,8 +53,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public double Width
         {
-            get { return (double) entity.Fields[fieldPrefix + "Width"].CurrentValue; }
-            set { entity.SetNewFieldValue(fieldPrefix + "Width", value); }
+            get { return GetField<double>("Width"); }
+            set { SetField("Width", value); }
         }
 
         /// <summary>
@@ -60,8 +62,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public double Height
         {
-            get { return (double) entity.Fields[fieldPrefix + "Height"].CurrentValue; }
-            set { entity.SetNewFieldValue(fieldPrefix + "Height", value); }
+            get { return GetField<double>("Height"); }
+            set { SetField("Height", value); }
         }
 
         /// <summary>
@@ -77,8 +79,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public double Weight
         {
-            get { return (double) entity.Fields[fieldPrefix + "Weight"].CurrentValue; }
-            set { entity.SetNewFieldValue(fieldPrefix + "Weight", value); }
+            get { return GetField<double>("Weight"); }
+            set { SetField("Weight", value); }
         }
 
         /// <summary>
@@ -86,8 +88,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public bool AddWeight
         {
-            get { return (bool) entity.Fields[fieldPrefix + "AddWeight"].CurrentValue; }
-            set { entity.SetNewFieldValue(fieldPrefix + "AddWeight", value); }
+            get { return GetField<bool>("AddWeight"); }
+            set { SetField("AddWeight", value); }
         }
     }
 }

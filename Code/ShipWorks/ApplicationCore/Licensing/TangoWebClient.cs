@@ -198,8 +198,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 List<InsuranceChoice> insuredPackages = 
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                    .Select(parcelIndex => shipmentType.GetParcelInsuranceChoice(shipment, parcelIndex))
-                    .Where(choice => choice.Insurance && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
+                    .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                    .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
                     .ToList();
 
                 bool shipWorksInsured = false;
@@ -218,8 +218,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                 else
                 {
                     carrierInsured = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                        .Select(parcelIndex => shipmentType.GetParcelInsuranceChoice(shipment, parcelIndex))
-                        .Where(choice => choice.Insurance && choice.InsuranceProvider == InsuranceProvider.Carrier && choice.InsuranceValue > 0)
+                        .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                        .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier && choice.InsuranceValue > 0)
                         .Any();
                 }
 

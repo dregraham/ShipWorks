@@ -57,11 +57,11 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            throw new NotSupportedException("GetParcelInsuranceChoice not supported for none.");
+            throw new NotSupportedException("GetParcelDetail not supported for none.");
         }
 
         /// <summary>

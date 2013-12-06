@@ -53,8 +53,6 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Address", new AddressOutline(context, "ship", true), () => new PersonAdapter(Shipment, "Ship"));
             AddElement("Address", new AddressOutline(context, "from", true), () => new PersonAdapter(Shipment, "Origin"));
 
-            AddElement("Insurance", new ShipmentInsuranceOutline(context), () => LoadedShipment);
-
             AddElement("CustomsItem", new CustomsItemOutline(context), () => { if (CustomsManager.IsCustomsRequired(Shipment)) { CustomsManager.LoadCustomsItems(Shipment, false); return Shipment.CustomsItems; } else return null; });
             
             // Add an outline entry for the last/terminating best rate event that occurred on the shipment
@@ -63,14 +61,20 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
             {
+                // We need to "hoist" this as its own variable - otherwise the same typeCode variable intance would get captured for each iteration.
+                ShipmentTypeCode typeCode = shipmentType.ShipmentTypeCode;
+
+                // Add a package node for each package in the shipment.  For shipment types that don't support true "Packages" there will always be a single Package node that represents
+                // the entire shipment.
+                AddElement("Package", new PackageOutline(context),
+                    () => Enumerable.Range(0, shipmentType.GetParcelCount(LoadedShipment)).Select(index => Tuple.Create(LoadedShipment, index)),
+                    If(() => Shipment.ShipmentType == (int) typeCode));
+
                 // Let the ShipmentType generate its elements into a stand-in container
                 ElementOutline container = new ElementOutline(context);
                 shipmentType.GenerateTemplateElements(container, () => Shipment, () => LoadedShipment);
 
-                // We need to "hoist" this as its own variable - otherwise the same storeType variable intance would get captured for each iteration.
-                ShipmentTypeCode typeCode = shipmentType.ShipmentTypeCode;
-
-                // Copy the elements from the stand-in to ourself, adding on the StoreType specific condition
+                // Copy the elements from the stand-in to ourself, adding on the ShipmentType specific condition
                 AddElements(container, If(() => Shipment.ShipmentType == (int) typeCode));
             }
         }

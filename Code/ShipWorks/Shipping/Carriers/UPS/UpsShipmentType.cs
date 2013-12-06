@@ -651,9 +651,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
@@ -664,7 +664,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 var package = shipment.Ups.Packages[parcelIndex];
 
-                return new InsuranceChoice(shipment, package, package, package);
+                return new ShipmentParcel(shipment, package.UpsPackageID,
+                    new InsuranceChoice(shipment, package, package, package),
+                    new DimensionsAdapter(package));
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");

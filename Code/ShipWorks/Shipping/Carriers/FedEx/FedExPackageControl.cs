@@ -282,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
 
-                        insuranceToLoad.Add(shipmentType.GetParcelInsuranceChoice(package.FedExShipment.Shipment, package.FedExShipment.Packages.IndexOf(package)));
+                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.FedExShipment.Shipment, package.FedExShipment.Packages.IndexOf(package)).Insurance);
                     }
                 }
             }
