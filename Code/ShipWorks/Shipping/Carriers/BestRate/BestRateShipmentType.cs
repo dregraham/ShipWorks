@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.BestRate, shipment.BestRate),
+                new InsuranceChoice(shipment, shipment, shipment.BestRate, null),
                 new DimensionsAdapter(shipment.BestRate));
         }
 
