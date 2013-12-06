@@ -172,4 +172,5 @@ GO
 UPDATE ShippingSettings
 SET	FedExUsername = '07AQFKOy51LbLAhK',
 	FedExPassword = '3pi4NjRiialJkTS24bZcZqg/NgAfdfWewwpatUMzqcs='
+	WHERE ISNULL(FedExUsername,'') != ''
 GO
