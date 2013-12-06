@@ -348,7 +348,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static string GetUspsEndorsementCode(UpsShipmentEntity ups)
         {
             UpsServiceType upsServiceType = (UpsServiceType) ups.Service;
+            UpsPackagingType upsPackagingType = (UpsPackagingType) ups.Packages[0].PackagingType;
             UspsEndorsementType uspsEndorsementType = (UspsEndorsementType) ups.Endorsement;
+
             if (UpsUtility.IsUpsSurePostService(upsServiceType))
             {
                 switch (uspsEndorsementType)
@@ -373,6 +375,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // MI Expedited & International MI does not support endorsements
                 if (upsServiceType == UpsServiceType.UpsMailInnovationsIntEconomy ||
                     upsServiceType == UpsServiceType.UpsMailInnovationsIntPriority)
+                {
+                    return string.Empty;
+                }
+
+                // MI Expedited w/ Flat packaging types does not allow endorsements
+                if (upsServiceType == UpsServiceType.UpsMailInnovationsExpedited &&
+                    (upsPackagingType == UpsPackagingType.BPMFlats || upsPackagingType == UpsPackagingType.StandardFlats))
                 {
                     return string.Empty;
                 }
