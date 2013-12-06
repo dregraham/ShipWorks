@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Resources;
 using System.Reflection;
+using System.Globalization;
 
 namespace Interapptive.Shared.Utility
 {
@@ -53,7 +54,7 @@ namespace Interapptive.Shared.Utility
                 Assembly primaryAssembly = Assembly.GetEntryAssembly();
 
                 // The only reason this will be null is if we are in a unit test.
-                if (primaryAssembly == null || primaryAssembly.FullName.ToLower().Contains("mstest"))
+                if (primaryAssembly == null || primaryAssembly.FullName.ToUpper(CultureInfo.InvariantCulture).Contains("MSTEST"))
                 {
                     return new Bitmap(1, 1);
                 }
