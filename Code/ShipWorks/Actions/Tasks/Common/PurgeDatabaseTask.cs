@@ -9,6 +9,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data.Common;
 using System.Linq;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -20,15 +26,17 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));
-        private readonly ISqlPurgeScriptRunner scriptRunner;
-        private readonly IDateTimeProvider dateProvider;
-        private readonly List<PurgeDatabaseType> purgeOrder = new List<PurgeDatabaseType>
-        {
-            PurgeDatabaseType.Labels,
-            PurgeDatabaseType.PrintJobs,
-            PurgeDatabaseType.Email,
-            PurgeDatabaseType.Audit
-        };
+        readonly ISqlPurgeScriptRunner scriptRunner;
+        readonly IDateTimeProvider dateProvider;
+
+        readonly List<PurgeDatabaseType> purgeOrder = new List<PurgeDatabaseType>
+            {
+                PurgeDatabaseType.Labels,
+                PurgeDatabaseType.PrintJobs,
+                PurgeDatabaseType.Email,
+                PurgeDatabaseType.Orders,
+                PurgeDatabaseType.Audit
+            };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PurgeDatabaseTask"/> class.
@@ -138,20 +146,28 @@ namespace ShipWorks.Actions.Tasks.Common
                     break;
                 }
 
-                string scriptName = EnumHelper.GetApiValue(purge);
-
-                log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, olderThan);
-                try
+                // For orders, there is no script - we do it using C#
+                if (purge == PurgeDatabaseType.Orders)
                 {
-                    scriptRunner.RunScript(scriptName, olderThan, CanTimeout ? runUntil : (DateTime?)null, 5);
-                    log.InfoFormat("Finished {0} successfully.", scriptName);
+                    PurgeOrders(olderThan, localStopExecutionAfter);
                 }
-                catch (DbException ex)
+                else
                 {
-                    // Catch a DbException instead of a SqlException so this catch can be tested.
-                    // SqlException is sealed and can't be easily constructed.
-                    exceptions.Add(purge, ex);
-                    log.InfoFormat("Error running purge: {0}.", ex.Message);
+                    string scriptName = EnumHelper.GetApiValue(purge);
+
+                    log.InfoFormat("Running {0}, deleting data older than {1}...", scriptName, olderThan);
+                    try
+                    {
+                        scriptRunner.RunScript(scriptName, olderThan, CanTimeout ? runUntil : (DateTime?) null, 5);
+                        log.InfoFormat("Finished {0} successfully.", scriptName);
+                    }
+                    catch (DbException ex)
+                    {
+                        // Catch a DbException instead of a SqlException so this catch can be tested.
+                        // SqlException is sealed and can't be easily constructed.
+                        exceptions.Add(purge, ex);
+                        log.InfoFormat("Error running purge: {0}.", ex.Message);
+                    }
                 }
             }
 
@@ -183,12 +199,85 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
+        /// Purge old orders
+        /// </summary>
+        private void PurgeOrders(DateTime olderThan, DateTime stopAfter)
+        {
+            // First we need to query orders that are older than the time frame configured by the task
+            ResultsetFields resultFields = new ResultsetFields(2);
+            resultFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
+            resultFields.DefineField(OrderFields.CustomerID, 1, "CustomerID", "");
+
+            // Delete the oldest orders first
+            SortExpression sort = new SortExpression(OrderFields.OrderDate | SortOperator.Ascending);
+
+            int pageSize = 100;
+
+            while (true)
+            {
+                List<Tuple<long, long>> toDelete = new List<Tuple<long, long>>();
+
+                RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.OrderDate <= olderThan);
+                using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, pageSize, sort, true))
+                {
+                    while (reader.Read())
+                    {
+                        toDelete.Add(Tuple.Create(reader.GetInt64(0), reader.GetInt64(1)));
+                    }
+                }
+
+                // Now go through each one and delete it
+                foreach (var tuple in toDelete)
+                {
+                    long orderID = tuple.Item1;
+                    long customerID = tuple.Item2;
+
+                    // First delete the order
+                    DeletionService.DeleteOrder(orderID);
+
+                    // See if the customer has any orders left
+                    object result = SqlAdapter.Default.GetScalar(CustomerFields.RollupOrderCount, null, AggregateFunction.None, CustomerFields.CustomerID == customerID);
+
+                    if (!(result is DBNull))
+                    {
+                        int ordersLeft = Convert.ToInt32(result);
+
+                        if (ordersLeft == 0)
+                        {
+                            DeletionService.DeleteCustomer(customerID);
+                        }
+                    }
+
+                    // Stop executing if we've been running longer than the time the user has allowed.
+                    if (CanTimeout && stopAfter < dateProvider.UtcNow)
+                    {
+                        log.Info("Stopping purge because it has exceeded the maximum allowed time.");
+                        break;
+                    }
+                }
+
+                // If there aren't any more, or if it was less than our page size, then we must be done
+                if (toDelete.Count < pageSize)
+                {
+                    log.InfoFormat("There are no more orders left to purge older than the retention period.");
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
         /// Is the task allowed to be run using the specified trigger type?
         /// </summary>
         /// <param name="triggerType">Type of trigger that should be tested</param>
         /// <returns></returns>
         public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
         {
+            // So I could kick these off with custom buttons
+            if (InterapptiveOnly.MagicKeysDown)
+            {
+                return true;
+            }
+
             return triggerType == ActionTriggerType.Scheduled;
         }
     }

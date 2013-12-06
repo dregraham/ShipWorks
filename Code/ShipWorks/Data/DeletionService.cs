@@ -55,21 +55,18 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteEntity(long entityID)
         {
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            switch (EntityUtility.GetEntityType(entityID))
             {
-                switch (EntityUtility.GetEntityType(entityID))
-                {
-                    case EntityType.OrderEntity:
-                        DeleteOrder(entityID);
-                        break;
+                case EntityType.OrderEntity:
+                    DeleteOrder(entityID);
+                    break;
 
-                    case EntityType.CustomerEntity:
-                        DeleteCustomer(entityID);
-                        break;
+                case EntityType.CustomerEntity:
+                    DeleteCustomer(entityID);
+                    break;
 
-                    default:
-                        throw new InvalidOperationException("Invalid entity type " + entityID);
-                }
+                default:
+                    throw new InvalidOperationException("Invalid entity type " + entityID);
             }
         }
 
@@ -104,7 +101,10 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
 
-            DeleteWithCascade(EntityType.OrderEntity, orderID);
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            {
+                DeleteWithCascade(EntityType.OrderEntity, orderID);
+            }
 
             DataProvider.RemoveEntity(orderID);
         }
@@ -128,7 +128,10 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.CustomersDelete, customerID);
 
-            DeleteWithCascade(EntityType.CustomerEntity, customerID);
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            {
+                DeleteWithCascade(EntityType.CustomerEntity, customerID);
+            }
 
             DataProvider.RemoveEntity(customerID);
         }

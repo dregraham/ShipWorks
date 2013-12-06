@@ -12916,5 +12916,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountBusinessAddressException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountSoapException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Users.Security.PermissionException")]
-﻿// This file is used by Code Analysis to maintain SuppressMessage 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "DropBox", Scope = "member", Target = "ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExDropoffType.#DropBox")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Scope = "member", Target = "ShipWorks.Users.Audit.AuditBehaviorScope.#.ctor(ShipWorks.Users.Audit.AuditBehaviorUser,ShipWorks.Users.Audit.AuditReason,ShipWorks.Users.Audit.AuditState)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "ShipWorks.Users.Audit.AuditBehaviorScope.#ValidateScope(System.Boolean,System.String)")]

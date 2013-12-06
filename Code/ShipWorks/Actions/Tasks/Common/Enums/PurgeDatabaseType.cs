@@ -20,6 +20,9 @@ namespace ShipWorks.Actions.Tasks.Common
         PrintJobs = 4,
 
         [Description("Abandoned Resources"), ApiValue("PurgeAbandonedResources")]
-        AbandonedResources = 5
+        AbandonedResources = 5,
+
+        [Description("Orders"), ApiValue("PurgeOrders")]
+        Orders = 6
     }
 }
