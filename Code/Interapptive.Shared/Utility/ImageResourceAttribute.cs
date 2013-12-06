@@ -14,8 +14,8 @@ namespace Interapptive.Shared.Utility
     [AttributeUsage(AttributeTargets.All)]
     public class ImageResourceAttribute : Attribute
     {
-        string resourceKey;
-        string resourceSet;
+        private string resourceKey;
+        private string resourceSet;
 
         /// <summary>
         /// Constructor
@@ -38,14 +38,8 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public string ResourceSet
         {
-            get
-            {
-                return resourceSet;
-            }
-            set
-            {
-                resourceSet = value;
-            }
+            get { return resourceSet; }
+            set { resourceSet = value; }
         }
 
         /// <summary>
@@ -55,10 +49,11 @@ namespace Interapptive.Shared.Utility
         {
             get
             {
+
                 Assembly primaryAssembly = Assembly.GetEntryAssembly();
-                
+
                 // The only reason this will be null is if we are in a unit test.
-                if (primaryAssembly == null)
+                if (primaryAssembly == null || primaryAssembly.FullName.ToLower().Contains("mstest"))
                 {
                     return new Bitmap(1, 1);
                 }
@@ -73,7 +68,7 @@ namespace Interapptive.Shared.Utility
                     throw new NotFoundException(string.Format("The resource '{0}' could not be found in '{1}'.", resourceKey, primaryResources));
                 }
 
-                return (Image) result;
+                return (Image)result;
             }
         }
     }
