@@ -56,6 +56,13 @@ namespace Interapptive.Shared.Utility
             get
             {
                 Assembly primaryAssembly = Assembly.GetEntryAssembly();
+                
+                // The only reason this will be null is if we are in a unit test.
+                if (primaryAssembly==null)
+                {
+                    return new Bitmap(1, 1);
+                }
+                
                 string primaryResources = string.IsNullOrEmpty(resourceSet) ? string.Format("{0}.Properties.Resources", primaryAssembly.GetName().Name) : resourceSet;
 
                 ResourceManager resman = new ResourceManager(primaryResources, primaryAssembly);
