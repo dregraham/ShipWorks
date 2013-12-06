@@ -62,6 +62,7 @@ namespace ShipWorks.Shipping
         EquaShip = 10,
 
         [Description("Best Rate")]
+        [ShipmentTypeIconAttribute("bestrate")]
         BestRate = 14,
 
         [Description("None")]
