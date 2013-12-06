@@ -2,58 +2,6 @@ SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Creating [dbo].[BigCommerceOrderItem]'
-GO
-CREATE TABLE [dbo].[BigCommerceOrderItem]
-(
-[OrderItemID] [bigint] NOT NULL,
-[OrderAddressID] [bigint] NOT NULL,
-[OrderProductID] [bigint] NOT NULL,
-[IsDigitalItem] [bit] NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_IsDigitalItem] DEFAULT ((0)),
-[EventDate] [datetime] NULL,
-[EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-)
-GO
-PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrderItem]'
-GO
-ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
-GO
-PRINT N'Creating [dbo].[ActionQueue]'
-GO
-CREATE TABLE [dbo].[ActionQueue]
-(
-[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[ActionID] [bigint] NOT NULL,
-[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0)),
-[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
-[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
-[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
-[TriggerComputerID] [bigint] NOT NULL,
-[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ObjectID] [bigint] NULL,
-[Status] [int] NOT NULL,
-[NextStep] [int] NOT NULL,
-[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-)
-GO
-PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
-GO
-ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
-GO
-PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
-GO
-PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
-GO
-ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Altering [dbo].[ActionQueue]'
-GO
 PRINT N'Creating [dbo].[FedExPackage]'
 GO
 CREATE TABLE [dbo].[FedExPackage]
@@ -233,6 +181,58 @@ GO
 PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
 GO
 ALTER TABLE [dbo].[WorldShipPackage] ADD CONSTRAINT [PK_WorldShipPackage] PRIMARY KEY CLUSTERED  ([UpsPackageID])
+GO
+PRINT N'Creating [dbo].[ActionQueue]'
+GO
+CREATE TABLE [dbo].[ActionQueue]
+(
+[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ActionID] [bigint] NOT NULL,
+[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0)),
+[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
+[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
+[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
+[TriggerComputerID] [bigint] NOT NULL,
+[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ObjectID] [bigint] NULL,
+[Status] [int] NOT NULL,
+[NextStep] [int] NOT NULL,
+[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
+GO
+ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
+GO
+PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
+GO
+PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
+GO
+ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ActionQueue]'
+GO
+PRINT N'Creating [dbo].[BigCommerceOrderItem]'
+GO
+CREATE TABLE [dbo].[BigCommerceOrderItem]
+(
+[OrderItemID] [bigint] NOT NULL,
+[OrderAddressID] [bigint] NOT NULL,
+[OrderProductID] [bigint] NOT NULL,
+[IsDigitalItem] [bit] NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_IsDigitalItem] DEFAULT ((0)),
+[EventDate] [datetime] NULL,
+[EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrderItem]'
+GO
+ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
 PRINT N'Creating [dbo].[Action]'
 GO
@@ -818,6 +818,141 @@ PRINT N'Creating index [IX_AuditChangeDetail_VariantNew] on [dbo].[AuditChangeDe
 GO
 CREATE NONCLUSTERED INDEX [IX_AuditChangeDetail_VariantNew] ON [dbo].[AuditChangeDetail] ([VariantNew]) INCLUDE ([AuditID])
 GO
+PRINT N'Creating [dbo].[ShippingProfile]'
+GO
+CREATE TABLE [dbo].[ShippingProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL IDENTITY(1053, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipmentType] [int] NOT NULL,
+[ShipmentTypePrimary] [bit] NOT NULL,
+[OriginID] [bigint] NULL,
+[Insurance] [bit] NULL,
+[InsuranceInitialValueSource] [int] NULL,
+[InsuranceInitialValueAmount] [money] NULL,
+[ReturnShipment] [bit] NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShippingProfile] on [dbo].[ShippingProfile]'
+GO
+ALTER TABLE [dbo].[ShippingProfile] ADD CONSTRAINT [PK_ShippingProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
+ALTER TABLE [dbo].[ShippingProfile] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ShippingProfile]'
+GO
+PRINT N'Creating [dbo].[BestRateProfile]'
+GO
+CREATE TABLE [dbo].[BestRateProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL,
+[Weight] [float] NULL,
+[ServiceLevel] [int] NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
+GO
+ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [PK_BestRateProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
+PRINT N'Creating [dbo].[Shipment]'
+GO
+CREATE TABLE [dbo].[Shipment]
+(
+[ShipmentID] [bigint] NOT NULL IDENTITY(1031, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[OrderID] [bigint] NOT NULL,
+[ShipmentType] [int] NOT NULL,
+[ContentWeight] [float] NOT NULL,
+[TotalWeight] [float] NOT NULL,
+[Processed] [bit] NOT NULL,
+[ProcessedDate] [datetime] NULL,
+[ShipDate] [datetime] NOT NULL,
+[ShipmentCost] [money] NOT NULL,
+[Voided] [bit] NOT NULL,
+[VoidedDate] [datetime] NULL,
+[TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CustomsGenerated] [bit] NOT NULL,
+[CustomsValue] [money] NOT NULL,
+[ThermalType] [int] NULL,
+[ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipCompany] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipStreet1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipStreet2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipStreet3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipCity] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ResidentialDetermination] [int] NOT NULL,
+[ResidentialResult] [bit] NOT NULL,
+[OriginOriginID] [bigint] NOT NULL,
+[OriginFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginCompany] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginStreet1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginStreet2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginStreet3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginCity] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginFax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginWebsite] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ReturnShipment] [bit] NOT NULL,
+[Insurance] [bit] NOT NULL,
+[InsuranceProvider] [int] NOT NULL,
+[ShipNameParseStatus] [int] NOT NULL,
+[ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginNameParseStatus] [int] NOT NULL,
+[OriginUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BestRateEvents] [tinyint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
+GO
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
+PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
+GO
+ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[Shipment]'
+GO
+PRINT N'Creating [dbo].[BestRateShipment]'
+GO
+CREATE TABLE [dbo].[BestRateShipment]
+(
+[ShipmentID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NOT NULL,
+[DimsLength] [float] NOT NULL,
+[DimsWidth] [float] NOT NULL,
+[DimsHeight] [float] NOT NULL,
+[DimsWeight] [float] NOT NULL,
+[DimsAddWeight] [bit] NOT NULL,
+[ServiceLevel] [int] NOT NULL,
+[InsuranceValue] [money] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [PK_BestRateShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
 PRINT N'Creating [dbo].[BigCommerceStore]'
 GO
 CREATE TABLE [dbo].[BigCommerceStore]
@@ -1244,30 +1379,6 @@ PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'
 GO
 ALTER TABLE [dbo].[EndiciaShipment] ADD CONSTRAINT [PK_EndiciaShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating [dbo].[ShippingProfile]'
-GO
-CREATE TABLE [dbo].[ShippingProfile]
-(
-[ShippingProfileID] [bigint] NOT NULL IDENTITY(1053, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipmentType] [int] NOT NULL,
-[ShipmentTypePrimary] [bit] NOT NULL,
-[OriginID] [bigint] NULL,
-[Insurance] [bit] NULL,
-[InsuranceInitialValueSource] [int] NULL,
-[InsuranceInitialValueAmount] [money] NULL,
-[ReturnShipment] [bit] NULL
-)
-GO
-PRINT N'Creating primary key [PK_ShippingProfile] on [dbo].[ShippingProfile]'
-GO
-ALTER TABLE [dbo].[ShippingProfile] ADD CONSTRAINT [PK_ShippingProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
-GO
-ALTER TABLE [dbo].[ShippingProfile] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Altering [dbo].[ShippingProfile]'
-GO
 PRINT N'Creating [dbo].[EquaShipProfile]'
 GO
 CREATE TABLE [dbo].[EquaShipProfile]
@@ -1295,98 +1406,6 @@ GO
 PRINT N'Creating primary key [PK_EquashipProfile] on [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [PK_EquashipProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
-GO
-PRINT N'Creating [dbo].[BestRateProfile]'
-GO
-CREATE TABLE [dbo].[BestRateProfile]
-(
-[ShippingProfileID] [bigint] NOT NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
-[Weight] [float] NULL,
-[ServiceLevel] [int] NULL
-)
-GO
-PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
-GO
-ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [PK_BestRateProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
-GO
-PRINT N'Creating [dbo].[Shipment]'
-GO
-CREATE TABLE [dbo].[Shipment]
-(
-[ShipmentID] [bigint] NOT NULL IDENTITY(1031, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[OrderID] [bigint] NOT NULL,
-[ShipmentType] [int] NOT NULL,
-[ContentWeight] [float] NOT NULL,
-[TotalWeight] [float] NOT NULL,
-[Processed] [bit] NOT NULL,
-[ProcessedDate] [datetime] NULL,
-[ShipDate] [datetime] NOT NULL,
-[ShipmentCost] [money] NOT NULL,
-[Voided] [bit] NOT NULL,
-[VoidedDate] [datetime] NULL,
-[TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CustomsGenerated] [bit] NOT NULL,
-[CustomsValue] [money] NOT NULL,
-[ThermalType] [int] NULL,
-[ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipCompany] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipStreet1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipStreet2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipStreet3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipCity] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ResidentialDetermination] [int] NOT NULL,
-[ResidentialResult] [bit] NOT NULL,
-[OriginOriginID] [bigint] NOT NULL,
-[OriginFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginCompany] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginStreet1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginStreet2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginStreet3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginCity] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginFax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginWebsite] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ReturnShipment] [bit] NOT NULL,
-[Insurance] [bit] NOT NULL,
-[InsuranceProvider] [int] NOT NULL,
-[ShipNameParseStatus] [int] NOT NULL,
-[ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginNameParseStatus] [int] NOT NULL,
-[OriginUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[BestRateEvents] [tinyint] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
-GO
-PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
-GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
-GO
-ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Altering [dbo].[Shipment]'
 GO
 PRINT N'Creating [dbo].[EquaShipShipment]'
 GO
@@ -3611,7 +3630,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerCompareAddress] [bit] NOT NULL,
 [CustomerUpdateBilling] [bit] NOT NULL,
 [CustomerUpdateShipping] [bit] NOT NULL,
-[AuditNewOrders] [bit] NOT NULL
+[AuditNewOrders] [bit] NOT NULL,
+[AuditDeletedOrders] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -4341,7 +4361,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [Express1StampsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL,
-[BestRateExcludedShipmentTypes] [nvarchar](30) NOT NULL,
+[BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -4460,25 +4480,6 @@ PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcesse
 GO
 ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
 GO
-PRINT N'Creating [dbo].[BestRateShipment]'
-GO
-CREATE TABLE [dbo].[BestRateShipment]
-(
-[ShipmentID] [bigint] NOT NULL,
-[DimsProfileID] [bigint] NOT NULL,
-[DimsLength] [float] NOT NULL,
-[DimsWidth] [float] NOT NULL,
-[DimsHeight] [float] NOT NULL,
-[DimsWeight] [float] NOT NULL,
-[DimsAddWeight] [bit] NOT NULL,
-[ServiceLevel] [int] NOT NULL,
-[InsuranceValue] [money] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
-GO
-ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [PK_BestRateShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
-GO
 PRINT N'Adding constraints to [dbo].[Computer]'
 GO
 ALTER TABLE [dbo].[Computer] ADD CONSTRAINT [UK_Computer_Identifier] UNIQUE NONCLUSTERED  ([Identifier])
@@ -4544,6 +4545,14 @@ GO
 PRINT N'Adding foreign keys to [dbo].[AuditChangeDetail]'
 GO
 ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [FK_AuditChangeDetail_AuditChange] FOREIGN KEY ([AuditChangeID]) REFERENCES [dbo].[AuditChange] ([AuditChangeID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BestRateProfile]'
+GO
+ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [FK_BestRateProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[BigCommerceOrderItem]'
 GO
@@ -4651,14 +4660,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
 GO
 ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[BestRateProfile]'
-GO
-ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [FK_BestRateProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
-GO
-ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
 GO
