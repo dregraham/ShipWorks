@@ -1013,7 +1013,9 @@ namespace ShipWorks.Shipping
                         shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
 
                         // Remove any shipment data that is not necessary for this shipment type
-                        ClearNonActiveShipmentData(shipment, adapter);
+                        // BN: Actually we can't do this here.  Auditing follows some rules, and one of which is that if there are any deletes of 1:1 mapped entities (such as FedEx:Shipment)
+                        //     then the whole activity is considered a delete.  So deleting "non active shipment data" actually makes processing show up as a Delete in the audit.
+                        // ClearNonActiveShipmentData(shipment, adapter);
 
                         adapter.SaveAndRefetch(shipment);
 
@@ -1096,52 +1098,6 @@ namespace ShipWorks.Shipping
 
             adapter.DeleteEntitiesDirectly(childShipmentType, new RelationPredicateBucket(shipmentIdField == shipment.ShipmentID));
         }
-
-        private static void ResetShippingAddressFields(ShipmentEntity shipment, string originalShipFirstName, string originalShipMiddleName, string originalShipLastName, string originalShipCompany,
-            string originalShipStreet1, string originalShipStreet2, string originalShipStreet3, string originalShipCity, string originalShipStateProvince,
-            string originalShipPostalCode, string originalShipCountry, string originalShipEmail, string originalShipPhone)
-        {
-
-            shipment.ShipFirstName = originalShipFirstName;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipFirstName].IsChanged = false;
-
-            shipment.ShipMiddleName = originalShipMiddleName;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipMiddleName].IsChanged = false;
-
-            shipment.ShipLastName = originalShipLastName;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipLastName].IsChanged = false;
-
-            shipment.ShipCompany = originalShipCompany;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipCompany].IsChanged = false;
-
-            shipment.ShipStreet1 = originalShipStreet1;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipStreet1].IsChanged = false;
-
-            shipment.ShipStreet2 = originalShipStreet2;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipStreet2].IsChanged = false;
-
-            shipment.ShipStreet3 = originalShipStreet3;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipStreet3].IsChanged = false;
-
-            shipment.ShipCity = originalShipCity;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipCity].IsChanged = false;
-
-            shipment.ShipStateProvCode = originalShipStateProvince;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipStateProvCode].IsChanged = false;
-
-            shipment.ShipPostalCode = originalShipPostalCode;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipPostalCode].IsChanged = false;
-
-            shipment.ShipCountryCode = originalShipCountry;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipCountryCode].IsChanged = false;
-
-            shipment.ShipEmail = originalShipEmail;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipEmail].IsChanged = false;
-
-            shipment.ShipPhone = originalShipPhone;
-            shipment.Fields[(int)ShipmentFieldIndex.ShipPhone].IsChanged = false;
-        }
-
 
         /// <summary>
         /// Validate that the given store is licensed to ship.  If there is an error its stored in licenseCheckCache.  If there is already
