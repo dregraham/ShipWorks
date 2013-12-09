@@ -31,6 +31,8 @@ namespace ShipWorks.ApplicationCore
         public SplashScreen()
         {
             InitializeComponent();
+
+            Region = new Region(new Rectangle(1, 1, Width - 2, Height - 2));
         }
 
         /// <summary>
