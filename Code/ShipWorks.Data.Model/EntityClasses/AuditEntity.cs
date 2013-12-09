@@ -233,13 +233,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
 			// use template trick to calculate the # of single-sided / oneway relations
-			int numberOfOneWayRelations = 0+1+1;
+			int numberOfOneWayRelations = 0+1;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-				case "Computer":
-					return true;
+
 				case "User":
 					return true;
 
@@ -574,7 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncComputer(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", AuditEntity.Relations.ComputerEntityUsingComputerID, true, signalRelatedEntity, "", resetFKFields, new int[] { (int)AuditFieldIndex.ComputerID } );		
+			base.PerformDesetupSyncRelatedEntity( _computer, new PropertyChangedEventHandler( OnComputerPropertyChanged ), "Computer", AuditEntity.Relations.ComputerEntityUsingComputerID, true, signalRelatedEntity, "Audit", resetFKFields, new int[] { (int)AuditFieldIndex.ComputerID } );		
 			_computer = null;
 		}
 
@@ -889,14 +888,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_computer != null)
 						{
-							UnsetRelatedEntity(_computer, "Computer");
+							_computer.UnsetRelatedEntity(this, "Audit");
 						}
 					}
 					else
 					{
 						if(_computer!=value)
 						{
-							SetRelatedEntity((IEntity2)value, "Computer");
+							((IEntity2)value).SetRelatedEntity(this, "Audit");
 						}
 					}
 				}

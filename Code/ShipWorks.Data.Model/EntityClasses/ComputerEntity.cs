@@ -38,11 +38,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 
-
+		private EntityCollection<AuditEntity> _audit;
 
 
 
 		private EntityCollection<ServiceStatusEntity> _serviceStatus;
+
+
+
+
+
+
+
+
 
 
 
@@ -66,12 +74,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			/// <summary>Member name Audit</summary>
+			public static readonly string Audit = "Audit";
 
 
 
 			/// <summary>Member name ServiceStatus</summary>
 			public static readonly string ServiceStatus = "ServiceStatus";
+
+
+
+
+
+
+
+
 
 
 
@@ -139,11 +156,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 
-
+				_audit = (EntityCollection<AuditEntity>)info.GetValue("_audit", typeof(EntityCollection<AuditEntity>));
 
 
 
 				_serviceStatus = (EntityCollection<ServiceStatusEntity>)info.GetValue("_serviceStatus", typeof(EntityCollection<ServiceStatusEntity>));
+
+
+
+
+
+
+
+
 
 
 
@@ -191,13 +216,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "Audit":
+					this.Audit.Add((AuditEntity)entity);
+					break;
 
 
 
 				case "ServiceStatus":
 					this.ServiceStatus.Add((ServiceStatusEntity)entity);
 					break;
+
+
+
+
+
+
+
+
 
 
 
@@ -229,13 +264,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "Audit":
+					toReturn.Add(ComputerEntity.Relations.AuditEntityUsingComputerID);
+					break;
 
 
 
 				case "ServiceStatus":
 					toReturn.Add(ComputerEntity.Relations.ServiceStatusEntityUsingComputerID);
 					break;
+
+
+
+
+
+
+
+
 
 
 
@@ -281,13 +326,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "Audit":
+					this.Audit.Add((AuditEntity)relatedEntity);
+					break;
 
 
 
 				case "ServiceStatus":
 					this.ServiceStatus.Add((ServiceStatusEntity)relatedEntity);
 					break;
+
+
 
 
 
@@ -307,13 +356,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				case "Audit":
+					base.PerformRelatedEntityRemoval(this.Audit, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 
 
 
 				case "ServiceStatus":
 					base.PerformRelatedEntityRemoval(this.ServiceStatus, relatedEntity, signalRelatedEntityManyToOne);
 					break;
+
+
 
 
 
@@ -348,11 +401,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 
-
+			toReturn.Add(this.Audit);
 
 
 
 			toReturn.Add(this.ServiceStatus);
+
+
 
 
 
@@ -370,11 +425,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 
-
+				info.AddValue("_audit", ((_audit!=null) && (_audit.Count>0) && !this.MarkedForDeletion)?_audit:null);
 
 
 
 				info.AddValue("_serviceStatus", ((_serviceStatus!=null) && (_serviceStatus.Count>0) && !this.MarkedForDeletion)?_serviceStatus:null);
+
+
+
+
+
+
+
+
 
 
 
@@ -429,6 +492,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'Audit' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAudit()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AuditFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
+			return bucket;
+		}
 
 
 
@@ -442,6 +514,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ServiceStatusFields.ComputerID, null, ComparisonOperator.Equal, this.ComputerID));
 			return bucket;
 		}
+
+
+
+
+
+
+
+
 
 
 
@@ -480,11 +560,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 
-
+			collectionsQueue.Enqueue(this._audit);
 
 
 
 			collectionsQueue.Enqueue(this._serviceStatus);
+
+
+
+
+
+
+
+
 
 
 
@@ -500,11 +588,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 
-
+			this._audit = (EntityCollection<AuditEntity>) collectionsQueue.Dequeue();
 
 
 
 			this._serviceStatus = (EntityCollection<ServiceStatusEntity>) collectionsQueue.Dequeue();
+
+
+
+
+
+
+
+
 
 
 
@@ -519,7 +615,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 
-
+			if (this._audit != null)
+			{
+				return true;
+			}
 
 
 
@@ -527,6 +626,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return true;
 			}
+
+
+
+
+
+
+
+
 
 
 
@@ -544,11 +651,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 
-
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<AuditEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditEntityFactory))) : null);
 
 
 
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ServiceStatusEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ServiceStatusEntityFactory))) : null);
+
+
+
+
+
+
+
+
 
 
 
@@ -567,11 +682,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
 
-
+			toReturn.Add("Audit", _audit);
 
 
 
 			toReturn.Add("ServiceStatus", _serviceStatus);
+
+
+
+
+
+
+
+
 
 
 
@@ -587,7 +710,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddInternalsToContext()
 		{
 
-
+			if(_audit!=null)
+			{
+				_audit.ActiveContext = base.ActiveContext;
+			}
 
 
 
@@ -604,6 +730,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
+
+
+
+
+
+
 		}
 
 		/// <summary> Initializes the class members</summary>
@@ -611,11 +745,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			_audit = null;
 
 
 
 			_serviceStatus = null;
+
+
+
+
+
+
+
+
 
 
 
@@ -689,6 +831,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Audit' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAudit
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<AuditEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditEntityFactory))),
+					(IEntityRelation)GetRelationsForField("Audit")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.AuditEntity, 0, null, null, null, null, "Audit", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ServiceStatus' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -700,6 +853,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 					(IEntityRelation)GetRelationsForField("ServiceStatus")[0], (int)ShipWorks.Data.Model.EntityType.ComputerEntity, (int)ShipWorks.Data.Model.EntityType.ServiceStatusEntity, 0, null, null, null, null, "ServiceStatus", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
 			}
 		}
+
+
+
+
+
+
 
 
 
@@ -777,6 +936,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
+		/// <summary> Gets the EntityCollection with the related entities of type 'AuditEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(AuditEntity))]
+		public virtual EntityCollection<AuditEntity> Audit
+		{
+			get
+			{
+				if(_audit==null)
+				{
+					_audit = new EntityCollection<AuditEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditEntityFactory)));
+					_audit.SetContainingEntityInfo(this, "Computer");
+				}
+				return _audit;
+			}
+		}
 
 
 
@@ -796,6 +970,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				return _serviceStatus;
 			}
 		}
+
+
+
+
+
+
+
+
 
 
 

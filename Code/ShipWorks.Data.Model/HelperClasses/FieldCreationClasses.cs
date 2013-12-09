@@ -14932,6 +14932,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ProcessedDate);}
 		}
+		/// <summary>Creates a new ShipmentEntity.ProcessedUserID field instance</summary>
+		public static EntityField2 ProcessedUserID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ProcessedUserID);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ProcessedComputerID field instance</summary>
+		public static EntityField2 ProcessedComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ProcessedComputerID);}
+		}
 		/// <summary>Creates a new ShipmentEntity.ShipDate field instance</summary>
 		public static EntityField2 ShipDate
 		{
@@ -14951,6 +14961,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 VoidedDate
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.VoidedDate);}
+		}
+		/// <summary>Creates a new ShipmentEntity.VoidedUserID field instance</summary>
+		public static EntityField2 VoidedUserID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.VoidedUserID);}
+		}
+		/// <summary>Creates a new ShipmentEntity.VoidedComputerID field instance</summary>
+		public static EntityField2 VoidedComputerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.VoidedComputerID);}
 		}
 		/// <summary>Creates a new ShipmentEntity.TrackingNumber field instance</summary>
 		public static EntityField2 TrackingNumber

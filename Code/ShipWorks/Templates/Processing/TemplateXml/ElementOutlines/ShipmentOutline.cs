@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Users;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -41,8 +42,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Processed", () => Shipment.Processed);
             AddElementLegacy2x("IsProcessed", () => Shipment.Processed);
             AddElement("ProcessedDate", () => Shipment.ProcessedDate);
+            AddElement("ProcessedUser", new UserOutline(context), () => Shipment.ProcessedUserID == null ? (UserEntity) null : UserManager.GetUser(Shipment.ProcessedUserID.Value));
             AddElement("Voided", () => Shipment.Voided);
             AddElement("VoidedDate", () => Shipment.VoidedDate);
+            AddElement("VoidedUser", new UserOutline(context), () => Shipment.VoidedUserID == null ? (UserEntity) null : UserManager.GetUser(Shipment.VoidedUserID.Value));
             AddElement("ShippedDate", () => Shipment.ShipDate);
             AddElement("ServiceUsed", () => ShippingManager.GetServiceUsed(Shipment));
             AddElement("ReturnShipment", () => Shipment.ReturnShipment);

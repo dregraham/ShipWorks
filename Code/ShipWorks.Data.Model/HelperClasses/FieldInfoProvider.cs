@@ -2018,10 +2018,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "TotalWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.TotalWeight, 0, 0, 38);
 			base.AddElementFieldInfo("ShipmentEntity", "Processed", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.Processed, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "ProcessedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShipmentFieldIndex.ProcessedDate, 0, 0, 0);
+			base.AddElementFieldInfo("ShipmentEntity", "ProcessedUserID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)ShipmentFieldIndex.ProcessedUserID, 0, 0, 19);
+			base.AddElementFieldInfo("ShipmentEntity", "ProcessedComputerID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)ShipmentFieldIndex.ProcessedComputerID, 0, 0, 19);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipDate", typeof(System.DateTime), false, false, false, false,  (int)ShipmentFieldIndex.ShipDate, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipmentCost", typeof(System.Decimal), false, false, false, false,  (int)ShipmentFieldIndex.ShipmentCost, 0, 4, 19);
 			base.AddElementFieldInfo("ShipmentEntity", "Voided", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.Voided, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "VoidedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ShipmentFieldIndex.VoidedDate, 0, 0, 0);
+			base.AddElementFieldInfo("ShipmentEntity", "VoidedUserID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)ShipmentFieldIndex.VoidedUserID, 0, 0, 19);
+			base.AddElementFieldInfo("ShipmentEntity", "VoidedComputerID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)ShipmentFieldIndex.VoidedComputerID, 0, 0, 19);
 			base.AddElementFieldInfo("ShipmentEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.TrackingNumber, 50, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "CustomsGenerated", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.CustomsGenerated, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "CustomsValue", typeof(System.Decimal), false, false, false, false,  (int)ShipmentFieldIndex.CustomsValue, 0, 4, 19);

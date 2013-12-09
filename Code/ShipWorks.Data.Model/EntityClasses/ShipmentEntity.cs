@@ -39,7 +39,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 		private EntityCollection<ShipmentCustomsItemEntity> _customsItems;
 
+
+
 		private OrderEntity _order;
+
+
 		private BestRateShipmentEntity _bestRate;
 		private EquaShipShipmentEntity _equaShip;
 		private FedExShipmentEntity _fedEx;
@@ -60,8 +64,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+
+
 			/// <summary>Member name Order</summary>
 			public static readonly string Order = "Order";
+
+
 			/// <summary>Member name CustomsItems</summary>
 			public static readonly string CustomsItems = "CustomsItems";
 
@@ -141,11 +149,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_customsItems = (EntityCollection<ShipmentCustomsItemEntity>)info.GetValue("_customsItems", typeof(EntityCollection<ShipmentCustomsItemEntity>));
 
+
+
 				_order = (OrderEntity)info.GetValue("_order", typeof(OrderEntity));
 				if(_order!=null)
 				{
 					_order.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
+
+
 				_bestRate = (BestRateShipmentEntity)info.GetValue("_bestRate", typeof(BestRateShipmentEntity));
 				if(_bestRate!=null)
 				{
@@ -203,6 +215,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case ShipmentFieldIndex.OrderID:
 					DesetupSyncOrder(true, false);
 					break;
+				case ShipmentFieldIndex.ProcessedUserID:
+
+					break;
+				case ShipmentFieldIndex.ProcessedComputerID:
+
+					break;
+				case ShipmentFieldIndex.VoidedUserID:
+
+					break;
+				case ShipmentFieldIndex.VoidedComputerID:
+
+					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -225,9 +249,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+
+
 				case "Order":
 					this.Order = (OrderEntity)entity;
 					break;
+
+
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)entity);
 					break;
@@ -277,9 +305,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+
+
 				case "Order":
 					toReturn.Add(ShipmentEntity.Relations.OrderEntityUsingOrderID);
 					break;
+
+
 				case "CustomsItems":
 					toReturn.Add(ShipmentEntity.Relations.ShipmentCustomsItemEntityUsingShipmentID);
 					break;
@@ -328,8 +360,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
+
+
 				case "Order":
 					return true;
+
+
 
 
 
@@ -351,9 +387,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+
+
 				case "Order":
 					SetupSyncOrder(relatedEntity);
 					break;
+
+
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)relatedEntity);
 					break;
@@ -395,9 +435,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+
+
 				case "Order":
 					DesetupSyncOrder(false, true);
 					break;
+
+
 				case "CustomsItems":
 					base.PerformRelatedEntityRemoval(this.CustomsItems, relatedEntity, signalRelatedEntityManyToOne);
 					break;
@@ -484,10 +528,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+
+
 			if(_order!=null)
 			{
 				toReturn.Add(_order);
 			}
+
+
 
 
 
@@ -529,7 +577,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				info.AddValue("_customsItems", ((_customsItems!=null) && (_customsItems.Count>0) && !this.MarkedForDeletion)?_customsItems:null);
 
+
+
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
+
+
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_equaShip", (!this.MarkedForDeletion?_equaShip:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
@@ -593,6 +645,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
+
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'Order' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
 		/// <returns></returns>
@@ -602,6 +656,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
 			return bucket;
 		}
+
+
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'BestRateShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
@@ -752,7 +808,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+
+
 			toReturn.Add("Order", _order);
+
+
 			toReturn.Add("CustomsItems", _customsItems);
 
 			toReturn.Add("BestRate", _bestRate);
@@ -774,10 +834,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				_customsItems.ActiveContext = base.ActiveContext;
 			}
 
+
+
 			if(_order!=null)
 			{
 				_order.ActiveContext = base.ActiveContext;
 			}
+
+
 			if(_bestRate!=null)
 			{
 				_bestRate.ActiveContext = base.ActiveContext;
@@ -818,7 +882,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			_customsItems = null;
 
+
+
 			_order = null;
+
+
 			_bestRate = null;
 			_equaShip = null;
 			_fedEx = null;
@@ -868,6 +936,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ProcessedDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ProcessedUserID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ProcessedComputerID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ShipDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -878,6 +952,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("VoidedDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VoidedUserID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VoidedComputerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
@@ -1010,6 +1090,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
+
+
 		/// <summary> Removes the sync logic for member _order</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
@@ -1042,6 +1124,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 			}
 		}
+
+
 
 		/// <summary> Removes the sync logic for member _bestRate</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -1352,6 +1436,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
+
+
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Order' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -1363,6 +1449,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 					(IEntityRelation)GetRelationsForField("Order")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.OrderEntity, 0, null, null, null, null, "Order", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
 			}
 		}
+
+
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateShipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
@@ -1572,6 +1660,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.ProcessedDate, value); }
 		}
 
+		/// <summary> The ProcessedUserID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ProcessedUserID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ProcessedUserID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.ProcessedUserID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ProcessedUserID, value); }
+		}
+
+		/// <summary> The ProcessedComputerID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ProcessedComputerID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ProcessedComputerID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.ProcessedComputerID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ProcessedComputerID, value); }
+		}
+
 		/// <summary> The ShipDate property of the Entity Shipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "Shipment"."ShipDate"<br/>
@@ -1614,6 +1724,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ShipmentFieldIndex.VoidedDate, false); }
 			set	{ SetValue((int)ShipmentFieldIndex.VoidedDate, value); }
+		}
+
+		/// <summary> The VoidedUserID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."VoidedUserID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> VoidedUserID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.VoidedUserID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.VoidedUserID, value); }
+		}
+
+		/// <summary> The VoidedComputerID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."VoidedComputerID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> VoidedComputerID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.VoidedComputerID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.VoidedComputerID, value); }
 		}
 
 		/// <summary> The TrackingNumber property of the Entity Shipment<br/><br/>
@@ -2106,6 +2238,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
+
+
 		/// <summary> Gets / sets related entity of type 'OrderEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
 		[Browsable(false)]
@@ -2140,6 +2274,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 			}
 		}
+
+
 
 		/// <summary> Gets / sets related entity of type 'BestRateShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>

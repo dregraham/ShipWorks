@@ -39,7 +39,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.OtherShipmentEntityUsingShipmentID);
 			toReturn.Add(this.PostalShipmentEntityUsingShipmentID);
 			toReturn.Add(this.UpsShipmentEntityUsingShipmentID);
+			toReturn.Add(this.ComputerEntityUsingVoidedComputerID);
+			toReturn.Add(this.ComputerEntityUsingProcessedComputerID);
 			toReturn.Add(this.OrderEntityUsingOrderID);
+			toReturn.Add(this.UserEntityUsingVoidedUserID);
+			toReturn.Add(this.UserEntityUsingProcessedUserID);
 			return toReturn;
 		}
 
@@ -212,6 +216,34 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
+		/// Shipment.VoidedComputerID - Computer.ComputerID
+		/// </summary>
+		public virtual IEntityRelation ComputerEntityUsingVoidedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.VoidedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				return relation;
+			}
+		}
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
+		/// Shipment.ProcessedComputerID - Computer.ComputerID
+		/// </summary>
+		public virtual IEntityRelation ComputerEntityUsingProcessedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.ProcessedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and OrderEntity over the m:1 relation they have, using the relation between the fields:
 		/// Shipment.OrderID - Order.OrderID
 		/// </summary>
@@ -222,6 +254,34 @@ namespace ShipWorks.Data.Model.RelationClasses
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Order", false);
 				relation.AddEntityFieldPair(OrderFields.OrderID, ShipmentFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				return relation;
+			}
+		}
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and UserEntity over the m:1 relation they have, using the relation between the fields:
+		/// Shipment.VoidedUserID - User.UserID
+		/// </summary>
+		public virtual IEntityRelation UserEntityUsingVoidedUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
+				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.VoidedUserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				return relation;
+			}
+		}
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and UserEntity over the m:1 relation they have, using the relation between the fields:
+		/// Shipment.ProcessedUserID - User.UserID
+		/// </summary>
+		public virtual IEntityRelation UserEntityUsingProcessedUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
+				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.ProcessedUserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				return relation;
 			}

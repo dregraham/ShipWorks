@@ -873,10 +873,14 @@ CREATE TABLE [dbo].[Shipment]
 [TotalWeight] [float] NOT NULL,
 [Processed] [bit] NOT NULL,
 [ProcessedDate] [datetime] NULL,
+[ProcessedUserID] [bigint] NULL,
+[ProcessedComputerID] [bigint] NULL,
 [ShipDate] [datetime] NOT NULL,
 [ShipmentCost] [money] NOT NULL,
 [Voided] [bit] NOT NULL,
 [VoidedDate] [datetime] NULL,
+[VoidedUserID] [bigint] NULL,
+[VoidedComputerID] [bigint] NULL,
 [TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsGenerated] [bit] NOT NULL,
 [CustomsValue] [money] NOT NULL,
@@ -4609,6 +4613,14 @@ PRINT N'Adding foreign keys to [dbo].[ServiceStatus]'
 GO
 ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [FK_ServiceStatus_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
 GO
+PRINT N'Adding foreign keys to [dbo].[Shipment]'
+GO
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_ProcessedComputer] FOREIGN KEY ([ProcessedComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_VoidedComputer] FOREIGN KEY ([VoidedComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_ProcessedUser] FOREIGN KEY ([ProcessedUserID]) REFERENCES [dbo].[User] ([UserID])
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_VoidedUser] FOREIGN KEY ([VoidedUserID]) REFERENCES [dbo].[User] ([UserID])
+GO
 PRINT N'Adding foreign keys to [dbo].[TemplateComputerSettings]'
 GO
 ALTER TABLE [dbo].[TemplateComputerSettings] ADD CONSTRAINT [FK_TemplateComputerSettings_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID]) ON DELETE CASCADE
@@ -4843,10 +4855,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[SearsOrder]'
 GO
 ALTER TABLE [dbo].[SearsOrder] ADD CONSTRAINT [FK_SearsOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ShopifyOrder]'
 GO

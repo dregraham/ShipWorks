@@ -281,7 +281,9 @@
       <Separator/>
       <Condition identifier="Shipment.Status" />
       <Condition identifier="Shipment.ProcessedDate" />
+      <Condition identifier="Shipment.ProcessedUser" />
       <Condition identifier="Shipment.VoidedDate" />
+      <Condition identifier="Shipment.VoidedUser" />
       <Condition identifier="Shipment.ReturnStatus" />
       <Separator/>
       <Condition identifier="Shipment.Cost" displayAs="Cost" />

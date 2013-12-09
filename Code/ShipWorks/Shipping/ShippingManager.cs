@@ -824,6 +824,8 @@ namespace ShipWorks.Shipping
 
                         shipment.Voided = true;
                         shipment.VoidedDate = DateTime.UtcNow;
+                        shipment.VoidedUserID = UserSession.User.UserID;
+                        shipment.VoidedComputerID = UserSession.Computer.ComputerID;
 
                         adapter.SaveAndRefetch(shipment);
 
@@ -977,7 +979,6 @@ namespace ShipWorks.Shipping
                         shipment.ReturnShipment = false;
                     }
 
-
                     // We're going to allow the store to confirm the shipping address for the shipping label, but we want to 
                     // make a note of the original shipping address first, so we can reset the address back after the label 
                     // has been generated. This will result in the customer still being able to see where the package went 
@@ -1008,6 +1009,8 @@ namespace ShipWorks.Shipping
 
                         shipment.Processed = true;
                         shipment.ProcessedDate = DateTime.UtcNow;
+                        shipment.ProcessedUserID = UserSession.User.UserID;
+                        shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
 
                         // Remove any shipment data that is not necessary for this shipment type
                         ClearNonActiveShipmentData(shipment, adapter);

@@ -7029,6 +7029,10 @@ namespace ShipWorks.Data.Model
 		Processed,
 		///<summary>ProcessedDate. </summary>
 		ProcessedDate,
+		///<summary>ProcessedUserID. </summary>
+		ProcessedUserID,
+		///<summary>ProcessedComputerID. </summary>
+		ProcessedComputerID,
 		///<summary>ShipDate. </summary>
 		ShipDate,
 		///<summary>ShipmentCost. </summary>
@@ -7037,6 +7041,10 @@ namespace ShipWorks.Data.Model
 		Voided,
 		///<summary>VoidedDate. </summary>
 		VoidedDate,
+		///<summary>VoidedUserID. </summary>
+		VoidedUserID,
+		///<summary>VoidedComputerID. </summary>
+		VoidedComputerID,
 		///<summary>TrackingNumber. </summary>
 		TrackingNumber,
 		///<summary>CustomsGenerated. </summary>

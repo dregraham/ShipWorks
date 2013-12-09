@@ -68,6 +68,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
+
+
 		}
 		#endregion
 		
