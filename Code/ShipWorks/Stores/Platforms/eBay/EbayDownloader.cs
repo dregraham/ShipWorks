@@ -70,6 +70,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
                 rangeEnd = eBayOfficialTime.AddMinutes(-5);
 
+                // Ebay only allows going back 30 days
+                if (rangeStart < eBayOfficialTime.AddDays(-30))
+                {
+                    rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
+                }
+
                 if (!DownloadOrders())
                 {
                     return;
