@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Management
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.wizardPageFinished = new ShipWorks.UI.Wizard.WizardPage();
             this.label11 = new System.Windows.Forms.Label();
-            this.linkControl1 = new ShipWorks.UI.Controls.LinkControl();
+            this.linkGettingStarted = new ShipWorks.UI.Controls.LinkControl();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
@@ -267,7 +267,7 @@ namespace ShipWorks.Stores.Management
             // wizardPageFinished
             // 
             this.wizardPageFinished.Controls.Add(this.label11);
-            this.wizardPageFinished.Controls.Add(this.linkControl1);
+            this.wizardPageFinished.Controls.Add(this.linkGettingStarted);
             this.wizardPageFinished.Controls.Add(this.label9);
             this.wizardPageFinished.Controls.Add(this.label7);
             this.wizardPageFinished.Controls.Add(this.kryptonBorderEdge);
@@ -298,17 +298,18 @@ namespace ShipWorks.Stores.Management
             this.label11.TabIndex = 23;
             this.label11.Text = "is worth it.";
             // 
-            // linkControl1
+            // linkGettingStarted
             // 
-            this.linkControl1.AutoSize = true;
-            this.linkControl1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.linkControl1.ForeColor = System.Drawing.Color.Blue;
-            this.linkControl1.Location = new System.Drawing.Point(215, 231);
-            this.linkControl1.Name = "linkControl1";
-            this.linkControl1.Size = new System.Drawing.Size(111, 13);
-            this.linkControl1.TabIndex = 22;
-            this.linkControl1.Text = "Getting Started Guide";
+            this.linkGettingStarted.AutoSize = true;
+            this.linkGettingStarted.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkGettingStarted.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkGettingStarted.ForeColor = System.Drawing.Color.Blue;
+            this.linkGettingStarted.Location = new System.Drawing.Point(215, 231);
+            this.linkGettingStarted.Name = "linkGettingStarted";
+            this.linkGettingStarted.Size = new System.Drawing.Size(111, 13);
+            this.linkGettingStarted.TabIndex = 22;
+            this.linkGettingStarted.Text = "Getting Started Guide";
+            this.linkGettingStarted.Click += new System.EventHandler(this.OnLinkGettingStartedGuide);
             // 
             // label9
             // 
@@ -893,7 +894,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label11;
-        private UI.Controls.LinkControl linkControl1;
+        private UI.Controls.LinkControl linkGettingStarted;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;

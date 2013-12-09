@@ -805,6 +805,14 @@ namespace ShipWorks.Stores.Management
         #region Complete
 
         /// <summary>
+        /// User clicked the link to open the getting started guide
+        /// </summary>
+        private void OnLinkGettingStartedGuide(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/help/ShipWorks-GettingStarted.pdf", this);
+        }
+
+        /// <summary>
         /// Stepping into the complete page
         /// </summary>
         private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
@@ -949,5 +957,6 @@ namespace ShipWorks.Stores.Management
         }
 
         #endregion
+
     }
 }
