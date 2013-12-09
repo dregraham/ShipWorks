@@ -366,7 +366,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.buyDotComMapChooser.Location = new System.Drawing.Point(-2, 0);
             this.buyDotComMapChooser.Map = null;
             this.buyDotComMapChooser.Name = "buyDotComMapChooser";
-            this.buyDotComMapChooser.Size = new System.Drawing.Size(344, 91);
+            this.buyDotComMapChooser.Size = new System.Drawing.Size(344, 127);
             this.buyDotComMapChooser.TabIndex = 29;
             // 
             // sectionBuyDotCom
@@ -386,7 +386,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelBuyDotCom.Controls.Add(this.buyDotComMapChooser);
             this.panelBuyDotCom.Location = new System.Drawing.Point(13, 757);
             this.panelBuyDotCom.Name = "panelBuyDotCom";
-            this.panelBuyDotCom.Size = new System.Drawing.Size(347, 83);
+            this.panelBuyDotCom.Size = new System.Drawing.Size(347, 130);
             this.panelBuyDotCom.TabIndex = 31;
             // 
             // onTracTestServer
@@ -474,7 +474,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageInterapptive";
-            this.Size = new System.Drawing.Size(374, 868);
+            this.Size = new System.Drawing.Size(374, 911);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelBuyDotCom.ResumeLayout(false);
             this.ResumeLayout(false);

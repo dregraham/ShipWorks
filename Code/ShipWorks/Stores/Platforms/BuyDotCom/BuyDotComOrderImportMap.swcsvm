@@ -9,8 +9,8 @@
   <Schema type="BuyDotComOrderImport" version="1.0.0.0" />
   <Source type="GenericFile-CSV" version="1.0">
     <Delimiter>9</Delimiter>
-    <Quotes>34</Quotes>
-    <QuotesEscape>34</QuotesEscape>
+    <Quotes>0</Quotes>
+    <QuotesEscape>0</QuotesEscape>
     <Encoding>utf-8</Encoding>
     <Columns>
       <Column>
