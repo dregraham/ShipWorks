@@ -33,7 +33,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public EbayOrderIdentifier(string orderID)
         {
-            Match match = Regex.Match(orderID, @"^(\d+)-(\d+)$");
+            // The - prefix is from a case where eBay had a bug that prefixed items with a -
+            Match match = Regex.Match(orderID, @"^-?(\d+)-(\d+)$");
 
             // "Combined" orders have an Int64 ID, whereas single-line auctions are represented by an ItemID-TransactionID hyphenation
             if (match.Success)
