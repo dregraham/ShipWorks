@@ -104,6 +104,7 @@ namespace ShipWorks.Stores.Management
             titleStoreType.Text = storeType.StoreTypeName;
 
             // Load general \ contact tab
+            storeAddressControl.LoadStore(store);
             storeContactControl.LoadStore(store);
 
             // Store Settings
@@ -403,6 +404,7 @@ namespace ShipWorks.Stores.Management
             store.Enabled = !storeDisabled.Checked;
 
             storeContactControl.SaveToEntity(store);
+            storeAddressControl.SaveToEntity(store);
 
             // Do an initial check of the store name
             if (!StoreManager.CheckStoreName(store.StoreName, store, this))
