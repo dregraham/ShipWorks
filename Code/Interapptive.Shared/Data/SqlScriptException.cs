@@ -34,6 +34,15 @@ namespace Interapptive.Shared.Data
             this.batch = batch;
             this.executionException = true;
         }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SqlScriptException(string name, Exception inner)
+            : base(inner.Message, inner)
+        {
+            this.scriptName = name;
+            this.executionException = true;
+        }
 
         /// <summary>
         /// Constructore for creation a non-execution failure

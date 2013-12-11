@@ -286,13 +286,9 @@ namespace ShipWorks.Data.Administration
                     // Execute the script
                     SqlScript executor = sqlLoader[script.ScriptName];
 
-                    // Update the progress as we complete each bactch in the script
-                    executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
-                    {
-                        // Update the progress
-                        progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
-                    };
-
+                    // Update the progress
+                    progress.PercentComplete = Math.Min(100, (int) (scriptProgressValue * scriptsCompleted));
+                    
                     // Run all the batches in the script
                     executor.Execute(con);
                 }

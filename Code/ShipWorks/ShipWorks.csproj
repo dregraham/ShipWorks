@@ -137,6 +137,10 @@
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.SqlServer.Smo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\Microsoft.SqlServer.Smo.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
@@ -10084,6 +10088,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.6.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

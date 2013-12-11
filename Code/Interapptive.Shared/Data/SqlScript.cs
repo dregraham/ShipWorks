@@ -15,12 +15,12 @@ namespace Interapptive.Shared.Data
     public class SqlScript
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlScript));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SqlScript));
 
-        string name;
-        string sql;
+        private string name;
+        private string sql;
 
-        List<string> batches;
+        private List<string> batches;
 
         /// <summary>
         /// Gets the name of the script
@@ -29,11 +29,6 @@ namespace Interapptive.Shared.Data
         {
             get { return name; }
         }
-
-        /// <summary>
-        /// Raised when a batch has successfully completed
-        /// </summary>
-        public event SqlScriptBatchCompletedEventHandler BatchCompleted;
 
         /// <summary>
         /// Contstructor
@@ -51,10 +46,7 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public string Content
         {
-            get
-            {
-                return sql;
-            }
+            get { return sql; }
         }
 
         /// <summary>
@@ -62,10 +54,7 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public IList<string> Batches
         {
-            get
-            {
-                return batches.AsReadOnly();
-            }
+            get { return batches.AsReadOnly(); }
         }
 
         /// <summary>
@@ -79,59 +68,49 @@ namespace Interapptive.Shared.Data
             SqlCommand cmd = SqlCommandProvider.Create(con);
             cmd.CommandTimeout = 1200; // 20 minutes
 
-            // Execute each batch
-            for (int i = 0; i < batches.Count; i++)
+
+            ExecuteSQLCmdMode executeSqlCmd = new ExecuteSQLCmdMode(con);
+            
+            try
             {
-                string command = batches[i];
+                int tries = 3;
 
-                try
+                // We keep trying for certain errors that mean we need to wait for SQL Server to get done configuring.  This was done for the CreateDatabase script, when
+                // dreating a database in Amazon RDS.
+                while (tries-- > 0)
                 {
-                    int tries = 3;
-
-                    // We keep trying for certain errors that mean we need to wait for SQL Server to get done configuring.  This was done for the CreateDatabase script, when
-                    // dreating a database in Amazon RDS.
-                    while (tries-- > 0)
+                    try
                     {
-                        try
+                        executeSqlCmd.Execute(sql);
+
+                        break;
+                    }
+                    catch (SqlException ex)
+                    {
+                        // "Backup, file manipulation operations (such as ALTER DATABASE ADD FILE) and encryption changes on a database must be serialized. 
+                        //  Reissue the statement after the current backup or file manipulation operation is completed."
+                        if (ex.Number == 3023)
                         {
-                            cmd.CommandText = command;
-                            SqlCommandProvider.ExecuteNonQuery(cmd);
+                            log.Warn(string.Format("Failed executing script {0}, will retry {1} times.", name, tries), ex);
+                            Thread.Sleep(250);
 
-                            break;
+                            continue;
                         }
-                        catch (SqlException ex)
+                        else
                         {
-                            // "Backup, file manipulation operations (such as ALTER DATABASE ADD FILE) and encryption changes on a database must be serialized. 
-                            //  Reissue the statement after the current backup or file manipulation operation is completed."
-                            if (ex.Number == 3023)
-                            {
-                                log.Warn(string.Format("Failed executing batch {0} in script {1}, will retry {2} times.", i, name, tries), ex);
-                                Thread.Sleep(250);
-
-                                continue;
-                            }
-                            else
-                            {
-                                throw;
-                            }
+                            throw;
                         }
-
                     }
 
-                    SqlScriptBatchCompletedEventHandler handler = BatchCompleted;
-                    if (handler != null)
-                    {
-                        handler(this, new SqlScriptBatchCompletedEventArgs(i));
-                    }
                 }
-                catch (SqlException ex)
-                {
-                    throw new SqlScriptException(name, i, ex) { ShowScriptDetails = batches.Count > 1 };
-                }
-                catch (Exception ex)
-                {
-                    throw new SqlScriptException(name, i, ex) { ShowScriptDetails = batches.Count > 1 };
-                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SqlScriptException(name, ex) { ShowScriptDetails = batches.Count > 1 };
+            }
+            catch (Exception ex)
+            {
+                throw new SqlScriptException(name, ex) { ShowScriptDetails = batches.Count > 1 };
             }
         }
     }

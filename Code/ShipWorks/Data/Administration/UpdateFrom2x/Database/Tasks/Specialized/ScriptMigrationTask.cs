@@ -145,8 +145,6 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                     {
                         if (script.Batches.Count > 1)
                         {
-                            // treat each batch as a unit of work, don't need to actually run the script
-                            script.BatchCompleted += (o, e) => ReportWorkProgress();
 
                             // execute the script using the regular batch-capable methods
                             script.Execute(con);
