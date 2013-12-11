@@ -34,7 +34,7 @@ namespace ShipWorks.Editions.Freemium
 
             foreach (ShipmentTypeCode shipmentType in Enum.GetValues(typeof(ShipmentTypeCode)))
             {
-                if (shipmentType == ShipmentTypeCode.Endicia || shipmentType == ShipmentTypeCode.Express1Endicia)
+                if (shipmentType == ShipmentTypeCode.Endicia || shipmentType == ShipmentTypeCode.Express1Endicia || shipmentType == ShipmentTypeCode.BestRate)
                 {
                     continue;
                 }
