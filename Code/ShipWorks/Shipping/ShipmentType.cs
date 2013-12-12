@@ -640,17 +640,6 @@ namespace ShipWorks.Shipping
                 }
             }
 
-            if (shipment.OriginCountryCode == "US")
-            {
-                // i-Parcel allows customers to upload their SKUs and customs info, so we don't need to enter it in ShipWorks
-                // So Customs is never required.
-                if (ShipmentTypeManager.IsiParcel((ShipmentTypeCode)shipment.ShipmentType))
-                {
-                    requiresCustoms = false;
-                }
-
-            }
-
             return requiresCustoms;
         }
     }

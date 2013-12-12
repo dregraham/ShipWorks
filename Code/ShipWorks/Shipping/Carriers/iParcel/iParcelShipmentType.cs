@@ -933,5 +933,26 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             return new iParcelBestRateBroker();
         }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address and any store specific logic that may impact whether customs
+        /// is required (i.e. eBay GSP).
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            bool requiresCustoms = base.IsCustomsRequired(shipment);
+
+            if (shipment.OriginCountryCode == "US")
+            {
+                // i-Parcel allows customers to upload their SKUs and customs info, so we don't need to enter it in ShipWorks
+                // So Customs is never required.
+                requiresCustoms = false;
+            }
+
+            return requiresCustoms;
+        }
     }
 }
