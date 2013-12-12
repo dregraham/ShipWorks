@@ -558,5 +558,73 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.AreEqual(0, testRateGroup.FootnoteCreators.Count());
         }
 
+        [TestMethod]
+        public void IsCustomsRequired_ReturnsFalse_WhenSingleBrokerDoesNotRequireCustoms_Test()
+        {
+            broker = new Mock<IBestRateShippingBroker>();
+            broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+
+            bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
+            Assert.IsFalse(isRequired);
+        }
+
+        [TestMethod]
+        public void IsCustomsRequired_ReturnsFalse_WhenSingleBrokerRequiresCustoms_Test()
+        {
+            broker = new Mock<IBestRateShippingBroker>();
+            broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+
+            bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
+            Assert.IsTrue(isRequired);
+        }
+
+        [TestMethod]
+        public void IsCustomsRequired_ReturnsFalse_WithMultipleBrokers_WhenNoBrokersRequireCustoms_Test()
+        {
+            Mock<IBestRateShippingBroker> firstBroker = new Mock<IBestRateShippingBroker>();
+            firstBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
+
+            Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
+            secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+
+            bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
+            Assert.IsFalse(isRequired);
+        }
+
+        [TestMethod]
+        public void IsCustomsRequired_ReturnsTrue_WithMultipleBrokers_WhenOneBrokerRequireCustoms_Test()
+        {
+            Mock<IBestRateShippingBroker> firstBroker = new Mock<IBestRateShippingBroker>();
+            firstBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
+
+            Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
+            secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+
+            bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
+            Assert.IsTrue(isRequired);
+        }
+
+        [TestMethod]
+        public void IsCustomsRequired_ReturnsTrue_WithMultipleBrokers_WhenAllBrokerRequireCustoms_Test()
+        {
+            Mock<IBestRateShippingBroker> firstBroker = new Mock<IBestRateShippingBroker>();
+            firstBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
+
+            Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
+            secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
+
+            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+
+            bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
+            Assert.IsTrue(isRequired);
+        }
     }
 }
