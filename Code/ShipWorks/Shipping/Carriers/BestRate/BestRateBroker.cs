@@ -56,6 +56,33 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Determines whether customs forms are required for the given shipment for any accounts of a broker.
+        /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
+        /// </summary>
+        public virtual bool IsCustomsRequired(ShipmentEntity shipment)
+        {
+            List<TAccount> accounts = accountRepository.Accounts.ToList();
+            foreach (TAccount account in accounts)
+            {
+                // Create a clone so we don't have to worry about modifying the original shipment
+                ShipmentEntity clonedShipmentEntity = EntityUtility.CloneEntity(shipment);
+                clonedShipmentEntity.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+
+                CreateShipmentChild(clonedShipmentEntity);
+                ShipmentType.ConfigureNewShipment(clonedShipmentEntity);
+                UpdateChildShipmentSettings(clonedShipmentEntity, shipment, account);
+
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(clonedShipmentEntity);
+                if (shipmentType.IsCustomsRequired(clonedShipmentEntity))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Gets the single best rate for each account based 
         /// on the configuration of the best rate shipment data.
         /// </summary>

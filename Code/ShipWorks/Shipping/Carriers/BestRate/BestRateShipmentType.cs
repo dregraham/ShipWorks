@@ -214,7 +214,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
             
             if (!bestRateShippingBrokers.Any())
@@ -351,7 +350,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return new BestRateSettingsControl();
         }
-
+        
         /// <summary>
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
@@ -399,6 +398,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return ShipmentTypeManager.GetType(shipment);
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address and any store specific logic that may impact whether customs
+        /// is required (i.e. eBay GSP).
+        /// </summary>
+        public override bool IsCustomsRequired(ShipmentEntity shipment)
+        {
+            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers();
+            return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
 
         /// <summary>
