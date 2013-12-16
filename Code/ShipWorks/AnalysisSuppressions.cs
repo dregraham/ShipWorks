@@ -12928,3 +12928,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountSoapException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Users.Security.PermissionException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Shipping.Carriers.iParcel.iParcelShipmentType.#IsCustomsRequiredByShipment(ShipWorks.Data.Model.EntityClasses.ShipmentEntity)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "ShipWorks.Shipping.Carriers.UPS.UpsServiceControl.#GetLoadedServiceTypes()")]
