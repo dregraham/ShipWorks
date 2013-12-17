@@ -280,12 +280,6 @@ namespace ShipWorks.Data
                 shouldCacheEntity = false;
             }
 
-            // Caching inserts isn't necessary, and can result cloned child entities in the New state.  Bad.
-            if (e.Action == EntityPersistedAction.Insert)
-            {
-                shouldCacheEntity = false;
-            }
-
             if (shouldCacheEntity)
             {
                 entityCache.SetCache(key, entity);
