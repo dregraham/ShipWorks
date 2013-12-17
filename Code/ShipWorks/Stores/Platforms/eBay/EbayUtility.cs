@@ -166,9 +166,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Get effective checkout status of the given item
+        /// Get effective payment status of the given item
         /// </summary>
-        public static EbayEffectiveCheckoutStatus GetEffectiveCheckoutStatus(EbayOrderItemEntity orderItem)
+        public static EbayEffectivePaymentStatus GetEffectivePaymentStatus(EbayOrderItemEntity orderItem)
         {
             CompleteStatusCodeType completeStatus = (CompleteStatusCodeType) orderItem.CompleteStatus;
             PaymentStatusCodeType paymentStatus = (PaymentStatusCodeType) orderItem.PaymentStatus;
@@ -178,28 +178,28 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 paymentStatus == PaymentStatusCodeType.BuyerCreditCardFailed ||
                 paymentStatus == PaymentStatusCodeType.BuyerFailedPaymentReportedBySeller)
             {
-                return EbayEffectiveCheckoutStatus.Failed;
+                return EbayEffectivePaymentStatus.Failed;
             }
 
             // If its paypal processing, thats what we display
             if (paymentStatus == PaymentStatusCodeType.PayPalPaymentInProcess)
             {
-                return EbayEffectiveCheckoutStatus.PaymentPendingPayPal;
+                return EbayEffectivePaymentStatus.PaymentPendingPayPal;
             }
 
             // If it's marked as paid in My eBay, or complete status is Complete
             if (orderItem.MyEbayPaid || completeStatus == CompleteStatusCodeType.Complete)
             {
-                return EbayEffectiveCheckoutStatus.Paid;
+                return EbayEffectivePaymentStatus.Paid;
             }
 
             // Payment is in process
             if (paymentStatus == PaymentStatusCodeType.PaymentInProcess || completeStatus == CompleteStatusCodeType.Pending)
             {
-                return EbayEffectiveCheckoutStatus.PaymentPending;
+                return EbayEffectivePaymentStatus.PaymentPending;
             }
 
-            return EbayEffectiveCheckoutStatus.Incomplete;
+            return EbayEffectivePaymentStatus.Incomplete;
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return true;
             }
 
-            return orderItem.EffectiveCheckoutStatus == (int) EbayEffectiveCheckoutStatus.Paid;
+            return orderItem.EffectiveCheckoutStatus == (int) EbayEffectivePaymentStatus.Paid;
         }
 
         /// <summary>

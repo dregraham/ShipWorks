@@ -127,16 +127,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Process all of the downloaded orders
                 foreach (OrderType orderType in response.OrderArray)
                 {
-                    ProcessOrder(orderType);
-
-                    Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
-                    Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
-
                     // Check for user cancel
                     if (Progress.IsCancelRequested)
                     {
                         return false;
                     }
+
+                    ProcessOrder(orderType);
+
+                    Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
+                    Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
                 }
 
                 // Quit if eBay says there aren't any more
@@ -180,6 +180,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Online status
             order.OnlineStatusCode = (int) orderType.OrderStatus;
             order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
+
+            // SellingManager Pro
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
 
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
@@ -321,8 +324,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     orderItem.EbayItemID = long.Parse(transaction.Item.ItemID);
                     orderItem.EbayTransactionID = long.Parse(transaction.TransactionID);
                 }
+                // Attach it, so any items get saved with the order
+                else
+                {
+                    order.OrderItems.Add(orderItem);
+                }
 
-                UpdateTransaction(orderItem, transaction, orderType.CheckoutStatus);
+                UpdateTransaction(orderItem, orderType, transaction);
             }
 
             return abandonedItems;
@@ -533,7 +541,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update the transaction (order item) info
         /// </summary>
-        private void UpdateTransaction(EbayOrderItemEntity orderItem, TransactionType transaction, CheckoutStatusType checkoutStatus)
+        private void UpdateTransaction(EbayOrderItemEntity orderItem, OrderType orderType, TransactionType transaction)
         {
             orderItem.Code = transaction.Item.ItemID;
             orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
@@ -542,13 +550,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             orderItem.SKU = transaction.Item.SKU ?? "";
 
             // Checkout (from order - these can be moved up in the database from the item to the order level)
-            orderItem.PaymentMethod = (int) checkoutStatus.PaymentMethod;
-            orderItem.PaymentStatus = (int) checkoutStatus.eBayPaymentStatus;
-            orderItem.CompleteStatus = (int) checkoutStatus.Status;
+            orderItem.PaymentMethod = (int) orderType.CheckoutStatus.PaymentMethod;
+            orderItem.PaymentStatus = (int) orderType.CheckoutStatus.eBayPaymentStatus;
+            orderItem.CompleteStatus = (int) orderType.CheckoutStatus.Status;
 
-            // My eBay
-            orderItem.MyEbayPaid = transaction.PaidTimeSpecified;
-            orderItem.MyEbayShipped = transaction.ShippedTimeSpecified || HasTrackingNumber(transaction);
+            // My eBay statuses - we set this at the line-item level, but the API provides them at the order level.
+            orderItem.MyEbayPaid = orderType.PaidTimeSpecified;
+            orderItem.MyEbayShipped = orderType.ShippedTimeSpecified || HasTrackingNumber(transaction);
 
             // Load variation information
             UpdateTransactionVariationDetail(orderItem, transaction);

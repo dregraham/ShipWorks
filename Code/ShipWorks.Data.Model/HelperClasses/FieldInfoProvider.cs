@@ -620,6 +620,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayOrderEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderFieldIndex.EbayBuyerID, 50, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "CombinedLocally", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.CombinedLocally, 0, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "SelectedShippingMethod", typeof(System.Int32), false, false, false, false,  (int)EbayOrderFieldIndex.SelectedShippingMethod, 0, 0, 10);
+			base.AddElementFieldInfo("EbayOrderEntity", "SellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.SellingManagerRecord, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderEntity", "GspEligible", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.GspEligible, 0, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "GspFirstName", typeof(System.String), false, false, false, false,  (int)EbayOrderFieldIndex.GspFirstName, 128, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "GspLastName", typeof(System.String), false, false, false, false,  (int)EbayOrderFieldIndex.GspLastName, 128, 0, 0);
@@ -638,7 +639,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedType, 0, 0, 10);
 			base.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedComments", typeof(System.String), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedComments, 80, 0, 0);
 			base.AddElementFieldInfo("EbayOrderEntity", "RollupPayPalAddressStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupPayPalAddressStatus, 0, 0, 10);
-			base.AddElementFieldInfo("EbayOrderEntity", "RollupSellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupSellingManagerRecord, 0, 0, 10);
 		}
 		/// <summary>Inits EbayOrderItemEntity's FieldInfo objects</summary>
 		private void InitEbayOrderItemEntityInfos()

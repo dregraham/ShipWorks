@@ -2036,6 +2036,8 @@
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorFlagType.cs" />
     <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemShippedStatusCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenFactory.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\ITokenReader.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\SecureXmlFileTokenReader.cs" />
@@ -3066,7 +3068,7 @@
       <DependentUpon>EbayOnlineUpdateTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayPayPalAddressStatusCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbaySellingManagerRecordCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayBuyerIDDisplayType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayFeedbackData.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayFeedbackDirection.cs" />
@@ -3532,7 +3534,7 @@
     <Compile Include="Filters\Content\Conditions\Customers\CustomerPrintedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Notes\NoteVisibilityCondition.cs" />
     <Compile Include="Filters\Content\Conditions\NumericStringCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayCheckoutStatusCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemPaymentStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackCondition.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -4037,6 +4037,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.SelectedShippingMethod);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.SellingManagerRecord field instance</summary>
+		public static EntityField2 SellingManagerRecord
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.SellingManagerRecord);}
+		}
 		/// <summary>Creates a new EbayOrderEntity.GspEligible field instance</summary>
 		public static EntityField2 GspEligible
 		{
@@ -4126,11 +4131,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RollupPayPalAddressStatus
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.RollupPayPalAddressStatus);}
-		}
-		/// <summary>Creates a new EbayOrderEntity.RollupSellingManagerRecord field instance</summary>
-		public static EntityField2 RollupSellingManagerRecord
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.RollupSellingManagerRecord);}
 		}
 	}
 

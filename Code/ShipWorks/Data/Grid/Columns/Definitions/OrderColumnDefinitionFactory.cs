@@ -122,8 +122,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{419FC10D-48A3-4c97-8CEC-AAB625BC99F7}", true,
-                        new GridTextDisplayType().Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Sales Record #", "10645",
-                        EbayOrderFields.RollupSellingManagerRecord)
+                        new GridTextDisplayType(), "Sales Record #", "10645",
+                        EbayOrderFields.SellingManagerRecord)
                         {
                             StoreTypeCode = StoreTypeCode.Ebay
                         },
@@ -470,7 +470,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{067841B1-C098-4d4e-A0FB-ACABA420B135}", true,
-                        new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description).Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Payment Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
+                        new GridEnumDisplayType<EbayEffectivePaymentStatus>(EnumSortMethod.Description).Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Payment Status", EbayEffectivePaymentStatus.AwaitingPayment,
                         EbayOrderFields.RollupEffectiveCheckoutStatus)
                         {
                             StoreTypeCode = StoreTypeCode.Ebay

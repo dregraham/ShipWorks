@@ -339,7 +339,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     if (!paid.Value &&
                         ebayItem.EffectivePaymentMethod == (int)EbayEffectivePaymentMethod.PayPal &&
-                        ebayItem.EffectiveCheckoutStatus == (int)EbayEffectiveCheckoutStatus.Paid)
+                        ebayItem.EffectiveCheckoutStatus == (int)EbayEffectivePaymentStatus.Paid)
                     {
                         // cannot do this
                         throw new EbayException("Cannot change the Paid status of a completed PayPal payment.", "");
@@ -355,6 +355,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (shipped.HasValue)
                 {
                     ebayItem.MyEbayShipped = shipped.Value;
+
+                    // Only overwrite Local Status if it's blank 
+                    if (string.IsNullOrEmpty(order.LocalStatus))
+                    {
+                        order.LocalStatus = "Shipped";
+                    }
                 }
 
                 // update the paid flag
