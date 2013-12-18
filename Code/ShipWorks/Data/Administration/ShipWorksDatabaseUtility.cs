@@ -60,13 +60,9 @@ namespace ShipWorks.Data.Administration
                 path += "\\";
             }
 
-            // Set the path to Program Files
-            createDbSql = createDbSql.Replace("{DBNAME}", name);
-            createDbSql = createDbSql.Replace("{FILEPATH}", path);
-            createDbSql = createDbSql.Replace("{FILENAME}", DetermineAvailableFileName(path, name));
+            SqlScript script = new SqlScript("Create Database", createDbSql);
 
-            // Create the database
-            SqlUtility.ExecuteScriptSql("Create Database", createDbSql, con);
+            script.Execute(con, name,  DetermineAvailableFileName(path, name), path);
         }
 
         /// <summary>

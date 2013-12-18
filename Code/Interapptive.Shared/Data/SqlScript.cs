@@ -58,9 +58,17 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
-        /// Executes the script on the given connection
+        /// Executes the script on the given connection using default database information. 
         /// </summary>
         public void Execute(SqlConnection con)
+        {
+            Execute(con, con.Database, string.Empty, string.Empty);
+        }
+
+        /// <summary>
+        /// Executes the script on the given connection
+        /// </summary>
+        public void Execute(SqlConnection con, string databaseName, string defaultFilePrefix, string defaultFilePath)
         {
             log.InfoFormat("Running script {0}", name);
 
@@ -81,6 +89,11 @@ namespace Interapptive.Shared.Data
                 {
                     try
                     {
+                        executeSqlCmd.SetVariable("DatabaseName", databaseName);
+                        executeSqlCmd.SetVariable("DefaultFilePrefix", defaultFilePrefix);
+                        executeSqlCmd.SetVariable("DefaultDataPath", defaultFilePath);
+                        executeSqlCmd.SetVariable("DefaultLogPath", defaultFilePath);
+
                         executeSqlCmd.Execute(sql);
 
                         break;
