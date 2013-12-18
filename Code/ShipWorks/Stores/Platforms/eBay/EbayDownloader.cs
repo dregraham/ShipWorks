@@ -38,12 +38,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // WebClient to use for connetivity
         EbayWebClient webClient;
 
-        // Time range we are downloading from\to
-        DateTime rangeStart;
-        DateTime rangeEnd;
-
         // Total number of ordres expected during this download
-        int expectedCount;
+        int expectedCount = -1;
 
         /// <summary>
         /// Create the new eBay downloader
@@ -65,16 +61,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 // Get the official eBay time in UTC
                 eBayOfficialTime = webClient.GetOfficialTime();
-
-                // Get the date\time to start downloading from
-                rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
-                rangeEnd = eBayOfficialTime.AddMinutes(-5);
-
-                // Ebay only allows going back 30 days
-                if (rangeStart < eBayOfficialTime.AddDays(-30))
-                {
-                    rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
-                }
 
                 if (!DownloadOrders())
                 {
@@ -111,15 +97,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private bool DownloadOrders()
         {
-            int page = 1;
+            // Get the date\time to start downloading from
+            DateTime rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
+            DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
+
+            // Ebay only allows going back 30 days
+            if (rangeStart < eBayOfficialTime.AddDays(-30))
+            {
+                rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
+            }
 
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd, page);
+                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd);
 
                 // Grab the total expected account from the first page
-                if (page == 1)
+                if (expectedCount < 0)
                 {
                     expectedCount = response.PaginationResult.TotalNumberOfEntries;
                 }
@@ -133,10 +127,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         return false;
                     }
 
+                    DateTime lastModified = orderType.CheckoutStatus.LastModifiedTime;
+                    
+                    // Skip any that are out of range.  We take any that are a day out of range back, b\c eBay's API sometimes returns stuff in the next page that should have been on the previous.
+                    // I have open bug reports with them.  12/18/13
+                    if (lastModified < rangeStart.AddDays(-1) || lastModified > rangeEnd)
+                    {
+                        log.WarnFormat("Skipping eBay order {0} since it's out of our date range {1}", orderType.OrderID, orderType.CheckoutStatus.LastModifiedTime);
+                        continue;
+                    }
+
                     ProcessOrder(orderType);
 
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
+
+                    // Update the range for the next time around.  Should always be ascending
+                    Debug.Assert(lastModified >= rangeStart);
+                    rangeStart = lastModified;
                 }
 
                 // Quit if eBay says there aren't any more
@@ -144,9 +152,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     return true;
                 }
-
-                // Next page
-                page++;
             }
         }
 
