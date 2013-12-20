@@ -39,6 +39,8 @@ namespace ShipWorks.Data.Connection
         DateTime serverDateLocal;
         DateTime serverDateUtc;
         Stopwatch timeSinceTimeTaken;
+        string serverMachineName;
+        Version serverVersion;
 
         /// <summary>
         /// Static constructor
@@ -95,6 +97,13 @@ namespace ShipWorks.Data.Connection
 
             // Set the loaded session as current
             Current = session;
+
+            if (IsConfigured)
+            {
+                // If there is a crash, we are not allowed to ask the database for these values, so ask now so that they get cached.
+                Current.GetServerMachineName();
+                Current.GetServerVersion();
+            }
         }
 
         /// <summary>
@@ -144,6 +153,10 @@ namespace ShipWorks.Data.Connection
         {
             // This forces the time to be regotten the next time asked for
             timeSinceTimeTaken = null;
+
+            // Set cached properties so that they will get re-populated when asked for.
+            serverVersion = null;
+            serverMachineName = string.Empty;
         }
 
         /// <summary>
@@ -242,10 +255,15 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public Version GetServerVersion()
         {
-            using (SqlConnection con = OpenConnection())
+            if (serverVersion == null)
             {
-                return new Version(con.ServerVersion);
+                using (SqlConnection con = OpenConnection())
+                {
+                    serverVersion = new Version(con.ServerVersion);
+                }
             }
+
+            return serverVersion;
         }
 
         /// <summary>
@@ -474,10 +492,15 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public string GetServerMachineName()
         {
-            using (SqlConnection con = OpenConnection())
+            if (string.IsNullOrWhiteSpace(serverMachineName))
             {
-                return (string) SqlCommandProvider.ExecuteScalar(con, "SELECT SERVERPROPERTY( 'MachineName' )");
+                using (SqlConnection con = OpenConnection())
+                {
+                    serverMachineName = (string) SqlCommandProvider.ExecuteScalar(con, "SELECT SERVERPROPERTY( 'MachineName' )");
+                }
             }
+
+            return serverMachineName;
         }
 
         /// <summary>
