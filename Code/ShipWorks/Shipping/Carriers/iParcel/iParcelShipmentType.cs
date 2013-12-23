@@ -697,7 +697,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                             RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
                             {
-                                ServiceLevel = ServiceLevelType.Anytime
+                                ServiceLevel = ServiceLevelType.Anytime,
+                                ShipmentType = ShipmentTypeCode.iParcel 
                             };
 
                             results.Add(serviceRate);

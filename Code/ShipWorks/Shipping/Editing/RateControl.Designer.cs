@@ -30,7 +30,7 @@
         {
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sandGrid = new Divelements.SandGrid.SandGrid();
-            this.gridColumnCarrier = new Divelements.SandGrid.GridColumn();
+            this.gridColumnProvider = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnService = new Divelements.SandGrid.GridColumn();
             this.gridColumnDays = new Divelements.SandGrid.GridColumn();
             this.gridColumnRate = new Divelements.SandGrid.GridColumn();
@@ -56,7 +56,7 @@
             this.sandGrid.AllowMultipleSelection = false;
             this.sandGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
-            this.gridColumnCarrier,
+            this.gridColumnProvider,
             this.gridColumnService,
             this.gridColumnDays,
             this.gridColumnRate,
@@ -117,16 +117,18 @@
             this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
             // 
-            // gridColumnCarrier
+            // gridColumnProvider
             // 
-            this.gridColumnCarrier.AllowEditing = false;
-            this.gridColumnCarrier.AllowReorder = false;
-            this.gridColumnCarrier.Clickable = false;
-            this.gridColumnCarrier.HeaderText = "Carrier";
-            this.gridColumnCarrier.Visible = false;
-            this.gridColumnCarrier.Width = 50;
-            this.gridColumnCarrier.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
-            this.gridColumnCarrier.AutoSizeIncludeHeader = true;
+            this.gridColumnProvider.AllowEditing = false;
+            this.gridColumnProvider.AllowReorder = false;
+            this.gridColumnProvider.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnProvider.AutoSizeIncludeHeader = true;
+            this.gridColumnProvider.CellHorizontalAlignment = System.Drawing.StringAlignment.Center;
+            this.gridColumnProvider.Clickable = false;
+            this.gridColumnProvider.HeaderText = "Provider";
+            this.gridColumnProvider.MinimumWidth = 50;
+            this.gridColumnProvider.Visible = false;
+            this.gridColumnProvider.Width = 75;
             // 
             // gridColumnService
             // 
@@ -287,6 +289,6 @@
         private System.Windows.Forms.Panel panelOutOfDate;
         private System.Windows.Forms.Panel panelFootnote;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
-        private Divelements.SandGrid.GridColumn gridColumnCarrier;
+        private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
     }
 }

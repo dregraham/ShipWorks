@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using ShipWorks.UI.Controls;
+using ShipWorks.Properties;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -84,14 +86,20 @@ namespace ShipWorks.Shipping.Editing
 
             if (rateGroup.Carrier == ShipmentTypeCode.BestRate)
             {
-                gridColumnCarrier.Visible = true;
+                gridColumnProvider.Visible = true;
             }
 
             foreach (RateResult rate in rateGroup.Rates)
             {
+                Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
+                if (rate.ShipmentType == ShipmentTypeCode.Other)
+                {
+                    providerLogo = ShippingIcons.truck_blue;
+                }
+
                 GridRow row = new GridRow(new[]
                 {
-                    new GridCell(rate.CarrierDescription),
+                    new GridCell(providerLogo == null ? ShippingIcons.other : providerLogo),
                     new GridCell(rate.Description),
                     new GridCell(rate.Days),
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),

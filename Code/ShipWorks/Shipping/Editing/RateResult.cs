@@ -90,6 +90,14 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Gets or sets the type of the shipment.
+        /// </summary>
+        /// <value>
+        /// The type of the shipment.
+        /// </value>
+        public ShipmentTypeCode ShipmentType { get; set; }
+
+        /// <summary>
         /// Tag used by the specific service type to store a strongly-typed object representing the rate.  Only valid if Selectable is true.
         /// </summary>
         public object Tag

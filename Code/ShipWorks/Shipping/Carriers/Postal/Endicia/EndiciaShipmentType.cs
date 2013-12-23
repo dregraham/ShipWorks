@@ -398,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                     }
 
-                    RateGroup finalGroup = new RateGroup(finalRates);
+                    RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Endicia; return e; }).ToList());
                     
                     if (settings.EndiciaAutomaticExpress1)
                     {
@@ -425,7 +425,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     // Express1 rages - return as-is
-                    return new RateGroup(endiciaRates);
+                    return new RateGroup(endiciaRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Endicia; return e; }).ToList());
                 }
             }
             catch (EndiciaException ex)

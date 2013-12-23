@@ -165,6 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     foreach(RateResult stampsRate in stampsRates)
                     {
                         PostalRateSelection stampsRateDetail = (PostalRateSelection)stampsRate.Tag;
+                        stampsRate.ShipmentType = ShipmentTypeCode.Stamps;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
                         if (stampsRate.Selectable && stampsRateDetail != null && Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
@@ -175,6 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             {
                                 express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
                                     ((PostalRateSelection)e1r.Tag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection)e1r.Tag).ConfirmationType == stampsRateDetail.ConfirmationType);
+                                express1Rate.ShipmentType = stampsRate.ShipmentType;
                             }
 
                             // If Express1 returned a rate, check to make sure it is a lower amount
@@ -217,7 +219,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         }
                     }
 
-                    RateGroup finalGroup = new RateGroup(finalRates);
+                    RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
                     if (settings.StampsAutomaticExpress1)
                     {
                         if (hasExpress1Savings)
@@ -242,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 else
                 {
                     // Express1 rates - return as-is
-                    return new RateGroup(stampsRates);
+                    return new RateGroup(stampsRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
                 }
             }
             catch(StampsException ex)

@@ -677,7 +677,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                                 new FedExRateSelection(serviceType))
                 {
                     ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays)
+                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                    ShipmentType = ShipmentTypeCode.FedEx
                 });
             }
 

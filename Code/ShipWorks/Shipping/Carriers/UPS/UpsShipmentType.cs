@@ -746,7 +746,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                             service)
                         {
                             ServiceLevel = GetServiceLevel(serviceRate, transitTime),
-                            ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate
+                            ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate,
+                            ShipmentType = ShipmentTypeCode.UpsOnLineTools
                         };
 
                         rates.Add(rateResult);

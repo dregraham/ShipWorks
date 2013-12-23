@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.Editing
             OriginalRate = originalRate;
             ExpectedDeliveryDate = originalRate.ExpectedDeliveryDate;
             CarrierDescription = originalRate.CarrierDescription;
+            ShipmentType = originalRate.ShipmentType;
         }
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace ShipWorks.Shipping.Editing
             {
                 Description = "Undisclosed " + EnumHelper.GetDescription(ServiceLevel);
                 CarrierDescription = "Undisclosed";
+                ShipmentType = ShipmentTypeCode.Other;
             }
         }
     }
