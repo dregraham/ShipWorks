@@ -11,13 +11,13 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public class SqlUpdateScript
     {
-        Version schemaVersion;
+        string schemaVersion;
         string scriptName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SqlUpdateScript(string resourcePath)
+        public SqlUpdateScript(string resourcePath, string resourceName)
         {
             // We have to extract out the path part
             int updateIndex = resourcePath.IndexOf("Update");
@@ -29,20 +29,13 @@ namespace ShipWorks.Data.Administration
             // Set the script name
             scriptName = resourcePath.Substring(updateIndex + "Update.".Length);
 
-            Match versionMatch = Regex.Match(resourcePath, @"\d+\.\d+\.\d+\.\d+\.sql$");
-            if (!versionMatch.Success)
-            {
-                throw new InvalidOperationException("Could not extract script name from path " + resourcePath);
-            }
-
-            // Create the version from that
-            schemaVersion = new Version(versionMatch.Value.Replace(".sql", ""));
+            schemaVersion = resourceName;
         }
 
         /// <summary>
         /// The ShipWorks database schema version number
         /// </summary>
-        public Version SchemaVersion
+        public string SchemaVersion
         {
             get { return schemaVersion; }
         }

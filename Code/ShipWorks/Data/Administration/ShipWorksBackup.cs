@@ -803,7 +803,7 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                if (SqlSchemaUpdater.GetInstalledSchemaVersion() < new Version(3, 0))
+                if (SqlSchemaUpdater.IsVersionLessThanThree())
                 {
                     log.Info("Access granted to null user due to 2x schema.");
                     return;

@@ -8,6 +8,7 @@
     [CustomerUpdateBilling]  BIT        NOT NULL,
     [CustomerUpdateShipping] BIT        NOT NULL,
     [AuditNewOrders]         BIT        NOT NULL,
+    [AuditDeletedOrders]     BIT        NOT NULL,
     CONSTRAINT [PK_Configuration] PRIMARY KEY CLUSTERED ([ConfigurationID] ASC)
 );
 

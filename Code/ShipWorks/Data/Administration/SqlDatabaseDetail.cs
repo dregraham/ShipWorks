@@ -19,7 +19,7 @@ namespace ShipWorks.Data.Administration
         string name;
         SqlDatabaseStatus status;
 
-        Version schemaVersion;
+        string schemaVersion;
 
         string lastUsedBy;
         DateTime lastUsedOn;
@@ -70,9 +70,12 @@ namespace ShipWorks.Data.Administration
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.schemaVersion = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+            detail.schemaVersion = (string) SqlCommandProvider.ExecuteScalar(cmd);
 
-            detail.status = detail.schemaVersion.Major < 3 ? SqlDatabaseStatus.ShipWorks2x : SqlDatabaseStatus.ShipWorks;
+            detail.status = SqlSchemaUpdater.IsVersionLessThanThree(detail.schemaVersion) ?
+                                SqlDatabaseStatus.ShipWorks2x :
+                                SqlDatabaseStatus.ShipWorks;
+
         }
 
         /// <summary>
@@ -156,7 +159,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// ShipWorks schema version of the database
         /// </summary>
-        public Version SchemaVersion
+        public string SchemaVersion
         {
             get { return schemaVersion; }
         }

@@ -7,10 +7,14 @@
     [TotalWeight]              FLOAT (53)     NOT NULL,
     [Processed]                BIT            NOT NULL,
     [ProcessedDate]            DATETIME       NULL,
+    [ProcessedUserID]          BIGINT         NULL,
+    [ProcessedComputerID]      BIGINT         NULL,
     [ShipDate]                 DATETIME       NOT NULL,
     [ShipmentCost]             MONEY          NOT NULL,
     [Voided]                   BIT            NOT NULL,
     [VoidedDate]               DATETIME       NULL,
+    [VoidedUserID]             BIGINT         NULL,
+    [VoidedComputerID]         BIGINT         NULL,
     [TrackingNumber]           NVARCHAR (50)  NOT NULL,
     [CustomsGenerated]         BIT            NOT NULL,
     [CustomsValue]             MONEY          NOT NULL,
@@ -56,6 +60,10 @@
     [BestRateEvents]           TINYINT        NOT NULL,
     CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED ([ShipmentID] ASC),
     CONSTRAINT [FK_Shipment_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID]),
+    CONSTRAINT [FK_Shipment_ProcessedComputer] FOREIGN KEY ([ProcessedComputerID]) REFERENCES [dbo].[Computer] ([ComputerID]),
+    CONSTRAINT [FK_Shipment_ProcessedUser] FOREIGN KEY ([ProcessedUserID]) REFERENCES [dbo].[User] ([UserID]),
+    CONSTRAINT [FK_Shipment_VoidedComputer] FOREIGN KEY ([VoidedComputerID]) REFERENCES [dbo].[Computer] ([ComputerID]),
+    CONSTRAINT [FK_Shipment_VoidedUser] FOREIGN KEY ([VoidedUserID]) REFERENCES [dbo].[User] ([UserID]),
     CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED ([ShipmentID] ASC)
 );
 

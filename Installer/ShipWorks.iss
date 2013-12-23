@@ -326,7 +326,7 @@ function CheckUpgradeIssues() : Boolean;
 var
 	TargetExe: string;
 	VersionFound: string;
-	SchemaFound: Integer;
+	NeedsUpgrade: boolean;
 begin
 
 	Result := True;
@@ -356,10 +356,10 @@ begin
 		then begin
 
 			// See if a DB upgrade will be required.
-		    if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+		    if Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -schema:' + #RequiredSchemaID, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
 		    then begin
 
-				if ((SchemaFound > 0) and ({#RequiredSchemaID} > SchemaFound))
+				if (NeedsUpgrade)
 				then begin
 
 					if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +

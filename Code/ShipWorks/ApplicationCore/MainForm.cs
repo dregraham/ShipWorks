@@ -760,7 +760,7 @@ namespace ShipWorks
         /// </summary>
         private bool CheckDatabaseVersion()
         {
-            Version installedVersion;
+            string installedVersion;
 
             try
             {
@@ -777,7 +777,8 @@ namespace ShipWorks
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
             // See if it needs upgraded
-            if (installedVersion < SqlSchemaUpdater.GetRequiredSchemaVersion() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
+            UpdateScriptManager updateScriptManager = new UpdateScriptManager();
+            if (updateScriptManager.DoesDBNeedToBeUpgraded(installedVersion) || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {
@@ -802,7 +803,7 @@ namespace ShipWorks
             }
             
             // See if its too new
-            if (installedVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            if ((new UpdateScriptManager()).DoesShipWorksNeedToBeUpgraded(installedVersion))
             {
                 MessageHelper.ShowMessage(this,
                     "The version of your ShipWorks database is newer than this version\n" +

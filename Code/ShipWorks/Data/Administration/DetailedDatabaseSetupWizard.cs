@@ -1238,35 +1238,31 @@ namespace ShipWorks.Data.Administration
                     status = "(Active)";
                 }
                 // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
-                else if (database.Status == SqlDatabaseStatus.ShipWorks)
+                else switch (database.Status)
                 {
-                    if (database.SchemaVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
-                    {
-                        status = "Newer";
-                    }
-                    else if (database.SchemaVersion < SqlSchemaUpdater.GetRequiredSchemaVersion())
-                    {
-                        status = "Out of Date";
-                    }
-                    else
-                    {
-                        status = "Ready";
-                    }
-                }
-                // ShipWorks 2
-                else if (database.Status == SqlDatabaseStatus.ShipWorks2x)
-                {
-                    status = "ShipWorks 2";
-                }
-                // Not a ShipWorks database
-                else if (database.Status == SqlDatabaseStatus.NonShipWorks)
-                {
-                    status = "Non-ShipWorks";
-                }
-                // Couldn't connect for some reason
-                else
-                {
-                    status = "Couldn't Connect";
+                    case SqlDatabaseStatus.ShipWorks:
+                        if (database.SchemaVersion == SqlSchemaUpdater.GetRequiredSchemaVersion())
+                        {
+                            status = "Ready";
+                        }
+                        else if ((new UpdateScriptManager()).DoesDBNeedToBeUpgraded(database.SchemaVersion))
+                        {
+                            status = "Out of Date";
+                        }
+                        else
+                        {
+                            status = "Newer";
+                        }
+                        break;
+                    case SqlDatabaseStatus.ShipWorks2x:
+                        status = "ShipWorks 2";
+                        break;
+                    case SqlDatabaseStatus.NonShipWorks:
+                        status = "Non-ShipWorks";
+                        break;
+                    default:
+                        status = "Couldn't Connect";
+                        break;
                 }
 
                 // See if we have info on the last logged in user
@@ -1841,11 +1837,14 @@ namespace ShipWorks.Data.Administration
 
             using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
             {
-                Version installed;
-
+                bool isVersionLessThanThree;
+                bool isVersionLessThanOneTwo;
+               
                 try
                 {
-                    installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
+                    string installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
+                    isVersionLessThanThree = SqlSchemaUpdater.IsVersionLessThanThree(installed);
+                    isVersionLessThanOneTwo = SqlSchemaUpdater.IsVersionLessThanOneTwo(installed);
                 }
                 catch (InvalidShipWorksDatabaseException)
                 {
@@ -1860,14 +1859,14 @@ namespace ShipWorks.Data.Administration
 
                 // Below db version 1.2.0 (ShipWorks 2.4), there were no users.  So to be logged
                 // in at all is to be an admin.
-                if (installed < new Version(1, 2))
+                if (isVersionLessThanOneTwo)
                 {
                     log.Debug("Pre 2.4 database, no need for admin logon.");
 
                     e.Skip = true;
                 }
                 // See if we need to login 2.x style
-                else if (installed < new Version(3, 0))
+                else if (isVersionLessThanThree)
                 {
                     if (!UserUtility.Has2xAdminUsers())
                     {
@@ -1951,10 +1950,10 @@ namespace ShipWorks.Data.Administration
 
             using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
             {
-                Version installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
+                bool isVersionLessThanThree = SqlSchemaUpdater.IsVersionLessThanThree(SqlSchemaUpdater.GetRequiredSchemaVersion());
 
                 // See if we need to login 2.x style
-                if (installed < new Version(3, 0))
+                if (isVersionLessThanThree)
                 {
                     if (!UserUtility.IsShipWorks2xAdmin(restoreUsername.Text, restorePassword.Text))
                     {

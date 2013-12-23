@@ -849,7 +849,13 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// </summary>
         protected override int RunEstimate(SqlConnection con)
         {
-            Version installedVersion = SqlSchemaUpdater.GetInstalledSchemaVersion(con);
+            string installedVersionName = SqlSchemaUpdater.GetInstalledSchemaVersion(con);
+
+            Version installedVersion;
+            if (Version.TryParse(installedVersionName, out installedVersion))
+            {
+                throw new MigrationException("Your ShipWorks 2 database is newer than this version of ShipWorks 3 supports upgrading.\n\nPlease update to the latest version of ShipWorks 3 to upgrade your ShipWorks 2 database.");
+            }
 
             // only allow upgrading from V2 versions we are aware of.
             if (installedVersion > new Version("2.9.65.0"))
@@ -876,10 +882,11 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         protected override int Run()
         {
             Version installedVersion;
-            using (SqlConnection con = MigrationTaskBase.OpenConnectionForTask(this))
+
+            using (SqlConnection con = OpenConnectionForTask(this))
             {
                 // capture the current database version
-                installedVersion = SqlSchemaUpdater.GetInstalledSchemaVersion(con);
+                installedVersion = Version.Parse(SqlSchemaUpdater.GetInstalledSchemaVersion(con));
 
                 // The scripts must run in SQL 2000 mode, as that's what they were generated for.  Most databases will already be at that level unless
                 // they were created in a manually installed instance of 05 or higher.
