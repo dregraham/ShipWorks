@@ -143,8 +143,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
                     // Update the range for the next time around.  Should always be ascending
-                    Debug.Assert(lastModified >= rangeStart);
-                    rangeStart = lastModified;
+                    if (lastModified > rangeStart)
+                    {
+                        rangeStart = lastModified;
+                    }
                 }
 
                 // Quit if eBay says there aren't any more
