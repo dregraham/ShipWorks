@@ -73,11 +73,7 @@ namespace Interapptive.Shared.Data
             log.InfoFormat("Running script {0}", name);
 
             // Create the command to use
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandTimeout = 1200; // 20 minutes
-
-
-            ExecuteSQLCmdMode executeSqlCmd = new ExecuteSQLCmdMode(con);
+            ExecuteSqlCmdMode executeSqlCmd = new ExecuteSqlCmdMode(con);
             
             try
             {
