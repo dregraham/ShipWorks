@@ -25,16 +25,20 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Gets the script names of all the scripts required to update the database to latest schema.
+        /// Gets the upgrade path.
         /// </summary>
-        public List<String> GetUpgradePath(string installedVersion, List<KeyValuePair<string, List<String>>> shipWorksVersions)
+        /// <param name="fromVersion">From version.</param>
+        /// <param name="shipWorksVersions">All ShipWorks Versions.</param>
+        /// <returns></returns>
+        public List<String> GetUpgradePath(string fromVersion, List<KeyValuePair<string, List<String>>> shipWorksVersions)
         {
+            string toVersion = shipWorksVersions.Last().Key;
             foreach (var shipWorksVersion in shipWorksVersions)
             {
                 AddVersion(shipWorksVersion.Key, shipWorksVersion.Value);
             }
 
-            return GetUpgradePath(installedVersion, shipWorksVersions.Last().Key);
+            return GetUpgradePath(fromVersion, toVersion);
         }
 
         /// <summary>
@@ -73,7 +77,18 @@ namespace ShipWorks.Data.Administration
                 return new List<string>();
             }
 
-            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths = graph.ShortestPathsDijkstra(edge => edgeCosts[edge], targetVersion);
+            TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths;
+
+            try
+            {
+
+                tryGetPaths = graph.ShortestPathsDijkstra(edge => edgeCosts[edge], targetVersion);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new FindVersionUpgradePathException("Couldn't find version in version file.", ex);
+            }
+
             IEnumerable<Edge<string>> path;
 
             if (tryGetPaths(installedVersion, out path))
@@ -81,7 +96,7 @@ namespace ShipWorks.Data.Administration
                 return path.Reverse().Select(version => version.Source).ToList();
             }
 
-            throw new InvalidOperationException(string.Format("Couldn't find path from {0} to {1}.", installedVersion, targetVersion));
+            throw new FindVersionUpgradePathException(string.Format("Couldn't find path from {0} to {1}.", installedVersion, targetVersion));
         }
     }
 }

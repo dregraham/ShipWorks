@@ -113,7 +113,9 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Doeses the installing version require database to be upgraded.
+        /// Does the installing version require database to be upgraded. This is a tough question because
+        /// we don't have the json file for the version being installed. We assume that if we haven't heard of
+        /// the version being installed, it will require a DB update...
         /// </summary>
         /// <param name="installingSchemaVersion">The installing schema version.</param>
         /// <param name="installedSchemaVersion">The installed schema version.</param>
@@ -134,27 +136,24 @@ namespace ShipWorks.Data.Administration
                 }
             }
 
-            try
+            if (allVersions.All(x => x.Key != installingSchemaVersion))
             {
-                // There are scripts that can update the DB, so true.
-                return GetUpdateScripts(installedSchemaVersion).Count > 0;
+                // We don't know about the version that is about to be installed. Most likely will require an upgrade.
+                return true;
             }
-            catch (InvalidOperationException)
-            {
-                // No upgrade path, the likeliest reason is that the installed software is unaware of the DB version
-                // of the software being installed and the DB will need to be upgraded.
-                return false;
-            }
+
+            // We don't know if you need to upgrade.
+            return false;
         }
 
         /// <summary>
         /// Get a list of all the update scripts in ShipWorks, ordered based on upgradePath.
         /// </summary>
-        public List<SqlUpdateScript> GetUpdateScripts(string schemaVersion)
+        public List<SqlUpdateScript> GetUpdateScripts(string fromVersion)
         {
             VersionGraph versionGraph = new VersionGraph();
 
-            List<string> upgradePath = versionGraph.GetUpgradePath(schemaVersion, allVersions);
+            List<string> upgradePath = versionGraph.GetUpgradePath(fromVersion, allVersions);
 
             List<SqlUpdateScript> scripts = GetAllScripts();
 

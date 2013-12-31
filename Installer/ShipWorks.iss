@@ -85,7 +85,7 @@ Type: files; Name: {app}\eBay.SDK.dll
 Source: isxdl.dll; DestDir: {tmp}; Flags: dontcopy
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: ShipWorks.exe.config; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Model.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Adapter.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -123,12 +123,12 @@ Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwri
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 
 #ifdef IncludeSymbols
-    Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\ShipWorks.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\ShipWorks.Data.Model.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\ShipWorks.Data.Adapter.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\ShipWorks.SqlServer.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    ; Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    ; Source: {#AppArtifacts}\ShipWorks.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    ; Source: {#AppArtifacts}\ShipWorks.Data.Model.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    ; Source: {#AppArtifacts}\ShipWorks.Data.Adapter.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    ; Source: {#AppArtifacts}\ShipWorks.SqlServer.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
+    ; Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
 
 
@@ -145,19 +145,19 @@ EnableISX=true
 [Registry]
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: ComputerID; ValueData: {code:GetGuid}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks\Instances; ValueType: string; ValueName: {app}; ValueData: {code:GetAppID}; Flags: createvalueifdoesntexist
-Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID};
-Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler;
+Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID}
+Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler
 
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: /s=scheduler; Flags: nowait; Check: not NeedRestart
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall";
+Filename: {app}\ShipWorks.exe; Parameters: /command:uninstall
 
 [Dirs]
 Name: {app}
-Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not CommonAppDataExists;
+Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not CommonAppDataExists
 
 [Code]
 //----------------------------------------------------------------
@@ -183,27 +183,27 @@ begin
 	then begin
 		newAppID := GetGuid('');
 	end;
-	
+
 	try
 	    appPath := ExpandConstant('{app}');
 
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks\Instances' , appPath, instanceID)
-		then begin	
+		then begin
 			Result := instanceID;
 		end
 		else
-		begin		
+		begin
 			Result := newAppID;
 		end;
-		
+
     except
-    
+
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks', 'LastInstalledInstanceID', instanceID)
 		then begin
 			Result := instanceID;
 		end
 		else
-		begin			
+		begin
 			Result := newAppID;
 		end;
     end;
@@ -242,7 +242,7 @@ var
 begin
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-	if (FileExists(TargetExe)) 
+	if (FileExists(TargetExe))
     then begin
 
 	    if (GetVersionNumbers(TargetExe, VersionMS, VersionLS))
@@ -268,7 +268,7 @@ begin
         end;
 	end
 	else
-	begin			
+	begin
 		Result := false;
 	end;
 
@@ -280,12 +280,12 @@ end;
 function CommonAppDataExists(): Boolean;
 begin
 
-	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive')) 
+	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive'))
     then begin
         Result := true;
     end
 	else
-	begin			
+	begin
 		Result := false;
 	end;
 
@@ -326,12 +326,15 @@ function CheckUpgradeIssues() : Boolean;
 var
 	TargetExe: string;
 	VersionFound: string;
-	NeedsUpgrade: boolean;
+	NeedsUpgrade: Integer;
+	VersionInstalling: string;
 begin
 
 	Result := True;
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+
+	VersionInstalling := '' + '{#= RequiredSchemaID}' + '';
 
 	if (FileExists(TargetExe))
 	then begin
@@ -356,10 +359,10 @@ begin
 		then begin
 
 			// See if a DB upgrade will be required.
-		    if Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -schema:' + #RequiredSchemaID, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
+		    if Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -dbschema:' + VersionInstalling, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
 		    then begin
 
-				if (NeedsUpgrade)
+				if (NeedsUpgrade = 1)
 				then begin
 
 					if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
@@ -409,12 +412,12 @@ begin
 			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
 		end;
 
-        if IsTaskSelected('desktopicon') 
+        if IsTaskSelected('desktopicon')
         then begin
             // We now call it just ShipWorks instead of ShipWorks 3
             DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
-        end;    
-  
+        end;
+
   end;
 
 end;

@@ -389,7 +389,10 @@ namespace ShipWorks.Data.Administration
             /// </summary>
             public string CommandName
             {
-                get { return "checkneedsupgrade"; }
+                get
+                {
+                    return "checkneedsupgrade";
+                }
             }
 
             /// <summary>
@@ -397,23 +400,16 @@ namespace ShipWorks.Data.Administration
             /// </summary>
             public void Execute(List<string> args)
             {
-                string type = null;
                 string swSchema = null;
 
                 // Need to extract the type
                 OptionSet optionSet = new OptionSet()
                 {
-                    { "t|type=", v => type = v },
-                    { "schema", s => swSchema = s },
+                    { "dbschema=", s => swSchema = s },
                     { "<>", v => { throw new CommandLineCommandArgumentException(CommandName, v, "Invalid arguments passed to command."); } }
                 };
 
                 optionSet.Parse(args);
-
-                if (string.IsNullOrEmpty(type))
-                {
-                    throw new CommandLineCommandArgumentException(CommandName, "type", "The required 'type' parameter was not specified.");
-                }
 
                 // At the point in which this is called, SqlSession has not been setup
                 SqlSession.Initialize();
@@ -428,10 +424,10 @@ namespace ShipWorks.Data.Administration
                         string installedSchemaVersion = GetInstalledSchemaVersion();
 
                         UpdateScriptManager scriptManager = new UpdateScriptManager();
-                        
+
                         log.InfoFormat("Database schema version  {0}", installedSchemaVersion);
 
-                        Environment.ExitCode = scriptManager.DoesInstallingVersionRequireDBToBeUpgraded(swSchema,installedSchemaVersion) ? 1 : 0;
+                        Environment.ExitCode = scriptManager.DoesInstallingVersionRequireDBToBeUpgraded(swSchema, installedSchemaVersion) ? 1 : 0;
                     }
                     else
                     {
@@ -447,18 +443,6 @@ namespace ShipWorks.Data.Administration
                     Environment.ExitCode = 0;
                 }
             }
-        }
-
-        /// <summary>
-        /// Get the SchemaID representation of the given version number
-        /// </summary>
-        private static int GetSchemaID(Version version)
-        {
-            return
-                (version.Major << 24) +
-                (version.Minor << 16) +
-                (version.Build << 8) +
-                (version.Revision);
         }
     }
 }
