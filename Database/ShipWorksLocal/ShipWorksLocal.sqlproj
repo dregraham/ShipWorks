@@ -99,8 +99,6 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
-    <Folder Include="Functions\" />
-    <Folder Include="Stored Procedures\" />
     <Folder Include="Assemblies\" />
   </ItemGroup>
   <ItemGroup>
@@ -828,33 +826,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="Functions\GetEntityTableNumber.sql" />
-    <Build Include="Functions\GetFilterNodeLayoutID.sql" />
-    <Build Include="Functions\GetFilterNodeLevels.sql" />
-    <Build Include="Functions\GetFilterSequenceLayoutID.sql" />
-    <Build Include="Functions\BitwiseAnd.sql" />
-    <Build Include="Functions\DatePartOnly.sql" />
-    <Build Include="Functions\DateToUniversalTime.sql" />
-    <Build Include="Functions\GetTransactionID.sql" />
-    <Build Include="Functions\RegexMatch.sql" />
-    <Build Include="Functions\GetTemplateFullName.sql" />
-    <Build Include="Functions\GetComputerID.sql" />
-    <Build Include="Functions\GetUserID.sql" />
-    <Build Include="Functions\GetTemplateDescendantsOfFolder.sql" />
-    <Build Include="Stored Procedures\GetSchemaVersion.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="Stored Procedures\ValidateGridLayouts.sql" />
-    <Build Include="Stored Procedures\CalculateUpdateFilterCounts.sql" />
-    <Build Include="Stored Procedures\CalculateInitialFilterCounts.sql" />
-    <Build Include="Stored Procedures\DeleteAbandonedFilterCounts.sql" />
-    <Build Include="Stored Procedures\ValidateFilterLayouts.sql" />
-    <Build Include="Stored Procedures\PurgeAudit.sql" />
-    <Build Include="Stored Procedures\PurgeLabels.sql" />
-    <Build Include="Stored Procedures\PurgePrintResult.sql" />
-    <Build Include="Stored Procedures\PurgeEmailOutbound.sql" />
-    <Build Include="Stored Procedures\PurgeAbandonedResources.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assemblies\ShipWorks.SqlServer.dll" />
