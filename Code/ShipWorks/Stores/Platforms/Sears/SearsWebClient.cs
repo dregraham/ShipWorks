@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 xShipment.Add(
                     new XElement(nsDefault + "detail",
-                        new XElement(nsDefault + "tracking-number", shipment.TrackingNumber),
+                        new XElement(nsDefault + "tracking-number", shipment.TrackingNumber.Trim()),
                         new XElement(nsDefault + "ship-date", shipment.ShipDate.ToString("yyyy-MM-dd")),
                         new XElement(nsDefault + "shipping-carrier", SearsUtility.GetShipmentCarrierCode(shipment)),
                         new XElement(nsDefault + "shipping-method", SearsUtility.GetShpmentServiceCode(shipment)),
