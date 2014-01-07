@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Fetch the records to import
             IRelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.Relations.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated, "", "", JoinHint.Inner);
+            bucket.Relations.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated, "", "", JoinHint.Left);
             bucket.PredicateExpression.AddWithAnd(WorldShipShipmentFields.ShipmentProcessedOnComputerID == thisComputerID | WorldShipShipmentFields.ShipmentProcessedOnComputerID == System.DBNull.Value);
             adapter.FetchEntityCollection(importList, bucket, 0);
 
@@ -187,19 +187,24 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     if (importList.Count() >= 0)
                     {
                         List<WorldShipProcessedEntity> toImport = importList.ToList();
-                        WorldShipUtility.FixNullShipmentIDs(toImport);
+                        WorldShipUtility.FixInvalidShipmentIDs(toImport);
+
+                        // We called FixNullShipmentIDs, so if there are any, ignore them.
+                        toImport = toImport.Where(i => !string.IsNullOrWhiteSpace(i.ShipmentID)).ToList();
 
                         // Get a list of ws processed entries that are NOT Voids
                         // To support the old mappings, include any where the VoidIndicator is null.  And if it is not null, then check that it is "N"
-                        var worldShipShipments = toImport.Where(i => (i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N")).GroupBy(import => import.ShipmentIdCalculated,
-                            (shipmentId, importEntries) =>
-                                new WorldShipProcessedGrouping(shipmentId,
-                                                               importEntries.Where(i => i.ShipmentIdCalculated == shipmentId && ((i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList()
-                                                              )
-                            );
+                        var worldShipShipments = toImport.Where(i => (i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
+
+                        List<WorldShipProcessedGrouping> worldShipProcessedGroupings = 
+                            worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
+                                (shipmentId, importEntries) =>
+                                    new WorldShipProcessedGrouping(shipmentId,
+                                        importEntries.Where(i => (i.ShipmentIdCalculated == shipmentId || i.ShipmentID == shipmentId.ToString()) && ((i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList())
+                                ).ToList();
 
                         // Process each shipped entry
-                        foreach (WorldShipProcessedGrouping worldShipProcessGroup in worldShipShipments)
+                        foreach (WorldShipProcessedGrouping worldShipProcessGroup in worldShipProcessedGroupings)
                         {
                             ProcessEntry(worldShipProcessGroup);
                         }
@@ -335,8 +340,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                             {
                                 // In case after the upgrade, WS still had entries with no UpsPackageId, we need to support them
                                 // See if we can find a package that does not yet have a tracking number
-                                upsPackage = upsShipment.Packages.FirstOrDefault(p => (string.IsNullOrEmpty(p.TrackingNumber) && !string.IsNullOrEmpty(import.TrackingNumber)) ||
-                                                                                            (string.IsNullOrEmpty(p.UspsTrackingNumber) && !string.IsNullOrEmpty(import.UspsTrackingNumber)));
+                                upsPackage = upsShipment.Packages.FirstOrDefault(p => (string.IsNullOrEmpty(p.TrackingNumber.Trim()) && !string.IsNullOrEmpty(import.TrackingNumber.Trim())) ||
+                                                                                            (string.IsNullOrEmpty(p.UspsTrackingNumber.Trim()) && !string.IsNullOrEmpty(import.UspsTrackingNumber.Trim())));
                             }
 
                             // This is the case where the user created a new package in WS, so create a new one and add to the shipment

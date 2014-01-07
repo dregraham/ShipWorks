@@ -79,15 +79,15 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(46, 301);
+            this.label6.Location = new System.Drawing.Point(44, 270);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 13);
+            this.label6.Size = new System.Drawing.Size(63, 13);
             this.label6.TabIndex = 10;
-            this.label6.Text = "Store Code:";
+            this.label6.Text = "Store code:";
             // 
             // storeCodeTextBox
             // 
-            this.storeCodeTextBox.Location = new System.Drawing.Point(117, 298);
+            this.storeCodeTextBox.Location = new System.Drawing.Point(117, 266);
             this.storeCodeTextBox.Name = "storeCodeTextBox";
             this.storeCodeTextBox.Size = new System.Drawing.Size(107, 21);
             this.storeCodeTextBox.TabIndex = 7;
@@ -95,11 +95,12 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(42, 279);
+            this.label7.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.label7.Location = new System.Drawing.Point(230, 270);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(249, 13);
+            this.label7.Size = new System.Drawing.Size(212, 13);
             this.label7.TabIndex = 12;
-            this.label7.Text = "Only required on multi-store Magento installations:";
+            this.label7.Text = "(Only for multi-store Magento installations)";
             // 
             // label8
             // 
@@ -166,7 +167,7 @@
             this.Controls.Add(this.storeCodeTextBox);
             this.Controls.Add(this.label7);
             this.Name = "MagentoAccountSettingsControl";
-            this.Size = new System.Drawing.Size(482, 337);
+            this.Size = new System.Drawing.Size(482, 305);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.label2, 0);
             this.Controls.SetChildIndex(this.label3, 0);

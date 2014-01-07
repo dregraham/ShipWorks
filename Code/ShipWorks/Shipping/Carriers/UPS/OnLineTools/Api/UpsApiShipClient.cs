@@ -1004,11 +1004,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 UpsPackageEntity currentPackage = shipment.Ups.Packages[packageIndex];
 
                 // Extract the package data
-                currentPackage.TrackingNumber = XPathUtility.Evaluate(packageNode, "TrackingNumber", "");
+                currentPackage.TrackingNumber = XPathUtility.Evaluate(packageNode, "TrackingNumber", "").Trim();
 
                 if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
                 {
-                    currentPackage.UspsTrackingNumber = XPathUtility.Evaluate(packageNode, "USPSPICNumber", "");
+                    currentPackage.UspsTrackingNumber = XPathUtility.Evaluate(packageNode, "USPSPICNumber", "").Trim();
                     shipment.Ups.UspsTrackingNumber = currentPackage.UspsTrackingNumber;
                     shipment.Ups.Cn22Number = XPathUtility.Evaluate(packageNode, "CN22Number", "");
 

@@ -131,8 +131,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             if (eBayItems.Count >= 1)
                             {
                                 // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
-                                if ((combineType == EbayCombinedOrderType.Local && eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Paid)) ||
-                                    (combineType == EbayCombinedOrderType.Ebay  && eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Incomplete)))
+                                if ((combineType == EbayCombinedOrderType.Local && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Paid)) ||
+                                    (combineType == EbayCombinedOrderType.Ebay  && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Incomplete)))
                                 {
                                     orders.Add(ebayOrder);
                                 }

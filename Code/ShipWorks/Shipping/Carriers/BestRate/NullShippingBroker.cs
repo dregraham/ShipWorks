@@ -14,6 +14,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class NullShippingBroker : IBestRateShippingBroker
     {
         /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasAccounts
+        {
+            get
+            {
+                // Always return false since this is a null broker
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Gets the rates for each of the accounts of a specific shipping provider based
         /// on the configuration of the best rate shipment data.
         /// </summary>
@@ -34,18 +49,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Gets a value indicating whether there any accounts available to a broker.
+        /// Determines whether customs forms are required for the given shipment for any accounts of a broker.
+        /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasAccounts
+        public bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            get
-            {
-                // Always return false since this is a null broker
-                return false;
-            }
+            return false;
         }
     }
 }

@@ -1139,11 +1139,12 @@ namespace ShipWorks.Data.Administration
 
             // Create another variable for closure purposes
             SqlSession backgroundSession = connectionSession;
+            SqlSessionConfiguration firstTryConfiguration = !string.IsNullOrEmpty(sqlSession.Configuration.ServerInstance) ? sqlSession.Configuration : (SqlSession.IsConfigured ? SqlSession.Current.Configuration : null);
 
             // Start the background task to try to log in and figure out the background databases...
             var task = Task.Factory.StartNew(() =>
                 {
-                    SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, backgroundSession.Configuration);
+                    SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration);
 
                     if (configuration != null)
                     {

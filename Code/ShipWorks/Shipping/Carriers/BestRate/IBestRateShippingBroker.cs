@@ -17,6 +17,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public interface IBestRateShippingBroker
     {
+
+        /// <summary>
+        /// Gets a value indicating whether there any accounts available to a broker.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
+        /// </value>
+        bool HasAccounts { get; }
+
         /// <summary>
         /// Gets the rates for each of the accounts of a specific shipping provider based 
         /// on the configuration of the best rate shipment data.
@@ -34,11 +43,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
 
         /// <summary>
-        /// Gets a value indicating whether there any accounts available to a broker.
+        /// Determines whether customs forms are required for the given shipment for any accounts of a broker.
+        /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if the broker [has accounts]; otherwise, <c>false</c>.
-        /// </value>
-        bool HasAccounts { get; }
+        bool IsCustomsRequired(ShipmentEntity shipment);
     }
 }

@@ -250,8 +250,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
 
-            // If firstTry was given, use it
-            if (firstTry != null && !(!firstTry.WindowsAuth && string.IsNullOrWhiteSpace(firstTry.Username)))
+            // If firstTry was given, and we are connecting to the same instance it represents, use it's config first as it will likely work.
+            if ((firstTry != null) && 
+                (firstTry.WindowsAuth || !string.IsNullOrWhiteSpace(firstTry.Username)) &&
+                (firstTry.ServerInstance == instance))
             {
                 configsToTry.Add(new SqlSessionConfiguration(firstTry));
             }

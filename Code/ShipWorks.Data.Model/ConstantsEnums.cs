@@ -1906,6 +1906,8 @@ namespace ShipWorks.Data.Model
 		CombinedLocally,
 		///<summary>SelectedShippingMethod. </summary>
 		SelectedShippingMethod,
+		///<summary>SellingManagerRecord. </summary>
+		SellingManagerRecord,
 		///<summary>GspEligible. </summary>
 		GspEligible,
 		///<summary>GspFirstName. </summary>
@@ -1942,8 +1944,6 @@ namespace ShipWorks.Data.Model
 		RollupFeedbackReceivedComments,
 		///<summary>RollupPayPalAddressStatus. </summary>
 		RollupPayPalAddressStatus,
-		///<summary>RollupSellingManagerRecord. </summary>
-		RollupSellingManagerRecord,
 		/// <summary></summary>
 		AmountOfFields
 	}

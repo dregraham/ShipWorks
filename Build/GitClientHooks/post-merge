@@ -1,0 +1,8 @@
+#!/bin/sh
+
+
+# Make sure we're on the root directory of the branch 
+relativeRoot=$(git rev-parse --show-cdup)
+cd "$relativeRoot"	
+
+./Build/GitClientHooks/combine-feature-scripts.sh
