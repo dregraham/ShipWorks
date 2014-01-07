@@ -71,7 +71,7 @@ namespace ShipWorks.Data.Administration
                 GetUpdateScripts(schemaVersion);
                 return false;
             }
-            catch (InvalidOperationException)
+            catch (FindVersionUpgradePathException)
             {
                 return true;
             }
@@ -102,7 +102,7 @@ namespace ShipWorks.Data.Administration
                     return true;
                 }
             }
-            catch (InvalidOperationException)
+            catch (FindVersionUpgradePathException)
             {
                 // No upgrade path, the likeliest reason is that the software is unaware of the DB version and 
                 // the software needs to be upgraded. 
