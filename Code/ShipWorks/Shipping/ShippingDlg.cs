@@ -1299,7 +1299,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void UpdateSelectionDependentUI()
         {
-            bool canProcessSelected = false;
             bool canApplyProfile = false;
             bool canGetRates = false;
             bool canPrint = false;
@@ -1309,6 +1308,7 @@ namespace ShipWorks.Shipping
             bool securityCreateEditProcess = uiDisplayedShipments.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.Order.OrderID));
             bool securityVoidDelete = uiDisplayedShipments.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, s.Order.OrderID));
 
+
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
@@ -1316,7 +1316,6 @@ namespace ShipWorks.Shipping
                 {
                     if (!shipment.Processed && securityCreateEditProcess)
                     {
-                        canProcessSelected = true;
                         canApplyProfile = true;
                     }
 
@@ -1338,7 +1337,7 @@ namespace ShipWorks.Shipping
             }
 
             // Update enable state
-            processSelected.Enabled = canProcessSelected;
+            processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
             getRates.Enabled = canGetRates;
             print.Enabled = canPrint;
@@ -1822,7 +1821,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnProcessSelected(object sender, EventArgs e)
         {
-            Process(shipmentControl.SelectedShipments);
+            if (shipmentControl.SelectedShipments.Any())
+            {
+                Process(shipmentControl.SelectedShipments);
+            }
+            else
+            {
+                MessageHelper.ShowError(this, "At least one shipment must be selected.");
+            }
         }
 
         /// <summary>
