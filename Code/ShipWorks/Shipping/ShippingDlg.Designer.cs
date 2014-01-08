@@ -50,7 +50,6 @@
             this.processAll = new System.Windows.Forms.Button();
             this.processSelected = new System.Windows.Forms.Button();
             this.panelSettingsButtons = new System.Windows.Forms.Panel();
-            this.profiles = new System.Windows.Forms.Button();
             this.labelInternal = new System.Windows.Forms.Label();
             this.unprocess = new System.Windows.Forms.Button();
             this.applyProfile = new ShipWorks.UI.Controls.DropDownButton();
@@ -265,23 +264,10 @@
             // 
             this.panelSettingsButtons.Controls.Add(this.labelSettings);
             this.panelSettingsButtons.Controls.Add(this.shippingServices);
-            this.panelSettingsButtons.Controls.Add(this.profiles);
             this.panelSettingsButtons.Location = new System.Drawing.Point(0, 203);
             this.panelSettingsButtons.Name = "panelSettingsButtons";
             this.panelSettingsButtons.Size = new System.Drawing.Size(160, 78);
             this.panelSettingsButtons.TabIndex = 3;
-            // 
-            // profiles
-            // 
-            this.profiles.Image = global::ShipWorks.Properties.Resources.document;
-            this.profiles.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.profiles.Location = new System.Drawing.Point(9, 48);
-            this.profiles.Name = "profiles";
-            this.profiles.Size = new System.Drawing.Size(150, 23);
-            this.profiles.TabIndex = 9;
-            this.profiles.Text = "Profiles...";
-            this.profiles.UseVisualStyleBackColor = true;
-            this.profiles.Click += new System.EventHandler(this.OnProfiles);
             // 
             // labelInternal
             // 
@@ -321,9 +307,9 @@
             // 
             // splitContainer
             // 
-            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer.Location = new System.Drawing.Point(12, 12);
             this.splitContainer.Name = "splitContainer";
@@ -381,9 +367,9 @@
             // 
             // serviceControlArea
             // 
-            this.serviceControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.serviceControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.serviceControlArea.Location = new System.Drawing.Point(6, 36);
             this.serviceControlArea.Name = "serviceControlArea";
             this.serviceControlArea.Size = new System.Drawing.Size(336, 427);
@@ -417,16 +403,16 @@
             this.tabPageCustoms.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustoms.Name = "tabPageCustoms";
             this.tabPageCustoms.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCustoms.Size = new System.Drawing.Size(385, 463);
+            this.tabPageCustoms.Size = new System.Drawing.Size(348, 463);
             this.tabPageCustoms.TabIndex = 2;
             this.tabPageCustoms.Text = "Customs";
             this.tabPageCustoms.UseVisualStyleBackColor = true;
             // 
             // customsControlArea
             // 
-            this.customsControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.customsControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.customsControlArea.Location = new System.Drawing.Point(5, 6);
             this.customsControlArea.Name = "customsControlArea";
             this.customsControlArea.Size = new System.Drawing.Size(374, 454);
@@ -439,16 +425,16 @@
             this.tabPageTracking.Location = new System.Drawing.Point(4, 22);
             this.tabPageTracking.Name = "tabPageTracking";
             this.tabPageTracking.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTracking.Size = new System.Drawing.Size(385, 463);
+            this.tabPageTracking.Size = new System.Drawing.Size(348, 463);
             this.tabPageTracking.TabIndex = 3;
             this.tabPageTracking.Text = "Tracking";
             this.tabPageTracking.UseVisualStyleBackColor = true;
             // 
             // panelTrackingData
             // 
-            this.panelTrackingData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelTrackingData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTrackingData.Controls.Add(this.trackingControl);
             this.panelTrackingData.Controls.Add(this.track);
             this.panelTrackingData.Controls.Add(this.trackingNumbers);
@@ -465,9 +451,9 @@
             // 
             // trackingControl
             // 
-            this.trackingControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackingControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.trackingControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackingControl.Location = new System.Drawing.Point(33, 77);
             this.trackingControl.Name = "trackingControl";
@@ -487,8 +473,8 @@
             // 
             // trackingNumbers
             // 
-            this.trackingNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackingNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.trackingNumbers.Location = new System.Drawing.Point(90, 51);
             this.trackingNumbers.Multiline = true;
             this.trackingNumbers.Name = "trackingNumbers";
@@ -543,8 +529,8 @@
             // 
             // panelTrackingMessage
             // 
-            this.panelTrackingMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelTrackingMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTrackingMessage.Controls.Add(this.labelTrackingMessage);
             this.panelTrackingMessage.Location = new System.Drawing.Point(6, 6);
             this.panelTrackingMessage.Name = "panelTrackingMessage";
@@ -554,14 +540,14 @@
             // 
             // labelTrackingMessage
             // 
-            this.labelTrackingMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTrackingMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTrackingMessage.Location = new System.Drawing.Point(5, 4);
             this.labelTrackingMessage.Name = "labelTrackingMessage";
             this.labelTrackingMessage.Size = new System.Drawing.Size(365, 55);
             this.labelTrackingMessage.TabIndex = 0;
             this.labelTrackingMessage.Text = "Multiple shipments are selected.  Select a single shipment to get tracking inform" +
-                "ation.";
+    "ation.";
             // 
             // ShippingDlg
             // 
@@ -631,7 +617,6 @@
         private System.Windows.Forms.Button getRates;
         private System.Windows.Forms.Panel panelEditButtons;
         private System.Windows.Forms.Panel customsControlArea;
-        private System.Windows.Forms.Button profiles;
         private ShipWorks.UI.Controls.DropDownButton applyProfile;
         private System.Windows.Forms.TabPage tabPageTracking;
         private System.Windows.Forms.Panel panelTrackingMessage;

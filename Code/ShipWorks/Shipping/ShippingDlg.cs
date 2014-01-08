@@ -1260,6 +1260,14 @@ namespace ShipWorks.Shipping
             {
                 contextMenuProfiles.Items.Add(new ToolStripMenuItem { Text = "(None)", Enabled = false });
             }
+
+            // Add a menu item to open the shipping profile manager dialog
+            contextMenuProfiles.Items.Add(new ToolStripSeparator());
+
+            ToolStripMenuItem manageProfilesMenuItem = new ToolStripMenuItem("Manage Profiles...");
+            manageProfilesMenuItem.Click += OnProfiles;
+            contextMenuProfiles.Items.Add(manageProfilesMenuItem);
+
         }
 
         /// <summary>
