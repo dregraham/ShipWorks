@@ -93,9 +93,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 return 1;
             }
 
-            if (script.Batches.Count > 1)
+            if (script.BatchCount > 1)
             {
-                return script.Batches.Count;
+                return script.BatchCount;
             }
             else
             {
@@ -143,7 +143,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 {
                     try
                     {
-                        if (script.Batches.Count > 1)
+                        if (script.BatchCount > 1)
                         {
 
                             // execute the script using the regular batch-capable methods

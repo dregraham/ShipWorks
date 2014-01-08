@@ -14,7 +14,7 @@ namespace ShipWorks.Data.Administration
         // Used for executing scripts
         private static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
 
-        private List<KeyValuePair<string, List<String>>> allVersions;
+        private List<UpgradePath> allVersions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateScriptManager"/> class.
@@ -39,11 +39,11 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         public string GetRequiredSchemaVersion()
         {
-            return allVersions.Last().Key;
+            return allVersions.Last().ToVersion;
         }
 
         /// <summary>
-        /// Doeses ShipWorks need to be upgraded - This is ran by the installer.
+        /// Does ShipWorks need to be upgraded - This is ran by the installer.
         /// </summary>
         /// <param name="schemaVersion">The schema version.</param>
         /// <returns></returns>
@@ -136,7 +136,7 @@ namespace ShipWorks.Data.Administration
                 }
             }
 
-            if (allVersions.All(x => x.Key != installingSchemaVersion))
+            if (allVersions.All(x => x.ToVersion != installingSchemaVersion))
             {
                 // We don't know about the version that is about to be installed. Most likely will require an upgrade.
                 return true;
@@ -147,7 +147,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Get a list of all the update scripts in ShipWorks, ordered based on upgradePath.
+        /// Get a list of all the update scripts in ShipWorks, in the order they should be applied.
         /// </summary>
         public List<SqlUpdateScript> GetUpdateScripts(string fromVersion)
         {
@@ -157,7 +157,10 @@ namespace ShipWorks.Data.Administration
 
             List<SqlUpdateScript> scripts = GetAllScripts();
 
-            return upgradePath.Join(scripts, up => up, s => s.SchemaVersion, (s, script) => script).ToList();
+			// select s
+			// from upgradPath up
+			// inner join scripts s on up.scriptname = s.schemaversion 
+			return upgradePath.Join(scripts, up => up, s => s.SchemaVersion, (s, script) => script).ToList();			
         }
 
         /// <summary>
@@ -177,7 +180,7 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         private List<SqlUpdateScript> GetAllScripts()
         {
-            HashSet<string> resourceNames = getScriptNames();
+            HashSet<string> resourceNames = GetScriptNames();
 
             List<SqlUpdateScript> scripts = new List<SqlUpdateScript>();
             foreach (string fullPathResourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames()
@@ -194,7 +197,7 @@ namespace ShipWorks.Data.Administration
         /// Gets the short name of the resource.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">Could not extract script name from path  + resource</exception>
-        private string GetShortResourceName(string resource, HashSet<string> resourceNames)
+        private string GetShortResourceName(string resource, HashSet<string> scriptNames)
         {
             // Try to find the last part of the resource in resourceNames. If not found, add the last part plus another letter.
             // For example, if the name of the resource is blah.abc.sql and there is a string in resourceNames called abc:
@@ -208,7 +211,7 @@ namespace ShipWorks.Data.Administration
             for (int i = 1; i <= resource.Length; i++)
             {
                 string checkName = resource.Substring(resource.Length - i);
-                if (resourceNames.Contains(checkName))
+                if (scriptNames.Contains(checkName))
                 {
                     return checkName;
                 }
@@ -221,13 +224,13 @@ namespace ShipWorks.Data.Administration
         /// Gets the script names from the version file.
         /// </summary>
         /// <returns></returns>
-        private HashSet<string> getScriptNames()
+        private HashSet<string> GetScriptNames()
         {
             HashSet<string> versions = new HashSet<string>();
 
             foreach (var versionPair in allVersions)
             {
-                versions.Add(versionPair.Key);
+                versions.Add(versionPair.ToVersion);
             }
 
             return versions;
@@ -236,10 +239,10 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Deserailize serializedVersions
         /// </summary>
-        private List<KeyValuePair<string, List<String>>> GetAllVersions(string serializedVersions)
+        private List<UpgradePath> GetAllVersions(string serializedVersions)
         {
-            List<KeyValuePair<string, List<string>>> versions =
-                JsonConvert.DeserializeObject<List<KeyValuePair<string, List<String>>>>(serializedVersions);
+            List<UpgradePath> versions =
+                JsonConvert.DeserializeObject<List<UpgradePath>>(serializedVersions);
 
             return versions;
         }

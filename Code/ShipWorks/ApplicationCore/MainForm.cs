@@ -778,6 +778,7 @@ namespace ShipWorks
 
             // See if it needs upgraded
             UpdateScriptManager updateScriptManager = new UpdateScriptManager();
+			
             if (updateScriptManager.DoesDBNeedToBeUpgraded(installedVersion) || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
@@ -803,7 +804,7 @@ namespace ShipWorks
             }
             
             // See if its too new
-            if ((new UpdateScriptManager()).DoesShipWorksNeedToBeUpgraded(installedVersion))
+            if (updateScriptManager.DoesShipWorksNeedToBeUpgraded(installedVersion))
             {
                 MessageHelper.ShowMessage(this,
                     "The version of your ShipWorks database is newer than this version\n" +

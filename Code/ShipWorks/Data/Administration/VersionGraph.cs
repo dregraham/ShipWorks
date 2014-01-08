@@ -29,13 +29,12 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         /// <param name="fromVersion">From version.</param>
         /// <param name="shipWorksVersions">All ShipWorks Versions.</param>
-        /// <returns></returns>
-        public List<String> GetUpgradePath(string fromVersion, List<KeyValuePair<string, List<String>>> shipWorksVersions)
+        public List<String> GetUpgradePath(string fromVersion, List<UpgradePath> shipWorksVersions)
         {
-            string toVersion = shipWorksVersions.Last().Key;
+            string toVersion = shipWorksVersions.Last().ToVersion;
             foreach (var shipWorksVersion in shipWorksVersions)
             {
-                AddVersion(shipWorksVersion.Key, shipWorksVersion.Value);
+                AddVersion(shipWorksVersion.ToVersion, shipWorksVersion.FromVersion);
             }
 
             return GetUpgradePath(fromVersion, toVersion);
@@ -47,7 +46,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         /// <param name="targetVersion">Version to upgrade to.</param>
         /// <param name="versionsToUpgrade">The first version passed in is the preferred version.</param>
-        private void AddVersion(string targetVersion, List<string> versionsToUpgrade)
+        private void AddVersion(string targetVersion, IEnumerable<string> versionsToUpgrade)
         {
             graph.AddVertex(targetVersion);
 
@@ -69,7 +68,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         /// <param name="installedVersion">The installed version.</param>
         /// <param name="targetVersion">The target version.</param>
-        /// <exception cref="System.InvalidOperationException"></exception>
         private List<String> GetUpgradePath(string installedVersion, string targetVersion)
         {
             if (targetVersion==installedVersion)

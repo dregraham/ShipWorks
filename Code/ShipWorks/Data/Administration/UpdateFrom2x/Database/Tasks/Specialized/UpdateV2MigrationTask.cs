@@ -852,7 +852,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
             string installedVersionName = SqlSchemaUpdater.GetInstalledSchemaVersion(con);
 
             Version installedVersion;
-            if (Version.TryParse(installedVersionName, out installedVersion))
+            if (!Version.TryParse(installedVersionName, out installedVersion))
             {
                 throw new MigrationException("Your ShipWorks 2 database is newer than this version of ShipWorks 3 supports upgrading.\n\nPlease update to the latest version of ShipWorks 3 to upgrade your ShipWorks 2 database.");
             }

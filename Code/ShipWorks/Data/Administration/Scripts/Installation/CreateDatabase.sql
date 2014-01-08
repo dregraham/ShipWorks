@@ -5,10 +5,10 @@ SET NUMERIC_ROUNDABORT OFF;
 
 
 GO
-:setvar DatabaseName "NewDB"
-:setvar DefaultFilePrefix "NewDB"
-:setvar DefaultDataPath "C:\Program Files\Microsoft SQL Server\MSSQL10_50.DEVELOPMENT\MSSQL\DATA\"
-:setvar DefaultLogPath "C:\Program Files\Microsoft SQL Server\MSSQL10_50.DEVELOPMENT\MSSQL\DATA\"
+:setvar DatabaseName "ShipWorks"
+:setvar DefaultFilePrefix "ShipWorks"
+:setvar DefaultDataPath ""
+:setvar DefaultLogPath ""
 
 
 IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'$(DatabaseName)') 

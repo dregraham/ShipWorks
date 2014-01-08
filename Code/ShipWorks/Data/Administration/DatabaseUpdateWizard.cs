@@ -75,6 +75,7 @@ namespace ShipWorks.Data.Administration
         // Handles V2 to V3 data migration
         MigrationController v2migrationController;
 
+        // Version of the database installed
         bool versionUnderThree = false;
         bool versionUnderOneTwo = false;
 

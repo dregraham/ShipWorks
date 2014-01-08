@@ -196,12 +196,8 @@ namespace ShipWorks.Data.Administration
         private static void FileGrow(string installed)
         {
             Version parsedVersion;
-            if (!Version.TryParse(installed, out parsedVersion))
-            {
-                parsedVersion = new Version(3, 99);
-            }
 
-            if (parsedVersion < new Version(3, 1, 21, 0))
+            if (Version.TryParse(installed, out parsedVersion) && parsedVersion < new Version(3, 1, 21, 0))
             {
                 using (SqlConnection con = SqlSession.Current.OpenConnection())
                 {
