@@ -52,12 +52,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 xmlWriter.WriteEndElement();
             }
 
-            if (package.DeclaredValue > 0 && servicePackageSettings.DeclaredValueAllowed)
-            {
-                xmlWriter.WriteStartElement("InsuredValue");
-                xmlWriter.WriteElementString("MonetaryValue", package.DeclaredValue.ToString("0.00"));
-                xmlWriter.WriteEndElement();
-            }
+            // Declared value (Rating derived class will write it's own version)
+            WriteDeclaredValue(package, servicePackageSettings);
 
             if (upsShipment.ShipperRelease)
             {
@@ -90,6 +86,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
 
             // End service options
             xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Writes the declared value to the request.  This call needs to be overrideable because the Get Rates version may not
+        /// have a UpsServicePackageTypeSetting.
+        /// </summary>
+        protected virtual void WriteDeclaredValue(UpsPackageEntity package, UpsServicePackageTypeSetting servicePackageSettings)
+        {
+            if (package.DeclaredValue > 0 && servicePackageSettings.DeclaredValueAllowed)
+            {
+                xmlWriter.WriteStartElement("InsuredValue");
+                xmlWriter.WriteElementString("MonetaryValue", package.DeclaredValue.ToString("0.00"));
+                xmlWriter.WriteEndElement();
+            }
         }
 
         /// <summary>

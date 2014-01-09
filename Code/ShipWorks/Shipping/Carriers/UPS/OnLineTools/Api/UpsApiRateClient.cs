@@ -126,13 +126,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 return new List<UpsServiceRate>();
             }
 
-            // MI package types are not allowed to be used with non-MI services.  Let the user know if 
-            // there is a mis-match.
-            if (!IsServiceAndPackageTypeValid(ups))
-            {
-                throw new ShippingException("The combination of Service and Packaging fields are invalid.");
-            }
-
             // PickupType
             xmlWriter.WriteStartElement("PickupType");
             xmlWriter.WriteElementString("Code", UpsApiCore.GetPickupTypeCode(accountRateType));

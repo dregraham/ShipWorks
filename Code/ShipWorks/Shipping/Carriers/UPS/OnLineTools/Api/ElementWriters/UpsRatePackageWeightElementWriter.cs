@@ -16,7 +16,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
     /// </summary>
     class UpsRatePackageWeightElementWriter : UpsPackageWeightElementWriter
     {
- 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UpsRatePackageWeightElementWriter(XmlTextWriter xmlTextWriter) :base(xmlTextWriter)
         {
         }
@@ -39,7 +41,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             xmlWriter.WriteElementString("Description", "Pounds");
             xmlWriter.WriteEndElement();
 
-            xmlWriter.WriteElementString("Weight", weight.ToString("##0.##"));
+            // If there is no weight, default to the minimum
+            string rateWeight = weight <= 0 ? "0.1" : weight.ToString("##0.##");
+
+            xmlWriter.WriteElementString("Weight", rateWeight);
             xmlWriter.WriteEndElement();
         }
     }
