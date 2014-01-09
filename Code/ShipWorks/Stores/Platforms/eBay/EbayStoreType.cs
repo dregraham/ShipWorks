@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         static EbayStoreType()
         {
-            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectiveCheckoutStatus(e) );
+            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectivePaymentStatus(e) );
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e) );
         }
 
@@ -185,9 +185,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ForAnyItemCondition anyItem = new ForAnyItemCondition();
             definition.RootContainer.FirstGroup.Conditions.Add(anyItem);
 
-            EbayCheckoutStatusCondition checkoutStatus = new EbayCheckoutStatusCondition();
+            EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
             checkoutStatus.Operator = EqualityOperator.NotEqual;
-            checkoutStatus.Value = EbayEffectiveCheckoutStatus.Paid;
+            checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             anyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 
             return new FilterEntity
@@ -212,9 +212,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ForEveryItemCondition everyItem = new ForEveryItemCondition();
             definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
 
-            EbayCheckoutStatusCondition checkoutStatus = new EbayCheckoutStatusCondition();
+            EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
             checkoutStatus.Operator = EqualityOperator.Equals;
-            checkoutStatus.Value = EbayEffectiveCheckoutStatus.Paid;
+            checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             everyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 
             // It also has to be not yet shipped
@@ -409,11 +409,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
             buyerCondition.TargetValue = search;
             buyerCondition.Operator = StringOperator.BeginsWith;
 
+            EbayOrderSellingManagerRecordCondition orderRecordCondition = new EbayOrderSellingManagerRecordCondition();
+            orderRecordCondition.IsNumeric = false;
+            orderRecordCondition.StringOperator = StringOperator.BeginsWith;
+            orderRecordCondition.StringValue = search;
+
             OrderItemCodeCondition codeCondition = new OrderItemCodeCondition();
             codeCondition.Operator = StringOperator.BeginsWith;
             codeCondition.TargetValue = search;
 
-            EbaySellingManagerRecordCondition recordCondition = new EbaySellingManagerRecordCondition();
+            EbayItemSellingManagerRecordCondition recordCondition = new EbayItemSellingManagerRecordCondition();
             recordCondition.IsNumeric = false;
             recordCondition.StringOperator = StringOperator.BeginsWith;
             recordCondition.StringValue = search;
@@ -425,6 +430,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             group.JoinType = ConditionJoinType.Any;
             group.Conditions.Add(buyerCondition);
+            group.Conditions.Add(orderRecordCondition);
             group.Conditions.Add(anyItemCondition);
 
             return group;
@@ -565,6 +571,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ElementOutline outline = container.AddElement("eBay");
             outline.AddElement("ItemID", () => item.Value.EbayItemID);
             outline.AddElement("TransactionID", () => item.Value.EbayTransactionID);
+            outline.AddElement("RecordNumber", () => item.Value.SellingManagerRecord);
 
             // generate auction-specific xml
             GenerateTemplateCommonElements(outline, item);
@@ -584,7 +591,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("FeedbackBuyerType", () => EbayUtility.GetFeedbackTypeString((CommentTypeCodeType) item.Value.FeedbackReceivedType));
 
             // checkout status
-            outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectiveCheckoutStatus) item.Value.EffectiveCheckoutStatus));
+            outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectivePaymentStatus) item.Value.EffectiveCheckoutStatus));
             outline.AddElement("CheckoutComplete", () => EbayUtility.IsCheckoutStatusComplete(item.Value) ? "true" : "false");
 
             // Selling Manager record

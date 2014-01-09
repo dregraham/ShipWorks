@@ -207,8 +207,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                         List<EbayOrderItemEntity> eBayItems = foundOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
 
                         bool add = (eBayItems.Count >= 1) && (CombinedOrderType == EbayCombinedOrderType.Local) ?
-                            eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Paid) :
-                            eBayItems.All(i => EbayUtility.GetEffectiveCheckoutStatus(i) == EbayEffectiveCheckoutStatus.Incomplete);
+                            eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Paid) :
+                            eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Incomplete);
 
                         if (add)
                         {

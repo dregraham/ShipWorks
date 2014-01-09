@@ -577,21 +577,21 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         {
             int v2Status = (int) v2Condition.Element("TargetValue");
 
-            EbayCheckoutStatusCondition condition = new EbayCheckoutStatusCondition();
+            EbayItemPaymentStatusCondition condition = new EbayItemPaymentStatusCondition();
             condition.Operator = EqualityOperator.Equals;
             
             switch (v2Status)
             {
-                case 0: condition.Value = EbayEffectiveCheckoutStatus.Incomplete; break;
-                case 1: condition.Value = EbayEffectiveCheckoutStatus.PaymentPendingPayPal; break;
-                case 2: condition.Value = EbayEffectiveCheckoutStatus.BuyerRequestsTotal; break;
-                case 3: condition.Value = EbayEffectiveCheckoutStatus.AwaitingPayment; break;
-                case 4: condition.Value = EbayEffectiveCheckoutStatus.Paid; break;
-                case 5: condition.Value = EbayEffectiveCheckoutStatus.Failed; break;
-                case 6: condition.Value = EbayEffectiveCheckoutStatus.SellerResponded; break;
-                case 7: condition.Value = EbayEffectiveCheckoutStatus.PaymentPending; break;
-                case 8: condition.Value = EbayEffectiveCheckoutStatus.PaymentPendingEscrow; break;
-                case 9: condition.Value = EbayEffectiveCheckoutStatus.EscrowCanceled; break;
+                case 0: condition.Value = EbayEffectivePaymentStatus.Incomplete; break;
+                case 1: condition.Value = EbayEffectivePaymentStatus.PaymentPendingPayPal; break;
+                case 2: condition.Value = EbayEffectivePaymentStatus.BuyerRequestsTotal; break;
+                case 3: condition.Value = EbayEffectivePaymentStatus.AwaitingPayment; break;
+                case 4: condition.Value = EbayEffectivePaymentStatus.Paid; break;
+                case 5: condition.Value = EbayEffectivePaymentStatus.Failed; break;
+                case 6: condition.Value = EbayEffectivePaymentStatus.SellerResponded; break;
+                case 7: condition.Value = EbayEffectivePaymentStatus.PaymentPending; break;
+                case 8: condition.Value = EbayEffectivePaymentStatus.PaymentPendingEscrow; break;
+                case 9: condition.Value = EbayEffectivePaymentStatus.EscrowCanceled; break;
             }
 
             return WrapConditionForTarget(condition, ConditionEntityTarget.OrderItem, target);

@@ -84,6 +84,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                     // otherwise a SoapException will be generated
                     AbstractRequestType request = CreateRequest();
                     request.Version = configuration.ApiVersion;
+                    request.MessageID = Guid.NewGuid().ToString();
 
                     response = service.ExecuteRequest(request, configuration.RequestName);
                 }

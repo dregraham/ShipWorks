@@ -499,6 +499,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("SelectedShippingMethod", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("SellingManagerRecord", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("GspEligible", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -551,9 +554,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("RollupPayPalAddressStatus", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RollupSellingManagerRecord", fieldHashtable);
 		}
 		#endregion
 
@@ -669,6 +669,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderFieldIndex.SelectedShippingMethod, true); }
 			set	{ SetValue((int)EbayOrderFieldIndex.SelectedShippingMethod, value); }
+		}
+
+		/// <summary> The SellingManagerRecord property of the Entity EbayOrder<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "EbayOrder"."SellingManagerRecord"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> SellingManagerRecord
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.SellingManagerRecord, false); }
+			set	{ SetValue((int)EbayOrderFieldIndex.SellingManagerRecord, value); }
 		}
 
 		/// <summary> The GspEligible property of the Entity EbayOrder<br/><br/>
@@ -867,17 +878,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupPayPalAddressStatus, false); }
 			set	{ SetValue((int)EbayOrderFieldIndex.RollupPayPalAddressStatus, value); }
-		}
-
-		/// <summary> The RollupSellingManagerRecord property of the Entity EbayOrder<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrder"."RollupSellingManagerRecord"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> RollupSellingManagerRecord
-		{
-			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupSellingManagerRecord, false); }
-			set	{ SetValue((int)EbayOrderFieldIndex.RollupSellingManagerRecord, value); }
 		}
 
 

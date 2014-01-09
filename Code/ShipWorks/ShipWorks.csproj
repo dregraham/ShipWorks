@@ -498,6 +498,12 @@
     <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.Designer.cs">
+      <DependentUpon>DateTimeFormatRequiredDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -2036,6 +2042,8 @@
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorFlagType.cs" />
     <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemShippedStatusCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenFactory.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\ITokenReader.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\SecureXmlFileTokenReader.cs" />
@@ -3066,7 +3074,7 @@
       <DependentUpon>EbayOnlineUpdateTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayPayPalAddressStatusCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbaySellingManagerRecordCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayBuyerIDDisplayType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayFeedbackData.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayFeedbackDirection.cs" />
@@ -3532,7 +3540,7 @@
     <Compile Include="Filters\Content\Conditions\Customers\CustomerPrintedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Notes\NoteVisibilityCondition.cs" />
     <Compile Include="Filters\Content\Conditions\NumericStringCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayCheckoutStatusCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemPaymentStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackCondition.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -5696,6 +5704,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Help\SubmitHelpRequestDlg.resx">
       <DependentUpon>SubmitHelpRequestDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.resx">
+      <DependentUpon>DateTimeFormatRequiredDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\EnglishCultureRequiredDlg.resx">
       <DependentUpon>EnglishCultureRequiredDlg.cs</DependentUpon>
@@ -10084,6 +10096,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

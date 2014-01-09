@@ -200,8 +200,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             },
 
                         new GridColumnDefinition("{85CFDCF5-4243-4dc0-90CC-777CEC004768}",
-                            new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description), "Payment Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
+                            new GridEnumDisplayType<EbayEffectivePaymentStatus>(EnumSortMethod.Description), "Payment Status", EbayEffectivePaymentStatus.AwaitingPayment,
                             EbayOrderItemFields.EffectiveCheckoutStatus)
+                            {
+                                StoreTypeCode = StoreTypeCode.Ebay
+                            },
+
+                        new GridColumnDefinition("{B79CDE81-97FA-4F09-B900-5F26DA061232}",
+                            new GridBooleanDisplayType() { TrueText = "Shipped", FalseText = "Not Shipped" }, "Shipped Status", true,
+                            EbayOrderItemFields.MyEbayShipped)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay
                             },

@@ -651,25 +651,25 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "EbayOrderEntity", "EbayBuyerID", "EbayBuyerID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "EbayOrderEntity", "CombinedLocally", "CombinedLocally", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
 			base.AddElementFieldMapping( "EbayOrderEntity", "SelectedShippingMethod", "SelectedShippingMethod", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspEligible", "GspEligible", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspFirstName", "GspFirstName", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspLastName", "GspLastName", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspStreet1", "GspStreet1", false, (int)SqlDbType.NVarChar, 512, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspStreet2", "GspStreet2", false, (int)SqlDbType.NVarChar, 512, 0, 0, false, "", null, typeof(System.String), 9 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspCity", "GspCity", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 10 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspStateProvince", "GspStateProvince", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 11 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspPostalCode", "GspPostalCode", false, (int)SqlDbType.NVarChar, 9, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspCountryCode", "GspCountryCode", false, (int)SqlDbType.NVarChar, 2, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "GspReferenceID", "GspReferenceID", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 14 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupEbayItemCount", "RollupEbayItemCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 15 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupEffectiveCheckoutStatus", "RollupEffectiveCheckoutStatus", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupEffectivePaymentMethod", "RollupEffectivePaymentMethod", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 17 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackLeftType", "RollupFeedbackLeftType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 18 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackLeftComments", "RollupFeedbackLeftComments", true, (int)SqlDbType.VarChar, 80, 0, 0, false, "", null, typeof(System.String), 19 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackReceivedType", "RollupFeedbackReceivedType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackReceivedComments", "RollupFeedbackReceivedComments", true, (int)SqlDbType.VarChar, 80, 0, 0, false, "", null, typeof(System.String), 21 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupPayPalAddressStatus", "RollupPayPalAddressStatus", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 22 );
-			base.AddElementFieldMapping( "EbayOrderEntity", "RollupSellingManagerRecord", "RollupSellingManagerRecord", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 23 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "SellingManagerRecord", "SellingManagerRecord", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspEligible", "GspEligible", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspFirstName", "GspFirstName", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspLastName", "GspLastName", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspStreet1", "GspStreet1", false, (int)SqlDbType.NVarChar, 512, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspStreet2", "GspStreet2", false, (int)SqlDbType.NVarChar, 512, 0, 0, false, "", null, typeof(System.String), 10 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspCity", "GspCity", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 11 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspStateProvince", "GspStateProvince", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 12 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspPostalCode", "GspPostalCode", false, (int)SqlDbType.NVarChar, 9, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspCountryCode", "GspCountryCode", false, (int)SqlDbType.NVarChar, 2, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "GspReferenceID", "GspReferenceID", false, (int)SqlDbType.NVarChar, 128, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupEbayItemCount", "RollupEbayItemCount", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupEffectiveCheckoutStatus", "RollupEffectiveCheckoutStatus", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 17 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupEffectivePaymentMethod", "RollupEffectivePaymentMethod", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 18 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackLeftType", "RollupFeedbackLeftType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackLeftComments", "RollupFeedbackLeftComments", true, (int)SqlDbType.VarChar, 80, 0, 0, false, "", null, typeof(System.String), 20 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackReceivedType", "RollupFeedbackReceivedType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupFeedbackReceivedComments", "RollupFeedbackReceivedComments", true, (int)SqlDbType.VarChar, 80, 0, 0, false, "", null, typeof(System.String), 22 );
+			base.AddElementFieldMapping( "EbayOrderEntity", "RollupPayPalAddressStatus", "RollupPayPalAddressStatus", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 23 );
 		}
 		/// <summary>Inits EbayOrderItemEntity's mappings</summary>
 		private void InitEbayOrderItemEntityMappings()

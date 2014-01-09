@@ -8,10 +8,10 @@ using System.Reflection;
 namespace ShipWorks.Stores.Platforms.Ebay.Enums
 {
     /// <summary>
-    /// Our own type for representing the full cycle of an order's checkout status
+    /// Our own type for representing an order's payment status
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum EbayEffectiveCheckoutStatus
+    public enum EbayEffectivePaymentStatus
     {
         [Description("Not Completed")]
         Incomplete = 0, 

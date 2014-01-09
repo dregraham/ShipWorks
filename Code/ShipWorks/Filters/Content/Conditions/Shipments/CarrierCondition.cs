@@ -26,7 +26,10 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             get
             {
-                return ShipmentTypeManager.ShipmentTypes.Select(t => new ValueChoice<ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode)).ToArray();
+                return ShipmentTypeManager.ShipmentTypes
+                    .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
+                    .Select(t => new ValueChoice<ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode))
+                    .ToArray();
             }
         }
 

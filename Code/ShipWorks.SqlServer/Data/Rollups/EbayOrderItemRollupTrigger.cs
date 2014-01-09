@@ -33,7 +33,6 @@ public partial class Triggers
         rollupColumns.Add(new RollupColumn { SourceColumn = "EffectiveCheckoutStatus",  TargetColumn = "RollupEffectiveCheckoutStatus",  Method = RollupMethod.SameOrNull });
        
         rollupColumns.Add(new RollupColumn { SourceColumn = "PayPalAddressStatus",      TargetColumn = "RollupPayPalAddressStatus",      Method = RollupMethod.SameOrNull });
-        rollupColumns.Add(new RollupColumn { SourceColumn = "SellingManagerRecord",     TargetColumn = "RollupSellingManagerRecord",     Method = RollupMethod.SameOrNull });
 
         rollupColumns.Add(new RollupColumn { SourceColumn = "FeedbackLeftType",         TargetColumn = "RollupFeedbackLeftType",         Method = RollupMethod.SameOrNull });
         rollupColumns.Add(new RollupColumn { SourceColumn = "FeedbackLeftComments",     TargetColumn = "RollupFeedbackLeftComments",     Method = RollupMethod.SameOrNull });

@@ -727,9 +727,22 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 apiRunQueryResultXml = advancedCartApi.runQuery(store.StoreDomain, store.ApiUserKey, sqlQuery, string.Empty);
                 ValidateAdvancedCartApiQueryResponse(apiRunQueryResultXml, queryType);
             }
+            catch (InvalidOperationException ex)
+            {
+                // FogBugz crash 262171.  The api returned invalid xml, which was converted into an InvalidOperationException with
+                // an inner exception of XmlException.  Check for these and don't crash ShipWorks, but give the user a fairly nice
+                // error message.
+                if (ex.InnerException != null && ex.InnerException is XmlException)
+                {
+                    throw new ThreeDCartException("An invalid response was returned from the 3D Cart store.  Please try again later.", ex);
+                }
+
+                // If it's not an inner exception of XmlException type, translate and throw.
+                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
+            }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
+                throw WebHelper.TranslateWebException(ex, typeof (ThreeDCartException));
             }
 
             // Return the result xml

@@ -38,12 +38,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // WebClient to use for connetivity
         EbayWebClient webClient;
 
-        // Time range we are downloading from\to
-        DateTime rangeStart;
-        DateTime rangeEnd;
-
         // Total number of ordres expected during this download
-        int expectedCount;
+        int expectedCount = -1;
 
         /// <summary>
         /// Create the new eBay downloader
@@ -65,16 +61,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 // Get the official eBay time in UTC
                 eBayOfficialTime = webClient.GetOfficialTime();
-
-                // Get the date\time to start downloading from
-                rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
-                rangeEnd = eBayOfficialTime.AddMinutes(-5);
-
-                // Ebay only allows going back 30 days
-                if (rangeStart < eBayOfficialTime.AddDays(-30))
-                {
-                    rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
-                }
 
                 if (!DownloadOrders())
                 {
@@ -111,15 +97,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private bool DownloadOrders()
         {
-            int page = 1;
+            // Get the date\time to start downloading from
+            DateTime rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
+            DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
+
+            // Ebay only allows going back 30 days
+            if (rangeStart < eBayOfficialTime.AddDays(-30))
+            {
+                rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
+            }
 
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd, page);
+                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd);
 
                 // Grab the total expected account from the first page
-                if (page == 1)
+                if (expectedCount < 0)
                 {
                     expectedCount = response.PaginationResult.TotalNumberOfEntries;
                 }
@@ -127,15 +121,31 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Process all of the downloaded orders
                 foreach (OrderType orderType in response.OrderArray)
                 {
+                    // Check for user cancel
+                    if (Progress.IsCancelRequested)
+                    {
+                        return false;
+                    }
+
+                    DateTime lastModified = orderType.CheckoutStatus.LastModifiedTime;
+                    
+                    // Skip any that are out of range.  We take any that are a day out of range back, b\c eBay's API sometimes returns stuff in the next page that should have been on the previous.
+                    // I have open bug reports with them.  12/18/13
+                    if (lastModified < rangeStart.AddDays(-1) || lastModified > rangeEnd)
+                    {
+                        log.WarnFormat("Skipping eBay order {0} since it's out of our date range {1}", orderType.OrderID, orderType.CheckoutStatus.LastModifiedTime);
+                        continue;
+                    }
+
                     ProcessOrder(orderType);
 
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                    // Check for user cancel
-                    if (Progress.IsCancelRequested)
+                    // Update the range for the next time around.  Should always be ascending
+                    if (lastModified > rangeStart)
                     {
-                        return false;
+                        rangeStart = lastModified;
                     }
                 }
 
@@ -144,9 +154,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     return true;
                 }
-
-                // Next page
-                page++;
             }
         }
 
@@ -180,6 +187,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Online status
             order.OnlineStatusCode = (int) orderType.OrderStatus;
             order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
+
+            // SellingManager Pro
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
 
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
@@ -321,8 +331,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     orderItem.EbayItemID = long.Parse(transaction.Item.ItemID);
                     orderItem.EbayTransactionID = long.Parse(transaction.TransactionID);
                 }
+                // Attach it, so any items get saved with the order
+                else
+                {
+                    order.OrderItems.Add(orderItem);
+                }
 
-                UpdateTransaction(orderItem, transaction, orderType.CheckoutStatus);
+                UpdateTransaction(orderItem, orderType, transaction);
             }
 
             return abandonedItems;
@@ -533,7 +548,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update the transaction (order item) info
         /// </summary>
-        private void UpdateTransaction(EbayOrderItemEntity orderItem, TransactionType transaction, CheckoutStatusType checkoutStatus)
+        private void UpdateTransaction(EbayOrderItemEntity orderItem, OrderType orderType, TransactionType transaction)
         {
             orderItem.Code = transaction.Item.ItemID;
             orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
@@ -542,13 +557,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             orderItem.SKU = transaction.Item.SKU ?? "";
 
             // Checkout (from order - these can be moved up in the database from the item to the order level)
-            orderItem.PaymentMethod = (int) checkoutStatus.PaymentMethod;
-            orderItem.PaymentStatus = (int) checkoutStatus.eBayPaymentStatus;
-            orderItem.CompleteStatus = (int) checkoutStatus.Status;
+            orderItem.PaymentMethod = (int) orderType.CheckoutStatus.PaymentMethod;
+            orderItem.PaymentStatus = (int) orderType.CheckoutStatus.eBayPaymentStatus;
+            orderItem.CompleteStatus = (int) orderType.CheckoutStatus.Status;
 
-            // My eBay
-            orderItem.MyEbayPaid = transaction.PaidTimeSpecified;
-            orderItem.MyEbayShipped = transaction.ShippedTimeSpecified || HasTrackingNumber(transaction);
+            // My eBay statuses - we set this at the line-item level, but the API provides them at the order level.
+            orderItem.MyEbayPaid = orderType.PaidTimeSpecified;
+            orderItem.MyEbayShipped = orderType.ShippedTimeSpecified || HasTrackingNumber(transaction);
 
             // Load variation information
             UpdateTransactionVariationDetail(orderItem, transaction);

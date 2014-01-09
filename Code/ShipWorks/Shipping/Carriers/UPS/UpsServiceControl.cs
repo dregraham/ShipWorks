@@ -146,8 +146,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void LoadShipmentDetails()
         {
-            UpsServiceType? serviceType = null;
-            bool allServicesSame = true;
+            List<UpsServiceType> serviceTypes = new List<UpsServiceType>();
             bool allCodAvailable = true;
             bool anyCodEnabled = false;
             bool anySaturday = false;
@@ -162,18 +161,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             foreach (ShipmentEntity overriddenShipment in overriddenShipments)
             {
                 UpsServiceType thisService = (UpsServiceType)overriddenShipment.Ups.Service;
+                serviceTypes.Add(thisService);
 
-                if (serviceType == null)
-                {
-                    serviceType = thisService;
-                }
-                else
-                {
-                    if (serviceType != thisService)
-                    {
-                        allServicesSame = false;
-                    }
-                }
 
                 if (!UpsUtility.IsCodAvailable((UpsServiceType)overriddenShipment.Ups.Service, overriddenShipment.ShipCountryCode))
                 {
@@ -193,13 +182,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            // If there not all the same clear the value we had
-            if (!allServicesSame)
-            {
-                serviceType = null;
-            }
-
-            UpdateMiAndSurePostSpecificVisibility(serviceType);
+            UpdateMiAndSurePostSpecificVisibility(serviceTypes);
 
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
@@ -214,9 +197,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
                 IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
-                List<UpsServiceType> serviceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
+                List<UpsServiceType> upsServiceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
 
-                List<KeyValuePair<string, UpsServiceType>> services = serviceTypes
+                List<KeyValuePair<string, UpsServiceType>> services = upsServiceTypes
                     .Select(type => new KeyValuePair<string, UpsServiceType>(EnumHelper.GetDescription(type), (UpsServiceType) type))
                     .ToList();
 
@@ -282,6 +265,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpdateBillingSectionDisplay();
             UpdateSectionDescription();
+        }
+
+
+        /// <summary>
+        /// Gets the loaded service types.
+        /// </summary>
+        /// <returns></returns>
+        public List<UpsServiceType> GetLoadedServiceTypes()
+        {
+            return LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service).ToList();
         }
 
         /// <summary>
@@ -392,8 +385,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
             UpdateCodVisibility();
-            UpdateMiAndSurePostSpecificVisibility(service.SelectedValue == null ? null : (UpsServiceType?)service.SelectedValue);
-            
+            UpdateMiAndSurePostSpecificVisibility(GetLoadedServiceTypes());
+
             SaveToShipments();
             RaiseShipmentServiceChanged();
 
@@ -407,20 +400,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Updates MI and SurePost specific visibility.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
-        private void UpdateMiAndSurePostSpecificVisibility(UpsServiceType? serviceType)
+        private void UpdateMiAndSurePostSpecificVisibility(List<UpsServiceType> serviceType)
         {            
 			bool isSurePost=false;
             bool isMi = false;
             bool showEndorsement = false;
 
-            if (serviceType.HasValue)
+            if (serviceType.Any())
             {
-                isSurePost = UpsUtility.IsUpsSurePostService(serviceType.Value);
-                isMi = UpsUtility.IsUpsMiService(serviceType.Value);
+                isSurePost = serviceType.Any(a => UpsUtility.IsUpsSurePostService(a));
+                isMi = serviceType.Any(a => UpsUtility.IsUpsMiService(a));
                 showEndorsement = isSurePost || isMi;
 
-                if (serviceType.Value == UpsServiceType.UpsMailInnovationsIntEconomy ||
-                    serviceType.Value == UpsServiceType.UpsMailInnovationsIntEconomy)
+                // Because endorsements are not utilized on international packages, use value 5 for international packages.
+                if (serviceType.All(a => (a == UpsServiceType.UpsMailInnovationsIntEconomy) || (a == UpsServiceType.UpsMailInnovationsIntPriority)))
                 {
                     showEndorsement = false;
                 }
@@ -482,7 +475,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             SaveToShipments();
             LoadShipmentDetails();
             UpdateCodVisibility();
-            UpdateMiAndSurePostSpecificVisibility(service.SelectedValue == null ? null : (UpsServiceType?) service.SelectedValue);
+
+            UpdateMiAndSurePostSpecificVisibility(GetLoadedServiceTypes());
         }
 
         /// <summary>
