@@ -849,16 +849,16 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// </summary>
         protected override int RunEstimate(SqlConnection con)
         {
-            string installedVersionName = SqlSchemaUpdater.GetInstalledSchemaVersion(con);
+            SchemaVersion installedVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion(con);
 
-            Version installedVersion;
-            if (!Version.TryParse(installedVersionName, out installedVersion))
+            if (!installedVersion.IsSystemVersion)
             {
                 throw new MigrationException("Your ShipWorks 2 database is newer than this version of ShipWorks 3 supports upgrading.\n\nPlease update to the latest version of ShipWorks 3 to upgrade your ShipWorks 2 database.");
             }
 
+            Version databaseSchemaSystemVersion = installedVersion.GetVersion();
             // only allow upgrading from V2 versions we are aware of.
-            if (installedVersion > new Version("2.9.65.0"))
+            if (databaseSchemaSystemVersion > new Version("2.9.65.0"))
             {
                 throw new MigrationException("Your ShipWorks 2 database is newer than this version of ShipWorks 3 supports upgrading.\n\nPlease update to the latest version of ShipWorks 3 to upgrade your ShipWorks 2 database.");
             }
@@ -867,7 +867,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
             foreach (V2UpdateBatch batch in updateBatches)
             {
                 i++;
-                if (installedVersion <= batch.Version)
+                if (databaseSchemaSystemVersion <= batch.Version)
                 {
                     return updateBatches.Count - i;
                 }
@@ -881,12 +881,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// </summary>
         protected override int Run()
         {
-            Version installedVersion;
+            Version databaseSchemaVersion;
 
             using (SqlConnection con = OpenConnectionForTask(this))
             {
                 // capture the current database version
-                installedVersion = Version.Parse(SqlSchemaUpdater.GetInstalledSchemaVersion(con));
+                databaseSchemaVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion(con).GetVersion();
 
                 // The scripts must run in SQL 2000 mode, as that's what they were generated for.  Most databases will already be at that level unless
                 // they were created in a manually installed instance of 05 or higher.
@@ -901,7 +901,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
             int i = 0;
             foreach (V2UpdateBatch batch in updateBatches)
             {
-                if (installedVersion <= batch.Version)
+                if (databaseSchemaVersion <= batch.Version)
                 {
                     // set the progress detail text to show what's going on
                     if (i < updateBatches.Count - 1)

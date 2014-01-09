@@ -70,12 +70,11 @@ namespace ShipWorks.Data.Administration
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.schemaVersion = (string) SqlCommandProvider.ExecuteScalar(cmd);
+            SchemaVersion version = new SchemaVersion((string) SqlCommandProvider.ExecuteScalar(cmd));
 
-            detail.status = SqlSchemaUpdater.IsVersionLessThanThree(detail.schemaVersion) ?
-                                SqlDatabaseStatus.ShipWorks2x :
-                                SqlDatabaseStatus.ShipWorks;
+            detail.schemaVersion = version.VersionName;
 
+            detail.status = version.DatabaseStatus;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Data.Administration
 {
-    public class UpdateScriptManager
+    public class SchemaVersionManager
     {
         // Used for executing scripts
         private static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
@@ -17,17 +17,17 @@ namespace ShipWorks.Data.Administration
         private List<UpgradePath> allVersions;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateScriptManager"/> class.
+        /// Initializes a new instance of the <see cref="SchemaVersionManager"/> class.
         /// </summary>
-        public UpdateScriptManager()
+        public SchemaVersionManager()
             : this(GetSerializedSchemaUpdateInformation())
         {}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateScriptManager"/> class.
+        /// Initializes a new instance of the <see cref="SchemaVersionManager"/> class.
         /// </summary>
         /// <param name="serializedVersions">The serialized versions.</param>
-        public UpdateScriptManager(string serializedVersions)
+        public SchemaVersionManager(string serializedVersions)
         {
             allVersions = GetAllVersions(serializedVersions);
         }
@@ -37,123 +37,20 @@ namespace ShipWorks.Data.Administration
         /// Gets the required schema version for the running version of the software.
         /// </summary>
         /// <returns></returns>
-        public string GetRequiredSchemaVersion()
+        public SchemaVersion GetRequiredSchemaVersion()
         {
-            return allVersions.Last().ToVersion;
+            return new SchemaVersion(allVersions.Last().ToVersion);
         }
 
-        /// <summary>
-        /// Does ShipWorks need to be upgraded - This is ran by the installer.
-        /// </summary>
-        /// <param name="schemaVersion">The schema version.</param>
-        /// <returns></returns>
-        public bool DoesShipWorksNeedToBeUpgraded(string schemaVersion)
-        {
-            if (GetRequiredSchemaVersion() == schemaVersion)
-            {
-                return false;
-            }
-
-            Version parsedVersion;
-            if (Version.TryParse(schemaVersion, out parsedVersion))
-            {
-                if (parsedVersion.Major == 2)
-                {
-                    return false;
-                }
-            }
-
-            try
-            {
-                // If InvalidOperationException, no path from installed version to DB version. 
-                // This either means the DB version is newer or ShipWorks doesn't recognize it for some other weird reason.
-                //   The vast majority of the time, it is the former, so we return true on Exception.
-                GetUpdateScripts(schemaVersion);
-                return false;
-            }
-            catch (FindVersionUpgradePathException)
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Does the database need to be upgraded - using the ShipWorksVersions file, see if DB needs an upgrade.
-        /// </summary>
-        /// <param name="schemaVersion">The schema version of the database being evaluated.</param>
-        /// <param name="isInstalling">if set to <c>true</c> [is installing].</param>
-        /// <returns></returns>
-        public bool DoesDBNeedToBeUpgraded(string schemaVersion)
-        {
-            Version parsedVersion;
-            if (Version.TryParse(schemaVersion, out parsedVersion))
-            {
-                if (parsedVersion.Major == 2)
-                {
-                    return true;
-                }
-            }
-
-            try
-            {
-                // There are scripts that can update the DB, so true
-                if (GetUpdateScripts(schemaVersion).Count > 0)
-                {
-                    return true;
-                }
-            }
-            catch (FindVersionUpgradePathException)
-            {
-                // No upgrade path, the likeliest reason is that the software is unaware of the DB version and 
-                // the software needs to be upgraded. 
-                return false;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Does the installing version require database to be upgraded. This is a tough question because
-        /// we don't have the json file for the version being installed. We assume that if we haven't heard of
-        /// the version being installed, it will require a DB update...
-        /// </summary>
-        /// <param name="installingSchemaVersion">The installing schema version.</param>
-        /// <param name="installedSchemaVersion">The installed schema version.</param>
-        /// <returns></returns>
-        public bool DoesInstallingVersionRequireDBToBeUpgraded(string installingSchemaVersion, string installedSchemaVersion)
-        {
-            if (installedSchemaVersion == installingSchemaVersion)
-            {
-                return false;
-            }
-
-            Version parsedVersion;
-            if (Version.TryParse(installedSchemaVersion, out parsedVersion))
-            {
-                if (parsedVersion.Major == 2)
-                {
-                    return true;
-                }
-            }
-
-            if (allVersions.All(x => x.ToVersion != installingSchemaVersion))
-            {
-                // We don't know about the version that is about to be installed. Most likely will require an upgrade.
-                return true;
-            }
-
-            // We don't know if you need to upgrade.
-            return false;
-        }
 
         /// <summary>
         /// Get a list of all the update scripts in ShipWorks, in the order they should be applied.
         /// </summary>
-        public List<SqlUpdateScript> GetUpdateScripts(string fromVersion)
+        public List<SqlUpdateScript> GetUpdateScripts(SchemaVersion fromVersion, SchemaVersion toVersion)
         {
             VersionGraph versionGraph = new VersionGraph();
 
-            List<string> upgradePath = versionGraph.GetUpgradePath(fromVersion, allVersions);
+            List<string> upgradePath = versionGraph.GetUpgradePath(fromVersion, toVersion, allVersions);
 
             List<SqlUpdateScript> scripts = GetAllScripts();
 

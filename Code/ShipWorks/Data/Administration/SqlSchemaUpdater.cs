@@ -9,6 +9,7 @@ using NDesk.Options;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
+using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.Data.Connection;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
@@ -27,19 +28,11 @@ namespace ShipWorks.Data.Administration
         private static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
 
         /// <summary>
-        /// Get the dabase schema version that is required by this version of ShipWorks
-        /// </summary>
-        public static string GetRequiredSchemaVersion()
-        {
-            return (new UpdateScriptManager()).GetRequiredSchemaVersion();
-        }
-
-        /// <summary>
         /// Indiciates if the connection to the given database is the exact database version required for ShipWorks
         /// </summary>
         public static bool IsCorrectSchemaVersion()
         {
-            return GetInstalledSchemaVersion() == GetRequiredSchemaVersion();
+            return GetDatabaseSchemaVersion() == (new SchemaVersionManager()).GetRequiredSchemaVersion();
         }
 
         /// <summary>
@@ -48,52 +41,20 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         public static bool IsVersionLessThanThree()
         {
-            return IsVersionLessThanThree(GetInstalledSchemaVersion());
-        }
-
-        /// <summary>
-        /// Determines whether the specified installed version is less than 3 (likely 2)
-        /// </summary>
-        /// <param name="installedVersion">The installed version.</param>
-        /// <returns></returns>
-        public static bool IsVersionLessThanThree(string installedVersion)
-        {
-            Version installed;
-
-            if (!Version.TryParse(installedVersion, out installed))
-            {
-                // Schema is no longer using a standard version format. This happened around v3.8.
-                return false;
-            }
-
-            return installed.Major < 3;
-        }
-
-        /// <summary>
-        /// Determines whether the installed version is less than 1.2.x [the specified installed version].
-        /// </summary>
-        /// <param name="installedVersion">The installed version.</param>
-        /// <returns></returns>
-        public static bool IsVersionLessThanOneTwo(string installedVersion)
-        {
-            if (!IsVersionLessThanThree(installedVersion))
-            {
-                return false;
-            }
-
-            return Version.Parse(installedVersion) < new Version(1, 2);
+            //TODO: remove this function.
+            return false;
         }
 
         /// <summary>
         /// Get the schema version of the ShipWorks database
         /// </summary>
-        public static string GetInstalledSchemaVersion()
+        public static SchemaVersion GetDatabaseSchemaVersion()
         {
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
-                    return GetInstalledSchemaVersion(con);
+                    return GetDatabaseSchemaVersion(con);
                 }
                 catch (SqlException ex)
                 {
@@ -114,9 +75,10 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void UpdateDatabase(ProgressProvider progressProvider, bool debuggingMode = false)
         {
-            string installed = GetInstalledSchemaVersion();
+            SchemaVersion toVersion = GetDatabaseSchemaVersion();
+            SchemaVersion fromVersion = (new SchemaVersionManager()).GetRequiredSchemaVersion();
 
-            log.InfoFormat("Upgrading database from {0} to {1}", installed, GetRequiredSchemaVersion());
+            log.InfoFormat("Upgrading database from {0} to {1}", toVersion, fromVersion);
 
             // Create the primary progress item
             ProgressItem progressScripts = new ProgressItem("Update Tables");
@@ -139,7 +101,7 @@ namespace ShipWorks.Data.Administration
                         using (TransactionScope transaction = new TransactionScope(debuggingMode ? TransactionScopeOption.Suppress : TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
                         {
                             // Update the tables
-                            UpdateScripts(installed, progressScripts);
+                            UpdateScripts(toVersion, fromVersion, progressScripts);
 
                             // Functionality starting
                             progressFunctionality.Starting();
@@ -158,7 +120,7 @@ namespace ShipWorks.Data.Administration
                             // Now we need to update the database to return the correct schema version that is now installed
                             using (SqlConnection con = SqlSession.Current.OpenConnection())
                             {
-                                UpdateSchemaVersionStoredProcedure(con);
+                                UpdateSchemaVersionStoredProcedure(con, toVersion);
                             }
 
                             // Functionality is done
@@ -173,7 +135,7 @@ namespace ShipWorks.Data.Administration
                     // Clear out the pool so any connection holding onto SINGLE_USER gets released
                     SqlConnection.ClearAllPools();
 
-                    FileGrow(installed);
+                    FileGrow(toVersion);
 
                     // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
                     using (SqlConnection con = SqlSession.Current.OpenConnection())
@@ -193,11 +155,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// If we were upgrading from 3.1.21 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
         /// </summary>
-        private static void FileGrow(string installed)
+        private static void FileGrow(SchemaVersion installed)
         {
-            Version parsedVersion;
-
-            if (Version.TryParse(installed, out parsedVersion) && parsedVersion < new Version(3, 1, 21, 0))
+            if (installed.IsSystemVersion && installed.GetVersion() < new Version(3, 1, 21, 0))
             {
                 using (SqlConnection con = SqlSession.Current.OpenConnection())
                 {
@@ -223,17 +183,9 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Update the schema version store procuedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
-        /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con)
-        {
-            UpdateSchemaVersionStoredProcedure(con, GetRequiredSchemaVersion());
-        }
-
-        /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, string version)
+        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, SchemaVersion version)
         {
             if (version == null)
             {
@@ -265,15 +217,15 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Upgrade a 3.x database to the current version.
         /// </summary>
-        private static void UpdateScripts(string installed, ProgressItem progress)
+        private static void UpdateScripts(SchemaVersion toVersion, SchemaVersion fromVersion, ProgressItem progress)
         {
             progress.Starting();
             progress.Detail = "Preparing...";
 
-            UpdateScriptManager updateScriptManager = new UpdateScriptManager();
+            SchemaVersionManager schemaVersionManager = new SchemaVersionManager();
 
             // Get all the update scripts
-            List<SqlUpdateScript> updateScripts = updateScriptManager.GetUpdateScripts(installed).ToList();
+            List<SqlUpdateScript> updateScripts = schemaVersionManager.GetUpdateScripts(toVersion, fromVersion).ToList();
 
             // Start with generic progress msg
             progress.Detail = "Updating...";
@@ -306,8 +258,12 @@ namespace ShipWorks.Data.Administration
                     // Execute the script
                     SqlScript executor = sqlLoader[script.ScriptName];
 
-                    // Update the progress
-                    progress.PercentComplete = Math.Min(100, (int)(scriptProgressValue*scriptsCompleted));
+                    // Update the progress as we complete each bactch in the script
+                    executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
+                    {
+                        // Update the progress
+                        progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.BatchCount)));
+                    };
 
                     // Run all the batches in the script
                     executor.Execute(con);
@@ -366,13 +322,13 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the schema version of the ShipWorks database on the given connection
         /// </summary>
-        public static string GetInstalledSchemaVersion(SqlConnection con)
+        public static SchemaVersion GetDatabaseSchemaVersion(SqlConnection con)
         {
             SqlCommand cmd = SqlCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            return (string)SqlCommandProvider.ExecuteScalar(cmd);
+            return new SchemaVersion((string)SqlCommandProvider.ExecuteScalar(cmd));
         }
 
         /// <summary>
@@ -396,12 +352,12 @@ namespace ShipWorks.Data.Administration
             /// </summary>
             public void Execute(List<string> args)
             {
-                string swSchema = null;
+                string installingSchemaVersion = null;
 
                 // Need to extract the type
                 OptionSet optionSet = new OptionSet()
                 {
-                    { "dbschema=", s => swSchema = s },
+                    { "dbschema=", s => installingSchemaVersion = s },
                     { "<>", v => { throw new CommandLineCommandArgumentException(CommandName, v, "Invalid arguments passed to command."); } }
                 };
 
@@ -417,13 +373,13 @@ namespace ShipWorks.Data.Administration
                         // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
                         // a new int from the schema id
 
-                        string installedSchemaVersion = GetInstalledSchemaVersion();
+                        SchemaVersion databaseSchemaVersion = GetDatabaseSchemaVersion();
 
-                        UpdateScriptManager scriptManager = new UpdateScriptManager();
+                        log.InfoFormat("Database schema version  {0}", databaseSchemaVersion);
 
-                        log.InfoFormat("Database schema version  {0}", installedSchemaVersion);
+                        SchemaVersionComparisonResult schemaVersionComparisonResult = databaseSchemaVersion.Compare(new SchemaVersion(installingSchemaVersion));
 
-                        Environment.ExitCode = scriptManager.DoesInstallingVersionRequireDBToBeUpgraded(swSchema, installedSchemaVersion) ? 1 : 0;
+                        Environment.ExitCode = schemaVersionComparisonResult == SchemaVersionComparisonResult.Newer ? 1 : 0;
                     }
                     else
                     {

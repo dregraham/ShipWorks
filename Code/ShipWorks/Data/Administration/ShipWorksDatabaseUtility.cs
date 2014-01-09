@@ -106,8 +106,10 @@ namespace ShipWorks.Data.Administration
                 // Add any initial data via script
                 sqlLoader["InitialData"].Execute(con);
 
+                SchemaVersion requiredSchemaVersion = (new SchemaVersionManager()).GetRequiredSchemaVersion();
+                
                 // Update the database to be marked with the correct db version
-                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
+                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con, requiredSchemaVersion);
             }
 
             // Create the ShipWorks "SuperUser"

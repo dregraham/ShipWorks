@@ -109,10 +109,8 @@ namespace ShipWorks.Data.Administration
         private DatabaseUpdateWizard()
         {
             InitializeComponent();
-
             
-
-            string installedSchemaVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+            SchemaVersion databaseSchemaVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion();
 
             if (SqlServerInstaller.IsMsdeMigrationInProgress)
             {
@@ -121,8 +119,8 @@ namespace ShipWorks.Data.Administration
             }
             else
             {
-                versionUnderOneTwo = SqlSchemaUpdater.IsVersionLessThanOneTwo(installedSchemaVersion);
-                versionUnderThree = SqlSchemaUpdater.IsVersionLessThanThree(installedSchemaVersion);
+                versionUnderOneTwo = databaseSchemaVersion.IsVersionLessThanOneTwo;
+                versionUnderThree = databaseSchemaVersion.IsVersionLessThanThree;
             }
 
             showFirewallPage = versionUnderThree;
@@ -161,7 +159,7 @@ namespace ShipWorks.Data.Administration
 
                 if (versionUnderThree)
                 {
-                    v2migrationController = MigrationController.CreateV2ToV3Controller(Version.Parse(installedSchemaVersion));
+                    v2migrationController = MigrationController.CreateV2ToV3Controller(databaseSchemaVersion.GetVersion());
 
                     log.InfoFormat("Created V2 migration controller: {0}", v2migrationController.MigrationState);
                 }

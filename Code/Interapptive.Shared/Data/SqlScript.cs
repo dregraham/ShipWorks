@@ -195,14 +195,11 @@ namespace Interapptive.Shared.Data
                             }
                             else
                             {
-                                throw new Exception(string.Format("Improperly formatted :SetVar on line {0}.", i));
+                                throw new SqlScriptException(string.Format("Improperly formatted :SetVar on line {0}.", i));
                             }
 
-                            if (variables.ContainsKey(varName))
-                            {
-                                variables[varName] = varValue;
-                            }
-                            else
+                            // if variable is passed in from code, don't allow script to overwrite.
+                            if (!variables.ContainsKey(varName))
                             {
                                 variables.Add(varName, varValue);
                             }

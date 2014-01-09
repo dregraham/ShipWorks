@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Core
 
                 SqlAssemblyDeployer.DeployAssemblies(con);
 
-                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
+                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con, (new SchemaVersionManager()).GetRequiredSchemaVersion());
             }
         }
     }

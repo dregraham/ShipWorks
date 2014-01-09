@@ -564,9 +564,11 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="Data\Administration\FindVersionUpgradePathException.cs" />
-    <Compile Include="Data\Administration\UpdateScriptManager.cs" />
+    <Compile Include="Data\Administration\SchemaVersion.cs" />
+    <Compile Include="Data\Administration\SchemaVersionManager.cs" />
     <Compile Include="Data\Administration\UpgradePath.cs" />
     <Compile Include="Data\Administration\VersionGraph.cs" />
+    <Compile Include="Data\Administration\Versioning\SchemaVersionComparisonResult.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />

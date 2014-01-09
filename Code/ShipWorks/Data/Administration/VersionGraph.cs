@@ -27,11 +27,8 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Gets the upgrade path.
         /// </summary>
-        /// <param name="fromVersion">From version.</param>
-        /// <param name="shipWorksVersions">All ShipWorks Versions.</param>
-        public List<String> GetUpgradePath(string fromVersion, List<UpgradePath> shipWorksVersions)
+        public List<String> GetUpgradePath(SchemaVersion fromVersion, SchemaVersion toVersion, IEnumerable<UpgradePath> shipWorksVersions)
         {
-            string toVersion = shipWorksVersions.Last().ToVersion;
             foreach (var shipWorksVersion in shipWorksVersions)
             {
                 AddVersion(shipWorksVersion.ToVersion, shipWorksVersion.FromVersion);
@@ -68,7 +65,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         /// <param name="installedVersion">The installed version.</param>
         /// <param name="targetVersion">The target version.</param>
-        private List<String> GetUpgradePath(string installedVersion, string targetVersion)
+        private List<String> GetUpgradePath(SchemaVersion installedVersion, SchemaVersion targetVersion)
         {
             if (targetVersion==installedVersion)
             {
@@ -80,7 +77,7 @@ namespace ShipWorks.Data.Administration
             try
             {
 
-                tryGetPaths = graph.ShortestPathsDijkstra(edge => edgeCosts[edge], targetVersion);
+                tryGetPaths = graph.ShortestPathsDijkstra(edge => edgeCosts[edge], targetVersion.VersionName);
             }
             catch (KeyNotFoundException ex)
             {
@@ -89,7 +86,7 @@ namespace ShipWorks.Data.Administration
 
             IEnumerable<Edge<string>> path;
 
-            if (tryGetPaths(installedVersion, out path))
+            if (tryGetPaths(installedVersion.VersionName, out path))
             {
                 return path.Reverse().Select(version => version.Source).ToList();
             }

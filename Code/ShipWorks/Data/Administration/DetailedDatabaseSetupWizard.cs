@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared;
 using System.Text.RegularExpressions;
@@ -1222,12 +1223,16 @@ namespace ShipWorks.Data.Administration
         {
             gridDatabses.Rows.Clear();
 
+            SchemaVersion softwareSchemaVersion = (new SchemaVersionManager()).GetRequiredSchemaVersion();
+
             // Add a row for each database
             foreach (SqlDatabaseDetail database in databases.OrderBy(d => d.Name))
             {
                 string status;
                 string activity = "";
                 string order = "";
+
+                SchemaVersionComparisonResult databaseVersionComparedWithSoftwareVersion = softwareSchemaVersion.Compare(new SchemaVersion(database.SchemaVersion));
 
                 bool isCurrent = SqlSession.IsConfigured &&
                     SqlSession.Current.Configuration.ServerInstance == configuration.ServerInstance &&
@@ -1242,17 +1247,16 @@ namespace ShipWorks.Data.Administration
                 else switch (database.Status)
                 {
                     case SqlDatabaseStatus.ShipWorks:
-                        if (database.SchemaVersion == SqlSchemaUpdater.GetRequiredSchemaVersion())
+                        switch (databaseVersionComparedWithSoftwareVersion)
                         {
-                            status = "Ready";
-                        }
-                        else if ((new UpdateScriptManager()).DoesDBNeedToBeUpgraded(database.SchemaVersion))
-                        {
-                            status = "Out of Date";
-                        }
-                        else
-                        {
-                            status = "Newer";
+                            case SchemaVersionComparisonResult.Newer: status = "Newer";
+                                break;
+                            case SchemaVersionComparisonResult.Older: status = "Older";
+                                break;
+                            case SchemaVersionComparisonResult.Equal: status = "Ready";
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException("Invalid SchemaVersionComparisonResult.");
                         }
                         break;
                     case SqlDatabaseStatus.ShipWorks2x:
@@ -1843,9 +1847,9 @@ namespace ShipWorks.Data.Administration
                
                 try
                 {
-                    string installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
-                    isVersionLessThanThree = SqlSchemaUpdater.IsVersionLessThanThree(installed);
-                    isVersionLessThanOneTwo = SqlSchemaUpdater.IsVersionLessThanOneTwo(installed);
+                    SchemaVersion installed = SqlSchemaUpdater.GetDatabaseSchemaVersion();
+                    isVersionLessThanThree = installed.IsVersionLessThanThree;
+                    isVersionLessThanOneTwo = installed.IsVersionLessThanOneTwo;
                 }
                 catch (InvalidShipWorksDatabaseException)
                 {
@@ -1951,7 +1955,8 @@ namespace ShipWorks.Data.Administration
 
             using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
             {
-                bool isVersionLessThanThree = SqlSchemaUpdater.IsVersionLessThanThree(SqlSchemaUpdater.GetRequiredSchemaVersion());
+
+                bool isVersionLessThanThree = (new SchemaVersionManager()).GetRequiredSchemaVersion().IsVersionLessThanThree;
 
                 // See if we need to login 2.x style
                 if (isVersionLessThanThree)

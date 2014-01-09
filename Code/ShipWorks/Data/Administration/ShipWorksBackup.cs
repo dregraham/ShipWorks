@@ -273,7 +273,7 @@ namespace ShipWorks.Data.Administration
 
             xmlWriter.WriteStartElement("ShipWorks");
             xmlWriter.WriteElementString("AppVersion", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            xmlWriter.WriteElementString("SchemaVersion", SqlSchemaUpdater.GetInstalledSchemaVersion().ToString());
+            xmlWriter.WriteElementString("SchemaVersion", SqlSchemaUpdater.GetDatabaseSchemaVersion().ToString());
             xmlWriter.WriteEndElement();
 
             xmlWriter.WriteEndElement();

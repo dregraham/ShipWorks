@@ -107,7 +107,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                         cmd.CommandText = script.Content;
 
                         object result = SqlCommandProvider.ExecuteScalar(cmd);
-                        if (result != null && result.GetType() == typeof(int))
+                        if (result != null && result is int)
                         {
                             return (int)result;
                         }
@@ -145,6 +145,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                     {
                         if (script.BatchCount > 1)
                         {
+                            // treat each batch as a unit of work, don't need to actually run the script
+                            script.BatchCompleted += (o, e) => ReportWorkProgress();
 
                             // execute the script using the regular batch-capable methods
                             script.Execute(con);
