@@ -656,15 +656,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             customs.CustomsItems = customsItems.ToArray();
         }
-
-        /// <summary>
-        /// Our pseudo duck typing that sets the given property to the specified value on the given object
-        /// </summary>
-        private static void SetReflectedValue(object duck, string property, object value)
-        {
-            duck.GetType().GetProperty(property).SetValue(duck, value, null);
-        }
-
+        
         /// <summary>
         /// Get the country code given the specified country.  This gives us an opportunity to use Endicia specific country name values, if necessary, 
         /// which i think it will be.
@@ -781,8 +773,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Weight
-            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+            // Default the weight to .01 if it is 0, so we can get a rate without needing the user to provide a value
+            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
 
             bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
 
@@ -1216,8 +1208,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Weight
-            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+            // Default the weight to .01 if it is 0, so we can get a rate without needing the user to provide a value
+            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
 
             // Service and packaging
             request.MailClass = endiciaShipmentType.GetMailClassCode(serviceType, packagingType);
