@@ -773,7 +773,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Default the weight to .01 if it is 0, so we can get a rate without needing the user to provide a value
+            // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
             request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
 
             bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
@@ -1208,7 +1208,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Default the weight to .01 if it is 0, so we can get a rate without needing the user to provide a value
+            // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
             request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
 
             // Service and packaging
