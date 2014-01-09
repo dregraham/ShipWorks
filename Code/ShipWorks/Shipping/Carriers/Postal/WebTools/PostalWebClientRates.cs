@@ -45,6 +45,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 XmlTextWriter xmlWriter = new XmlTextWriter(writer);
                 xmlWriter.Formatting = Formatting.Indented;
 
+                // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
+                double ratedWeight = shipment.TotalWeight > 0 ? shipment.TotalWeight : .1;
+
                 // Domestic
                 if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
                 {
@@ -59,8 +62,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("FirstClassMailType", GetFirstClassMailType(packaging));
                     xmlWriter.WriteElementString("ZipOrigination", new PersonAdapter(shipment, "Origin").PostalCode5);
                     xmlWriter.WriteElementString("ZipDestination", new PersonAdapter(shipment, "Ship").PostalCode5);
-
-                    WeightValue weightValue = new WeightValue(shipment.TotalWeight);
+                    
+                    WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
                     xmlWriter.WriteElementString("Container", GetContainerValue(packaging, shipment.Postal.NonRectangular));
@@ -87,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteStartElement("Package");
                     xmlWriter.WriteAttributeString("ID", "0");
 
-                    WeightValue weightValue = new WeightValue(shipment.TotalWeight);
+                    WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
 

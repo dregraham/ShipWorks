@@ -80,11 +80,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            if (shipment.TotalWeight == 0)
-            {
-                throw new ShippingException("The shipment weight cannot be zero.");
-            }
-
             return new RateGroup(PostalWebClientRates.GetRates(shipment));
         }
 
