@@ -24,14 +24,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // We can safely cast this since we've passed initialization 
             RateRequest nativeRequest = request.NativeRequest as RateRequest;
 
-            // Just need to assign the weight value in pounds
+            // Just need to assign the weight value in pounds (default the weight to .1 if none is given, so we can still get rates)
             nativeRequest.RequestedShipment.TotalWeight = new Weight
                 {
                     Units = GetApiWeightUnit(request.ShipmentEntity), 
-                    Value = (decimal)request.ShipmentEntity.TotalWeight,
+                    Value = (decimal)request.ShipmentEntity.TotalWeight > 0 ? (decimal)request.ShipmentEntity.TotalWeight : .1m,
                     ValueSpecified = true,
                     UnitsSpecified = true
                 };
+
+            
         }
 
         /// <summary>

@@ -110,5 +110,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Weight weight = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
             Assert.AreEqual((decimal)shipmentEntity.TotalWeight, weight.Value);
         }
+
+        [TestMethod]
+        public void Manipulate_SetsWeightValueToZeroPointOne_WhenValueIsZero_Test()
+        {
+            shipmentEntity.TotalWeight = 0f;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Weight weight = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
+            Assert.AreEqual(0.1m, weight.Value);
+        }
     }
 }

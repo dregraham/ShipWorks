@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
             nativeRequest.RequestedShipment.PackageCount = fedex.Packages.Count.ToString();
 
-            // All of the package details are sent to to FedEx in a single call instead of doing smultiple
+            // All of the package details are sent to to FedEx in a single call instead of doing multiple
             // calls like the processing a shipment does
             for (int packageIndex = 0; packageIndex < fedex.Packages.Count; packageIndex++)
             {
@@ -60,12 +60,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 packageRequest.SequenceNumber = (packageIndex + 1).ToString();
                 packageRequest.GroupPackageCount = "1";
 
-                // Package weight and value
+                // Package weight and value (default the weight to .1 if none is given, so we can still get rates)
                 packageRequest.Weight = new Weight
                 {
-                    Units = GetApiWeightUnit(request.ShipmentEntity), 
+                    Units = GetApiWeightUnit(request.ShipmentEntity),
                     UnitsSpecified = true,
-                    Value = FedExUtility.GetPackageTotalWeight(fedExPackage),
+                    Value = FedExUtility.GetPackageTotalWeight(fedExPackage) > 0 ? FedExUtility.GetPackageTotalWeight(fedExPackage) : .1m,
                     ValueSpecified = true
                 };
 
