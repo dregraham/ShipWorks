@@ -4,7 +4,7 @@ using System.Linq;
 using QuickGraph;
 using QuickGraph.Algorithms;
 
-namespace ShipWorks.Data.Administration
+namespace ShipWorks.Data.Administration.Versioning
 {
     /// <summary>
     /// When all the versions are added to VersionGraph, this will return the best shortest path.

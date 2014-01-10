@@ -1,20 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Versioning;
 
-namespace ShipWorks.Data.Administration
+namespace ShipWorks.Data.Administration.Versioning
 {
     public class SchemaVersion
     {
+        ISchemaVersionManager schemaVersionManager;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="SchemaVersion"/> class.
         /// </summary>
         /// <param name="versionName">Name of the version.</param>
-        public SchemaVersion(string versionName)
+        public SchemaVersion(string versionName) : this(versionName, new SchemaVersionManager())
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SchemaVersion"/> class.
+        /// </summary>
+        public SchemaVersion(string versionName, ISchemaVersionManager schemaVersionManager)
         {
             VersionName = versionName;
+            this.schemaVersionManager = schemaVersionManager;
         }
 
         /// <summary>
@@ -130,10 +135,9 @@ namespace ShipWorks.Data.Administration
                 return SchemaVersionComparisonResult.Equal;
             }
 
-
-            // These are old version numbers, use standard comparison methods
-            if (leftVersion.IsSystemVersion && rightVersion.IsSystemVersion)
-            {
+            // if both versions are less than version 3, version order is determined by normal version comparison.
+            if (leftVersion.IsVersionLessThanThree && rightVersion.IsVersionLessThanThree)
+            {               
                 if (leftVersion.GetVersion() > rightVersion.GetVersion())
                 {
                     return SchemaVersionComparisonResult.Older;
@@ -145,19 +149,16 @@ namespace ShipWorks.Data.Administration
             }
 
             // Left version is older because it is still using a traditional version number.
-            if (leftVersion.IsSystemVersion)
+            if (leftVersion.IsVersionLessThanThree)
             {
                 return SchemaVersionComparisonResult.Newer;
             }
 
-            
-            if (rightVersion.IsSystemVersion)
+            if (rightVersion.IsVersionLessThanThree)
             {
                 // Right version is older because it is still using a traditional version number
                 return SchemaVersionComparisonResult.Older;
             }
-
-            SchemaVersionManager schemaVersionManager = new SchemaVersionManager();
 
             try
             {

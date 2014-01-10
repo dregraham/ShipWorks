@@ -1256,7 +1256,7 @@ namespace ShipWorks.Data.Administration
                             case SchemaVersionComparisonResult.Equal: status = "Ready";
                                 break;
                             default:
-                                throw new ArgumentOutOfRangeException("Invalid SchemaVersionComparisonResult.");
+                                throw new ArgumentOutOfRangeException("databaseVersionComparedWithSoftwareVersion");
                         }
                         break;
                     case SqlDatabaseStatus.ShipWorks2x:
@@ -1847,9 +1847,9 @@ namespace ShipWorks.Data.Administration
                
                 try
                 {
-                    SchemaVersion installed = SqlSchemaUpdater.GetDatabaseSchemaVersion();
-                    isVersionLessThanThree = installed.IsVersionLessThanThree;
-                    isVersionLessThanOneTwo = installed.IsVersionLessThanOneTwo;
+                    SchemaVersion databaseSchemaVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion();
+                    isVersionLessThanThree = databaseSchemaVersion.IsVersionLessThanThree;
+                    isVersionLessThanOneTwo = databaseSchemaVersion.IsVersionLessThanOneTwo;
                 }
                 catch (InvalidShipWorksDatabaseException)
                 {

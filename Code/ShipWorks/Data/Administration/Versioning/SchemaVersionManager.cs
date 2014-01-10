@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Data;
 using Newtonsoft.Json;
 
-namespace ShipWorks.Data.Administration
+namespace ShipWorks.Data.Administration.Versioning
 {
-    public class SchemaVersionManager
+    public class SchemaVersionManager : ISchemaVersionManager
     {
         // Used for executing scripts
         private static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
@@ -41,8 +40,7 @@ namespace ShipWorks.Data.Administration
         {
             return new SchemaVersion(allVersions.Last().ToVersion);
         }
-
-
+        
         /// <summary>
         /// Get a list of all the update scripts in ShipWorks, in the order they should be applied.
         /// </summary>

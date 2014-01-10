@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.Data.Administration.Versioning;
 using log4net;
 using ShipWorks.UI;
 using System.IO;
@@ -803,7 +804,7 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                if (SqlSchemaUpdater.IsVersionLessThanThree())
+                if (SqlSchemaUpdater.GetDatabaseSchemaVersion().IsVersionLessThanThree)
                 {
                     log.Info("Access granted to null user due to 2x schema.");
                     return;

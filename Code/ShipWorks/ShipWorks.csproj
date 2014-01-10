@@ -563,11 +563,12 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
-    <Compile Include="Data\Administration\FindVersionUpgradePathException.cs" />
-    <Compile Include="Data\Administration\SchemaVersion.cs" />
-    <Compile Include="Data\Administration\SchemaVersionManager.cs" />
-    <Compile Include="Data\Administration\UpgradePath.cs" />
-    <Compile Include="Data\Administration\VersionGraph.cs" />
+    <Compile Include="Data\Administration\Versioning\FindVersionUpgradePathException.cs" />
+    <Compile Include="Data\Administration\Versioning\ISchemaVersionManager.cs" />
+    <Compile Include="Data\Administration\Versioning\SchemaVersion.cs" />
+    <Compile Include="Data\Administration\Versioning\SchemaVersionManager.cs" />
+    <Compile Include="Data\Administration\Versioning\UpgradePath.cs" />
+    <Compile Include="Data\Administration\Versioning\VersionGraph.cs" />
     <Compile Include="Data\Administration\Versioning\SchemaVersionComparisonResult.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
@@ -2757,7 +2758,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\Utility\SqlTableSeed.cs" />
-    <Compile Include="Data\Administration\SqlUpdateScript.cs" />
+    <Compile Include="Data\Administration\Versioning\SqlUpdateScript.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xConfigurationMigrator.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xApplicationDataSourceType.cs" />
     <Compile Include="Data\Connection\SqlDeadlockPriorityScope.cs" />
@@ -5794,7 +5795,7 @@
     <Compile Include="Data\Administration\SqlServerSetup\SqlServerInstaller.cs" />
     <Compile Include="Data\Grid\Paging\PagedEntityGateway.cs" />
     <Compile Include="Data\Connection\SqlSessionScope.cs" />
-    <Compile Include="Data\Administration\SqlSchemaUpdater.cs" />
+    <Compile Include="Data\Administration\Versioning\SqlSchemaUpdater.cs" />
     <Compile Include="Data\Connection\SqlSession.cs" />
     <Compile Include="Data\Utility\ValueComparisonValidator.cs" />
     <Compile Include="Email\Accounts\AddEmailAccountWizard.cs">

@@ -111,34 +111,6 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
-        /// Sets the script variables.
-        /// </summary>
-        private void SetVariables(SqlConnection connection, string databaseName, string defaultFilePrefix, string defaultFilePath)
-        {
-            variables = new Dictionary<string, string>();
-            variables.Add("SQLCMDUSER", "");
-            variables.Add("SQLCMDPASSWORD", "");
-            variables.Add("SQLCMDSERVER", connection.DataSource);
-            variables.Add("SQLCMDWORKSTATION", connection.WorkstationId);
-            variables.Add("SQLCMDDBNAME", connection.Database);
-            variables.Add("SQLCMDLOGINTIMEOUT", connection.ConnectionTimeout.ToString(CultureInfo.InvariantCulture));
-            variables.Add("SQLCMDSTATTIMEOUT", "0");
-            variables.Add("SQLCMDHEADERS", "0");
-            variables.Add("SQLCMDCOLSEP", "");
-            variables.Add("SQLCMDCOLWIDTH", "0");
-            variables.Add("SQLCMDPACKETSIZE", "4096");
-            variables.Add("SQLCMDERRORLEVEL", "0");
-            variables.Add("SQLCMDMAXVARTYPEWIDTH", "256");
-            variables.Add("SQLCMDMAXFIXEDTYPEWIDTH", "0");
-            variables.Add("SQLCMDEDITOR", "edit.com");
-            variables.Add("SQLCMDINI", "");
-            variables.Add("DATABASENAME", databaseName);
-            variables.Add("DEFAULTFILEPREFIX", defaultFilePrefix);
-            variables.Add("DEFAULTDATAPATH", defaultFilePath);
-            variables.Add("DEFAULTLOGPATH", defaultFilePath);
-        }
-
-        /// <summary>
         /// Executes the specified SQL script with default options
         /// </summary>
         public void Execute(SqlConnection connection)
@@ -236,6 +208,37 @@ namespace Interapptive.Shared.Data
             }
         }
 
+        /// <summary>
+        /// Sets the script variables.
+        /// </summary>
+        private void SetVariables(SqlConnection connection, string databaseName, string defaultFilePrefix, string defaultFilePath)
+        {
+            variables = new Dictionary<string, string>();
+            variables.Add("SQLCMDUSER", "");
+            variables.Add("SQLCMDPASSWORD", "");
+            variables.Add("SQLCMDSERVER", connection.DataSource);
+            variables.Add("SQLCMDWORKSTATION", connection.WorkstationId);
+            variables.Add("SQLCMDDBNAME", connection.Database);
+            variables.Add("SQLCMDLOGINTIMEOUT", connection.ConnectionTimeout.ToString(CultureInfo.InvariantCulture));
+            variables.Add("SQLCMDSTATTIMEOUT", "0");
+            variables.Add("SQLCMDHEADERS", "0");
+            variables.Add("SQLCMDCOLSEP", "");
+            variables.Add("SQLCMDCOLWIDTH", "0");
+            variables.Add("SQLCMDPACKETSIZE", "4096");
+            variables.Add("SQLCMDERRORLEVEL", "0");
+            variables.Add("SQLCMDMAXVARTYPEWIDTH", "256");
+            variables.Add("SQLCMDMAXFIXEDTYPEWIDTH", "0");
+            variables.Add("SQLCMDEDITOR", "edit.com");
+            variables.Add("SQLCMDINI", "");
+            variables.Add("DATABASENAME", databaseName);
+            variables.Add("DEFAULTFILEPREFIX", defaultFilePrefix);
+            variables.Add("DEFAULTDATAPATH", defaultFilePath);
+            variables.Add("DEFAULTLOGPATH", defaultFilePath);
+        }
+
+        /// <summary>
+        /// Executes the batch.
+        /// </summary>
         private int ExecuteBatch(SqlConnection connection, string command, int currentBatch)
         {
             int tries = 3;
@@ -286,6 +289,10 @@ namespace Interapptive.Shared.Data
             return currentBatch;
         }
 
+        /// <summary>
+        /// Raises the batch completed event.
+        /// </summary>
+        /// <param name="currentBatch">The current batch.</param>
         private void RaiseBatchCompletedEvent(int currentBatch)
         {
             SqlScriptBatchCompletedEventHandler handler = BatchCompleted;

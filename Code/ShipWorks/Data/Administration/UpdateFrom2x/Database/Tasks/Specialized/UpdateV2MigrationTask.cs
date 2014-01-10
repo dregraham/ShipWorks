@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.IO.Zip;
 using System.Data;
 using System.Transactions;
+using ShipWorks.Data.Administration.Versioning;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 
