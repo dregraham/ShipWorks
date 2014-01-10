@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 // Ge the rates for the given SurePost service using the SurePost specific element writers
                 return GetRates(shipment, account, xmlWriter, new UpsSurePostRateServiceElementWriter(xmlWriter, serviceType, shipment),
-                                new UpsSurePostPackageWeightWriter(xmlWriter, serviceType), new UpsSurePostPackageServiceOptionsElementWriter(xmlWriter));
+                                new UpsRateSurePostPackageWeightWriter(xmlWriter, serviceType), new UpsSurePostPackageServiceOptionsElementWriter(xmlWriter));
             }
         }
 
