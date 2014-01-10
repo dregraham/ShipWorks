@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net;
-using ShipWorks.Properties;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,7 +12,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
@@ -44,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                 new RateResult("Rate 123", "4", 6.23M, null)
             };
 
-            shipment = new ShipmentEntity()
+            shipment = new ShipmentEntity
             {
                 BestRate = new BestRateShipmentEntity()
             };
@@ -53,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
 
             brokerFactory = new Mock<IBestRateShippingBrokerFactory>();
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             log = new Mock<ILog>();
 
@@ -68,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject.GetRates(shipment);
 
-            brokerFactory.Verify(f => f.CreateBrokers(), Times.Once());
+            brokerFactory.Verify(f => f.CreateBrokers(shipment), Times.Once());
         }
 
         [TestMethod]
@@ -79,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
 
             testObject.GetRates(shipment);
 
@@ -95,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup( rates));
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
@@ -397,7 +394,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { brokerException, anotherBrokerException });
 
             // We want the factory to return our fake broker for this test
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
@@ -439,51 +436,43 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void GetShipmentInsuranceProvider_ReturnsInvalid_OneBrokersWithNoAccounts_Test()
         {
-            broker.Setup(b => b.HasAccounts)
-                  .Returns(false);
-            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
-                  .Returns(InsuranceProvider.ShipWorks);
+            broker.Setup(b => b.HasAccounts).Returns(false);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
 
-            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider());
+            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 
         [TestMethod]
         public void GetShipmentInsuranceProvider_ReturnsShipWorks_TwoBrokersWithAccountsAndShipWorksInsurance_Test()
         {
-            broker.Setup(b => b.HasAccounts)
-                  .Returns(true);
-            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
-                .Returns(InsuranceProvider.ShipWorks);
+            broker.Setup(b => b.HasAccounts).Returns(true);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
-            
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetShipmentInsuranceProvider());
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
+
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 
         [TestMethod]
         public void GetShipmentInsuranceProvider_ReturnsInvalid_TwoBrokersWithAccountsAndCarrierInsurance_Test()
         {
-            broker.Setup(b => b.HasAccounts)
-                  .Returns(true);
-            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
-                .Returns(InsuranceProvider.Carrier);
+            broker.Setup(b => b.HasAccounts).Returns(true);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
 
-            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider());
+            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 
         [TestMethod]
         public void GetShipmentInsuranceProvider_ReturnsCarrier_TwoBrokersWithAccountsAndCarrierInsurance_Test()
         {
-            broker.Setup(b => b.HasAccounts)
-                  .Returns(true);
-            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>()))
-                .Returns(InsuranceProvider.Carrier);
+            broker.Setup(b => b.HasAccounts).Returns(true);
+            broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
-            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider());
+            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 		
         [TestMethod]
@@ -518,24 +507,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         private void InitializeFootnoteTests()
         {
-            rateGroupWithNoFootnote = new RateGroup(new List<RateResult>() { new RateResult("result1", "2"), new RateResult("result2", "2") });
+            rateGroupWithNoFootnote = new RateGroup(new List<RateResult> { new RateResult("result1", "2"), new RateResult("result2", "2") });
 
-            rateGroupWithFooterWithAssociatedAmount = new RateGroup(new List<RateResult>()
+            rateGroupWithFooterWithAssociatedAmount = new RateGroup(new List<RateResult>
             {
                 new RateResult("result1", "2") { AmountFootnote = new Bitmap(1, 1) },
                 new RateResult("result2", "2")
             });
             rateGroupWithFooterWithAssociatedAmount.AddFootnoteCreator(() => new FakeRateFootnoteControl(true));
 
-            rateGroupWithFooterNotAssociatedWithAmount = new RateGroup(new List<RateResult>() { new RateResult("result1", "2"), new RateResult("result2", "2") });
+            rateGroupWithFooterNotAssociatedWithAmount = new RateGroup(new List<RateResult> { new RateResult("result1", "2"), new RateResult("result2", "2") });
             rateGroupWithFooterNotAssociatedWithAmount.AddFootnoteCreator(() => new FakeRateFootnoteControl(false));
         }
 
         [TestMethod]
         public void SetFootnote_ReturnsTwoFooters_BothFootersApplicableToRates_Test()
         {
-            RateGroup testRateGroup = new RateGroup(new List<RateResult>() { rateGroupWithFooterWithAssociatedAmount.Rates.First(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
-            BestRateShipmentType.SetFootnote(new List<RateGroup>() { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
+            RateGroup testRateGroup = new RateGroup(new List<RateResult> { rateGroupWithFooterWithAssociatedAmount.Rates.First(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
+            BestRateShipmentType.SetFootnote(new List<RateGroup> { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
 
             Assert.AreEqual(2, testRateGroup.FootnoteCreators.Count());
         }
@@ -543,8 +532,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void SetFootnote_ReturnsOneFooter_FooterWithAssociatedRateHasNoCorrespondingRate_Test()
         {
-            RateGroup testRateGroup = new RateGroup(new List<RateResult>() { rateGroupWithFooterNotAssociatedWithAmount.Rates.Last(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
-            BestRateShipmentType.SetFootnote(new List<RateGroup>() { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
+            RateGroup testRateGroup = new RateGroup(new List<RateResult> { rateGroupWithFooterNotAssociatedWithAmount.Rates.Last(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
+            BestRateShipmentType.SetFootnote(new List<RateGroup> { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
 
             Assert.AreEqual(1, testRateGroup.FootnoteCreators.Count());
         }
@@ -552,8 +541,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void SetFootnote_ReturnsNoFooter_NoAssociatedFooter_Test()
         {
-            RateGroup testRateGroup = new RateGroup(new List<RateResult>() { rateGroupWithFooterWithAssociatedAmount.Rates.Last(), rateGroupWithNoFootnote.Rates.First() });
-            BestRateShipmentType.SetFootnote(new List<RateGroup>() { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
+            RateGroup testRateGroup = new RateGroup(new List<RateResult> { rateGroupWithFooterWithAssociatedAmount.Rates.Last(), rateGroupWithNoFootnote.Rates.First() });
+            BestRateShipmentType.SetFootnote(new List<RateGroup> { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
 
             Assert.AreEqual(0, testRateGroup.FootnoteCreators.Count());
         }
@@ -564,7 +553,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker = new Mock<IBestRateShippingBroker>();
             broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsFalse(isRequired);
@@ -576,7 +565,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker = new Mock<IBestRateShippingBroker>();
             broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsTrue(isRequired);
@@ -591,7 +580,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsFalse(isRequired);
@@ -606,7 +595,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsTrue(isRequired);
@@ -621,7 +610,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
 
-            brokerFactory.Setup(f => f.CreateBrokers()).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsTrue(isRequired);

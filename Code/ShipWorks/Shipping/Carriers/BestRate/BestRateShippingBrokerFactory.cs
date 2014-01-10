@@ -15,9 +15,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Creates all of the best rate shipping brokers available in the system for the shipping
         /// providers that are activated and configured.
         /// </summary>
-        /// <returns>The shipping broker for all activated and configured shipment types that have not 
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>The shipping broker for all activated and configured shipment types that have not
         /// been excluded.</returns>
-        public IEnumerable<IBestRateShippingBroker> CreateBrokers()
+        public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment)
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();

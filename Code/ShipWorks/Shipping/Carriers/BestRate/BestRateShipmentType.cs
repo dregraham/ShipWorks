@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers();
+            IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment);
             
             if (!bestRateShippingBrokers.Any())
             {
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="compiledRateGroup">The compiled rate group.</param>
         public static void SetFootnote(IEnumerable<RateGroup> allRateGroups, RateGroup compiledRateGroup)
         {
-            // Only add footnotes from rategroups from which rates will actually be displayed
+            // Only add footnotes from rate groups from which rates will actually be displayed
             IEnumerable<Func<RateFootnoteControl>> includedRateGroups = allRateGroups
                                                                             .Where(rg => rg.FootnoteCreators.Any())
                                                                             .Where(rg => rg.Rates
@@ -407,7 +407,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers();
+            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment);
             return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
 
@@ -460,7 +460,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider();
+            InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
             shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
         }
@@ -469,10 +469,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets the shipment insurance provider based on carriers selected.
         /// </summary>
         /// <returns></returns>
-        public InsuranceProvider GetShipmentInsuranceProvider()
+        public InsuranceProvider GetShipmentInsuranceProvider(ShipmentEntity shipment)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers().Where(b => b.HasAccounts).ToList();
+            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers(shipment).Where(b => b.HasAccounts).ToList();
 
             // Default shipmentInsuranceProvider is ShipWorks
             InsuranceProvider shipmentInsuranceProvider;
