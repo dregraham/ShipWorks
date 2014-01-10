@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
@@ -23,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         [TestMethod]
         public void GetShippingBroker_ReturnsFedExShippingBroker_Test()
         {
-            IBestRateShippingBroker broker = testObject.GetShippingBroker();
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
             Assert.IsInstanceOfType(broker, typeof(FedExBestRateBroker));
         }

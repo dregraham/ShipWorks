@@ -660,10 +660,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Endicia shipment type.
+        /// Gets an instance to the best rate shipping broker for Endicia based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an EndiciaBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new EndiciaBestRateBroker();
         }

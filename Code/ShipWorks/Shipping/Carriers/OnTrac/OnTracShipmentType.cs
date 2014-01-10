@@ -461,7 +461,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
                 else
                 {
-                    // origin not specidied as an account. Use base behavior.
+                    // origin not specified as an account. Use base behavior.
                     isSuccessfull = base.UpdatePersonAddress(shipment, person, originID);
                 }
             }
@@ -487,9 +487,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the OnTrac shipment type.
+        /// Gets an instance to the best rate shipping broker for the OnTrac shipment type based on the shipment configuration.
         /// </summary>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an OnTracBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new OnTracBestRateBroker();
         }

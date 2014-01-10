@@ -938,10 +938,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the UPS shipment type.
+        /// Gets an instance to the best rate shipping broker for the UPS shipment type based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of an IBestRateShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an UpsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new UpsBestRateBroker();
         }

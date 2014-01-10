@@ -37,11 +37,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 if (IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
                 {
                     // This shipment type is activated, configured, and hasn't been excluded, so add it to our list of brokers
-                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker();
+                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment);
                     if (broker.HasAccounts)
                     {
                         // We only want to return brokers that have accounts setup
-                        brokers.Add(shipmentType.GetShippingBroker());
+                        brokers.Add(shipmentType.GetShippingBroker(shipment));
                     }
                 }
             }

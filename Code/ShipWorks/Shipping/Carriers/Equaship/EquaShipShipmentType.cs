@@ -463,10 +463,11 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Equaship shipment type.
+        /// Gets an instance to the best rate shipping broker for EquaShip based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
         }

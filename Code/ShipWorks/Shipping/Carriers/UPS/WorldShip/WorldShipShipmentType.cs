@@ -173,10 +173,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the UPS WorldShip shipment type.
+        /// Gets an instance to the best rate shipping broker for the UPS WorldShip shipment type based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of an IBestRateShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of a WorldShipBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new WorldShipBestRateBroker();
         }

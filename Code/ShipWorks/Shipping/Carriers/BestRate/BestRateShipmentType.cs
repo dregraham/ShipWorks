@@ -335,10 +335,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the best rate shipment type.
+        /// Gets an instance to the best rate shipping broker for a provider based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker since this is not applicable to the best rate shipment type.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
         }

@@ -994,10 +994,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the FedEx shipment type.
+        /// Gets an instance to the best rate shipping broker for the FedEx shipment type based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a FedExBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new FedExBestRateBroker();
         }
