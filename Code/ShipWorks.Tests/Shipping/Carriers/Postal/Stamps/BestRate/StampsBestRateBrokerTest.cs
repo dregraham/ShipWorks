@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
@@ -461,14 +462,43 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_SetsTagToAction()
+        public void GetBestRates_SetsTagToBestRateResultTag()
         {
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
             foreach (var rate in rates.Rates)
             {
-                Assert.IsInstanceOfType(rate.Tag, typeof(Action<ShipmentEntity>));
+                BestRateResultTag tag = rate.Tag as BestRateResultTag;
+
+                if (tag == null)
+                {
+                    Assert.Fail("Tag is {0} instead of BestRateResultTag", rate.Tag.GetType());
+                }
+
+                Assert.IsInstanceOfType(tag.RateSelectionDelegate, typeof(Action<ShipmentEntity>));
+                Assert.IsNotNull(tag.OriginalTag);
+                Assert.IsNotNull(tag.ResultKey);
             }
+        }
+
+        [TestMethod]
+        public void GetBestRates_SetsTagResultKeyToPostalAndServiceType()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Stamps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment, ex => { });
+
+            var resultKeys = rates.Rates.Select(x => x.Tag).Cast<BestRateResultTag>().Select(x => x.ResultKey).ToList();
+
+            Assert.IsTrue(resultKeys.Contains("PostalExpressMailPremium"));
+            Assert.IsTrue(resultKeys.Contains("PostalStandardPost"));
         }
 
         //[TestMethod]

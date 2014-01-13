@@ -135,6 +135,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         }
 
         /// <summary>
+        /// Gets the result key for a given rate
+        /// </summary>
+        /// <param name="rate">Rate result for which to create a result key</param>
+        /// <returns>Concatenation of the carrier description and the original rate tag</returns>
+        protected override string GetResultKey(RateResult rate)
+        {
+            return "Postal" + (PostalServiceType)GetServiceTypeFromTag(rate.Tag);
+        }
+
+        /// <summary>
         /// Convert the best rate shipment into the specified postal reseller shipment
         /// </summary>
         /// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>

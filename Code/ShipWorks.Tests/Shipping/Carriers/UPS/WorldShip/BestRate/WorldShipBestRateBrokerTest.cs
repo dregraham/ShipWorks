@@ -7,6 +7,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -356,14 +358,40 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_SetsTagToAction()
+        public void GetBestRates_SetsTagToBestRateResultTag()
         {
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
             foreach (var rate in rates.Rates)
             {
-                Assert.IsInstanceOfType(rate.Tag, typeof(Action<ShipmentEntity>));
+                BestRateResultTag tag = rate.Tag as BestRateResultTag;
+
+                if (tag == null)
+                {
+                    Assert.Fail("Tag is {0} instead of BestRateResultTag", rate.Tag.GetType());
+                }
+
+                Assert.IsInstanceOfType(tag.RateSelectionDelegate, typeof(Action<ShipmentEntity>));
+                Assert.IsNotNull(tag.OriginalTag);
+                Assert.IsNotNull(tag.ResultKey);
             }
+        }
+
+        [TestMethod]
+        public void GetBestRates_SetsTagResultKeyToCarrierAndServiceType()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            rateGroup1.Rates.Add(new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays });
+            rateGroup1.Rates.Add(new RateResult("Account 1c", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay });
+
+            RateGroup rates = testObject.GetBestRates(testShipment, ex => { });
+
+            var resultKeys = rates.Rates.Select(x => x.Tag).Cast<BestRateResultTag>().Select(x => x.ResultKey).ToList();
+
+            Assert.IsTrue(resultKeys.Contains("UPSUpsGround"));
+            Assert.IsTrue(resultKeys.Contains("UPSUpsNextDayAir"));
         }
 
         [TestMethod]

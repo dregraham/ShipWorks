@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -119,7 +120,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             foreach (RateResult rate in filteredRates)
             {
                 // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = CreateRateSelectionFunction(accountLookup[rate], rate.Tag);
+                rate.Tag = new BestRateResultTag
+                {
+                    OriginalTag = rate.Tag,
+                    ResultKey = GetResultKey(rate),
+                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], rate.Tag)
+                };
+                
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
                 rate.CarrierDescription = carrierDescription;
             }
@@ -128,6 +135,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
             return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Gets the result key for a given rate
+        /// </summary>
+        /// <param name="rate">Rate result for which to create a result key</param>
+        /// <returns>Concatenation of the carrier description and the original rate tag</returns>
+        protected virtual string GetResultKey(RateResult rate)
+        {
+            return carrierDescription + rate.Tag;
         }
 
         /// <summary>
