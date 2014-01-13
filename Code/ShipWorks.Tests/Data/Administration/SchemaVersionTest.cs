@@ -22,8 +22,8 @@ namespace ShipWorks.Tests.Data.Administration
         {
             mockSchemaVersionManager = new Mock<ISchemaVersionManager>();
 
-            OlderVersionTwo = new SchemaVersion("2.2.2.1");
-            NewerVersionTwo = new SchemaVersion("2.2.4.1");
+            OlderVersionTwo = new SchemaVersion("2.2.2.1", mockSchemaVersionManager.Object);
+            NewerVersionTwo = new SchemaVersion("2.2.4.1", mockSchemaVersionManager.Object);
 
             OlderVersionThree = new SchemaVersion("3.4.1.2", mockSchemaVersionManager.Object);
             NewerVersionThree = new SchemaVersion("NewerThree", mockSchemaVersionManager.Object);
