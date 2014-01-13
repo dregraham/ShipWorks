@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
             // and return the top 5
             IEnumerable<RateResult> orderedRates = rateResults.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
-            List<RateResult> orderedRatesList = orderedRates.Take(50).ToList();
+            List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
 
             return orderedRatesList;
         }
