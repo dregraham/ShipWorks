@@ -564,6 +564,7 @@
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateResultFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateResultFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
