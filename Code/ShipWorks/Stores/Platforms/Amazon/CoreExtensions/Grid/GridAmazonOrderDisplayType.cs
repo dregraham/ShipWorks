@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.EntityClasses;
@@ -42,8 +43,44 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
             if (order != null)
             {
                 string domainName = GetDomainName(order);
-                WebHelper.OpenUrl(string.Format("https://sellercentral.{0}/gp/orders/order-details.html/?orderID={1}", domainName, order.AmazonOrderID), e.Row.Grid.SandGrid.TopLevelControl);
+                string orderUrl = string.Format("https://sellercentral.{0}/gp/orders/order-details.html/?orderID={1}", domainName, order.AmazonOrderID);
+
+                HttpRequestSubmitter request = new HttpVariableRequestSubmitter();
+                request.Uri = new Uri(orderUrl);
+
+                try
+                {
+                    // There have been cases where 502 errors have been received when trying to navigate to 
+                    // the store domain provided by amazon, so we'll try to bounce a request off of the URL
+                    // to see whether it works; if it doesn't work, we'll resort to just hitting sellercentral.amazon.com
+                    IHttpResponseReader response = request.GetResponse();
+                    if (response.HttpWebResponse.StatusCode != HttpStatusCode.OK)
+                    {
+                        log.Warn(string.Format("Unable to view Amazon order info at {0}. A {1} error was received.", orderUrl, response.HttpWebResponse.StatusCode));
+                        orderUrl = SwapDomainWithGenericAmazonDomain(orderUrl);
+                    }
+                }
+                catch (WebException exception)
+                {
+                    log.Warn(string.Format("Unable to view Amazon order info at {0}. {1}", orderUrl, exception.Message));
+                    orderUrl = SwapDomainWithGenericAmazonDomain(orderUrl);
+                }
+
+                WebHelper.OpenUrl(orderUrl, e.Row.Grid.SandGrid.TopLevelControl);
             }
+        }
+
+        /// <summary>
+        /// Swaps the domain of the URL provided with the generic amazon sellercentral domain (i.e. mystore.com/xyz... becomes amazon.com/xyz...)
+        /// </summary>
+        /// <param name="orderUrl">The order URL.</param>
+        /// <returns>The same URL except with the domain of sellercentral.amazon.com</returns>
+        private static string SwapDomainWithGenericAmazonDomain(string orderUrl)
+        {
+            Uri uri = new Uri(orderUrl);
+
+            log.InfoFormat("Swapping {0} with the 'sellercentral.amazon.com' domain.", uri.Host);
+            return orderUrl.Replace(uri.Host, "sellercentral.amazon.com");
         }
 
         /// <summary>
@@ -68,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
             }
             catch (AmazonException)
             {
-                log.WarnFormat("The domain name could not be retreived for the Amazon store (store ID {0}); defaulting to amazon.com.", order.StoreID);
+                log.WarnFormat("The domain name could not be retrieved for the Amazon store (store ID {0}); defaulting to amazon.com.", order.StoreID);
             }
 
             return domainName;
