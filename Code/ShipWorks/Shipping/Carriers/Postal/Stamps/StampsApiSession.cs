@@ -1028,7 +1028,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             rate.ToZIPCode = shipment.ShipPostalCode;
             rate.ToCountry = AdjustCountryCode(shipment.ShipCountryCode);
 
-            WeightValue weightValue = new WeightValue(shipment.TotalWeight);
+            const double pointOneOzAsLbs = 0.00625;
+            WeightValue weightValue = new WeightValue(shipment.TotalWeight > 0 ? shipment.TotalWeight : pointOneOzAsLbs);
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 

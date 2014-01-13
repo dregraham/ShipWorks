@@ -805,7 +805,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the service estimated arrival time for the given service type if it's available.
         /// </summary>
-        /// <param name="service">The service.</param>
         /// <param name="transitTime">The transit time.</param>
         /// <returns>A string value of the arrival time in the format of "DayOfWeek h:mm tt" (e.g. Friday 4:00 PM)</returns>
         private static string GetServiceEstimatedArrivalTime(UpsTransitTime transitTime)
