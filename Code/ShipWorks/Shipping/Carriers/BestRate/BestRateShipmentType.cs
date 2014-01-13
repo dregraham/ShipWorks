@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     {
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
+        private IBestRateResultFilter bestRateResultFilter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -44,6 +45,27 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             this.brokerFactory = brokerFactory;
             this.log = log;
+        }
+
+
+        /// <summary>
+        /// IBestRateResultFilter that returns a new list of the filtered rate results.
+        /// </summary>
+        public IBestRateResultFilter BestRateResultFilter
+        {
+            get
+            {
+                if (bestRateResultFilter == null)
+                {
+                    bestRateResultFilter = new BestRateResultFilter();
+                }
+
+                return bestRateResultFilter;
+            }
+            set
+            {
+                bestRateResultFilter = value; 
+            }
         }
 
         /// <summary>
@@ -212,7 +234,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment);
             
@@ -232,8 +254,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             Task.WaitAll(tasks);
 
             List<RateGroup> rateGroups = tasks.Select(x => x.Result).ToList();
+            IEnumerable<RateResult> allRates = rateGroups.SelectMany(x => x.Rates);
 
-            var orderedRatesList = GetBestOrderedRatesList(shipment, rateGroups);
+            // Filter out any rates as necessary
+            List<RateResult> orderedRatesList = BestRateResultFilter.FilterRates(allRates, (ServiceLevelType)shipment.BestRate.ServiceLevel).ToList();
 
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
@@ -245,33 +269,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
             return compiledRateGroup;
-        }
-
-        /// <summary>
-        /// Gets the top best rates ordered by cost then service level.
-        /// </summary>
-        private static List<RateResult> GetBestOrderedRatesList(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
-        {
-            IEnumerable<RateResult> allRates = rateGroups.SelectMany(x => x.Rates);
-
-            var serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
-
-            if (shipment.BestRate.ServiceLevel != (int)ServiceLevelType.Anytime)
-            {
-                DateTime? maxDeliveryDate = allRates
-                    .Where(x => x.ServiceLevel != ServiceLevelType.Anytime)
-                    .Where(x => (int)x.ServiceLevel <= shipment.BestRate.ServiceLevel)
-                    .Max(x => x.ExpectedDeliveryDate);
-
-                allRates = allRates.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate || serviceLevelSpeedComparer.Compare(x.ServiceLevel, (ServiceLevelType)shipment.BestRate.ServiceLevel) <= 0).ToList();
-            }
-
-            // We want the cheapest rates to appear first, and any ties to be ordered by service level
-            // and return the top 5
-            IEnumerable<RateResult> orderedRates = allRates.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
-            List<RateResult> orderedRatesList = orderedRates.Take(5).ToList();
-
-            return orderedRatesList;
         }
 
         /// <summary>

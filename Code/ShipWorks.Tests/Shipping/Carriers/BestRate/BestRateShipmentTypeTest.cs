@@ -310,16 +310,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void GetRates_PassesExceptionHandlerToBroker_Test()
-        {
-            Action<ShippingException> handler = exception => { };
-
-            testObject.GetRates(shipment, handler);
-
-            broker.Verify(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), handler));
-        }
-
-        [TestMethod]
         public void GetRates_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
         {
             // Setup the broker to return specific rates
