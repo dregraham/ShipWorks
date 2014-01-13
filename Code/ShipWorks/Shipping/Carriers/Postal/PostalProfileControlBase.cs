@@ -44,17 +44,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
             originCombo.DataSource = origins;
 
             LoadServiceTypes();
-            LoadConfirmationTypes();
 
             // Only Express 1 Endicia should see the cubic packaging type
             EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.Express1Endicia));
             EnumHelper.BindComboBox<PostalCustomsContentType>(contentType);
+            EnumHelper.BindComboBox<PostalConfirmationType>(confirmation);
 
             dimensionsControl.Initialize();
 
             AddValueMapping(profile, ShippingProfileFields.OriginID, senderState, originCombo, labelSender);
-
             AddValueMapping(postal, PostalProfileFields.Service, serviceState, service, labelService);
+
             AddValueMapping(postal, PostalProfileFields.Confirmation, confirmationState, confirmation, labelConfirmation);
             AddValueMapping(postal, PostalProfileFields.Weight, weightState, weight, labelWeight);
 
@@ -92,59 +92,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType).Concat(PostalUtility.GetInternationalServices(shipmentType))
                 .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s)).ToList());
         }
-        
-        /// <summary>
-        /// Load the available confirmation types
-        /// </summary>
-        protected void LoadConfirmationTypes()
-        {
-            object previousValue = confirmation.SelectedValue;
-
-            List<PostalConfirmationType> confirmationTypes = new List<PostalConfirmationType>();
-
-            if (serviceState.Checked)
-            {
-                confirmationTypes = GetAvailableConfirmationTypes((PostalServiceType) service.SelectedValue);
-            }
-
-            // If none have been added yet, assume we should just alow them all.
-            if (confirmationTypes.Count == 0)
-            {
-                confirmationTypes.Add(PostalConfirmationType.None);
-                confirmationTypes.Add(PostalConfirmationType.Delivery);
-                confirmationTypes.Add(PostalConfirmationType.Signature);
-            }
-
-            confirmation.DisplayMember = "Key";
-            confirmation.ValueMember = "Value";
-            confirmation.DataSource = confirmationTypes.Select(t => new KeyValuePair<string, PostalConfirmationType>(
-                EnumHelper.GetDescription(t), t)).ToList();
-
-            if (previousValue == null)
-            {
-                confirmation.SelectedIndex = -1;
-            }
-            else
-            {
-                confirmation.SelectedValue = previousValue;
-                if (confirmation.SelectedIndex == -1)
-                {
-                    confirmation.SelectedIndex = 0;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the avaliable confirmation types based on the service type.
-        /// </summary>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <returns>A List of PostalConfirmationType values.</returns>
-        protected List<PostalConfirmationType> GetAvailableConfirmationTypes(PostalServiceType serviceType)
-        {
-            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)Profile.ShipmentType) as PostalShipmentType;
-
-            return postalShipmentType.GetAvailableConfirmationTypes(null, serviceType, null);
-        }
 
         /// <summary>
         /// The selected content type has changed
@@ -152,14 +99,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         private void OnContentTypeChanged(object sender, EventArgs e)
         {
             contentDescription.Visible = contentType.SelectedValue != null && (PostalCustomsContentType) contentType.SelectedValue == PostalCustomsContentType.Other;
-        }
-
-        /// <summary>
-        /// The service selection or content state has changed
-        /// </summary>
-        private void OnChangeService(object sender, EventArgs e)
-        {
-            LoadConfirmationTypes();
         }
     }
 }

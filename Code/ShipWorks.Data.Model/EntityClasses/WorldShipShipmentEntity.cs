@@ -254,9 +254,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Packages":
 					this.Packages.Add((WorldShipPackageEntity)relatedEntity);
 					break;
-				case "WorldShipProcessed":
-					this.WorldShipProcessed.Add((WorldShipProcessedEntity)relatedEntity);
-					break;
+
 
 				default:
 					break;
@@ -279,9 +277,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Packages":
 					base.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-				case "WorldShipProcessed":
-					base.PerformRelatedEntityRemoval(this.WorldShipProcessed, relatedEntity, signalRelatedEntityManyToOne);
-					break;
+
 
 				default:
 					break;
@@ -1604,7 +1600,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(_worldShipProcessed==null)
 				{
 					_worldShipProcessed = new EntityCollection<WorldShipProcessedEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipProcessedEntityFactory)));
-					_worldShipProcessed.SetContainingEntityInfo(this, "WorldShipShipment");
+
 				}
 				return _worldShipProcessed;
 			}

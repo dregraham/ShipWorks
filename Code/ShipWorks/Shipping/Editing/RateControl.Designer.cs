@@ -30,6 +30,7 @@
         {
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sandGrid = new Divelements.SandGrid.SandGrid();
+            this.gridColumnCarrier = new Divelements.SandGrid.GridColumn();
             this.gridColumnService = new Divelements.SandGrid.GridColumn();
             this.gridColumnDays = new Divelements.SandGrid.GridColumn();
             this.gridColumnRate = new Divelements.SandGrid.GridColumn();
@@ -41,10 +42,11 @@
             this.panelOutOfDate = new System.Windows.Forms.Panel();
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            ((System.ComponentModel.ISupportInitialize) (this.outOfDateBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).BeginInit();
             this.outOfDateBar.Panel.SuspendLayout();
             this.outOfDateBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.image)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.panelOutOfDate.SuspendLayout();
             this.panelFootnote.SuspendLayout();
             this.SuspendLayout();
@@ -54,6 +56,7 @@
             this.sandGrid.AllowMultipleSelection = false;
             this.sandGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
+            this.gridColumnCarrier,
             this.gridColumnService,
             this.gridColumnDays,
             this.gridColumnRate,
@@ -64,11 +67,13 @@
             this.sandGrid.Location = new System.Drawing.Point(0, 30);
             this.sandGrid.Name = "sandGrid";
             this.sandGrid.NullRepresentation = "";
+            this.sandGrid.PrimaryColumn = this.gridColumnService;
             this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
             this.sandGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("First Class"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -78,6 +83,7 @@
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))}),
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("     Delivery Confirmation (+$.045)"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -87,6 +93,7 @@
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))}),
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("     Signature Confirmation (+$0.85)"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -96,6 +103,7 @@
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))}),
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
+                        new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("Priority"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
@@ -108,6 +116,17 @@
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
             this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
+            // 
+            // gridColumnCarrier
+            // 
+            this.gridColumnCarrier.AllowEditing = false;
+            this.gridColumnCarrier.AllowReorder = false;
+            this.gridColumnCarrier.Clickable = false;
+            this.gridColumnCarrier.HeaderText = "Carrier";
+            this.gridColumnCarrier.Visible = false;
+            this.gridColumnCarrier.Width = 50;
+            this.gridColumnCarrier.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnCarrier.AutoSizeIncludeHeader = true;
             // 
             // gridColumnService
             // 
@@ -149,8 +168,8 @@
             // 
             // outOfDateBar
             // 
-            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.outOfDateBar.GroupBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderRowList;
             this.outOfDateBar.GroupBorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
             this.outOfDateBar.Location = new System.Drawing.Point(4, 3);
@@ -162,11 +181,11 @@
             this.outOfDateBar.Panel.Controls.Add(this.labelPrimary);
             this.outOfDateBar.Panel.Controls.Add(this.image);
             this.outOfDateBar.Size = new System.Drawing.Size(485, 24);
-            this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (235)))));
+            this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(235)))));
             this.outOfDateBar.StateCommon.Border.Color1 = System.Drawing.Color.Silver;
-            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders) ((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom)
-                        | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left)
-                        | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.outOfDateBar.StateCommon.Border.Rounding = 4;
             this.outOfDateBar.TabIndex = 6;
             // 
@@ -174,7 +193,7 @@
             // 
             this.labelSecondary.AutoSize = true;
             this.labelSecondary.BackColor = System.Drawing.Color.Transparent;
-            this.labelSecondary.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (50)))), ((int) (((byte) (50)))), ((int) (((byte) (50)))));
+            this.labelSecondary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.labelSecondary.Location = new System.Drawing.Point(85, 2);
             this.labelSecondary.Name = "labelSecondary";
             this.labelSecondary.Size = new System.Drawing.Size(231, 13);
@@ -185,7 +204,7 @@
             // 
             this.labelPrimary.AutoSize = true;
             this.labelPrimary.BackColor = System.Drawing.Color.Transparent;
-            this.labelPrimary.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelPrimary.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPrimary.Location = new System.Drawing.Point(16, 2);
             this.labelPrimary.Name = "labelPrimary";
             this.labelPrimary.Size = new System.Drawing.Size(71, 13);
@@ -239,14 +258,15 @@
             this.Controls.Add(this.sandGrid);
             this.Controls.Add(this.panelOutOfDate);
             this.Controls.Add(this.panelFootnote);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RateControl";
             this.Size = new System.Drawing.Size(493, 205);
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).EndInit();
             this.outOfDateBar.Panel.ResumeLayout(false);
             this.outOfDateBar.Panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.outOfDateBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).EndInit();
             this.outOfDateBar.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.image)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.panelOutOfDate.ResumeLayout(false);
             this.panelFootnote.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -267,5 +287,6 @@
         private System.Windows.Forms.Panel panelOutOfDate;
         private System.Windows.Forms.Panel panelFootnote;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
+        private Divelements.SandGrid.GridColumn gridColumnCarrier;
     }
 }

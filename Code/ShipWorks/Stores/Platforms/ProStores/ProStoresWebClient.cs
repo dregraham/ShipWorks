@@ -18,6 +18,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using System.Globalization;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -586,6 +587,13 @@ namespace ShipWorks.Stores.Platforms.ProStores
             {
                 using (IHttpResponseReader response = request.GetResponse())
                 {
+                    if (!response.HttpWebResponse.ContentType.ToUpper(CultureInfo.InvariantCulture).Contains("TEXT/XML"))
+                    {
+                        // Sometimes ProStores responds with the HTML of their maintenance page
+                        log.Error(string.Format("The request to ProStores could not be processed. ProStores returned a response with an unexpected content type: {0}", response.HttpWebResponse.ContentType));
+                        throw new ProStoresException("ShipWorks encountered an unexpected response from ProStores that could not be processed. Please try again later.");
+                    }
+
                     string responseXml = response.ReadResult();
 
                     // Log the response

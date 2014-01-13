@@ -97,9 +97,16 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Indicates if a download is currently in progress
         /// </summary>
-        public static bool IsDownloading
+        public static bool IsDownloading(long? storeID = null)
         {
-            get { return isDownloading; }
+            if (storeID == null)
+            {
+                return isDownloading;
+            }
+            else
+            {
+                return downloadQueue.Any(d => d.StoreID == storeID);
+            }
         }
 
         /// <summary>
@@ -126,9 +133,10 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Initiates an auto-download for any stores that are due for an auto download
+        /// Initiates an auto-download for any stores that are due for an auto download.  By default we only actually do anything at most once every 15 seconds, but
+        /// if you really really need this to check right now-now, you can set forceCheckNow to true
         /// </summary>
-        public static void StartAutoDownloadIfNeeded()
+        public static void StartAutoDownloadIfNeeded(bool forceCheckNow = false)
         {
             // If we are a background process, and the UI process is open - then just let the UI do it
             if (!Program.ExecutionMode.IsUISupported && UserInterfaceExecutionMode.IsProcessRunning)
@@ -137,7 +145,7 @@ namespace ShipWorks.Stores.Communication
             }
 
             // Don't check more often than every 15 seconds
-            if (lastAutoDownloadCheck + TimeSpan.FromSeconds(15) > DateTime.UtcNow)
+            if (!forceCheckNow && lastAutoDownloadCheck + TimeSpan.FromSeconds(15) > DateTime.UtcNow)
             {
                 return;
             }

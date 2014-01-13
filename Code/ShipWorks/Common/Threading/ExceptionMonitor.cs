@@ -107,7 +107,7 @@ namespace ShipWorks.Common.Threading
                 return false;
             }
 
-            // If invoke isn't required, we don't need to do anytihng
+            // If invoke isn't required, we don't need to do anything
             if (!Program.MainForm.InvokeRequired)
             {
                 return false;

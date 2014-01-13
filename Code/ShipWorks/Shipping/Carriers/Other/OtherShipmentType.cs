@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -150,16 +151,18 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            return new InsuranceChoice(shipment, shipment, shipment.Other, null);
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.Other, null),
+                new DimensionsAdapter());
         }
 
         /// <summary>
@@ -186,6 +189,15 @@ namespace ShipWorks.Shipping.Carriers.Other
             ElementOutline outline = container.AddElement("Other");
             outline.AddElement("Carrier", () => loaded().Other.Carrier);
             outline.AddElement("Service", () => loaded().Other.Service);
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Other shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
         }
     }
 }

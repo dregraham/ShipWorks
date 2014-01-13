@@ -45,6 +45,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -72,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         static EbayStoreType()
         {
-            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectiveCheckoutStatus(e) );
+            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectivePaymentStatus(e) );
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e) );
         }
 
@@ -146,8 +147,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 pages.Add(new FreemiumStoreWizardValidateAccountPage());
             }
 
-            pages.Add(new EBayPayPalPage());
-            pages.Add(new EBayOptionsPage());
+            // People end up thinking they have to download paypal details and images, when really it just takes forever.  Don't show these options by default
+            // pages.Add(new EBayPayPalPage());
+            // pages.Add(new EBayOptionsPage());
            
             return pages;
         }
@@ -183,9 +185,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ForAnyItemCondition anyItem = new ForAnyItemCondition();
             definition.RootContainer.FirstGroup.Conditions.Add(anyItem);
 
-            EbayCheckoutStatusCondition checkoutStatus = new EbayCheckoutStatusCondition();
+            EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
             checkoutStatus.Operator = EqualityOperator.NotEqual;
-            checkoutStatus.Value = EbayEffectiveCheckoutStatus.Paid;
+            checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             anyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 
             return new FilterEntity
@@ -210,9 +212,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ForEveryItemCondition everyItem = new ForEveryItemCondition();
             definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
 
-            EbayCheckoutStatusCondition checkoutStatus = new EbayCheckoutStatusCondition();
+            EbayItemPaymentStatusCondition checkoutStatus = new EbayItemPaymentStatusCondition();
             checkoutStatus.Operator = EqualityOperator.Equals;
-            checkoutStatus.Value = EbayEffectiveCheckoutStatus.Paid;
+            checkoutStatus.Value = EbayEffectivePaymentStatus.Paid;
             everyItem.Container.FirstGroup.Conditions.Add(checkoutStatus);
 
             // It also has to be not yet shipped
@@ -267,10 +269,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayOrderID = 0,
                 EbayBuyerID = "",
 
-                BuyerFeedbackScore = 0,
-                BuyerFeedbackPrivate = false,
-
-                SelectedShippingMethod = 0,
+                SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
                 
                 GspEligible = false,
                 GspFirstName = "",
@@ -312,7 +311,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 FeedbackReceivedType = (int) EbayFeedbackType.None,
                 FeedbackReceivedComments = "",
 
-                CheckoutStatus = (int) CheckoutStatusCodeType.CheckoutIncomplete,
                 MyEbayPaid = false,
                 MyEbayShipped = false,
 
@@ -322,7 +320,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 PayPalAddressStatus = (int) AddressStatusCodeType.None,
                 PayPalTransactionID = "",
 
-                SellerPaidStatus = (int) PaidStatusCodeType.NotPaid,
                 SellingManagerRecord = 0,
             };
         }
@@ -412,11 +409,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
             buyerCondition.TargetValue = search;
             buyerCondition.Operator = StringOperator.BeginsWith;
 
+            EbayOrderSellingManagerRecordCondition orderRecordCondition = new EbayOrderSellingManagerRecordCondition();
+            orderRecordCondition.IsNumeric = false;
+            orderRecordCondition.StringOperator = StringOperator.BeginsWith;
+            orderRecordCondition.StringValue = search;
+
             OrderItemCodeCondition codeCondition = new OrderItemCodeCondition();
             codeCondition.Operator = StringOperator.BeginsWith;
             codeCondition.TargetValue = search;
 
-            EbaySellingManagerRecordCondition recordCondition = new EbaySellingManagerRecordCondition();
+            EbayItemSellingManagerRecordCondition recordCondition = new EbayItemSellingManagerRecordCondition();
             recordCondition.IsNumeric = false;
             recordCondition.StringOperator = StringOperator.BeginsWith;
             recordCondition.StringValue = search;
@@ -428,6 +430,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             group.JoinType = ConditionJoinType.Any;
             group.Conditions.Add(buyerCondition);
+            group.Conditions.Add(orderRecordCondition);
             group.Conditions.Add(anyItemCondition);
 
             return group;
@@ -452,11 +455,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// ChannelAdvisor does not have an Online Status
+        /// eBay has online status and online last modified
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            if (column == OnlineGridColumnSupport.LastModified)
+            if (column == OnlineGridColumnSupport.LastModified || column == OnlineGridColumnSupport.OnlineStatus)
             {
                 return true;
             }
@@ -533,6 +536,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("LastModifiedDate", () => order.Value.OnlineLastModified);
             outline.AddElement("BuyerID", () => order.Value.EbayBuyerID);
 
+            outline.AddElement("EligibleForGSP", () => order.Value.GspEligible);
+            outline.AddElement("ShippingMethod", () => EnumHelper.GetDescription((EbayShippingMethod)order.Value.SelectedShippingMethod));
+
             // Since typical ebay orders will have just a single item, and to ease template migration from v2, include
             // the auction details here like with v2
             var item = new Lazy<EbayOrderItemEntity>(() =>
@@ -565,13 +571,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ElementOutline outline = container.AddElement("eBay");
             outline.AddElement("ItemID", () => item.Value.EbayItemID);
             outline.AddElement("TransactionID", () => item.Value.EbayTransactionID);
+            outline.AddElement("RecordNumber", () => item.Value.SellingManagerRecord);
 
             // generate auction-specific xml
             GenerateTemplateCommonElements(outline, item);
         }
 
         /// <summary>
-        /// Gerereates for a single EbayOrderItemEntity
+        /// Generates for a single EbayOrderItemEntity
         /// </summary>
         private static void GenerateTemplateCommonElements(ElementOutline outline, Lazy<EbayOrderItemEntity> item)
         {
@@ -584,14 +591,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("FeedbackBuyerType", () => EbayUtility.GetFeedbackTypeString((CommentTypeCodeType) item.Value.FeedbackReceivedType));
 
             // checkout status
-            outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectiveCheckoutStatus) item.Value.EffectiveCheckoutStatus));
+            outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectivePaymentStatus) item.Value.EffectiveCheckoutStatus));
             outline.AddElement("CheckoutComplete", () => EbayUtility.IsCheckoutStatusComplete(item.Value) ? "true" : "false");
 
             // Selling Manager record
             ElementOutline sellingElement = outline.AddElement("SellingManager");
             sellingElement.AddElement("RecordNumber", () => item.Value.SellingManagerRecord.ToString());
-            sellingElement.AddElement("ProductName", () => item.Value.SellingManagerProductName);
-            sellingElement.AddElement("PartNumber", () => item.Value.SellingManagerProductPart);
 
             // only write out paypal stuff if we know the paypal transaction id
             ElementOutline paypalElement = outline.AddElement("PayPal", ElementOutline.If(() => item.Value.PayPalTransactionID.Length > 0));
@@ -611,12 +616,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 new MenuCommand("Send Message...", OnSendMessage),
                 new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true },
+
                 new MenuCommand("Mark as Paid", OnUpdateShipment){ Tag = EbayOnlineAction.Paid },
                 new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped },
+
                 new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true },
                 new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped },
-                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = CombineType.Local },
-                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = CombineType.EbayCombinedPayment },
+
+                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = EbayCombinedOrderType.Local },
+                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = EbayCombinedOrderType.Ebay },
+
                 new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
                 new MenuCommand("Ship to Buyer", OnShipToBuyer)
             };  
@@ -742,20 +751,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void OnCombineOrders(MenuCommandExecutionContext context)
         {
-            CombineType combineType = (CombineType)context.MenuCommand.Tag;
-
-            CombinedOrderFinder loader = new CombinedOrderFinder(context.Owner);
-
-            loader.LoadComplete += new CombinedOrdersLoadedEventHandler(OnCombinedPaymentsLoaded);
+            EbayPotentialCombinedOrderFinder finder = new EbayPotentialCombinedOrderFinder(context.Owner);
+            finder.SearchComplete += new EbayPotentialCombinedOrdersFoundEventHandler(OnPotentialCombinedOrdersFound);
 
             List<long> orderIDs = context.SelectedKeys.ToList();
-            loader.LoadAsync(orderIDs, context, combineType);
+            finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
         }
 
         /// <summary>
         /// Loading of possible combined payments is complete
         /// </summary>
-        void OnCombinedPaymentsLoaded(object sender, CombinedOrdersLoadedEventArgs e)
+        void OnPotentialCombinedOrdersFound(object sender, EbayPotentialCombinedOrdersFoundEventArgs e)
         {
             // unpack the user state
             MenuCommandExecutionContext context = (MenuCommandExecutionContext)e.UserState;
@@ -771,14 +777,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 context.Complete();
                 return;
             }
-            else if (e.CombinedPayments.Count == 0)
+            else if (e.Candidates.Count == 0)
             {
-                context.Complete(MenuCommandResult.Warning, "There are no orders eligible to combine with those selected.");
+                context.Complete(MenuCommandResult.Warning, string.Format("None of the selected orders are able to be combined {0}.", e.CombinedOrderType == EbayCombinedOrderType.Local ? "locally" : "on eBay"));
                 return;
             }
 
             // continue to allow selection of which order(s) to combine
-            using (EbayCombineOrdersDlg dlg = new EbayCombineOrdersDlg(e.CombineType, e.CombinedPayments))
+            using (EbayCombineOrdersDlg dlg = new EbayCombineOrdersDlg(e.CombinedOrderType, e.Candidates))
             {
                 if (dlg.ShowDialog(e.Owner) != DialogResult.OK)
                 {
@@ -786,10 +792,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     return;
                 }
 
-                List<OrderCombining.CombinedOrder> selectedOrders = dlg.SelectedOrders;
+                List<OrderCombining.EbayCombinedOrderCandidate> selectedOrders = dlg.SelectedOrders;
 
                 // create another background worker for combining
-                BackgroundExecutor<OrderCombining.CombinedOrder> executor = new BackgroundExecutor<OrderCombining.CombinedOrder>(e.Owner,
+                BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate> executor = new BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate>(e.Owner,
                     "Combining eBay Orders",
                     "ShipWorks is combining eBay Orders.",
                     "Combining Order {0} of {1}...");
@@ -807,7 +813,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Worker method for combining eBay orders
         /// </summary>
-        private void CombineOrdersCallback(OrderCombining.CombinedOrder toCombine, object userState, BackgroundIssueAdder<OrderCombining.CombinedOrder> issueAdder)
+        private void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
         {
             try
             {

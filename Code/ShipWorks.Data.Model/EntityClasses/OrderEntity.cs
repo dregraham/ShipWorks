@@ -43,6 +43,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<OrderPaymentDetailEntity> _orderPaymentDetails;
 
 
+
+
+
+
 		private CustomerEntity _customer;
 		private StoreEntity _store;
 
@@ -70,6 +74,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
+
+
+
+
 
 
 
@@ -135,6 +143,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				_orderCharges = (EntityCollection<OrderChargeEntity>)info.GetValue("_orderCharges", typeof(EntityCollection<OrderChargeEntity>));
 				_orderItems = (EntityCollection<OrderItemEntity>)info.GetValue("_orderItems", typeof(EntityCollection<OrderItemEntity>));
 				_orderPaymentDetails = (EntityCollection<OrderPaymentDetailEntity>)info.GetValue("_orderPaymentDetails", typeof(EntityCollection<OrderPaymentDetailEntity>));
+
+
+
+
 
 
 				_customer = (CustomerEntity)info.GetValue("_customer", typeof(CustomerEntity));
@@ -211,6 +223,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
+
+
 				default:
 					break;
 			}
@@ -250,6 +266,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "OrderPaymentDetails":
 					toReturn.Add(OrderEntity.Relations.OrderPaymentDetailEntityUsingOrderID);
 					break;
+
+
+
+
 
 
 
@@ -429,6 +449,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_orderPaymentDetails", ((_orderPaymentDetails!=null) && (_orderPaymentDetails.Count>0) && !this.MarkedForDeletion)?_orderPaymentDetails:null);
 
 
+
+
+
+
 				info.AddValue("_customer", (!this.MarkedForDeletion?_customer:null));
 				info.AddValue("_store", (!this.MarkedForDeletion?_store:null));
 
@@ -516,6 +540,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
+
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'Customer' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
 		/// <returns></returns>
@@ -570,6 +598,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(this._orderPaymentDetails);
 
 
+
+
+
+
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -581,6 +613,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			this._orderCharges = (EntityCollection<OrderChargeEntity>) collectionsQueue.Dequeue();
 			this._orderItems = (EntityCollection<OrderItemEntity>) collectionsQueue.Dequeue();
 			this._orderPaymentDetails = (EntityCollection<OrderPaymentDetailEntity>) collectionsQueue.Dequeue();
+
+
+
+
 
 
 		}
@@ -607,6 +643,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 
 
+
+
+
+
 			return base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -620,6 +660,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderChargeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderChargeEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderItemEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderItemEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderPaymentDetailEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderPaymentDetailEntityFactory))) : null);
+
+
+
+
 
 
 		}
@@ -637,6 +681,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("OrderCharges", _orderCharges);
 			toReturn.Add("OrderItems", _orderItems);
 			toReturn.Add("OrderPaymentDetails", _orderPaymentDetails);
+
+
+
+
 
 
 
@@ -664,6 +712,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 
 
+
+
+
+
 			if(_customer!=null)
 			{
 				_customer.ActiveContext = base.ActiveContext;
@@ -683,6 +735,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_orderCharges = null;
 			_orderItems = null;
 			_orderPaymentDetails = null;
+
+
+
+
 
 
 			_customer = null;
@@ -1020,6 +1076,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 					(IEntityRelation)GetRelationsForField("OrderPaymentDetails")[0], (int)ShipWorks.Data.Model.EntityType.OrderEntity, (int)ShipWorks.Data.Model.EntityType.OrderPaymentDetailEntity, 0, null, null, null, null, "OrderPaymentDetails", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
 			}
 		}
+
+
+
+
 
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Customer' 
@@ -1761,6 +1821,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				return _orderPaymentDetails;
 			}
 		}
+
+
+
+
 
 
 

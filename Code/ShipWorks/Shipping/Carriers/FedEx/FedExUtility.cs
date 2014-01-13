@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Xml.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Rate;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.v2013.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
 using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FedEx2Day,
                 FedExServiceType.FedExExpressSaver,
                 FedExServiceType.FedEx1DayFreight,
-                FedExServiceType.FedEx2DayAM,
+                FedExServiceType.FedEx2DayAM
             };
 
             // Since all shipments are going to the same country, just pick out the first one
@@ -80,6 +80,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.GroundHomeDelivery);
                 serviceTypes.Add(FedExServiceType.StandardOvernight);
                 serviceTypes.Add(FedExServiceType.SmartPost);
+                serviceTypes.Add(FedExServiceType.FirstFreight);
                 serviceTypes.Add(FedExServiceType.FedEx2DayFreight);
                 serviceTypes.Add(FedExServiceType.FedEx3DayFreight);
             }
@@ -143,14 +144,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             switch (service)
             {
                 case FedExServiceType.InternationalPriority:
-                case FedExServiceType.InternationalEconomy:
-                case FedExServiceType.InternationalFirst:
-                    {
-                        types.Add(FedExPackagingType.Box10Kg);
-                        types.Add(FedExPackagingType.Box25Kg);
+                {
+                    types.Add(FedExPackagingType.Box10Kg);
+                    types.Add(FedExPackagingType.Box25Kg);
 
-                        break;
-                    }
+                    break;
+                }
             }
 
             types.Add(FedExPackagingType.Custom);
@@ -215,6 +214,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             switch (serviceType)
             {
+                case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
@@ -237,6 +237,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.StandardOvernight:
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
@@ -252,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool CanDeliverOnSaturday(FedExServiceType serviceType, DateTime shipDate)
         {
-            if ((serviceType == FedExServiceType.PriorityOvernight || serviceType == FedExServiceType.FedEx1DayFreight)
+            if ((serviceType == FedExServiceType.PriorityOvernight || serviceType == FedExServiceType.FedEx1DayFreight || serviceType == FedExServiceType.FirstFreight)
                 && shipDate.DayOfWeek == DayOfWeek.Friday)
             {
                 return true;

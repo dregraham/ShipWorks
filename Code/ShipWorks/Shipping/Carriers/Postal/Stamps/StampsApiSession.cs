@@ -19,6 +19,7 @@ using ShipWorks.Data.Connection;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
@@ -218,65 +219,89 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
-            List<RateResult> rates = new List<RateResult>();
-
-            foreach(RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
+            try
             {
-                PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
+                List<RateResult> rates = new List<RateResult>();
 
-                RateResult baseRate = null;
-
-                // If its a rate that has sig\deliv, then you can's select the core rate itself
-                if(stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
+                foreach (RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
                 {
-                    baseRate = new RateResult(
-                        PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                        stampsRate.DeliverDays.Replace("Days", ""));
-                }
-                else
-                {
-                    baseRate = new RateResult(
-                         PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                         stampsRate.DeliverDays.Replace("Days", ""),
-                         stampsRate.Amount,
-                         new PostalRateSelection(serviceType, PostalConfirmationType.None));
-                }
+                    PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
-                rates.Add(baseRate);
+                    RateResult baseRate = null;
 
-                // Add a rate for each add-on
-                foreach(AddOnV4 addOn in stampsRate.AddOns)
-                {
-                    string name = null;
-                    PostalConfirmationType confirmationType = PostalConfirmationType.None;
-
-                    switch(addOn.AddOnType)
+                    // If its a rate that has sig\deliv, then you can's select the core rate itself
+                    if (stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
                     {
-                        case AddOnTypeV4.USADC:
-                            name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
-                            confirmationType = PostalConfirmationType.Delivery;
-                            break;
-
-                        case AddOnTypeV4.USASC:
-                            name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
-                            confirmationType = PostalConfirmationType.Signature;
-                            break;
+                        baseRate = new RateResult(
+                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                            stampsRate.DeliverDays.Replace("Days", ""));
+                    }
+                    else
+                    {
+                        baseRate = new RateResult(
+                            PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                            stampsRate.DeliverDays.Replace("Days", ""),
+                            stampsRate.Amount,
+                            new PostalRateSelection(serviceType, PostalConfirmationType.None));
                     }
 
-                    if(name != null)
-                    {
-                        RateResult addOnRate = new RateResult(
-                            name,
-                            string.Empty,
-                            stampsRate.Amount + addOn.Amount,
-                            new PostalRateSelection(serviceType, confirmationType));
+                    PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
 
-                        rates.Add(addOnRate);
+                    rates.Add(baseRate);
+
+                    // Add a rate for each add-on
+                    foreach (AddOnV4 addOn in stampsRate.AddOns)
+                    {
+                        string name = null;
+                        PostalConfirmationType confirmationType = PostalConfirmationType.None;
+
+                        switch (addOn.AddOnType)
+                        {
+                            case AddOnTypeV4.USADC:
+                                name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
+                                confirmationType = PostalConfirmationType.Delivery;
+                                break;
+
+                            case AddOnTypeV4.USASC:
+                                name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
+                                confirmationType = PostalConfirmationType.Signature;
+                                break;
+                        }
+
+                        if (name != null)
+                        {
+                            RateResult addOnRate = new RateResult(
+                                name,
+                                string.Empty,
+                                stampsRate.Amount + addOn.Amount,
+                                new PostalRateSelection(serviceType, confirmationType));
+
+                            PostalUtility.SetServiceDetails(addOnRate, serviceType, stampsRate.DeliverDays);
+
+                            rates.Add(addOnRate);
+                        }
                     }
                 }
+
+                return rates;
             }
+            catch (StampsApiException ex)
+            {
+                if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+                {
+                    // Provide a little more context as to which user name/password was incorrect in the case
+                    // where there's multiple accounts or Express1 for Stamps is being used to compare rates
+                    string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
+                                    StampsAccountManager.GetResellerName(account.IsExpress1),
+                                    account.Username,
+                                    Environment.NewLine);
 
-            return rates;
+                    throw new StampsException(message, ex);
+                }
+
+                // This isn't an authentication exception, so just throw the original exception
+                throw;
+            }
         }
 
         /// <summary>
@@ -405,7 +430,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             registration.Email,
                             registration.AccountType,
                             registration.PromoCode,
-                            (object) registration.CreditCard ?? registration.AchAccount,
+                            (object)registration.CreditCard ?? registration.AchAccount,
                             out suggestedUserName,
                             out userId,
                             out promoUrl
@@ -531,7 +556,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
-            AuthenticationWrapper(() => { ProcessShipmentInternal(shipment, account); return true; }, account);
+            try
+            {
+                AuthenticationWrapper(() => { ProcessShipmentInternal(shipment, account); return true; }, account);
+            }
+            catch (StampsApiException ex)
+            {
+                if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+                {
+                    // Provide a little more context as to which user name/password was incorrect in the case
+                    // where there's multiple accounts or Express1 for Stamps is being used to compare rates
+                    string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
+                                    StampsAccountManager.GetResellerName(account.IsExpress1),
+                                    account.Username,
+                                    Environment.NewLine);
+
+                    throw new StampsException(message, ex);
+                }
+
+                // This isn't an authentication exception, so just throw the original exception
+                throw;
+            }
         }
 
         /// <summary>
@@ -560,11 +605,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ThermalLanguage? thermalType;
 
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
-            if(shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
                 thermalType = settings.StampsThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
             }
-            else if(shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
                 thermalType = settings.Express1StampsThermal ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
             }
@@ -1019,8 +1064,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static RateV11 CreateRateForProcessing(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV11 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
@@ -1203,10 +1248,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
         {
-            if(isExpress1)
+            if (isExpress1)
             {
                 // Express1 does not return error codes...
-                switch(ex.Message)
+                switch (ex.Message)
                 {
                     case "Invalid authentication info":
                     case "Unable to authenticate user.":
@@ -1219,7 +1264,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 long code = StampsApiException.GetErrorCode(ex);
 
-                switch(code)
+                switch (code)
                 {
                     case 0x002b0201: // Invalid
                     case 0x002b0202: // Expired

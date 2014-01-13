@@ -84,6 +84,7 @@ namespace ShipWorks.Data
             config.CustomerUpdateShipping = true;
 
             config.AuditNewOrders = false;
+            config.AuditDeletedOrders = false;
 
             adapter.SaveEntity(config);
         }

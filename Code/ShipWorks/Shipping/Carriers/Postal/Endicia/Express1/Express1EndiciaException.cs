@@ -8,18 +8,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     [Serializable]
     public class Express1EndiciaException : EndiciaException
     {
-        public Express1EndiciaException()
-        {
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Express1EndiciaException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public Express1EndiciaException(string message)
             : base(message)
-        {
-        }
-
-        public Express1EndiciaException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
+        { }
+        
     }
 }

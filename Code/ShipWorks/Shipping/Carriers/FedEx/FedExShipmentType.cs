@@ -15,8 +15,9 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -27,6 +28,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -374,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
-            profile.FedEx.Signature = (int) FedExSignatureType.NoSignature;
+            profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
             profile.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             profile.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
             profile.FedEx.NonStandardContainer = false;
@@ -777,9 +779,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
@@ -790,7 +792,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 var package = shipment.FedEx.Packages[parcelIndex];
 
-                return new InsuranceChoice(shipment, package, package, package);
+                return new ShipmentParcel(shipment, package.FedExPackageID,
+                    new InsuranceChoice(shipment, package, package, package),
+                    new DimensionsAdapter(package));
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
@@ -833,48 +837,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             try
             {
                 return new FedExShippingClerk().GetRates(shipment);
-                //List<RateResult> results = new List<RateResult>();
-
-                //// Get the rates
-                //List<RateReplyDetail> fedexRates = FedExApiRate.GetRates(shipment);
-
-                //if (fedexRates == null)
-                //{
-                //    fedexRates = new List<RateReplyDetail>();
-                //}
-
-                //// Translate them to rate results
-                //foreach (RateReplyDetail rateDetail in fedexRates)
-                //{
-                //    // Service
-                //    FedExServiceType serviceType = FedExApiRate.GetFedExServiceType(rateDetail.ServiceType);
-
-                //    int transitDays = 0;
-
-                //    if (rateDetail.DeliveryTimestampSpecified)
-                //    {
-                //        // Transite time
-                //        DateTime deliveryDate = rateDetail.DeliveryTimestamp;
-                //        transitDays = (deliveryDate.Date - shipment.ShipDate.Date).Days;
-                //    }
-
-                //    else if (rateDetail.TransitTimeSpecified)
-                //    {
-                //        transitDays = FedExApiRate.GetTransitDays(rateDetail.TransitTime);
-                //    }
-
-                //    // Cost
-                //    decimal cost = rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetCharge.Amount;
-
-                //    // Add the shipworks rate object
-                //    results.Add(new RateResult(
-                //        EnumHelper.GetDescription(serviceType),
-                //        transitDays == 0 ? "" : transitDays.ToString(),
-                //        cost,
-                //        new FedExRateSelection(serviceType)));
-                //}
-
-                //return new RateGroup(results);
             }
             catch (FedExException ex)
             {
@@ -1029,6 +991,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the FedEx shipment type.
+        /// </summary>
+        /// <returns>An instance of a FedExBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new FedExBestRateBroker();
         }
 
         /// <summary>

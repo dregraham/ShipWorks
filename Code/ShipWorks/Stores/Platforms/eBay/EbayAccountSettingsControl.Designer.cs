@@ -30,7 +30,7 @@
         {
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.tokenManageControl = new ShipWorks.Stores.Platforms.Ebay.EbayTokenManageControl();
+            this.tokenManageControl = new ShipWorks.Stores.Platforms.Ebay.Tokens.EbayTokenManageControl();
             this.SuspendLayout();
             // 
             // openFileDialog
@@ -68,6 +68,6 @@
 
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private EbayTokenManageControl tokenManageControl;
+        private ShipWorks.Stores.Platforms.Ebay.Tokens.EbayTokenManageControl tokenManageControl;
     }
 }

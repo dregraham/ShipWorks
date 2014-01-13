@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -32,5 +31,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
 
         }
+
+        /// <summary>
+        /// Exception
+        /// </summary>
+        /// <param name="message">Exception message</param>
+        /// <param name="doesNotServiceLocation">Was the exception a result of OnTrac's service area?</param>
+        public OnTracException(string message, bool doesNotServiceLocation)
+            : base(message)
+        {
+            DoesNotServiceLocation = doesNotServiceLocation;
+        }
+
+        /// <summary>
+        /// Was the exception generated because OnTrac does not service an address?
+        /// </summary>
+        public virtual bool DoesNotServiceLocation { get; protected set; }
     }
 }

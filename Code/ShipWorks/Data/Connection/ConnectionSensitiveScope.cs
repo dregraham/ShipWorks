@@ -17,6 +17,7 @@ namespace ShipWorks.Data.Connection
     {
         bool acquired = false;
         bool restoreInitiated = false;
+        SqlSessionConfiguration originalSqlConfig = null;
 
         static List<ConnectionSensitiveScope> scopeStack = new List<ConnectionSensitiveScope>();
 
@@ -43,7 +44,13 @@ namespace ShipWorks.Data.Connection
             // new operations can still come in while we are waiting.
             acquired = ApplicationBusyManager.WaitForOperations(owner, uiUserGoalText, () => scopeStack.Add(this));
 
-            ShipWorksBackup.RestoreStarting += new EventHandler(OnRestoreStarting);
+            // If we acquired the scope, we need to track changes to the database during it
+            if (acquired)
+            {
+                ShipWorksBackup.RestoreStarting += new EventHandler(OnRestoreStarting);
+
+                originalSqlConfig = SqlSession.IsConfigured ? SqlSession.Current.Configuration : null;
+            }
         }
 
         /// <summary>
@@ -64,17 +71,22 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Indicates if a database restore operation was initiated while this scope was in scope.
+        /// Indicates if the database, or the database we are pointing to via SqlSession, has changed during this scope
         /// </summary>
-        public bool DatabaseRestoreInitiated
+        public bool DatabaseChanged
         {
-            get { return restoreInitiated; }
+            get 
+            {
+                SqlSessionConfiguration currentSqlConfig = SqlSession.IsConfigured ? SqlSession.Current.Configuration : null;
+
+                return originalSqlConfig != currentSqlConfig || restoreInitiated;
+            }
         }
 
         /// <summary>
         /// A restore is starting
         /// </summary>
-        void OnRestoreStarting(object sender, EventArgs e)
+        private void OnRestoreStarting(object sender, EventArgs e)
         {
             restoreInitiated = true;
         }

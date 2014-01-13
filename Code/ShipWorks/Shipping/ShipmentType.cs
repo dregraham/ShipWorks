@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
@@ -26,6 +27,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping
 {
@@ -402,9 +404,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get the insurance data that describes what type of insurance is being used and on what parcels.
+        /// Get detailed information about the parcel in a generic way that can be used accross shipment types
         /// </summary>
-        public abstract InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex);
+        public abstract ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex);
 
         /// <summary>
         /// Get the tracking numbers for the shipment.  This can incluce extra text, such as "Package 1: (track#)"
@@ -445,11 +447,11 @@ namespace ShipWorks.Shipping
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
             {
-                InsuranceChoice insuranceChoice = GetParcelInsuranceChoice(shipment, i);
+                InsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
 
                 if (profile.Insurance != null)
                 {
-                    insuranceChoice.Insurance = profile.Insurance.Value;
+                    insuranceChoice.Insured = profile.Insurance.Value;
                 }
 
                 if (profile.InsuranceInitialValueSource != null)
@@ -535,6 +537,110 @@ namespace ShipWorks.Shipping
             }
 
             return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
+        }
+
+        /// <summary>
+        /// Gets whether the specified settings tab should be hidden in the UI
+        /// </summary>
+        public virtual bool IsSettingsTabHidden(ShipmentTypeSettingsControl.Page tab)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for a provider.
+        /// </summary>
+        /// <returns>An instance of an IBestRateShippingBroker.</returns>
+        public abstract IBestRateShippingBroker GetShippingBroker();
+
+        /// <summary>
+        /// Preferences the process.
+        /// </summary>
+        /// <returns>
+        /// Most shipment types don't do any pre-processing and will return themselves.  
+        /// This will return a different shipping type for BestRate
+        /// </returns>
+        public virtual ShipmentType PreProcess(ShipmentEntity shipment)
+        {
+            return this;
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address and any store specific logic that may impact whether customs
+        /// is required (i.e. eBay GSP).
+        /// </summary>
+        public virtual bool IsCustomsRequired(ShipmentEntity shipment)
+        {
+            // Some carts have an international shipping program in place that allow
+            // sellers to ship international orders to a domestic facility meaning 
+            // customs is not required despite the international shipping address, so 
+            // let the store take a look at the shipment as well to determine if customs
+            // are required in addition to the just looking at the shipping address.
+
+            bool requiresCustoms = IsCustomsRequiredByShipment(shipment);
+
+            if (requiresCustoms)
+            {
+                // This shipment requires customs based on the shipping address
+                // but allow the store to have the final say
+                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
+                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+
+                // Pass a true value indicating customs is required based on the shipping address
+                requiresCustoms = storeType.IsCustomsRequired(shipment, true);
+            }
+
+            return requiresCustoms;
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            bool requiresCustoms = !ShipmentType.IsDomestic(shipment);
+
+            if (shipment.ShipCountryCode == "US")
+            {
+                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+                {
+                    requiresCustoms = true;
+                }
+
+                // Foreign US territories requiring customs forms - http://pe.usps.com/text/dmm300/608.htm
+                if (shipment.ShipPostalCode.StartsWith("96910") ||
+                    shipment.ShipPostalCode.StartsWith("96912") ||
+                    shipment.ShipPostalCode.StartsWith("96913") ||
+                    shipment.ShipPostalCode.StartsWith("96915") ||
+                    shipment.ShipPostalCode.StartsWith("96916") ||
+                    shipment.ShipPostalCode.StartsWith("96917") ||
+                    shipment.ShipPostalCode.StartsWith("96919") ||
+                    shipment.ShipPostalCode.StartsWith("96921") ||
+                    shipment.ShipPostalCode.StartsWith("96923") ||
+                    shipment.ShipPostalCode.StartsWith("96928") ||
+                    shipment.ShipPostalCode.StartsWith("96929") ||
+                    shipment.ShipPostalCode.StartsWith("96931") ||
+                    shipment.ShipPostalCode.StartsWith("96932") ||
+                    shipment.ShipPostalCode.StartsWith("96939") ||
+                    shipment.ShipPostalCode.StartsWith("96940") ||
+                    shipment.ShipPostalCode.StartsWith("96941") ||
+                    shipment.ShipPostalCode.StartsWith("96942") ||
+                    shipment.ShipPostalCode.StartsWith("96943") ||
+                    shipment.ShipPostalCode.StartsWith("96944") ||
+                    shipment.ShipPostalCode.StartsWith("96950") ||
+                    shipment.ShipPostalCode.StartsWith("96951") ||
+                    shipment.ShipPostalCode.StartsWith("96952") ||
+                    shipment.ShipPostalCode.StartsWith("96960") ||
+                    shipment.ShipPostalCode.StartsWith("96970") ||
+                    shipment.ShipPostalCode.StartsWith("96799"))
+                {
+                    requiresCustoms = true;
+                }
+            }
+
+            return requiresCustoms;
         }
     }
 }

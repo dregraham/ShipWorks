@@ -18,30 +18,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public partial class EbayMessagingDlg : Form
     {
-        // The type of eBay message to send
-        public EbaySendMessageType MessageType { get; set; }
-
-        // The subject of the message to send
-        public string Subject { get; set; }
-
-        // The message contents
-        public string Message { get; set; }
-        
-        // Whether or not to have eBay send a copy to the seller (SW user)
-        public bool CopyMe { get; set; }
-
         // Order Ids provided to the dialog to send messages for
         List<long> orderIds;
 
-        /// <summary>
-        /// Returns the ID of the selected order item, or 0 if All
-        /// </summary>
         long selectedItemId;
-        public long SelectedItemID
-        {
-            get { return selectedItemId; }
-        }
-            
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -53,15 +34,45 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
+        /// Returns the ID of the selected order item, or 0 if All
+        /// </summary>
+        public long SelectedItemID
+        {
+            get { return selectedItemId; }
+        }
+
+        /// <summary>
+        /// The type of eBay message to send
+        /// </summary>
+        public EbaySendMessageType MessageType { get; set; }
+
+        /// <summary>
+        /// The subject of the message to send
+        /// </summary>
+        public string Subject { get; set; }
+
+        /// <summary>
+        /// The message contents
+        /// </summary>
+        public string Message { get; set; }
+        
+        /// <summary>
+        /// Whether or not to have eBay send a copy to the seller (SW user)
+        /// </summary>
+        public bool CopyMe { get; set; }
+
+        /// <summary>
         /// Loading, populate the UI
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             // add the Message Type
-            EnumHelper.BindComboBox<EbaySendMessageType>(messageTypeComboBox, t => t == EbaySendMessageType.CustomizedSubject ||
-                                                                           t == EbaySendMessageType.General ||
-                                                                           t == EbaySendMessageType.Payment ||
-                                                                           t == EbaySendMessageType.Shipping);
+            EnumHelper.BindComboBox<EbaySendMessageType>(messageTypeComboBox, 
+                t => t == EbaySendMessageType.CustomizedSubject ||
+                     t == EbaySendMessageType.General ||
+                     t == EbaySendMessageType.Payment ||
+                     t == EbaySendMessageType.Shipping);
+
             // default to General
             messageTypeComboBox.SelectedValue = EbaySendMessageType.General;
 

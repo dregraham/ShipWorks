@@ -486,12 +486,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EbayTransactionID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("SellingManagerProductName", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("SellingManagerProductPart", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("SellingManagerRecord", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -507,13 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PaymentMethod", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("CheckoutStatus", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CompleteStatus", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("SellerPaidStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("FeedbackLeftType", fieldHashtable);
@@ -644,28 +632,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayOrderItemFieldIndex.EbayTransactionID, value); }
 		}
 
-		/// <summary> The SellingManagerProductName property of the Entity EbayOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrderItem"."SellingManagerProductName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String SellingManagerProductName
-		{
-			get { return (System.String)GetValue((int)EbayOrderItemFieldIndex.SellingManagerProductName, true); }
-			set	{ SetValue((int)EbayOrderItemFieldIndex.SellingManagerProductName, value); }
-		}
-
-		/// <summary> The SellingManagerProductPart property of the Entity EbayOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrderItem"."SellingManagerProductPart"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String SellingManagerProductPart
-		{
-			get { return (System.String)GetValue((int)EbayOrderItemFieldIndex.SellingManagerProductPart, true); }
-			set	{ SetValue((int)EbayOrderItemFieldIndex.SellingManagerProductPart, value); }
-		}
-
 		/// <summary> The SellingManagerRecord property of the Entity EbayOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."SellingManagerRecord"<br/>
@@ -721,17 +687,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayOrderItemFieldIndex.PaymentMethod, value); }
 		}
 
-		/// <summary> The CheckoutStatus property of the Entity EbayOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrderItem"."CheckoutStatus"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 CheckoutStatus
-		{
-			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.CheckoutStatus, true); }
-			set	{ SetValue((int)EbayOrderItemFieldIndex.CheckoutStatus, value); }
-		}
-
 		/// <summary> The CompleteStatus property of the Entity EbayOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."CompleteStatus"<br/>
@@ -741,17 +696,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.CompleteStatus, true); }
 			set	{ SetValue((int)EbayOrderItemFieldIndex.CompleteStatus, value); }
-		}
-
-		/// <summary> The SellerPaidStatus property of the Entity EbayOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayOrderItem"."SellerPaidStatus"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 SellerPaidStatus
-		{
-			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.SellerPaidStatus, true); }
-			set	{ SetValue((int)EbayOrderItemFieldIndex.SellerPaidStatus, value); }
 		}
 
 		/// <summary> The FeedbackLeftType property of the Entity EbayOrderItem<br/><br/>

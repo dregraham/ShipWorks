@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Indicates if insurance is on or off
         /// </summary>
-        public bool Insurance
+        public bool Insured
         {
             get { return (bool) insuranceFieldEntity.Fields[insuranceFieldPrefix + "Insurance"].CurrentValue; }
             set { insuranceFieldEntity.SetNewFieldValue(insuranceFieldPrefix + "Insurance", value); }

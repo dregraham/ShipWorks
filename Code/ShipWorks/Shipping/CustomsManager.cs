@@ -25,86 +25,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            // Some carts have an international shipping program in place that allow
-            // sellers to ship international orders to a domestic facility meaning 
-            // customs is not required despite the international shipping address, so 
-            // let the store take a look at the shipment as well to determine if customs
-            // are required in addition to the just looking at the shipping address.
-
-            bool requiresCustoms = IsCustomsRequiredByShipment(shipment);
-
-            if (requiresCustoms)
-            {
-                // This shipment requires customs based on the shipping address
-                // but allow the store to have the final say
-                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
-                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
-
-                // Pass a true value indicating customs is required based on the shipping addresss
-                requiresCustoms = storeType.IsCustomsRequired(shipment, true);
-            }
-
-            return requiresCustoms;
-        }
-
-        /// <summary>
-        /// Indicates if customs forms may be required to ship the shipment based on the
-        /// shipping address.
-        /// </summary>
-        private static bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
-        {
-            bool requiresCustoms = !ShipmentType.IsDomestic(shipment);
-
-            if (shipment.ShipCountryCode == "US")
-            {
-                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
-                {
-                    requiresCustoms = true;
-                }
-
-                // Foreign US territories requiring customs forms - http://pe.usps.com/text/dmm300/608.htm
-                if (shipment.ShipPostalCode.StartsWith("96910") ||
-                    shipment.ShipPostalCode.StartsWith("96912") ||
-                    shipment.ShipPostalCode.StartsWith("96913") ||
-                    shipment.ShipPostalCode.StartsWith("96915") ||
-                    shipment.ShipPostalCode.StartsWith("96916") ||
-                    shipment.ShipPostalCode.StartsWith("96917") ||
-                    shipment.ShipPostalCode.StartsWith("96919") ||
-                    shipment.ShipPostalCode.StartsWith("96921") ||
-                    shipment.ShipPostalCode.StartsWith("96923") ||
-                    shipment.ShipPostalCode.StartsWith("96928") ||
-                    shipment.ShipPostalCode.StartsWith("96929") ||
-                    shipment.ShipPostalCode.StartsWith("96931") ||
-                    shipment.ShipPostalCode.StartsWith("96932") ||
-                    shipment.ShipPostalCode.StartsWith("96939") ||
-                    shipment.ShipPostalCode.StartsWith("96940") ||
-                    shipment.ShipPostalCode.StartsWith("96941") ||
-                    shipment.ShipPostalCode.StartsWith("96942") ||
-                    shipment.ShipPostalCode.StartsWith("96943") ||
-                    shipment.ShipPostalCode.StartsWith("96944") || 
-                    shipment.ShipPostalCode.StartsWith("96950") ||
-                    shipment.ShipPostalCode.StartsWith("96951") ||
-                    shipment.ShipPostalCode.StartsWith("96952") ||
-                    shipment.ShipPostalCode.StartsWith("96960") ||
-                    shipment.ShipPostalCode.StartsWith("96970") ||
-                    shipment.ShipPostalCode.StartsWith("96799")) 
-                {
-                    requiresCustoms = true;
-                }
-            }
-
-            if (shipment.OriginCountryCode == "US")
-            {
-                // i-Parcel allows customers to upload their SKUs and customs info, so we don't need to enter it in ShipWorks
-                // So Customs is never required.
-                if (ShipmentTypeManager.IsiParcel((ShipmentTypeCode) shipment.ShipmentType))
-                {
-                    requiresCustoms = false;
-                }
-
-            }
-
-            return requiresCustoms;
+            // Defer to the shipment type to inspect the shipment to determine whether 
+            // customs is required based on any carrier-specific logic (i.e. best-rate)
+            ShipmentType shipmpentType = ShipmentTypeManager.GetType(shipment);
+            return shipmpentType.IsCustomsRequired(shipment);
         }
 
         /// <summary>

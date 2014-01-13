@@ -67,11 +67,6 @@ namespace ShipWorks.Actions.Tasks.Common
                             // No errors, so just break out of the while loop
                             break;
                         }
-                        catch (SqlLockException ex)
-                        {
-                            // Log and try again if within number of tries.
-                            log.Warn(ex.Message);
-                        }
                         catch (SqlDeadlockException sqlDeadlockException)
                         {
                             // Log and try again if within number of tries.

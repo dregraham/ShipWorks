@@ -88,7 +88,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\ShipmentTypeCode.cs" />
+    <Compile Include="Shipping\ShipmentTypeIconAttribute.cs" />
     <Compile Include="Stores\StoreTypeCode.cs" />
+    <Compile Include="Stores\StoreTypeIconAttribute.cs" />
     <Compile Include="Stores\StoreTypeIdentity.cs" />
     <Compile Include="Stores\StoreTypeIdentityAttribute.cs" />
     <Compile Include="Templates\TemplateBuiltinFolders.cs" />

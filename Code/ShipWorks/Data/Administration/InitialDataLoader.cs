@@ -52,7 +52,7 @@ namespace ShipWorks.Data.Administration
             // Before we can create the custom filters, we need to get the FilterLayoutContext initialized, since that is what all filters
             // are created through.  We don't need (and can't have, since there are no real users yet) the "My Layout" stuff, so put the SuperUser
             // in scope to prevent that.
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {
                 CreateStatusPresets();
 

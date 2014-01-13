@@ -6,6 +6,8 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
+using System.Drawing;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -14,7 +16,18 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
     /// </summary>
     public class GridStoreDisplayType : GridColumnDisplayType
     {
+        bool showIcon = true;
+
         StoreProperty property;
+
+        /// <summary>
+        /// Class that the data gets transfered to display
+        /// </summary>
+        public class DisplayData
+        {
+            public string StoreText { get; set; }
+            public Image StoreIcon { get; set; }
+        }
 
         /// <summary>
         /// Construct a new instance to display data from the given store property
@@ -22,34 +35,95 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         public GridStoreDisplayType(StoreProperty property)
         {
             this.property = property;
-            this.PreviewInputType = GridColumnPreviewInputType.LiteralString;
         }
 
         /// <summary>
-        /// Format the StoreID into the StoreName
+        /// The format editor for the display type.
+        /// </summary>
+        public override GridColumnDisplayEditor CreateEditor()
+        {
+            return new GridStoreDisplayEditor(this);
+        }
+
+        /// <summary>
+        /// Indicates if the icon representing the store type should be displayed
+        /// </summary>
+        public bool ShowIcon
+        {
+            get { return showIcon; }
+            set { showIcon = value; }
+        }
+
+        /// <summary>
+        /// Provide the data to be used by the display functions
+        /// </summary>
+        protected override object GetEntityValue(EntityBase2 entity)
+        {
+            object value = base.GetEntityValue(entity);
+
+            if (value != null)
+            {
+                long storeID = (long) value;
+                StoreEntity store = StoreManager.GetStore(storeID);
+
+                if (store != null)
+                {
+                    DisplayData displayData = new DisplayData();
+
+                    switch (property)
+                    {
+                        case StoreProperty.StoreName:
+                            displayData.StoreText = store.StoreName;
+                            break;
+
+                        case StoreProperty.StoreType:
+                            displayData.StoreText = StoreTypeManager.GetType(store).StoreTypeName;
+                            break;
+
+                        default:
+                            throw new InvalidOperationException(string.Format("Unhandled StoreProperty value {0}", property));
+                    }
+
+                    if (showIcon)
+                    {
+                        displayData.StoreIcon = EnumHelper.GetImage((StoreTypeCode) store.TypeCode);
+                    }
+
+                    return displayData;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Format the display data into the display text
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            long storeID = (long) value;
-            StoreEntity store = StoreManager.GetStore(storeID);
+            DisplayData displayData = (DisplayData) value;
 
-            // Has been deleted, or just created and we havnt loaded it yet
-            if (store == null)
+            if (displayData == null)
             {
                 return "";
             }
 
-            switch (property)
+            return displayData.StoreText;
+        }
+
+        /// <summary>
+        /// Get the image to display for the store
+        /// </summary>
+        protected override Image GetDisplayImage(object value)
+        {
+            DisplayData displayData = (DisplayData) value;
+
+            if (displayData == null || !showIcon)
             {
-                case StoreProperty.StoreName:
-                    return store.StoreName;
-
-                case StoreProperty.StoreType:
-                    return StoreTypeManager.GetType(store).StoreTypeName;
-
-                default:
-                    throw new InvalidOperationException(string.Format("Unhandled StoreProperty value {0}", property));
+                return null;
             }
+
+            return displayData.StoreIcon;
         }
     }
 }

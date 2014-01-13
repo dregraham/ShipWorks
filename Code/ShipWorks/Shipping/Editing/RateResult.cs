@@ -3,28 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Editing
 {
     /// <summary>
-    /// Rate object used by the RatesControl, use for univeral rate display system
+    /// Rate object used by the RatesControl, use for universal rate display system
     /// </summary>
     public class RateResult
     {
         bool selectable;
-        string description;
         string days;
         decimal amount;
 
         Image amountFootnote;
         object tag;
 
+        string carrierDescription;
+
         /// <summary>
-        /// Constructor, for when an entry is not a selctable rate, but used more as a heading
+        /// Constructor for tests
+        /// </summary>
+        protected RateResult()
+        {
+            
+        }
+
+        /// <summary>
+        /// Constructor, for when an entry is not a selectable rate, but used more as a heading
         /// </summary>
         public RateResult(string description, string days)
         {
-            this.description = description;
+            this.Description = description;
             this.days = days;
 
             this.selectable = false;
@@ -35,7 +45,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public RateResult(string description, string days, decimal amount, object tag)
         {
-            this.description = description;
+            this.Description = description;
             this.days = days;
             this.amount = amount;
             this.tag = tag;
@@ -44,12 +54,14 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Gets or sets the service level.
+        /// </summary>
+        public ServiceLevelType ServiceLevel { get; set; }
+
+        /// <summary>
         /// A description of the rate service class, like "USPS Priority"
         /// </summary>
-        public string Description
-        {
-            get { return description; }
-        }
+        public string Description { get; set; }
 
         /// <summary>
         /// Transit time description could be "2" or "2 - 3 standard" or whatever
@@ -57,6 +69,7 @@ namespace ShipWorks.Shipping.Editing
         public string Days
         {
             get { return days; }
+            set { days = value; }
         }
 
         /// <summary>
@@ -82,6 +95,7 @@ namespace ShipWorks.Shipping.Editing
         public object Tag
         {
             get { return tag; }
+            set { tag = value; }
         }
 
         /// <summary>
@@ -91,5 +105,37 @@ namespace ShipWorks.Shipping.Editing
         {
             get { return selectable; }
         }
+
+        /// <summary>
+        /// Gets or sets the expected delivery date.
+        /// </summary>
+        public DateTime? ExpectedDeliveryDate { get; set; }
+
+        /// <summary>
+        /// Mask the description of the rate, if necessary
+        /// </summary>
+        /// <param name="rates">Collection of all rates, including this one</param>
+        /// <remarks>For the base RateResult class, this method should do nothing</remarks>
+        public virtual void MaskDescription(IEnumerable<RateResult> rates)
+        {
+            
+        }
+
+
+
+        /// <summary>
+        /// Gets or sets the carrier description.
+        /// </summary>
+        /// <value>
+        /// The carrier description.
+        /// </value>
+        public string CarrierDescription
+        {
+            get { return carrierDescription; }
+            set { carrierDescription = value; }
+        }
+
+
+
     }
 }

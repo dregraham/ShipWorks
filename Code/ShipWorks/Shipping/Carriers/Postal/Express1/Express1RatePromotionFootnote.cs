@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
@@ -25,6 +23,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         }
 
         /// <summary>
+        /// Adds the carrier name text to the text of the control
+        /// </summary>
+        public override void SetCarrierName(string carrierName)
+        {
+            AddCarrierNameText(carrierName, label, linkControl);
+        }
+
+        /// <summary>
         /// Link to activate the Express1 discount
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
@@ -36,6 +42,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     RaiseRateCriteriaChanged();
                 }
             }
+        }
+
+        /// <summary>
+        /// Associated with star.
+        /// </summary>
+        public override bool AssociatedWithAmountFooter
+        {
+            get { return true; }
         }
     }
 }

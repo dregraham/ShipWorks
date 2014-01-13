@@ -36,6 +36,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.PrintResultEntityUsingComputerID);
 			toReturn.Add(this.ServerMessageSignoffEntityUsingComputerID);
 			toReturn.Add(this.ServiceStatusEntityUsingComputerID);
+			toReturn.Add(this.ShipmentEntityUsingVoidedComputerID);
+			toReturn.Add(this.ShipmentEntityUsingProcessedComputerID);
 			toReturn.Add(this.TemplateComputerSettingsEntityUsingComputerID);
 			toReturn.Add(this.VersionSignoffEntityUsingComputerID);
 
@@ -67,7 +69,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Audit" , true);
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, AuditFields.ComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditEntity", false);
@@ -131,6 +133,36 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, ServiceStatusFields.ComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ServiceStatusEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - Shipment.VoidedComputerID
+		/// </summary>
+		public virtual IEntityRelation ShipmentEntityUsingVoidedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.VoidedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - Shipment.ProcessedComputerID
+		/// </summary>
+		public virtual IEntityRelation ShipmentEntityUsingProcessedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.ProcessedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
 				return relation;
 			}
 		}

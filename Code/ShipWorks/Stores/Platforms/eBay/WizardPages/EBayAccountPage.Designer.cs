@@ -32,8 +32,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.linkImportTokenFile = new ShipWorks.UI.Controls.LinkControl();
             this.panelCreate = new System.Windows.Forms.Panel();
-            this.createTokenControl = new ShipWorks.Stores.Platforms.Ebay.EbayTokenCreateControl();
-            this.manageTokenControl = new ShipWorks.Stores.Platforms.Ebay.EbayTokenManageControl();
+            this.createTokenControl = new ShipWorks.Stores.Platforms.Ebay.Tokens.EbayTokenCreateControl();
+            this.manageTokenControl = new ShipWorks.Stores.Platforms.Ebay.Tokens.EbayTokenManageControl();
             this.panelCreate.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,8 +126,8 @@
         private System.Windows.Forms.Label label7;
         private ShipWorks.UI.Controls.LinkControl linkImportTokenFile;
         private System.Windows.Forms.Panel panelCreate;
-        private EbayTokenCreateControl createTokenControl;
-        private EbayTokenManageControl manageTokenControl;
+        private ShipWorks.Stores.Platforms.Ebay.Tokens.EbayTokenCreateControl createTokenControl;
+        private ShipWorks.Stores.Platforms.Ebay.Tokens.EbayTokenManageControl manageTokenControl;
 
     }
 }

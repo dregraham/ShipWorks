@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Templates.Processing.TemplateXml.NodeFactories;
 using log4net;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Users;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -38,8 +42,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Processed", () => Shipment.Processed);
             AddElementLegacy2x("IsProcessed", () => Shipment.Processed);
             AddElement("ProcessedDate", () => Shipment.ProcessedDate);
+            AddElement("ProcessedUser", new UserOutline(context), () => Shipment.ProcessedUserID == null ? (UserEntity) null : UserManager.GetUser(Shipment.ProcessedUserID.Value));
             AddElement("Voided", () => Shipment.Voided);
             AddElement("VoidedDate", () => Shipment.VoidedDate);
+            AddElement("VoidedUser", new UserOutline(context), () => Shipment.VoidedUserID == null ? (UserEntity) null : UserManager.GetUser(Shipment.VoidedUserID.Value));
             AddElement("ShippedDate", () => Shipment.ShipDate);
             AddElement("ServiceUsed", () => ShippingManager.GetServiceUsed(Shipment));
             AddElement("ReturnShipment", () => Shipment.ReturnShipment);
@@ -50,25 +56,32 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Address", new AddressOutline(context, "ship", true), () => new PersonAdapter(Shipment, "Ship"));
             AddElement("Address", new AddressOutline(context, "from", true), () => new PersonAdapter(Shipment, "Origin"));
 
-            AddElement("Insurance", new ShipmentInsuranceOutline(context), () => LoadedShipment);
-
             AddElement("CustomsItem", new CustomsItemOutline(context), () => { if (CustomsManager.IsCustomsRequired(Shipment)) { CustomsManager.LoadCustomsItems(Shipment, false); return Shipment.CustomsItems; } else return null; });
+            
+            // Add an outline entry for the last/terminating best rate event that occurred on the shipment
+            AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
 
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
             {
+                // We need to "hoist" this as its own variable - otherwise the same typeCode variable intance would get captured for each iteration.
+                ShipmentTypeCode typeCode = shipmentType.ShipmentTypeCode;
+
+                // Add a package node for each package in the shipment.  For shipment types that don't support true "Packages" there will always be a single Package node that represents
+                // the entire shipment.
+                AddElement("Package", new PackageOutline(context),
+                    () => Enumerable.Range(0, shipmentType.GetParcelCount(LoadedShipment)).Select(index => Tuple.Create(LoadedShipment, index)),
+                    If(() => Shipment.ShipmentType == (int) typeCode));
+
                 // Let the ShipmentType generate its elements into a stand-in container
                 ElementOutline container = new ElementOutline(context);
                 shipmentType.GenerateTemplateElements(container, () => Shipment, () => LoadedShipment);
 
-                // We need to "hoist" this as its own variable - otherwise the same storeType variable intance would get captured for each iteration.
-                ShipmentTypeCode typeCode = shipmentType.ShipmentTypeCode;
-
-                // Copy the elements from the stand-in to ourself, adding on the StoreType specific condition
+                // Copy the elements from the stand-in to ourself, adding on the ShipmentType specific condition
                 AddElements(container, If(() => Shipment.ShipmentType == (int) typeCode));
             }
         }
-
+        
         /// <summary>
         /// Create the outline for the ShipmentType element
         /// </summary>
@@ -92,6 +105,19 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             }
 
             return "None";
+        }
+
+        /// <summary>
+        /// Get text describing the latest best rate event that occurred on the shipment.
+        /// </summary>
+        private static string GetLatestBestRateEventDescription(ShipmentEntity shipment)
+        {
+            // Obtain the latest event that occurred
+            BestRateEventTypes eventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes latestEvent = eventTypes.GetLatestBestRateEvent();
+
+            // Now that we have the latest event, we can just return the description for it
+            return new BestRateEventsDescription(latestEvent).ToString().Trim();
         }
 
         /// <summary>

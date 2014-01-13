@@ -130,7 +130,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             progress.Detail = "Upgrading eBay items...";
 
             // configure the calculations
-            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectiveCheckoutStatus(e));
+            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectivePaymentStatus(e));
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e));
 
             int expectedCount = 0;
@@ -150,7 +150,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                 OrderItemEntity.Is2xUpgraderUpdatingEffectiveEbayFields = true;
 
                 // Put the SuperUser in scope, and don't audit
-                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Disabled))
+                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                 {
                     while (true)
                     {

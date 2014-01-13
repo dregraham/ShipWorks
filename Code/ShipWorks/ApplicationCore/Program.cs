@@ -1,5 +1,7 @@
+using System.Globalization;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
@@ -18,6 +20,7 @@ using System.Diagnostics;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Services;
 using NDesk.Options;
+using System.Collections.Generic;
 
 namespace ShipWorks
 {
@@ -192,6 +195,14 @@ namespace ShipWorks
                 return false;
             }
 
+            // Check to see if the DateTimeFormat is valid.
+            if (!CheckDateTimeFormatSetting())
+            {
+                ExecutionMode.ShowTerminationMessage(new DateTimeFormatRequiredDlg(), "English US date format is required");
+
+                return false;
+            }
+
             // See if a reboot is required
             if (StartupController.CheckRebootRequired())
             {
@@ -202,7 +213,26 @@ namespace ShipWorks
 
             return true;
         }
-        
+
+        /// <summary>
+        /// Checks to see if the DateTimeFormat is valid.  If not, it displays a message to the user on how to fix it.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static bool CheckDateTimeFormatSetting()
+        {
+            List<string> allowedShortDatePartterns = new List<string>() { "M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy" };
+
+            string currentShortDatePattern = Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern;
+
+            if (!allowedShortDatePartterns.Contains(currentShortDatePattern))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Sets up the application exception handling policy
         /// </summary>

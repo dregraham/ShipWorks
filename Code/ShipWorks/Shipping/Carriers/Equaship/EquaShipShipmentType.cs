@@ -17,6 +17,7 @@ using System.Drawing.Imaging;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Tracking;
 using Interapptive.Shared.Business;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.EquaShip
 {
@@ -139,14 +140,19 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             shipment.EquaShip.InsuranceValue = 0;
         }
 
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        /// <summary>
+        /// Get the details of the equaship parcel
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            return new InsuranceChoice(shipment, shipment, shipment.EquaShip, null);
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.EquaShip, null),
+                new DimensionsAdapter(shipment.EquaShip));
         }
 
         /// <summary>
@@ -454,6 +460,15 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Equaship shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
         }
     }
 }

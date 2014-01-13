@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         packagingType.ApplyMultiValue((UpsPackagingType) package.PackagingType);
                         weight.ApplyMultiWeight(package.Weight);
 
-                        insuranceToLoad.Add(shipmentType.GetParcelInsuranceChoice(package.UpsShipment.Shipment, package.UpsShipment.Packages.IndexOf(package)));
+                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.UpsShipment.Shipment, package.UpsShipment.Packages.IndexOf(package)).Insurance);
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
                     }
                 }

@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -56,11 +57,11 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            throw new NotSupportedException("GetParcelInsuranceChoice not supported for none.");
+            throw new NotSupportedException("GetParcelDetail not supported for none.");
         }
 
         /// <summary>
@@ -69,6 +70,15 @@ namespace ShipWorks.Shipping.Carriers.None
         public override void ProcessShipment(ShipmentEntity shipment)
         {
             throw new ShippingException("No carrier is selected for the shipment.");
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the None shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new NullShippingBroker();
         }
     }
 }

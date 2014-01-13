@@ -315,6 +315,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 log.Error("BigCommerce max API requests per hour reached.");
                 throw new BigCommerceWebClientRequestThrottledException();
             }
+
+            if (restResponse.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                // BC wants to treat Internal Server Error as a "please try again soon", so we will.
+                log.Error("BigCommerce returned a 500 error, so we will wait and try again soon.");
+                throw new BigCommerceWebClientRequestThrottledException();
+            }
             
             if (restResponse.StatusCode == HttpStatusCode.NoContent || restResponse.StatusCode == HttpStatusCode.NotModified)
             {
@@ -483,20 +490,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             LoadProductImages(order);
 
-            // Get the order shipments
-            RestRequest request = new RestRequest();
-            request.Resource = order.products.resource.Replace("products", "shipments");
-            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShipments, request, progressReporter);
-            List<BigCommerceShipment> shipmentsRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceShipment>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceShipment>>);
-            order.OrderShipments = shipmentsRestResponse;
-
             // Get the order shipping addresses
             PopulateOrderShippingAddresses(order);
 
             // Get the order coupons
-            request = new RestRequest();
+            RestRequest request = new RestRequest();
             request.Resource = order.coupons.resource;
-            requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetCoupons, request, progressReporter);
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetCoupons, request, progressReporter);
             List<BigCommerceCoupon> couponsRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceCoupon>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceCoupon>>);
             order.OrderCoupons = couponsRestResponse;
         }

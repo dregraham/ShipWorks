@@ -125,8 +125,8 @@ namespace ShipWorks.Shipping.Insurance
             {
                 List<InsuranceChoice> insuranceChoices = 
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                    .Select(parcelIndex => shipmentType.GetParcelInsuranceChoice(shipment, parcelIndex))
-                    .Where(choice => choice.Insurance).ToList();
+                    .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                    .Where(choice => choice.Insured).ToList();
 
                 if (license.IsTrial)
                 {
@@ -279,7 +279,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.OnTrac:
                     {
                         // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipemnt will have the same pennyone setting
-                        bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, 0).InsurancePennyOne.Value;
+                        bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
 
                         if (!pennyOne)
                         {
@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.iParcel:
                     {
                         // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipemnt will have the same pennyone setting
-                        bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, 0).InsurancePennyOne.Value;
+                        bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
 
                         if (!pennyOne)
                         {

@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using System.Text;
+using Interapptive.Shared.Data;
+using log4net;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.Services.Hosting;
 using ShipWorks.Data.Connection;
@@ -185,6 +187,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             else
             {
                 log.Fatal("Application Crashed", exception);
+
+                if (SqlSession.IsConfigured)
+                {
+                    log.Fatal(SqlUtility.GetRunningSqlCommands(SqlSession.Current.Configuration.GetConnectionString()));
+                }
 
                 if (IsEligibleToSubmitCrashReport())
                 {

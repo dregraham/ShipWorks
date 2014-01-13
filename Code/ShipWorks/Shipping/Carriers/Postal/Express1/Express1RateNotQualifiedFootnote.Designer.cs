@@ -30,7 +30,7 @@
         {
             this.label = new System.Windows.Forms.Label();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label
@@ -52,17 +52,17 @@
             this.pictureBox.TabIndex = 3;
             this.pictureBox.TabStop = false;
             // 
-            // EndiciaExpress1RateNotQualifiedFootnote
+            // Express1RateNotQualifiedFootnote
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.label);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Express1RateNotQualifiedFootnote";
-            this.Size = new System.Drawing.Size(367, 28);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            this.Size = new System.Drawing.Size(559, 28);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

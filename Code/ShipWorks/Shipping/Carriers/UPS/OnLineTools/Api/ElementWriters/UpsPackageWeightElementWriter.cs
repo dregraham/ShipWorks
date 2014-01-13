@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             xmlWriter.WriteElementString("Description", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? "Pounds" : "Ounces");
             xmlWriter.WriteEndElement();
 
-            xmlWriter.WriteElementString("Weight", weight.ToString("##0.0"));
+            xmlWriter.WriteElementString("Weight", weight.ToString("##0.##"));
             xmlWriter.WriteEndElement();
         }
     }

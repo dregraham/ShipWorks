@@ -110,6 +110,7 @@
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Data\EntityAdapter.cs" />
     <Compile Include="Data\OdbcManager.cs" />
     <Compile Include="Data\OdbcManagerException.cs" />
     <Compile Include="Data\SqlCommandProvider.cs" />

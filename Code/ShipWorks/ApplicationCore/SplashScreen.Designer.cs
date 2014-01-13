@@ -80,7 +80,7 @@ namespace ShipWorks.ApplicationCore
             this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Top;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 0);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(506, 1);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(508, 1);
             this.kryptonBorderEdge.TabIndex = 51;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
@@ -89,9 +89,9 @@ namespace ShipWorks.ApplicationCore
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellList;
             this.kryptonBorderEdge1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.kryptonBorderEdge1.Location = new System.Drawing.Point(0, 254);
+            this.kryptonBorderEdge1.Location = new System.Drawing.Point(0, 256);
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
-            this.kryptonBorderEdge1.Size = new System.Drawing.Size(506, 1);
+            this.kryptonBorderEdge1.Size = new System.Drawing.Size(508, 1);
             this.kryptonBorderEdge1.TabIndex = 52;
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
             // 
@@ -103,7 +103,7 @@ namespace ShipWorks.ApplicationCore
             this.kryptonBorderEdge2.Location = new System.Drawing.Point(0, 1);
             this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
             this.kryptonBorderEdge2.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 253);
+            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 255);
             this.kryptonBorderEdge2.TabIndex = 53;
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
             // 
@@ -112,10 +112,10 @@ namespace ShipWorks.ApplicationCore
             this.kryptonBorderEdge3.AutoSize = false;
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellList;
             this.kryptonBorderEdge3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.kryptonBorderEdge3.Location = new System.Drawing.Point(505, 1);
+            this.kryptonBorderEdge3.Location = new System.Drawing.Point(507, 1);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
             this.kryptonBorderEdge3.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 253);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 255);
             this.kryptonBorderEdge3.TabIndex = 54;
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             // 
@@ -123,9 +123,10 @@ namespace ShipWorks.ApplicationCore
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.LimeGreen;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(506, 255);
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.ClientSize = new System.Drawing.Size(508, 257);
             this.Controls.Add(this.kryptonBorderEdge3);
             this.Controls.Add(this.kryptonBorderEdge2);
             this.Controls.Add(this.kryptonBorderEdge1);
@@ -133,12 +134,14 @@ namespace ShipWorks.ApplicationCore
             this.Controls.Add(this.status);
             this.Controls.Add(this.labelReleaseInfo);
             this.Controls.Add(this.website);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SplashScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShipWorks";
+            this.TransparencyKey = System.Drawing.Color.LimeGreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Settings.Origin;
@@ -222,6 +224,53 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets the BestRate service level associated with the specified postal service type
+        /// </summary>
+        /// <param name="serviceType">Service type for which to get the best rate service level</param>
+        /// <returns></returns>
+        public static ServiceLevelType GetServiceLevel(PostalServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case PostalServiceType.ExpressMail:
+                    return ServiceLevelType.TwoDays;
+
+                case PostalServiceType.PriorityMail:
+                case PostalServiceType.FirstClass:
+                case PostalServiceType.CriticalMail:
+                    return ServiceLevelType.ThreeDays;
+
+                case PostalServiceType.InternationalExpress:
+                    return ServiceLevelType.FourToSevenDays;
+
+                default:
+                    return ServiceLevelType.Anytime;
+            }
+        }
+
+        /// <summary>
+        /// Get the longest amount of delivery days for the specified best rate service level
+        /// </summary>
+        /// <param name="serviceLevel">Service level for which to get the worst case delivery days</param>
+        /// <returns></returns>
+        public static int GetWorstCaseDeliveryDaysFromServiceType(ServiceLevelType serviceLevel)
+        {
+            switch (serviceLevel)
+            {
+                case ServiceLevelType.OneDay:
+                    return 1;
+                case ServiceLevelType.TwoDays:
+                    return 2;
+                case ServiceLevelType.ThreeDays:
+                    return 3;
+                case ServiceLevelType.FourToSevenDays:
+                    return 7;
+                default:
+                    return -1;
+            }
+        }
+
+        /// <summary>
         /// The USPS does not allow punctuation characters in addresses
         /// </summary>
         public static string StripPunctuation(string value)
@@ -358,6 +407,49 @@ namespace ShipWorks.Shipping.Carriers.Postal
             return 
                 serviceType == PostalServiceType.ParcelSelect || 
                 ShipmentTypeManager.IsEndiciaDhl(serviceType);
+        }
+
+        /// <summary>
+        /// Sets service level details on the specified rate
+        /// </summary>
+        /// <param name="baseRate">Rate on which service level details should be set</param>
+        public static void SetServiceDetails(RateResult baseRate)
+        {
+            PostalRateSelection rateSelection = baseRate.Tag as PostalRateSelection;
+
+            if (rateSelection != null)
+            {
+                SetServiceDetails(baseRate, rateSelection.ServiceType, string.Empty);    
+            }
+        }
+
+        /// <summary>
+        /// Sets service level details on the specified rate
+        /// </summary>
+        /// <param name="baseRate">Rate on which service level details should be set</param>
+        /// <param name="serviceType">Service type for the specified rate</param>
+        /// <param name="deliverDays">How many days are expected for the package to be in delivery</param>
+        public static void SetServiceDetails(RateResult baseRate, PostalServiceType serviceType, string deliverDays)
+        {
+            baseRate.ServiceLevel = GetServiceLevel(serviceType);
+
+            int deliveryDays = -1;
+            if (!int.TryParse(deliverDays.Split('-').LastOrDefault(), out deliveryDays))
+            {
+                deliveryDays = GetWorstCaseDeliveryDaysFromServiceType(baseRate.ServiceLevel);
+            }
+
+            if (deliveryDays > 0)
+            {
+                DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(deliveryDays, DayOfWeek.Sunday);
+
+                if (deliveryDate.HasValue && deliveryDate.Value.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    deliveryDate = deliveryDate.Value.AddDays(2);
+                }
+
+                baseRate.ExpectedDeliveryDate = deliveryDate;
+            }
         }
     }
 }

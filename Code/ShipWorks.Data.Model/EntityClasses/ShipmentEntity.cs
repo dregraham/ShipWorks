@@ -39,7 +39,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 		private EntityCollection<ShipmentCustomsItemEntity> _customsItems;
 
+
+
 		private OrderEntity _order;
+
+
+		private BestRateShipmentEntity _bestRate;
 		private EquaShipShipmentEntity _equaShip;
 		private FedExShipmentEntity _fedEx;
 		private IParcelShipmentEntity _iParcel;
@@ -59,11 +64,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+
+
 			/// <summary>Member name Order</summary>
 			public static readonly string Order = "Order";
+
+
 			/// <summary>Member name CustomsItems</summary>
 			public static readonly string CustomsItems = "CustomsItems";
 
+			/// <summary>Member name BestRate</summary>
+			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name EquaShip</summary>
 			public static readonly string EquaShip = "EquaShip";
 			/// <summary>Member name FedEx</summary>
@@ -138,10 +149,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_customsItems = (EntityCollection<ShipmentCustomsItemEntity>)info.GetValue("_customsItems", typeof(EntityCollection<ShipmentCustomsItemEntity>));
 
+
+
 				_order = (OrderEntity)info.GetValue("_order", typeof(OrderEntity));
 				if(_order!=null)
 				{
 					_order.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
+
+
+				_bestRate = (BestRateShipmentEntity)info.GetValue("_bestRate", typeof(BestRateShipmentEntity));
+				if(_bestRate!=null)
+				{
+					_bestRate.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_equaShip = (EquaShipShipmentEntity)info.GetValue("_equaShip", typeof(EquaShipShipmentEntity));
 				if(_equaShip!=null)
@@ -195,6 +215,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case ShipmentFieldIndex.OrderID:
 					DesetupSyncOrder(true, false);
 					break;
+				case ShipmentFieldIndex.ProcessedUserID:
+
+					break;
+				case ShipmentFieldIndex.ProcessedComputerID:
+
+					break;
+				case ShipmentFieldIndex.VoidedUserID:
+
+					break;
+				case ShipmentFieldIndex.VoidedComputerID:
+
+					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -217,13 +249,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+
+
 				case "Order":
 					this.Order = (OrderEntity)entity;
 					break;
+
+
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)entity);
 					break;
 
+				case "BestRate":
+					this.BestRate = (BestRateShipmentEntity)entity;
+					break;
 				case "EquaShip":
 					this.EquaShip = (EquaShipShipmentEntity)entity;
 					break;
@@ -266,13 +305,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+
+
 				case "Order":
 					toReturn.Add(ShipmentEntity.Relations.OrderEntityUsingOrderID);
 					break;
+
+
 				case "CustomsItems":
 					toReturn.Add(ShipmentEntity.Relations.ShipmentCustomsItemEntityUsingShipmentID);
 					break;
 
+				case "BestRate":
+					toReturn.Add(ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID);
+					break;
 				case "EquaShip":
 					toReturn.Add(ShipmentEntity.Relations.EquaShipShipmentEntityUsingShipmentID);
 					break;
@@ -314,8 +360,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
+
+
 				case "Order":
 					return true;
+
+
+
 
 
 
@@ -336,11 +387,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+
+
 				case "Order":
 					SetupSyncOrder(relatedEntity);
 					break;
+
+
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)relatedEntity);
+					break;
+				case "BestRate":
+					SetupSyncBestRate(relatedEntity);
 					break;
 				case "EquaShip":
 					SetupSyncEquaShip(relatedEntity);
@@ -377,11 +435,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+
+
 				case "Order":
 					DesetupSyncOrder(false, true);
 					break;
+
+
 				case "CustomsItems":
 					base.PerformRelatedEntityRemoval(this.CustomsItems, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "BestRate":
+					DesetupSyncBestRate(false, true);
 					break;
 				case "EquaShip":
 					DesetupSyncEquaShip(false, true);
@@ -414,6 +479,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_bestRate!=null)
+			{
+				toReturn.Add(_bestRate);
+			}
+
 			if(_equaShip!=null)
 			{
 				toReturn.Add(_equaShip);
@@ -458,10 +528,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+
+
 			if(_order!=null)
 			{
 				toReturn.Add(_order);
 			}
+
+
+
+
 
 
 
@@ -501,7 +577,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				info.AddValue("_customsItems", ((_customsItems!=null) && (_customsItems.Count>0) && !this.MarkedForDeletion)?_customsItems:null);
 
+
+
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
+
+
+				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_equaShip", (!this.MarkedForDeletion?_equaShip:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
@@ -564,6 +645,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
+
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'Order' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
 		/// <returns></returns>
@@ -571,6 +654,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
+
+
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'BestRateShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoBestRate()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(BestRateShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
 
@@ -713,9 +808,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+
+
 			toReturn.Add("Order", _order);
+
+
 			toReturn.Add("CustomsItems", _customsItems);
 
+			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("EquaShip", _equaShip);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("IParcel", _iParcel);
@@ -734,9 +834,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 				_customsItems.ActiveContext = base.ActiveContext;
 			}
 
+
+
 			if(_order!=null)
 			{
 				_order.ActiveContext = base.ActiveContext;
+			}
+
+
+			if(_bestRate!=null)
+			{
+				_bestRate.ActiveContext = base.ActiveContext;
 			}
 			if(_equaShip!=null)
 			{
@@ -774,7 +882,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			_customsItems = null;
 
+
+
 			_order = null;
+
+
+			_bestRate = null;
 			_equaShip = null;
 			_fedEx = null;
 			_iParcel = null;
@@ -823,6 +936,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ProcessedDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ProcessedUserID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ProcessedComputerID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ShipDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -833,6 +952,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("VoidedDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VoidedUserID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("VoidedComputerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
@@ -959,8 +1084,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OriginUnparsedName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BestRateEvents", fieldHashtable);
 		}
 		#endregion
+
+
 
 		/// <summary> Removes the sync logic for member _order</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -987,6 +1117,41 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnOrderPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+
+
+		/// <summary> Removes the sync logic for member _bestRate</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncBestRate(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
+			_bestRate = null;
+		}
+		
+		/// <summary> setups the sync logic for member _bestRate</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncBestRate(IEntity2 relatedEntity)
+		{
+			if(_bestRate!=relatedEntity)
+			{
+				DesetupSyncBestRate(true, true);
+				_bestRate = (BestRateShipmentEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID, false, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnBestRatePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1271,6 +1436,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
+
+
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Order' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -1280,6 +1447,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory))),
 					(IEntityRelation)GetRelationsForField("Order")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.OrderEntity, 0, null, null, null, null, "Order", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+			}
+		}
+
+
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateShipment' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathBestRate
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(BestRateShipmentEntityFactory))),
+					(IEntityRelation)GetRelationsForField("BestRate")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.BestRateShipmentEntity, 0, null, null, null, null, "BestRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
 			}
 		}
 
@@ -1479,6 +1660,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.ProcessedDate, value); }
 		}
 
+		/// <summary> The ProcessedUserID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ProcessedUserID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ProcessedUserID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.ProcessedUserID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ProcessedUserID, value); }
+		}
+
+		/// <summary> The ProcessedComputerID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ProcessedComputerID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ProcessedComputerID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.ProcessedComputerID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ProcessedComputerID, value); }
+		}
+
 		/// <summary> The ShipDate property of the Entity Shipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "Shipment"."ShipDate"<br/>
@@ -1521,6 +1724,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ShipmentFieldIndex.VoidedDate, false); }
 			set	{ SetValue((int)ShipmentFieldIndex.VoidedDate, value); }
+		}
+
+		/// <summary> The VoidedUserID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."VoidedUserID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> VoidedUserID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.VoidedUserID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.VoidedUserID, value); }
+		}
+
+		/// <summary> The VoidedComputerID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."VoidedComputerID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> VoidedComputerID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.VoidedComputerID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.VoidedComputerID, value); }
 		}
 
 		/// <summary> The TrackingNumber property of the Entity Shipment<br/><br/>
@@ -1985,6 +2210,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.OriginUnparsedName, value); }
 		}
 
+		/// <summary> The BestRateEvents property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."BestRateEvents"<br/>
+		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte BestRateEvents
+		{
+			get { return (System.Byte)GetValue((int)ShipmentFieldIndex.BestRateEvents, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.BestRateEvents, value); }
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
 		[TypeContainedAttribute(typeof(ShipmentCustomsItemEntity))]
@@ -2000,6 +2236,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				return _customsItems;
 			}
 		}
+
+
 
 
 		/// <summary> Gets / sets related entity of type 'OrderEntity' which has to be set using a fetch action earlier. If no related entity
@@ -2031,6 +2269,51 @@ namespace ShipWorks.Data.Model.EntityClasses
 						if(_order!=value)
 						{
 							SetRelatedEntity((IEntity2)value, "Order");
+						}
+					}
+				}
+			}
+		}
+
+
+
+		/// <summary> Gets / sets related entity of type 'BestRateShipmentEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual BestRateShipmentEntity BestRate
+		{
+			get
+			{
+				return _bestRate;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncBestRate(value);
+					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
+					{
+						value.SetRelatedEntity(this, "Shipment");
+					}
+				}
+				else
+				{
+					if(value==null)
+					{
+						bool raisePropertyChanged = (_bestRate !=null);
+						DesetupSyncBestRate(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("BestRate");
+						}
+					}
+					else
+					{
+						if(_bestRate!=value)
+						{
+							IEntity2 relatedEntity = (IEntity2)value;
+							relatedEntity.SetRelatedEntity(this, "Shipment");
+							SetupSyncBestRate(relatedEntity);
 						}
 					}
 				}

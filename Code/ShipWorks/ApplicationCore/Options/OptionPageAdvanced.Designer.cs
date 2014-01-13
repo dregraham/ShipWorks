@@ -47,6 +47,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.sectionAuditing = new ShipWorks.UI.Controls.SectionTitle();
             this.auditNewOrders = new System.Windows.Forms.CheckBox();
             this.infotipAudit = new ShipWorks.UI.Controls.InfoTip();
+            this.auditDeletedOrders = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -61,8 +62,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionLogIn
             // 
-            this.sectionLogIn.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionLogIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionLogIn.Location = new System.Drawing.Point(10, 10);
             this.sectionLogIn.Name = "sectionLogIn";
             this.sectionLogIn.Size = new System.Drawing.Size(598, 22);
@@ -76,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelAddressCasing.Size = new System.Drawing.Size(340, 41);
             this.labelAddressCasing.TabIndex = 4;
             this.labelAddressCasing.Text = "When downloading orders ShipWorks can cleanup names and addresses entered by the " +
-                "customer.  For instance, \"123 elm street\" would become \"123 Elm Street\".";
+    "customer.  For instance, \"123 elm street\" would become \"123 Elm Street\".";
             // 
             // labelLogOnMethod
             // 
@@ -88,8 +89,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionAddressCasing
             // 
-            this.sectionAddressCasing.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionAddressCasing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionAddressCasing.Location = new System.Drawing.Point(10, 77);
             this.sectionAddressCasing.Name = "sectionAddressCasing";
             this.sectionAddressCasing.Size = new System.Drawing.Size(598, 22);
@@ -115,7 +116,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.label1.Size = new System.Drawing.Size(385, 30);
             this.label1.TabIndex = 9;
             this.label1.Text = "In these cases you can configure what else ShipWorks should check to determine if" +
-                " its the same customer as another order.";
+    " its the same customer as another order.";
             // 
             // compareCustomerAddress
             // 
@@ -139,8 +140,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionCustomerUpdating
             // 
-            this.sectionCustomerUpdating.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionCustomerUpdating.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionCustomerUpdating.Location = new System.Drawing.Point(10, 385);
             this.sectionCustomerUpdating.Name = "sectionCustomerUpdating";
             this.sectionCustomerUpdating.Size = new System.Drawing.Size(598, 22);
@@ -149,8 +150,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionCustomerMatching
             // 
-            this.sectionCustomerMatching.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionCustomerMatching.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionCustomerMatching.Location = new System.Drawing.Point(10, 182);
             this.sectionCustomerMatching.Name = "sectionCustomerMatching";
             this.sectionCustomerMatching.Size = new System.Drawing.Size(598, 22);
@@ -193,7 +194,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelCustomerMatching2.Size = new System.Drawing.Size(383, 34);
             this.labelCustomerMatching2.TabIndex = 8;
             this.labelCustomerMatching2.Text = "Some stores allow customers to checkout without a registered account and there is" +
-                " no online ID for ShipWorks to check.";
+    " no online ID for ShipWorks to check.";
             // 
             // labelCustomerMatching1
             // 
@@ -202,13 +203,13 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelCustomerMatching1.Size = new System.Drawing.Size(374, 43);
             this.labelCustomerMatching1.TabIndex = 7;
             this.labelCustomerMatching1.Text = "ShipWorks determines which orders belong to the same customer by checking the onl" +
-                "ine ID of the customer.  For instance, for eBay this would be the user ID or for" +
-                " osCommerce it would be the customer #.";
+    "ine ID of the customer.  For instance, for eBay this would be the user ID or for" +
+    " osCommerce it would be the customer #.";
             // 
             // sectionAuditing
             // 
-            this.sectionAuditing.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionAuditing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionAuditing.Location = new System.Drawing.Point(10, 485);
             this.sectionAuditing.Name = "sectionAuditing";
             this.sectionAuditing.Size = new System.Drawing.Size(598, 22);
@@ -220,20 +221,30 @@ namespace ShipWorks.ApplicationCore.Options
             this.auditNewOrders.AutoSize = true;
             this.auditNewOrders.Location = new System.Drawing.Point(35, 515);
             this.auditNewOrders.Name = "auditNewOrders";
-            this.auditNewOrders.Size = new System.Drawing.Size(202, 17);
+            this.auditNewOrders.Size = new System.Drawing.Size(249, 17);
             this.auditNewOrders.TabIndex = 17;
-            this.auditNewOrders.Text = "Audit initial data from all new orders.";
+            this.auditNewOrders.Text = "Audit full details of new customers and orders.";
             this.auditNewOrders.UseVisualStyleBackColor = true;
             // 
             // infotipAudit
             // 
             this.infotipAudit.Caption = "Auditing all new order data uses a significant amount of space in the database.\r\n" +
-                "\r\nAny edits are still audited, including both the original and updated values.";
-            this.infotipAudit.Location = new System.Drawing.Point(235, 517);
+    "\r\nAny edits are still audited, including both the original and updated values.";
+            this.infotipAudit.Location = new System.Drawing.Point(282, 518);
             this.infotipAudit.Name = "infotipAudit";
             this.infotipAudit.Size = new System.Drawing.Size(12, 12);
             this.infotipAudit.TabIndex = 33;
             this.infotipAudit.Title = "Audit New Orders";
+            // 
+            // auditDeletedOrders
+            // 
+            this.auditDeletedOrders.AutoSize = true;
+            this.auditDeletedOrders.Location = new System.Drawing.Point(35, 538);
+            this.auditDeletedOrders.Name = "auditDeletedOrders";
+            this.auditDeletedOrders.Size = new System.Drawing.Size(265, 17);
+            this.auditDeletedOrders.TabIndex = 34;
+            this.auditDeletedOrders.Text = "Audit full details of deleted customers and orders.";
+            this.auditDeletedOrders.UseVisualStyleBackColor = true;
             // 
             // OptionPageAdvanced
             // 
@@ -241,6 +252,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.auditDeletedOrders);
             this.Controls.Add(this.infotipAudit);
             this.Controls.Add(this.auditNewOrders);
             this.Controls.Add(this.sectionAuditing);
@@ -260,9 +272,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.labelLogOnMethod);
             this.Controls.Add(this.sectionAddressCasing);
             this.Controls.Add(this.logOnMethod);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageAdvanced";
-            this.Size = new System.Drawing.Size(622, 567);
+            this.Size = new System.Drawing.Size(622, 589);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -290,6 +302,7 @@ namespace ShipWorks.ApplicationCore.Options
         private UI.Controls.SectionTitle sectionAuditing;
         private System.Windows.Forms.CheckBox auditNewOrders;
         private UI.Controls.InfoTip infotipAudit;
+        private System.Windows.Forms.CheckBox auditDeletedOrders;
 
     }
 }

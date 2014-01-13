@@ -43,6 +43,7 @@
     <AppDirectory>$(ArtifactDirectory)\Application</AppDirectory>
     <InstallerDirectory>$(ArtifactDirectory)\Distribute</InstallerDirectory>
     <ModulesDirectory>$(InstallerDirectory)\Modules</ModulesDirectory>
+    <SupportObfuscationLogDirectory>\\INTFS01\Support\ObfuscationReports</SupportObfuscationLogDirectory>
   </PropertyGroup>
 
   <!-- The main build -->
@@ -269,7 +270,7 @@
   <Target Name="SqlSnapshot" Condition=" $(CreateInstaller) == 'True' ">
 
     <Message Text="Taking SQL Snapshot" />
-    <Exec Command='".\SqlSnapper\RedGate.SQLSnapper.exe" /server:INTSQL01\Development /database:ShipWorksSchema_Master /makesnapshot:"$(LogDirectory)\DatabaseSchema$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).snp"' />
+    <Exec Command='".\SqlSnapper\RedGate.SQLSnapper.exe" /server:INTSQL01\Development /database:ShipWorksSchema_integration /makesnapshot:"$(LogDirectory)\DatabaseSchema$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).snp"' />
 
   </Target>
 
@@ -372,6 +373,10 @@
     <!-- Copy the report to one with the version apart of the name, so its easier to use and identify -->
     <Copy SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(LogDirectory)\ObfuscationReport$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).xml" />
 
+    <!-- Copy the report for non-internal builds (VersionMajor > 0) to a location that the support team 
+         can access to streamline their work (i.e. not wait on someone from development to manually copy the file) -->
+    <Copy Condition="$(VersionMajor) &gt; 0" SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(SupportObfuscationLogDirectory)\ShipWorks$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)\ObfuscationReport.xml" />
+    
     <!-- Copy the assemblies that were obfuscated from our original folder so we have an archive of them-->
     <Copy SourceFiles="$(AppDirectory)\%(ObfuscatedAssemblies.Filename)%(ObfuscatedAssemblies.Extension)"
 				DestinationFolder="$(AppDirectory)\Original" />

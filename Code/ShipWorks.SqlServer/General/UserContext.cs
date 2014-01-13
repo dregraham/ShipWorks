@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.SqlServer.General
 {
@@ -12,8 +13,9 @@ namespace ShipWorks.SqlServer.General
     {
         long userID;
         long computerID;
-        bool auditingEnabled;
         bool deletingStore;
+
+        AuditState state;
 
         int reasonType;
         string reasonDetail;
@@ -21,13 +23,13 @@ namespace ShipWorks.SqlServer.General
         /// <summary>
         /// Constructor
         /// </summary>
-        public UserContext(long userID, long computerID, int reasonType, string reasonDetail, bool auditingEnabled, bool deletingStore)
+        public UserContext(long userID, long computerID, int reasonType, string reasonDetail, AuditState state, bool deletingStore)
         {
             this.userID = userID;
             this.computerID = computerID;
             this.reasonType = reasonType;
             this.reasonDetail = reasonDetail;
-            this.auditingEnabled = auditingEnabled;
+            this.state = state;
             this.deletingStore = deletingStore;
         }
 
@@ -83,9 +85,9 @@ namespace ShipWorks.SqlServer.General
         /// <summary>
         /// Indicates if auditing is enabled
         /// </summary>
-        public bool AuditingEnabled
+        public AuditState AuditState
         {
-            get { return auditingEnabled; }
+            get { return state; }
         }
 
         /// <summary>

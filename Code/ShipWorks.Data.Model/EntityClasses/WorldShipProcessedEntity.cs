@@ -138,7 +138,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch((WorldShipProcessedFieldIndex)fieldIndex)
 			{
-				case WorldShipProcessedFieldIndex.ShipmentID:
+				case WorldShipProcessedFieldIndex.ShipmentIdCalculated:
 					DesetupSyncWorldShipShipment(true, false);
 					break;
 				default:
@@ -191,7 +191,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 				case "WorldShipShipment":
-					toReturn.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentID);
+					toReturn.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated);
 					break;
 
 
@@ -211,12 +211,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
 			// use template trick to calculate the # of single-sided / oneway relations
-			int numberOfOneWayRelations = 0;
+			int numberOfOneWayRelations = 0+1;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-
+				case "WorldShipShipment":
+					return true;
 
 				default:
 					return base.CheckOneWayRelations(propertyName);
@@ -349,7 +350,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual IRelationPredicateBucket GetRelationInfoWorldShipShipment()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(WorldShipShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(WorldShipShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentIdCalculated));
 			return bucket;
 		}
 
@@ -510,6 +511,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("LeadTrackingNumber", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentIdCalculated", fieldHashtable);
 		}
 		#endregion
 
@@ -518,7 +522,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncWorldShipShipment(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _worldShipShipment, new PropertyChangedEventHandler( OnWorldShipShipmentPropertyChanged ), "WorldShipShipment", WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentID, true, signalRelatedEntity, "WorldShipProcessed", resetFKFields, new int[] { (int)WorldShipProcessedFieldIndex.ShipmentID } );		
+			base.PerformDesetupSyncRelatedEntity( _worldShipShipment, new PropertyChangedEventHandler( OnWorldShipShipmentPropertyChanged ), "WorldShipShipment", WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated, true, signalRelatedEntity, "", resetFKFields, new int[] { (int)WorldShipProcessedFieldIndex.ShipmentIdCalculated } );		
 			_worldShipShipment = null;
 		}
 
@@ -530,7 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				DesetupSyncWorldShipShipment(true, true);
 				_worldShipShipment = (WorldShipShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _worldShipShipment, new PropertyChangedEventHandler( OnWorldShipShipmentPropertyChanged ), "WorldShipShipment", WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentID, true, new string[] {  } );
+				base.PerformSetupSyncRelatedEntity( _worldShipShipment, new PropertyChangedEventHandler( OnWorldShipShipmentPropertyChanged ), "WorldShipShipment", WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated, true, new string[] {  } );
 			}
 		}
 		
@@ -794,6 +798,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipProcessedFieldIndex.LeadTrackingNumber, value); }
 		}
 
+		/// <summary> The ShipmentIdCalculated property of the Entity WorldShipProcessed<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipProcessed"."ShipmentIdCalculated"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ShipmentIdCalculated
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)WorldShipProcessedFieldIndex.ShipmentIdCalculated, false); }
+
+		}
+
 
 
 		/// <summary> Gets / sets related entity of type 'WorldShipShipmentEntity' which has to be set using a fetch action earlier. If no related entity
@@ -817,14 +832,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_worldShipShipment != null)
 						{
-							_worldShipShipment.UnsetRelatedEntity(this, "WorldShipProcessed");
+							UnsetRelatedEntity(_worldShipShipment, "WorldShipShipment");
 						}
 					}
 					else
 					{
 						if(_worldShipShipment!=value)
 						{
-							((IEntity2)value).SetRelatedEntity(this, "WorldShipProcessed");
+							SetRelatedEntity((IEntity2)value, "WorldShipShipment");
 						}
 					}
 				}

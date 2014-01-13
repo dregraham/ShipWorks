@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 using log4net;
 using Interapptive.Shared.Business;
 
@@ -19,8 +20,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
     /// </summary>
     public class OnTracRates : OnTracRequest
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(OnTracRates));
-
         private readonly HttpVariableRequestSubmitter httpVariableRequestSubmitter;
 
         /// <summary>
@@ -63,15 +62,39 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                 OnTracServiceType onTracServiceType =
                     EnumHelper.GetEnumByApiValue<OnTracServiceType>(rateQuote.Service.ToString());
 
+                DateTime? expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(rateQuote.TransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+
                 rates.Add(
                     new RateResult(
                         EnumHelper.GetDescription(onTracServiceType),
                         rateQuote.TransitDays.ToString(),
-                        (decimal) rateQuote.TotalCharge,
-                        onTracServiceType));
+                        (decimal)rateQuote.TotalCharge,
+                        onTracServiceType)
+                    {
+                        ExpectedDeliveryDate = expectedDeliveryDate,
+                        ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays)
+                    });
             }
 
             return new RateGroup(rates);
+        }
+
+        /// <summary>
+        /// Gets the service level.
+        /// </summary>
+        private static ServiceLevelType GetServiceLevel(OnTracServiceType serviceType, int transitDays)
+        {
+            switch (serviceType)
+            {
+                case OnTracServiceType.Sunrise:
+                case OnTracServiceType.SunriseGold:
+                case OnTracServiceType.PalletizedFreight:
+                    return ServiceLevelType.OneDay;
+                default:
+                case OnTracServiceType.None:
+                case OnTracServiceType.Ground:
+                    return ShippingManager.GetServiceLevel(transitDays);
+            }
         }
 
         /// <summary>

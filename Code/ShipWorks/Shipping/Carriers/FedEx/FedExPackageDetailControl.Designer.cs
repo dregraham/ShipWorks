@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void InitializeComponent()
         {
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.packagesGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumn = new Divelements.SandGrid.GridColumn();
             this.labelPackages = new System.Windows.Forms.Label();
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.gridColumn});
             this.packagesGrid.Location = new System.Drawing.Point(121, 3);
             this.packagesGrid.Name = "packagesGrid";
-            this.packagesGrid.Renderer = windowsXPRenderer2;
+            this.packagesGrid.Renderer = windowsXPRenderer1;
             this.packagesGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
                         new Divelements.SandGrid.GridCell("Package 1")}),
@@ -185,9 +185,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // priorityAlertControl
             // 
-            this.priorityAlertControl.Location = new System.Drawing.Point(38, 3);
+            this.priorityAlertControl.Location = new System.Drawing.Point(7, 3);
             this.priorityAlertControl.Name = "priorityAlertControl";
-            this.priorityAlertControl.Size = new System.Drawing.Size(296, 138);
+            this.priorityAlertControl.Size = new System.Drawing.Size(332, 138);
             this.priorityAlertControl.TabIndex = 16;
             // 
             // labelDryIceWeight

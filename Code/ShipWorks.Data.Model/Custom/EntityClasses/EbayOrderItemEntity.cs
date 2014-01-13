@@ -16,6 +16,17 @@ namespace ShipWorks.Data.Model.EntityClasses
         static Func<EbayOrderItemEntity, int> effectiveCheckoutStatusAltorithm = null;
 
         /// <summary>
+        /// Unique identifier of a line item, as defined by eBay based on ItemID and TransactionID
+        /// </summary>
+        public string OrderLineItemID
+        {
+            get
+            {
+                return string.Format("{0}-{1}", EbayItemID, EbayTransactionID);
+            }
+        }
+
+        /// <summary>
         /// Set the algorithm to use for calculating the effective paymeant status of the item
         /// </summary>
         public static void SetEffectivePaymentMethodAlgorithm(Func<EbayOrderItemEntity, int> algorithm)

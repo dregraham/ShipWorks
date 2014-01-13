@@ -17,30 +17,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private readonly IExpress1RegistrationValidator registrationValidator;
         private readonly IExpress1RegistrationGateway registrationGateway;
         private readonly IExpress1RegistrationRepository registrationRepository;
+        private readonly IExpress1PasswordEncryptionStrategy passwordEncryptionStrategy;
         
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Express1Registration"/> class using default values
-        /// for the gateway, repository, and validator.
-        /// </summary>
-        /// <param name="shipmentType">Type of the shipment.</param>
-        public Express1Registration(ShipmentTypeCode shipmentType)
-            : this (shipmentType, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new Express1RegistrationValidator())
-        { }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1Registration" /> class.
         /// </summary>
         /// <param name="shipmentType">Type of shipment this account will be used for.</param>
         /// <param name="gateway">The gateway used to interface with the Express1 API</param>
         /// <param name="repository">Repository used to interface with the underlying account entities</param>
+        /// <param name="encryptionStrategy">An abstraction for the strategy used for encrypting passwords since 
+        /// this can vary depending on the underlying Express1 carrier.</param>
         /// <param name="validator">Validator that will be used to ensure data is correct</param>
-        public Express1Registration(ShipmentTypeCode shipmentType, IExpress1RegistrationGateway gateway, IExpress1RegistrationRepository repository, IExpress1RegistrationValidator validator)
+        public Express1Registration(ShipmentTypeCode shipmentType, IExpress1RegistrationGateway gateway, IExpress1RegistrationRepository repository, IExpress1PasswordEncryptionStrategy encryptionStrategy, IExpress1RegistrationValidator validator)
         {
             ShipmentTypeCode = shipmentType;
 
             registrationValidator = validator;
             registrationGateway = gateway;
             registrationRepository = repository;
+            passwordEncryptionStrategy = encryptionStrategy;
 
             UserName = string.Empty;
             PlainTextPassword = string.Empty;
@@ -136,7 +131,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// </summary>
         public string EncryptedPassword
         {
-            get { return SecureText.Encrypt(PlainTextPassword, UserName); }
+            get
+            {
+                // Defer to the password encryption strategy since this can vary by
+                // the underlying Express1 carrier (Endicia or Stamps.com)
+                return passwordEncryptionStrategy.EncryptPassword(this);
+            }
         }
 
         /// <summary>

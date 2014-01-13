@@ -14,14 +14,17 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -550,9 +553,22 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Get the insurance data that describes what type of insurance is being used and on what parcels.
+        /// Get the total packages contained by the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override int GetParcelCount(ShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return shipment.IParcel.Packages.Count;
+        }
+
+        /// <summary>
+        /// Get the parcel data that describes details about a particular parcel
+        /// </summary>
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
@@ -562,7 +578,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (parcelIndex >= 0 && parcelIndex < shipment.IParcel.Packages.Count)
             {
                 IParcelPackageEntity package = shipment.IParcel.Packages[parcelIndex];
-                return new InsuranceChoice(shipment, package, package, package);
+
+                return new ShipmentParcel(shipment, package.IParcelPackageID,
+                    new InsuranceChoice(shipment, package, package, package),
+                    new DimensionsAdapter(package));
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
@@ -676,7 +695,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                                                         .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
                                                         .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
 
-                            RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType));
+                            RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
+                            {
+                                ServiceLevel = ServiceLevelType.Anytime
+                            };
+
                             results.Add(serviceRate);
                         }
 
@@ -900,6 +923,36 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             return location.ToString();
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the iParcel shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new iParcelBestRateBroker();
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address and any store specific logic that may impact whether customs
+        /// is required (i.e. eBay GSP).
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            bool requiresCustoms = base.IsCustomsRequired(shipment);
+
+            if (shipment.OriginCountryCode == "US")
+            {
+                // i-Parcel allows customers to upload their SKUs and customs info, so we don't need to enter it in ShipWorks
+                // So Customs is never required.
+                requiresCustoms = false;
+            }
+
+            return requiresCustoms;
         }
     }
 }

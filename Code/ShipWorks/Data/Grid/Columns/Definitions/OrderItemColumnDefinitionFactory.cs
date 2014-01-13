@@ -200,8 +200,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             },
 
                         new GridColumnDefinition("{85CFDCF5-4243-4dc0-90CC-777CEC004768}",
-                            new GridEnumDisplayType<EbayEffectiveCheckoutStatus>(EnumSortMethod.Description), "Checkout Status", EbayEffectiveCheckoutStatus.AwaitingPayment,
+                            new GridEnumDisplayType<EbayEffectivePaymentStatus>(EnumSortMethod.Description), "Payment Status", EbayEffectivePaymentStatus.AwaitingPayment,
                             EbayOrderItemFields.EffectiveCheckoutStatus)
+                            {
+                                StoreTypeCode = StoreTypeCode.Ebay
+                            },
+
+                        new GridColumnDefinition("{B79CDE81-97FA-4F09-B900-5F26DA061232}",
+                            new GridBooleanDisplayType() { TrueText = "Shipped", FalseText = "Not Shipped" }, "Shipped Status", true,
+                            EbayOrderItemFields.MyEbayShipped)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay
                             },
@@ -229,23 +236,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.Ebay
                             }, 
 
-                        new GridColumnDefinition("{3A8DB5E8-7234-47a6-AB4C-0A650CE2C581}",
-                            new GridTextDisplayType(), "Product Name", "White-Shirt",
-                            EbayOrderItemFields.SellingManagerProductName)
-                            {
-                                StoreTypeCode = StoreTypeCode.Ebay,
-                            },
-
                         new GridColumnDefinition("{B00E4A3E-D224-4ea7-B6AF-172FA93BBC8C}",
                             new GridTextDisplayType(), "Sales Record #", "64505",
                             EbayOrderItemFields.SellingManagerRecord)
-                            {
-                                StoreTypeCode = StoreTypeCode.Ebay,
-                            },
-
-                        new GridColumnDefinition("{269D6E7B-DF92-4641-946E-E797B0143C08}",
-                            new GridTextDisplayType(), "Part #", "A499132-F",
-                            EbayOrderItemFields.SellingManagerProductPart)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay,
                             },

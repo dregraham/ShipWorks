@@ -213,6 +213,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -299,7 +301,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             insuranceControl.LoadInsuranceChoices(
                 LoadedShipments.Select(
-                    shipment => ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, 0)));
+                    shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
         }
 
         /// <summary>

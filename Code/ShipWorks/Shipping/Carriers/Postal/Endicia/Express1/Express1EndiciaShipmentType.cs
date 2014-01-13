@@ -3,7 +3,10 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -105,7 +108,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public override Form CreateSetupWizard()
         {
-            return new Express1EndiciaSetupWizard();
+            Express1Registration registration = new Express1Registration(ShipmentTypeCode, new EndiciaExpress1RegistrationGateway(), new EndiciaExpress1RegistrationRepository(), 
+                new EndiciaExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
+
+            EndiciaAccountManagerControl accountManagerControl = new EndiciaAccountManagerControl();
+            EndiciaOptionsControl optionsControl = new EndiciaOptionsControl(EndiciaReseller.Express1);
+            EndiciaBuyPostageDlg postageDlg = new EndiciaBuyPostageDlg();
+
+            return new Express1SetupWizard(postageDlg, accountManagerControl, optionsControl, registration, EndiciaAccountManager.Express1Accounts);
         }
 
         /// <summary>
@@ -142,6 +152,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             }
 
             throw new EndiciaException(string.Format("{0} is not supported when shipping with Endicia.", PostalUtility.GetPostalServiceTypeDescription(serviceType)));
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Express1 for Endicia shipment type.
+        /// </summary>
+        /// <returns>An instance of a NullShippingBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new Express1EndiciaBestRateBroker();
         }
     }
 }

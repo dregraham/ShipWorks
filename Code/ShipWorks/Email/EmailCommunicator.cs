@@ -566,7 +566,13 @@ namespace ShipWorks.Email
             mailMessage.Date = new MailDateTime(outboxItem.SentDate.ToLocalTime());
 
             // The plain text part
-            mailMessage.BodyText = DataResourceManager.LoadResourceReference(outboxItem.PlainPartResourceID).ReadAllText();
+            DataResourceReference plainEmailText = DataResourceManager.LoadResourceReference(outboxItem.PlainPartResourceID);
+            if (plainEmailText == null)
+            {
+                log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for PlainPartResourceID {1}.", outboxItem.EmailOutboundID, outboxItem.PlainPartResourceID);
+                throw new EmailException("An error has occurred retrieving the body of the email.");
+            }
+            mailMessage.BodyText = plainEmailText.ReadAllText();
 
             // Apply the html part
             if (outboxItem.HtmlPartResourceID != null)

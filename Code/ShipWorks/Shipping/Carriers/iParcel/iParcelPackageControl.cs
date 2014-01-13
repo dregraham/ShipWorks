@@ -262,7 +262,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     {
                         weight.ApplyMultiWeight(package.Weight);
 
-                        insuranceToLoad.Add(shipmentType.GetParcelInsuranceChoice(package.IParcelShipment.Shipment, package.IParcelShipment.Packages.IndexOf(package)));
+                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.IParcelShipment.Shipment, package.IParcelShipment.Packages.IndexOf(package)).Insurance);
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
 
                         skuAndQuantity.ApplyMultiText(package.SkuAndQuantities);

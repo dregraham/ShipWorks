@@ -43,6 +43,8 @@ using System.Threading.Tasks;
 using ShipWorks.Properties;
 using Divelements.SandGrid;
 using ShipWorks.UI.Controls;
+using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Data.Administration
 {
@@ -356,6 +358,7 @@ namespace ShipWorks.Data.Administration
                 }
                 else
                 {
+                    if (radioRestoreBackupLocalDb.Checked) return ChooseWiselyOption.Restore;
                     return ChooseWiselyOption.Connect;
                 }
             }
@@ -1136,11 +1139,12 @@ namespace ShipWorks.Data.Administration
 
             // Create another variable for closure purposes
             SqlSession backgroundSession = connectionSession;
+            SqlSessionConfiguration firstTryConfiguration = !string.IsNullOrEmpty(sqlSession.Configuration.ServerInstance) ? sqlSession.Configuration : (SqlSession.IsConfigured ? SqlSession.Current.Configuration : null);
 
             // Start the background task to try to log in and figure out the background databases...
             var task = Task.Factory.StartNew(() =>
                 {
-                    SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, backgroundSession.Configuration);
+                    SqlSessionConfiguration configuration = SqlInstanceUtility.DetermineCredentials(backgroundSession.Configuration.ServerInstance, firstTryConfiguration);
 
                     if (configuration != null)
                     {
@@ -2190,7 +2194,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// The "complete" page is being shown.
         /// </summary>
-        private void OnShownComplete(object sender, EventArgs e)
+        private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
             // This is so we dont delete the pending db in the OnClose
             pendingDatabaseCreated = false;
@@ -2198,16 +2202,24 @@ namespace ShipWorks.Data.Administration
 
             sqlSession.SaveAsCurrent();
 
-            // We now have a new session
-            if (SqlSchemaUpdater.IsCorrectSchemaVersion())
+            // If we created this database, then seamlessly continue this wizard into the add store wizard
+            if (ChooseWisely == ChooseWiselyOption.Create)
             {
-                UserSession.InitializeForCurrentDatabase();
+                AddStoreWizard.ContinueAfterCreateDatabase(this, swUsername.Text.Trim(), swPassword.Text);
             }
-
-            // If we created the admin user, go ahead and log that user in
-            if (adminUserCreated)
+            else
             {
-                UserSession.Logon(swUsername.Text.Trim(), swPassword.Text, true);
+                // We now have a new session
+                if (SqlSchemaUpdater.IsCorrectSchemaVersion())
+                {
+                    UserSession.InitializeForCurrentDatabase();
+                }
+
+                // If we created the admin user, go ahead and log that user in
+                if (adminUserCreated)
+                {
+                    UserSession.Logon(swUsername.Text.Trim(), swPassword.Text, true);
+                }
             }
         }
 
@@ -2223,7 +2235,6 @@ namespace ShipWorks.Data.Administration
         }
 
         #endregion    
-
     }
 }
 

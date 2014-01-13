@@ -26,6 +26,8 @@ using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
 using ShipWorks.Stores;
 using ShipWorks.Actions;
+using ShipWorks.Users.Audit;
+using ShipWorks.SqlServer.Data.Auditing;
 
 namespace ShipWorks.Data
 {
@@ -99,7 +101,10 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
 
-            DeleteWithCascade(EntityType.OrderEntity, orderID);
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            {
+                DeleteWithCascade(EntityType.OrderEntity, orderID);
+            }
 
             DataProvider.RemoveEntity(orderID);
         }
@@ -123,7 +128,10 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.CustomersDelete, customerID);
 
-            DeleteWithCascade(EntityType.CustomerEntity, customerID);
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            {
+                DeleteWithCascade(EntityType.CustomerEntity, customerID);
+            }
 
             DataProvider.RemoveEntity(customerID);
         }

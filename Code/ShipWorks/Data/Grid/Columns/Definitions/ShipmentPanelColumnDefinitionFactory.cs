@@ -18,6 +18,7 @@ using ShipWorks.Shipping.CoreExtensions.Grid;
 using ShipWorks.Stores.Content.Panels.CoreExtensions.Grid;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -63,6 +64,16 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     "Process Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ShipmentFields.ProcessedDate),
 
+                new GridColumnDefinition("{0D458821-9A30-479D-AE84-1F517EC49458}", 
+                    new GridUserDisplayType(), "Processed By", new object[] { "Joe", Resources.user_16 },
+                    ShipmentFields.ProcessedUserID,
+                    UserFields.Username),
+
+                new GridColumnDefinition("{E8F8F052-5797-4ABC-AAD1-C751A13F0ADA}", 
+                    new GridComputerDisplayType(), "Processed On", "\\ShippingPC",
+                    ShipmentFields.ProcessedComputerID,
+                    ComputerFields.Name),
+
                 new GridColumnDefinition("{4037EBEF-0391-4b07-80C3-575BEB07E201}",
                     new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None }, 
                     "Ship Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
@@ -72,6 +83,16 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None }, 
                     "Void Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ShipmentFields.VoidedDate),
+
+                new GridColumnDefinition("{D53E7614-1771-4942-8CF9-F419B43F01A0}", 
+                    new GridUserDisplayType(), "Voided By", new object[] { "Joe", Resources.user_16 },
+                    ShipmentFields.VoidedUserID,
+                    UserFields.Username),
+
+                new GridColumnDefinition("{C6258887-A20F-458E-8C59-2F91DD174881}", 
+                    new GridComputerDisplayType(), "Voided On", "\\ShippingPC",
+                    ShipmentFields.VoidedComputerID,
+                    ComputerFields.Name),
 
                 new GridColumnDefinition("{B7195820-4EA1-4815-9E8B-9857C5D59091}",
                     new GridWeightDisplayType(), "Weight", 3.1,

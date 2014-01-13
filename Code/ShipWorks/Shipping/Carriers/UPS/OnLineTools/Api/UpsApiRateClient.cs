@@ -261,6 +261,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 string warning = XPathUtility.Evaluate(shipmentNode, "RatedShipmentWarning", "");
                 decimal totalCharge = XPathUtility.Evaluate(shipmentNode, "TotalCharges/MonetaryValue", (decimal) 0.0);
                 decimal negotiatedTotal = XPathUtility.Evaluate(shipmentNode, "NegotiatedRates/NetSummaryCharges/GrandTotal/MonetaryValue", (decimal) -1.0);
+                
+                int? guaranteedDaysToDelivery = XPathUtility.Evaluate(shipmentNode, "GuaranteedDaysToDelivery", -1);
+                if (guaranteedDaysToDelivery == -1)
+                {
+                    guaranteedDaysToDelivery = null;
+                }
+
 
                 if (!string.IsNullOrEmpty(warning))
                 {
@@ -290,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                 if (rates.All(r => r.Service != serviceType))
                 {
-                    rates.Add(new UpsServiceRate(serviceType.Value, amount, negotiated));
+                    rates.Add(new UpsServiceRate(serviceType.Value, amount, negotiated, guaranteedDaysToDelivery));
                 }
             }
 

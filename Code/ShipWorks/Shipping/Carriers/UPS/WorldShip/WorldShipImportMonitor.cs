@@ -151,8 +151,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Fetch the records to import
             IRelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.Relations.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentID, "", "", JoinHint.Inner);
+            bucket.Relations.Add(WorldShipProcessedEntity.Relations.WorldShipShipmentEntityUsingShipmentIdCalculated, "", "", JoinHint.Left);
             bucket.PredicateExpression.AddWithAnd(WorldShipShipmentFields.ShipmentProcessedOnComputerID == thisComputerID | WorldShipShipmentFields.ShipmentProcessedOnComputerID == System.DBNull.Value);
+            adapter.FetchEntityCollection(importList, bucket, 0);
+
+            return importList;
+        }
+
+        /// <summary>
+        /// Gets a list of WorldShipProcessed entities that need to be deleted
+        /// </summary>
+        private static WorldShipProcessedCollection GetAbandonedWorldShipProcessedEntitiesForDeletion(SqlAdapter adapter)
+        {
+            WorldShipProcessedCollection importList = new WorldShipProcessedCollection();
+
+            // Fetch the records to delete
+            IRelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.PredicateExpression.AddWithAnd(WorldShipProcessedFields.ShipmentIdCalculated == System.DBNull.Value);
             adapter.FetchEntityCollection(importList, bucket, 0);
 
             return importList;
@@ -166,40 +181,55 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             // Don't do in a transaction, we'll get each row in a transaction later
             using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                WorldShipProcessedCollection importList = GetWorldShipProcessedEntitiesForProcessing(adapter);
-
-                // Only do the work if we have something to process
-                if (importList.Count() >= 0)
+                using (WorldShipProcessedCollection importList = GetWorldShipProcessedEntitiesForProcessing(adapter))
                 {
-                    List<WorldShipProcessedEntity> toImport = importList.ToList();
-                    WorldShipUtility.FixNullShipmentIDs(toImport);
-
-                    // Get a list of ws processed entries that are NOT Voids
-                    // To support the old mappings, include any where the VoidIndicator is null.  And if it is not null, then check that it is "N"
-                    var worldShipShipments = toImport.Where(i => (i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N")).GroupBy(import => import.ShipmentID,
-                        (shipmentId, importEntries) =>
-                            new WorldShipProcessedGrouping(shipmentId,
-                                                           importEntries.Where(i => i.ShipmentID == shipmentId && ((i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList()
-                                                          )
-                        );
-
-                    // Process each shipped entry
-                    foreach (WorldShipProcessedGrouping worldShipProcessGroup in worldShipShipments)
+                    // Only do the work if we have something to process
+                    if (importList.Count() >= 0)
                     {
-                        ProcessEntry(worldShipProcessGroup);
+                        List<WorldShipProcessedEntity> toImport = importList.ToList();
+                        WorldShipUtility.FixInvalidShipmentIDs(toImport);
+
+                        // We called FixNullShipmentIDs, so if there are any, ignore them.
+                        toImport = toImport.Where(i => !string.IsNullOrWhiteSpace(i.ShipmentID)).ToList();
+
+                        // Get a list of ws processed entries that are NOT Voids
+                        // To support the old mappings, include any where the VoidIndicator is null.  And if it is not null, then check that it is "N"
+                        var worldShipShipments = toImport.Where(i => (i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
+
+                        List<WorldShipProcessedGrouping> worldShipProcessedGroupings = 
+                            worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
+                                (shipmentId, importEntries) =>
+                                    new WorldShipProcessedGrouping(shipmentId,
+                                        importEntries.Where(i => (i.ShipmentIdCalculated == shipmentId || i.ShipmentID == shipmentId.ToString()) && ((i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList())
+                                ).ToList();
+
+                        // Process each shipped entry
+                        foreach (WorldShipProcessedGrouping worldShipProcessGroup in worldShipProcessedGroupings)
+                        {
+                            ProcessEntry(worldShipProcessGroup);
+                        }
+
+                        // Now Process Voids
+                        // The old mappings did not support voids, so only include entries where VoidIndicator is not null and equals "Y"
+                        var voidedWorldShipShipments = toImport.Where(i => i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "Y").GroupBy(import => import.ShipmentIdCalculated,
+                            (shipmentId, importEntries) =>
+                                new WorldShipProcessedGrouping(shipmentId, importEntries.Where(i => i.ShipmentIdCalculated == shipmentId && i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "Y").ToList())
+                            );
+
+                        // Process each voided entry
+                        foreach (WorldShipProcessedGrouping worldShipProcessGroup in voidedWorldShipShipments)
+                        {
+                            ProcessVoidEntry(worldShipProcessGroup);
+                        }
                     }
+                }
 
-                    // Now Process Voids
-                    // The old mappings did not support voids, so only include entries where VoidIndicator is not null and equals "Y"
-                    var voidedWorldShipShipments = toImport.Where(i => i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "Y").GroupBy(import => import.ShipmentID,
-                        (shipmentId, importEntries) =>
-                            new WorldShipProcessedGrouping(shipmentId, importEntries.Where(i => i.ShipmentID == shipmentId && i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "Y").ToList())
-                        );
-
-                    // Process each voided entry
-                    foreach (WorldShipProcessedGrouping worldShipProcessGroup in voidedWorldShipShipments)
+                // Delete any abandoned WorldShipProcessedEntities
+                using (WorldShipProcessedCollection deleteList = GetAbandonedWorldShipProcessedEntitiesForDeletion(adapter))
+                {
+                    if (deleteList.Count > 0)
                     {
-                        ProcessVoidEntry(worldShipProcessGroup);
+                        adapter.DeleteEntityCollection(deleteList);
                     }
                 }
             }
@@ -217,15 +247,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         /// <param name="shipmentIdToTest">String representation of the shipmentID to find</param>
         /// <returns>ShipmentEntity if a shipment is found for shipmentIdToTest, otherwise null is returned. </returns>
-        private static ShipmentEntity GetShipment(string shipmentIdToTest)
+        private static ShipmentEntity GetShipment(long? shipmentIdToTest)
         {
             // First we need to find the shipment
             long shipmentID = 0;
             ShipmentEntity shipment = null;
 
             // Try to convert the string shipment ID to a usable long
-            if (long.TryParse(shipmentIdToTest, out shipmentID))
+            if (shipmentIdToTest.HasValue)
             {
+                shipmentID = shipmentIdToTest.Value;
+
                 // test to make sure we have a real shipment id
                 if (shipmentID % 1000 != EntityUtility.GetEntitySeed(EntityType.ShipmentEntity))
                 {
@@ -242,7 +274,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
             else
             {
-                log.WarnFormat("ShipmentID contained '{0}' which was not convertable to a long.", shipmentIdToTest);
+                log.WarnFormat("ShipmentID was null");
                 return null;
             }
 
@@ -272,10 +304,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     {
                         // The shipment went away...  
                         // Ensure the original exported records are deleted
-                        long shipmentID;
-                        if (long.TryParse(worldShipProcessedGrouping.ShipmentID, out shipmentID))
+                        if (worldShipProcessedGrouping.ShipmentID.HasValue)
                         {
-                            adapter.DeleteEntity(new WorldShipShipmentEntity(shipmentID));
+                            adapter.DeleteEntity(new WorldShipShipmentEntity(worldShipProcessedGrouping.ShipmentID.Value));
                         }
 
                         // Commit the delete and return.
@@ -309,8 +340,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                             {
                                 // In case after the upgrade, WS still had entries with no UpsPackageId, we need to support them
                                 // See if we can find a package that does not yet have a tracking number
-                                upsPackage = upsShipment.Packages.FirstOrDefault(p => (string.IsNullOrEmpty(p.TrackingNumber) && !string.IsNullOrEmpty(import.TrackingNumber)) ||
-                                                                                            (string.IsNullOrEmpty(p.UspsTrackingNumber) && !string.IsNullOrEmpty(import.UspsTrackingNumber)));
+                                upsPackage = upsShipment.Packages.FirstOrDefault(p => (string.IsNullOrEmpty(p.TrackingNumber.Trim()) && !string.IsNullOrEmpty(import.TrackingNumber.Trim())) ||
+                                                                                            (string.IsNullOrEmpty(p.UspsTrackingNumber.Trim()) && !string.IsNullOrEmpty(import.UspsTrackingNumber.Trim())));
                             }
 
                             // This is the case where the user created a new package in WS, so create a new one and add to the shipment

@@ -19,8 +19,9 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
@@ -35,12 +36,15 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using Moq;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 {   
-    public class FedExPrototypeFixture 
+    public class FedExPrototypeFixture
     {
+        private readonly Mock<ExecutionMode> executionMode;
+
         public FedExPrototypeFixture()
         {
             // Sleep to allow time to attach the debugger to runner.exe if needed
@@ -62,7 +66,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     swInstance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
                     break;
                 case "john-pc":
-                    swInstance = Guid.Parse("{00000000-143F-4C2B-A80F-5CF0E121A909}");
+                    swInstance = Guid.Parse("{358e8025-ba77-43c7-8a4e-66af9860bd2c}");
                     break;
                 case "kevin-pc":
                     swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
@@ -70,9 +74,18 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 case "MSTest-vm":
                     swInstance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
                     break;
+                case "benz-pc":
+                    swInstance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
+                    break;
                 default:
                     throw new ApplicationException("Enter your machine and ShipWorks instance guid in FedExPrototypeFixture()");
             }
+
+            // Mock an execution mode for the various dependencies that use the execution
+            // mode to determine at whether the UI is running
+            executionMode = new Mock<ExecutionMode>();
+            executionMode.Setup(m => m.IsUIDisplayed).Returns(false);
+            executionMode.Setup(m => m.IsUISupported).Returns(true);
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
@@ -82,7 +95,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
                 Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
 
-                DataProvider.InitializeForApplication();
+                DataProvider.InitializeForApplication(executionMode.Object);
                 AuditProcessor.InitializeForApplication();
 
                 FedExAccountManager.InitializeForCurrentSession();
@@ -95,7 +108,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
                 UserManager.InitializeForCurrentUser();
 
-                UserSession.InitializeForCurrentDatabase();
+                UserSession.InitializeForCurrentDatabase(executionMode.Object);
                 UserSession.Logon("shipworks", "shipworks", true);
 
                 ShippingManager.InitializeForCurrentDatabase();
@@ -104,6 +117,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 TemplateManager.InitializeForCurrentSession();
             }
         }
+
 
         public string FedExAccountNumber { get; set; }
 
@@ -229,6 +243,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
         public string SaveLabel { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether save label is "true"
+        /// </summary>
+        public bool IsSaveLabel
+        {
+            get
+            {
+                return (String.IsNullOrWhiteSpace(SaveLabel) || SaveLabel.Equals("true", StringComparison.InvariantCultureIgnoreCase));
+            }
+        }
 
         /// <summary>
         /// Determines if a special key combination is active.  Can be used
@@ -288,19 +312,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             }
             finally
             {
-
                 CleanupLabel();
-
-                // Reset values that don't appear in every test case since it appears that the 
-                // value from the previous test doesn't carry over to the next test (the runner
-                // doesn't create a new instance of the fixture for each run)
-                ResetValues();
             }
         }
 
         private void CleanupLabel()
         {
-            if (String.IsNullOrWhiteSpace(SaveLabel) || !SaveLabel.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            if (!IsSaveLabel)
             {
                 string certificationDirectory = LogSession.LogFolder + "\\FedExCertification\\";
 
@@ -400,11 +418,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             SetPaymentInfo(shipment);
 
             shipment.FedEx.DropoffType = GetDropoffType();
-
-            if (string.IsNullOrWhiteSpace(FedExAccountNumber))
-            {
-                FedExAccountNumber = ShipperCountryCode == "CA" ? "602611841" : "602344126";
-            }
 
             // Default to the shipper country code
             shipment.FedEx.FedExAccountID = GetFedExAccountId(FedExAccountNumber, ShipperCountryCode); 
@@ -619,43 +632,28 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 shipment.OriginFax = string.Empty;
             }
         }
-
-        /// <summary>
-        /// Iterates through each property, in our ShipWorks MSTest objects, setting each to null
-        /// </summary>
-        public virtual void ResetValues()
-        {
-            Type type = this.GetType();
-            PropertyInfo[] properties = (from c in type.GetProperties()
-                                         where c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
-                                            && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
-                                            && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant()
-                                         select c).ToArray();
-
-            foreach (PropertyInfo item in properties)
-            {
-                try
-                {
-                    item.SetValue(this, null, null);
-                }
-                catch (Exception ex)
-                {
-                    string msg = ex.Message;
-                    throw;
-                }
-            }
-        }
-
+        
         protected virtual void SetLinearUnits(ShipmentEntity shipment)
         {
-            shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            if (string.IsNullOrWhiteSpace(PackageLineItemUnits) || PackageLineItemUnits == "IN")
+            {
+                shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            }
+            else
+            {
+                shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.CM;
+            }
         }
 
         protected virtual void SetHoldLocationData(ShipmentEntity shipment)
         {
-            if (!string.IsNullOrEmpty(HoldLocationType))
+            // Check all three locations because some of the tabs of the spreadsheet don't have a column for the hold at location type
+            if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToLower() == "hold_at_location") 
+                || (!string.IsNullOrEmpty(SpecialServiceType2) && SpecialServiceType2.ToLower() == "hold_at_location")
+                || (!string.IsNullOrEmpty(HoldLocationType)))
             {
-                shipment.FedEx.HoldLocationType = (int) GetLocationType();
+                // Default to the FedEx Express Station if there isn't a location type pulled in from the spreadsheet
+                shipment.FedEx.HoldLocationType = string.IsNullOrEmpty(HoldLocationType) ? (int)FedExLocationType.FedExExpressStation : (int) GetLocationType();
                 
                 shipment.FedEx.HoldCity = HoldCity;
                 shipment.FedEx.HoldCompanyName = HoldCompanyName;
@@ -748,6 +746,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 // Return the fedex account number of our account
                 accountNumber = "224813333";
             }
+            else
+                if (accountNumber.ToLower() == "canadian test account number")
+                {
+                    // Return the canadian fedex account number of our account
+                    accountNumber = "602611841";
+                }
 
             return accountNumber;
         }
@@ -760,6 +764,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         {
             FedExPayorType payorType = GetPaymentType(ResponsiblePartyPaymentType);
             shipment.FedEx.PayorTransportType = (int) payorType;
+            shipment.FedEx.PayorDutiesCountryCode = ResponsiblePartyCountryCode;
 
             if (payorType == FedExPayorType.Sender)
             {
@@ -783,10 +788,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         private void SetAlcoholData(ShipmentEntity shipment)
         {
+            bool hasAlcohol = ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "alcohol") ||
+                               (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "alcohol") ||
+                               (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol"));
+
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
-                // TODO: populate based on test data
-                package.ContainsAlcohol = false;
+                package.ContainsAlcohol = hasAlcohol;
             }
         }
 
@@ -816,7 +824,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         /// Sets the priorty alert data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        private void SetPriortyAlertData(ShipmentEntity shipment)
+        protected void SetPriortyAlertData(ShipmentEntity shipment)
         {
             if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT")
             {
@@ -970,6 +978,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                         break;
                 }
             }
+            else
+            {
+                shipment.FedEx.Signature = (int)FedExSignatureType.ServiceDefault;
+            }
         }
 
         /// <summary>
@@ -1021,18 +1033,51 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
         private void SetShipmentSpecialServiceType(ShipmentEntity shipment, string serviceType)
         {
             if (!string.IsNullOrEmpty(serviceType))
-            switch (serviceType.ToLower())
             {
-                case "cod":
-                case "cod each package":
-                    shipment.FedEx.CodEnabled = true;
-                    break;
-                case "inside_delivery":
-                    shipment.FedEx.FreightInsideDelivery = true;
-                    break;
-                case "saturday_delivery":
-                    shipment.FedEx.SaturdayDelivery = true;
-                    break;
+                switch (serviceType.ToLower())
+                {
+                    case "cod":
+                    case "cod each package":
+                        shipment.FedEx.CodEnabled = true;
+                        break;
+                    case "inside_delivery":
+                        shipment.FedEx.FreightInsideDelivery = true;
+                        break;
+                    case "saturday_delivery":
+                        shipment.FedEx.SaturdayDelivery = true;
+                        break;
+                    case "future_day_shipment":
+                        // Just need to set the ship date to a date in the future; choose the next Monday
+                        // so that Saturday pickup/delivery doesn't factor in
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
+                        break;
+                }
+
+                if (shipment.FedEx.SaturdayDelivery)
+                {
+                    // We have a Saturday delivery, so update the ship date accordingly. We don't do this in
+                    // the switch statement above to avoid the case where a future delivery may overwrite the 
+                    // shipment date depending on the order the special service type values get assigned
+                    // (i.e. SpecialServiceType1 vs. SpecialServiceType2)
+                    if (shipment.FedEx.Service == (int)FedExServiceType.PriorityOvernight
+                        || shipment.FedEx.Service == (int)FedExServiceType.FirstFreight
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx1DayFreight
+                        || shipment.FedEx.Service == (int) FedExServiceType.InternationalPriority)
+                    {
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
+                    }
+                    else  if (shipment.FedEx.Service == (int)FedExServiceType.FedEx2Day 
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayAM 
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayFreight)
+                    {
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Thursday);
+                    }
+                    else
+                    {
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Wednesday);
+                    }
+                
+                }
             }
         }
 
@@ -1247,6 +1292,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 case "FEDEX_1_DAY_FREIGHT": return FedExServiceType.FedEx1DayFreight;
                 case "FEDEX_2_DAY_FREIGHT": return FedExServiceType.FedEx2DayFreight;
                 case "FEDEX_3_DAY_FREIGHT": return FedExServiceType.FedEx3DayFreight;
+                case "FEDEX_FIRST_FREIGHT": return FedExServiceType.FirstFreight;
                 case "FEDEX_GROUND": return FedExServiceType.FedExGround;
                 case "GROUND_HOME_DELIVERY": return FedExServiceType.GroundHomeDelivery;
                 case "INTERNATIONAL_PRIORITY_FREIGHT": return FedExServiceType.InternationalPriorityFreight;

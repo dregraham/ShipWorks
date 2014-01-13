@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Carriers.Postal;

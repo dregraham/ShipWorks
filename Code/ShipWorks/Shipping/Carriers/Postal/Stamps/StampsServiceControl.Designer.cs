@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -35,20 +36,26 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.stampsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.hidePostalLabel = new System.Windows.Forms.Label();
             this.hidePostage = new System.Windows.Forms.CheckBox();
             this.labelStampsValidation = new System.Windows.Forms.Label();
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
             this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelMemo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
@@ -107,7 +114,7 @@
             // 
             // sectionShipment.ContentPanel
             // 
-            this.sectionShipment.ContentPanel.Controls.Add(this.label4);
+            this.sectionShipment.ContentPanel.Controls.Add(this.hidePostalLabel);
             this.sectionShipment.ContentPanel.Controls.Add(this.hidePostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo);
@@ -207,15 +214,15 @@
             this.stampsAccount.TabIndex = 3;
             this.stampsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
             // 
-            // label4
+            // hidePostalLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(33, 278);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(45, 13);
-            this.label4.TabIndex = 55;
-            this.label4.Text = "Stealth:";
+            this.hidePostalLabel.AutoSize = true;
+            this.hidePostalLabel.BackColor = System.Drawing.Color.Transparent;
+            this.hidePostalLabel.Location = new System.Drawing.Point(33, 278);
+            this.hidePostalLabel.Name = "hidePostalLabel";
+            this.hidePostalLabel.Size = new System.Drawing.Size(45, 13);
+            this.hidePostalLabel.TabIndex = 55;
+            this.hidePostalLabel.Text = "Stealth:";
             // 
             // hidePostage
             // 
@@ -257,6 +264,7 @@
             this.memo.Name = "memo";
             this.memo.Size = new System.Drawing.Size(210, 21);
             this.memo.TabIndex = 73;
+            this.memo.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelMemo
             // 
@@ -282,15 +290,21 @@
             this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
             this.panelTop.ResumeLayout(false);
@@ -308,11 +322,11 @@
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label label2;
         private ShipWorks.UI.Controls.LinkControl linkManageStampsAccounts;
-        private System.Windows.Forms.CheckBox hidePostage;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label labelStampsValidation;
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
         private Templates.Tokens.TemplateTokenTextBox memo;
         private System.Windows.Forms.Label labelMemo;
+        protected System.Windows.Forms.CheckBox hidePostage;
+        protected System.Windows.Forms.Label hidePostalLabel;
     }
 }

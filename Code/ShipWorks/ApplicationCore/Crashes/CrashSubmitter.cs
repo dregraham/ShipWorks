@@ -173,6 +173,9 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.AppendLine("Title: " + GetIdentifier(ex));
             sb.AppendLine();
 
+            sb.AppendFormat("[[version]{0}[/version]]", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            sb.AppendLine();
+
             // User Comments
             sb.AppendLine("User Comments:");
             if (string.IsNullOrEmpty(comments)) 

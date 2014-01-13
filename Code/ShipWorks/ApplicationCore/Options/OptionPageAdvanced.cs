@@ -53,6 +53,7 @@ namespace ShipWorks.ApplicationCore.Options
             updateCustomerShipping.Checked = config.CustomerUpdateShipping;
 
             auditNewOrders.Checked = config.AuditNewOrders;
+            auditDeletedOrders.Checked = config.AuditDeletedOrders;
         }
 
         /// <summary>
@@ -70,6 +71,7 @@ namespace ShipWorks.ApplicationCore.Options
             config.CustomerUpdateShipping = updateCustomerShipping.Checked;
 
             config.AuditNewOrders = auditNewOrders.Checked;
+            config.AuditDeletedOrders = auditDeletedOrders.Checked;
 
             ConfigurationData.Save(config);
         }

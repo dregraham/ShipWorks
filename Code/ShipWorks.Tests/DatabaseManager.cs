@@ -41,7 +41,7 @@ namespace ShipWorks.Tests
             sqlSession.Configuration.WindowsAuth = true;
 
             sqlScope = new SqlSessionScope(sqlSession);
-            auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditBehaviorDisabledState.Disabled);
+            auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled);
 
             ShipWorksSession.Initialize(instanceID);
 

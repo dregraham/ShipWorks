@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers
                 LoadedShipments.Where(shipment => shipment.ShipmentType != (int) ShipmentTypeCode.None && ShippingManager.IsShipmentTypeActivated((ShipmentTypeCode) shipment.ShipmentType))
                     .SelectMany(shipment =>
                         Enumerable.Range(0, ShipmentTypeManager.GetType(shipment).GetParcelCount(shipment))
-                            .Select(parcelIndex => ShipmentTypeManager.GetType(shipment).GetParcelInsuranceChoice(shipment, parcelIndex)));
+                            .Select(parcelIndex => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, parcelIndex).Insurance));
 
             insuranceControl.LoadInsuranceChoices(allInsurnace);
         }

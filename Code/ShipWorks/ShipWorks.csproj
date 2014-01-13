@@ -498,6 +498,12 @@
     <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.Designer.cs">
+      <DependentUpon>DateTimeFormatRequiredDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -555,6 +561,16 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.Designer.cs">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
       <SubType>Form</SubType>
@@ -587,6 +603,8 @@
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensions.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterDetail.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTechnology.cs" />
     <Compile Include="Data\Administration\DatabaseDetailsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -594,6 +612,12 @@
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Administration\DatabaseFileInfo.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupWizard.Designer.cs">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Administration\SqlDatabaseDetail.cs" />
     <Compile Include="Data\Administration\SimpleDatabaseSetupWizard.cs">
       <SubType>Form</SubType>
@@ -660,6 +684,25 @@
     <Compile Include="Data\Controls\PersonException.cs" />
     <Compile Include="Data\Connection\SqlSessionPermissionSet.cs" />
     <Compile Include="Data\Grid\Columns\Definitions\ServiceStatusColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.Designer.cs">
+      <DependentUpon>GridEnumDisplayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.Designer.cs">
+      <DependentUpon>GridOrderNumberDisplayEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridOrderNumberDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.Designer.cs">
+      <DependentUpon>GridStoreDisplayEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridComputerLimitedListDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\Decorators\GridServiceStopTimeDecorator.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridBooleanDisplayType.cs" />
@@ -867,14 +910,216 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ReturnStatusType.cs" />
     <Compile Include="Filters\Content\Conditions\ChildQuantityCondition.cs" />
+    <Compile Include="Properties\ShippingIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShippingIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\StoreIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\CreatePendingShipmentRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\IFedExNativeShipmentRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\ProcessShipmentRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\CreatePendingShipmentReply.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\IFedExNativeShipmentReply.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\ProcessShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescription.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtension.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.Designer.cs">
+      <DependentUpon>BestRateProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.Designer.cs">
+      <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.Designer.cs">
+      <DependentUpon>BestRateServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.Designer.cs">
+      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BrokerException.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\CoreExtensions\Filters\BestRateProcessedCondition.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\PackageBasedBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\ServiceLevelSpeedComparer.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevel.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalResellerBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
+    <Compile Include="Shipping\Editing\Enums\ServiceLevelType.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBrokerFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\NullShippingBroker.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExSmartPostCloseRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\Manipulators\FedExCloseClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\Manipulators\FedExCloseDateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\Manipulators\FedExCloseVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\Manipulators\FedExCloseWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\Manipulators\FedExPickupCarrierManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\FedExEndOfDayCloseRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\FedExGroundCloseResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\FedExSmartPostCloseResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\IFedExEndOfDayCloseRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\Manipulators\FedExGroundCloseReportManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\Manipulators\FedExSmartPostCloseEntityManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Close\Response\Manipulators\IFedExCloseResponseManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Enums\FedExCodAddTransportationChargeBasisType.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Enums\FedExDropoffType.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Enums\FedExLocationType.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Enums\FedExPriorityAlertEnhancementType.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Environment\FedExSettings.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Environment\FedExSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiCarrierException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExRequestFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExRequestManipulatorUtilities.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExResponseFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExServiceGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShipmentTokenProcessor.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerk.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapCarrierException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\FedExGlobalShipAddressRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressConstraintManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Response\FedExGlobalShipAddressResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExRequestFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShipmentTokenProcessor.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShippingClerk.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\PackageMovement\Request\FedExPackageMovementRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\PackageMovement\Request\Manipulators\FedExPackageMovementClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\PackageMovement\Request\Manipulators\FedExPackageMovementVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\PackageMovement\Request\Manipulators\FedExPackageMovementWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\PackageMovement\Response\FedExPackageMovementResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\FedExRateRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRatePackageDetailsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRatePackageSpecialServicesManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRatePackagingTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRatePickupManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateRateTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateRecipientManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateReturnTransitManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateShipmentSpecialServiceTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateShipperManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateSmartPostManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateTotalInsuredValueManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateTotalWeightManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateWebAuthenticationManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Response\FedExRateResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\FedExRegisterCspUserRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\FedExSubscriptionRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\FedExVersionCaptureRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\Manipulators\FedExCspContactManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\Manipulators\FedExRegistrationClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\Manipulators\FedExRegistrationVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\Manipulators\FedExRegistrationWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Request\Manipulators\FedExSubscriberManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExRegisterCspUserResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExSubscriptionResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExVersionCaptureResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\CreatePendingShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\FedExShipRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\IFedExNativeShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCertificationManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCodOptionsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExDangerousGoodsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExDryIceManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExEmailNotificationsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExFreightManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExHoldAtLocationManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExHomeDeliveryManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExLabelSpecificationManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExMasterTrackingManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackageDetailsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackageSpecialServicesManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackagingTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPickupManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPriorityAlertManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExRateTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExRecipientManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExReferenceManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExReturnsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExServiceTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShipmentSpecialServiceTypeManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShipperManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingChargesManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingRequestManipulatorBase.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExSmartPostManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExTotalInsuredValueManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExTotalWeightManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExAdmissibilityManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExBrokerManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExCommercialInvoiceManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExCustomsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExInternationalControlledExportManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExTrafficInArmsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\ProcessShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\FedExLabelRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\FedExShipResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExNativeShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentCodManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentCostManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentTrackingManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\FedExTrackRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingPackageIdentifierManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Response\FedExTrackingResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Response\Manipulators\FedExTrackingResponseManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Response\Manipulators\IFedExTrackingResponseManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\CreatePendingShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\ProcessShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\FedExVoidRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidParametersManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Void\Response\FedExVoidResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1ConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1PasswordEncryptionStrategy.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
       <SubType>UserControl</SubType>
@@ -924,6 +1169,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1Utilities.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ValidationError.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IScanFormShipmentTypeName.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1PurchasePostageDlg.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\Payment\Express1AchPaymentValidator.cs" />
@@ -972,8 +1218,11 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsIrregularIndicatorType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsShipmentChargeType.cs" />
@@ -1032,142 +1281,12 @@
     </Compile>
     <Compile Include="Shipping\Api\CarrierException.cs" />
     <Compile Include="Shipping\Api\CarrierRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\FedExGroundCloseRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\FedExSmartPostCloseRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\Manipulators\FedExCloseClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\Manipulators\FedExCloseDateManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\Manipulators\FedExCloseVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\Manipulators\FedExCloseWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Request\Manipulators\FedExPickupCarrierManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\FedExEndOfDayCloseRepository.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\FedExGroundCloseResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\FedExSmartPostCloseResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\IFedExEndOfDayCloseRepository.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\Manipulators\FedExGroundCloseReportManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\Manipulators\FedExSmartPostCloseEntityManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Close\Response\Manipulators\IFedExCloseResponseManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Enums\FedExCodAddTransportationChargeBasisType.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Enums\FedExDropoffType.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Enums\FedExLocationType.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Enums\FedExPriorityAlertEnhancementType.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Environment\FedExSettings.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Environment\FedExSettingsRepository.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExRequestFactory.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExResponseFactory.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExServiceGateway.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExShipmentTokenProcessor.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExShippingClerk.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExSoapException.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\FedExGlobalShipAddressRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressConstraintManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\GlobalShipAddress\Response\FedExGlobalShipAddressResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExRequestFactory.cs" />
     <Compile Include="Shipping\Api\ICarrierResponseFactory.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExApiException.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExServiceGateway.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExShipmentTokenProcessor.cs" />
     <Compile Include="Shipping\Api\IShippingClerk.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\IFedExShippingClerk.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\PackageMovement\Request\FedExPackageMovementRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\PackageMovement\Request\Manipulators\FedExPackageMovementClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\PackageMovement\Request\Manipulators\FedExPackageMovementVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\PackageMovement\Request\Manipulators\FedExPackageMovementWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\PackageMovement\Response\FedExPackageMovementResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\FedExRateRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRatePackageDetailsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRatePackageSpecialServicesManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRatePackagingTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRatePickupManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateRateTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateSmartPostManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateWebAuthenticationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateRecipientManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateReturnTransitManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateShipmentSpecialServiceTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateShipperManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateTotalInsuredValueManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Request\Manipulators\FedExRateTotalWeightManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Rate\Response\FedExRateResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\FedExRegisterCspUserRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\FedExSubscriptionRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\Manipulators\FedExCspContactManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\Manipulators\FedExRegistrationVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\Manipulators\FedExSubscriberManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Response\FedExRegisterCspUserResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Response\FedExSubscriptionResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\FedExShipRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExDangerousGoodsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExFreightManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExCertificationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExCodOptionsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExDryIceManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExEmailNotificationsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExHoldAtLocationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\International\FedExInternationalControlledExportManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExLabelSpecificationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExMasterTrackingManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExPackageDetailsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExPackageSpecialServicesManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExPackagingTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExPickupManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExPriorityAlertManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExRecipientManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExReturnsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShippingChargesManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExServiceTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShippingClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShippingRequestManipulatorBase.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExSmartPostManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExTotalWeightManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShipperManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\FedExRequestManipulatorUtilities.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExRateTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShipmentSpecialServiceTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExTotalInsuredValueManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShippingWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExShippingVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExReferenceManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\International\FedExAdmissibilityManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\International\FedExBrokerManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\International\FedExCommercialInvoiceManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\International\FedExCustomsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\FedExHomeDeliveryManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Request\Manipulators\International\FedExTrafficInArmsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\FedExLabelRepository.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\FedExShipResponse.cs" />
     <Compile Include="Shipping\Api\ICarrierRequestManipulator.cs" />
     <Compile Include="Shipping\Api\ILabelRepository.cs" />
     <Compile Include="Shipping\Api\ICarrierResponse.cs" />
     <Compile Include="Shipping\Api\ICarrierResponseManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\Manipulators\FedExShipmentCodManipulator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\Manipulators\FedExShipmentCostManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Shipping\Response\Manipulators\FedExShipmentTrackingManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\FedExVersionCaptureRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\Manipulators\FedExRegistrationClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Request\Manipulators\FedExRegistrationWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Registration\Response\FedExVersionCaptureResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Request\FedExTrackRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Request\Manipulators\FedExTrackingClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Request\Manipulators\FedExTrackingPackageIdentifierManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Request\Manipulators\FedExTrackingVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Request\Manipulators\FedExTrackingWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Response\FedExTrackingResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Response\Manipulators\FedExTrackingResponseManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Tracking\Response\Manipulators\IFedExTrackingResponseManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Void\Request\FedExVoidRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Void\Request\Manipulators\FedExVoidClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Void\Request\Manipulators\FedExVoidParametersManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Void\Request\Manipulators\FedExVoidVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\v2013\Void\Response\FedExVoidResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCustomsExportFilingOption.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCustomsOptionType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCustomsRecipientIdentificationType.cs" />
@@ -1395,42 +1514,6 @@
     <Compile Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracZipResponse.cs">
       <DependentUpon>OnTracZipResponse.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.Designer.cs">
-      <DependentUpon>EndiciaAutomaticExpress1Control.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.Designer.cs">
-      <DependentUpon>EndiciaExpress1ActivateDiscountDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.Designer.cs">
-      <DependentUpon>EndiciaExpress1ActualSavingsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RateDiscountedFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RateNotQualifiedFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.Designer.cs">
-      <DependentUpon>EndiciaExpress1RatePromotionFootnote.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1501,12 +1584,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaUtility.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceWrapper.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.Designer.cs">
-      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsForm.cs" />
     <Compile Include="Data\Import\Xml\GenericXmlOrderLoader.cs" />
@@ -1716,6 +1793,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipOdbcManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProcessedGrouping.cs" />
     <Compile Include="Shipping\CoreExtensions\ShippingFilterConditionUtility.cs" />
+    <Compile Include="Shipping\Editing\NonCompetitiveRateResult.cs" />
     <Compile Include="Shipping\Editing\RateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1761,6 +1839,7 @@
       <DependentUpon>InsuranceSelectionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsuranceInitialValueSource.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateShippingBroker.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileControl.cs" />
     <Compile Include="Shipping\ScanForms\DefaultScanFormBatchShipmentRepository.cs" />
     <Compile Include="Shipping\ScanForms\IScanFormBatchPrinter.cs" />
@@ -1786,7 +1865,11 @@
     <Compile Include="Shipping\ScanForms\ScanForm.cs" />
     <Compile Include="Shipping\ScanForms\IScanFormAccountRepository.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtility.cs" />
+    <Compile Include="Shipping\Settings\ShippingTypeCheckboxesControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
+    <Compile Include="Shipping\ShipmentParcel.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottle.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottleParameters.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />
@@ -1800,6 +1883,12 @@
     </Compile>
     <Compile Include="Stores\Management\ComputerDownloadPolicyDlg.Designer.cs">
       <DependentUpon>ComputerDownloadPolicyDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Management\StoreAddressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
+      <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
@@ -1953,63 +2042,42 @@
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorFlagType.cs" />
     <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\EbayTokenFactory.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\ITokenFactory.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Readers\ITokenReader.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Readers\SecureXmlFileTokenReader.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Readers\XmlFileTokenReader.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Readers\XmlTokenReader.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Repositories\EbayTokenRepository.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Repositories\ITokenRepository.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Token.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\TokenData.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\TokenExportDialog.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\TokenImportDialog.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Writers\ITokenWriter.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Writers\SecureXmlFileTokenWriter.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Writers\SecureXmlTokenWriter.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Writers\XmlFileTokenWriter.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Authorization\Writers\XmlTokenWriter.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemShippedStatusCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderSellingManagerRecordCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenFactory.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\ITokenReader.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\SecureXmlFileTokenReader.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\XmlFileTokenReader.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Readers\XmlTokenReader.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTangoTokenUtility.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayToken.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\TokenExportDialogController.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\TokenImportDialogController.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Writers\ITokenWriter.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Writers\SecureXmlFileTokenWriter.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Writers\SecureXmlTokenWriter.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Writers\XmlFileTokenWriter.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Tokens\Writers\XmlTokenWriter.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayEligibleForGspCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbaySelectedShippingMethodCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayGlobalShippingProgramEligibilityDisplayType.cs" />
-    <Compile Include="Stores\Platforms\Ebay\EbayDownloadSummary.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayDownloader.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayMissingGspReferenceException.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayUrlUtilities.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayWebClient.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayShippingMethod.cs" />
-    <Compile Include="Stores\Platforms\Ebay\IEbayWebClient.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Authorization\EbayTangoAuthorizationRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Authorization\EbayUserInfoRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Authorization\ITangoAuthorizationRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Authorization\IUserInfoRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\EbayCombinedPaymentRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\EbayFeedbackRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\EbayItemRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\EbaySellingRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\EbayTransactionRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\ICombinedPaymentRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\IFeedbackRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\IItemRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\ISellingRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Download\ITransactionRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetUserRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetOrdersRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetFeedbackRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayGetItemRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Requests\EbayRequestConfiguration.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\EbayRequestFactory.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\EbayCombineOrdersRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\EbayCompleteSaleRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\EbayItemTransactionRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\EbayLeaveFeedbackRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\EbaySendMessageToPartnerRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\EbayUserNotesRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\ICombineOrdersRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\ICompleteSaleRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\IItemTransactionRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\ILeaveFeedbackRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\ISendPartnerMessageRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\Fulfillment\IUserNotesRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\IRequestFactory.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\System\EbayTimeRequest.cs" />
-    <Compile Include="Stores\Platforms\Ebay\Requests\System\ITimeRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayAddOrderRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayCompleteSaleRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayLeaveFeedbackRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbaySendMessageRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbaySetUserNotesRequest.cs" />
+    <Compile Include="Stores\Platforms\Ebay\Requests\EbayOfficialTimeRequest.cs" />
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Policy.cs" />
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\EligibilityRule.cs" />
     <Compile Include="Stores\Platforms\Ebay\Shipping\GlobalShippingProgram\Rules\IGlobalShippingProgramRule.cs" />
@@ -2227,8 +2295,22 @@
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Yahoo\YahooOnlineUpdater.cs" />
-    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceChoiceOutline.cs" />
-    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipmentInsuranceOutline.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\BestRateEventsOutline.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.Designer.cs">
+      <DependentUpon>PrinterTypeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.Designer.cs">
+      <DependentUpon>ThermalPrinterLanguageWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\DimensionsOutline.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\InsuranceOutline.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\PackageOutline.cs" />
     <Compile Include="Templates\Tokens\ITokenSuggestionFactory.cs" />
     <Compile Include="Templates\Tokens\TokenSelectionMode.cs" />
     <Compile Include="UI\Controls\DecimalTextBox.cs">
@@ -2808,7 +2890,7 @@
     <Compile Include="Stores\Management\OnlineUpdateActionControlBase.Designer.cs">
       <DependentUpon>OnlineUpdateActionControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Management\AddStoreWizardLock.cs" />
+    <Compile Include="ApplicationCore\Setup\ShipWorksSetupLock.cs" />
     <Compile Include="Stores\Management\AddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2992,26 +3074,26 @@
       <DependentUpon>EbayOnlineUpdateTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayPayPalAddressStatusCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbaySellingManagerRecordCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayBuyerIDDisplayType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayFeedbackData.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Grid\GridEbayFeedbackDirection.cs" />
-    <Compile Include="Stores\Platforms\Ebay\EbayTokenCreateControl.cs">
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenCreateControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayTokenCreateControl.Designer.cs">
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenCreateControl.Designer.cs">
       <DependentUpon>EbayTokenCreateControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayTokenManageControl.cs">
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenManageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayTokenManageControl.Designer.cs">
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenManageControl.Designer.cs">
       <DependentUpon>EbayTokenManageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayTokenUpdateDlg.cs">
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenUpdateDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayTokenUpdateDlg.Designer.cs">
+    <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenUpdateDlg.Designer.cs">
       <DependentUpon>EbayTokenUpdateDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayFeedbackType.cs" />
@@ -3458,7 +3540,7 @@
     <Compile Include="Filters\Content\Conditions\Customers\CustomerPrintedCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Notes\NoteVisibilityCondition.cs" />
     <Compile Include="Filters\Content\Conditions\NumericStringCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayCheckoutStatusCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemPaymentStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackCondition.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -3562,10 +3644,7 @@
     <Compile Include="Filters\Management\QuickFilterHelper.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiAddressValidation.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiClose.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiException.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiPackageMovement.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiTrack.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExPhysicalPackagingType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCodPaymentType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCommercialInvoicePurpose.cs" />
@@ -3582,9 +3661,6 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExAccountEditorDlg.Designer.cs">
       <DependentUpon>FedExAccountEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiRate.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiRegistration.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiShip.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3823,7 +3899,6 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExSetupWizard.Designer.cs">
       <DependentUpon>FedExSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExApiCore.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExAccountManager.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExAccountManagerControl.cs">
       <SubType>UserControl</SubType>
@@ -3831,7 +3906,6 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExAccountManagerControl.Designer.cs">
       <DependentUpon>FedExAccountManagerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExException.cs" />
     <Compile Include="Shipping\ThermalDocTabType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExUtility.cs" />
@@ -4333,11 +4407,11 @@
     <Compile Include="Stores\Platforms\Ebay\OrderCombining\AcceptedPaymentsControl.Designer.cs">
       <DependentUpon>AcceptedPaymentsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrdersLoadedEventHandler.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrder.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrderFinder.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombinedOrderComponent.cs" />
-    <Compile Include="Stores\Platforms\Ebay\OrderCombining\CombineType.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayPotentialCombinedOrdersFoundEventHandler.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombinedOrderCandidate.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayPotentialCombinedOrderFinder.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombinedOrderComponent.cs" />
+    <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombinedOrderType.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4356,7 +4430,6 @@
     <Compile Include="Stores\Platforms\Ebay\OrderCombining\EbayCombineOrdersDlg.Designer.cs">
       <DependentUpon>EbayCombineOrdersDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Ebay\EbayDownloader.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayUtility.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayException.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayItemSelectionControl.cs">
@@ -4380,7 +4453,6 @@
       <DependentUpon>EbayStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Ebay\EbayStoreType.cs" />
-    <Compile Include="Stores\Platforms\Ebay\EbayWebClient.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbaySendMessageType.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayEffectiveCheckoutStatus.cs" />
     <Compile Include="Stores\Platforms\Ebay\Enums\EbayEffectivePaymentMethod.cs" />
@@ -5519,37 +5591,37 @@
     <Compile Include="Data\Administration\DetailedDatabaseSetupWizard.Designer.cs">
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\Reference.cs">
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -5633,6 +5705,10 @@
     <EmbeddedResource Include="ApplicationCore\Help\SubmitHelpRequestDlg.resx">
       <DependentUpon>SubmitHelpRequestDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.resx">
+      <DependentUpon>DateTimeFormatRequiredDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\EnglishCultureRequiredDlg.resx">
       <DependentUpon>EnglishCultureRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -5666,6 +5742,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DatabaseDetailsDlg.resx">
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Setup\ShipWorksSetupWizard.resx">
+      <DependentUpon>ShipWorksSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\SimpleDatabaseSetupWizard.resx">
       <DependentUpon>SimpleDatabaseSetupWizard.cs</DependentUpon>
@@ -6580,6 +6659,15 @@
     <EmbeddedResource Include="Data\Connection\SingleUserModeDlg.resx">
       <DependentUpon>SingleUserModeDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.resx">
+      <DependentUpon>GridEnumDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridOrderNumberDisplayEditor.resx">
+      <DependentUpon>GridOrderNumberDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridStoreDisplayEditor.resx">
+      <DependentUpon>GridStoreDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Import\Spreadsheet\Types\Csv\Editing\GenericCsvChangeSourceSchemaDlg.resx">
       <DependentUpon>GenericCsvChangeSourceSchemaDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -6657,6 +6745,23 @@
     <EmbeddedResource Include="ApplicationCore\SplashScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\ShippingIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
+      <DependentUpon>BestRateProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateServiceControl.resx">
+      <DependentUpon>BestRateServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
+      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.resx">
+      <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.resx">
       <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>
@@ -6748,32 +6853,11 @@
     <EmbeddedResource Include="Shipping\Carriers\OnTrac\OnTracSetupWizard.resx">
       <DependentUpon>OnTracSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaAutomaticExpress1Control.resx">
-      <DependentUpon>EndiciaAutomaticExpress1Control.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActivateDiscountDlg.resx">
-      <DependentUpon>EndiciaExpress1ActivateDiscountDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1ActualSavingsDlg.resx">
-      <DependentUpon>EndiciaExpress1ActualSavingsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateDiscountedFootnote.resx">
-      <DependentUpon>EndiciaExpress1RateDiscountedFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RateNotQualifiedFootnote.resx">
-      <DependentUpon>EndiciaExpress1RateNotQualifiedFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaExpress1RatePromotionFootnote.resx">
-      <DependentUpon>EndiciaExpress1RatePromotionFootnote.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.resx">
       <DependentUpon>EndiciaPassphraseChangeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.resx">
       <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSetupWizard.resx">
-      <DependentUpon>Express1EndiciaSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.resx">
       <DependentUpon>AutomaticExpress1ControlBase.cs</DependentUpon>
@@ -6880,6 +6964,9 @@
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormDlg.resx">
       <DependentUpon>ScanFormDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -6900,6 +6987,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ComputerDownloadPolicyDlg.resx">
       <DependentUpon>ComputerDownloadPolicyDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\StoreAddressControl.resx">
+      <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
@@ -6988,6 +7078,11 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\StoreIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>StoreIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ThreeDCart\CoreExtensions\Actions\ThreeDCartOrderUpdateTaskEditor.resx">
       <DependentUpon>ThreeDCartOrderUpdateTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -7027,6 +7122,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooAccountSettingsControl.resx">
       <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\IO\Hardware\Printers\PrinterTypeControl.resx">
+      <DependentUpon>PrinterTypeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.resx">
+      <DependentUpon>ThermalPrinterLanguageWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\DecimalTextBox.resx">
       <DependentUpon>DecimalTextBox.cs</DependentUpon>
@@ -7182,7 +7283,6 @@
       <DependentUpon>AddUserWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Audit\AuditBehaviorScope.cs" />
-    <Compile Include="Users\Audit\AuditBehaviorDisabledState.cs" />
     <Compile Include="Users\Audit\AuditBehaviorUser.cs" />
     <Compile Include="Users\Audit\AuditReason.cs" />
     <Compile Include="Users\Audit\AuditChangeGroup.cs" />
@@ -7309,10 +7409,10 @@
     <Compile Include="Data\Controls\PersonControl.Designer.cs">
       <DependentUpon>PersonControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\Controls\StoreContactControl.cs">
+    <Compile Include="Stores\Management\StoreContactControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Data\Controls\StoreContactControl.Designer.cs">
+    <Compile Include="Stores\Management\StoreContactControl.Designer.cs">
       <DependentUpon>StoreContactControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\PopupComboBox.cs">
@@ -7403,36 +7503,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -7543,19 +7613,17 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Shipping\Carriers\Equaship\Wsdl\equashipapi.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\AddressValidationService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\CloseService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\GlobalShipAddressService_v1.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\OpenShipService_v3.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\PackageMovementInformationService_v5.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\RegistrationService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\ReturnTagService_v1.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\TrackService_v6.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\v2013\Wsdl\UploadDocumentService_v1.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v3.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ReturnTagService_v1.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v1.wsdl" />
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -7620,106 +7688,106 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\CloseServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseDocumentsReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseDocumentsReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\GroundCloseReportsReprintReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReportsReprintReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\RateServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\Reference.map">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CancelPendingShipmentReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\SmartPostCloseReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\CreatePendingShipmentReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\SearchLocationsReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessShipmentReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PostalCodeInquiryReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ProcessTagReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\ServiceAvailabilityReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\Reference.map">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipmentReply.datasource">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegisterWebCspUserReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\ShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegistrationServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\SubscriptionReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\VersionCaptureReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelPendingShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CreatePendingShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SendNotificationsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryFaxReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryLetterReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\xmlsoap.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\Reference.map">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\GlobalShipAddressServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\SmartPostCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress\GlobalShipAddressServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress\Reference.map">
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PackageMovementInformationServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress\SearchLocationsReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\PackageMovementInformationServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\PostalCodeInquiryReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\ServiceAvailabilityReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\RegisterWebCspUserReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\RegistrationServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\SubscriptionReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\VersionCaptureReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\SignatureProofOfDeliveryFaxReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\SignatureProofOfDeliveryLetterReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\TrackNotificationReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\TrackReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\TrackServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ChallengeQuestionResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -8282,13 +8350,13 @@
     <EmbeddedResource Include="Stores\Platforms\Ebay\CoreExtensions\Actions\EbayOnlineUpdateTaskEditor.resx">
       <DependentUpon>EbayOnlineUpdateTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Ebay\EbayTokenCreateControl.resx">
+    <EmbeddedResource Include="Stores\Platforms\Ebay\Tokens\EbayTokenCreateControl.resx">
       <DependentUpon>EbayTokenCreateControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Ebay\EbayTokenManageControl.resx">
+    <EmbeddedResource Include="Stores\Platforms\Ebay\Tokens\EbayTokenManageControl.resx">
       <DependentUpon>EbayTokenManageControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Ebay\EbayTokenUpdateDlg.resx">
+    <EmbeddedResource Include="Stores\Platforms\Ebay\Tokens\EbayTokenUpdateDlg.resx">
       <DependentUpon>EbayTokenUpdateDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Ebay\WizardPages\EbayOnlineUpdateActionControl.resx">
@@ -9615,7 +9683,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>PersonControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Controls\StoreContactControl.resx">
+    <EmbeddedResource Include="Stores\Management\StoreContactControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StoreContactControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10025,6 +10093,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.5\3.5.4.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.6\3.6.2.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10055,6 +10127,11 @@
     <None Include="Resources\brush4.png" />
     <None Include="Resources\camera.png" />
     <None Include="Resources\barcode - Copy.png" />
+    <None Include="Resources\blank_paper.png" />
+    <None Include="Resources\box_closed_with_label.png" />
+    <None Include="Resources\calendar_7.png" />
+    <None Include="Resources\box_closed4.png" />
+    <None Include="Resources\box_closed5.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10124,6 +10201,19 @@
     <None Include="Resources\disk_blue - Copy.png" />
     <None Include="Resources\lightbulb - Copy.png" />
     <None Include="Resources\media_stop_red.png" />
+    <None Include="Resources\document1.png" />
+    <None Include="Resources\document_plain.png" />
+    <None Include="Resources\documents.png" />
+    <None Include="Resources\form_blue3.png" />
+    <None Include="Resources\form_blue4.png" />
+    <None Include="Resources\document_plain_packing_slip.png" />
+    <None Include="Resources\document_plain_packing_slip1.png" />
+    <None Include="Resources\document_plain_shipping_labels.png" />
+    <None Include="Resources\hand_thumb_up.png" />
+    <None Include="Resources\hand_thumb_up1.png" />
+    <None Include="Resources\key11.png" />
+    <None Include="Resources\check3.png" />
+    <None Include="Resources\dashed_outline.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10144,6 +10234,9 @@
     <None Include="Resources\money_envelope.png" />
     <None Include="Resources\monitor.png" />
     <None Include="Resources\mouse.png" />
+    <None Include="Resources\nav_down_green1.png" />
+    <None Include="Resources\nav_down_green2.png" />
+    <None Include="Resources\nav_up_blue.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />
@@ -10163,10 +10256,23 @@
     <None Include="Resources\paperclip - Copy.png" />
     <None Include="Resources\pin_blue - Copy.png" />
     <None Include="Resources\refresh - Copy.png" />
+    <None Include="Resources\printer21.png" />
+    <None Include="Resources\server_from_client1.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
     <None Include="Resources\ship2.png" />
+    <None Include="Resources\Shipping\Icons\endicia.png" />
+    <None Include="Resources\Shipping\Icons\express1.png" />
+    <None Include="Resources\Shipping\Icons\fedex.png" />
+    <None Include="Resources\Shipping\Icons\iparcel.png" />
+    <None Include="Resources\Shipping\Icons\ontrac.png" />
+    <None Include="Resources\Shipping\Icons\other.png" />
+    <None Include="Resources\Shipping\Icons\stamps.png" />
+    <None Include="Resources\Shipping\Icons\ups.png" />
+    <None Include="Resources\Shipping\Icons\usps.png" />
+    <None Include="Resources\Shipping\Icons\dhl.png" />
+    <None Include="Resources\Shipping\Icons\bestrate.png" />
     <Content Include="Resources\shipworks.ico" />
     <EmbeddedResource Include="Templates\Distribution\History.xml" />
     <None Include="Resources\template_snippet16.png" />
@@ -10211,6 +10317,52 @@
     <None Include="Resources\wrench.png" />
     <None Include="Resources\yinyang.png" />
     <None Include="Resources\shoppingcart - Copy.png" />
+    <None Include="Resources\Stores\Icons\3dcart.png" />
+    <None Include="Resources\Stores\Icons\amazon.png" />
+    <None Include="Resources\Stores\Icons\americommerce.png" />
+    <None Include="Resources\Stores\Icons\bigcommerce.png" />
+    <None Include="Resources\Stores\Icons\channeladvisor.png" />
+    <None Include="Resources\Stores\Icons\clickcartpro.png" />
+    <None Include="Resources\Stores\Icons\commerceinterface.png" />
+    <None Include="Resources\Stores\Icons\creloaded.png" />
+    <None Include="Resources\Stores\Icons\ebay.png" />
+    <None Include="Resources\Stores\Icons\etsy.png" />
+    <None Include="Resources\Stores\Icons\genericfile.png" />
+    <None Include="Resources\Stores\Icons\genericmodule.png" />
+    <None Include="Resources\Stores\Icons\infopia.png" />
+    <None Include="Resources\Stores\Icons\magento.png" />
+    <None Include="Resources\Stores\Icons\manual.png" />
+    <None Include="Resources\Stores\Icons\miva.png" />
+    <None Include="Resources\Stores\Icons\networksolutions.png" />
+    <None Include="Resources\Stores\Icons\newegg.png" />
+    <None Include="Resources\Stores\Icons\orderdynamics.png" />
+    <None Include="Resources\Stores\Icons\ordermotion.png" />
+    <None Include="Resources\Stores\Icons\oscommerce.png" />
+    <None Include="Resources\Stores\Icons\paypal.png" />
+    <None Include="Resources\Stores\Icons\prostores.png" />
+    <None Include="Resources\Stores\Icons\rakuten.png" />
+    <None Include="Resources\Stores\Icons\searchfit.png" />
+    <None Include="Resources\Stores\Icons\sears.png" />
+    <None Include="Resources\Stores\Icons\sellervantage.png" />
+    <None Include="Resources\Stores\Icons\shopify.png" />
+    <None Include="Resources\Stores\Icons\shopsite.png" />
+    <None Include="Resources\Stores\Icons\virtuemart.png" />
+    <None Include="Resources\Stores\Icons\volusion.png" />
+    <None Include="Resources\Stores\Icons\webshopmanager.png" />
+    <None Include="Resources\Stores\Icons\xcart.png" />
+    <None Include="Resources\Stores\Icons\yahoo.png" />
+    <None Include="Resources\Stores\Icons\zencart.png" />
+    <None Include="Resources\thermal_label_roll.png" />
+    <None Include="Resources\thermal_roll.png" />
+    <None Include="Resources\thermal_roll_w_packing_slip.png" />
+    <None Include="Resources\thermal_roll_w_shipping_label.png" />
+    <None Include="Resources\truck_blue.png" />
+    <None Include="Resources\shoppingcart2.png" />
+    <None Include="Resources\truck_blue1.png" />
+    <None Include="Resources\unknown1.png" />
+    <None Include="Resources\social-facebook.png" />
+    <None Include="Resources\social-twitter.png" />
+    <None Include="Resources\smiley.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -10650,14 +10802,6 @@
     <None Include="Resources\user1_lock.png" />
     <None Include="Resources\sw_cubes_big.png" />
     <None Include="Resources\warning.png" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\AddressValidationService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\CloseService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v4.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\RateService_v7.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\RegistrationService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\ShipService_v7.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\TrackService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl" />
     <None Include="Stores\Platforms\Magento\shipworks3.php" />
     <None Include="Stores\Platforms\Miva\shipworks3.mv" />
     <None Include="Stores\Platforms\Miva\shipworks3Miva5.mv">
@@ -10676,129 +10820,6 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReportsReprintReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\SmartPostCloseReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PackageMovementInformationServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PostalCodeInquiryReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PostalCodeInquiryReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\ServiceAvailabilityReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\ServiceAvailabilityReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegisterCSPUserReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegisterWebCspUserReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegistrationServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\SubscriptionReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\SubscriptionReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\VersionCaptureReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\VersionCaptureReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelEMailLabelReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelPendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CloseReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CreatePendingShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessEMailLabelReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ReprintCloseReportsReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryFaxReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryLetterReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackNotificationReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\ELSServices.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -11494,27 +11515,60 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\PackageMovementInformationService_v5.wsdl">
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.PackageMovement\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v5.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_PackageMovement_PackageMovementInformationService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RegistrationService_v2.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Registration\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RegistrationService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Registration_RegistrationService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.3.8.x-UPSRecertification\Code\ShipWorks\Shipping\Carriers\UPS\Api\Wsdl\OpenAccount.wsdl">
       <UrlBehavior>Static</UrlBehavior>
@@ -11527,21 +11581,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl">
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl">
       <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Rate\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\RateService_v12.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Rate_RateService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Ship\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\ShipService_v12.wsdl</UpdateFromURL>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11560,21 +11603,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_OnLineTools_WebServices_RegisterMgrAcctService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\CloseService_v2.wsdl">
+    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\GlobalShipAddressService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Close\</RelPath>
-      <UpdateFromURL>E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Close_CloseService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\GlobalShipAddressService_v1.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.GlobalShipAddress\</RelPath>
-      <UpdateFromURL>E:\Interapptive\Applications\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\GlobalShipAddressService_v1.wsdl</UpdateFromURL>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\</RelPath>
+      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\GlobalShipAddressService_v2.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11692,17 +11724,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_AmeriCommerce_WebServices_AmeriCommerceDatabaseIO</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\CloseService_v2.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Development\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\AddressValidationService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\</RelPath>
@@ -11714,62 +11735,7 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v4.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v4.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_PackageMovementInformation_PackageMovementInformationService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\RateService_v7.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\RateService_v7.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rates_RateService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\RegistrationService_v2.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\RegistrationService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_RegistrationService_RegistrationService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\ShipService_v7.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\ShipService_v7.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_WebReference_ShipService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\TrackService_v4.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl">
+    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
       <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl</UpdateFromURL>
@@ -11934,17 +11900,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_PayPal_WebServices_PayPalAPIInterfaceService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\TrackService_v6.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.v2013.Track\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\3.2.x - FedExRecertification\Code\ShipWorks\Shipping\Carriers\FedEx\Api\v2013\Wsdl\TrackService_v6.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Track_TrackService</CachedSettingsPropName>
-    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -11987,7 +11942,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

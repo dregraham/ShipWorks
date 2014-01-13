@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Users.Security;
 using System.Transactions;
+using ShipWorks.SqlServer.Data.Auditing;
 
 namespace ShipWorks.Users.Audit
 {
@@ -19,22 +20,20 @@ namespace ShipWorks.Users.Audit
         static List<AuditReason> reasonStack;
 
         [ThreadStatic]
-        static int disabledCount;
+        static List<AuditState> stateStack;
 
         // The active user behavior
         AuditBehaviorUser userBehavior = AuditBehaviorUser.Default;
 
-        // Indicates if we added to the reasonStack
-        bool specifiedReason = false;
-
-        // The disabled behavior
-        AuditBehaviorDisabledState disabledState = AuditBehaviorDisabledState.Default;
+        // Indicates what we've added to the stacks
+        bool needPopReason = false;
+        bool needPopState = false;
 
         /// <summary>
         /// Enter the scope with the specified user behavior.
         /// </summary>
         public AuditBehaviorScope(AuditBehaviorUser userBehavior)
-            : this(userBehavior, new AuditReason(AuditReasonType.Default), AuditBehaviorDisabledState.Default)
+            : this(userBehavior, new AuditReason(AuditReasonType.Default), AuditState.Default)
         {
         }
 
@@ -42,7 +41,7 @@ namespace ShipWorks.Users.Audit
         /// Enter a behavior scope that specifies what audit reason the user is currently in
         /// </summary>
         public AuditBehaviorScope(AuditReasonType reasonType)
-            : this(AuditBehaviorUser.Default, new AuditReason(reasonType), AuditBehaviorDisabledState.Default)
+            : this(AuditBehaviorUser.Default, new AuditReason(reasonType), AuditState.Default)
         {
 
         }
@@ -51,15 +50,15 @@ namespace ShipWorks.Users.Audit
         /// Enter a behavior scope that specifies what audit reason the user is currently in
         /// </summary>
         public AuditBehaviorScope(AuditReason reason)
-            : this(AuditBehaviorUser.Default, reason, AuditBehaviorDisabledState.Default)
+            : this(AuditBehaviorUser.Default, reason, AuditState.Default)
         {
         }
         
         /// <summary>
         /// Enter a scope with the specified disabled behavior
         /// </summary>
-        public AuditBehaviorScope(AuditBehaviorDisabledState disabledState)
-            : this(AuditBehaviorUser.Default, new AuditReason(AuditReasonType.Default), disabledState)
+        public AuditBehaviorScope(AuditState auditState)
+            : this(AuditBehaviorUser.Default, new AuditReason(AuditReasonType.Default), auditState)
         {
         }
 
@@ -67,7 +66,7 @@ namespace ShipWorks.Users.Audit
         /// Enter a scope with the specified behavior
         /// </summary>
         public AuditBehaviorScope(AuditBehaviorUser userBehavior, AuditReason reason)
-            : this(userBehavior, reason, AuditBehaviorDisabledState.Default)
+            : this(userBehavior, reason, AuditState.Default)
         {
 
         }
@@ -75,19 +74,13 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Enter a scope with the specified behavior
         /// </summary>
-        public AuditBehaviorScope(AuditBehaviorUser userBehavior, AuditReason reason, AuditBehaviorDisabledState disabledState)
+        public AuditBehaviorScope(AuditBehaviorUser userBehavior, AuditReason reason, AuditState auditState)
         {
-            this.disabledState = disabledState;
             this.userBehavior = userBehavior;
 
             if (userBehavior == AuditBehaviorUser.SuperUser)
             {
-                // Entring a SuperUser scope during an active transaction would cause a DTC error.  Changing the active user changes the connection
-                // string, which then would try to open a seperate connection, causing it to have to go to DTC to stay within the same transaction.
-                if (!IsSuperUserActive && Transaction.Current != null)
-                {
-                    throw new InvalidOperationException("Cannot enter the super user scope while a transaction is already active.");
-                }
+                ValidateScope(!IsSuperUserActive, "userBehavior");
 
                 superUserCount++;
             }
@@ -99,14 +92,39 @@ namespace ShipWorks.Users.Audit
                     reasonStack = new List<AuditReason>();
                 }
 
+                bool changingReason = (reasonStack.Count == 0 || reasonStack[0].ReasonType != reason.ReasonType || reasonStack[0].ReasonDetail != reason.ReasonDetail);
+
+                ValidateScope(changingReason, "reason");
+
                 reasonStack.Insert(0, reason);
-                specifiedReason = true;
+                needPopReason = true;
             }
 
-            if (disabledState == AuditBehaviorDisabledState.Disabled)
+            if (auditState != AuditState.Default)
             {
-                disabledCount++;
+                if (stateStack == null)
+                {
+                    stateStack = new List<AuditState>();
+                }
+
+                bool changingState = (stateStack.Count == 0 || stateStack[0] != auditState);
+
+                ValidateScope(changingState, "state");
+
+                stateStack.Insert(0, auditState);
+                needPopState = true;
             }
+        }
+
+        /// <summary>
+        /// Validates that it's OK to change the properties of the active scope
+        /// </summary>
+        private void ValidateScope(bool changing, string property)
+        {
+            if (changing && Transaction.Current != null)
+            {
+                throw new InvalidOperationException("Cannot change connection-altering property when transaction is already in progress: " + property);
+            }        
         }
 
         /// <summary>
@@ -136,9 +154,17 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Indicates if auditing is currently disabled
         /// </summary>
-        public static bool IsDisabled
+        public static AuditState ActiveState
         {
-            get { return disabledCount > 0; }
+            get
+            {
+                if (stateStack != null && stateStack.Count > 0)
+                {
+                    return stateStack[0];
+                }
+
+                return AuditState.Enabled;
+            }
         }
 
         /// <summary>
@@ -151,14 +177,14 @@ namespace ShipWorks.Users.Audit
                 superUserCount--;
             }
 
-            if (specifiedReason)
+            if (needPopReason)
             {
                 reasonStack.RemoveAt(0);
             }
 
-            if (disabledState == AuditBehaviorDisabledState.Disabled)
+            if (needPopState)
             {
-                disabledCount--;
+                stateStack.RemoveAt(0);
             }
         }
     }

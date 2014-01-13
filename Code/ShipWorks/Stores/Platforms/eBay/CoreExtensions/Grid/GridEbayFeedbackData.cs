@@ -57,19 +57,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Grid
         /// </summary>
         public string GetCommentValue()
         {
-            if (direction == GridEbayFeedbackDirection.Received)
-            {
-                return comments;
-            }
-            else
-            {
-                if (FeedbackType == null)
-                {
-                    return null;
-                }
-
-                return EnumHelper.GetDescription(FeedbackType);
-            }
+            return comments;
         }
 
         /// <summary>
@@ -82,26 +70,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Grid
                 return null;
             }
 
-            if (direction == GridEbayFeedbackDirection.Received)
+            switch (feedbackType)
             {
-                switch (feedbackType)
-                {
-                    case EbayFeedbackType.Positive: return Resources.add16_2;
-                    case EbayFeedbackType.Negative: return Resources.forbidden1;
-                    case EbayFeedbackType.Neutral: return Resources.shape_circle;
-                }
-
-                return Resources.blank16;
+                case EbayFeedbackType.Positive: return Resources.add16_2;
+                case EbayFeedbackType.Negative: return Resources.forbidden1;
+                case EbayFeedbackType.Neutral: return Resources.shape_circle;
             }
-            else
-            {
-                if (feedbackType != EbayFeedbackType.None)
-                {
-                    return Resources.message_ok;
-                }
 
-                return Resources.blank16;
-            }
+            return Resources.blank16;
         }
     }
 }

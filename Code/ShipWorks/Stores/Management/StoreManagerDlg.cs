@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data;
@@ -85,6 +86,11 @@ namespace ShipWorks.Stores.Management
 
             foreach (StoreEntity store in StoreManager.GetAllStores())
             {
+                if (!store.Enabled && !showDisabledStores.Checked)
+                {
+                    continue;
+                }
+
                 string storeType = StoreTypeManager.GetType(store).StoreTypeName;
 
                 GridRow row = new GridRow(new string[] { store.StoreName, storeType, GetLastDownloadDescription(store) });
@@ -101,6 +107,7 @@ namespace ShipWorks.Stores.Management
             }
 
             UpdateEditButtonState();
+            UpdateDisabledStoresControls();
         }
 
         /// <summary>
@@ -116,7 +123,7 @@ namespace ShipWorks.Stores.Management
             var row = GetStoreRow(store);
 
             row.Cells[0].Text = store.StoreName;
-            row.Cells[0].Image = Resources.store_16;
+            row.Cells[0].Image = EnumHelper.GetImage((StoreTypeCode) store.TypeCode);
 
             // Apply the font
             row.Font = font;
@@ -163,16 +170,21 @@ namespace ShipWorks.Stores.Management
             }
             set
             {
-                foreach (GridRow row in sandGrid.Rows)
+                if (value == null)
                 {
-                    if (((StoreEntity)row.Tag).StoreID == value.StoreID)
+                    sandGrid.SelectedElements.Clear();
+                }
+                else
+                {
+                    foreach (GridRow row in sandGrid.Rows)
                     {
-                        row.Selected = true;
-                        return;
+                        if (((StoreEntity) row.Tag).StoreID == value.StoreID)
+                        {
+                            row.Selected = true;
+                            return;
+                        }
                     }
                 }
-
-                throw new NotFoundException(string.Format("Store {0} not found in grid rows.", value.StoreName));
             }
         }
 
@@ -203,7 +215,7 @@ namespace ShipWorks.Stores.Management
             {
                 dlg.ShowDialog(this);
 
-                UpdateStoreRowDisplay(store);
+                LoadStores();
             }
         }
 
@@ -343,7 +355,7 @@ namespace ShipWorks.Stores.Management
             BackgroundDeleteState state = (BackgroundDeleteState) userData;
 
             // We don't audit anything for deleting a store
-            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditBehaviorDisabledState.Disabled))
+            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
             {
                 DeletionService.DeleteStore(state.Store);
             }
@@ -383,13 +395,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnAddStore(object sender, EventArgs e)
         {
-            StoreEntity newStore = AddStoreWizard.RunWizard(this);
-
-            if (newStore != null)
+            if (AddStoreWizard.RunWizard(this))
             {
                 LoadStores();
 
-                SelectedStore = newStore;
+                SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();
                 ActiveControl = sandGrid;
             }
         }
@@ -415,6 +425,19 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
+        /// Update the controls for showing disabled stores
+        /// </summary>
+        private void UpdateDisabledStoresControls()
+        {
+            int disabledCount = StoreManager.GetAllStores().Where(s => !s.Enabled).Count();
+
+            showDisabledStores.Visible = disabledCount > 0;
+            labelDisabledCount.Visible = disabledCount > 0;
+
+            labelDisabledCount.Text = string.Format("({0} disabled store{1})", disabledCount, disabledCount > 1 ? "s" : "");
+        }
+
+        /// <summary>
         /// Get the grid row for the given store
         /// </summary>
         private GridRow GetStoreRow(StoreEntity store)
@@ -428,6 +451,16 @@ namespace ShipWorks.Stores.Management
             }
 
             throw new InvalidOperationException("Could not find grid row for store " + store.StoreName);
+        }
+
+        /// <summary>
+        /// Changing whether disabled stores are displayed or not
+        /// </summary>
+        private void OnChangeShowDisabledStores(object sender, EventArgs e)
+        {
+            StoreEntity selected = SelectedStore;
+            LoadStores();
+            SelectedStore = selected;
         }
     }
 }

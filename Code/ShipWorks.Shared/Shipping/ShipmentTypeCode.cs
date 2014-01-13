@@ -15,40 +15,55 @@ namespace ShipWorks.Shipping
     public enum ShipmentTypeCode
     {
         [Description("UPS")]
+        [ShipmentTypeIconAttribute("ups")]
         UpsOnLineTools = 0,
 
         [Description("UPS (WorldShip)")]
+        [ShipmentTypeIconAttribute("ups")]
         UpsWorldShip = 1,
 
         [Description("USPS (Endicia)")]
+        [ShipmentTypeIconAttribute("endicia")]
         Endicia = 2,
 
         [Description("USPS (Stamps.com)")]
+        [ShipmentTypeIconAttribute("stamps")]
         Stamps = 3,
 
         [Description("USPS (w/o Postage)")]
+        [ShipmentTypeIconAttribute("usps")]
         PostalWebTools = 4,
 
         [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Express1EndiciaShipmentType", "ShipmentTypeName")]
+        [ShipmentTypeIconAttribute("express1")]
         Express1Endicia = 9,
 
         [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsShipmentType", "ShipmentTypeName")]
+        [ShipmentTypeIconAttribute("express1")]
         Express1Stamps = 13,
 
         [Description("FedEx")]
+        [ShipmentTypeIconAttribute("fedex")]
         FedEx = 6,
         
         [Description("OnTrac")]
+        [ShipmentTypeIconAttribute("ontrac")]
         OnTrac = 11,
 
         [Description("i-parcel")]
+        [ShipmentTypeIconAttribute("iparcel")]
         iParcel = 12,
 
         [Description("Other")]
+        [ShipmentTypeIconAttribute("other")]
         Other = 5,
 
         [Description("EquaShip")]
         EquaShip = 10,
+
+        [Description("Best Rate")]
+        [ShipmentTypeIconAttribute("bestrate")]
+        BestRate = 14,
 
         [Description("None")]
         None = 99

@@ -31,7 +31,7 @@
             this.label = new System.Windows.Forms.Label();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.linkControl = new ShipWorks.UI.Controls.LinkControl();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label
@@ -66,7 +66,7 @@
             this.linkControl.Text = "Activate Discount...";
             this.linkControl.Click += new System.EventHandler(this.OnActivateDiscount);
             // 
-            // EndiciaExpress1RatePromotionFootnote
+            // Express1RatePromotionFootnote
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -74,10 +74,10 @@
             this.Controls.Add(this.linkControl);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.label);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Express1RatePromotionFootnote";
-            this.Size = new System.Drawing.Size(294, 28);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            this.Size = new System.Drawing.Size(441, 28);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

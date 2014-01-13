@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public class WorldShipProcessedGrouping
     {
-        readonly string shipmentID;
+        readonly long? shipmentID;
         List<WorldShipProcessedEntity> worldShipProcessedEntries;
         bool haveProcessedEntriesBeenSorted = false;
 
@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         /// <param name="shipmentID">The shipment for processing</param>
         /// <param name="worldShipProcessedEntries">The WorldShipProcessed entries to process</param>
-        public WorldShipProcessedGrouping(string shipmentID, List<WorldShipProcessedEntity> worldShipProcessedEntries)
+        public WorldShipProcessedGrouping(long? shipmentID, List<WorldShipProcessedEntity> worldShipProcessedEntries)
         {
             this.shipmentID = shipmentID;
             this.worldShipProcessedEntries = worldShipProcessedEntries;
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// The ShipmentID for processing
         /// </summary>
-        public string ShipmentID
+        public long? ShipmentID
         {
             get 
             {
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         /// <summary>
         /// The WorldShipProcessEntity list for processing.  
-        /// The list is sorted by UpsPackageID, then by VoidIndicator, then by RowVersion.
+        /// The list is sorted by UpsPackageID (with nulls at the end), then by VoidIndicator, then by WorldShipProcessedID.
         /// </summary>
         public List<WorldShipProcessedEntity> OrderedWorldShipProcessedEntries
         {
@@ -46,12 +46,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 if (!haveProcessedEntriesBeenSorted && worldShipProcessedEntries != null && worldShipProcessedEntries.Any())
                 {
-                    worldShipProcessedEntries = worldShipProcessedEntries.OrderByDescending(worldShipProcessedEntry => worldShipProcessedEntry.UpsPackageID)
+                    // So that we pick the correct entry later, we want null UpsPackageIDs to be at the end of the list.  To do that, we
+                    // first order desc by UpsPackageID having a value, then by it's actual value.  
+                    worldShipProcessedEntries = worldShipProcessedEntries.OrderByDescending(worldShipProcessedEntry => !string.IsNullOrWhiteSpace(worldShipProcessedEntry.UpsPackageID))
+                                                                         .ThenBy(worldShipProcessedEntry => worldShipProcessedEntry.UpsPackageID)
                                                                          .ThenBy(worldShipProcessedEntry => worldShipProcessedEntry.VoidIndicator)
                                                                          .ThenBy(worldShipProcessedEntry => worldShipProcessedEntry.WorldShipProcessedID).ToList();
 
                     // Fix any blank shipmentIDs
-                    WorldShipUtility.FixNullShipmentIDs(worldShipProcessedEntries);
+                    WorldShipUtility.FixInvalidShipmentIDs(worldShipProcessedEntries);
 
                     // Set the flag stating we've already sorted the list so we don't do it again
                     haveProcessedEntriesBeenSorted = true;

@@ -16,43 +16,42 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
     public partial class EbayCombineOrdersDlg : Form
     {
         // The type of combine operation being configured
-        CombineType combineType;
+        EbayCombinedOrderType combineType;
 
         // some items were removed due to security permissions
         bool securityRestricted = false;
 
-        // collection of orders that were selected by the user
-        // when they selected to combine.
-        List<CombinedOrder> combiningOrders;
-        public List<CombinedOrder> SelectedOrders
-        {
-            get { return combiningOrders; }
-        }
+        List<EbayCombinedOrderCandidate> combiningOrders;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayCombineOrdersDlg(CombineType combineType, List<CombinedOrder> orders)
+        public EbayCombineOrdersDlg(EbayCombinedOrderType combineType, List<EbayCombinedOrderCandidate> orders)
         {
             InitializeComponent();
 
-            this.combiningOrders = new List<CombinedOrder>(orders);
+            this.combiningOrders = new List<EbayCombinedOrderCandidate>(orders);
             this.combineType = combineType;
 
-            if (combineType == CombineType.Local)
+            if (combineType == EbayCombinedOrderType.Local)
             {
                 remotePanel.Visible = false;
                 localPanel.Visible = true;
-                combineButton.Text = "&Combine";
-                Text = "Combine eBay Orders";
             }
             else
             {
                 localPanel.Visible = false;
                 remotePanel.Visible = true;
-                combineButton.Text = "&Invoice";
-                Text = "Send eBay Invoice";
             }
+        }
+
+        /// <summary>
+        ///  collection of orders that were selected by the user
+        ///  when they selected to combine.
+        ///  </summary>
+        public List<EbayCombinedOrderCandidate> SelectedOrders
+        {
+            get { return combiningOrders; }
         }
 
         /// <summary>
@@ -69,15 +68,15 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             combiningOrders.RemoveAll(c => storesNotAllowed.Contains(c.StoreID));
 
             // load the UI
-            foreach (CombinedOrder combined in combiningOrders)
+            foreach (EbayCombinedOrderCandidate combined in combiningOrders)
             {
                 // create an editor control, and add it to the ui
-                EbayCombineOrderControl paymentControl = new EbayCombineOrderControl(combineType, combined);
-                contentPanel.Controls.Add(paymentControl);
+                EbayCombineOrderControl combinedOrderControl = new EbayCombineOrderControl(combineType, combined);
+                contentPanel.Controls.Add(combinedOrderControl);
             }
 
             // update the arrangment of payment controls
-            UpdatePaymentControlLayout();
+            UpdateCombinedOrderControlLayout();
 
             // resize the form if needed
             if (combiningOrders.Count == 1)
@@ -93,21 +92,21 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// Layout all of the payment controls correctly
+        /// Layout all of the combined order controls correctly
         /// </summary>
-        private void UpdatePaymentControlLayout()
+        private void UpdateCombinedOrderControlLayout()
         {
             int y = 4;
 
             for (int i = 0; i < contentPanel.Controls.Count; i++)
             {
-                EbayCombineOrderControl paymentControl = (EbayCombineOrderControl) contentPanel.Controls[i];
+                EbayCombineOrderControl combinedOrderControl = (EbayCombineOrderControl) contentPanel.Controls[i];
 
-                paymentControl.Location = new Point(0, y);
-                paymentControl.Width = contentPanel.DisplayRectangle.Width;
-                paymentControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                combinedOrderControl.Location = new Point(0, y);
+                combinedOrderControl.Width = contentPanel.DisplayRectangle.Width;
+                combinedOrderControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
-                y = paymentControl.Bottom + 2;
+                y = combinedOrderControl.Bottom + 2;
             }
         }
 
@@ -118,9 +117,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         {
             foreach (EbayCombineOrderControl orderControl in contentPanel.Controls.OfType<EbayCombineOrderControl>().Where(c => c.IsSelected))
             {
-                if (orderControl.CombinedOrder.Components.Count(c => c.Included) <= 1)
+                if (orderControl.Candidate.Components.Count(c => c.Included) <= 1)
                 {
-                    MessageHelper.ShowError(this, string.Format("At least two orders for buyer '{0}' must be selected for combining.", orderControl.CombinedOrder.EbayBuyerID));
+                    MessageHelper.ShowError(this, string.Format("At least two orders for buyer '{0}' must be selected for combining.", orderControl.Candidate.BuyerID));
                     return;
                 }
             }
@@ -128,7 +127,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             // remove all unselected ones
             foreach (EbayCombineOrderControl orderControl in contentPanel.Controls.OfType<EbayCombineOrderControl>().Where( control => !control.IsSelected))
             {
-                combiningOrders.Remove(orderControl.CombinedOrder);
+                combiningOrders.Remove(orderControl.Candidate);
             }
 
             // OK

@@ -256,5 +256,78 @@ namespace ShipWorks.Stores.Content
                 adapter.Commit();
             }
         }
+
+        /// <summary>
+        /// Gets the next OrderNumber that an order should use.  This is useful for storetypes that don't supply their own
+        /// order numbers for ShipWorks, such as Amazon and eBay.
+        /// </summary>
+        public static long GetNextOrderNumber(long storeID)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                object result = adapter.GetScalar(
+                    OrderFields.OrderNumber,
+                    null, AggregateFunction.Max,
+                    OrderFields.StoreID == storeID & OrderFields.IsManual == false);
+
+                long orderNumber = result is DBNull ? 0 : (long) result;
+
+                // Get the next one
+                orderNumber++;
+
+                log.InfoFormat("GetNextOrderNumber = {0}", orderNumber);
+
+                return orderNumber;
+            }
+        }
+
+        /// <summary>
+        /// Copies any note entities from one order to another.
+        /// </summary>
+        public static void CopyNotes(long fromOrderID, OrderEntity toOrder)
+        {
+            // Make the copies
+            List<NoteEntity> newNotes = EntityUtility.CloneEntityCollection(DataProvider.GetRelatedEntities(fromOrderID, EntityType.NoteEntity).Select(n => (NoteEntity) n));
+
+            foreach (NoteEntity note in newNotes)
+            {
+                EntityUtility.MarkAsNew(note);
+                note.Order = toOrder;
+
+                NoteManager.SaveNote(note);
+            }
+        }
+
+        /// <summary>
+        /// Copies any shipment entities from one order to another
+        /// </summary>
+        public static void CopyShipments(long fromOrderID, OrderEntity toOrder)
+        {
+            // Copy any existing shipments
+            foreach (ShipmentEntity shipment in ShippingManager.GetShipments(fromOrderID, false))
+            {
+                // load all carrier and customs data
+                ShippingManager.EnsureShipmentLoaded(shipment);
+
+                // clone the entity tree
+                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
+
+                // this is now a new shipment to be inserted
+                EntityUtility.MarkAsNew(clonedShipment);
+                clonedShipment.Order = toOrder;
+
+                // Mark all the carrier-specific stuff as new
+                clonedShipment.GetDependingRelatedEntities().ForEach(e => EntityUtility.MarkAsNew(e));
+
+                // And all the customers stuff as new
+                foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)
+                {
+                    EntityUtility.MarkAsNew(customsItem);
+                }
+
+                ShippingManager.SaveShipment(clonedShipment);
+            }
+        }
+
     }
 }

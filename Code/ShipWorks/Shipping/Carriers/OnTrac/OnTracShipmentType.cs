@@ -9,6 +9,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
@@ -125,16 +127,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            return new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
+                new DimensionsAdapter(shipment.OnTrac));
+
         }
 
         /// <summary>
@@ -157,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // None is only an option if an invalid country is selected.
                 if (((OnTracServiceType)shipment.OnTrac.Service) == OnTracServiceType.None)
                 {
-                    throw new OnTracException("OnTrac does not provide service outside of the United States.");
+                    throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -479,6 +484,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 shipment.TotalWeight += shipment.OnTrac.DimsWeight;
             }
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the OnTrac shipment type.
+        /// </summary>
+        public override IBestRateShippingBroker GetShippingBroker()
+        {
+            return new OnTracBestRateBroker();
         }
     }
 }

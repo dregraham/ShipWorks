@@ -52,7 +52,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		private EntityCollection<OrderEntity> _orderCollectionViaNote;
+
+
+
+
+
+
+
+
+
 
 
 		private UserSettingsEntity _settings;
@@ -84,8 +92,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			/// <summary>Member name OrderCollectionViaNote</summary>
-			public static readonly string OrderCollectionViaNote = "OrderCollectionViaNote";
+
+
+
+
+
+
+
+
+
 
 			/// <summary>Member name Settings</summary>
 			public static readonly string Settings = "Settings";
@@ -162,7 +177,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				_orderCollectionViaNote = (EntityCollection<OrderEntity>)info.GetValue("_orderCollectionViaNote", typeof(EntityCollection<OrderEntity>));
+
+
+
+
+
+
+
+
+
 
 
 				_settings = (UserSettingsEntity)info.GetValue("_settings", typeof(UserSettingsEntity));
@@ -222,11 +245,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "OrderCollectionViaNote":
-					this.OrderCollectionViaNote.IsReadOnly = false;
-					this.OrderCollectionViaNote.Add((OrderEntity)entity);
-					this.OrderCollectionViaNote.IsReadOnly = true;
-					break;
+
+
+
+
+
+
+
+
+
 
 				case "Settings":
 					this.Settings = (UserSettingsEntity)entity;
@@ -268,10 +295,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "OrderCollectionViaNote":
-					toReturn.Add(UserEntity.Relations.NoteEntityUsingUserID, "UserEntity__", "Note_", JoinHint.None);
-					toReturn.Add(NoteEntity.Relations.OrderEntityUsingObjectID, "Note_", string.Empty, JoinHint.None);
-					break;
+
+
+
+
+
+
+
+
+
 
 				case "Settings":
 					toReturn.Add(UserEntity.Relations.UserSettingsEntityUsingUserID);
@@ -321,6 +353,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
 				case "Settings":
 					SetupSyncSettings(relatedEntity);
 					break;
@@ -338,6 +372,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+
+
 
 
 
@@ -396,6 +432,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
 			return toReturn;
 		}
 		
@@ -424,7 +462,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				info.AddValue("_orderCollectionViaNote", ((_orderCollectionViaNote!=null) && (_orderCollectionViaNote.Count>0) && !this.MarkedForDeletion)?_orderCollectionViaNote:null);
+
+
+
+
+
+
+
+
+
 
 
 				info.AddValue("_settings", (!this.MarkedForDeletion?_settings:null));
@@ -477,16 +523,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'Order' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoOrderCollectionViaNote()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.Relations.AddRange(GetRelationsForFieldOfType("OrderCollectionViaNote"));
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UserFields.UserID, null, ComparisonOperator.Equal, this.UserID, "UserEntity__"));
-			return bucket;
-		}
+
+
+
+
+
+
+
+
 
 
 
@@ -542,7 +586,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			collectionsQueue.Enqueue(this._orderCollectionViaNote);
+
+
+
+
+
+
+
+
+
 
 		}
 		
@@ -566,7 +618,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			this._orderCollectionViaNote = (EntityCollection<OrderEntity>) collectionsQueue.Dequeue();
+
+
+
+
+
+
+
+
+
 
 		}
 		
@@ -589,10 +649,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if (this._orderCollectionViaNote != null)
-			{
-				return true;
-			}
+
+
+
+
+
+
+
+
+
 
 			return base.HasPopulatedMemberEntityCollections();
 		}
@@ -618,7 +683,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory))) : null);
+
+
+
+
+
+
+
+
+
 
 		}
 #endif
@@ -645,7 +718,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			toReturn.Add("OrderCollectionViaNote", _orderCollectionViaNote);
+
+
+
+
+
+
+
+
+
 
 			toReturn.Add("Settings", _settings);
 			return toReturn;
@@ -669,10 +750,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if(_orderCollectionViaNote!=null)
-			{
-				_orderCollectionViaNote.ActiveContext = base.ActiveContext;
-			}
+
+
+
+
+
+
+
+
+
 
 
 			if(_settings!=null)
@@ -700,7 +786,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_orderCollectionViaNote = null;
+
+
+
+
+
+
+
+
+
 
 
 			_settings = null;
@@ -816,19 +910,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Order' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathOrderCollectionViaNote
-		{
-			get
-			{
-				IEntityRelation intermediateRelation = UserEntity.Relations.NoteEntityUsingUserID;
-				intermediateRelation.SetAliases(string.Empty, "Note_");
-				return new PrefetchPathElement2(new EntityCollection<OrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory))), intermediateRelation,
-					(int)ShipWorks.Data.Model.EntityType.UserEntity, (int)ShipWorks.Data.Model.EntityType.OrderEntity, 0, null, null, GetRelationsForField("OrderCollectionViaNote"), null, "OrderCollectionViaNote", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToMany);
-			}
-		}
+
+
+
+
+
+
 
 
 
@@ -960,21 +1047,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'OrderEntity' which are related to this entity via a relation of type 'm:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
-		[TypeContainedAttribute(typeof(OrderEntity))]
-		public virtual EntityCollection<OrderEntity> OrderCollectionViaNote
-		{
-			get
-			{
-				if(_orderCollectionViaNote==null)
-				{
-					_orderCollectionViaNote = new EntityCollection<OrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory)));
-					_orderCollectionViaNote.IsReadOnly=true;
-				}
-				return _orderCollectionViaNote;
-			}
-		}
+
+
+
+
+
+
+
+
 
 
 

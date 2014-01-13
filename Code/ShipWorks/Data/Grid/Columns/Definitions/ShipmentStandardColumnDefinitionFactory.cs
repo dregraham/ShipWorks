@@ -53,7 +53,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         }))  { DefaultWidth = 24 },
 
                 new GridColumnDefinition("{EC204711-129C-4d4b-B476-168EDB171C0B}", true,
-                    new GridTextDisplayType(), "Order #", "5089",
+                    new GridOrderNumberDisplayType(), "Order #", GridOrderNumberDisplayType.SampleData(Stores.StoreTypeCode.GenericModule),
                     OrderFields.OrderNumberComplete, 
                     OrderFields.OrderNumber) { DefaultWidth = 54, EntityTransform = TransformShipmentToOrder  },
 

@@ -36,15 +36,15 @@ namespace ShipWorks.Stores.Management
             this.imageStore = new System.Windows.Forms.PictureBox();
             this.optionControl = new ShipWorks.UI.Controls.OptionControl();
             this.optionPageStoreDetails = new ShipWorks.UI.Controls.OptionPage();
-            this.storeContactControl = new ShipWorks.Data.Controls.StoreContactControl();
+            this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
             this.labelAllowDownload = new System.Windows.Forms.Label();
             this.comboAllowDownload = new ShipWorks.Stores.Management.ComputerDownloadAllowedComboBox();
             this.panelStoreStatus = new System.Windows.Forms.Panel();
+            this.infotipStoreEnabled = new ShipWorks.UI.Controls.InfoTip();
             this.sectionStatus = new ShipWorks.UI.Controls.SectionTitle();
             this.label4 = new System.Windows.Forms.Label();
             this.storeDisabled = new System.Windows.Forms.CheckBox();
-            this.infotipStoreEnabled = new ShipWorks.UI.Controls.InfoTip();
             this.configureDownloadComputers = new ShipWorks.UI.Controls.LinkControl();
             this.sectionAutoDownloads = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionTitleManualOrders = new ShipWorks.UI.Controls.SectionTitle();
@@ -68,7 +68,8 @@ namespace ShipWorks.Stores.Management
             this.labelStatus = new System.Windows.Forms.Label();
             this.licenseKey = new System.Windows.Forms.TextBox();
             this.changeLicense = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize) (this.imageStore)).BeginInit();
+            this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
+            ((System.ComponentModel.ISupportInitialize)(this.imageStore)).BeginInit();
             this.optionControl.SuspendLayout();
             this.optionPageStoreDetails.SuspendLayout();
             this.optionPageSettings.SuspendLayout();
@@ -76,15 +77,15 @@ namespace ShipWorks.Stores.Management
             this.optionPageStatusPreset.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.optionPageLicense.SuspendLayout();
             this.SuspendLayout();
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ok.Location = new System.Drawing.Point(611, 521);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
@@ -95,7 +96,7 @@ namespace ShipWorks.Stores.Management
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(692, 521);
             this.cancel.Name = "cancel";
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Management
             // titleStoreName
             // 
             this.titleStoreName.AutoSize = true;
-            this.titleStoreName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.titleStoreName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleStoreName.Location = new System.Drawing.Point(48, 10);
             this.titleStoreName.Name = "titleStoreName";
             this.titleStoreName.Size = new System.Drawing.Size(83, 13);
@@ -136,9 +137,9 @@ namespace ShipWorks.Stores.Management
             // 
             // optionControl
             // 
-            this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.optionControl.Controls.Add(this.optionPageStoreDetails);
             this.optionControl.Controls.Add(this.optionPageSettings);
             this.optionControl.Controls.Add(this.optionPageOnlineAccount);
@@ -156,6 +157,7 @@ namespace ShipWorks.Stores.Management
             // 
             this.optionPageStoreDetails.BackColor = System.Drawing.Color.White;
             this.optionPageStoreDetails.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.optionPageStoreDetails.Controls.Add(this.storeAddressControl);
             this.optionPageStoreDetails.Controls.Add(this.storeContactControl);
             this.optionPageStoreDetails.Location = new System.Drawing.Point(153, 0);
             this.optionPageStoreDetails.Name = "optionPageStoreDetails";
@@ -166,10 +168,10 @@ namespace ShipWorks.Stores.Management
             // 
             // storeContactControl
             // 
-            this.storeContactControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.storeContactControl.Location = new System.Drawing.Point(7, 1);
+            this.storeContactControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.storeContactControl.Location = new System.Drawing.Point(6, 294);
             this.storeContactControl.Name = "storeContactControl";
-            this.storeContactControl.Size = new System.Drawing.Size(358, 417);
+            this.storeContactControl.Size = new System.Drawing.Size(358, 115);
             this.storeContactControl.TabIndex = 0;
             // 
             // optionPageSettings
@@ -220,10 +222,19 @@ namespace ShipWorks.Stores.Management
             this.panelStoreStatus.Size = new System.Drawing.Size(564, 80);
             this.panelStoreStatus.TabIndex = 29;
             // 
+            // infotipStoreEnabled
+            // 
+            this.infotipStoreEnabled.Caption = resources.GetString("infotipStoreEnabled.Caption");
+            this.infotipStoreEnabled.Location = new System.Drawing.Point(281, 30);
+            this.infotipStoreEnabled.Name = "infotipStoreEnabled";
+            this.infotipStoreEnabled.Size = new System.Drawing.Size(12, 12);
+            this.infotipStoreEnabled.TabIndex = 26;
+            this.infotipStoreEnabled.Title = "Store Status";
+            // 
             // sectionStatus
             // 
-            this.sectionStatus.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionStatus.Location = new System.Drawing.Point(0, 0);
             this.sectionStatus.Name = "sectionStatus";
             this.sectionStatus.Size = new System.Drawing.Size(564, 22);
@@ -251,15 +262,6 @@ namespace ShipWorks.Stores.Management
             this.storeDisabled.UseVisualStyleBackColor = true;
             this.storeDisabled.CheckedChanged += new System.EventHandler(this.OnChangeEnabledState);
             // 
-            // infotipStoreEnabled
-            // 
-            this.infotipStoreEnabled.Caption = resources.GetString("infotipStoreEnabled.Caption");
-            this.infotipStoreEnabled.Location = new System.Drawing.Point(281, 30);
-            this.infotipStoreEnabled.Name = "infotipStoreEnabled";
-            this.infotipStoreEnabled.Size = new System.Drawing.Size(12, 12);
-            this.infotipStoreEnabled.TabIndex = 26;
-            this.infotipStoreEnabled.Title = "Store Status";
-            // 
             // configureDownloadComputers
             // 
             this.configureDownloadComputers.AutoSize = true;
@@ -275,8 +277,8 @@ namespace ShipWorks.Stores.Management
             // 
             // sectionAutoDownloads
             // 
-            this.sectionAutoDownloads.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionAutoDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionAutoDownloads.Location = new System.Drawing.Point(15, 15);
             this.sectionAutoDownloads.Name = "sectionAutoDownloads";
             this.sectionAutoDownloads.Size = new System.Drawing.Size(564, 22);
@@ -285,8 +287,8 @@ namespace ShipWorks.Stores.Management
             // 
             // sectionTitleManualOrders
             // 
-            this.sectionTitleManualOrders.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitleManualOrders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleManualOrders.Location = new System.Drawing.Point(15, 129);
             this.sectionTitleManualOrders.Name = "sectionTitleManualOrders";
             this.sectionTitleManualOrders.Size = new System.Drawing.Size(564, 22);
@@ -295,7 +297,7 @@ namespace ShipWorks.Stores.Management
             // 
             // automaticDownloadControl
             // 
-            this.automaticDownloadControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.automaticDownloadControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.automaticDownloadControl.Location = new System.Drawing.Point(32, 72);
             this.automaticDownloadControl.Name = "automaticDownloadControl";
             this.automaticDownloadControl.Size = new System.Drawing.Size(292, 50);
@@ -349,7 +351,7 @@ namespace ShipWorks.Stores.Management
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox1.Image = global::ShipWorks.Properties.Resources.information16;
             this.pictureBox1.Location = new System.Drawing.Point(8, 404);
             this.pictureBox1.Name = "pictureBox1";
@@ -360,7 +362,7 @@ namespace ShipWorks.Stores.Management
             // 
             // label6
             // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(61, 406);
             this.label6.Name = "label6";
@@ -370,9 +372,9 @@ namespace ShipWorks.Stores.Management
             // 
             // label5
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(25, 406);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(36, 13);
@@ -381,9 +383,9 @@ namespace ShipWorks.Stores.Management
             // 
             // orderStatusPresets
             // 
-            this.orderStatusPresets.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.orderStatusPresets.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.orderStatusPresets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.orderStatusPresets.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.orderStatusPresets.Location = new System.Drawing.Point(1, 1);
             this.orderStatusPresets.Name = "orderStatusPresets";
             this.orderStatusPresets.Size = new System.Drawing.Size(407, 404);
@@ -405,7 +407,7 @@ namespace ShipWorks.Stores.Management
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox2.Image = global::ShipWorks.Properties.Resources.information16;
             this.pictureBox2.Location = new System.Drawing.Point(8, 404);
             this.pictureBox2.Name = "pictureBox2";
@@ -416,7 +418,7 @@ namespace ShipWorks.Stores.Management
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(61, 406);
             this.label1.Name = "label1";
@@ -426,9 +428,9 @@ namespace ShipWorks.Stores.Management
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(25, 406);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(36, 13);
@@ -437,9 +439,9 @@ namespace ShipWorks.Stores.Management
             // 
             // itemStatusPresets
             // 
-            this.itemStatusPresets.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.itemStatusPresets.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.itemStatusPresets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.itemStatusPresets.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.itemStatusPresets.Location = new System.Drawing.Point(1, 1);
             this.itemStatusPresets.Name = "itemStatusPresets";
             this.itemStatusPresets.Size = new System.Drawing.Size(407, 404);
@@ -473,7 +475,7 @@ namespace ShipWorks.Stores.Management
             // labelLicense
             // 
             this.labelLicense.AutoSize = true;
-            this.labelLicense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelLicense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelLicense.Location = new System.Drawing.Point(6, 14);
             this.labelLicense.Name = "labelLicense";
             this.labelLicense.Size = new System.Drawing.Size(52, 13);
@@ -483,7 +485,7 @@ namespace ShipWorks.Stores.Management
             // labelStatus
             // 
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelStatus.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelStatus.Location = new System.Drawing.Point(10, 38);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(47, 13);
@@ -509,6 +511,14 @@ namespace ShipWorks.Stores.Management
             this.changeLicense.Text = "Change Activation...";
             this.changeLicense.Click += new System.EventHandler(this.OnChangeLicense);
             // 
+            // storeAddressControl
+            // 
+            this.storeAddressControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.storeAddressControl.Location = new System.Drawing.Point(6, 8);
+            this.storeAddressControl.Name = "storeAddressControl";
+            this.storeAddressControl.Size = new System.Drawing.Size(360, 283);
+            this.storeAddressControl.TabIndex = 1;
+            // 
             // StoreSettingsDlg
             // 
             this.AcceptButton = this.ok;
@@ -522,7 +532,7 @@ namespace ShipWorks.Stores.Management
             this.Controls.Add(this.imageStore);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(795, 4594);
             this.MinimizeBox = false;
@@ -535,7 +545,7 @@ namespace ShipWorks.Stores.Management
             this.Text = "Store Settings";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize) (this.imageStore)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageStore)).EndInit();
             this.optionControl.ResumeLayout(false);
             this.optionPageStoreDetails.ResumeLayout(false);
             this.optionPageSettings.ResumeLayout(false);
@@ -546,10 +556,10 @@ namespace ShipWorks.Stores.Management
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.optionPageLicense.ResumeLayout(false);
             this.optionPageLicense.PerformLayout();
             this.ResumeLayout(false);
@@ -568,7 +578,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label titleStoreType;
         private System.Windows.Forms.Label titleStoreName;
         private System.Windows.Forms.PictureBox imageStore;
-        private ShipWorks.Data.Controls.StoreContactControl storeContactControl;
+        private StoreContactControl storeContactControl;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -598,5 +608,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Panel panelStoreStatus;
         private System.Windows.Forms.Label labelAllowDownload;
         private ComputerDownloadAllowedComboBox comboAllowDownload;
+        private StoreAddressControl storeAddressControl;
     }
 }

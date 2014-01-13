@@ -95,6 +95,7 @@
         <Condition identifier="ChannelAdvisorOrder.FlagType" />
         <Condition identifier="CommerceInterfaceOrder.CommerceInterfaceOrderNumber" />
         <Condition identifier="EbayOrder.EbayBuyerID" />
+        <Condition identifier="EbayOrder.SellingManagerRecord" />
         <Condition identifier="EbayOrder.SelectedShippingMethod" />
         <Condition identifier="EbayOrder.GspEligible" />
         <Condition identifier="EtsyOrder.WasPaid" />
@@ -215,6 +216,7 @@
       <Condition identifier="EbayOrderItem.Feedback" />
       <Condition identifier="EbayOrderItem.PaymentMethod" />
       <Condition identifier="EbayOrderItem.CheckoutStatus" />
+      <Condition identifier="EbayOrderItem.ShippedStatus" />
       <Condition identifier="EbayOrderItem.PayPalAddressStatus" />
     </Category>
 
@@ -256,6 +258,7 @@
 
     <Category name="Shipment">
       <Condition identifier="Shipment.ShipmentType" />
+      <Condition identifier="Shipment.BestRateProcessed" />
       <Group name="Ship To">
         <Group name="Name">
           <Condition identifier="Shipment.ShipTo.FirstName" displayAs="First Name"/>
@@ -280,7 +283,9 @@
       <Separator/>
       <Condition identifier="Shipment.Status" />
       <Condition identifier="Shipment.ProcessedDate" />
+      <Condition identifier="Shipment.ProcessedUser" />
       <Condition identifier="Shipment.VoidedDate" />
+      <Condition identifier="Shipment.VoidedUser" />
       <Condition identifier="Shipment.ReturnStatus" />
       <Separator/>
       <Condition identifier="Shipment.Cost" displayAs="Cost" />

@@ -678,6 +678,64 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateProfile.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum BestRateProfileFieldIndex:int
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>ServiceLevel. </summary>
+		ServiceLevel,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateShipment.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum BestRateShipmentFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>ServiceLevel. </summary>
+		ServiceLevel,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BigCommerceOrderItem.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -1541,6 +1599,8 @@ namespace ShipWorks.Data.Model
 		CustomerUpdateShipping,
 		///<summary>AuditNewOrders. </summary>
 		AuditNewOrders,
+		///<summary>AuditDeletedOrders. </summary>
+		AuditDeletedOrders,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1842,14 +1902,12 @@ namespace ShipWorks.Data.Model
 		EbayOrderID,
 		///<summary>EbayBuyerID. </summary>
 		EbayBuyerID,
-		///<summary>BuyerFeedbackScore. </summary>
-		BuyerFeedbackScore,
-		///<summary>BuyerFeedbackPrivate. </summary>
-		BuyerFeedbackPrivate,
 		///<summary>CombinedLocally. </summary>
 		CombinedLocally,
 		///<summary>SelectedShippingMethod. </summary>
 		SelectedShippingMethod,
+		///<summary>SellingManagerRecord. </summary>
+		SellingManagerRecord,
 		///<summary>GspEligible. </summary>
 		GspEligible,
 		///<summary>GspFirstName. </summary>
@@ -1886,8 +1944,6 @@ namespace ShipWorks.Data.Model
 		RollupFeedbackReceivedComments,
 		///<summary>RollupPayPalAddressStatus. </summary>
 		RollupPayPalAddressStatus,
-		///<summary>RollupSellingManagerRecord. </summary>
-		RollupSellingManagerRecord,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1943,10 +1999,6 @@ namespace ShipWorks.Data.Model
 		EbayItemID,
 		///<summary>EbayTransactionID. </summary>
 		EbayTransactionID,
-		///<summary>SellingManagerProductName. </summary>
-		SellingManagerProductName,
-		///<summary>SellingManagerProductPart. </summary>
-		SellingManagerProductPart,
 		///<summary>SellingManagerRecord. </summary>
 		SellingManagerRecord,
 		///<summary>EffectiveCheckoutStatus. </summary>
@@ -1957,12 +2009,8 @@ namespace ShipWorks.Data.Model
 		PaymentStatus,
 		///<summary>PaymentMethod. </summary>
 		PaymentMethod,
-		///<summary>CheckoutStatus. </summary>
-		CheckoutStatus,
 		///<summary>CompleteStatus. </summary>
 		CompleteStatus,
-		///<summary>SellerPaidStatus. </summary>
-		SellerPaidStatus,
 		///<summary>FeedbackLeftType. </summary>
 		FeedbackLeftType,
 		///<summary>FeedbackLeftComments. </summary>
@@ -2076,6 +2124,8 @@ namespace ShipWorks.Data.Model
 		DomesticShippingService,
 		///<summary>InternationalShippingService. </summary>
 		InternationalShippingService,
+		///<summary>FeedbackUpdatedThrough. </summary>
+		FeedbackUpdatedThrough,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6979,6 +7029,10 @@ namespace ShipWorks.Data.Model
 		Processed,
 		///<summary>ProcessedDate. </summary>
 		ProcessedDate,
+		///<summary>ProcessedUserID. </summary>
+		ProcessedUserID,
+		///<summary>ProcessedComputerID. </summary>
+		ProcessedComputerID,
 		///<summary>ShipDate. </summary>
 		ShipDate,
 		///<summary>ShipmentCost. </summary>
@@ -6987,6 +7041,10 @@ namespace ShipWorks.Data.Model
 		Voided,
 		///<summary>VoidedDate. </summary>
 		VoidedDate,
+		///<summary>VoidedUserID. </summary>
+		VoidedUserID,
+		///<summary>VoidedComputerID. </summary>
+		VoidedComputerID,
 		///<summary>TrackingNumber. </summary>
 		TrackingNumber,
 		///<summary>CustomsGenerated. </summary>
@@ -7071,6 +7129,8 @@ namespace ShipWorks.Data.Model
 		OriginNameParseStatus,
 		///<summary>OriginUnparsedName. </summary>
 		OriginUnparsedName,
+		///<summary>BestRateEvents. </summary>
+		BestRateEvents,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7391,6 +7451,8 @@ namespace ShipWorks.Data.Model
 		UpsMailInnovationsEnabled,
 		///<summary>WorldShipMailInnovationsEnabled. </summary>
 		WorldShipMailInnovationsEnabled,
+		///<summary>InternalBestRateExcludedShipmentTypes. </summary>
+		InternalBestRateExcludedShipmentTypes,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8980,6 +9042,8 @@ namespace ShipWorks.Data.Model
 		NumberOfPackages,
 		///<summary>LeadTrackingNumber. </summary>
 		LeadTrackingNumber,
+		///<summary>ShipmentIdCalculated. </summary>
+		ShipmentIdCalculated,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9437,6 +9501,10 @@ namespace ShipWorks.Data.Model
 		AuditChangeEntity,
 		///<summary>AuditChangeDetail</summary>
 		AuditChangeDetailEntity,
+		///<summary>BestRateProfile</summary>
+		BestRateProfileEntity,
+		///<summary>BestRateShipment</summary>
+		BestRateShipmentEntity,
 		///<summary>BigCommerceOrderItem</summary>
 		BigCommerceOrderItemEntity,
 		///<summary>BigCommerceStore</summary>

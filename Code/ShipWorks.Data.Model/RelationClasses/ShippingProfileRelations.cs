@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 
+			toReturn.Add(this.BestRateProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.EquaShipProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.FedExProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.IParcelProfileEntityUsingShippingProfileID);
@@ -44,6 +45,25 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 		#region Class Property Declarations
 
+
+		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and BestRateProfileEntity over the 1:1 relation they have, using the relation between the fields:
+		/// ShippingProfile.ShippingProfileID - BestRateProfile.ShippingProfileID
+		/// </summary>
+		public virtual IEntityRelation BestRateProfileEntityUsingShippingProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "BestRate", true);
+
+				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, BestRateProfileFields.ShippingProfileID);
+
+
+
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("BestRateProfileEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and EquaShipProfileEntity over the 1:1 relation they have, using the relation between the fields:
 		/// ShippingProfile.ShippingProfileID - EquaShipProfile.ShippingProfileID

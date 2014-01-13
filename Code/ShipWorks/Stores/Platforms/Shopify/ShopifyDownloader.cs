@@ -457,7 +457,35 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 // Shopify only sends the total line price
                 option.UnitPrice = 0;
+
+                // Add any properties for this option
+                LoadOptionProperties(item, lineItem);
             }
+        }
+
+        /// <summary>
+        /// Add any Shopify option properties to the order item attribute
+        /// </summary>
+        private void LoadOptionProperties(OrderItemEntity item, JToken lineItem)
+        {
+            JToken properties = lineItem.SelectToken("properties");
+            if (properties == null)
+            {
+                return;
+            }
+
+            foreach (JToken property in properties.Select(prop => prop))
+            {
+                string propertyName = property.GetValue<string>("name", string.Empty);
+                string propertyValue = property.GetValue<string>("value", string.Empty);
+
+                //Instantiate the order item attribute
+                OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
+                option.Name = string.Format("   {0}", propertyName);
+                option.Description = propertyValue;
+                option.UnitPrice = 0;
+            }
+
         }
 
         /// <summary>

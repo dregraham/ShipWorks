@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Resources;
 using System.Reflection;
+using System.Globalization;
 
 namespace Interapptive.Shared.Utility
 {
@@ -12,9 +13,10 @@ namespace Interapptive.Shared.Utility
     /// Attribute that can be applied to supply the name of an image resource to something
     /// </summary>
     [AttributeUsage(AttributeTargets.All)]
-    public sealed class ImageResourceAttribute : Attribute
+    public class ImageResourceAttribute : Attribute
     {
-        string resourceKey;
+        private string resourceKey;
+        private string resourceSet;
 
         /// <summary>
         /// Constructor
@@ -33,14 +35,31 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// The resource set to use to lookup the Resource key.  If null, defaults to AssemblyName.Properties.Resources.
+        /// </summary>
+        public string ResourceSet
+        {
+            get { return resourceSet; }
+            set { resourceSet = value; }
+        }
+
+        /// <summary>
         /// The resource image referenced by the key.  Throws a NotFoundException if not present.
         /// </summary>
         public Image ResourceImage
         {
             get
             {
+
                 Assembly primaryAssembly = Assembly.GetEntryAssembly();
-                string primaryResources = string.Format("{0}.Properties.Resources", primaryAssembly.GetName().Name);
+
+                // The only reason this will be null is if we are in a unit test.
+                if (primaryAssembly == null || primaryAssembly.FullName.ToUpper(CultureInfo.InvariantCulture).Contains("MSTEST"))
+                {
+                    return new Bitmap(1, 1);
+                }
+
+                string primaryResources = string.IsNullOrEmpty(resourceSet) ? string.Format("{0}.Properties.Resources", primaryAssembly.GetName().Name) : resourceSet;
 
                 ResourceManager resman = new ResourceManager(primaryResources, primaryAssembly);
 
@@ -50,7 +69,7 @@ namespace Interapptive.Shared.Utility
                     throw new NotFoundException(string.Format("The resource '{0}' could not be found in '{1}'.", resourceKey, primaryResources));
                 }
 
-                return (Image) result;
+                return (Image)result;
             }
         }
     }

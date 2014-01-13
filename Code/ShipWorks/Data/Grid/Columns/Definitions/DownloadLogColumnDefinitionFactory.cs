@@ -6,6 +6,8 @@ using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -46,7 +48,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         DownloadFields.QuantityNew) { DefaultWidth = 60 },
 
                     new GridColumnDefinition("{E36583A3-1535-42a0-AD1B-BFEC9C699D64}", true,
-                        new GridStoreDisplayType(StoreProperty.StoreName), "Store Name", "My Store",
+                        new GridStoreDisplayType(StoreProperty.StoreName), "Store Name", new GridStoreDisplayType.DisplayData { StoreText = "My Store", StoreIcon = StoreIcons.magento },
                         DownloadFields.StoreID,
                         StoreFields.StoreName),
 

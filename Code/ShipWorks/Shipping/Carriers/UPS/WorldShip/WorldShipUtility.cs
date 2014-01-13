@@ -348,7 +348,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static string GetUspsEndorsementCode(UpsShipmentEntity ups)
         {
             UpsServiceType upsServiceType = (UpsServiceType) ups.Service;
+            UpsPackagingType upsPackagingType = (UpsPackagingType) ups.Packages[0].PackagingType;
             UspsEndorsementType uspsEndorsementType = (UspsEndorsementType) ups.Endorsement;
+
             if (UpsUtility.IsUpsSurePostService(upsServiceType))
             {
                 switch (uspsEndorsementType)
@@ -373,6 +375,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // MI Expedited & International MI does not support endorsements
                 if (upsServiceType == UpsServiceType.UpsMailInnovationsIntEconomy ||
                     upsServiceType == UpsServiceType.UpsMailInnovationsIntPriority)
+                {
+                    return string.Empty;
+                }
+
+                // MI Expedited w/ Flat packaging types does not allow endorsements
+                if (upsServiceType == UpsServiceType.UpsMailInnovationsExpedited &&
+                    (upsPackagingType == UpsPackagingType.BPMFlats || upsPackagingType == UpsPackagingType.StandardFlats))
                 {
                     return string.Empty;
                 }
@@ -1080,19 +1089,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// Attempts to determine ShipmentIDs for WorldShipProcessed entities that do not have ShipmentIDs
         /// </summary>
         /// <param name="worldShipProcessedEntries">List of WorldShipProcessed entities to fix.</param>
-        public static void FixNullShipmentIDs(List<WorldShipProcessedEntity> worldShipProcessedEntries)
+        public static void FixInvalidShipmentIDs(List<WorldShipProcessedEntity> worldShipProcessedEntries)
         {
+            long testShipmentID;
             foreach (WorldShipProcessedEntity wsp in worldShipProcessedEntries)
             {
-                if (string.IsNullOrWhiteSpace(wsp.ShipmentID))
+                if (string.IsNullOrWhiteSpace(wsp.ShipmentID) || !long.TryParse(wsp.ShipmentID, out testShipmentID))
                 {
                     WorldShipProcessedEntity wspToCopy = worldShipProcessedEntries.FirstOrDefault(x => x.WorldShipShipmentID == wsp.WorldShipShipmentID
-                        && !string.IsNullOrWhiteSpace(x.ShipmentID));
+                        && !string.IsNullOrWhiteSpace(x.ShipmentID)
+                        && x.WorldShipProcessedID != wsp.WorldShipProcessedID);
 
-                    if (wspToCopy != null)
-                    {
-                        wsp.ShipmentID = wspToCopy.ShipmentID;
-                    }
+                    wsp.ShipmentID = wspToCopy != null ? wspToCopy.ShipmentID : null;
                 }
             }
         }

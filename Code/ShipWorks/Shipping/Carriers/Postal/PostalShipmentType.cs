@@ -202,16 +202,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Get the insurance data for the shipment
+        /// Get the parcel data for the shipment
         /// </summary>
-        public override InsuranceChoice GetParcelInsuranceChoice(ShipmentEntity shipment, int parcelIndex)
+        public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            return new InsuranceChoice(shipment, shipment, shipment.Postal, null);
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.Postal, null),
+                new DimensionsAdapter(shipment.Postal));
         }
 
         /// <summary>
@@ -299,6 +301,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return confirmationTypes;
-        }
+        }        
     }
 }

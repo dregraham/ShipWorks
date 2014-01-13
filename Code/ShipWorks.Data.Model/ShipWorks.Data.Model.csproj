@@ -126,6 +126,7 @@
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />
     <Compile Include="Custom\EntityClasses\EmailAccountEntity.cs" />
@@ -1141,6 +1142,18 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\ActionQueueSelectionRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\BestRateShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\BestRateShipmentRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\BestRateProfileRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\BestRateProfileEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>
