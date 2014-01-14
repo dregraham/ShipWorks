@@ -564,6 +564,12 @@
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateErrorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateErrorDialog.Designer.cs">
+      <DependentUpon>BestRateErrorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateResultFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateResultTag.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateResultFilter.cs" />
@@ -6754,6 +6760,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateErrorDialog.resx">
+      <DependentUpon>BestRateErrorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
       <DependentUpon>BestRateProfileControl.cs</DependentUpon>
