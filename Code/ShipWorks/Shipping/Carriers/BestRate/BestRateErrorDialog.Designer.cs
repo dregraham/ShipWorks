@@ -71,7 +71,6 @@
             // 
             this.errorGrid.AllowMultipleSelection = false;
             this.errorGrid.AllowRowResize = true;
-            this.errorGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.errorGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.errorGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnIcon,

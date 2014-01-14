@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,8 +6,6 @@ using Divelements.SandGrid;
 using Interapptive.Shared.Utility;
 using ShipWorks.Properties;
 using System.Linq;
-using ShipWorks.Shipping.Carriers.OnTrac;
-using ShipWorks.Shipping.Carriers.Other;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
