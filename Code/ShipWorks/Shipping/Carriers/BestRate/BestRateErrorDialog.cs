@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <returns>An Image of the provider logo.</returns>
-        private Image GetProviderLogo(ShipmentType shipmentType)
+        private static Image GetProviderLogo(ShipmentType shipmentType)
         {
             Image providerLogo = EnumHelper.GetImage(shipmentType.ShipmentTypeCode);
 
