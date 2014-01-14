@@ -88,6 +88,7 @@
             this.errorGrid.Renderer = windowsXPRenderer1;
             this.errorGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.errorGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
+            gridRow1.AllowEditing = false;
             gridRow1.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.error16),
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.box_closed16),

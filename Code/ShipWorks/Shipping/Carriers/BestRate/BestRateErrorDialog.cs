@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared.Utility;
 using ShipWorks.Properties;
+using System.Linq;
+using ShipWorks.Shipping.Carriers.OnTrac;
+using ShipWorks.Shipping.Carriers.Other;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
     public partial class BestRateErrorDialog : Form
     {
-        private readonly IEnumerable<BrokerException> brokerExceptions;
+        private readonly List<BrokerException> brokerExceptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateErrorDialog"/> class.
@@ -20,7 +24,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             InitializeComponent();
 
-            this.brokerExceptions = brokerExceptions;
+            // Sort the exceptions by severity level (highest to lowest)
+            BrokerExceptionSeverityLevelComparer severityLevelComparer = new BrokerExceptionSeverityLevelComparer();
+            this.brokerExceptions = brokerExceptions.OrderBy(ex => ex.SeverityLevel, severityLevelComparer).ToList();
         }
 
         /// <summary>
@@ -31,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private void OnLoad(object sender, EventArgs e)
         {
             errorGrid.Rows.Clear();
-            
+
             foreach (BrokerException brokerException in brokerExceptions)
             {
                 List<GridCell> cells = new List<GridCell>
@@ -41,7 +47,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     new GridCell(brokerException.Message)
                 };
 
+                // Set the row height to zero, so it gets dynamically sized based on any 
+                // text that gets wrapped to the next line
                 GridRow row = new GridRow(cells.ToArray());
+                row.Height = 0;
+
                 errorGrid.Rows.Add(row);
             }
         }
