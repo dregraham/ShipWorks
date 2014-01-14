@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsFirstRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
+        public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevelAndPrice()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -185,11 +185,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             RateGroup rates = testObject.GetBestRates(testShipment, ex => { });
 
             Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.AreEqual(1, rates.Rates.Count);
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsCheapestRate_WhenTwoRatesHaveSameTypeLevel()
+        public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevel()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
             Assert.IsTrue(rates.Rates.Contains(result2));
-            Assert.AreEqual(1, rates.Rates.Count);
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]

@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsFirstRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
+        public void GetBestRates_ReturnsTwoRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -184,11 +184,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
             Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.AreEqual(1, rates.Rates.Count);
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsCheapestRate_WhenTwoRatesHaveSameTypeLevel()
+        public void GetBestRates_ReturnsTwoRate_WhenTwoRatesHaveSameTypeLevel()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -202,7 +202,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
             Assert.IsTrue(rates.Rates.Contains(result2));
-            Assert.AreEqual(1, rates.Rates.Count);
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]

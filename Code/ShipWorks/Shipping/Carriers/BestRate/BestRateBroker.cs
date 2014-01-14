@@ -106,8 +106,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<RateResult> filteredRates = accountRateGroups.SelectMany(x => x.Value.Rates)
                                                          .Where(IsValidRate)
                                                          .Where(r => !IsExcludedServiceType(r.Tag))
-                                                         .GroupBy(r => GetServiceTypeFromTag(r.Tag))
-                                                         .SelectMany(RateResultsByServiceLevel)
                                                          .ToList();
 
             // Create a dictionary of rates with their associated accounts for lookup later
@@ -279,26 +277,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected virtual RateGroup GetRates(ShipmentEntity shipment)
         {
             return GetRatesAction(shipment);
-        }
-
-        /// <summary>
-        /// Gets a list of rates by PostalServiceType
-        /// </summary>
-        /// <param name="typeGroup">Group </param>
-        /// <returns></returns>
-        private static IEnumerable<RateResult> RateResultsByServiceLevel(IGrouping<int, RateResult> typeGroup)
-        {
-            return typeGroup.GroupBy(r => r.ServiceLevel).Select(CheapestRateInGroup);
-        }
-
-        /// <summary>
-        /// Gets the cheapest rate in group of rates.
-        /// </summary>
-        /// <param name="serviceLevelGroup">Group of rates from which to return the cheapest</param>
-        /// <returns></returns>
-        private static RateResult CheapestRateInGroup(IEnumerable<RateResult> serviceLevelGroup)
-        {
-            return serviceLevelGroup.OrderBy(r => r.Amount).FirstOrDefault();
         }
 
         /// <summary>
