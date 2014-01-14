@@ -415,7 +415,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="exception">Exception that was generated</param>
         private static void PreProcessExceptionHandler(BrokerException exception)
         {
-            if (exception.SeverityLevel != BrokerExceptionSeverityLevel.Low)
+            if (exception.SeverityLevel != BrokerExceptionSeverityLevel.Warning)
             {
                 // Throw the inner exception since the actual shipping exception we're interested 
                 // in (and the application is expecting to handle) is here

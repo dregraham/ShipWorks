@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Divelements.SandGrid;
+﻿using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
-using ShipWorks.UI.Controls;
-using ShipWorks.Properties;
 using Interapptive.Shared.Utility;
+using ShipWorks.Properties;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -99,14 +95,12 @@ namespace ShipWorks.Shipping.Editing
 
                 GridRow row = new GridRow(new[]
                 {
-                    new GridCell(providerLogo == null ? ShippingIcons.other : providerLogo),
+                    new GridCell(providerLogo ?? ShippingIcons.other),
                     new GridCell(rate.Description),
                     new GridCell(rate.Days),
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
                     new GridHyperlinkCell(rate.Selectable ? "Select" : "")
-                });
-                
-                row.Tag = rate;
+                }) { Tag = rate };
 
                 sandGrid.Rows.Add(row);
             }
