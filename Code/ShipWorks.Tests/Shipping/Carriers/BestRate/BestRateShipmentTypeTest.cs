@@ -378,8 +378,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
             // because we couldn't get this functionality with Moq
-            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.Error);
-            BrokerException anotherBrokerException = new BrokerException(new ShippingException("another shipping exception"), BrokerExceptionSeverityLevel.Error);
+            Mock<ShipmentType> shipmentType = new Mock<ShipmentType>();
+
+            BrokerException brokerException = new BrokerException(new ShippingException("a shipping exception"), BrokerExceptionSeverityLevel.Error, shipmentType.Object);
+            BrokerException anotherBrokerException = new BrokerException(new ShippingException("another shipping exception"), BrokerExceptionSeverityLevel.Error, shipmentType.Object);
 
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { brokerException, anotherBrokerException });
 

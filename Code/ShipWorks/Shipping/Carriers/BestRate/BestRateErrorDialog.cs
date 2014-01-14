@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 List<GridCell> cells = new List<GridCell>
                 {
-                    new GridCell(brokerException.SeverityLevel == BrokerExceptionSeverityLevel.High ? Resources.error16 : Resources.warning16),
+                    new GridCell(brokerException.SeverityLevel == BrokerExceptionSeverityLevel.Error ? Resources.error16 : Resources.warning16),
                     new GridCell(brokerException.Message)
                 };
 

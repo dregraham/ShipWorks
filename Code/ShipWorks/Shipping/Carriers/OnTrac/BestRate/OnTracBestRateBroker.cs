@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 
             if (onTracException != null && onTracException.DoesNotServiceLocation)
             {
-                return new BrokerException(ex, BrokerExceptionSeverityLevel.Warning);
+                return new BrokerException(ex, BrokerExceptionSeverityLevel.Warning, ShipmentType);
             }
 
             return base.WrapShippingException(ex);

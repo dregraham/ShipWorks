@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
-            Divelements.SandGrid.GridRow gridRow1 = new Divelements.SandGrid.GridRow();
-            Divelements.SandGrid.GridRow gridRow2 = new Divelements.SandGrid.GridRow();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.GridRow gridRow3 = new Divelements.SandGrid.GridRow();
+            Divelements.SandGrid.GridRow gridRow4 = new Divelements.SandGrid.GridRow();
             this.closeButton = new System.Windows.Forms.Button();
             this.descriptionMessage = new System.Windows.Forms.Label();
             this.errorGrid = new Divelements.SandGrid.SandGrid();
@@ -82,22 +82,22 @@
             this.errorGrid.Name = "errorGrid";
             this.errorGrid.NullRepresentation = "";
             this.errorGrid.PrimaryColumn = this.gridColumnErrorMessage;
-            this.errorGrid.Renderer = windowsXPRenderer1;
+            this.errorGrid.Renderer = windowsXPRenderer2;
             this.errorGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.errorGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
-            gridRow1.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
+            gridRow3.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.error16),
             new Divelements.SandGrid.GridCell("There was an error getting rates from FedEx. Your account could not be authentica" +
                     "ted.")});
-            gridRow1.ContentsUnknown = true;
-            gridRow1.Height = 0;
-            gridRow2.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
+            gridRow3.ContentsUnknown = true;
+            gridRow3.Height = 0;
+            gridRow4.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.warning16),
             new Divelements.SandGrid.GridCell("OnTrac does not service the destination address.")});
-            gridRow2.Height = 0;
+            gridRow4.Height = 0;
             this.errorGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
-            gridRow1,
-            gridRow2});
+            gridRow3,
+            gridRow4});
             this.errorGrid.ShadeAlternateRows = true;
             this.errorGrid.Size = new System.Drawing.Size(489, 204);
             this.errorGrid.StretchPrimaryGrid = false;
@@ -130,7 +130,7 @@
             // 
             // warningLabel
             // 
-            this.warningLabel.Location = new System.Drawing.Point(290, 255);
+            this.warningLabel.Location = new System.Drawing.Point(100, 259);
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(48, 14);
             this.warningLabel.TabIndex = 11;
@@ -140,7 +140,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ShipWorks.Properties.Resources.warning16;
-            this.pictureBox1.Location = new System.Drawing.Point(272, 254);
+            this.pictureBox1.Location = new System.Drawing.Point(82, 258);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.TabIndex = 10;
@@ -148,7 +148,7 @@
             // 
             // errorLabel
             // 
-            this.errorLabel.Location = new System.Drawing.Point(191, 255);
+            this.errorLabel.Location = new System.Drawing.Point(29, 259);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(31, 14);
             this.errorLabel.TabIndex = 9;
@@ -158,7 +158,7 @@
             // errorImage
             // 
             this.errorImage.Image = global::ShipWorks.Properties.Resources.error16;
-            this.errorImage.Location = new System.Drawing.Point(174, 254);
+            this.errorImage.Location = new System.Drawing.Point(12, 258);
             this.errorImage.Name = "errorImage";
             this.errorImage.Size = new System.Drawing.Size(16, 16);
             this.errorImage.TabIndex = 8;
