@@ -469,7 +469,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         public void ApplySelectedShipmentRate_AddsRateSelectedEventToShipment_Test()
         {
             shipment.BestRateEvents = 0;
-            RateResult rate = new RateResult("foo", "3") {Tag = new Action<ShipmentEntity>(entity => { })};
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents); 
@@ -479,7 +479,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         public void ApplySelectedShipmentRate_DoesNotRemoveOtherBestRateEvents_Test()
         {
             shipment.BestRateEvents = (int)BestRateEventTypes.RatesCompared;
-            RateResult rate = new RateResult("foo", "3") { Tag = new Action<ShipmentEntity>(entity => { }) };
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
@@ -489,7 +489,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         public void ApplySelectedShipmentRate_CallsActionSetOnTag_Test()
         {
             ShipmentEntity calledShipment = null;
-            RateResult rate = new RateResult("foo", "3") { Tag = new Action<ShipmentEntity>(entity => { calledShipment = entity; }) };
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual(shipment, calledShipment);
