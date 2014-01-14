@@ -19,33 +19,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void Compare_HighToLow_IsNegative_Test()
+        public void Compare_ErrorToWarning_IsNegative_Test()
         {
-            int result = testObject.Compare(BrokerExceptionSeverityLevel.High, BrokerExceptionSeverityLevel.Low);
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Error, BrokerExceptionSeverityLevel.Warning);
 
             Assert.IsTrue(result < 0);
         }
 
         [TestMethod]
-        public void Compare_LowToHigh_IsPositive_Test()
+        public void Compare_WarningToError_IsPositive_Test()
         {
-            int result = testObject.Compare(BrokerExceptionSeverityLevel.Low, BrokerExceptionSeverityLevel.High);
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Error);
 
             Assert.IsTrue(result > 0);
         }
 
         [TestMethod]
-        public void Compare_HighToHigh_IsZero_Test()
+        public void Compare_ErrorToError_IsZero_Test()
         {
-            int result = testObject.Compare(BrokerExceptionSeverityLevel.High, BrokerExceptionSeverityLevel.High);
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Error, BrokerExceptionSeverityLevel.Error);
 
             Assert.AreEqual(0, result);
         }
 
         [TestMethod]
-        public void Compare_LowToLow_IsZero_Test()
+        public void Compare_WarningToWarning_IsZero_Test()
         {
-            int result = testObject.Compare(BrokerExceptionSeverityLevel.Low, BrokerExceptionSeverityLevel.Low);
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Warning);
 
             Assert.AreEqual(0, result);
         }

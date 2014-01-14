@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>An integer value used for comparison purposes.</returns>
         private int GetNumericValueForComparison(BrokerExceptionSeverityLevel severityLevel)
         {
-            return severityLevel == BrokerExceptionSeverityLevel.High ? errorLevelValue : warningLevelValue;
+            return severityLevel == BrokerExceptionSeverityLevel.Error ? errorLevelValue : warningLevelValue;
         }
     }
 }
