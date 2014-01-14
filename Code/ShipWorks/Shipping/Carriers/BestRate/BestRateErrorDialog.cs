@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Divelements.SandGrid;
+using Interapptive.Shared.Utility;
 using ShipWorks.Properties;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -22,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Called when [load].
+        /// Called when the form is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
@@ -35,12 +37,30 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<GridCell> cells = new List<GridCell>
                 {
                     new GridCell(brokerException.SeverityLevel == BrokerExceptionSeverityLevel.Error ? Resources.error16 : Resources.warning16),
+                    new GridCell(GetProviderLogo(brokerException.ShipmentType)),
                     new GridCell(brokerException.Message)
                 };
 
                 GridRow row = new GridRow(cells.ToArray());
                 errorGrid.Rows.Add(row);
             }
+        }
+
+        /// <summary>
+        /// Gets the provider logo for the given shipment type.
+        /// </summary>
+        /// <param name="shipmentType">Type of the shipment.</param>
+        /// <returns>An Image of the provider logo.</returns>
+        private Image GetProviderLogo(ShipmentType shipmentType)
+        {
+            Image providerLogo = EnumHelper.GetImage(shipmentType.ShipmentTypeCode);
+
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.Other)
+            {
+                providerLogo = ShippingIcons.truck_blue;
+            }
+
+            return providerLogo;
         }
 
         /// <summary>
