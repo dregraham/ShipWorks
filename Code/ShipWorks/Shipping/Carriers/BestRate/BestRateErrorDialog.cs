@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using ShipWorks.Properties;
@@ -34,13 +29,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private void OnLoad(object sender, EventArgs e)
         {
             errorGrid.Rows.Clear();
-
+            
             foreach (BrokerException brokerException in brokerExceptions)
             {
                 List<GridCell> cells = new List<GridCell>
                 {
                     new GridCell(brokerException.SeverityLevel == BrokerExceptionSeverityLevel.High ? Resources.error16 : Resources.warning16),
-                    new GridCell(brokerException.SeverityLevel == BrokerExceptionSeverityLevel.High ? "High" : "Low"),
                     new GridCell(brokerException.Message)
                 };
 
