@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
-            Divelements.SandGrid.GridRow gridRow1 = new Divelements.SandGrid.GridRow();
-            Divelements.SandGrid.GridRow gridRow2 = new Divelements.SandGrid.GridRow();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.GridRow gridRow3 = new Divelements.SandGrid.GridRow();
+            Divelements.SandGrid.GridRow gridRow4 = new Divelements.SandGrid.GridRow();
             this.closeButton = new System.Windows.Forms.Button();
             this.descriptionMessage = new System.Windows.Forms.Label();
             this.errorGrid = new Divelements.SandGrid.SandGrid();
@@ -43,16 +43,18 @@
             this.errorImage = new System.Windows.Forms.PictureBox();
             this.informationLabel = new System.Windows.Forms.Label();
             this.informationIcon = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // closeButton
             // 
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.closeButton.Location = new System.Drawing.Point(425, 287);
+            this.closeButton.Location = new System.Drawing.Point(425, 301);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 4;
@@ -87,25 +89,25 @@
             this.errorGrid.Name = "errorGrid";
             this.errorGrid.NullRepresentation = "";
             this.errorGrid.PrimaryColumn = this.gridColumnErrorMessage;
-            this.errorGrid.Renderer = windowsXPRenderer1;
+            this.errorGrid.Renderer = windowsXPRenderer2;
             this.errorGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.errorGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
-            gridRow1.AllowEditing = false;
-            gridRow1.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
+            gridRow3.AllowEditing = false;
+            gridRow3.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.error16),
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.box_closed16),
             new Divelements.SandGrid.GridCell("There was an error getting rates from FedEx. Your account could not be authentica" +
                     "ted.")});
-            gridRow1.ContentsUnknown = true;
-            gridRow1.Height = 0;
-            gridRow2.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
+            gridRow3.ContentsUnknown = true;
+            gridRow3.Height = 0;
+            gridRow4.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.warning16),
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.box_closed16),
             new Divelements.SandGrid.GridCell("OnTrac does not service the destination address.")});
-            gridRow2.Height = 0;
+            gridRow4.Height = 0;
             this.errorGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
-            gridRow1,
-            gridRow2});
+            gridRow3,
+            gridRow4});
             this.errorGrid.ShadeAlternateRows = true;
             this.errorGrid.Size = new System.Drawing.Size(489, 204);
             this.errorGrid.StretchPrimaryGrid = false;
@@ -151,7 +153,7 @@
             // 
             // warningLabel
             // 
-            this.warningLabel.Location = new System.Drawing.Point(100, 259);
+            this.warningLabel.Location = new System.Drawing.Point(228, 5);
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(48, 14);
             this.warningLabel.TabIndex = 11;
@@ -161,7 +163,7 @@
             // warningIcon
             // 
             this.warningIcon.Image = global::ShipWorks.Properties.Resources.warning16;
-            this.warningIcon.Location = new System.Drawing.Point(82, 258);
+            this.warningIcon.Location = new System.Drawing.Point(210, 4);
             this.warningIcon.Name = "warningIcon";
             this.warningIcon.Size = new System.Drawing.Size(16, 16);
             this.warningIcon.TabIndex = 10;
@@ -169,7 +171,7 @@
             // 
             // errorLabel
             // 
-            this.errorLabel.Location = new System.Drawing.Point(29, 259);
+            this.errorLabel.Location = new System.Drawing.Point(35, 5);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(31, 14);
             this.errorLabel.TabIndex = 9;
@@ -179,7 +181,7 @@
             // errorImage
             // 
             this.errorImage.Image = global::ShipWorks.Properties.Resources.error16;
-            this.errorImage.Location = new System.Drawing.Point(12, 258);
+            this.errorImage.Location = new System.Drawing.Point(17, 4);
             this.errorImage.Name = "errorImage";
             this.errorImage.Size = new System.Drawing.Size(16, 16);
             this.errorImage.TabIndex = 8;
@@ -187,22 +189,36 @@
             // 
             // informationLabel
             // 
-            this.informationLabel.Location = new System.Drawing.Point(186, 259);
+            this.informationLabel.Location = new System.Drawing.Point(393, 5);
             this.informationLabel.Name = "informationLabel";
-            this.informationLabel.Size = new System.Drawing.Size(75, 15);
+            this.informationLabel.Size = new System.Drawing.Size(72, 15);
             this.informationLabel.TabIndex = 13;
-            this.informationLabel.Text = "Informational";
+            this.informationLabel.Text = "Information";
             this.informationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // informationIcon
             // 
             this.informationIcon.ErrorImage = null;
             this.informationIcon.Image = global::ShipWorks.Properties.Resources.information16;
-            this.informationIcon.Location = new System.Drawing.Point(168, 258);
+            this.informationIcon.Location = new System.Drawing.Point(376, 4);
             this.informationIcon.Name = "informationIcon";
             this.informationIcon.Size = new System.Drawing.Size(16, 16);
             this.informationIcon.TabIndex = 12;
             this.informationIcon.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.errorLabel);
+            this.panel1.Controls.Add(this.informationLabel);
+            this.panel1.Controls.Add(this.errorImage);
+            this.panel1.Controls.Add(this.informationIcon);
+            this.panel1.Controls.Add(this.warningIcon);
+            this.panel1.Controls.Add(this.warningLabel);
+            this.panel1.Location = new System.Drawing.Point(11, 251);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(489, 26);
+            this.panel1.TabIndex = 14;
             // 
             // BestRateErrorDialog
             // 
@@ -210,13 +226,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.closeButton;
-            this.ClientSize = new System.Drawing.Size(512, 322);
-            this.Controls.Add(this.informationLabel);
-            this.Controls.Add(this.informationIcon);
-            this.Controls.Add(this.warningLabel);
-            this.Controls.Add(this.warningIcon);
-            this.Controls.Add(this.errorLabel);
-            this.Controls.Add(this.errorImage);
+            this.ClientSize = new System.Drawing.Size(512, 336);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.errorGrid);
             this.Controls.Add(this.descriptionMessage);
             this.Controls.Add(this.closeButton);
@@ -232,6 +243,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -250,6 +262,7 @@
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
         private System.Windows.Forms.Label informationLabel;
         private System.Windows.Forms.PictureBox informationIcon;
+        private System.Windows.Forms.Panel panel1;
 
     }
 }

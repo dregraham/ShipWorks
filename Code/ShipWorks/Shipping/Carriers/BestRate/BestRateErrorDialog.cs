@@ -33,13 +33,38 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnLoad(object sender, EventArgs e)
         {
+            InitializeLegend();
+            LoadGridData();
+        }
+        
+        /// <summary>
+        /// Initializes the icons and text of the grid's legend based on the attributes 
+        /// of the BrokerExceptionSeverityLevel values.
+        /// </summary>
+        private void InitializeLegend()
+        {
+            errorImage.Image = EnumHelper.GetImage(BrokerExceptionSeverityLevel.Error);
+            errorLabel.Text = EnumHelper.GetDescription(BrokerExceptionSeverityLevel.Error);
+
+            warningIcon.Image = EnumHelper.GetImage(BrokerExceptionSeverityLevel.Warning);
+            warningLabel.Text = EnumHelper.GetDescription(BrokerExceptionSeverityLevel.Warning);
+
+            informationIcon.Image = EnumHelper.GetImage(BrokerExceptionSeverityLevel.Information);
+            informationLabel.Text = EnumHelper.GetDescription(BrokerExceptionSeverityLevel.Information);
+        }
+
+        /// <summary>
+        /// Loads the grid data based on the content of the broker exceptions.
+        /// </summary>
+        private void LoadGridData()
+        {
             errorGrid.Rows.Clear();
 
             foreach (BrokerException brokerException in brokerExceptions)
             {
                 List<GridCell> cells = new List<GridCell>
                 {
-                    new GridCell(brokerException.SeverityLevel == BrokerExceptionSeverityLevel.Error ? Resources.error16 : Resources.warning16),
+                    new GridCell(EnumHelper.GetImage(brokerException.SeverityLevel)),
                     new GridCell(GetProviderLogo(brokerException.ShipmentType)),
                     new GridCell(brokerException.Message)
                 };
