@@ -1,6 +1,13 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
+using SpreadsheetGear.CustomFunctions;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 {
@@ -77,6 +84,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, EndiciaAccountEntity account)
         {
             postalShipmentEntity.Endicia.EndiciaAccountID = account.EndiciaAccountID;
+        }
+
+        /// <summary>
+        /// Gets best rates for Endicia
+        /// </summary>
+        /// <returns>Best rates from Endicia</returns>
+        /// <remarks>Adds an informational error when no DHL rates are returned</remarks>
+        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        {
+            RateGroup rates = base.GetBestRates(shipment, exceptionHandler);
+
+            if (DoesNotIncludeDhlRates(rates.Rates))
+            {
+                exceptionHandler(new BrokerException(new ShippingException("No DHL rates were returned"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+            }
+
+            return rates;
+        }
+
+        /// <summary>
+        /// Gets whether the specified rate collection includes any Dhl rates
+        /// </summary>
+        private static bool DoesNotIncludeDhlRates(IEnumerable<RateResult> rates)
+        {
+            return !rates.Select(PostalRateSelectionFromRateResult)
+                .Any(x => ShipmentTypeManager.IsEndiciaDhl(x.ServiceType));
+        }
+
+        /// <summary>
+        /// Gets the PostalRateSelection from a RateResult
+        /// </summary>
+        private static PostalRateSelection PostalRateSelectionFromRateResult(RateResult result)
+        {
+            return (PostalRateSelection) ((BestRateResultTag) result.Tag).OriginalTag;
         }
     }
 }

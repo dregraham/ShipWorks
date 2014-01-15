@@ -365,7 +365,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         public void GetBestRates_CallsHandler_WhenShippingExceptionIsThrown()
         {
             ShippingException exception = new ShippingException();
-            ShippingException calledException = null;
+            List<ShippingException> calledExceptions = new List<ShippingException>();
 
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                                    .Returns((ShipmentEntity s) => rateResults[s.Postal.Endicia.EndiciaAccountID])
@@ -374,9 +374,47 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
                                        if (s.Postal.Endicia.EndiciaAccountID == 2) throw exception;
                                    });
 
+            testObject.GetBestRates(testShipment, calledExceptions.Add);
+
+            Assert.IsTrue(calledExceptions.Select(x => x.InnerException).Contains(exception));
+        }
+
+        [TestMethod]
+        public void GetBestRates_CallsHandlerWithInformationError_WhenResultsDoNotIncludeDhl()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Endicia Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            BrokerException calledException = null;
+
             testObject.GetBestRates(testShipment, ex => calledException = ex);
 
-            Assert.AreEqual(exception, calledException.InnerException);
+            Assert.AreEqual(BrokerExceptionSeverityLevel.Information, calledException.SeverityLevel);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenResultsIncludeDhl()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Endicia Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.DhlParcelStandard, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            BrokerException calledException = null;
+
+            testObject.GetBestRates(testShipment, ex => calledException = ex);
+
+            Assert.IsNull(calledException);
         }
 
         [TestMethod]
