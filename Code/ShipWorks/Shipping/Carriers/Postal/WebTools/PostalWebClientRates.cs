@@ -131,16 +131,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 throw new ShippingException("Response from USPS: " + error);
             }
 
-            List<RateResult> rateResults;
             if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
             {
-                rateResults = ProcessXmlDomesticResponse(xmlDocument, packaging);
+                return ProcessXmlDomesticResponse(xmlDocument, packaging);
             }
             else
             {
-                rateResults = ProcessXmlInternationalResponse(xmlDocument, packaging);
+                return ProcessXmlInternationalResponse(xmlDocument, packaging);
             }
-            return rateResults.Select(s => { s.ShipmentType = ShipmentTypeCode.PostalWebTools; return s; }).ToList();
         }
 
         /// <summary>
@@ -270,8 +268,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 }
             }
 
-            rates.ForEach(PostalUtility.SetServiceDetails);
-
+            foreach (var rate in rates)
+            {
+                PostalUtility.SetServiceDetails(rate);
+                rate.ShipmentType = ShipmentTypeCode.PostalWebTools;
+            }
+            
             return rates;
         }
 
@@ -423,7 +425,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     EnumHelper.GetDescription(serviceType), 
                     days, 
                     amount, 
-                    new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                    new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                    {ShipmentType = ShipmentTypeCode.PostalWebTools});
             }
 
             return rates;

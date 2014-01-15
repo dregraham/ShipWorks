@@ -32,6 +32,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         [Description("Error")]
         [ImageResourceAttribute("error16")]
-        Error,
+        Error
     }
 }
