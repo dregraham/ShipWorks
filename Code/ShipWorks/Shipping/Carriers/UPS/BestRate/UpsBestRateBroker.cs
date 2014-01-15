@@ -16,7 +16,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// </summary>
     public class UpsBestRateBroker : PackageBasedBestRateBroker<UpsAccountEntity, UpsPackageEntity>
     {
-        bool isMailInnovationsAvailable;
+        private bool isMailInnovationsAvailable;
+        private bool canUseSurePost;
 
         /// <summary>
         /// Creates a broker with the default shipment type and account repository
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         }
 
         /// <summary>
-        /// Gets a list of Ups rates
+        /// Gets a list of UPS rates
         /// </summary>
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
         /// <param name="exceptionHandler">Action that performs exception handling</param>
@@ -50,15 +51,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
-            var modifiedRates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+            List<RateResult> modifiedRates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+            
             bestRates.Rates.Clear();
             bestRates.Rates.AddRange(modifiedRates);
 
             if (isMailInnovationsAvailable)
             {
-                exceptionHandler(new BrokerException(new ShippingException("UPS doesn't provide rates for Mail Innovations"),BrokerExceptionSeverityLevel.Information, ShipmentType));
+                exceptionHandler(new BrokerException(new ShippingException("UPS doesn't provide rates for Mail Innovations."), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
 
+            if (canUseSurePost && !bestRates.Rates.Any(r => UpsUtility.IsUpsSurePostService(((UpsServiceType)((BestRateResultTag)r.Tag).OriginalTag))))
+            {
+                // The account is configured to use SurePost, but there weren't any SurePost rates returned, so
+                // we want to flag this in the from of sending a BrokerException to the exception handler
+                exceptionHandler(new BrokerException(new ShippingException("ShipWorks could not get SurePost rates."), BrokerExceptionSeverityLevel.Warning, ShipmentType));
+            }
+            
             return bestRates;
         }
 
@@ -69,6 +78,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override void Configure(BestRateBrokerSettings brokerSettings)
         {
             isMailInnovationsAvailable = brokerSettings.IsMailInnovationsAvailable(ShipmentType);
+            canUseSurePost = brokerSettings.CanUseSurePost();
         }
 
         /// <summary>

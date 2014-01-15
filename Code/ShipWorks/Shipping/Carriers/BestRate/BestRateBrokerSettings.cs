@@ -4,6 +4,7 @@ using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -109,6 +110,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 default:
                     throw new ArgumentException("shipmentType should be UPS type", "shipmentType");
             }
+        }
+
+        public bool CanUseSurePost()
+        {
+            return UpsUtility.CanUseSurePost();
         }
     }
 }
