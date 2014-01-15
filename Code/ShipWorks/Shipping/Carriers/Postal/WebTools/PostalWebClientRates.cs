@@ -131,14 +131,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 throw new ShippingException("Response from USPS: " + error);
             }
 
+            List<RateResult> rateResults;
             if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
             {
-                return ProcessXmlDomesticResponse(xmlDocument, packaging);
+                rateResults = ProcessXmlDomesticResponse(xmlDocument, packaging);
             }
             else
             {
-                return ProcessXmlInternationalResponse(xmlDocument, packaging);
+                rateResults = ProcessXmlInternationalResponse(xmlDocument, packaging);
             }
+            return rateResults.Select(s => { s.ShipmentType = ShipmentTypeCode.PostalWebTools; return s; }).ToList();
         }
 
         /// <summary>
