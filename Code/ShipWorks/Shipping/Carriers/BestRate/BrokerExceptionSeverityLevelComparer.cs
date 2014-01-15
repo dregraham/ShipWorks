@@ -11,18 +11,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BrokerExceptionSeverityLevelComparer : IComparer<BrokerExceptionSeverityLevel>
     {
-        private readonly int errorLevelValue;
-        private readonly int warningLevelValue;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BrokerExceptionSeverityLevelComparer"/> class.
-        /// </summary>
-        public BrokerExceptionSeverityLevelComparer()
-        {
-            errorLevelValue = 0;
-            warningLevelValue = 1;
-        }
-
+        private const int ErrorLevelValue = 0;
+        private const int WarningLevelValue = 1;
+        private const int InformationLevelValue = 2;
+        
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
         /// </summary>
@@ -56,9 +48,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="severityLevel">The severity level.</param>
         /// <returns>An integer value used for comparison purposes.</returns>
-        private int GetNumericValueForComparison(BrokerExceptionSeverityLevel severityLevel)
+        private static int GetNumericValueForComparison(BrokerExceptionSeverityLevel severityLevel)
         {
-            return severityLevel == BrokerExceptionSeverityLevel.Error ? errorLevelValue : warningLevelValue;
+            int valueForComparison = ErrorLevelValue;
+
+            if (severityLevel == BrokerExceptionSeverityLevel.Warning)
+            {
+                valueForComparison = WarningLevelValue;
+            }
+            else if (severityLevel == BrokerExceptionSeverityLevel.Information)
+            {
+                valueForComparison = InformationLevelValue;
+            }
+
+            return valueForComparison;
         }
     }
 }

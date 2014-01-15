@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
@@ -27,11 +23,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void Compare_WarningToError_IsPositive_Test()
+        public void Compare_ErrorToInformation_IsNegative_Test()
         {
-            int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Error);
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Error, BrokerExceptionSeverityLevel.Information);
 
-            Assert.IsTrue(result > 0);
+            Assert.IsTrue(result < 0);
         }
 
         [TestMethod]
@@ -43,11 +39,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
+        public void Compare_WarningToError_IsPositive_Test()
+        {
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Error);
+
+            Assert.IsTrue(result > 0);
+        }
+
+        [TestMethod]
+        public void Compare_WarningToInformation_IsNegative_Test()
+        {
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Information);
+
+            Assert.IsTrue(result < 0);
+        }
+
+        [TestMethod]
         public void Compare_WarningToWarning_IsZero_Test()
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Warning);
 
             Assert.AreEqual(0, result);
+        }
+
+        [TestMethod]
+        public void Compare_InformationToInformatkion_IsZero_Test()
+        {
+            int result = testObject.Compare(BrokerExceptionSeverityLevel.Information, BrokerExceptionSeverityLevel.Information);
+
+            Assert.IsTrue(result == 0);
         }
 
     }
