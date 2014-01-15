@@ -3,6 +3,6 @@
     public interface IBestRateBrokerSettings
     {
         bool CheckExpress1Rates(ShipmentType shipmentType);
-        bool IsMailInnovationsAvailable();
+        bool IsMailInnovationsAvailable(ShipmentType shipmentType);
     }
 }
