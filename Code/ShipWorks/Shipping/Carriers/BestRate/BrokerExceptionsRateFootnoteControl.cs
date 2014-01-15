@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+
+using Interapptive.Shared.Utility;
+
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -17,6 +21,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             InitializeComponent();
 
             this.brokerExceptions = brokerExceptions;
+
+            pictureBox.Image = EnumHelper.GetImage(brokerExceptions.FirstOrDefault().SeverityLevel);
         }
 
         /// <summary>
