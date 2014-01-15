@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -47,5 +46,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
         /// </summary>
         bool IsCustomsRequired(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Configures the broker using the given settings.
+        /// </summary>
+        /// <param name="brokerSettings">The broker settings.</param>
+        void Configure(BestRateBrokerSettings brokerSettings);
     }
 }

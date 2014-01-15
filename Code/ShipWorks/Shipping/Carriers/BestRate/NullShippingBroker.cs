@@ -56,5 +56,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return false;
         }
+
+
+        /// <summary>
+        /// Configures a broker using the given settings.
+        /// </summary>
+        /// <param name="brokerSettings">The broker settings.</param>
+        public void Configure(BestRateBrokerSettings brokerSettings)
+        { }
     }
 }

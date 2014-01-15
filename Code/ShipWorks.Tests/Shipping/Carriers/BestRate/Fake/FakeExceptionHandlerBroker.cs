@@ -84,5 +84,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
         {
             return false;
         }
+        
+        /// <summary>
+        /// Configures the broker using the given settings.
+        /// </summary>
+        /// <param name="brokerSettings">The broker settings.</param>
+        public void Configure(BestRateBrokerSettings brokerSettings)
+        { }
     }
 }
