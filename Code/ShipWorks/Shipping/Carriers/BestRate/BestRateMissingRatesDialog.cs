@@ -87,12 +87,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             Image providerLogo = EnumHelper.GetImage(shipmentType.ShipmentTypeCode);
 
-            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.Other)
-            {
-                providerLogo = ShippingIcons.truck_blue;
-            }
-
-            return providerLogo;
+            // Just in case a shipment type doesn't have a logo
+            return providerLogo ?? ShippingIcons.other;
         }
 
         /// <summary>
