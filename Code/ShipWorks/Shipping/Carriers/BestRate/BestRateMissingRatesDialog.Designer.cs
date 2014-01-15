@@ -54,6 +54,7 @@
             // 
             // closeButton
             // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeButton.Location = new System.Drawing.Point(425, 318);
@@ -66,9 +67,11 @@
             // 
             // descriptionMessage
             // 
+            this.descriptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.descriptionMessage.Location = new System.Drawing.Point(8, 29);
             this.descriptionMessage.Name = "descriptionMessage";
-            this.descriptionMessage.Size = new System.Drawing.Size(487, 49);
+            this.descriptionMessage.Size = new System.Drawing.Size(492, 49);
             this.descriptionMessage.TabIndex = 5;
             this.descriptionMessage.Text = resources.GetString("descriptionMessage.Text");
             // 
@@ -76,6 +79,9 @@
             // 
             this.errorGrid.AllowMultipleSelection = false;
             this.errorGrid.AllowRowResize = true;
+            this.errorGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.errorGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.errorGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnIcon,
@@ -124,7 +130,6 @@
             this.gridColumnIcon.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnIcon.HeaderText = "Severity";
             this.gridColumnIcon.MinimumWidth = 25;
-            this.gridColumnIcon.ResizeBehavior = Divelements.SandGrid.ElementResizeBehavior.None;
             this.gridColumnIcon.Width = 50;
             // 
             // gridColumnProvider
@@ -137,7 +142,6 @@
             this.gridColumnProvider.Clickable = false;
             this.gridColumnProvider.HeaderText = "Provider";
             this.gridColumnProvider.MinimumWidth = 50;
-            this.gridColumnProvider.ResizeBehavior = Divelements.SandGrid.ElementResizeBehavior.None;
             this.gridColumnProvider.Width = 50;
             // 
             // gridColumnErrorMessage
@@ -145,15 +149,15 @@
             this.gridColumnErrorMessage.AllowEditing = false;
             this.gridColumnErrorMessage.AllowReorder = false;
             this.gridColumnErrorMessage.AllowWrap = true;
+            this.gridColumnErrorMessage.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnErrorMessage.Clickable = false;
             this.gridColumnErrorMessage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnErrorMessage.HeaderText = "Error";
-            this.gridColumnErrorMessage.ResizeBehavior = Divelements.SandGrid.ElementResizeBehavior.None;
             this.gridColumnErrorMessage.Width = 385;
             // 
             // warningLabel
             // 
-            this.warningLabel.Location = new System.Drawing.Point(228, 5);
+            this.warningLabel.Location = new System.Drawing.Point(230, 5);
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(48, 14);
             this.warningLabel.TabIndex = 11;
@@ -163,7 +167,7 @@
             // warningIcon
             // 
             this.warningIcon.Image = global::ShipWorks.Properties.Resources.warning16;
-            this.warningIcon.Location = new System.Drawing.Point(210, 4);
+            this.warningIcon.Location = new System.Drawing.Point(212, 4);
             this.warningIcon.Name = "warningIcon";
             this.warningIcon.Size = new System.Drawing.Size(16, 16);
             this.warningIcon.TabIndex = 10;
@@ -171,7 +175,7 @@
             // 
             // errorLabel
             // 
-            this.errorLabel.Location = new System.Drawing.Point(35, 5);
+            this.errorLabel.Location = new System.Drawing.Point(37, 5);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(31, 14);
             this.errorLabel.TabIndex = 9;
@@ -181,7 +185,7 @@
             // errorImage
             // 
             this.errorImage.Image = global::ShipWorks.Properties.Resources.error16;
-            this.errorImage.Location = new System.Drawing.Point(17, 4);
+            this.errorImage.Location = new System.Drawing.Point(19, 4);
             this.errorImage.Name = "errorImage";
             this.errorImage.Size = new System.Drawing.Size(16, 16);
             this.errorImage.TabIndex = 8;
@@ -189,7 +193,7 @@
             // 
             // informationLabel
             // 
-            this.informationLabel.Location = new System.Drawing.Point(393, 5);
+            this.informationLabel.Location = new System.Drawing.Point(395, 5);
             this.informationLabel.Name = "informationLabel";
             this.informationLabel.Size = new System.Drawing.Size(72, 15);
             this.informationLabel.TabIndex = 13;
@@ -200,7 +204,7 @@
             // 
             this.informationIcon.ErrorImage = null;
             this.informationIcon.Image = global::ShipWorks.Properties.Resources.information16;
-            this.informationIcon.Location = new System.Drawing.Point(376, 4);
+            this.informationIcon.Location = new System.Drawing.Point(378, 4);
             this.informationIcon.Name = "informationIcon";
             this.informationIcon.Size = new System.Drawing.Size(16, 16);
             this.informationIcon.TabIndex = 12;
@@ -208,6 +212,8 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.errorLabel);
             this.panel1.Controls.Add(this.informationLabel);
@@ -222,14 +228,16 @@
             // 
             // header
             // 
+            this.header.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.header.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.header.Location = new System.Drawing.Point(8, 9);
             this.header.Name = "header";
-            this.header.Size = new System.Drawing.Size(487, 20);
+            this.header.Size = new System.Drawing.Size(492, 20);
             this.header.TabIndex = 15;
             this.header.Text = "ShipWorks could not get rates from all providers.";
             // 
-            // BestRateErrorDialog
+            // BestRateMissingRatesDialog
             // 
             this.AcceptButton = this.closeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -242,10 +250,10 @@
             this.Controls.Add(this.descriptionMessage);
             this.Controls.Add(this.closeButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "BestRateErrorDialog";
+            this.Name = "BestRateMissingRatesDialog";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Missing Rates";
