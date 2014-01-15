@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// An informational message, no severity
         /// </summary>
         [Description("Information")]
-        [ImageResourceAttribute("InfoTip")]
+        [ImageResourceAttribute("information16")]
         Information,
 
         /// <summary>
