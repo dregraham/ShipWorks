@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
@@ -9,12 +10,31 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public partial class BestRateSettingsControl : SettingsControlBase
     {
+        private static readonly List<ShipmentTypeCode> nonCarrierShipmentTypes = new List<ShipmentTypeCode>
+        {
+            ShipmentTypeCode.None,
+            ShipmentTypeCode.BestRate,
+            ShipmentTypeCode.Other
+        };
+
+        private bool isDirty;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public BestRateSettingsControl()
         {
             InitializeComponent();
+
+            panelProviders.ChangeEnabledShipmentTypes += OnPanelProvidersChangeEnabledShipmentTypes;
+        }
+
+        /// <summary>
+        /// The enabled shipment types have changed
+        /// </summary>
+        void OnPanelProvidersChangeEnabledShipmentTypes(object sender, System.EventArgs e)
+        {
+            isDirty = true;
         }
 
         /// <summary>
@@ -32,19 +52,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            var shipments = ShipmentTypeManager.EnabledShipmentTypes
-                                               .Select(x => (int)x.ShipmentTypeCode)
-                                               .ToList();
-            var disabledShipments = ShipmentTypeManager.ShipmentTypes
-                                                       .Select(x => (int) x.ShipmentTypeCode)
-                                                       .Except(shipments)
-                                                       .Intersect(settings.BestRateExcludedTypes);
+            // If there are no changes, don't do anything
+            if (!isDirty)
+            {
+                return;
+            }
 
-            var excludedShipmentCodes = shipments.Except(panelProviders.SelectedShipmentTypes.Select(x => (int)x.ShipmentTypeCode))
-                                                 .Union(disabledShipments)
-                                                 .ToArray();
+            // Save the explicitly unselected shipment types
+            // Include previously excluded types to handle a situation where the type was excluded from best rates then hidden globally
+            // Include non carrier shipment types (other, none, etc.), since we never want to do anything with those
+            // Finally, remove explicitly included shipment types to remove previously excluded types that are now shown globally
+            settings.BestRateExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode)
+                .Union(settings.BestRateExcludedTypes)
+                .Union(nonCarrierShipmentTypes.Cast<int>())
+                .Except(panelProviders.SelectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode))
+                .ToArray();
 
-            settings.BestRateExcludedTypes = excludedShipmentCodes;
+            isDirty = false;
         }
 
         /// <summary>
@@ -66,9 +90,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipmentType">The shipment type to test</param>
         private static bool IsCarrierShippingType(ShipmentType shipmentType)
         {
-            return shipmentType.ShipmentTypeCode != ShipmentTypeCode.None && 
-                        shipmentType.ShipmentTypeCode != ShipmentTypeCode.BestRate && 
-                        shipmentType.ShipmentTypeCode != ShipmentTypeCode.Other;
+            return !nonCarrierShipmentTypes.Contains(shipmentType.ShipmentTypeCode);
         }
     }
 }
