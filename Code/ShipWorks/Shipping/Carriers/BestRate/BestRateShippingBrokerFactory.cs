@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>The shipping broker for all activated and configured shipment types that have not
-        /// been excluded.</returns>
+        /// been excluded from being used to find the best rate.</returns>
         public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment)
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
@@ -44,6 +44,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                         brokers.Add(shipmentType.GetShippingBroker(shipment));
                     }
                 }
+            }
+
+            // We need to configure each of the brokers now that we have our final
+            // list that should be used
+            BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, brokers);
+            foreach (IBestRateShippingBroker broker in brokers)
+            {
+                broker.Configure(brokerSettings);
             }
 
             return brokers;
