@@ -714,7 +714,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 // Get the transit times and services
-
                 List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment);
 
                 List<UpsServiceRate> serviceRates = UpsApiRateClient.GetRates(shipment);

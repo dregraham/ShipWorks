@@ -105,7 +105,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("UnitOfMeasurement");
             xmlWriter.WriteElementString("Code", "LBS");
             xmlWriter.WriteEndElement();
-            xmlWriter.WriteElementString("Weight", Math.Min(shipment.TotalWeight, 150).ToString("0.0"));
+            double weight = shipment.TotalWeight <= 0.00 ? 0.1 : shipment.TotalWeight;
+            xmlWriter.WriteElementString("Weight", Math.Min(weight, 150).ToString("##0.##"));
             xmlWriter.WriteEndElement();
 
             xmlWriter.WriteElementString("TotalPackagesInShipment", ups.Packages.Count.ToString(CultureInfo.InvariantCulture));
