@@ -9,15 +9,15 @@ using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
-    public partial class BestRateErrorDialog : Form
+    public partial class BestRateMissingRatesDialog : Form
     {
         private readonly List<BrokerException> brokerExceptions;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BestRateErrorDialog"/> class.
+        /// Initializes a new instance of the <see cref="BestRateMissingRatesDialog"/> class.
         /// </summary>
         /// <param name="brokerExceptions">The broker exceptions.</param>
-        public BestRateErrorDialog(IEnumerable<BrokerException> brokerExceptions)
+        public BestRateMissingRatesDialog(IEnumerable<BrokerException> brokerExceptions)
         {
             InitializeComponent();
 

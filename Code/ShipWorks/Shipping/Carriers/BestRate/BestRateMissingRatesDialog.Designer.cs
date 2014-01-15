@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Carriers.BestRate
 {
-    partial class BestRateErrorDialog
+    partial class BestRateMissingRatesDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BestRateErrorDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BestRateMissingRatesDialog));
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             Divelements.SandGrid.GridRow gridRow1 = new Divelements.SandGrid.GridRow();
             Divelements.SandGrid.GridRow gridRow2 = new Divelements.SandGrid.GridRow();

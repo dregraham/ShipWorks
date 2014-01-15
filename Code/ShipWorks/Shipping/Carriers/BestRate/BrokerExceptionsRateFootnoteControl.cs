@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="e">The <see cref="LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void OnMoreInfoClick(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            using (BestRateErrorDialog dialog = new BestRateErrorDialog(BrokerExceptions))
+            using (BestRateMissingRatesDialog dialog = new BestRateMissingRatesDialog(BrokerExceptions))
             {
                 dialog.ShowDialog(this);
             }
