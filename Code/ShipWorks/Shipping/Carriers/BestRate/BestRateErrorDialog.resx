@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="descriptionMessage.Text" xml:space="preserve">
+    <value>Items denoted as an error will prevent a shipment from being automatically processed after ShipWorks finds the best rate, but the shipment can still be processed manually by selecting a rate from the rates grid, though.</value>
+  </data>
 </root>

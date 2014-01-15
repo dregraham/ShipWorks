@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
-            Divelements.SandGrid.GridRow gridRow3 = new Divelements.SandGrid.GridRow();
-            Divelements.SandGrid.GridRow gridRow4 = new Divelements.SandGrid.GridRow();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BestRateErrorDialog));
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.GridRow gridRow1 = new Divelements.SandGrid.GridRow();
+            Divelements.SandGrid.GridRow gridRow2 = new Divelements.SandGrid.GridRow();
             this.closeButton = new System.Windows.Forms.Button();
             this.descriptionMessage = new System.Windows.Forms.Label();
             this.errorGrid = new Divelements.SandGrid.SandGrid();
@@ -44,6 +45,7 @@
             this.informationLabel = new System.Windows.Forms.Label();
             this.informationIcon = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.header = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).BeginInit();
@@ -54,7 +56,7 @@
             // 
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.closeButton.Location = new System.Drawing.Point(425, 301);
+            this.closeButton.Location = new System.Drawing.Point(425, 318);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 4;
@@ -64,13 +66,11 @@
             // 
             // descriptionMessage
             // 
-            this.descriptionMessage.Location = new System.Drawing.Point(8, 9);
+            this.descriptionMessage.Location = new System.Drawing.Point(8, 29);
             this.descriptionMessage.Name = "descriptionMessage";
-            this.descriptionMessage.Size = new System.Drawing.Size(487, 36);
+            this.descriptionMessage.Size = new System.Drawing.Size(487, 49);
             this.descriptionMessage.TabIndex = 5;
-            this.descriptionMessage.Text = "Errors will prevent a shipment from being automatically processed with best rate." +
-    " \r\nThe shipment can still be processed manually by selecting a rate from the rat" +
-    "es grid, though.";
+            this.descriptionMessage.Text = resources.GetString("descriptionMessage.Text");
             // 
             // errorGrid
             // 
@@ -85,29 +85,29 @@
             this.errorGrid.EnableSearching = false;
             this.errorGrid.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorGrid.ImageTextSeparation = 1;
-            this.errorGrid.Location = new System.Drawing.Point(11, 48);
+            this.errorGrid.Location = new System.Drawing.Point(11, 76);
             this.errorGrid.Name = "errorGrid";
             this.errorGrid.NullRepresentation = "";
             this.errorGrid.PrimaryColumn = this.gridColumnErrorMessage;
-            this.errorGrid.Renderer = windowsXPRenderer2;
+            this.errorGrid.Renderer = windowsXPRenderer1;
             this.errorGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.errorGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
-            gridRow3.AllowEditing = false;
-            gridRow3.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
+            gridRow1.AllowEditing = false;
+            gridRow1.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.error16),
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.box_closed16),
             new Divelements.SandGrid.GridCell("There was an error getting rates from FedEx. Your account could not be authentica" +
                     "ted.")});
-            gridRow3.ContentsUnknown = true;
-            gridRow3.Height = 0;
-            gridRow4.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
+            gridRow1.ContentsUnknown = true;
+            gridRow1.Height = 0;
+            gridRow2.Cells.AddRange(new Divelements.SandGrid.GridCell[] {
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.warning16),
             new Divelements.SandGrid.GridCell(global::ShipWorks.Properties.Resources.box_closed16),
             new Divelements.SandGrid.GridCell("OnTrac does not service the destination address.")});
-            gridRow4.Height = 0;
+            gridRow2.Height = 0;
             this.errorGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
-            gridRow3,
-            gridRow4});
+            gridRow1,
+            gridRow2});
             this.errorGrid.ShadeAlternateRows = true;
             this.errorGrid.Size = new System.Drawing.Size(489, 204);
             this.errorGrid.StretchPrimaryGrid = false;
@@ -215,10 +215,19 @@
             this.panel1.Controls.Add(this.informationIcon);
             this.panel1.Controls.Add(this.warningIcon);
             this.panel1.Controls.Add(this.warningLabel);
-            this.panel1.Location = new System.Drawing.Point(11, 251);
+            this.panel1.Location = new System.Drawing.Point(11, 279);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(489, 26);
             this.panel1.TabIndex = 14;
+            // 
+            // header
+            // 
+            this.header.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.header.Location = new System.Drawing.Point(8, 9);
+            this.header.Name = "header";
+            this.header.Size = new System.Drawing.Size(487, 20);
+            this.header.TabIndex = 15;
+            this.header.Text = "ShipWorks could not get rates from all providers.";
             // 
             // BestRateErrorDialog
             // 
@@ -226,7 +235,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.closeButton;
-            this.ClientSize = new System.Drawing.Size(512, 336);
+            this.ClientSize = new System.Drawing.Size(512, 353);
+            this.Controls.Add(this.header);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.errorGrid);
             this.Controls.Add(this.descriptionMessage);
@@ -238,7 +248,7 @@
             this.Name = "BestRateErrorDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Best Rate Errors";
+            this.Text = "Missing Rates";
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorImage)).EndInit();
@@ -263,6 +273,7 @@
         private System.Windows.Forms.Label informationLabel;
         private System.Windows.Forms.PictureBox informationIcon;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label header;
 
     }
 }
