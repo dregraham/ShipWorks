@@ -290,7 +290,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment
         /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            return GetRates(shipment, true);
+        }
+
+        /// <summary>
+        /// Get postal rates for the given shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        /// <param name="getExpress1Rates">Defines whether Express1 rates should be retrieved along with Endicia</param>
+        public RateGroup GetRates(ShipmentEntity shipment, bool getExpress1Rates)
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
@@ -315,7 +326,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 try
                 {
                     // Currently this actually recurses into this same method
-                    express1Rates = ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList();
+                    express1Rates = (getExpress1Rates) ? 
+                        ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() : 
+                        new List<RateResult>();
                 }
                 finally
                 {
@@ -346,7 +359,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         PostalRateSelection endiciaRateDetail = (PostalRateSelection) endiciaRate.Tag;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (endiciaRate.Selectable && endiciaRateDetail != null && Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
+                        if (getExpress1Rates &&
+                            endiciaRate.Selectable && 
+                            endiciaRateDetail != null && 
+                            Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
                         {
                             // See if Express1 returned a rate for this servie
                             RateResult express1Rate = null;

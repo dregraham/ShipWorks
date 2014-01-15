@@ -113,9 +113,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Get the rates for the given shipment.
+        /// Get postal rates for the given shipment
         /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            return GetRates(shipment, true);
+        }
+
+        /// <summary>
+        /// Get postal rates for the given shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        /// <param name="getExpress1Rates">Defines whether Express1 rates should be retrieved along with Endicia</param>
+        public RateGroup GetRates(ShipmentEntity shipment, bool getExpress1Rates)
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -140,7 +151,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 try
                 {
                     // Currently this actually recurses into this same method
-                    express1Rates = ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList();
+                    express1Rates = (getExpress1Rates) ?
+                        ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() :
+                        new List<RateResult>();
                 }
                 finally
                 {
@@ -168,7 +181,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         stampsRate.ShipmentType = ShipmentTypeCode.Stamps;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (stampsRate.Selectable && stampsRateDetail != null && Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
+                        if (getExpress1Rates &&
+                            stampsRate.Selectable && 
+                            stampsRateDetail != null && 
+                            Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
                         {
                             // See if Express1 returned a rate for this service
                             RateResult express1Rate = null;
