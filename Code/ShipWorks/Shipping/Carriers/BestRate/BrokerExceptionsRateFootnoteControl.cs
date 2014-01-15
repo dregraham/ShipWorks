@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             this.brokerExceptions = brokerExceptions;
 
+            // This assumes that the brokerExceptions passed in have been properly sorted by now.
             pictureBox.Image = EnumHelper.GetImage(brokerExceptions.FirstOrDefault().SeverityLevel);
         }
 
