@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // We need to configure each of the brokers now that we have our final
             // list that should be used
-            BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, brokers);
+            BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, brokers, EditionManager.ActiveRestrictions);
             foreach (IBestRateShippingBroker broker in brokers)
             {
                 broker.Configure(brokerSettings);

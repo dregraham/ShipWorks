@@ -16,6 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
     /// </summary>
     public class EndiciaBestRateBroker : PostalResellerBestRateBroker<EndiciaAccountEntity>
     {
+        bool isEndiciaDhlEnabled;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -95,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         {
             RateGroup rates = base.GetBestRates(shipment, exceptionHandler);
 
-            if (DoesNotIncludeDhlRates(rates.Rates))
+            if (isEndiciaDhlEnabled)
             {
                 exceptionHandler(new BrokerException(new ShippingException("No DHL rates were returned"), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
@@ -104,20 +106,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         /// <summary>
-        /// Gets whether the specified rate collection includes any Dhl rates
+        /// Configures the specified broker settings.
         /// </summary>
-        private static bool DoesNotIncludeDhlRates(IEnumerable<RateResult> rates)
+        public override void Configure(BestRateBrokerSettings brokerSettings)
         {
-            return !rates.Select(PostalRateSelectionFromRateResult)
-                .Any(x => ShipmentTypeManager.IsEndiciaDhl(x.ServiceType));
-        }
+            base.Configure(brokerSettings);
 
-        /// <summary>
-        /// Gets the PostalRateSelection from a RateResult
-        /// </summary>
-        private static PostalRateSelection PostalRateSelectionFromRateResult(RateResult result)
-        {
-            return (PostalRateSelection) ((BestRateResultTag) result.Tag).OriginalTag;
+            isEndiciaDhlEnabled = brokerSettings.IsEndiciaDHLEnabled();
         }
     }
 }

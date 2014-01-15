@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -15,22 +16,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     {
         private readonly ShippingSettingsEntity settings;
         private readonly List<IBestRateShippingBroker> brokers;
+        private readonly EditionRestrictionSet activeRestrictions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateBrokerSettings"/> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="brokers">The brokers.</param>
-        public BestRateBrokerSettings(ShippingSettingsEntity settings, List<IBestRateShippingBroker> brokers)
+        public BestRateBrokerSettings(ShippingSettingsEntity settings, List<IBestRateShippingBroker> brokers, EditionRestrictionSet activeRestrictions)
         {
             this.settings = settings;
             this.brokers = brokers;
+            this.activeRestrictions = activeRestrictions;
         }
+
 
         /// <summary>
         /// Checks the express1 rates.
         /// </summary>
-        /// <param name="shipmentType">Type of the shipment.</param>
         public bool CheckExpress1Rates(ShipmentType shipmentType)
         {
             // assumption: ShipmentType is enabled. If it were not, this wouldn't be called.
@@ -112,9 +115,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
         }
 
+        /// <summary>
+        /// Determines if endicia DHL is enabled.
+        /// </summary>
         public bool CanUseSurePost()
         {
             return UpsUtility.CanUseSurePost();
+        }
+        public bool IsEndiciaDHLEnabled()
+        {
+            return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None);
         }
     }
 }

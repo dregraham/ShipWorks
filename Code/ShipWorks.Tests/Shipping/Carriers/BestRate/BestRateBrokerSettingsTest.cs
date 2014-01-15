@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -20,11 +21,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private ShippingSettingsEntity settings;
         private List<IBestRateShippingBroker> brokers;
 
+        private EditionRestrictionSet restrictions;
+
         [TestInitialize]
         public void Initialize()
         {
             settings = new ShippingSettingsEntity();
             brokers = new List<IBestRateShippingBroker>();
+            
 
             settings.BestRateExcludedTypes = new int[0];
             settings.ActivatedTypes = new int[]
@@ -33,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                 (int)ShipmentTypeCode.Express1Stamps
             };
 
-            testObject = new BestRateBrokerSettings(settings, brokers);
+            testObject = new BestRateBrokerSettings(settings, brokers, restrictions);
         }
 
         [TestMethod]
