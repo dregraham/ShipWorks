@@ -218,8 +218,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 brokerExceptions.Add(ex);
             });
 
-            // Get a list of distinct exceptions based on the message text ordered by the severity level
-            IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderByDescending(e => e.SeverityLevel)
+            // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
+            IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
                                                                                 .GroupBy(e => e.Message)
                                                                                 .Select(m => m.First()).ToList();
             if (distinctExceptions.Any())

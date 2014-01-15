@@ -395,6 +395,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
+        public void GetRates_AddsFootnote_WithExceptionsOrderedFromHighestToLowestSeverityLevel_WhenMultipleBrokerExceptionsAreEncountered_Test()
+        {
+            // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
+            // because we couldn't get this functionality with Moq
+            Mock<ShipmentType> shipmentType = new Mock<ShipmentType>();
+
+            BrokerException informationLevelBrokerException = new BrokerException(new ShippingException("information severity level"), BrokerExceptionSeverityLevel.Information, shipmentType.Object);
+            BrokerException errorLevelBrokerException = new BrokerException(new ShippingException("error severity level"), BrokerExceptionSeverityLevel.Error, shipmentType.Object);
+            BrokerException warningLevelBrokerException = new BrokerException(new ShippingException("warning severity level"), BrokerExceptionSeverityLevel.Warning, shipmentType.Object);
+
+            FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { informationLevelBrokerException, errorLevelBrokerException, warningLevelBrokerException });
+
+            // We want the factory to return our fake broker for this test
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            // Create the footnote control and extract the exceptions
+            RateFootnoteControl footnote = rateGroup.FootnoteCreators.Select(creator => creator()).First();
+            List<BrokerException> exceptionsInFootnoteControl = ((BrokerExceptionsRateFootnoteControl)footnote).BrokerExceptions.ToList();
+            
+            Assert.AreEqual(BrokerExceptionSeverityLevel.Error, exceptionsInFootnoteControl[0].SeverityLevel);
+            Assert.AreEqual(BrokerExceptionSeverityLevel.Warning, exceptionsInFootnoteControl[1].SeverityLevel);
+            Assert.AreEqual(BrokerExceptionSeverityLevel.Information, exceptionsInFootnoteControl[2].SeverityLevel);
+        }
+
+        [TestMethod]
         public void GetRates_AddsRatesComparedEventToShipment_Test()
         {
             shipment.BestRateEvents = 0;
