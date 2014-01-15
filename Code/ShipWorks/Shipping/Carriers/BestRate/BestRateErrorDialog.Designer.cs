@@ -38,11 +38,14 @@
             this.gridColumnProvider = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnErrorMessage = new Divelements.SandGrid.GridColumn();
             this.warningLabel = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.warningIcon = new System.Windows.Forms.PictureBox();
             this.errorLabel = new System.Windows.Forms.Label();
             this.errorImage = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.informationLabel = new System.Windows.Forms.Label();
+            this.informationIcon = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // closeButton
@@ -155,14 +158,14 @@
             this.warningLabel.Text = "Warning";
             this.warningLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pictureBox1
+            // warningIcon
             // 
-            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.warning16;
-            this.pictureBox1.Location = new System.Drawing.Point(82, 258);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.TabIndex = 10;
-            this.pictureBox1.TabStop = false;
+            this.warningIcon.Image = global::ShipWorks.Properties.Resources.warning16;
+            this.warningIcon.Location = new System.Drawing.Point(82, 258);
+            this.warningIcon.Name = "warningIcon";
+            this.warningIcon.Size = new System.Drawing.Size(16, 16);
+            this.warningIcon.TabIndex = 10;
+            this.warningIcon.TabStop = false;
             // 
             // errorLabel
             // 
@@ -182,6 +185,25 @@
             this.errorImage.TabIndex = 8;
             this.errorImage.TabStop = false;
             // 
+            // informationLabel
+            // 
+            this.informationLabel.Location = new System.Drawing.Point(186, 259);
+            this.informationLabel.Name = "informationLabel";
+            this.informationLabel.Size = new System.Drawing.Size(75, 15);
+            this.informationLabel.TabIndex = 13;
+            this.informationLabel.Text = "Informational";
+            this.informationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // informationIcon
+            // 
+            this.informationIcon.ErrorImage = null;
+            this.informationIcon.Image = global::ShipWorks.Properties.Resources.information16;
+            this.informationIcon.Location = new System.Drawing.Point(168, 258);
+            this.informationIcon.Name = "informationIcon";
+            this.informationIcon.Size = new System.Drawing.Size(16, 16);
+            this.informationIcon.TabIndex = 12;
+            this.informationIcon.TabStop = false;
+            // 
             // BestRateErrorDialog
             // 
             this.AcceptButton = this.closeButton;
@@ -189,8 +211,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.closeButton;
             this.ClientSize = new System.Drawing.Size(512, 322);
+            this.Controls.Add(this.informationLabel);
+            this.Controls.Add(this.informationIcon);
             this.Controls.Add(this.warningLabel);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.warningIcon);
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.errorImage);
             this.Controls.Add(this.errorGrid);
@@ -205,8 +229,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Best Rate Errors";
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -219,10 +244,12 @@
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnIcon;
         private Divelements.SandGrid.GridColumn gridColumnErrorMessage;
         private System.Windows.Forms.Label warningLabel;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox warningIcon;
         private System.Windows.Forms.Label errorLabel;
         private System.Windows.Forms.PictureBox errorImage;
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
+        private System.Windows.Forms.Label informationLabel;
+        private System.Windows.Forms.PictureBox informationIcon;
 
     }
 }
