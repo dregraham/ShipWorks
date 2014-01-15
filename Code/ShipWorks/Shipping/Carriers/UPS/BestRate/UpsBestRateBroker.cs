@@ -16,6 +16,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// </summary>
     public class UpsBestRateBroker : PackageBasedBestRateBroker<UpsAccountEntity, UpsPackageEntity>
     {
+        bool isMailInnovationsAvailable;
+
         /// <summary>
         /// Creates a broker with the default shipment type and account repository
         /// </summary>
@@ -52,7 +54,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             bestRates.Rates.Clear();
             bestRates.Rates.AddRange(modifiedRates);
 
+            if (isMailInnovationsAvailable)
+            {
+                exceptionHandler(new BrokerException(new ShippingException("UPS doesn't provide rates for Mail Innovations"),BrokerExceptionSeverityLevel.Information, ShipmentType));
+            }
+
             return bestRates;
+        }
+
+        /// <summary>
+        /// Configures the specified broker settings.
+        /// </summary>
+        /// <param name="brokerSettings">The broker settings.</param>
+        public override void Configure(BestRateBrokerSettings brokerSettings)
+        {
+            isMailInnovationsAvailable = brokerSettings.IsMailInnovationsAvailable(ShipmentType);
         }
 
         /// <summary>
