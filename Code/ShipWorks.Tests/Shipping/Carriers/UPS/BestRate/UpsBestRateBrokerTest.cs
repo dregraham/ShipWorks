@@ -533,7 +533,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject.Configure(settings.Object);
             testObject.GetBestRates(testShipment, exceptionHandler);
 
-            Assert.AreEqual("ShipWorks could not get SurePost rates.", brokerExceptions[0].Message);
+            Assert.AreEqual("UPS did not provide SurePost rates.", brokerExceptions[0].Message);
         }
 
         [TestMethod]

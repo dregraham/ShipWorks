@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             {
                 // The account is configured to use SurePost, but there weren't any SurePost rates returned, so
                 // we want to flag this in the from of sending a BrokerException to the exception handler
-                exceptionHandler(new BrokerException(new ShippingException("ShipWorks could not get SurePost rates."), BrokerExceptionSeverityLevel.Warning, ShipmentType));
+                exceptionHandler(new BrokerException(new ShippingException("UPS did not provide SurePost rates."), BrokerExceptionSeverityLevel.Warning, ShipmentType));
             }
             
             return bestRates;
