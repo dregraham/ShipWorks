@@ -49,5 +49,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             // Don't configure Express1 settings
         }
+
+        /// <summary>
+        /// Configures the specified broker settings.
+        /// </summary>
+        /// <param name="brokerSettings"></param>
+        public override void Configure(IBestRateBrokerSettings brokerSettings)
+        {
+            // Do nothing
+        }
     }
 }

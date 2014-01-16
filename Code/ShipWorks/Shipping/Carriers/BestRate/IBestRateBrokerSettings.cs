@@ -16,9 +16,15 @@
         /// Determines whether a customer [can use sure post].
         /// </summary>
         bool CanUseSurePost();
+
         /// <summary>
         /// Determines if endicia DHL is enabled.
         /// </summary>
         bool IsEndiciaDHLEnabled();
+
+        /// <summary>
+        /// Determines if Consolidator enabled.
+        /// </summary>
+        bool IsEndiciaConsolidatorEnabled();
     }
 }

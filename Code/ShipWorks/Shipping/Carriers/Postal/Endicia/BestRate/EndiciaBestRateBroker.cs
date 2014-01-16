@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
     public class EndiciaBestRateBroker : PostalResellerBestRateBroker<EndiciaAccountEntity>
     {
         bool isEndiciaDhlEnabled;
+        bool isEndiciaConsolidatorEnabled;
 
         /// <summary>
         /// Constructor
@@ -99,7 +100,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 
             if (isEndiciaDhlEnabled)
             {
-                exceptionHandler(new BrokerException(new ShippingException("No DHL rates were returned"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                exceptionHandler(new BrokerException(new ShippingException("Endicia did not provide DHL rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+            }
+
+            if (isEndiciaConsolidatorEnabled)
+            {
+                exceptionHandler(new BrokerException(new ShippingException("Endicia did not provide consolidator rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
 
             return rates;
@@ -113,6 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
             base.Configure(brokerSettings);
 
             isEndiciaDhlEnabled = brokerSettings.IsEndiciaDHLEnabled();
+            isEndiciaConsolidatorEnabled = brokerSettings.IsEndiciaConsolidatorEnabled();
 			
 			((EndiciaShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
         }

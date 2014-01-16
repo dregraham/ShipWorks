@@ -131,5 +131,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None);
         }
+
+        /// <summary>
+        /// Determines if Consolidator enabled.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public bool IsEndiciaConsolidatorEnabled()
+        {
+            return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None);
+        }
     }
 }

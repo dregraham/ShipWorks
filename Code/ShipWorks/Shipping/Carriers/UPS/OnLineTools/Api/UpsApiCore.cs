@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType)ups.Service);
             
             // All packages in the shipment
-            foreach (UpsPackageEntity package in ups.Packages)
+            foreach (UpsPackageEntity package in ups.Packages.ToList())
             {
                 xmlWriter.WriteStartElement("Package");
 

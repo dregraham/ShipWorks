@@ -100,8 +100,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity() };
 
             bestRateBrokerSettings = new Mock<IBestRateBrokerSettings>();
+
             bestRateBrokerSettings.Setup(b => b.IsEndiciaDHLEnabled())
                                   .Returns(false);
+            bestRateBrokerSettings.Setup(b => b.IsEndiciaConsolidatorEnabled())
+                                  .Returns(false);
+            
             testObject.Configure(bestRateBrokerSettings.Object);
         }
 
@@ -411,6 +415,50 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
         [TestMethod]
         public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForDhl()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Endicia Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.DhlParcelStandard, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            BrokerException calledException = null;
+
+            testObject.GetBestRates(testShipment, ex => calledException = ex);
+
+            Assert.IsNull(calledException);
+        }
+
+
+        [TestMethod]
+        public void GetBestRates_CallsHandlerWithInformationError_WhenCustomerEligibleForConsolidator()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Endicia Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            BrokerException calledException = null;
+
+            bestRateBrokerSettings.Setup(b => b.IsEndiciaConsolidatorEnabled())
+                                  .Returns(true);
+
+            testObject.Configure(bestRateBrokerSettings.Object);
+
+            testObject.GetBestRates(testShipment, ex => calledException = ex);
+
+            Assert.AreEqual(BrokerExceptionSeverityLevel.Information, calledException.SeverityLevel);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForConsolidator()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
