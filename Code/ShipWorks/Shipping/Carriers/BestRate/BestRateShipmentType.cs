@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            IEnumerable<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment);
+            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment).ToList();
             
             if (!bestRateShippingBrokers.Any())
             {
@@ -249,12 +249,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             // Start getting rates from each enabled carrier
-            Task<RateGroup>[] tasks = bestRateShippingBrokers
+            var tasks = bestRateShippingBrokers
                 .Select(broker => StartGetRatesTask(broker, shipment, exceptionHandler))
-                .ToArray();
-
-            Task.WaitAll(tasks);
-
+                .ToList();
+            
+            tasks.ForEach(t => t.Wait());
+            
             List<RateGroup> rateGroups = tasks.Select(x => x.Result).ToList();
             IEnumerable<RateResult> allRates = rateGroups.SelectMany(x => x.Rates);
 

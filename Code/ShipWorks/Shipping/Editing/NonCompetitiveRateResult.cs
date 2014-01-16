@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
 
@@ -9,13 +10,15 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public class NoncompetitiveRateResult : RateResult
     {
+        private readonly string maskedServiceTypeDescription;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="originalRate">RateResult from which to create this result</param>
-        public NoncompetitiveRateResult(RateResult originalRate) :
+        public NoncompetitiveRateResult(RateResult originalRate, string maskedServiceTypeDescription) :
             base(originalRate.Description, originalRate.Days, originalRate.Amount, originalRate.Tag)
         {
+            this.maskedServiceTypeDescription = maskedServiceTypeDescription;
             AmountFootnote = originalRate.AmountFootnote;
             ServiceLevel = originalRate.ServiceLevel;
             OriginalRate = originalRate;
@@ -38,7 +41,7 @@ namespace ShipWorks.Shipping.Editing
         {
             if (!rates.All(x => x is NoncompetitiveRateResult))
             {
-                Description = "Undisclosed " + EnumHelper.GetDescription(ServiceLevel);
+                Description = "Undisclosed " + maskedServiceTypeDescription;
                 CarrierDescription = "Undisclosed";
                 ShipmentType = ShipmentTypeCode.Other;
             }

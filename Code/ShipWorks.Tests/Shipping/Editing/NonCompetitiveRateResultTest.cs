@@ -13,8 +13,8 @@ namespace ShipWorks.Tests.Shipping.Editing
         [TestMethod]
         public void Constructor_CopiesAllProperties()
         {
-            RateResult originalRate = new RateResult("Test", "3", 12.1m, "Foo") {ServiceLevel = ServiceLevelType.ThreeDays};
-            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(originalRate);
+            RateResult originalRate = new RateResult("Test", "3", 12.1m, "Foo") { ServiceLevel = ServiceLevelType.ThreeDays };
+            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(originalRate, "MaskedBar");
 
             Assert.AreEqual("Test", testObject.Description);
             Assert.AreEqual("3", testObject.Days);
@@ -27,8 +27,8 @@ namespace ShipWorks.Tests.Shipping.Editing
         [TestMethod]
         public void MaskDescription_ShowsDescription_WhenAllResultsAreNonCompetitive()
         {
-            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(new RateResult("Bar", "5"));
-            testObject.MaskDescription(new List<RateResult>{testObject, new NoncompetitiveRateResult(new RateResult("Foo", "3"))});
+            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(new RateResult("Bar", "5"), "MaskedBar");
+            testObject.MaskDescription(new List<RateResult> { testObject, new NoncompetitiveRateResult(new RateResult("Foo", "3"), "MaskedFoo") });
 
             Assert.AreEqual("Bar", testObject.Description);
         }
@@ -36,19 +36,19 @@ namespace ShipWorks.Tests.Shipping.Editing
         [TestMethod]
         public void MaskDescription_MasksDescription_WhenOneResultIsNotNonCompetitive()
         {
-            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(new RateResult("Bar", "5") { ServiceLevel = ServiceLevelType.ThreeDays});
+            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(new RateResult("Bar", "5") { ServiceLevel = ServiceLevelType.ThreeDays }, "MaskedBar");
             testObject.MaskDescription(new List<RateResult> { testObject, new RateResult("Foo", "3") });
 
-            Assert.AreEqual("Undisclosed Three Days", testObject.Description);
+            Assert.AreEqual("Undisclosed MaskedBar", testObject.Description);
         }
 
         [TestMethod]
         public void MaskDescription_MasksDescription_WhenNoResultsAreNonCompetitive()
         {
-            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(new RateResult("Bar", "5") { ServiceLevel = ServiceLevelType.ThreeDays });
+            NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(new RateResult("Bar", "5") { ServiceLevel = ServiceLevelType.ThreeDays }, "MaskedBar");
             testObject.MaskDescription(new List<RateResult> { new RateResult("Baz", "7"), new RateResult("Foo", "3") });
 
-            Assert.AreEqual("Undisclosed Three Days", testObject.Description);
+            Assert.AreEqual("Undisclosed MaskedBar", testObject.Description);
         }
     }
 }

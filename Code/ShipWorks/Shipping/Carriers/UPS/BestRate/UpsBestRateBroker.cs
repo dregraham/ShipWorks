@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
-            List<RateResult> modifiedRates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x)).ToList<RateResult>();
+            List<RateResult> modifiedRates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x, GetServiceTypeDescription(x))).ToList<RateResult>();
             
             bestRates.Rates.Clear();
             bestRates.Rates.AddRange(modifiedRates);
@@ -69,6 +69,79 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             }
             
             return bestRates;
+        }
+
+        /// <summary>
+        /// Gets the service type description.
+        /// </summary>
+        private static string GetServiceTypeDescription(RateResult rateResult)
+        {
+            BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;
+            UpsServiceType upsServiceType = (UpsServiceType)bestRateResultTag.OriginalTag;
+
+            switch (upsServiceType)
+            {
+                case UpsServiceType.UpsGround:
+                    return "Ground";
+
+                case UpsServiceType.Ups3DaySelectFromCanada:
+                case UpsServiceType.Ups3DaySelect:
+                    return "Three Day";
+
+                case UpsServiceType.Ups2nDayAirIntra:
+                case UpsServiceType.Ups2DayAir:
+                    return "Two Day";
+
+                case UpsServiceType.Ups2DayAirAM:
+                    return "Two Day Morning";
+
+                case UpsServiceType.UpsExpress:
+                case UpsServiceType.UpsNextDayAir:
+                    return "One Day";
+
+                case UpsServiceType.UpsExpressSaver:
+                case UpsServiceType.UpsNextDayAirSaver:
+                    return "One Day Anytime";
+
+                case UpsServiceType.UpsExpressEarlyAm:
+                case UpsServiceType.UpsNextDayAirAM:
+                    return "One Day Morning";
+
+                case UpsServiceType.WorldwideExpress:
+                    return "Faster International";
+
+                case UpsServiceType.UpsCaWorldWideExpress:
+                case UpsServiceType.UpsCaWorldWideExpressPlus:
+                case UpsServiceType.WorldwideExpressPlus:
+                    return "Fast International Morning";
+
+                case UpsServiceType.UpsCaWorldWideExpressSaver:
+                case UpsServiceType.UpsExpedited:
+                case UpsServiceType.WorldwideExpedited:
+                    return "International";
+
+                case UpsServiceType.WorldwideSaver:
+                    return "International Afternoon";
+
+                case UpsServiceType.UpsStandard:
+                    return "International Ground";
+
+               
+                case UpsServiceType.UpsSurePostLessThan1Lb:
+                    return "Hybrid Mail Less than 1 LB";
+
+                case UpsServiceType.UpsSurePost1LbOrGreater:
+                    return "Hybrid Mail 1 LB or Greater";
+
+                case UpsServiceType.UpsSurePostBoundPrintedMatter:
+                    return "Hybrid Mail Bound Printed Matter";
+
+                case UpsServiceType.UpsSurePostMedia:
+                    return "Hybrid Mail Media";
+
+                default:
+                    return "Service";
+            }
         }
 
         /// <summary>
