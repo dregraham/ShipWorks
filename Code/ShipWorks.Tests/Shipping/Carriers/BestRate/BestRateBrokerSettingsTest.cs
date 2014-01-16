@@ -20,9 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         private ShippingSettingsEntity settings;
         private List<IBestRateShippingBroker> brokers;
-
-        private EditionRestrictionSet restrictions;
-
+        
         [TestInitialize]
         public void Initialize()
         {
@@ -37,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                 (int)ShipmentTypeCode.Express1Stamps
             };
 
-            testObject = new BestRateBrokerSettings(settings, brokers, restrictions);
+            testObject = new BestRateBrokerSettings(settings, brokers, null);
         }
 
         [TestMethod]
