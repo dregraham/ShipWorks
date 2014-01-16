@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ShippingSettingsEntity settings;
         private readonly List<IBestRateShippingBroker> brokers;
         private readonly EditionRestrictionSet activeRestrictions;
+        private IEnumerable<ShipmentTypeCode> enabledShipmentTypeCodes; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateBrokerSettings"/> class.
@@ -30,6 +31,22 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.activeRestrictions = activeRestrictions;
         }
 
+        /// <summary>
+        /// Get shipment types that are currently enabled
+        /// </summary>
+        /// <remarks>This property exists to allow the class to be tested, as tests can set their own list of enabled shipment types.</remarks>
+        public IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes
+        {
+            get
+            {
+                return enabledShipmentTypeCodes ??
+                       ShipmentTypeManager.EnabledShipmentTypes.Select(x => x.ShipmentTypeCode);
+            }
+            set
+            {
+                enabledShipmentTypeCodes = value;
+            }
+        }
 
         /// <summary>
         /// Checks the express1 rates.
@@ -89,7 +106,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Express1 is disabled at the best rates level.
                 return true;
             }
-            if (!settings.ActivatedTypes.Contains((int)express1ShipmentType))
+
+            if (!EnabledShipmentTypeCodes.Contains(express1ShipmentType))
             {
                 // Express1 is disabled at the general settings level.
                 return true;

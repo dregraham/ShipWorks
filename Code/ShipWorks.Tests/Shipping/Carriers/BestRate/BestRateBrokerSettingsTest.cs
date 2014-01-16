@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -10,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -36,6 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             };
 
             testObject = new BestRateBrokerSettings(settings, brokers, null);
+            testObject.EnabledShipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>().Select(x => x.Value);
         }
 
         [TestMethod]
@@ -54,7 +58,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsDisabledForStampsInSettings_Test()
         {
-            settings.ActivatedTypes = new int[0];
+            testObject.EnabledShipmentTypeCodes =
+                EnumHelper.GetEnumList<ShipmentTypeCode>()
+                    .Select(x => x.Value)
+                    .Where(x => x != ShipmentTypeCode.Express1Stamps);
             Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
         }
 
@@ -81,7 +88,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsDisabledForEndiciaInSettings_Test()
         {
-            settings.ActivatedTypes = new int[0];
+            testObject.EnabledShipmentTypeCodes =
+                EnumHelper.GetEnumList<ShipmentTypeCode>()
+                    .Select(x => x.Value)
+                    .Where(x => x != ShipmentTypeCode.Express1Endicia);
             Assert.AreEqual(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
         }
 
