@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// <summary>
         /// Configures the specified broker settings.
         /// </summary>
-        public override void Configure(BestRateBrokerSettings brokerSettings)
+        public override void Configure(IBestRateBrokerSettings brokerSettings)
         {
             base.Configure(brokerSettings);
 

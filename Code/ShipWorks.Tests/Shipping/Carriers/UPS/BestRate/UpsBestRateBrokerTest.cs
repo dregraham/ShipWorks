@@ -484,6 +484,138 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.AreEqual(2, rates.Rates.Count);
         }
        
+        [TestMethod]
+        public void GetBestRates_AddsBrokerException_WhenSurePostCanBeUsed_AndSurePostRatesAreNotIncluded_Test()
+        {
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            Action<BrokerException> exceptionHandler = brokerExceptions.Add;
+
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { account1 });
+
+            RateResult rate1 = new RateResult("Account 1", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays};
+            RateResult rate2 = new RateResult("Account 1", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+            
+            RateGroup rateGroup = new RateGroup(new [] { rate1, rate2, rate3 });
+            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+
+            // Setup the broker settings to indicate we can use SurePost (and we don't have an exception added for MI)
+            Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
+            settings.Setup(s => s.IsMailInnovationsAvailable(It.IsAny<ShipmentType>())).Returns(false);
+            settings.Setup(s => s.CanUseSurePost()).Returns(true);
+
+            testObject.Configure(settings.Object);
+            testObject.GetBestRates(testShipment, exceptionHandler);
+
+            Assert.AreEqual(1, brokerExceptions.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_BrokerExceptionMessageIndicatesSurePostRatesWereNotReceived_WhenSurePostCanBeUsed_AndSurePostRatesAreNotIncluded_Test()
+        {
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            Action<BrokerException> exceptionHandler = brokerExceptions.Add;
+
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { account1 });
+
+            RateResult rate1 = new RateResult("Account 1", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays };
+            RateResult rate2 = new RateResult("Account 1", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+
+            RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
+            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+
+            // Setup the broker settings to indicate we can use SurePost (and we don't have an exception added for MI)
+            Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
+            settings.Setup(s => s.IsMailInnovationsAvailable(It.IsAny<ShipmentType>())).Returns(false);
+            settings.Setup(s => s.CanUseSurePost()).Returns(true);
+
+            testObject.Configure(settings.Object);
+            testObject.GetBestRates(testShipment, exceptionHandler);
+
+            Assert.AreEqual("ShipWorks could not get SurePost rates.", brokerExceptions[0].Message);
+        }
+
+        [TestMethod]
+        public void GetBestRates_BrokerExceptionSeverityLevelIsWarning_WhenSurePostCanBeUsed_AndSurePostRatesAreNotIncluded_Test()
+        {
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            Action<BrokerException> exceptionHandler = brokerExceptions.Add;
+            
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { account1 });
+
+            RateResult rate1 = new RateResult("Account 1", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays };
+            RateResult rate2 = new RateResult("Account 1", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+
+            RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
+            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+
+            // Setup the broker settings to indicate we can use SurePost (and we don't have an exception added for MI)
+            Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
+            settings.Setup(s => s.IsMailInnovationsAvailable(It.IsAny<ShipmentType>())).Returns(false);
+            settings.Setup(s => s.CanUseSurePost()).Returns(true);
+
+            testObject.Configure(settings.Object);
+            testObject.GetBestRates(testShipment, exceptionHandler);
+
+            Assert.AreEqual(BrokerExceptionSeverityLevel.Warning, brokerExceptions[0].SeverityLevel);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotIncludeBrokerException_WhenSurePostCannotBeUsed_AndSurePostRatesAreNotIncluded_Test()
+        {
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            Action<BrokerException> exceptionHandler = brokerExceptions.Add;
+
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { account1 });
+
+            RateResult rate1 = new RateResult("Account 1", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays };
+            RateResult rate2 = new RateResult("Account 1", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+
+            RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
+            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+
+            // Setup the broker settings to indicate we cannot use SurePost (and we don't have an exception added for MI)
+            Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
+            settings.Setup(s => s.IsMailInnovationsAvailable(It.IsAny<ShipmentType>())).Returns(false);
+            settings.Setup(s => s.CanUseSurePost()).Returns(false);
+
+            testObject.Configure(settings.Object);
+            testObject.GetBestRates(testShipment, exceptionHandler);
+
+            Assert.AreEqual(0, brokerExceptions.Count);
+        }
+
+        [TestMethod]
+        public void GetBestRates_DoesNotIncludeBrokerException_WhenSurePostCanBeUsed_AndSurePostRatesAreIncluded_Test()
+        {
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            Action<BrokerException> exceptionHandler = brokerExceptions.Add;
+
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { account1 });
+
+            // Include a rate with a sure post service for this test
+            RateResult rate1 = new RateResult("Account 1", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays };
+            RateResult rate2 = new RateResult("Account 1", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult rate4 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsSurePost1LbOrGreater) { ServiceLevel = ServiceLevelType.OneDay };
+
+            RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3, rate4 });
+            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+
+            // Setup the broker settings to indicate we cannot use SurePost (and we don't have an exception added for MI)
+            Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
+            settings.Setup(s => s.IsMailInnovationsAvailable(It.IsAny<ShipmentType>())).Returns(false);
+            settings.Setup(s => s.CanUseSurePost()).Returns(false);
+
+            testObject.Configure(settings.Object);
+            testObject.GetBestRates(testShipment, exceptionHandler);
+
+            Assert.AreEqual(0, brokerExceptions.Count);
+        }
+
         /// <summary>
         /// Gets a list of original rates from a list of NonCompetitiveRateResults
         /// </summary>
