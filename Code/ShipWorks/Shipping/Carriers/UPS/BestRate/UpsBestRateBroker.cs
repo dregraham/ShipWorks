@@ -77,6 +77,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="brokerSettings">The broker settings.</param>
         public override void Configure(IBestRateBrokerSettings brokerSettings)
         {
+            base.Configure(brokerSettings);
+
             isMailInnovationsAvailable = brokerSettings.IsMailInnovationsAvailable(ShipmentType);
             canUseSurePost = brokerSettings.CanUseSurePost();
         }
