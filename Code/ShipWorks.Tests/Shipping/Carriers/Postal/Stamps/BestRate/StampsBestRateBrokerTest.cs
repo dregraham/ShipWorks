@@ -497,8 +497,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var resultKeys = rates.Rates.Select(x => x.Tag).Cast<BestRateResultTag>().Select(x => x.ResultKey).ToList();
 
-            Assert.IsTrue(resultKeys.Contains("PostalExpressMailPremium"));
-            Assert.IsTrue(resultKeys.Contains("PostalStandardPost"));
+            Assert.IsTrue(resultKeys.Contains("PostalExpress Mail (Premium)"));
+            Assert.IsTrue(resultKeys.Contains("PostalStandard Post"));
         }
 
         //[TestMethod]

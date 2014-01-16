@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
@@ -95,6 +97,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
             shipment.FedEx.Service = GetServiceTypeFromTag(tag);
+        }
+
+        /// <summary>
+        /// Gets the result key for a given rate
+        /// </summary>
+        /// <param name="rate">Rate result for which to create a result key</param>
+        /// <returns>Concatenation of the carrier description and the original rate tag</returns>
+        protected override string GetResultKey(RateResult rate)
+        {
+            return "FedEx" + EnumHelper.GetDescription((FedExServiceType)GetServiceTypeFromTag(rate.Tag));
         }
 
         /// <summary>

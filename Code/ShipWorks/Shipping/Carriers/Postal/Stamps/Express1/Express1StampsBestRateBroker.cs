@@ -1,5 +1,8 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -23,6 +26,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             base(shipmentType, accountRepository, "Express1 Stamps")
         {
 
+        }
+
+        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        {
+            RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
+            
+            // Set the shipment type to be express1 for stamps
+            rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Stamps);
+
+            return rateGroup;
         }
     }
 }

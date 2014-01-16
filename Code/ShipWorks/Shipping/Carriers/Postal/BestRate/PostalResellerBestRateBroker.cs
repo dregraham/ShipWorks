@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -141,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected override string GetResultKey(RateResult rate)
         {
-            return "Postal" + (PostalServiceType)GetServiceTypeFromTag(rate.Tag);
+            return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(rate.Tag));
         }
 
         /// <summary>
