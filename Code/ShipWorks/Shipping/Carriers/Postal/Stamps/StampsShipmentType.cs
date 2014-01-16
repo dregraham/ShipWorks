@@ -79,6 +79,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Should Express1 rates be checked when getting Endicia rates?
+        /// </summary>
+        public bool ShouldRetrieveExpress1Rates { get; set; }
+
+        /// <summary>
+        /// Create an instance of StampsShipmentType
+        /// </summary>
+        public StampsShipmentType()
+        {
+            ShouldRetrieveExpress1Rates = true;
+        }
+
+        /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
         /// </summary>
@@ -118,16 +131,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetRates(shipment, true);
-        }
-
-        /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        /// <param name="getExpress1Rates">Defines whether Express1 rates should be retrieved along with Endicia</param>
-        public RateGroup GetRates(ShipmentEntity shipment, bool getExpress1Rates)
-        {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
@@ -151,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 try
                 {
                     // Currently this actually recurses into this same method
-                    express1Rates = (getExpress1Rates) ?
+                    express1Rates = (ShouldRetrieveExpress1Rates) ?
                         ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() :
                         new List<RateResult>();
                 }
@@ -181,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         stampsRate.ShipmentType = ShipmentTypeCode.Stamps;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (getExpress1Rates &&
+                        if (ShouldRetrieveExpress1Rates &&
                             stampsRate.Selectable && 
                             stampsRateDetail != null && 
                             Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))

@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
         }
 
+        /// <summary>
+        /// Get best rates for Express 1
+        /// </summary>
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
@@ -36,6 +39,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Stamps);
 
             return rateGroup;
+        }
+
+        /// <summary>
+        /// Configures extra settings required by the broker
+        /// </summary>
+        /// <param name="brokerSettings">Settings that the broker can use to configure itself</param>
+        public override void Configure(IBestRateBrokerSettings brokerSettings)
+        {
+            // Don't configure Express1 settings
         }
     }
 }

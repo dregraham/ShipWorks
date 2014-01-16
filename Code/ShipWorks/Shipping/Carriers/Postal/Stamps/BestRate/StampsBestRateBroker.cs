@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -78,6 +79,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, StampsAccountEntity account)
         {
             postalShipmentEntity.Stamps.StampsAccountID = account.StampsAccountID;
+        }
+
+        /// <summary>
+        /// Configures the specified broker settings.
+        /// </summary>
+        public override void Configure(IBestRateBrokerSettings brokerSettings)
+        {
+            base.Configure(brokerSettings);
+
+            ((StampsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
         }
     }
 }

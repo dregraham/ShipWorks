@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
         }
 
+        /// <summary>
+        /// Get best rates for Express 1
+        /// </summary>
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
