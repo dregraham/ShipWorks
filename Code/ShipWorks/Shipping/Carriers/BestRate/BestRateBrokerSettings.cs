@@ -116,12 +116,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Determines if endicia DHL is enabled.
+        /// Determines whether a customer [can use sure post].
         /// </summary>
+        /// <returns></returns>
         public bool CanUseSurePost()
         {
             return UpsUtility.CanUseSurePost();
         }
+
+        /// <summary>
+        /// Determines if endicia DHL is enabled.
+        /// </summary>
         public bool IsEndiciaDHLEnabled()
         {
             return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None);

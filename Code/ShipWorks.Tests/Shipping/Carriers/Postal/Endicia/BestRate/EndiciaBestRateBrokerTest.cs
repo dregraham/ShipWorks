@@ -34,6 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         private RateResult account2Rate1;
         private RateResult account3Rate1;
         private RateResult account3Rate2;
+        private Mock<IBestRateBrokerSettings> bestRateBrokerSettings;
         private EndiciaBestRateBroker testObject;
         private ShipmentEntity testShipment;
 
@@ -97,6 +98,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
 
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity() };
+
+            bestRateBrokerSettings = new Mock<IBestRateBrokerSettings>();
+            bestRateBrokerSettings.Setup(b => b.IsEndiciaDHLEnabled())
+                                  .Returns(false);
+            testObject.Configure(bestRateBrokerSettings.Object);
         }
 
         [TestMethod]
@@ -380,7 +386,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_CallsHandlerWithInformationError_WhenResultsDoNotIncludeDhl()
+        public void GetBestRates_CallsHandlerWithInformationError_WhenCustomerEligibleForDhl()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -393,13 +399,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             BrokerException calledException = null;
 
-            testObject.GetBestRates(testShipment, ex => calledException = ex);
+            bestRateBrokerSettings.Setup(b => b.IsEndiciaDHLEnabled())
+                                  .Returns(true);
 
+            testObject.Configure(bestRateBrokerSettings.Object);
+
+            testObject.GetBestRates(testShipment, ex => calledException = ex);
+            
             Assert.AreEqual(BrokerExceptionSeverityLevel.Information, calledException.SeverityLevel);
         }
 
         [TestMethod]
-        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenResultsIncludeDhl()
+        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForDhl()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
