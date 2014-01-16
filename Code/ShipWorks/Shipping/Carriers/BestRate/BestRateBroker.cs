@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// The action to GetRates.
         /// </summary>
-        public Func<ShipmentEntity, RateGroup>GetRatesAction { get; set; }
+        public Func<ShipmentEntity, ShipmentType, RateGroup>GetRatesAction { get; set; }
 
         public abstract InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
 
@@ -285,7 +285,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         protected virtual RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetRatesAction(shipment);
+            return GetRatesAction(shipment, ShipmentType);
         }
 
         /// <summary>

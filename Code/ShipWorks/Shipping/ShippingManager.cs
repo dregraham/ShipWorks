@@ -707,6 +707,14 @@ namespace ShipWorks.Shipping
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
+            return GetRates(shipment, shipmentType);
+        }
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        public static RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
+        {
             // Marke sure the type is setup - it's possible it's not in the case of upgrading from V2
             if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {

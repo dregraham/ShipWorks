@@ -46,6 +46,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Should Express1 rates be checked when getting Endicia rates?
+        /// </summary>
+        public bool ShouldRetrieveExpress1Rates { get; set; }
+
+        /// <summary>
+        /// Create an EndiciaShipmentType object
+        /// </summary>
+        public EndiciaShipmentType()
+        {
+            ShouldRetrieveExpress1Rates = true;
+        }
+
+        /// <summary>
         /// Get the service description for the shipment
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
@@ -293,16 +306,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetRates(shipment, true);
-        }
-
-        /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        /// <param name="getExpress1Rates">Defines whether Express1 rates should be retrieved along with Endicia</param>
-        public RateGroup GetRates(ShipmentEntity shipment, bool getExpress1Rates)
-        {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
 
@@ -326,7 +329,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 try
                 {
                     // Currently this actually recurses into this same method
-                    express1Rates = (getExpress1Rates) ? 
+                    express1Rates = (ShouldRetrieveExpress1Rates) ? 
                         ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() : 
                         new List<RateResult>();
                 }
@@ -359,7 +362,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         PostalRateSelection endiciaRateDetail = (PostalRateSelection) endiciaRate.Tag;
 
                         // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (getExpress1Rates &&
+                        if (ShouldRetrieveExpress1Rates &&
                             endiciaRate.Selectable && 
                             endiciaRateDetail != null && 
                             Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))

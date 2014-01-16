@@ -113,6 +113,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
             base.Configure(brokerSettings);
 
             isEndiciaDhlEnabled = brokerSettings.IsEndiciaDHLEnabled();
+			
+			((EndiciaShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
         }
     }
 }

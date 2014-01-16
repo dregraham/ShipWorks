@@ -36,6 +36,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Endicia);
 
             return rateGroup;
+		}
+			
+        /// <summary>
+        /// Configures extra settings required by the broker
+        /// </summary>
+        /// <param name="brokerSettings">Settings that the broker can use to configure itself</param>
+        public override void Configure(IBestRateBrokerSettings brokerSettings)
+        {
+            // Don't configure Express1 settings
         }
     }
 }
