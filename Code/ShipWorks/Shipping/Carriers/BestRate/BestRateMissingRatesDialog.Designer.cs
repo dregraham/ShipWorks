@@ -69,9 +69,9 @@
             // 
             this.descriptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.descriptionMessage.Location = new System.Drawing.Point(8, 29);
+            this.descriptionMessage.Location = new System.Drawing.Point(11, 29);
             this.descriptionMessage.Name = "descriptionMessage";
-            this.descriptionMessage.Size = new System.Drawing.Size(492, 49);
+            this.descriptionMessage.Size = new System.Drawing.Size(489, 49);
             this.descriptionMessage.TabIndex = 5;
             this.descriptionMessage.Text = resources.GetString("descriptionMessage.Text");
             // 
