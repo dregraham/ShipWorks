@@ -12947,3 +12947,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "yyyy", Scope = "member", Target = "ShipWorks.ApplicationCore.MessageBoxes.DateTimeFormatRequiredDlg.#InitializeComponent()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.ApplicationCore.Crashes.CrashSubmitter.#AppendLineIgnoreException(System.Action)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "DropBox", Scope = "member", Target = "ShipWorks.Shipping.Carriers.FedEx.Api.v2013.Enums.FedExDropoffType.#DropBox")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.Program.#CheckSystemRequirements()")]

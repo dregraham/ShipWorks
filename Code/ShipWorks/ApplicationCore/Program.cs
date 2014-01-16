@@ -212,18 +212,27 @@ namespace ShipWorks
                 return false;
             }
 
-            // Make sure the user has at a minimum amount of disk space.
-            List<string> pathsToCheck = new List<string>() {DataPath.InstanceRoot, DataPath.ShipWorksTemp};
-            foreach (string pathToCheck in pathsToCheck)
+            // Make sure the user has a minimum amount of disk space.
+            try
             {
-                if (!CheckHardDiskSpaceOk(pathToCheck))
+                List<string> pathsToCheck = new List<string>() {DataPath.InstanceRoot, DataPath.ShipWorksTemp};
+                foreach (string pathToCheck in pathsToCheck)
                 {
-                    DriveInfo driveInfo = new DriveInfo(pathToCheck);
-                    ExecutionMode.ShowTerminationMessage(null,
-                        string.Format("Your computer is running out of disk space.  Please free up disk space on drive {0} to continue using ShipWorks.", driveInfo.Name));
+                    if (!CheckHardDiskSpaceOk(pathToCheck))
+                    {
+                        DriveInfo driveInfo = new DriveInfo(pathToCheck);
+                        ExecutionMode.ShowTerminationMessage(null,
+                            string.Format(
+                                "Your computer is running out of disk space.  Please free up disk space on drive {0} to continue using ShipWorks.",
+                                driveInfo.Name));
 
-                    return false;
+                        return false;
+                    }
                 }
+            }
+            catch
+            {
+                // If we couldn't check disk space for some reason, we'll handle that elsewhere with more context as to why.  So just continue on.
             }
 
             return true;
