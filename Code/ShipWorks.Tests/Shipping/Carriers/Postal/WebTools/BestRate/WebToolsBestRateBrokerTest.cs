@@ -68,9 +68,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
                             .Callback<ShipmentEntity>(x => x.Postal = new PostalShipmentEntity());
 
             testObject = new WebToolsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
-            testObject.GetRatesAction = entity =>
+            testObject.GetRatesAction = (shipment, type) =>
                 {
-                    getRatesShipments.Add(EntityUtility.CloneEntity(entity));
+                    getRatesShipments.Add(EntityUtility.CloneEntity(shipment));
                     return rateGroup1;
                 };
 

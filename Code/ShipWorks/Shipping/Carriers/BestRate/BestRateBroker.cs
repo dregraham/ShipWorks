@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Shipment type for the broker
         /// </summary>
-        protected ShipmentType ShipmentType { get; private set; }
+        public ShipmentType ShipmentType { get; private set; }
 
         /// <summary>
         /// The action to GetRates.

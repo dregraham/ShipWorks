@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject = new EndiciaBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
             };
 
 
@@ -580,6 +580,38 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         public void GetInsuranceProvider_ReturnsCarrier_Test()
         {
             Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { EndiciaInsuranceProvider = (int)InsuranceProvider.Carrier }));
+        }
+
+        [TestMethod]
+        public void Configure_ShouldCallCheckExpress1RatesOnSettings_WithShipmentType()
+        {
+            var brokerSettings = new Mock<IBestRateBrokerSettings>();
+
+            testObject.Configure(brokerSettings.Object);
+
+            brokerSettings.Verify(x => x.CheckExpress1Rates(testObject.ShipmentType));
+        }
+
+        [TestMethod]
+        public void Configure_SetsRetrieveExpress1RatesToTrue_WhenConfigurationIsTrue()
+        {
+            Configure_ShouldRetrieveExpress1RatesTest(true);
+        }
+
+        [TestMethod]
+        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsFalse()
+        {
+            Configure_ShouldRetrieveExpress1RatesTest(false);
+        }
+
+        private void Configure_ShouldRetrieveExpress1RatesTest(bool checkExpress1)
+        {
+            var brokerSettings = new Mock<IBestRateBrokerSettings>();
+            brokerSettings.Setup(x => x.CheckExpress1Rates(It.IsAny<ShipmentType>())).Returns(checkExpress1);
+
+            testObject.Configure(brokerSettings.Object);
+
+            Assert.AreEqual(checkExpress1, ((EndiciaShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
         }
     }
 }
