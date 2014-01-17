@@ -54,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 OutOfDate = originalRateGroup.OutOfDate
             };
 
-            foreach (var creator in originalRateGroup.FootnoteCreators)
+            foreach (IRateFootnoteFactory factory in originalRateGroup.FootnoteFactories)
             {
-                newRateGroup.AddFootnoteCreator(creator);
+                newRateGroup.AddFootnoteFactory(factory);
             }
 
             return newRateGroup;

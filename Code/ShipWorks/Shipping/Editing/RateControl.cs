@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Editing
             }
             else
             {
-                AddFootnotes(rateGroup.FootnoteCreators);
+                AddFootnotes(rateGroup.FootnoteFactories);
             }
         }
 
@@ -143,15 +143,18 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Adds the footnotes.
+        /// Adds the footnotes from the .
         /// </summary>
-        /// <param name="footNotes">The rate group.</param>
-        private void AddFootnotes(IEnumerable<Func<RateFootnoteControl>> footNotes)
+        /// <param name="footnoteFactories">The footnote factories.</param>
+        private void AddFootnotes(IEnumerable<IRateFootnoteFactory> footnoteFactories)
         {
             panelFootnote.Height = 0;
             int y = 0;
-            foreach (RateFootnoteControl footnote in footNotes.Select(footnoteCreator => footnoteCreator()))
+
+            foreach (IRateFootnoteFactory factory in footnoteFactories)
             {
+                RateFootnoteControl footnote = factory.CreateFootnote();
+
                 panelFootnote.Controls.Add(footnote);
                 footnote.Location = new Point(0, y);
                 panelFootnote.Visible = true;
@@ -170,7 +173,7 @@ namespace ShipWorks.Shipping.Editing
             if (ReloadRatesRequired != null)
             {
                 // We don't need to BeginInvoke here - that happens in the ShippingDlg, so we don't have to worry about being destroyed with the reload
-                // in the middle of this callstack.
+                // in the middle of this call stack.
                 ReloadRatesRequired(sender, e);
             }
         }

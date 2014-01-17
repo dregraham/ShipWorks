@@ -421,11 +421,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.AddFootnoteCreator(() => new Express1RateDiscountedFootnote(endiciaRates, express1Rates));
+                            finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, endiciaRates, express1Rates));
                         }
                         else
                         {
-                            finalGroup.AddFootnoteCreator(() => new Express1RateNotQualifiedFootnote());
+                            finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
                         }
                     }
                     else
@@ -433,7 +433,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
                         {
                             IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
-                            finalGroup.AddFootnoteCreator(() => new Express1RatePromotionFootnote(express1Settings));
+                            finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, express1Settings));
                         }
                     }
                     

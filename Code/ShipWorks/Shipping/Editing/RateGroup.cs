@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Editing
     public class RateGroup
     {
         bool outOfDate = false;
-        private readonly List<Func<RateFootnoteControl>> footnoteCreators;
+        private readonly List<IRateFootnoteFactory> footnoteFactories;
 
         /// <summary>
         /// Constructor
@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Editing
         public RateGroup(IEnumerable<RateResult> rates)
         {
             this.Rates = rates.ToList();
-            footnoteCreators = new List<Func<RateFootnoteControl>>();
+            footnoteFactories = new List<IRateFootnoteFactory>();
         }
 
         /// <summary>
@@ -39,22 +39,20 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Callback to create a footnote control, if any
+        /// Gets the footnote factories.
         /// </summary>
-        public IEnumerable<Func<RateFootnoteControl>> FootnoteCreators
+        public IEnumerable<IRateFootnoteFactory> FootnoteFactories
         {
-            get
-            {
-                return footnoteCreators;
-            }
+            get { return footnoteFactories; }
         }
 
         /// <summary>
-        /// Adds a footnote control creator to the footnote control creator collection
+        /// Adds a footnote factory to the FootnoteFactories collection.
         /// </summary>
-        public void AddFootnoteCreator<T>(Func<T> creator) where T : RateFootnoteControl
+        /// <param name="factory">The factory.</param>
+        public void AddFootnoteFactory(IRateFootnoteFactory factory)
         {
-            footnoteCreators.Add(creator);
+            footnoteFactories.Add(factory);
         }
 
         /// <summary>

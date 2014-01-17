@@ -162,20 +162,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private static void AddFootnoteCreators(IEnumerable<KeyValuePair<TAccount, RateGroup>> accountRates, RateGroup bestRateGroup)
         {
             // Get distinct types of footnotes
-            IEnumerable<Func<RateFootnoteControl>> footnoteCreators = accountRates.SelectMany(x => x.Value.FootnoteCreators)
-                                                                                  .GroupBy(x => x.Method.ReturnType)
-                                                                                  .Select(x => x.FirstOrDefault());
+            IEnumerable<IRateFootnoteFactory> distinctFootnoteFactories = accountRates.SelectMany(x => x.Value.FootnoteFactories)
+                                                                                      .GroupBy(f => f.GetType())
+                                                                                      .Select(f => f.FirstOrDefault());
 
             // Add each distinct footnote to the rate group that we're going to return
-            foreach (Func<RateFootnoteControl> footnoteCreator in footnoteCreators)
+            foreach (IRateFootnoteFactory factory in distinctFootnoteFactories)
             {
-                Func<RateFootnoteControl> creator = footnoteCreator;
-
-                bestRateGroup.AddFootnoteCreator(() =>
-                    {
-                        RateFootnoteControl control = creator();
-                        return control;
-                    });
+                bestRateGroup.AddFootnoteFactory(factory);
             }
         }
 

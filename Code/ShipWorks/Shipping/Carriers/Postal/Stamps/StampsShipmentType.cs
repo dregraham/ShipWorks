@@ -3,6 +3,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
@@ -243,18 +244,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         if (hasExpress1Savings)
                         {
-                            finalGroup.AddFootnoteCreator(() => new Express1RateDiscountedFootnote(stampsRates, express1Rates));
+                            finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, stampsRates, express1Rates));
                         }
                         else
                         {
-                            finalGroup.AddFootnoteCreator(() => new Express1RateNotQualifiedFootnote());
+                            finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
                         }
                     }
                     else
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
-                            finalGroup.AddFootnoteCreator(() => new Express1RatePromotionFootnote(new Express1StampsSettingsFacade(settings)));
+                            finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, new EndiciaExpress1SettingsFacade(settings)));
                         }
                     }
                     

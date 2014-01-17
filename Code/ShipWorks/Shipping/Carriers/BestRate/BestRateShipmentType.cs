@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                                                                                 .Select(m => m.First()).ToList();
             if (distinctExceptions.Any())
             {
-                rateGroup.AddFootnoteCreator(() => new BrokerExceptionsRateFootnoteControl(distinctExceptions));  
+                rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
             }
 
             return rateGroup;
@@ -285,17 +285,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public static void SetFootnote(IEnumerable<RateGroup> allRateGroups, RateGroup compiledRateGroup)
         {
             // Only add footnotes from rate groups from which rates will actually be displayed
-            IEnumerable<Func<RateFootnoteControl>> includedRateGroups = allRateGroups
-                                                                            .Where(rg => rg.FootnoteCreators.Any())
+            IEnumerable<IRateFootnoteFactory> includedRateGroups = allRateGroups
+                                                                            .Where(rg => rg.FootnoteFactories.Any())
                                                                             .Where(rg => rg.Rates
                                                                                                                 // where the rate doesn't have an image or the associated rate footer doesn't need an image
-                                                                                .Intersect(compiledRateGroup.Rates.Where(r => r.AmountFootnote != null || !rg.FootnoteCreators.First().Invoke().AssociatedWithAmountFooter))
+                                                                                .Intersect(compiledRateGroup.Rates.Where(r => r.AmountFootnote != null || !rg.FootnoteFactories.First().CreateFootnote().AssociatedWithAmountFooter))
                                                                                 .Any())
-                                                                            .SelectMany(outerGroup => outerGroup.FootnoteCreators);
+                                                                            .SelectMany(outerGroup => outerGroup.FootnoteFactories);
 
-            foreach (Func<RateFootnoteControl> creator in includedRateGroups)
+            foreach (IRateFootnoteFactory factory in includedRateGroups)
             {
-                compiledRateGroup.AddFootnoteCreator(creator);
+                compiledRateGroup.AddFootnoteFactory(factory);
             }
         }
 
