@@ -561,33 +561,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void SetFootnote_ReturnsTwoFooters_BothFootersApplicableToRates_Test()
-        {
-            RateGroup testRateGroup = new RateGroup(new List<RateResult> { rateGroupWithFooterWithAssociatedAmount.Rates.First(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
-            BestRateShipmentType.SetFootnote(new List<RateGroup> { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount }, testRateGroup);
-
-            Assert.AreEqual(2, testRateGroup.FootnoteFactories.Count());
-        }
-
-        [TestMethod]
-        public void SetFootnote_ReturnsOneFooter_FooterWithAssociatedRateHasNoCorrespondingRate_Test()
-        {
-            RateGroup testRateGroup = new RateGroup(new List<RateResult> { rateGroupWithFooterNotAssociatedWithAmount.Rates.Last(), rateGroupWithFooterNotAssociatedWithAmount.Rates.First() });
-            BestRateShipmentType.SetFootnote(new List<RateGroup> { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount}, testRateGroup);
-
-            Assert.AreEqual(1, testRateGroup.FootnoteFactories.Count());
-        }
-
-        [TestMethod]
-        public void SetFootnote_ReturnsNoFooter_NoAssociatedFooter_Test()
-        {
-            RateGroup testRateGroup = new RateGroup(new List<RateResult> { rateGroupWithFooterWithAssociatedAmount.Rates.Last(), rateGroupWithNoFootnote.Rates.First() });
-            BestRateShipmentType.SetFootnote(new List<RateGroup> { rateGroupWithNoFootnote, rateGroupWithFooterWithAssociatedAmount, rateGroupWithFooterNotAssociatedWithAmount}, testRateGroup);
-
-            Assert.AreEqual(0, testRateGroup.FootnoteFactories.Count());
-        }
-
-        [TestMethod]
         public void IsCustomsRequired_ReturnsFalse_WhenSingleBrokerDoesNotRequireCustoms_Test()
         {
             broker = new Mock<IBestRateShippingBroker>();
