@@ -39,34 +39,5 @@ namespace ShipWorks.Shipping.Editing
             }
         }
 
-        /// <summary>
-        /// Adds the carrier name text to the text of the control
-        /// </summary>
-        public virtual void SetCarrierName(string carrierName)
-        {
-            
-        }
-
-        /// <summary>
-        /// Adds the carrier name text.
-        /// </summary>
-        /// <param name="carrierName"></param>
-        /// <param name="label">The main message text.</param>
-        /// <param name="linkLabel">The link label.</param>
-        protected static void AddCarrierNameText(string carrierName, Label label, LinkControl linkLabel)
-        {
-            if (!String.IsNullOrEmpty(carrierName))
-            {
-                label.Text = "(" + carrierName + ") " + label.Text;
-                // Resize the label to fit the text
-                label.AutoSize = true;
-
-                if (linkLabel != null)
-                {
-                    // Move the link to accomodate for bigger label text
-                    linkLabel.Location = new Point(label.Location.X + label.Size.Width, label.Location.Y);
-                }
-            }
-        }
     }
 }

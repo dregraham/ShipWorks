@@ -23,14 +23,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         }
 
         /// <summary>
-        /// Adds the carrier name text to the text of the control
-        /// </summary>
-        public override void SetCarrierName(string carrierName)
-        {
-            AddCarrierNameText(carrierName, label, linkControl);
-        }
-
-        /// <summary>
         /// Link to activate the Express1 discount
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)

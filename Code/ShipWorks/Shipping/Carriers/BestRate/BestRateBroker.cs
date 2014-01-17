@@ -174,7 +174,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 bestRateGroup.AddFootnoteCreator(() =>
                     {
                         RateFootnoteControl control = creator();
-                        control.SetCarrierName(carrierDescription);
                         return control;
                     });
             }
