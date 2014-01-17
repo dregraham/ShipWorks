@@ -4,7 +4,7 @@ using System.Linq;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 
-namespace ShipWorks.Shipping.Carriers.BestRate
+namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
 {
     /// <summary>
     /// Implementation of IRateGroupFilter.  Used to filter Rate Results.
