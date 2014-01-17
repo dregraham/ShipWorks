@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
@@ -12,12 +14,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         private readonly IEnumerable<BrokerException> brokerExceptions;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BrokerExceptionsRateFootnoteFactory"/> class.
+        /// Initializes a new instance of the <see cref="BrokerExceptionsRateFootnoteFactory" /> class.
         /// </summary>
         /// <param name="brokerExceptions">The broker exceptions.</param>
+        /// <exception cref="System.InvalidOperationException">One or more broker exceptions must be provided.</exception>
         public BrokerExceptionsRateFootnoteFactory(IEnumerable<BrokerException> brokerExceptions)
         {
-            this.brokerExceptions = brokerExceptions;
+            IEnumerable<BrokerException> exceptions = brokerExceptions as IList<BrokerException> ?? brokerExceptions.ToList();
+
+            if (!exceptions.Any())
+            {
+                throw new InvalidOperationException("One or more broker exceptions must be provided.");
+            }
+
+            this.brokerExceptions = exceptions;
         }
 
         /// <summary>
