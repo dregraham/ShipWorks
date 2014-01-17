@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     {
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
-        private IRateGroupFilter rateGroupFilter;
+        private IEnumerable<IRateGroupFilter> rateGroupFilters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -52,20 +53,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// IRateGroupFilter that returns a new list of the filtered rate results.
         /// </summary>
-        public IRateGroupFilter RateGroupFilter
+        public IEnumerable<IRateGroupFilter> RateGroupFilters
         {
             get
             {
-                if (rateGroupFilter == null)
+                if (rateGroupFilters == null)
                 {
-                    rateGroupFilter = new RateGroupFilter();
+                    rateGroupFilters = new List<IRateGroupFilter> {new RateGroupFilter()};
                 }
 
-                return rateGroupFilter;
+                return rateGroupFilters;
             }
             set
             {
-                rateGroupFilter = value; 
+                rateGroupFilters = value; 
             }
         }
 
@@ -263,7 +264,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
             // Filter out any rates as necessary
-            compiledRateGroup = RateGroupFilter.FilterRates(compiledRateGroup, (ServiceLevelType)shipment.BestRate.ServiceLevel);
+            foreach (IRateGroupFilter rateGroupFilter in RateGroupFilters)
+            {
+                compiledRateGroup = rateGroupFilter.FilterRates(compiledRateGroup, (ServiceLevelType)shipment.BestRate.ServiceLevel);
+            }
 
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
