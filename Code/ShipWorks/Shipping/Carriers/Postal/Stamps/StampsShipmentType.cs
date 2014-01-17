@@ -264,6 +264,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
                     else
                     {
+                        stampsRates.ForEach(x => x.ShipmentType = ShipmentTypeCode.Stamps);
                         return new RateGroup(stampsRates);
                     }
                 }

@@ -442,6 +442,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
                     else
                     {
+                        endiciaRates.ForEach(x => x.ShipmentType = ShipmentTypeCode.Endicia);
                         return new RateGroup(endiciaRates);
                     }
                     
