@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="accountRates">RateGroups from which to get existing footnote functions</param>
         /// <param name="bestRateGroup">RateGroup into which the footnote creation functions will be added</param>
-        private void AddFootnoteCreators(IEnumerable<KeyValuePair<TAccount, RateGroup>> accountRates, RateGroup bestRateGroup)
+        private static void AddFootnoteCreators(IEnumerable<KeyValuePair<TAccount, RateGroup>> accountRates, RateGroup bestRateGroup)
         {
             // Get distinct types of footnotes
             IEnumerable<Func<RateFootnoteControl>> footnoteCreators = accountRates.SelectMany(x => x.Value.FootnoteCreators)

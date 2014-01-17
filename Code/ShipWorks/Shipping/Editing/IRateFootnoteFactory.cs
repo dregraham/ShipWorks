@@ -1,5 +1,4 @@
-﻿
-namespace ShipWorks.Shipping.Editing
+﻿namespace ShipWorks.Shipping.Editing
 {
     /// <summary>
     /// A factory interface for being able to create footnote controls. 
