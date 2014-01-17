@@ -264,6 +264,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             RateGroup compiledRateGroup = new RateGroup(allRates);
             compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
+            // Add the footnotes from all returned RateGroups into the new compiled RateGroup
+            foreach (IRateFootnoteFactory footnoteFactory in tasks.SelectMany(x => x.Result.FootnoteFactories))
+            {
+                compiledRateGroup.AddFootnoteFactory(footnoteFactory);
+            }
+
             // Filter out any rates as necessary
             foreach (IRateGroupFilter rateGroupFilter in filterFactory.CreateFilters(shipment))
             {
