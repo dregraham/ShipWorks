@@ -571,12 +571,12 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.Designer.cs">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateResultFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateResultTag.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparer.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\IBestRateResultFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IRateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     {
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
-        private IBestRateResultFilter bestRateResultFilter;
+        private IRateGroupFilter rateGroupFilter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -50,22 +50,22 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
 
         /// <summary>
-        /// IBestRateResultFilter that returns a new list of the filtered rate results.
+        /// IRateGroupFilter that returns a new list of the filtered rate results.
         /// </summary>
-        public IBestRateResultFilter BestRateResultFilter
+        public IRateGroupFilter RateGroupFilter
         {
             get
             {
-                if (bestRateResultFilter == null)
+                if (rateGroupFilter == null)
                 {
-                    bestRateResultFilter = new BestRateResultFilter();
+                    rateGroupFilter = new RateGroupFilter();
                 }
 
-                return bestRateResultFilter;
+                return rateGroupFilter;
             }
             set
             {
-                bestRateResultFilter = value; 
+                rateGroupFilter = value; 
             }
         }
 
@@ -257,18 +257,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<RateGroup> rateGroups = tasks.Select(x => x.Result).ToList();
             IEnumerable<RateResult> allRates = rateGroups.SelectMany(x => x.Rates);
 
+            RateGroup compiledRateGroup = new RateGroup(allRates);
+            SetFootnote(rateGroups, compiledRateGroup);
+
+            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
+
             // Filter out any rates as necessary
-            List<RateResult> orderedRatesList = BestRateResultFilter.FilterRates(allRates, (ServiceLevelType)shipment.BestRate.ServiceLevel).ToList();
+            compiledRateGroup = RateGroupFilter.FilterRates(compiledRateGroup, (ServiceLevelType)shipment.BestRate.ServiceLevel);
 
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
             // intermingled with rates from other carriers
-            orderedRatesList.ForEach(x => x.MaskDescription(orderedRatesList));
+            compiledRateGroup.Rates.ForEach(x => x.MaskDescription(compiledRateGroup.Rates));
             
-            RateGroup compiledRateGroup = new RateGroup(orderedRatesList);
-            SetFootnote(rateGroups, compiledRateGroup);
-
-            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
             return compiledRateGroup;
         }
 

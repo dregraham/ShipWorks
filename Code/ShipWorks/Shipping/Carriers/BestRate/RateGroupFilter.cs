@@ -1,24 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
     /// <summary>
-    /// Implementation of IBestRateResultFilter.  Used to filter Rate Results.
+    /// Implementation of IRateGroupFilter.  Used to filter Rate Results.
     /// </summary>
-    public class BestRateResultFilter : IBestRateResultFilter
+    public class RateGroupFilter : IRateGroupFilter
     {
         /// <summary>
         /// Method that filters rate results and returns a new list of the filtered rate results.
         /// </summary>
-        public IEnumerable<RateResult> FilterRates(IEnumerable<RateResult> rateResults, ServiceLevelType serviceLevelType)
+        public RateGroup FilterRates(RateGroup rateGroup, ServiceLevelType serviceLevelType)
         {
+            IEnumerable<RateResult> rateResults = rateGroup.Rates;
+
             ServiceLevelSpeedComparer serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
 
             if (serviceLevelType != ServiceLevelType.Anytime)
@@ -38,7 +37,29 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             orderedRates = orderedRates.GroupBy(reateResult => ((BestRateResultTag)reateResult.Tag).ResultKey,
                                                 (rateResultSource, rateResultSelector) => rateResultSelector.Aggregate(RateResultsGroupBySelector));
 
-            return orderedRates;
+            return CreateRateGroup(rateGroup, orderedRates);
+        }
+
+        /// <summary>
+        /// Creates a new rate group from an original rate group and a collection of rate results
+        /// </summary>
+        /// <param name="originalRateGroup">Rate group that should be copied</param>
+        /// <param name="rateResults">Collection of rate results that will be used for the new rate group</param>
+        /// <returns></returns>
+        private static RateGroup CreateRateGroup(RateGroup originalRateGroup, IEnumerable<RateResult> rateResults)
+        {
+            RateGroup newRateGroup = new RateGroup(rateResults)
+            {
+                Carrier = originalRateGroup.Carrier,
+                OutOfDate = originalRateGroup.OutOfDate
+            };
+
+            foreach (var creator in originalRateGroup.FootnoteCreators)
+            {
+                newRateGroup.AddFootnoteCreator(creator);
+            }
+
+            return newRateGroup;
         }
 
         /// <summary>
