@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
         [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_ThrowsInvalidOperationException_WhenCollectionOfBrokerExceptionsIsEmpty_Test()
         {
-            testObject = new BrokerExceptionsRateFootnoteFactory(new List<BrokerException>());
+            testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), new List<BrokerException>());
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
                 new BrokerException(new ShippingException("broker exception 3"), BrokerExceptionSeverityLevel.Error, new OnTracShipmentType())
             };
 
-            testObject = new BrokerExceptionsRateFootnoteFactory(brokerExceptions);
+            testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
 
             RateFootnoteControl footnote = testObject.CreateFootnote();
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
                 new BrokerException(new ShippingException("broker exception 3"), BrokerExceptionSeverityLevel.Error, new OnTracShipmentType())
             };
                 
-            testObject = new BrokerExceptionsRateFootnoteFactory(brokerExceptions);
+            testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
 
             BrokerExceptionsRateFootnoteControl footnote = testObject.CreateFootnote() as BrokerExceptionsRateFootnoteControl;
 

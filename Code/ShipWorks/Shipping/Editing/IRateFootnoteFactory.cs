@@ -7,6 +7,11 @@ namespace ShipWorks.Shipping.Editing
     public interface IRateFootnoteFactory
     {
         /// <summary>
+        /// Gets the corresponding shipment type for the factory.
+        /// </summary>
+        ShipmentType ShipmentType { get; }
+
+        /// <summary>
         /// Creates a footnote control.
         /// </summary>
         /// <returns>A instance of a RateFoonoteControl.</returns>
