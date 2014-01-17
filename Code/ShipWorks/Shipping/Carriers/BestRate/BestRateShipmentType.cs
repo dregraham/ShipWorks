@@ -27,8 +27,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     {
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
-        //private IEnumerable<IRateGroupFilter> rateGroupFilters;
-        private IRateGroupFilterFactory filterFactory;
+        private readonly IRateGroupFilterFactory filterFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -52,27 +51,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.filterFactory = filterFactory;
             this.log = log;
         }
-
-
-        ///// <summary>
-        ///// IRateGroupFilter that returns a new list of the filtered rate results.
-        ///// </summary>
-        //public IEnumerable<IRateGroupFilter> RateGroupFilters
-        //{
-        //    get
-        //    {
-        //        if (rateGroupFilters == null)
-        //        {
-        //            rateGroupFilters = new List<IRateGroupFilter> {new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel)};
-        //        }
-
-        //        return rateGroupFilters;
-        //    }
-        //    set
-        //    {
-        //        rateGroupFilters = value; 
-        //    }
-        //}
 
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType

@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
-            Assert.AreEqual(1, filters.Count());
+            Assert.AreEqual(2, filters.Count());
         }
 
         [TestMethod]
@@ -43,6 +43,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
             Assert.AreEqual(1, filters.OfType<RateGroupFilter>().Count());
+        }
+
+        [TestMethod]
+        public void CreateFilters_ContainsExpress1PromotionFootnoteFilter_Test()
+        {
+            IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
+
+            Assert.AreEqual(1, filters.OfType<BestRateExpress1PromotionFootnoteFilter>().Count());
         }
     }
 }

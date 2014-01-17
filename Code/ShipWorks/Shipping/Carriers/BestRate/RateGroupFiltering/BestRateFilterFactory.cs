@@ -19,7 +19,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             return new List<IRateGroupFilter>
             {
-                new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel)
+                new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
+                new BestRateExpress1PromotionFootnoteFilter()
             };
         }
     }
