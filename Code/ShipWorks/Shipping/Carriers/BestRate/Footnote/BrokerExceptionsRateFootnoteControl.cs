@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 
-namespace ShipWorks.Shipping.Carriers.BestRate
+namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
     public partial class BrokerExceptionsRateFootnoteControl : RateFootnoteControl
     {

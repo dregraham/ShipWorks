@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Settings.Origin;
 using log4net;

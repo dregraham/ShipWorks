@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Carriers.BestRate
+﻿namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
     partial class BrokerExceptionsRateFootnoteControl
     {
