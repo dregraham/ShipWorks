@@ -577,7 +577,7 @@
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparer.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateResultFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
-    <Compile Include="Shipping\Editing\FootnoteControlCreator.cs" />
+    <Compile Include="Shipping\Editing\IRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
