@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
 {
@@ -9,8 +8,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
     public interface IRateGroupFilter
     {
         /// <summary>
-        /// Method that filters rate results and returns a new list of the filtered rate results.
+        /// Method that filters a group of rates and returns a new group of the filtered rate results.
         /// </summary>
-        RateGroup FilterRates(RateGroup rateGroup, ServiceLevelType serviceLevelType);
+        RateGroup Filter(RateGroup rateGroup);
     }
 }

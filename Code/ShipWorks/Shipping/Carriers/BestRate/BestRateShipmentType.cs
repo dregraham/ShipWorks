@@ -27,7 +27,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     {
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
-        private IEnumerable<IRateGroupFilter> rateGroupFilters;
+        //private IEnumerable<IRateGroupFilter> rateGroupFilters;
+        private IRateGroupFilterFactory filterFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -35,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// IBestRateShippingBrokerFactory interface.
         /// </summary>
         public BestRateShipmentType()
-            : this(new BestRateShippingBrokerFactory(), LogManager.GetLogger(typeof(BestRateShipmentType)))
+            : this(new BestRateShippingBrokerFactory(), new BestRateFilterFactory(), LogManager.GetLogger(typeof(BestRateShipmentType)))
         { }
 
         /// <summary>
@@ -43,33 +44,35 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// the constructor is primarily for testing purposes.
         /// </summary>
         /// <param name="brokerFactory">The broker factory.</param>
+        /// <param name="filterFactory">The filter factory.</param>
         /// <param name="log">The log.</param>
-        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, ILog log)
+        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, IRateGroupFilterFactory filterFactory, ILog log)
         {
             this.brokerFactory = brokerFactory;
+            this.filterFactory = filterFactory;
             this.log = log;
         }
 
 
-        /// <summary>
-        /// IRateGroupFilter that returns a new list of the filtered rate results.
-        /// </summary>
-        public IEnumerable<IRateGroupFilter> RateGroupFilters
-        {
-            get
-            {
-                if (rateGroupFilters == null)
-                {
-                    rateGroupFilters = new List<IRateGroupFilter> {new RateGroupFilter()};
-                }
+        ///// <summary>
+        ///// IRateGroupFilter that returns a new list of the filtered rate results.
+        ///// </summary>
+        //public IEnumerable<IRateGroupFilter> RateGroupFilters
+        //{
+        //    get
+        //    {
+        //        if (rateGroupFilters == null)
+        //        {
+        //            rateGroupFilters = new List<IRateGroupFilter> {new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel)};
+        //        }
 
-                return rateGroupFilters;
-            }
-            set
-            {
-                rateGroupFilters = value; 
-            }
-        }
+        //        return rateGroupFilters;
+        //    }
+        //    set
+        //    {
+        //        rateGroupFilters = value; 
+        //    }
+        //}
 
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType
@@ -250,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             // Start getting rates from each enabled carrier
-            var tasks = bestRateShippingBrokers
+            List<Task<RateGroup>> tasks = bestRateShippingBrokers
                 .Select(broker => StartGetRatesTask(broker, shipment, exceptionHandler))
                 .ToList();
             
@@ -262,9 +265,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
             // Filter out any rates as necessary
-            foreach (IRateGroupFilter rateGroupFilter in RateGroupFilters)
+            foreach (IRateGroupFilter rateGroupFilter in filterFactory.CreateFilters(shipment))
             {
-                compiledRateGroup = rateGroupFilter.FilterRates(compiledRateGroup, (ServiceLevelType)shipment.BestRate.ServiceLevel);
+                compiledRateGroup = rateGroupFilter.Filter(compiledRateGroup);
             }
 
             // Allow each rate result the chance to mask its description if needed based on the 

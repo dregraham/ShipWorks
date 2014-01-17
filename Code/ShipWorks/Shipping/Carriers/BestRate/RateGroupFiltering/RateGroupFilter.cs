@@ -11,10 +11,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
     /// </summary>
     public class RateGroupFilter : IRateGroupFilter
     {
+        private readonly ServiceLevelType serviceLevelType;
+
+        public RateGroupFilter(ServiceLevelType serviceLevelType)
+        {
+            this.serviceLevelType = serviceLevelType;
+        }
+
         /// <summary>
         /// Method that filters rate results and returns a new list of the filtered rate results.
         /// </summary>
-        public RateGroup FilterRates(RateGroup rateGroup, ServiceLevelType serviceLevelType)
+        public RateGroup Filter(RateGroup rateGroup)
         {
             IEnumerable<RateResult> rateResults = rateGroup.Rates;
 

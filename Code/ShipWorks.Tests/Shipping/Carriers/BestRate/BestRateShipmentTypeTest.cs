@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -38,6 +39,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private Mock<IRateFootnoteFactory> associatedWithAmountFooterFootnoteFactory;
         private Mock<IRateFootnoteFactory> notAssociatedWithAmountFooterFootnoteFactory;
 
+        private Mock<IRateGroupFilterFactory> filterFactory;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -58,9 +61,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             brokerFactory = new Mock<IBestRateShippingBrokerFactory>();
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
+            filterFactory = new Mock<IRateGroupFilterFactory>();
+            filterFactory.Setup(f => f.CreateFilters(It.IsAny<ShipmentEntity>())).Returns(new List<IRateGroupFilter>());
+
             log = new Mock<ILog>();
 
-            testObject = new BestRateShipmentType(brokerFactory.Object, log.Object);
+            testObject = new BestRateShipmentType(brokerFactory.Object, filterFactory.Object, log.Object);
 
             InitializeFootnoteTests();
         }
@@ -197,111 +203,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.AreEqual(rates[0].Selectable, bestRates[0].Selectable);
             Assert.AreEqual(rates[1].Selectable, bestRates[1].Selectable);
         }
-
+        
         [TestMethod]
-        public void GetRates_RatesAreOrderedFromCheapestToMostExpensive_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "12", 34.30M, "SomeRateResult", ServiceLevelType.Anytime),
-                CreateRateResult("Rate xyz", "12", 4.23M, "SomeRateResult2", ServiceLevelType.Anytime),
-                CreateRateResult("Rate 123", "probably 7", 9.87M, "SomeRateResult3", ServiceLevelType.Anytime)
-            };
-
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-            List<RateResult> bestRates = rateGroup.Rates.ToList();
-            
-            Assert.AreEqual(rates[1], bestRates[0]);
-            Assert.AreEqual(rates[2], bestRates[1]);
-            Assert.AreEqual(rates[0], bestRates[2]);
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_AreOrderedByServiceLevel_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult2", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult3", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult4", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult5", ServiceLevelType.TwoDays ),                
-            };
-
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-            List<RateResult> bestRates = rateGroup.Rates.ToList();
-
-            Assert.AreEqual(rates[2], bestRates[0]);
-            Assert.AreEqual(rates[4], bestRates[1]);
-            Assert.AreEqual(rates[0], bestRates[2]);
-            Assert.AreEqual(rates[3], bestRates[3]);
-            Assert.AreEqual(rates[1], bestRates[4]);
-        }
-
-
-
-        [TestMethod]
-        public void GetRates_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable_Test()
-        {
-
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
-
-                // These are the rates that should be returned
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.TwoDays ),                
-            };
-
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-            List<RateResult> bestRates = rateGroup.Rates.ToList();
-
-            Assert.AreEqual(rates[6], bestRates[0]);
-            Assert.AreEqual(rates[8], bestRates[1]);
-            Assert.AreEqual(rates[4], bestRates[2]);
-            Assert.AreEqual(rates[7], bestRates[3]);
-            Assert.AreEqual(rates[5], bestRates[4]);
-        }
-
-
-        [TestMethod]
-        public void GetRates_ReturnsAllRates_WhenLessThanFiveRatesAreAvailable_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult2", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult3", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult4", ServiceLevelType.TwoDays ),                
-            };
-
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-            List<RateResult> bestRates = rateGroup.Rates.ToList();
-
-            Assert.AreEqual(rates.Count, bestRates.Count);
-        }
-
-
-        [TestMethod]
-        public void GetRates_CallsMaskDescription_OnReturnedRates()
+        public void GetRates_CallsMaskDescription_OnReturnedRates_Test()
         {
             var testRate = new Mock<RateResult>();
             testRate.Object.Tag = new BestRateResultTag() { ResultKey = "SomeKey"};
@@ -318,71 +222,51 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             testRate.Verify(x => x.MaskDescription(rates));
         }
-
-        [TestMethod]
-        public void GetRates_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.88M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.89M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.90M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
-
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.Anytime ),                  
-            };
-
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-            shipment.BestRate.ServiceLevel = (int)ServiceLevelType.TwoDays;
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-            List<RateResult> bestRates = rateGroup.Rates.ToList();
-             
-            Assert.AreEqual(rates[6], bestRates[0]);
-            Assert.AreEqual(rates[0], bestRates[1]);
-            Assert.AreEqual(rates[1], bestRates[2]);
-            Assert.AreEqual(rates[2], bestRates[3]);
-            Assert.AreEqual(rates[3], bestRates[4]);
-        }
-
-        [TestMethod]
-        public void GetRates_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays, DateTime.Today.AddDays(3) ),  
-                CreateRateResult("Rate 789", "2", 6.88M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.89M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.90M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
-
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", .23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays, DateTime.Today.AddDays(3)),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.Anytime ),                  
-            };
-
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-            shipment.BestRate.ServiceLevel = (int)ServiceLevelType.TwoDays;
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-            List<RateResult> bestRates = rateGroup.Rates.ToList();
-
-            Assert.AreEqual(rates[7], bestRates[0]);
-            Assert.AreEqual(rates[6], bestRates[1]);
-            Assert.AreEqual(rates[0], bestRates[2]);
-            Assert.AreEqual(rates[1], bestRates[3]);
-            Assert.AreEqual(rates[2], bestRates[4]);
-        }
         
+        [TestMethod]
+        public void GetRates_DelegatesToFilterFactory_Test()
+        {
+            // Setup the broker to return specific rates
+            rates = new List<RateResult>
+            {
+                CreateRateResult("Rate xyz", "12", 4.23M, "SomeRateResult"),
+                CreateRateResult("Rate 123", "probably 7", 9.87M, "SomeRateResult2"),
+            };
+
+            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
+
+            testObject.GetRates(shipment);
+
+            filterFactory.Verify(f => f.CreateFilters(shipment), Times.Once());
+        }
+
+        [TestMethod]
+        public void GetRates_UsesEachFilter_Test()
+        {
+            Mock<IRateGroupFilter> firstFilter = new Mock<IRateGroupFilter>();
+            firstFilter.Setup(f => f.Filter(It.IsAny<RateGroup>())).Returns((RateGroup group) => group);
+
+            Mock<IRateGroupFilter> secondFilter = new Mock<IRateGroupFilter>();
+            secondFilter.Setup(f => f.Filter(It.IsAny<RateGroup>())).Returns((RateGroup group) => group);
+
+            filterFactory.Setup(f => f.CreateFilters(It.IsAny<ShipmentEntity>())).Returns(new List<IRateGroupFilter> { firstFilter.Object, secondFilter.Object });
+
+            // Setup the broker to return specific rates
+            rates = new List<RateResult>
+            {
+                CreateRateResult("Rate xyz", "12", 4.23M, "SomeRateResult"),
+                CreateRateResult("Rate 123", "probably 7", 9.87M, "SomeRateResult2"),
+            };
+
+            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
+
+            testObject.GetRates(shipment);
+
+            firstFilter.Verify(f => f.Filter(It.IsAny<RateGroup>()), Times.Once());
+            secondFilter.Verify(f => f.Filter(It.IsAny<RateGroup>()), Times.Once());
+
+        }
+
         [TestMethod]
         public void GetRates_AddsFootnote_WhenMultipleBrokerExceptionsAreEncountered_Test()
         {
@@ -638,255 +522,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey)
         {
             return new RateResult(description, days, amount, new BestRateResultTag() { ResultKey = tagResultKey });
-        }
-
-        private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey, ServiceLevelType serviceLevel)
-        {
-            RateResult rateResult = CreateRateResult(description, days, amount, tagResultKey);
-            rateResult.ServiceLevel = serviceLevel;
-            return rateResult;
-        }
-        private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey, ServiceLevelType serviceLevel, DateTime expectedDeliveryDate)
-        {
-            RateResult rateResult = CreateRateResult(description, days, amount, tagResultKey, serviceLevel);
-            rateResult.ExpectedDeliveryDate = expectedDeliveryDate;
-            return rateResult;
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_ReturnsExpress1EndiciaForResultKey_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ),    
-                CreateRateResult("Rate 000", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),  
-                CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),            
-            };
-            rates[0].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Express1Endicia;
-            rates[3].ShipmentType = ShipmentTypeCode.Endicia;
-            rates[4].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[5].ShipmentType = ShipmentTypeCode.Express1Endicia;
-
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() { "Rate 123"});
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_ReturnsExpress1StampsForResultKey_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ),                
-            };
-            rates[0].ShipmentType = ShipmentTypeCode.Endicia;
-            rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[4].ShipmentType = ShipmentTypeCode.Endicia;
-
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() {"Rate 123"});
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_ReturnsEndiciaForResultKey_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ),                
-            };
-            rates[0].ShipmentType = ShipmentTypeCode.FedEx;
-            rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[4].ShipmentType = ShipmentTypeCode.Endicia;
-
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() {"Rate 789"});
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_ReturnsExpress1EndiciaForEachResultKey_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ), 
-                
-                CreateRateResult("Rate 2abc", "3", 4.23M, "Tag2", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate 2xyz", "A", 4.23M, "Tag2", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 2123", "1", 4.23M, "Tag2", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 2456", "S", 4.23M, "Tag2", ServiceLevelType.FourToSevenDays ),
-            };
-            rates[0].ShipmentType = ShipmentTypeCode.Express1Endicia;
-            rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Endicia;
-            rates[4].ShipmentType = ShipmentTypeCode.Express1Stamps;
-
-            rates[5].ShipmentType = ShipmentTypeCode.FedEx;
-            rates[6].ShipmentType = ShipmentTypeCode.Express1Endicia;
-            rates[7].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[8].ShipmentType = ShipmentTypeCode.Stamps;
-
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() { "Rate abc", "Rate 2xyz" });
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_ReturnsExpress1StampsForEachResultKey_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ), 
-                
-                CreateRateResult("Rate 2abc", "3", 4.23M, "Tag2", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate 2xyz", "A", 4.23M, "Tag2", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 2123", "1", 4.23M, "Tag2", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 2456", "S", 4.23M, "Tag2", ServiceLevelType.FourToSevenDays ),
-            };
-            rates[0].ShipmentType = ShipmentTypeCode.FedEx;
-            rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[4].ShipmentType = ShipmentTypeCode.Express1Stamps;
-
-            rates[5].ShipmentType = ShipmentTypeCode.FedEx;
-            rates[6].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[7].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[8].ShipmentType = ShipmentTypeCode.Stamps;
-
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() { "Rate 789", "Rate 2123" });
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithSameCost_ReturnsEndiciaForEachResultKey_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ), 
-                
-                CreateRateResult("Rate 2abc", "3", 4.23M, "Tag2", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate 2xyz", "A", 4.23M, "Tag2", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 2123", "1", 4.23M, "Tag2", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 2456", "S", 4.23M, "Tag2", ServiceLevelType.FourToSevenDays ),
-            };
-            rates[0].ShipmentType = ShipmentTypeCode.FedEx;
-            rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[4].ShipmentType = ShipmentTypeCode.Endicia;
-
-            rates[5].ShipmentType = ShipmentTypeCode.FedEx;
-            rates[6].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[7].ShipmentType = ShipmentTypeCode.Endicia;
-            rates[8].ShipmentType = ShipmentTypeCode.Stamps;
-
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() { "Rate 789", "Rate 2123" });
-        }
-
-        [TestMethod]
-        public void GetRates_RatesWithDifferentCosts_ReturnsOneRatePerServiceTypePerTag_Test()
-        {
-            // Setup the broker to return specific rates
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 0.23M, "Tag1", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "A", 1.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 2.23M, "Tag1", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "S", 3.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ), 
-                
-                CreateRateResult("Rate 2abc", "3", 5.23M, "Tag2", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate 2xyz", "A", 6.23M, "Tag2", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 2123", "1", 7.23M, "Tag2", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 2456", "S", 8.23M, "Tag2", ServiceLevelType.FourToSevenDays ),
-            };
-            
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            RunQueueTest(rates, new List<string>() { "Rate abc", "Rate 2abc" });
-        }
-
-        private void RunQueueTest(List<RateResult> rates, List<string> correctRateResultDescriptions)
-        {
-            // To test that order in the list doesn't matter, we'll create a queue and loaded it with the initial list
-            // Then we'll go into a for loop where get get rates, then shift the last RateResult to the top of the queue
-            // and get rates again.
-            Queue<RateResult> testQueue = new Queue<RateResult>();
-            rates.ForEach(testQueue.Enqueue);
-
-            for (int i = 0; i < rates.Count; i++)
-            {
-                Debug.WriteLine("====================================Iteration: " + i + ", " + rates.First().ShipmentType + rates.First().Description);
-
-                broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
-
-                RateGroup rateGroup = testObject.GetRates(shipment);
-                List<RateResult> bestRates = rateGroup.Rates.ToList();
-
-                // Find the list of correct results based on the rate result description passed in.
-                List<RateResult> correctRateResults = rates.Join(correctRateResultDescriptions, 
-                                                                 rr => rr.Description, 
-                                                                 correct => correct,
-                                                                 (rr, correct) => rr).ToList();
-
-                // Make sure the counts of correct results matches the rates returned.
-                Assert.AreEqual(correctRateResultDescriptions.Count(), bestRates.Count());
-
-                // Check each of the correct results with the returned results to make sure they are correct.
-                correctRateResults.ForEach(rr => Assert.AreEqual(rr, 
-                                                                 bestRates.First(br => br.Description == rr.Description)));
-
-                // Shift the last entry to the first.
-                testQueue.Enqueue(testQueue.Dequeue());
-                rates = testQueue.ToList();
-            }
         }
     }
 }
